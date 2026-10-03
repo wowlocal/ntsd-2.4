@@ -150,26 +150,26 @@ user's approval to push. Until then, keep the other phases moving.
 | 2026-10-03 | P0 Linux | Static Linux SDK 6.4.0 installed; probe cross-built for aarch64/x86_64 musl and run in containers. Output equals macOS except `os`/`crypto`. First `NTSDCore` Linux build stops at `import CryptoKit`. | probe compare; Core build log | c649bac |
 | 2026-10-03 | P2a digest | `PortableSHA256` (FIPS 180-4) in Core, exported as `SHA256` only where CryptoKit is missing. CryptoKit imports are conditional in Core (6), reference checks (6) and tests (7); Apple builds still use CryptoKit. The Linux Core build passes CryptoKit and stops at `import Darwin`. | macOS `PortableSHA256Tests`: vectors, lengths 0–200 split into regions, 1,528 packaged files / 874,627,316 bytes equal to CryptoKit; Xcode release build. First compile attempt failed on exclusivity (log `p2a-macos-sha-test.log`) | 4547acc |
 | 2026-10-03 | P2b clock | `OriginalMacStartupClock` imports Darwin/Glibc/Musl/Android per OS with unchanged calls. **`NTSDCore` now cross-compiles for Linux** (aarch64 debug and release, x86_64 debug). `NTSDReferenceChecks` stops at `import Compression`. | macOS clock test `testActualMacClocksAtWholeCallerBoundaries`; Xcode release build; Linux build logs `p2b-*` | 65c6916 |
-| 2026-10-03 | P2c inflate | `FixtureInflate.decode` keeps the `compression_decode_buffer(COMPRESSION_ZLIB)` contract. It uses `Compression` on Apple platforms and SDK zlib (new `CZlib` system-library target) elsewhere. Four reference checks and two tests call it; the pinned replay codec is untouched. **All nine check executables cross-compile for Linux aarch64.** | `FixtureInflateTests` with `NTSD_FIXTURE_INFLATE_ALL=1`: zlib equals Compression on all 1,934 fixture blobs (38 zlib-wrapped, header/trailer stripped as their test does), 3,157,901,771 packed / 18,326,948,532 inflated bytes, plus truncation for blobs ≤4 MiB. 21 regression tests (Object, Stage, Background, Bootstrap, WindowInput, CatalogDIBPixels, CatalogSession, LibWarFaultRejection) in the release test build; Xcode release build | this commit |
+| 2026-10-03 | P2c inflate | `FixtureInflate.decode` keeps the `compression_decode_buffer(COMPRESSION_ZLIB)` contract. It uses `Compression` on Apple platforms and SDK zlib (new `CZlib` system-library target) elsewhere. Four reference checks and two tests call it; the pinned replay codec is untouched. **All nine check executables cross-compile for Linux aarch64.** | `FixtureInflateTests` with `NTSD_FIXTURE_INFLATE_ALL=1`: zlib equals Compression on all 1,934 fixture blobs (38 zlib-wrapped, header/trailer stripped as their test does), 3,157,901,771 packed / 18,326,948,532 inflated bytes, plus truncation for blobs ≤4 MiB. 21 regression tests (Object, Stage, Background, Bootstrap, WindowInput, CatalogDIBPixels, CatalogSession, LibWarFaultRejection) in the release test build; Xcode release build | 699f9ec |
+| 2026-10-03 | P1 package | The manifest is portable on non-Apple hosts or with `NTSD_PORTABLE=1`; it then drops `NTSDMacPlatform`, `NTSDApp`/`NTSDNative` and the 19 test files now under `Tests/NTSDCoreTests/Mac/` (`git mv`, same target on macOS). The manifest cache honours the variable (16 ↔ 14 targets). Linux builds all portable targets. **The static musl SDK has no XCTest or swift-testing**, so the Linux test build needs a glibc SDK. | macOS: debug build with tests; `swift test list` = 696 tests = 696 `func test` declarations, and all 19 moved classes have full method counts; Xcode release build. Linux aarch64 `NTSD_PORTABLE=1` build of every portable target. Linux test build: `no such module 'XCTest'` (log `p1-linux-aarch64-tests-debug.log`) | this commit |
 
 ## Next task
 
-P1, the package graph for portable builds. Only 19 of 319 test files import
-Mac-only modules (`NTSDMacPlatform`, AppKit, AVFoundation, AVFAudio).
+P0-L2, the glibc Linux SDK with XCTest. Build `swift-sdk-generator` at its
+`swift-6.4.0-RELEASE` tag (clone under
+`/Volumes/X5/ntsd-2.4-research/crossplatform/tools`). Generate an Ubuntu 24.04
+aarch64 SDK from the official `swift:6.4.0` image (`--with-docker`,
+`--no-host-toolchain`; the installed 6.4.0 toolchain is the host).
 
-- Move those files with `git mv` into `Tests/NTSDCoreTests/Mac/`. They stay in
-  the same target on macOS and keep sharing helpers.
-- In `Package.swift`, treat the build as portable on a non-Apple host, or when
-  `NTSD_PORTABLE=1` is set for cross builds from this Mac (the manifest runs on
-  the host).
-- When portable, drop the `NTSDMacPlatform`/`NTSDApp` targets and the
-  `NTSDNative` product, exclude `Mac/` and the `NTSDMacPlatform` test
-  dependency. Check that SwiftPM's manifest cache honours the variable, using
-  separate scratch paths.
-- Gate: on macOS, an unchanged full build and test compile, with the moved test
-  classes still discovered. Then a Linux aarch64 `--build-tests` build under
-  `NTSD_PORTABLE=1`; fix any helpers that leak across the boundary by moving
-  files only.
+- Install the SDK and confirm that XCTest and swift-testing are in it.
+- Gate: the probe and an XCTest smoke package cross-built and run in a
+  `swift:6.4.0` container. Then
+  `NTSD_PORTABLE=1 swift build --build-tests` for the package. Record any test
+  helpers that leak across the `Mac/` boundary and fix them by moving files
+  only.
+
+The custom-image route (`--from-container-image` with extra packages) is how
+P7 adds SDL3 to this SDK.
 
 Following tasks:
 
