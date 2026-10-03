@@ -42,6 +42,33 @@ def shot(name):
     return pid, wid, d.get("capture_id"), d
 
 
+def click_window(title, x, y, scratch="/tmp"):
+    """Foreground click at capture pixel (x, y) of the original's window titled
+    `title`: the real pointer moves there first so Wine sees the motion."""
+    import os
+    previous = os.environ.get("WIN"); os.environ["WIN"] = title
+    try: return _click_window(x, y, Path(scratch) / "cua-click.png")
+    finally:
+        if previous is None: os.environ.pop("WIN", None)
+        else: os.environ["WIN"] = previous
+
+
+def _click_window(x, y, shot_path):
+    session = __import__("os").environ.get("CUA_SESSION", SESSION)
+    def capture():
+        pid, wid = window()
+        d = call("get_window_state", dict(pid=pid, window_id=wid, include_accessibility_tree=False, max_image_dimension=0,
+                                          screenshot_out_file=str(shot_path), session=session))
+        return pid, wid, d.get("capture_id")
+    pid, wid, cap = capture()
+    b = next(w["bounds"] for w in call("list_windows", {})["windows"] if w["window_id"] == wid)
+    scale = call("get_screen_size", {}).get("scale_factor", 2)
+    call("move_cursor", dict(x=(b["x"] + x / 2) * scale, y=(b["y"] + y / 2) * scale, scope="desktop", session=session))
+    time.sleep(0.6)
+    pid, wid, cap = capture()
+    return call("click", dict(pid=pid, window_id=wid, x=x, y=y, capture_id=cap, delivery_mode="foreground", session=session))
+
+
 def log(entry):
     entry["utc"] = time.strftime("%Y-%m-%dT%H:%M:%SZ", time.gmtime())
     with LOG.open("a") as f:

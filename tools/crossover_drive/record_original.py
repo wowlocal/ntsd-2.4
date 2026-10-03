@@ -73,7 +73,7 @@ def record(out, computers, shots):
         # not change the match.
         for _ in range(20):
             time.sleep(1)
-            if "ERROR" in po.titles(): po.keys(pid, [36], title="ERROR"); break
+            if po.dismiss_error(): break
             if (po.word(pid, 0x450BBC) or 0) > 0: break
         shot("5-fight")
         po.wait_clock(pid)

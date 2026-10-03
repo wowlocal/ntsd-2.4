@@ -11,7 +11,8 @@ the 3000-byte table at 44ff90 from it once. The original's seed is its real
 startup time, so after START its table is overwritten with the Mac's
 (`winedbg`, `set` per dword); the table index 450bcc and counter 450c34 are
 read on both sides and must agree. Then S x5 and J open the Demo; CrossOver's
-music ERROR box is dismissed whenever it appears.
+music ERROR box is closed with a click whenever it appears (Attack, and a
+key that closes the box, ends a Demo).
 
 The phase counter 450bd0 (mod 12; HP regeneration when 0, falling and hit
 rules) also advances on every menu frame in both programs and is not reset for
@@ -86,16 +87,14 @@ def original(out, base):
         (out / "original-random.json").write_text(json.dumps(state, indent=1))
         import trace_ticks
         phase = mac_phase(out / "mac-trace.jsonl"); state["phase12"] = phase
-        def dismiss():
-            if "ERROR" in po.titles(): po.keys(pid, [36], title="ERROR")
         def first(run):
             state["originalPhase12"] = summary_original.signed(int(re.findall(r"([0-9a-f]{8})\s*$", run("x /x 0x450bd0").strip())[-1], 16))
             run(f"set *(int*)0x450bd0 = {phase}")
-        trace_ticks.trace(pid, 1, started=lambda: po.keys(pid, [1] * 5 + [38]), on_wait=dismiss, first_hit=first)
+        trace_ticks.trace(pid, 1, started=lambda: po.keys(pid, [1] * 5 + [38]), on_wait=po.dismiss_error, first_hit=first)
         (out / "original-random.json").write_text(json.dumps(state, indent=1))
         deadline = time.time() + 1800
         while time.time() < deadline:
-            if "ERROR" in po.titles(): po.keys(pid, [36], title="ERROR")
+            po.dismiss_error()
             timer = po.word(pid, 0x450BDC)
             if timer is not None and 144 <= timer < 350: break
             time.sleep(1)
@@ -122,9 +121,9 @@ def traces(out, base, count):
     launcher, pid = po.start(clone)
     try:
         wd.wine("winedbg", "--file", "Z:" + str(poke), "0x" + pid, timeout=300)
-        def dismiss():
-            if "ERROR" in po.titles(): po.keys(pid, [36], title="ERROR")
-        hits = trace_ticks.trace(pid, count, started=lambda: po.keys(pid, [1] * 5 + [38]), on_wait=dismiss)
+        phase = mac_phase(path)
+        hits = trace_ticks.trace(pid, count, started=lambda: po.keys(pid, [1] * 5 + [38]), on_wait=po.dismiss_error,
+                                 first_hit=lambda run: run(f"set *(int*)0x450bd0 = {phase}"))
     finally:
         po.stop(clone, launcher); held.close()
     (out / "original-trace.json").write_text(json.dumps(hits, indent=0))

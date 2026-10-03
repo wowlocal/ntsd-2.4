@@ -56,6 +56,15 @@ def titles():
     return [w["title"] for w in cua.call("list_windows", {})["windows"] if w["app_name"] == "NTSD 2.4.exe" and w["is_on_screen"]]
 
 
+def dismiss_error():
+    """Close CrossOver's music ERROR box with a click on OK, not a key: a key
+    held while the box closes reaches the game (in a Demo, Attack ends it)."""
+    if "ERROR" not in titles(): return False
+    try: cua.click_window("ERROR", 237, 140, scratch=str(LOCK.parent))
+    except SystemExit: return False
+    time.sleep(0.5); return True
+
+
 def lock():
     """One original at a time: a second instance of the same clone confuses
     the pid lookup and the window filter. Held until the process exits or the
