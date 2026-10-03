@@ -41,7 +41,7 @@ def wait_word(pid, address, values, seconds, what):
     raise SystemExit(f"{what} not reached ({address:#x} = {po.word(pid, address)})")
 
 
-def record(out, computers, shots, mode="vs", stage_steps=0, watch=0):
+def record(out, computers, shots, mode="vs", stage_steps=0, watch=0, summary=True):
     def shot(name):
         if shots:
             pid, wid = cua.window()
@@ -90,6 +90,7 @@ def record(out, computers, shots, mode="vs", stage_steps=0, watch=0):
         po.wait_clock(pid)
         for i in range(watch // 10):                                       # frames to look at
             time.sleep(10); po.dismiss_error(); shot(f"6-watch-{i:02d}")
+        if not summary: return None
         summary_original.main(str(out / "original.json"), timeout=1800)
         time.sleep(3)                                                     # the file is written at the Summary
     finally:
@@ -106,9 +107,11 @@ def main():
     p.add_argument("--mode", choices=["vs", "stage"], default="vs")
     p.add_argument("--stage-steps", type=int, default=0, help="J presses on the Stage line (50 = Survival after 5)")
     p.add_argument("--watch", type=int, default=0, help="seconds of frames (every 10 s) after the start; needs --shots")
+    p.add_argument("--watch-only", action="store_true", help="stop after the frames: no Summary, recording or Mac run")
     a = p.parse_args(); out = Path(a.out); out.mkdir(parents=True, exist_ok=True)
     recording = next(iter(sorted(out.glob("*.lfr"))), None) if (out / "original.json").exists() else None
-    recording = recording or record(out, a.computers, a.shots, a.mode, a.stage_steps, a.watch)
+    recording = recording or record(out, a.computers, a.shots, a.mode, a.stage_steps, a.watch, not a.watch_only)
+    if recording is None: return 0
     mac = out / "mac.json"
     if not mac.exists():
         overlay = out / "overlay"; overlay.mkdir(exist_ok=True)
