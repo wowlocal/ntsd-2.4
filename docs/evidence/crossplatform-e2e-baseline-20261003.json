@@ -1,0 +1,21 @@
+{
+  "date": "2026-10-03",
+  "purpose": "app e2e baseline before P5 step 5 (display backend move) in docs/research/CROSS_PLATFORM.md",
+  "tool": "python3 tools/app_e2e.py --build --scenario all (frozen references in tools/app_e2e_*_reference.json, unchanged)",
+  "head_882adc6": {
+    "build": "build/swiftpm-app release, Xcode toolchain, native build system",
+    "duration": "17 min 44 s",
+    "pass": ["vs (with quit, website, controls, online, recording checks)", "mission", "demo", "war", "tournament", "altenter", "team-tournament", "joystick"],
+    "fail": {
+      "playback": "milestones/progress: alert 'Loading error!  Recording file may be corrupted!!' at iteration 251 instead of gameplay with tools' ORIGINAL_RECORDING (downloads/NTSD_2.4_2.0a/NTSD 2.4_2.0a/recording/20260331_012329_VS.lfr)",
+      "tournament-win": "only the final capture hash at iteration 14500 differed (5b462dba… vs reference 7ade184d…)"
+    }
+  },
+  "pre_crossplatform_74be317": {
+    "how": "detached worktree on X5, own release build, app_e2e --app <that binary>",
+    "playback": "fail, same alert at iteration 251: pre-existing, not caused by the cross-platform work",
+    "tournament-win": "pass"
+  },
+  "reruns_at_882adc6": {"tournament-win": ["pass", "pass"]},
+  "conclusion": "Steps P0–P5.4 cause no e2e regression. playback fails on main at 74be317 too. tournament-win's last capture is nondeterministic under load (1 of 3 runs at 882adc6 differed; the full run shared the machine with Linux test containers)."
+}
