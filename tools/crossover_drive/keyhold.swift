@@ -1,6 +1,6 @@
 // Held key presses for the cross-play trial: the original reads WM_KEYDOWN/KEYUP
 // into per-frame key state, so an instant down/up (cua-driver press_key) is lost.
-// usage: keyhold <pid> <pid|hid> <holdMs> <gapMs> <keycode>...
+// usage: keyhold <pid> <pid|hid> <holdMs> <gapMs> <keycode>...   ("-N" releases N only)
 // "pid" posts to the game process only; "hid" posts to the HID tap and refuses
 // unless the game is the frontmost application before every event.
 import AppKit
@@ -11,7 +11,7 @@ guard args.count >= 6, let pid = pid_t(args[1]), let hold = UInt32(args[3]), let
     print("usage: keyhold <pid> <pid|hid> <holdMs> <gapMs> <keycode>..."); exit(2)
 }
 let mode = args[2]
-let codes = args[5...].compactMap { CGKeyCode($0) }
+let codes = Array(args[5...])
 let source = CGEventSource(stateID: .hidSystemState)
 
 func front() -> Bool { NSWorkspace.shared.frontmostApplication?.processIdentifier == pid }
@@ -26,7 +26,12 @@ func post(_ code: CGKeyCode, _ down: Bool) {
     }
 }
 
-for code in codes {
+for word in codes {
+    // "-N": a key-up only, for a key whose release the game missed.
+    if word.hasPrefix("-"), let code = CGKeyCode(word.dropFirst()) {
+        post(code, false); usleep(gap * 1000); print("key", code, "released"); continue
+    }
+    guard let code = CGKeyCode(word) else { continue }
     post(code, true); usleep(hold * 1000)
     post(code, false); usleep(gap * 1000)
     print("key", code, "held", hold, "ms")

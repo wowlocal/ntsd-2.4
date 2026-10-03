@@ -47,6 +47,13 @@ def trace(pid, count, started=lambda: None, on_wait=lambda: None, first_hit=lamb
     run("break *0x421cdc")
     hits = []
     try:
+        def resume():
+            # A box the game opens while running (CrossOver's music ERROR)
+            # blocks its next tick until on_wait closes it.
+            child.send("cont\r")
+            while True:
+                try: child.expect(PROMPT, timeout=5); return
+                except pexpect.TIMEOUT: on_wait()
         child.send("cont\r"); started()
         while True:
             try: child.expect(PROMPT, timeout=5); break
@@ -63,7 +70,7 @@ def trace(pid, count, started=lambda: None, on_wait=lambda: None, first_hit=lamb
                 seats[seat] = {name: signed(words(a + offset, 1)[0]) for name, offset in FIELDS}
             hits.append(dict(tick=signed(tick), rngIndex=signed(index), rngCounter=signed(counter), phase12=signed(phase12),
                               phase3=signed(phase3), phase2=signed(phase2), seats=seats))
-            run("cont", timeout=600)
+            resume()
     finally:
         try:
             run("delete 1"); child.send("detach\r"); time.sleep(1)

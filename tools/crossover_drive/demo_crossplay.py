@@ -11,8 +11,8 @@ the 3000-byte table at 44ff90 from it once. The original's seed is its real
 startup time, so after START its table is overwritten with the Mac's
 (`winedbg`, `set` per dword); the table index 450bcc and counter 450c34 are
 read on both sides and must agree. Then S x5 and J open the Demo; CrossOver's
-music ERROR box is closed with a click whenever it appears (Attack, and a
-key that closes the box, ends a Demo).
+music ERROR box is closed with a click whenever it appears, and J is released
+after it (see `opened`).
 
 The phase counter 450bd0 (mod 12; HP regeneration when 0, falling and hit
 rules) also advances on every menu frame in both programs and is not reset for
@@ -61,6 +61,14 @@ def mac(out, base):
     if not path.exists(): raise SystemExit("no Mac summary")
 
 
+def opened(pid):
+    """While the Demo starts: close the music ERROR box, then release J. The
+    box opens while J (which chose Demo) is still down and takes its key-up,
+    so the game keeps P1's Attack (+d1) pressed, and at the first Summary
+    (timer >= 144) a pressed Attack on seats 0..7 ends the Demo."""
+    if po.dismiss_error(): po.keys(pid, ["-38"])
+
+
 def mac_phase(trace):
     """450bd0 after the Mac's first gameplay cycle (the original's value at
     its first 421cdc, inside that tick)."""
@@ -90,7 +98,7 @@ def original(out, base):
         def first(run):
             state["originalPhase12"] = summary_original.signed(int(re.findall(r"([0-9a-f]{8})\s*$", run("x /x 0x450bd0").strip())[-1], 16))
             run(f"set *(int*)0x450bd0 = {phase}")
-        trace_ticks.trace(pid, 1, started=lambda: po.keys(pid, [1] * 5 + [38]), on_wait=po.dismiss_error, first_hit=first)
+        trace_ticks.trace(pid, 1, started=lambda: po.keys(pid, [1] * 5 + [38]), on_wait=lambda: opened(pid), first_hit=first)
         (out / "original-random.json").write_text(json.dumps(state, indent=1))
         deadline = time.time() + 1800
         while time.time() < deadline:
@@ -122,7 +130,7 @@ def traces(out, base, count):
     try:
         wd.wine("winedbg", "--file", "Z:" + str(poke), "0x" + pid, timeout=300)
         phase = mac_phase(path)
-        hits = trace_ticks.trace(pid, count, started=lambda: po.keys(pid, [1] * 5 + [38]), on_wait=po.dismiss_error,
+        hits = trace_ticks.trace(pid, count, started=lambda: po.keys(pid, [1] * 5 + [38]), on_wait=lambda: opened(pid),
                                  first_hit=lambda run: run(f"set *(int*)0x450bd0 = {phase}"))
     finally:
         po.stop(clone, launcher); held.close()
