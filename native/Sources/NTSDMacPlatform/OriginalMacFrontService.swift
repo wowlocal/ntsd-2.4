@@ -46,7 +46,7 @@ import NTSDCore
                 }
                 prepared = .diagnostic(q,diagnostic)
             } else if OriginalMacDisplayBackend.handles(q) { prepared = .display(try backend.prepare(q)) }
-            else { prepared = .window(try backend.windows.prepare(q)) }
+            else { prepared = .window(try backend.macWindows.prepare(q)) }
         case .front(_,let q):prepared = .front(try backend.prepareFront(q))
         case .bitmap:throw OriginalMacDisplayBackend.Boundary.unsupported("bitmap uses its existing service")
         }
@@ -54,14 +54,14 @@ import NTSDCore
         do {
             switch prepared {
             case .display(let q):let r = try backend.perform(q);try answer(.window(r.response),r.resources)
-            case .window(let q):let r = try backend.windows.perform(q);try answer(.window(r.response),r.resources)
+            case .window(let q):let r = try backend.macWindows.perform(q);try answer(.window(r.response),r.resources)
             case .front(let q):let r = try backend.performFront(q);try answer(.front(r.response),r.resources)
             case .diagnostic(let q,let consume):
                 let response = try consume(q)
-                try answer(.window(response),backend.retainedResources+backend.windows.retainedResources)
+                try answer(.window(response),backend.retainedResources+backend.macWindows.retainedResources)
             }
         } catch {
-            try fail(String(reflecting:error),backend.retainedResources+backend.windows.retainedResources);throw error
+            try fail(String(reflecting:error),backend.retainedResources+backend.macWindows.retainedResources);throw error
         }
     }
 }

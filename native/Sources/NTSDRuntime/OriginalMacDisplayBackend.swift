@@ -1,5 +1,7 @@
-import AppKit
-import Darwin
+import Foundation
+#if canImport(CoreGraphics)
+import CoreGraphics
+#endif
 import NTSDCore
 
 /// Windowed host resources. XRGB8888 and logical desktop points describe this
@@ -37,7 +39,7 @@ import NTSDCore
         fileprivate init(_ token: UInt32,_ kind: Kind) { self.token = token; self.kind = kind }
     }
     private final class Draw: Resource {
-        var window: OriginalMacWindowBackend.WindowLease?
+        var window: (any OriginalRuntimeWindowLease)?
         /// Exclusive full-screen level (0x11) and its declared display mode
         /// (APPLICATION_FULL_SCREEN_PLAN.md: answered DD_OK, shown scaled).
         var exclusive = false, mode: (width: Int,height: Int)?
@@ -83,14 +85,16 @@ import NTSDCore
     }
     private final class Clipper: Resource {
         let draw: Draw
-        var window: OriginalMacWindowBackend.WindowLease?
+        var window: (any OriginalRuntimeWindowLease)?
         init(_ token: UInt32,_ draw: Draw) { self.draw = draw; super.init(token,.clipper) }
     }
     private final class WeakResource {
         weak var value: Resource?
         init(_ value: Resource) { self.value = value }
     }
-    public let windows: OriginalMacWindowBackend
+    public let windows: any OriginalRuntimeWindowing
+    /// Glyph masks for TextOutA; the Mac rasterises with CoreText.
+    private let textMask: ([UInt8]) -> TextMask
     private var bitmapModule: Resource?
     /// Served operations in order, kept only with `keepsOperationLogs`; the
     /// counts are always kept.
@@ -124,9 +128,10 @@ import NTSDCore
     /// The live app keeps no operation logs: a match replays ≈130 draws per
     /// gameplay body, so a log would grow without bound.
     public let keepsOperationLogs: Bool
-    public init(windows: OriginalMacWindowBackend,maximumBytes: Int = 256*1024*1024,freshSurfacesKnownBlack: Bool = false,
-                presentUnknownAsBlack: Bool = false,rleHolesReadPaletteZero: Bool = false,keepsOperationLogs: Bool = true) {
-        self.windows = windows; budget = Budget(maximumBytes); self.freshSurfacesKnownBlack = freshSurfacesKnownBlack
+    public init(windows: any OriginalRuntimeWindowing,maximumBytes: Int = 256*1024*1024,freshSurfacesKnownBlack: Bool = false,
+                presentUnknownAsBlack: Bool = false,rleHolesReadPaletteZero: Bool = false,keepsOperationLogs: Bool = true,
+                textMask: @escaping ([UInt8]) -> TextMask) {
+        self.windows = windows; self.textMask = textMask; budget = Budget(maximumBytes); self.freshSurfacesKnownBlack = freshSurfacesKnownBlack
         self.presentUnknownAsBlack = presentUnknownAsBlack; self.rleHolesReadPaletteZero = rleHolesReadPaletteZero
         self.keepsOperationLogs = keepsOperationLogs
     }
@@ -183,7 +188,7 @@ import NTSDCore
         case "cooperativeLevel":
             // DDSCL_NORMAL (windowed) or DDSCL_EXCLUSIVE|DDSCL_FULLSCREEN (Alt+Enter).
             try require(q.words.count == 3 && (q.words[2] == 8 || q.words[2] == 0x11))
-            _ = try resource(q.words[0],as:Draw.self); _ = try windows.lease(q.words[1])
+            _ = try resource(q.words[0],as:Draw.self); _ = try windows.windowLease(q.words[1])
         case "displayMode":
             try require(q.words.count == 4 && q.words[3] == 8 && q.words[1] > 0 && q.words[2] > 0 &&
                 q.words[1] <= 0x4000 && q.words[2] <= 0x4000)
@@ -210,7 +215,7 @@ import NTSDCore
             try require(q.words.count == 4 && q.words[1...3] == [0,0x457584,0]); _ = try resource(q.words[0],as:Draw.self)
         case "clipperWindow":
             try require(q.words.count == 3 && q.words[1] == 0)
-            _ = try resource(q.words[0],as:Clipper.self); _ = try windows.lease(q.words[2])
+            _ = try resource(q.words[0],as:Clipper.self); _ = try windows.windowLease(q.words[2])
         case "setClipper":
             try require(q.words.count == 2)
             let s = try resource(q.words[0],as:Surface.self)
@@ -267,9 +272,6 @@ import NTSDCore
               rect.minY.rounded(.towardZero) == rect.minY,rect.maxX <= CGFloat(s.width),rect.maxY <= CGFloat(s.height) else { throw Boundary.geometry }
         return (Int(rect.minX),Int(rect.minY),w,h,window.token)
     }
-    private func image(_ data: Storage,_ region: (Int,Int,Int,Int,UInt32?)) throws -> CGImage {
-        try framebuffer(data,region).cgImage()
-    }
     /// The region's presentation words; unknown pixels are black only when
     /// `presentUnknownAsBlack` allows it.
     private func framebuffer(_ data: Storage,_ region: (Int,Int,Int,Int,UInt32?)) throws -> OriginalFramebuffer {
@@ -289,10 +291,11 @@ import NTSDCore
         }
         return OriginalFramebuffer(width:w,height:h,pixels:bytes)
     }
-    public func image(_ token: UInt32) throws -> CGImage {
+    /// The surface's presentation rectangle as a framebuffer.
+    public func framebuffer(_ token: UInt32) throws -> OriginalFramebuffer {
         let s = try resource(token,as:Surface.self)
         guard let data = s.storage else { throw Boundary.released(token) }
-        return try image(data,rectangle(s))
+        return try framebuffer(data,rectangle(s))
     }
     public func perform(_ prepared: Prepared) throws -> Served {
         guard prepared.identity === identity else { throw Boundary.foreignPreparation }
@@ -305,7 +308,7 @@ import NTSDCore
         case "directDrawCreate":
             let d = try Draw(windows.identities.take()); install(d);retained = [d];response = .init(output:d.token)
         case "cooperativeLevel":
-            let d = try resource(q.words[0],as:Draw.self),w = try windows.lease(q.words[1])
+            let d = try resource(q.words[0],as:Draw.self),w = try windows.windowLease(q.words[1])
             _ = try windows.displayGeometry(w.token);d.window = w;d.exclusive = q.words[2] == 0x11;retained = [d,w];response = .init()
         case "displayMode":
             let d = try resource(q.words[0],as:Draw.self)
@@ -342,7 +345,7 @@ import NTSDCore
             let d = try resource(q.words[0],as:Draw.self),c = try Clipper(windows.identities.take(),d)
             install(c);retained = [c];response = .init(output:c.token)
         case "clipperWindow":
-            let c = try resource(q.words[0],as:Clipper.self),w = try windows.lease(q.words[2])
+            let c = try resource(q.words[0],as:Clipper.self),w = try windows.windowLease(q.words[2])
             _ = try windows.displayGeometry(w.token);c.window = w;retained = [c,w];response = .init()
         case "setClipper":
             let s = try resource(q.words[0],as:Surface.self)
@@ -363,7 +366,7 @@ import NTSDCore
             guard let data = s.storage else { throw Boundary.released(s.token) }
             let rect = try rectangle(s),(x,y,w,h,window) = rect
             for row in y..<(y+h) { for column in x..<(x+w) { let i = row*data.width+column;data.values[i] = color.littleEndian;data.known[i] = 1 } }
-            if let window { try windows.display(image(data,rect),in:window) }
+            if let window { try windows.present(framebuffer(data,rect),in:window) }
             retained = [s];response = .init()
         default:throw Boundary.unsupported(q.kind)
         }
@@ -639,27 +642,10 @@ extension OriginalMacDisplayBackend {
     /// text extent's width.
     public struct TextMask: Equatable {
         public let advance: Int, originX: Int, originY: Int, width: Int, height: Int, bits: [UInt8]
-    }
-    /// Declared temporary stand-in for SYSTEM_FONT (user decision 2026-10-01):
-    /// the macOS system font, bold, 13 px em, baseline at the cell's +13.
-    public static func textMask(_ bytes: [UInt8]) -> TextMask {
-        let font = NSFont.systemFont(ofSize:CGFloat(textCell-3),weight:.bold)
-        let attributes: [NSAttributedString.Key:Any] = [.font:font,
-            NSAttributedString.Key(kCTForegroundColorAttributeName as String):CGColor(gray:1,alpha:1)]
-        let line = CTLineCreateWithAttributedString(NSAttributedString(string:String(decoding:bytes,as:UTF8.self),attributes:attributes))
-        let advance = max(0,Int(CTLineGetTypographicBounds(line,nil,nil,nil).rounded()))
-        let margin = 4,width = advance+2*margin,height = textCell+2*margin
-        var bits = [UInt8](repeating:0,count:width*height)
-        bits.withUnsafeMutableBytes { raw in
-            guard let context = CGContext(data:raw.baseAddress,width:width,height:height,bitsPerComponent:8,bytesPerRow:width,
-                                          space:CGColorSpaceCreateDeviceGray(),bitmapInfo:CGImageAlphaInfo.none.rawValue) else { return }
-            context.setAllowsAntialiasing(false); context.setShouldAntialias(false)
-            context.setAllowsFontSmoothing(false); context.setShouldSmoothFonts(false)
-            // Memory row 0 is the image top; the cell spans rows margin..<margin+16.
-            context.textPosition = CGPoint(x:margin,y:margin+textCell-textAscent)
-            CTLineDraw(line,context)
+        public init(advance: Int, originX: Int, originY: Int, width: Int, height: Int, bits: [UInt8]) {
+            self.advance = advance; self.originX = originX; self.originY = originY
+            self.width = width; self.height = height; self.bits = bits
         }
-        return .init(advance:advance,originX:margin,originY:margin,width:width,height:height,bits:bits.map { $0 >= 128 ? 1 : 0 })
     }
     /// A COLORREF (0x00BBGGRR) as the native XRGB surface value.
     static func xrgb(_ color: UInt32) -> UInt32 { (color & 0xff) << 16 | (color & 0xff00) | (color >> 16) & 0xff }
@@ -670,7 +656,7 @@ extension OriginalMacDisplayBackend {
     private func drawText(_ bytes: [UInt8],x: Int,y: Int,_ dc: TextDC) throws {
         let s = dc.surface
         guard let data = s.storage else { throw Boundary.released(s.token) }
-        let mask = Self.textMask(bytes),background = Self.xrgb(dc.background),color = Self.xrgb(dc.color)
+        let mask = textMask(bytes),background = Self.xrgb(dc.background),color = Self.xrgb(dc.color)
         func set(_ column: Int,_ row: Int,_ value: UInt32) {
             guard column >= 0,row >= 0,column < data.width,row < data.height else { return }
             let i = row*data.width+column;data.values[i] = value.littleEndian;data.known[i] = 1
@@ -683,7 +669,7 @@ extension OriginalMacDisplayBackend {
         let right = min(data.width,x-mask.originX+mask.width),bottom = min(data.height,y-mask.originY+mask.height)
         if left < right,top < bottom {
             let target = try frontTarget(s,.init(left:left,top:top,right:right,bottom:bottom))
-            if let window = target.delivery.4 { try windows.display(image(data,target.delivery),in:window) }
+            if let window = target.delivery.4 { try windows.present(framebuffer(data,target.delivery),in:window) }
         }
     }
     /// Whether a Blt rectangle (nil: whole surface) lies inside the surface with
@@ -846,7 +832,7 @@ extension OriginalMacDisplayBackend {
                     let i = y*data.width+x;data.values[i] = color.littleEndian;data.known[i] = 1
                 } }
             }
-            if let window = target.delivery.4 { try windows.display(image(data,target.delivery),in:window) }
+            if let window = target.delivery.4 { try windows.present(framebuffer(data,target.delivery),in:window) }
             owners = [target.surface];response = .init(result:0)
         case .copy(let copy):
             let input = copy.source.storage!,output = copy.target.surface.storage!
@@ -859,7 +845,7 @@ extension OriginalMacDisplayBackend {
                     output.values[b] = input.values[a];output.known[b] = 1
                 } }
             }
-            if let window = copy.target.delivery.4 { try windows.display(image(output,copy.target.delivery),in:window) }
+            if let window = copy.target.delivery.4 { try windows.present(framebuffer(output,copy.target.delivery),in:window) }
             owners = [copy.target.surface,copy.source];response = .init(result:0)
         case .release(let s):
             release(s);owners = [s];response = .init(result:Int32(bitPattern:s.references))
@@ -871,7 +857,7 @@ extension OriginalMacDisplayBackend {
             let surfaces = [primary]+primary.chain,storages = surfaces.map(\.storage)
             for (i,s) in surfaces.enumerated() { s.storage = storages[(i+1)%surfaces.count] }
             let data = primary.storage!,window = primary.draw.window!.token
-            try windows.display(image(data,(0,0,data.width,data.height,window)),in:window)
+            try windows.present(framebuffer(data,(0,0,data.width,data.height,window)),in:window)
             owners = surfaces;response = .init(result:0)
         case .text(let step):
             switch step {
@@ -896,16 +882,5 @@ extension OriginalMacDisplayBackend {
         }
         frontOperationCount += 1; if keepsOperationLogs { frontOperations.append(.init(request:prepared.request,response:response)) }
         return .init(response:response,resources:owners)
-    }
-}
-
-extension OriginalFramebuffer {
-    /// The sRGB `noneSkipFirst | byteOrder32Little` CGImage over these bytes.
-    func cgImage() throws -> CGImage {
-        guard let provider = CGDataProvider(data:pixels as CFData),let space = CGColorSpace(name:CGColorSpace.sRGB),
-            let result = CGImage(width:width,height:height,bitsPerComponent:8,bitsPerPixel:32,bytesPerRow:width*4,space:space,
-                bitmapInfo:CGBitmapInfo(rawValue:CGImageAlphaInfo.noneSkipFirst.rawValue).union(.byteOrder32Little),
-                provider:provider,decode:nil,shouldInterpolate:false,intent:.defaultIntent) else { throw OriginalMacDisplayBackend.Boundary.image }
-        return result
     }
 }

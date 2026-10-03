@@ -2,6 +2,7 @@ import AppKit
 import XCTest
 @testable import NTSDCore
 @testable import NTSDMacPlatform
+@testable import NTSDRuntime
 
 @MainActor final class OriginalMacDisplayBackendTests: XCTestCase {
     typealias W = OriginalMacWindowBackendTests

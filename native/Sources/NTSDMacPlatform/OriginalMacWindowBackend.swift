@@ -137,14 +137,7 @@ import NTSDCore
         return .init(token:token,title:w.title,frame:w.frame,client:w.contentView?.bounds ?? .zero,
             backingScale:w.backingScaleFactor,visible:w.isVisible,closed:owner.closed,windowNumber:w.windowNumber)
     }
-    public struct DisplayGeometry: Equatable {
-        public let screen: CGRect, clientOnScreen: CGRect
-        /// Top-left desktop coordinates in logical AppKit points.
-        public var clientInDesktop: CGRect {
-            .init(x:clientOnScreen.minX-screen.minX,y:screen.maxY-clientOnScreen.maxY,
-                  width:clientOnScreen.width,height:clientOnScreen.height)
-        }
-    }
+    public typealias DisplayGeometry = OriginalRuntimeDisplayGeometry
     public func displayGeometry(_ token: UInt32) throws -> DisplayGeometry {
         let owner = try lease(token)
         if let held = owner.held,!owner.closed { return held }

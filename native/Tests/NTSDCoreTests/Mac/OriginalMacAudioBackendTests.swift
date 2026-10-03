@@ -3,6 +3,7 @@ import AVFAudio
 import XCTest
 @testable import NTSDCore
 @testable import NTSDMacPlatform
+@testable import NTSDRuntime
 @testable import NTSDReferenceChecks
 
 @MainActor final class OriginalMacAudioBackendTests: XCTestCase {
