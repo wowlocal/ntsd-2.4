@@ -2,11 +2,11 @@ import Foundation
 import NTSDCore
 
 /// The app's Winsock for the original's network code (NETWORK_PLAY_PLAN.md):
-/// main-menu requests (402b60, row 2's bind/listen) answered through
-/// `OriginalMacWinsock`, and its FD_* notifications posted as the window's
-/// 0x401 messages.
+/// main-menu requests (402b60, row 2's bind/listen) answered through the
+/// host's `OriginalRuntimeSockets` (the Mac's `OriginalMacWinsock`), and its
+/// FD_* notifications posted as the window's 0x401 messages.
 public final class OriginalMacRuntimeNetwork {
-    public let winsock = OriginalMacWinsock()
+    public let winsock: any OriginalRuntimeSockets
     /// gethostbyname's hostent: a nonzero declared token; its contents are the
     /// address list answered with it.
     public static let hostEntry: UInt32 = 0x0d0e_0001
@@ -22,7 +22,9 @@ public final class OriginalMacRuntimeNetwork {
     /// An explicit local-address response for controlled app tests. The normal
     /// app uses the Mac resolver; the engine still selects and binds its address.
     private let localAddresses: [UInt32]?
-    public init(localAddresses: [UInt32]? = nil) { self.localAddresses = localAddresses }
+    public init(localAddresses: [UInt32]? = nil,sockets: any OriginalRuntimeSockets) {
+        self.localAddresses = localAddresses; winsock = sockets
+    }
     public enum Boundary: Error, Equatable { case malformed(String) }
 
     /// 402d70 keeps its recovered gates, raw address suffix and error branches.
@@ -80,7 +82,7 @@ public final class OriginalMacRuntimeNetwork {
 
     /// Fixed strings in the pinned EXE, read statically for INPUT_CONTROL.
     /// The two version messages intentionally differ by one trailing space.
-    static func controlError(_ address: UInt32) throws -> [UInt8] {
+    public static func controlError(_ address: UInt32) throws -> [UInt8] {
         let text: String
         switch address {
         case 0x4493b4:text = "Connection Lost!"
@@ -118,10 +120,10 @@ public final class OriginalMacRuntimeNetwork {
             return host(winsock.hostAddresses(address:address))
         case .addressWord:
             guard a.isEmpty else { throw Boundary.malformed("client addressWord") }
-            return .init(result:Int32(bitPattern:OriginalMacWinsock.address(q.bytes)))
+            return .init(result:Int32(bitPattern:OriginalRuntimeSocketText.address(q.bytes)))
         case .htons:
             guard a.count == 1,q.bytes.isEmpty else { throw Boundary.malformed("client htons") }
-            return .init(result:Int32(OriginalMacWinsock.htons(UInt16(truncatingIfNeeded:a[0]))))
+            return .init(result:Int32(OriginalRuntimeSocketText.htons(UInt16(truncatingIfNeeded:a[0]))))
         case .connect:
             guard a.count == 2,a[1] == 16,q.bytes.count == 16,q.bytes[0] == 2,q.bytes[1] == 0 else { throw Boundary.malformed("client connect") }
             let b = q.bytes,port = UInt16(b[2]) << 8 | UInt16(b[3])
@@ -184,7 +186,7 @@ public final class OriginalMacRuntimeNetwork {
         case .hostLookup:
             guard e.strings.count == 1 else { throw Boundary.malformed("hostLookup") }
             guard let words = localAddresses ?? winsock.hostAddresses(e.strings[0]) else { return .init(word: 0) }
-            return .init(word: Self.hostEntry, addresses: words.map { .init(word: $0, text: OriginalMacWinsock.text($0)) })
+            return .init(word: Self.hostEntry, addresses: words.map { .init(word: $0, text: OriginalRuntimeSocketText.text($0)) })
         case .socket:
             guard w.count == 3 else { throw Boundary.malformed("socket") }
             return .init(word: winsock.socket(family: Int32(bitPattern: w[0]), type: Int32(bitPattern: w[1]), protocol: Int32(bitPattern: w[2])))

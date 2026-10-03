@@ -25,9 +25,7 @@ public final class OriginalMacWinsock {
     public enum Event: UInt32 { case read = 1, write = 2, accept = 8, connect = 16, close = 32 }
     /// A window message the original's WndProc receives (wParam = socket,
     /// lParam = event | error << 16).
-    public struct Notification: Equatable {
-        public let window: UInt32, message: UInt32, socket: UInt32, lParam: UInt32
-    }
+    public typealias Notification = OriginalRuntimeSocketNotification
     private struct Selection { let window: UInt32, message: UInt32, events: UInt32 }
     private final class Socket {
         let fd: Int32
@@ -191,21 +189,10 @@ public final class OriginalMacWinsock {
         return words
     }
     /// inet_addr: dotted decimal to an address word, INADDR_NONE when invalid.
-    public static func address(_ text: [UInt8]) -> UInt32 {
-        let parts = String(decoding: text.prefix { $0 != 0 }, as: UTF8.self).split(separator: ".", omittingEmptySubsequences: false)
-        guard parts.count == 4 else { return 0xffff_ffff }
-        var word: UInt32 = 0
-        for (i, part) in parts.enumerated() {
-            guard let value = UInt8(part) else { return 0xffff_ffff }
-            word |= UInt32(value) << (8*UInt32(i))
-        }
-        return word
-    }
+    public static func address(_ text: [UInt8]) -> UInt32 { OriginalRuntimeSocketText.address(text) }
     /// inet_ntoa of an address word.
-    public static func text(_ word: UInt32) -> [UInt8] {
-        Array((0..<4).map { String((word >> (8*UInt32($0))) & 0xff) }.joined(separator: ".").utf8)
-    }
-    public static func htons(_ value: UInt16) -> UInt16 { value.byteSwapped }
+    public static func text(_ word: UInt32) -> [UInt8] { OriginalRuntimeSocketText.text(word) }
+    public static func htons(_ value: UInt16) -> UInt16 { OriginalRuntimeSocketText.htons(value) }
 
     // MARK: - Sockets
 
@@ -382,3 +369,5 @@ public final class OriginalMacWinsock {
         data[offset] = UInt8(value & 0xff); data[offset+1] = UInt8(value >> 8)
     }
 }
+
+extension OriginalMacWinsock: OriginalRuntimeSockets {}

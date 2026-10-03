@@ -177,21 +177,25 @@ user's approval to push. Until then, keep the other phases moving.
 | 2026-10-04 | P5 step 7 (narrowed) | DisplayStartupService and BitmapService moved to `NTSDRuntime` unchanged; they only use runtime types. RuntimeStartupService needs the window request model (`prepare`/`perform` with the Mac `Prepared`), and RuntimeNetwork needs a Winsock provider, so both wait for their steps. | BitmapBackend, ObservedBitmap, RuntimeStartup, RuntimeMenu, ObservedIteration 24/24 on a fresh test build; 697 listed; Xcode release; Linux `NTSDRuntime`. e2e not rerun: pure file move, no code change | 1dcf183 |
 | 2026-10-04 | P3 memory | The heavy `Lib*` suites (LibSelectionCommands, LibSelectionStage, LibStageMode, LibTeamTournamentBracket/Preparation, so far) are OOM-killed on Linux even alone. `OriginalLibStageModeTests` peaks at 4.1 GB RSS on macOS (release, 64 s, passes), but in the container it grows 0.26→8.3 GiB in 21 s and is killed at the 11.7 GiB OrbStack VM limit (`OOMKilled=true`). `MALLOC_ARENA_MAX=2` changes nothing. Its fixture setup decodes a 1.19 GB JSON corpus with `JSONDecoder`, then parses it again into a full `JSONSerialization` `[String: Any]` tree, which corelibs Foundation represents far less compactly. Options: (a) rework these tests' corpus loading to avoid full trees, or (b) a larger VM, which is the user's OrbStack setting and restarts their containers. Asked the user. | samples `logs/mem-linux-LibStageMode*.tsv`, `logs/mem-macos-LibStageMode.log` | 6cdb5c2 |
 | 2026-10-04 | P5 step 8 | **The window request model moved to `NTSDRuntime`.** `OriginalRuntimeWindowBackend` now owns: tokens; cursor, class and window leases; request validation; the `perform` dispatch with its order; operations; metrics rules; held/full-screen geometry; present checks. It drives an `OriginalRuntimeWindowHost` (screen size, frame metric, cursor, create, windowCreated, orderFront, update, show, close, nonisolated `released`, client bounds/frame, display geometry, desktop point, present). `OriginalMacWindowHost` reproduces the AppKit code line for line. `OriginalMacWindowBackend` is now a typealias; Mac-only services (observation, `display(CGImage)`, capture, input, close request, macOS full screen, hide, clientPoint, PNG snapshots) are extensions. The lease keeps the host strongly, so a released open window is still closed after the backend is gone. | 51 tests (window, geometry, display, color, framebuffer, front raster, startup, menu, observed ×3, audio) on a fresh test build; 697 listed; Xcode release; Linux `NTSDRuntime`; full app e2e 9/10 = baseline, including altenter | d855299 |
-| 2026-10-04 | P5 step 9 | RuntimeStartupService, WindowStartupService and WindowGeometryService moved to `NTSDRuntime`. The startup service takes its `OriginalMacRuntimeMusic` as an init argument, and the Mac `init(windows:heap:environment:)` supplies the NSAlert one. `FileEffect` gained a public init. | Startup, Menu, Loading, WindowBackend, WindowGeometry, ObservedIteration, ObservedGraphics, MusicOutput 41/41 on a fresh test build; 697 listed; Xcode release; Linux `NTSDRuntime`; full app e2e 9/10 = baseline | this commit |
+| 2026-10-04 | P5 step 9 | RuntimeStartupService, WindowStartupService and WindowGeometryService moved to `NTSDRuntime`. The startup service takes its `OriginalMacRuntimeMusic` as an init argument, and the Mac `init(windows:heap:environment:)` supplies the NSAlert one. `FileEffect` gained a public init. | Startup, Menu, Loading, WindowBackend, WindowGeometry, ObservedIteration, ObservedGraphics, MusicOutput 41/41 on a fresh test build; 697 listed; Xcode release; Linux `NTSDRuntime`; full app e2e 9/10 = baseline | 60b463b |
+| 2026-10-04 | P5 step 10 | `OriginalRuntimeSockets` covers every Winsock call the original makes, plus `lastError`/`boundPort` and FD_* `post`. `OriginalRuntimeSocketNotification` and the pure `OriginalRuntimeSocketText` (inet_addr/ntoa/htons) are in `NTSDRuntime`. `OriginalMacRuntimeNetwork` moved there and takes its sockets; the Mac `init(localAddresses:)` supplies `OriginalMacWinsock`, whose statics forward. The first gate run stopped at the test build: the protocol lacked `boundPort`/`lastError`. | Winsock, NetworkHost, NetworkExit, RuntimeMenu, RuntimeLoading 23/23 on a fresh test build; 697 listed; Xcode release; Linux `NTSDRuntime`; full app e2e 9/10 = baseline (including vs's online check) | this commit |
 
 ## Next task
 
-P5 step 10, the Winsock provider.
+P5 step 11, the remaining Mac files and the composition root. Left in
+NTSDMacPlatform: RuntimeLoading (NSOpenPanel/NSAlert/NSWorkspace), RuntimeMenu
+(NSAlert, caps lock), FrontService (needs only the runtime window backend),
+RuntimeStartup (composition, `NSApplication.shared`), and the AppKit/AVFoundation
+adapters.
 
-- Put a protocol in front of `OriginalMacWinsock`'s public surface (startup,
-  cleanup, host name/addresses, socket, bind, listen, accept, connect, send,
-  receive, close, non-blocking, asyncSelect, post, started, open handles).
-- Move `OriginalMacRuntimeNetwork` to `NTSDRuntime` over it. The Darwin
-  sockets with Dispatch sources stay as the Mac provider; P7 adds POSIX
-  (Linux) and Winsock (Windows) providers.
-- Also consider FrontService: it only needs the runtime window backend now.
-- Gate: Winsock, NetworkHost/Exit and RuntimeMenu tests on a fresh test build;
-  697 listed; Xcode release; Linux `NTSDRuntime`; full app e2e = baseline.
+- Move FrontService.
+- Split RuntimeLoading and RuntimeMenu by injecting their dialogs and caps-lock
+  reads.
+- Add a runtime composition `OriginalRuntimeStartup.run(host:)` that the Mac
+  wrapper calls.
+- Then P6: an SDL3 host on macOS implementing `OriginalRuntimeWindowHost`,
+  `OriginalRuntimeWindowing`, audio output and input, compared with the AppKit
+  host on the same deterministic replay.
 
 Following tasks:
 
