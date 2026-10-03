@@ -151,6 +151,10 @@ import NTSDCore
         guard !owner.closed,let screen = owner.window.screen,let view = owner.window.contentView else { throw Boundary.geometry }
         return .init(screen:screen.frame,clientOnScreen:owner.window.convertToScreen(view.convert(view.bounds,to:nil)))
     }
+    /// Presents a finished framebuffer crop: the same CGImage path as `display`.
+    public func present(_ frame: OriginalFramebuffer,in token: UInt32) throws {
+        try display(frame.cgImage(),in:token)
+    }
     /// Consumes an owned immutable image crop; this is host delivery, not a Core
     /// observer. No implicit presentation is performed by window creation.
     public func display(_ image: CGImage,in token: UInt32) throws {

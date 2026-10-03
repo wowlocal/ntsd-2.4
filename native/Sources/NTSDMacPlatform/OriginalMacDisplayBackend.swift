@@ -268,6 +268,11 @@ import NTSDCore
         return (Int(rect.minX),Int(rect.minY),w,h,window.token)
     }
     private func image(_ data: Storage,_ region: (Int,Int,Int,Int,UInt32?)) throws -> CGImage {
+        try framebuffer(data,region).cgImage()
+    }
+    /// The region's presentation words; unknown pixels are black only when
+    /// `presentUnknownAsBlack` allows it.
+    private func framebuffer(_ data: Storage,_ region: (Int,Int,Int,Int,UInt32?)) throws -> OriginalFramebuffer {
         let (x,y,w,h,_) = region
         var bytes = Data(count:w*h*4)
         try bytes.withUnsafeMutableBytes { destination in
@@ -282,11 +287,7 @@ import NTSDCore
                 }
             }
         }
-        guard let provider = CGDataProvider(data:bytes as CFData),let space = CGColorSpace(name:CGColorSpace.sRGB),
-            let result = CGImage(width:w,height:h,bitsPerComponent:8,bitsPerPixel:32,bytesPerRow:w*4,space:space,
-                bitmapInfo:CGBitmapInfo(rawValue:CGImageAlphaInfo.noneSkipFirst.rawValue).union(.byteOrder32Little),
-                provider:provider,decode:nil,shouldInterpolate:false,intent:.defaultIntent) else { throw Boundary.image }
-        return result
+        return OriginalFramebuffer(width:w,height:h,pixels:bytes)
     }
     public func image(_ token: UInt32) throws -> CGImage {
         let s = try resource(token,as:Surface.self)
@@ -895,5 +896,16 @@ extension OriginalMacDisplayBackend {
         }
         frontOperationCount += 1; if keepsOperationLogs { frontOperations.append(.init(request:prepared.request,response:response)) }
         return .init(response:response,resources:owners)
+    }
+}
+
+extension OriginalFramebuffer {
+    /// The sRGB `noneSkipFirst | byteOrder32Little` CGImage over these bytes.
+    func cgImage() throws -> CGImage {
+        guard let provider = CGDataProvider(data:pixels as CFData),let space = CGColorSpace(name:CGColorSpace.sRGB),
+            let result = CGImage(width:width,height:height,bitsPerComponent:8,bitsPerPixel:32,bytesPerRow:width*4,space:space,
+                bitmapInfo:CGBitmapInfo(rawValue:CGImageAlphaInfo.noneSkipFirst.rawValue).union(.byteOrder32Little),
+                provider:provider,decode:nil,shouldInterpolate:false,intent:.defaultIntent) else { throw OriginalMacDisplayBackend.Boundary.image }
+        return result
     }
 }
