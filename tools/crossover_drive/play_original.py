@@ -55,7 +55,15 @@ def titles():
     return [w["title"] for w in cua.call("list_windows", {})["windows"] if w["app_name"] == "NTSD 2.4.exe" and w["is_on_screen"]]
 
 
+LOCK = Path("/Volumes/X5/ntsd-2.4-research/goal-100-20261002/crossplay-loop/original.lock")
+
+
 def main(recording, out, clone=DEFAULT_CLONE):
+    # One original at a time: a second instance of the same clone confuses the
+    # pid lookup and the window filter.
+    import fcntl
+    LOCK.parent.mkdir(parents=True, exist_ok=True)
+    lock = open(LOCK, "w"); fcntl.flock(lock, fcntl.LOCK_EX)
     os.environ.setdefault("CUA_SESSION", "play-" + time.strftime("%H%M%S"))
     if not KEYHOLD.exists():
         subprocess.run(["/usr/bin/swiftc", "-O", str(HERE / "keyhold.swift"), "-o", str(KEYHOLD)], check=True)
@@ -92,6 +100,11 @@ def main(recording, out, clone=DEFAULT_CLONE):
             t = titles()
             if "Error" in t: raise SystemExit("recording rejected by the original")
             if "Open" not in t: break
+        # The match clock 450bbc must run; otherwise the playback never started.
+        for _ in range(30):
+            time.sleep(2)
+            if (word(pid, 0x450BBC) or 0) > 30: break
+        else: raise SystemExit("playback did not start")
         summary_original.main(out, timeout=900)
     finally:
         for line in subprocess.run(["ps", "-axo", "pid,command"], capture_output=True, text=True).stdout.splitlines():

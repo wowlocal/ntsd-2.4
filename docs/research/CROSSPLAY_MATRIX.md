@@ -18,7 +18,7 @@
 | Задача | Статус |
 | --- | --- |
 | Summary из памяти: оригинал через `winedbg`, Mac через дамп | ✓ `summary_original.py`, `--summary-json`, `compare_summaries.py` (2026-10-03) |
-| Пакетный прогон списка записей в оригинале через Cua | ✓ `play_original.py` (без человека), `random_vs.py` |
+| Пакетный прогон списка записей в оригинале через Cua | ✓ `play_original.py` (без человека, один экземпляр под блокировкой, проверка старта повтора), `random_vs.py` (один повтор при сбое инструмента; фон — J на строке Background) |
 | Матчи «компьютер против компьютера» в оригинале с записью (оригинал → Mac) | — |
 | Потиковое сравнение на выбранных тиках | — |
 
@@ -97,7 +97,7 @@ Grassland, Path.
 | RamenPlace | ✓ [random VS 2](../evidence/crossplay-random-vs-2.json) |
 | Springs | ✓ [random VS 1](../evidence/crossplay-random-vs-1.json) |
 | Academy | ✓ [random VS 1](../evidence/crossplay-random-vs-1.json) |
-| CastleRoof | — |
+| CastleRoof | ✓ [random VS 3](../evidence/crossplay-random-vs-3.json) |
 | Valley | — |
 | Grassland | — |
 | Path | — |

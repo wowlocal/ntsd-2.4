@@ -3,7 +3,7 @@
 all with Random characters on a Random background, then the original under
 CrossOver plays the recording and both Summaries are compared from memory.
 
-usage: random_vs.py OUT_DIR SEED [SEED...] [--computers N] [--rerolls K]
+usage: random_vs.py OUT_DIR SEED [SEED...] [--computers N] [--rerolls K] [--background-steps N...]
 
 Per seed: the app runs with `--virtual-clock SEED 8`; P1 joins as Random and
 stays idle; the final menu's Randomize is pressed K times before Fight!. The
@@ -34,9 +34,11 @@ def script(computers, rerolls, background_steps=0):
     t += 100
     for _ in range(rerolls): steps.append(f"{t} key 74"); t += 100
     if background_steps:
-        # The final menu's marker starts at Randomize; S to Background, D cycles it.
+        # The final menu's marker starts at Randomize; S moves it to Background,
+        # where each J steps 44d024 100 (Random) -> 99 -> 0 -> 1 ... (A/D change
+        # the music). N presses give background N-2, or 99 for N = 1.
         steps.append(f"{t} key 83"); t += 40
-        for _ in range(background_steps): steps.append(f"{t} key 68"); t += 30
+        for _ in range(background_steps): steps.append(f"{t} key 74"); t += 40
         steps += [f"{t} key 87", f"{t + 30} key 87", f"{t + 60} key 87", f"{t + 110} key 74", "60000 exit"]
     else:
         steps += [f"{t} key 87", f"{t + 30} key 87", f"{t + 80} key 74", "60000 exit"]
@@ -59,8 +61,12 @@ def run(out, seed, computers, rerolls, background_steps=0):
         result["result"] = "no Mac summary or recording"; return result
     original = d / "original.json"
     if not original.exists():
-        try: play_original.main(str(recordings[-1]), str(original))
-        except SystemExit as e: result["result"] = f"original: {e}"; return result
+        # One retry: a lost key in the menu or the Open dialog is a tooling
+        # failure, not a game result.
+        for attempt in range(2):
+            try: play_original.main(str(recordings[-1]), str(original)); break
+            except SystemExit as e:
+                if attempt: result["result"] = f"original: {e}"; return result
     status = compare_summaries.main(str(mac), str(original))
     result["result"] = "equal" if status == 0 else "different"
     result["mac"] = json.loads(mac.read_text()); result["original"] = json.loads(original.read_text())
@@ -70,7 +76,7 @@ def run(out, seed, computers, rerolls, background_steps=0):
 def main():
     p = argparse.ArgumentParser(description=__doc__); p.add_argument("out"); p.add_argument("seeds", nargs="+", type=int)
     p.add_argument("--computers", type=int, default=3); p.add_argument("--rerolls", type=int, default=0)
-    p.add_argument("--background-steps", type=int, nargs="*", default=[], help="per seed: D presses on the Background line")
+    p.add_argument("--background-steps", type=int, nargs="*", default=[], help="per seed: J presses on the Background line")
     a = p.parse_args(); out = Path(a.out); out.mkdir(parents=True, exist_ok=True)
     results = []
     for i, seed in enumerate(a.seeds):
