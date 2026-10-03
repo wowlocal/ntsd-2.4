@@ -87,7 +87,7 @@ Grassland, Path.
 | District | ✓ e2e VS (скрин) |
 | SandCountry | ✓ [random VS 1](../evidence/crossplay-random-vs-1.json) |
 | Cave | ✓ [random VS 1](../evidence/crossplay-random-vs-1.json) |
-| Deep | — |
+| Deep | ✓ [random VS 4](../evidence/crossplay-random-vs-4.json) |
 | Hideout | ✓ [random VS 2](../evidence/crossplay-random-vs-2.json) |
 | Rain | ✓ [random VS 2](../evidence/crossplay-random-vs-2.json) |
 | SnowCountry | ✓ [random VS 1](../evidence/crossplay-random-vs-1.json) |
@@ -98,9 +98,9 @@ Grassland, Path.
 | Springs | ✓ [random VS 1](../evidence/crossplay-random-vs-1.json) |
 | Academy | ✓ [random VS 1](../evidence/crossplay-random-vs-1.json) |
 | CastleRoof | ✓ [random VS 3](../evidence/crossplay-random-vs-3.json) |
-| Valley | — |
-| Grassland | — |
-| Path | — |
+| Valley | ✓ [random VS 4](../evidence/crossplay-random-vs-4.json) |
+| Grassland | ✓ [random VS 4](../evidence/crossplay-random-vs-4.json) |
+| Path | ✓ [random VS 4](../evidence/crossplay-random-vs-4.json) |
 | встроенный фон 99 | ✓ [random VS 1](../evidence/crossplay-random-vs-1.json) |
 
 ## 4. Режимы и стадии (приоритет 4)
