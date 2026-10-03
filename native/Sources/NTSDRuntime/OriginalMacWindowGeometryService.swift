@@ -3,9 +3,9 @@ import NTSDCore
 /// Actual geometry queries run outside the Core transaction and only once per
 /// receipt. Other lifecycle requests require their own explicit provider.
 @MainActor public final class OriginalMacWindowGeometryService {
-    public let backend: OriginalMacWindowBackend
+    public let backend: OriginalRuntimeWindowBackend
     public enum Boundary: Error, Equatable { case notGeometry }
-    public init(backend: OriginalMacWindowBackend) { self.backend = backend }
+    public init(backend: OriginalRuntimeWindowBackend) { self.backend = backend }
     public func serve<P>(_ permit: OriginalLifecycleRequestExchange.Permit,
         on driver: OriginalApplicationObservedLifecycleIteration<P>) throws {
         let q = permit.request

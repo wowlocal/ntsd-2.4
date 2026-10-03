@@ -25,7 +25,10 @@ import NTSDCore
         }
     }
     /// A file replacement staged by a served request, applied after commit.
-    public struct FileEffect: Equatable { public let path: String, bytes: [UInt8] }
+    public struct FileEffect: Equatable {
+        public let path: String, bytes: [UInt8]
+        public init(path: String, bytes: [UInt8]) { self.path = path; self.bytes = bytes }
+    }
     public struct Served: Equatable { public let request: String }
     /// WinMM joystick policy: standard driver present; IDs below the declared
     /// count are connected game controllers, the others unplugged.
@@ -34,7 +37,7 @@ import NTSDCore
     public static let joystickRange: ClosedRange<UInt32> = 0...65535, joystickCentre: UInt32 = 32767
     private static func little(_ value: UInt32) -> [UInt8] { (0..<4).map { UInt8(truncatingIfNeeded: value >> ($0*8)) } }
     public let heap: OriginalMacRuntimeHeap, music: OriginalMacRuntimeMusic
-    private let windows: OriginalMacWindowBackend, environment: Environment
+    private let windows: OriginalRuntimeWindowBackend, environment: Environment
     private var panelBytes: [UInt8]?
     public private(set) var staged: [FileEffect] = []
     /// Caller bytes of each `_write`, before text-mode translation.
@@ -42,9 +45,11 @@ import NTSDCore
     public private(set) var served: [Served] = []
     /// OutputDebugStringA text; with no debugger attached Windows shows nothing.
     public private(set) var debugOutput: [[UInt8]] = []
-    public init(windows: OriginalMacWindowBackend,heap: OriginalMacRuntimeHeap,environment: Environment = .init()) {
-        self.windows = windows; self.heap = heap; self.environment = environment
-        music = OriginalMacRuntimeMusic(identities:windows.identities,heap:heap)
+    /// `music` answers DirectShow and MessageBoxA; the Mac initializer supplies
+    /// one with its alert presenter.
+    public init(windows: OriginalRuntimeWindowBackend,heap: OriginalMacRuntimeHeap,environment: Environment = .init(),
+                music: OriginalMacRuntimeMusic) {
+        self.windows = windows; self.heap = heap; self.environment = environment; self.music = music
     }
     public nonisolated static func handles(_ request: OriginalStartupRequest) -> Bool {
         switch request {

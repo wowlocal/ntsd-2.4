@@ -5,9 +5,9 @@ import NTSDCore
 @MainActor public final class OriginalMacWindowStartupService<Platform: OriginalApplicationObservedStartupPlatform> {
     public typealias Driver = OriginalApplicationObservedStartup<Platform>
     public enum Boundary: Error { case notWindowRequest }
-    public let backend: OriginalMacWindowBackend
+    public let backend: OriginalRuntimeWindowBackend
     private let driver: Driver
-    public init(driver: Driver,backend: OriginalMacWindowBackend) {
+    public init(driver: Driver,backend: OriginalRuntimeWindowBackend) {
         self.driver = driver; self.backend = backend
     }
     public func serve(_ permit: Driver.Exchange.Permit) throws {
