@@ -17,8 +17,8 @@
 
 | Задача | Статус |
 | --- | --- |
-| Summary из памяти: оригинал через `winedbg`, Mac через дамп | — |
-| Пакетный прогон списка записей в оригинале через Cua | — |
+| Summary из памяти: оригинал через `winedbg`, Mac через дамп | ✓ `summary_original.py`, `--summary-json`, `compare_summaries.py` (2026-10-03) |
+| Пакетный прогон списка записей в оригинале через Cua | ✓ `play_original.py` (без человека), `random_vs.py` |
 | Матчи «компьютер против компьютера» в оригинале с записью (оригинал → Mac) | — |
 | Потиковое сравнение на выбранных тиках | — |
 
@@ -50,7 +50,31 @@ Jiraiya(21), Shikamaru(22), Kabuto(23), Hidan(24), Kakuzu(25).
 
 | Персонаж | Статус |
 | --- | --- |
-| все | — (первая итерация: определить состав сверенных записей по их заголовкам) |
+| Sakura | ✓ [random VS 1](../evidence/crossplay-random-vs-1.json) |
+| Naruto | ✓ e2e VS (скрин), памятью — ещё нет |
+| Kakashi | — |
+| Sai | — |
+| Shino | ✓ [random VS 1](../evidence/crossplay-random-vs-1.json) |
+| Sasori | ✓ [random VS 1](../evidence/crossplay-random-vs-1.json) |
+| Rock_Lee | ✓ [random VS 1](../evidence/crossplay-random-vs-1.json) |
+| Chiyo | — |
+| Itachi | — |
+| Deidara | ✓ [random VS 1](../evidence/crossplay-random-vs-1.json) |
+| Sasuke | ✓ e2e VS (скрин), памятью — ещё нет |
+| Kiba | ✓ [random VS 1](../evidence/crossplay-random-vs-1.json) |
+| Yamato | ✓ [random VS 1](../evidence/crossplay-random-vs-1.json) |
+| Kankuro | — |
+| Temari | ✓ [random VS 1](../evidence/crossplay-random-vs-1.json) |
+| Gaara | ✓ [random VS 1](../evidence/crossplay-random-vs-1.json) |
+| Kisame | — |
+| Neji | ✓ [random VS 1](../evidence/crossplay-random-vs-1.json) |
+| Ten_Ten | ✓ [random VS 1](../evidence/crossplay-random-vs-1.json) |
+| Orochimaru | ✓ [random VS 1](../evidence/crossplay-random-vs-1.json) |
+| Jiraiya | ✓ [random VS 1](../evidence/crossplay-random-vs-1.json) |
+| Shikamaru | ✓ [random VS 1](../evidence/crossplay-random-vs-1.json) |
+| Kabuto | ✓ [random VS 1](../evidence/crossplay-random-vs-1.json) |
+| Hidan | ✓ [random VS 1](../evidence/crossplay-random-vs-1.json) |
+| Kakuzu | ✓ [random VS 1](../evidence/crossplay-random-vs-1.json) |
 
 ## 3. Фоны (приоритет 3)
 
@@ -60,7 +84,24 @@ Grassland, Path.
 
 | Фон | Статус |
 | --- | --- |
-| все | — |
+| District | ✓ e2e VS (скрин) |
+| SandCountry | ✓ [random VS 1](../evidence/crossplay-random-vs-1.json) |
+| Cave | ✓ [random VS 1](../evidence/crossplay-random-vs-1.json) |
+| Deep | — |
+| Hideout | — |
+| Rain | — |
+| SnowCountry | ✓ [random VS 1](../evidence/crossplay-random-vs-1.json) |
+| River | ✓ [random VS 1](../evidence/crossplay-random-vs-1.json) |
+| Forest | ✓ [random VS 1](../evidence/crossplay-random-vs-1.json) |
+| Arena | — |
+| RamenPlace | — |
+| Springs | ✓ [random VS 1](../evidence/crossplay-random-vs-1.json) |
+| Academy | ✓ [random VS 1](../evidence/crossplay-random-vs-1.json) |
+| CastleRoof | — |
+| Valley | — |
+| Grassland | — |
+| Path | — |
+| встроенный фон 99 | ✓ [random VS 1](../evidence/crossplay-random-vs-1.json) |
 
 ## 4. Режимы и стадии (приоритет 4)
 
