@@ -42,6 +42,7 @@
   "restore": "tar -xpf <archive> -C build/research (bsdtar restores modes, links and nanosecond mtimes from the PAX headers); the index maps each top-level entry to its archive",
   "notes": [
     "macOS created AppleDouble ._*.tar files next to archives on ExFAT for their extended attributes; they are not part of the archives",
-    "about 700 repository files (mostly historical docs and frozen tools) name build/research paths; those inputs must now be restored from T7 before reuse"
+    "about 700 repository files (mostly historical docs and frozen tools) name build/research paths; those inputs must now be restored from T7 before reuse",
+    "66 small files under build/research were tracked by git; the move showed them as deleted. They were restored from HEAD (git checkout -- build/research) the same evening. They exist in git and in the archives, and tools/archive_to_t7.py now skips entries with tracked files unless --include-tracked is given."
   ]
 }

@@ -123,9 +123,21 @@ def main():
     a.add_argument("source"); a.add_argument("dest")
     a.add_argument("--exclude", action="append", default=[]); a.add_argument("--dry-run", action="store_true")
     a.add_argument("--limit", type=int, default=0, help="process only the first N archives")
+    a.add_argument("--include-tracked", action="store_true",
+                   help="also archive entries that contain git-tracked files (they would show as deleted)")
     o = a.parse_args()
     root = os.path.abspath(o.source)
     names = sorted(n for n in os.listdir(root) if n not in o.exclude and n != "ARCHIVED_TO_T7.jsonl")
+    if not o.include_tracked:
+        top = subprocess.run(["git", "-C", root, "rev-parse", "--show-toplevel"], capture_output=True, text=True)
+        if top.returncode == 0:
+            listed = subprocess.run(["git", "-C", root, "ls-files", "--full-name", "."], capture_output=True, text=True, check=True).stdout
+            prefix = os.path.relpath(root, top.stdout.strip())
+            tracked = {os.path.relpath(f, prefix).split(os.sep)[0] for f in listed.splitlines() if f}
+            skipped = sorted(set(names) & tracked)
+            if skipped:
+                print(f"skipping {len(skipped)} entries with git-tracked files (use --include-tracked to archive them)", flush=True)
+            names = [n for n in names if n not in tracked]
     sizes = {n: sum(os.lstat(os.path.join(root, r)).st_size for r in entries(root, n)) for n in names}
     groups, small, small_size = [], [], 0
     for n in names:
