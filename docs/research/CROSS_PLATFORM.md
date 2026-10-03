@@ -172,21 +172,26 @@ user's approval to push. Until then, keep the other phases moving.
 | 2026-10-03 | P5 step 3 | Music sequencing moved to `NTSDRuntime`: `OriginalMacMusicOutput` (graph state, seeks, virtual clock, end events over the `Player` protocol) and `OriginalMacRuntimeMusic` (DirectShow answers). The AVAudioPlayer adapter and bundled-track lookup stay in `OriginalMacMusicPlayer.swift`. The MessageBoxA presenter is now a required init argument, and the Mac `init(identities:heap:)` supplies the same NSAlert, so a host cannot silently lose it. | MusicOutput, RuntimeLoading, RuntimeStartup 18/18 on a fresh test build; 696 listed; Xcode release; Linux `NTSDRuntime`. The first attempt stopped at the test build (missing `@testable import NTSDRuntime`), as the gate now requires | 1c2db2a |
 | 2026-10-03 | P5 step 4 | `OriginalFramebuffer` (XRGB8888 little-endian words) in `NTSDRuntime`. The display backend now builds a framebuffer, and a Mac `cgImage()` wraps it with the unchanged sRGB `noneSkipFirst|byteOrder32Little` parameters. `OriginalMacWindowBackend.present(_:in:)` takes a framebuffer. The five display call sites are unchanged. | New `OriginalFramebufferTests` (bytes and format); Framebuffer, DisplayBackend, DisplayColor, BitmapBackend, FrontRaster, WindowBackend, WindowGeometry 27/27 on a fresh test build; 697 listed; Xcode release; Linux `NTSDRuntime` | 882adc6 |
 | 2026-10-03 | e2e baseline | Full `tools/app_e2e.py` at 882adc6: 8/10 scenarios pass. `playback` fails with "Recording file may be corrupted" **at pre-crossplatform 74be317 too** (pre-existing on main). `tournament-win` differed in its final capture once and passed twice on rerun, and passes at 74be317: a capture nondeterministic under load. No regression from P0–P5.4. | [evidence](../evidence/crossplatform-e2e-baseline-20261003.json) | 92985dd |
-| 2026-10-03 | P5 step 5 | **The display backend (≈900 lines) moved to `NTSDRuntime`.** It talks to windows through `OriginalRuntimeWindowing` (identities, `windowLease`, `displayGeometry`, `present(OriginalFramebuffer,in:)`); the five presentations now call `present` with the same bytes. CoreText glyph masks are injected (`textMask:`), and the Mac convenience `init(windows:)` supplies them. `image(_:) -> CGImage`, `cgImage()`, `macWindows` (used by FrontService) and the window-protocol conformance live in `OriginalMacDisplayImage.swift`. DisplayGeometry is the runtime struct. Bitmap/Front/DisplayStartup services stay Mac for now. | 51 tests (display, color, bitmap, front raster, window, geometry, framebuffer, observed bitmap/graphics/iteration, runtime startup/menu) on a fresh test build; 697 listed; Xcode release; Linux `NTSDRuntime` (object rebuilt). **Full app e2e: 9/10, the same as baseline** (only the pre-existing playback alert) | this commit |
+| 2026-10-03 | P5 step 5 | **The display backend (≈900 lines) moved to `NTSDRuntime`.** It talks to windows through `OriginalRuntimeWindowing` (identities, `windowLease`, `displayGeometry`, `present(OriginalFramebuffer,in:)`); the five presentations now call `present` with the same bytes. CoreText glyph masks are injected (`textMask:`), and the Mac convenience `init(windows:)` supplies them. `image(_:) -> CGImage`, `cgImage()`, `macWindows` (used by FrontService) and the window-protocol conformance live in `OriginalMacDisplayImage.swift`. DisplayGeometry is the runtime struct. Bitmap/Front/DisplayStartup services stay Mac for now. | 51 tests (display, color, bitmap, front raster, window, geometry, framebuffer, observed bitmap/graphics/iteration, runtime startup/menu) on a fresh test build; 697 listed; Xcode release; Linux `NTSDRuntime` (object rebuilt). **Full app e2e: 9/10, the same as baseline** (only the pre-existing playback alert) | c5f5e0b |
+| 2026-10-04 | P5 step 6 | The audio backend and AudioService moved to `NTSDRuntime`. A portable float `Samples` store replaces `AVAudioPCMBuffer`, keeping `ready` = frames > 0 and the byte budget. The AVAudioFormat/PCMBuffer allocation failure path is gone, since those inputs are already validated. The runtime exposes `samples(_:)`; the Mac `pcmSnapshot` builds the same standard-format AVAudioPCMBuffer from it. `windowClosed(_:)` was added to `OriginalRuntimeWindowing`. | 34 tests (AudioBackend, SoundEffects, LoadingAudio ×3, RuntimeStartup, Menu, Loading, ObservedIteration) on a fresh test build; 697 listed; Xcode release; Linux `NTSDRuntime`; full app e2e 9/10 = baseline | this commit |
 
 ## Next task
 
-P5 step 6, the audio backend into `NTSDRuntime`.
+P5 step 7, startup ([design](CROSS_PLATFORM_RUNTIME.md)).
 
-- Move `OriginalMacAudioBackend` (DirectSound buffers and wave preparation)
-  and `OriginalMacAudioService`. A portable sample buffer replaces
-  `AVAudioPCMBuffer`; keep `ready` = `frameLength > 0` and the allocation rules.
-- The PCM snapshot and AVAudioEngine stay Mac.
-- Its window lease uses `OriginalRuntimeWindowLease`.
-- Gate: AudioBackend, LoadingAudio (without the 55-minute catalog test),
-  SoundEffects, startup/menu tests on a fresh test build; 697 listed; Xcode
-  release; Linux `NTSDRuntime`; full app e2e (9/10 with the known playback
-  failure).
+- Move the platform-free part of `OriginalMacRuntimeStartup` (service wiring,
+  dispatch order audio → window → display → runtime),
+  `OriginalMacRuntimeStartupService`, Wave and Overlay (without `standard()`),
+  and the Bitmap/DisplayStartup services that only need runtime types.
+- Keep `NSApplication.shared`, the Application Support path and the AppKit
+  window construction on the Mac side.
+- Gate: RuntimeStartup, RuntimeMenu, WindowBackend, LoadingAudio ×3 and
+  observed tests on a fresh test build; 697 listed; Xcode release; Linux
+  `NTSDRuntime`; full app e2e = baseline.
+
+The P3 Linux run now uses `--jobs 1`. With two jobs, the 11.7 GiB OrbStack VM
+OOM-killed heavy suites (exit 137: ActiveLifecycle, LibSelectionCommands,
+LibSelectionStage); they were requeued.
 
 Following tasks:
 

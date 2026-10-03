@@ -27,6 +27,8 @@ public struct OriginalRuntimeDisplayGeometry: Equatable {
     var identities: OriginalMacResourceIdentityPool { get }
     func windowLease(_ token: UInt32) throws -> any OriginalRuntimeWindowLease
     func displayGeometry(_ token: UInt32) throws -> OriginalRuntimeDisplayGeometry
+    /// Whether the window has been closed (its token stays known).
+    func windowClosed(_ token: UInt32) throws -> Bool
     /// Shows a finished crop in the window's client area.
     func present(_ frame: OriginalFramebuffer, in token: UInt32) throws
 }

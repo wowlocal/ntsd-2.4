@@ -1,8 +1,8 @@
-import AVFAudio
+import Foundation
 import NTSDCore
 
 /// Native PCM storage. Device creation acquires an owner, not an audio endpoint.
-/// The original per-call records stay separate from AVFAudio's representation.
+/// The original per-call records stay separate from the decoded float samples.
 @MainActor public final class OriginalMacAudioBackend {
     public enum Boundary: Error, Equatable {
         case unsupported(String), owner(UInt32), unknownSamples, allocationBudget
@@ -28,13 +28,19 @@ import NTSDCore
         public let token: UInt32
         fileprivate init(_ token: UInt32) { self.token = token }
     }
-    private final class Device: Resource { var window: OriginalMacWindowBackend.WindowLease? }
+    private final class Device: Resource { var window: (any OriginalRuntimeWindowLease)? }
+    /// Decoded float PCM, one array per channel at the buffer's rate. Frames
+    /// count 0 until Unlock converts the locked bytes (the "ready" state).
+    private final class Samples {
+        var frameLength = 0, channels: [[Float]]
+        init(channels: Int,capacity: Int) { self.channels = Array(repeating:[Float](repeating:0,count:capacity),count:channels) }
+    }
     private final class Buffer: Resource {
-        let device: Device, binding: OriginalWaveBinding, format: Format, pcm: AVAudioPCMBuffer
+        let device: Device, binding: OriginalWaveBinding, format: Format, pcm: Samples
         var raw: OriginalStateRecord, active: UInt32?
         var volume: Int32?
         init(_ token: UInt32,_ device: Device,_ binding: OriginalWaveBinding,_ format: Format,
-            _ pcm: AVAudioPCMBuffer,_ raw: OriginalStateRecord) {
+            _ pcm: Samples,_ raw: OriginalStateRecord) {
             self.device = device;self.binding = binding;self.format = format;self.pcm = pcm;self.raw = raw
             super.init(token)
         }
@@ -54,7 +60,7 @@ import NTSDCore
     private final class Identity {}
     private let identity = Identity(), maximumBytes: Int, diagnostic: Diagnostic?
     public let loadingDomain = OriginalAudioIdentityDomain()
-    public let windows: OriginalMacWindowBackend
+    public let windows: any OriginalRuntimeWindowing
     private var generation: UInt64 = 0
     private var devices: [UInt32:Device] = [:], buffers: [UInt32:Buffer] = [:], regions: [UInt32:Region] = [:]
     public private(set) var allocatedBytes = 0
@@ -66,7 +72,7 @@ import NTSDCore
         buffers.values.map { $0 as any OriginalApplicationStartupResource } +
         regions.values.map { $0 as any OriginalApplicationStartupResource }
     }
-    public init(windows: OriginalMacWindowBackend,maximumBytes: Int = 128*1024*1024,
+    public init(windows: any OriginalRuntimeWindowing,maximumBytes: Int = 128*1024*1024,
         diagnostic: Diagnostic? = nil) {
         self.windows = windows;self.maximumBytes = maximumBytes;self.diagnostic = diagnostic
     }
@@ -106,7 +112,7 @@ import NTSDCore
             case "deviceCreate":try require(q.arguments == [0,0x44eecc,0] && q.strings.isEmpty,"device creation")
             case "cooperativeLevel":
                 try require(q.arguments.count == 3 && q.arguments[2] == 1 && q.strings.isEmpty,"audio cooperative level")
-                _ = try device(q.arguments[0]);try require(try !windows.observation(q.arguments[1]).closed,"closed audio window")
+                _ = try device(q.arguments[0]);try require(try !windows.windowClosed(q.arguments[1]),"closed audio window")
             case "message":try require(diagnostic != nil && q.arguments == [0,0] && q.strings.count == 2,"sound diagnostic")
             default:throw Boundary.unsupported("sound request")
             }
@@ -150,7 +156,7 @@ import NTSDCore
                 let d = try Device(windows.identities.take());devices[d.token] = d;retained = [d]
                 response = .sound(.init(result:0,output:d.token))
             case "cooperativeLevel":
-                let d = try device(q.arguments[0]),w = try windows.lease(q.arguments[1]);d.window = w;retained = [d,w]
+                let d = try device(q.arguments[0]),w = try windows.windowLease(q.arguments[1]);d.window = w;retained = [d,w]
                 response = .sound(.init(result:0))
             default:response = try diagnostic!(prepared.request)
             }
@@ -160,9 +166,7 @@ import NTSDCore
                 let (f,count) = try format(q),frames = count/f.alignment
                 let bytes = count*2+frames*f.channels*MemoryLayout<Float>.size
                 guard bytes <= maximumBytes-allocatedBytes else { throw Boundary.allocationBudget }
-                guard let format = AVAudioFormat(standardFormatWithSampleRate:Double(f.rate),channels:AVAudioChannelCount(f.channels)),
-                      let pcm = AVAudioPCMBuffer(pcmFormat:format,frameCapacity:AVAudioFrameCount(frames)) else { throw Boundary.allocationFailed }
-                pcm.frameLength = 0
+                let pcm = Samples(channels:f.channels,capacity:frames)
                 let d = try device(binding.device),raw = try OriginalStateRecord(bytes:Array(repeating:0xa5,count:count),defined:Array(repeating:false,count:count))
                 let b = try Buffer(windows.identities.take(),d,binding,f,pcm,raw)
                 buffers[b.token] = b;allocatedBytes += bytes;retained = [d,b]
@@ -178,7 +182,6 @@ import NTSDCore
                 response = .waveAudio(.copied)
             case .unlock:
                 let b = try buffer(q.event.arguments[0],binding),f = b.format
-                guard let channels = b.pcm.floatChannelData else { throw Boundary.allocationFailed }
                 let frames = b.raw.bytes.count/f.alignment
                 for frame in 0..<frames { for channel in 0..<f.channels {
                     let index = frame*f.alignment+channel*(f.bits/8),value: Float
@@ -187,9 +190,9 @@ import NTSDCore
                         let word = UInt16(b.raw.bytes[index]) | (UInt16(b.raw.bytes[index+1]) << 8)
                         value = Float(Int16(bitPattern:word))/32768
                     }
-                    channels[channel][frame] = value
+                    b.pcm.channels[channel][frame] = value
                 } }
-                b.pcm.frameLength = AVAudioFrameCount(frames);retained = [b,regions[b.active!]!];b.active = nil
+                b.pcm.frameLength = frames;retained = [b,regions[b.active!]!];b.active = nil
                 response = .waveAudio(.result(0))
             case .restore:retained = [try buffer(q.event.arguments[0],binding)];response = .waveAudio(.result(0))
             default:response = try diagnostic!(prepared.request)
@@ -277,14 +280,11 @@ import NTSDCore
         let owner = OriginalWaveOwnership(binding:binding,result:result,domain:.opaque(loadingDomain),lease:lease)
         _ = try owner.addressedRegions();return owner
     }
-    /// A consumer receives independent storage, not mutable access to our owner.
-    public func pcmSnapshot(_ token: UInt32) throws -> AVAudioPCMBuffer {
+    /// A consumer receives independent storage, not mutable access to our owner:
+    /// one array of `frameLength` float samples per channel.
+    public func samples(_ token: UInt32) throws -> (format: Format, channels: [[Float]]) {
         guard let b = buffers[token] else { throw Boundary.owner(token) }
         guard b.pcm.frameLength > 0,b.raw.defined.allSatisfy({ $0 }) else { throw Boundary.unknownSamples }
-        guard let copy = AVAudioPCMBuffer(pcmFormat:b.pcm.format,frameCapacity:b.pcm.frameLength),
-              let dst = copy.floatChannelData,let src = b.pcm.floatChannelData else { throw Boundary.allocationFailed }
-        copy.frameLength = b.pcm.frameLength
-        for channel in 0..<b.format.channels { for frame in 0..<Int(copy.frameLength) { dst[channel][frame] = src[channel][frame] } }
-        return copy
+        return (b.format,b.pcm.channels.map { Array($0.prefix(b.pcm.frameLength)) })
     }
 }

@@ -52,5 +52,6 @@ extension OriginalFramebuffer {
 
 extension OriginalMacWindowBackend: OriginalRuntimeWindowing {
     public func windowLease(_ token: UInt32) throws -> any OriginalRuntimeWindowLease { try lease(token) }
+    public func windowClosed(_ token: UInt32) throws -> Bool { try observation(token).closed }
 }
 extension OriginalMacWindowBackend.WindowLease: OriginalRuntimeWindowLease {}
