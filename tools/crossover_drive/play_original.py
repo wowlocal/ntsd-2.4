@@ -58,7 +58,7 @@ def titles():
 LOCK = Path("/Volumes/X5/ntsd-2.4-research/goal-100-20261002/crossplay-loop/original.lock")
 
 
-def main(recording, out, clone=DEFAULT_CLONE):
+def main(recording, out, clone=DEFAULT_CLONE, timeout=900):
     # One original at a time: a second instance of the same clone confuses the
     # pid lookup and the window filter.
     import fcntl
@@ -105,7 +105,7 @@ def main(recording, out, clone=DEFAULT_CLONE):
             time.sleep(2)
             if (word(pid, 0x450BBC) or 0) > 30: break
         else: raise SystemExit("playback did not start")
-        summary_original.main(out, timeout=900)
+        summary_original.main(out, timeout=timeout)
     finally:
         for line in subprocess.run(["ps", "-axo", "pid,command"], capture_output=True, text=True).stdout.splitlines():
             if str(clone).replace("/", "\\") in line or str(clone) in line:

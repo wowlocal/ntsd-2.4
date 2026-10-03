@@ -3,7 +3,7 @@
 all with Random characters on a Random background, then the original under
 CrossOver plays the recording and both Summaries are compared from memory.
 
-usage: random_vs.py OUT_DIR SEED [SEED...] [--mode vs|stage] [--computers N] [--rerolls K]
+usage: random_vs.py OUT_DIR SEED [SEED...] [--mode vs|stage|war] [--computers N] [--rerolls K]
                     [--background-steps N...] [--difficulty-steps N...]
 
 Per seed: the app runs with `--virtual-clock SEED 8`; P1 joins as Random and
@@ -27,8 +27,42 @@ APP = ROOT / "build/swiftpm-app/release/NTSDNative"
 
 
 # Mode menu after START: VS is the first line, Stage the second.
-PREFIX = {"vs": ["20 click 350 230", "60 click 402 218", "100 key 74", "150 key 74", "200 key 74", "250 key 74"],
+PREFIX = {"war": None, "vs": ["20 click 350 230", "60 click 402 218", "100 key 74", "150 key 74", "200 key 74", "250 key 74"],
           "stage": ["20 click 350 230", "60 click 402 218", "100 key 83", "125 key 74", "175 key 74", "225 key 74", "275 key 74"]}
+
+
+# War as in app_e2e.py (P1 Naruto and one computer) up to its settings screen.
+WAR_PREFIX = ["20 click 350 230", "60 click 402 218", "100 key 83", "125 key 83", "150 key 83", "175 key 83", "200 key 74",
+              "250 key 74", "275 key 68", "300 key 74", "325 key 74", "400 key 75", "425 key 75", "450 key 75", "475 key 75",
+              "1000 key 74", "1100 key 68", "1150 key 74", "1200 key 74"]
+
+
+def war_script(seed):
+    """War with troop settings drawn from the seed. The settings screen starts
+    on OK! (section 6); S wraps to the Defense multipliers (section 0: J +0.5,
+    D switches the squad), then sections 1-4 (in-screen and reserve counts:
+    J +1, L +5, K -1, D moves the cursor and past the end the squad). W x5
+    returns to OK!, J opens the final menu, W x2 and J start the battle."""
+    import random
+    rng = random.Random(seed); steps = list(WAR_PREFIX); t = 1400; settings = []
+    def press(vk, label=None):
+        nonlocal t
+        steps.append(f"{t} key {vk}"); t += 40
+        if label: settings.append(label)
+    press(83)
+    for squad in range(2):
+        for _ in range(rng.randint(0, 4)): press(74, f"squad {squad + 1} defense +0.5")
+        if squad == 0: press(68)
+    for section in range(1, 5):
+        press(83)
+        for _ in range(12):
+            key = rng.choice([None, None, 74, 76, 75])
+            if key: press(key, f"section {section} {dict([(74, '+1'), (76, '+5'), (75, '-1')])[key]}")
+            press(68)
+    for _ in range(5): press(87)
+    press(74); t += 60; press(87); press(87); t += 20; press(74)
+    steps.append("900000 exit")
+    return "; ".join(steps), settings
 
 
 def script(computers, rerolls, background_steps=0, mode="vs", difficulty_steps=0):
@@ -49,21 +83,27 @@ def script(computers, rerolls, background_steps=0, mode="vs", difficulty_steps=0
         while line < target: steps.append(f"{t} key 83"); t += 40; line += 1
         for _ in range(count): steps.append(f"{t} key 74"); t += 40
     for _ in range(line): steps.append(f"{t} key 87"); t += 30
-    steps += [f"{t + 50} key 74", "60000 exit"]
+    # The exit is only a backstop: --exit-after-summary ends the run. The
+    # gameplay script clock counts loop iterations (about 3.3 per tick), and a
+    # Stage run with allies can last far beyond 60000.
+    steps += [f"{t + 50} key 74", "900000 exit"]
     return "; ".join(steps)
 
 
 def run(out, seed, computers, rerolls, background_steps=0, mode="vs", difficulty_steps=0, mac_only=False):
     d = out / str(seed); d.mkdir(parents=True, exist_ok=True); overlay = d / "overlay"; overlay.mkdir(exist_ok=True)
     mac = d / "mac.json"
+    if mode == "war": text, settings = war_script(seed)
+    else: text, settings = script(computers, rerolls, background_steps, mode, difficulty_steps), None
     if not mac.exists():
         done = subprocess.run([str(APP), "--original", "--mute-music", "--mute-sounds", "--overlay", str(overlay),
                                "--virtual-clock", str(seed), "8", "--script-clock", "gameplay", "--exit-after-summary",
                                "--summary-json", str(mac), "--summary-capture", str(d / "mac-summary.png"),
-                               "--script", script(computers, rerolls, background_steps, mode, difficulty_steps)], capture_output=True, text=True, timeout=1800,
+                               "--script", text], capture_output=True, text=True, timeout=7200,
                               env={"TZ": "Etc/GMT-1", "PATH": "/usr/bin:/bin"})
         (d / "mac.stdout").write_text(done.stdout + done.stderr)
     recordings = sorted(overlay.rglob("*.lfr"))
+    if settings is not None: (d / "war-settings.json").write_text(json.dumps(settings, indent=1))
     result = dict(seed=seed, mode=mode, computers=computers, rerolls=rerolls, backgroundSteps=background_steps, difficultySteps=difficulty_steps, recording=[str(r) for r in recordings])
     if not mac.exists() or not recordings:
         result["result"] = "no Mac summary or recording"; return result
@@ -73,7 +113,9 @@ def run(out, seed, computers, rerolls, background_steps=0, mode="vs", difficulty
         # One retry: a lost key in the menu or the Open dialog is a tooling
         # failure, not a game result.
         for attempt in range(2):
-            try: play_original.main(str(recordings[-1]), str(original)); break
+            # The original plays in real time (30 ticks a second).
+            timeout = json.loads(mac.read_text())["ticks"] // 30 + 600
+            try: play_original.main(str(recordings[-1]), str(original), timeout=timeout); break
             except SystemExit as e:
                 if attempt: result["result"] = f"original: {e}"; return result
     status = compare_summaries.main(str(mac), str(original))
