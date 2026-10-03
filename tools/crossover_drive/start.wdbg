@@ -1,0 +1,4 @@
+set *(int*)0x4546f0 = 350
+set *(int*)0x453cdc = 230
+set *(int*)0x457580 = 1
+detach

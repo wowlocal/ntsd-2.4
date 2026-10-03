@@ -579,9 +579,35 @@ final class OriginalRuntimeDelegate: NSObject, NSApplicationDelegate {
         if let i = arguments.firstIndex(of:"--summary-capture"),i+1 < arguments.count {
             try started.windows.snapshotPNG(gameWindow).write(to:URL(fileURLWithPath:arguments[i+1]))
         }
-        Self.emit(["event":"summary","cycles":cycles,"gameplayBodies":gameplayBodies,
+        let values = try Self.summaryValues(model)
+        if let i = arguments.firstIndex(of:"--summary-json"),i+1 < arguments.count {
+            try JSONSerialization.data(withJSONObject:values,options:[.sortedKeys]).write(to:URL(fileURLWithPath:arguments[i+1]),options:.atomic)
+        }
+        Self.emit(["event":"summary","cycles":cycles,"gameplayBodies":gameplayBodies,"values":values,
             "replayFiles":loading?.savedReplays.map { "\($0.path) \($0.bytes.count)" } ?? []])
         stopped = true;NSApp.terminate(nil);return true
+    }
+    /// The Summary's sources (OriginalResultLayout): per active seat the object
+    /// id, Kill +358, Attack +348, HP Lost +34c, MP Usage +350, Picking +35c,
+    /// team +364 and HP +2fc; time 450bbc, winner 450bf8, mode 451160 and the
+    /// War totals 451b64..451b70. The same fields are read from the original
+    /// (tools/crossover_drive/summary_original.py; CROSSPLAY_LOOP.md).
+    static func summaryValues(_ model: OriginalMatchPreparation) throws -> [String:Any] {
+        let base = OriginalMatchPreparation.globalBase
+        func g(_ address: Int) throws -> Int { Int(try model.globals.integer(at:address-base,as:Int32.self)) }
+        var seats: [[String:Int]] = []
+        for seat in 0..<20 where try model.world.integer(at:4+seat,as:UInt8.self) != 0 {
+            let slot = Int(try model.world.integer(at:0x194+4*seat,as:UInt32.self))
+            guard model.actors.indices.contains(slot) else { throw OriginalStateError.invalidStorage("Summary Actor binding") }
+            let actor = model.actors[slot],object = Int(try actor.integer(at:0x368,as:UInt32.self))
+            guard model.loadedObjects.indices.contains(object) else { throw OriginalStateError.invalidStorage("Summary Object binding") }
+            func a(_ offset: Int) throws -> Int { Int(try actor.integer(at:offset,as:Int32.self)) }
+            seats.append(["seat":seat,"id":Int(try model.loadedObjects[object].header.integer(at:0x6f4,as:Int32.self)),
+                          "kill":try a(0x358),"attack":try a(0x348),"hpLost":try a(0x34c),"mp":try a(0x350),"picking":try a(0x35c),
+                          "team":try a(0x364),"hp":try a(0x2fc)])
+        }
+        return ["seats":seats,"ticks":try g(0x450bbc),"winner":try g(0x450bf8),"mode":try g(0x451160),
+                "war":try [0x451b64,0x451b68,0x451b6c,0x451b70].map(g)]
     }
     /// The current original window (replaced by an Alt+Enter recreation).
     private var gameWindow: UInt32 = 0
