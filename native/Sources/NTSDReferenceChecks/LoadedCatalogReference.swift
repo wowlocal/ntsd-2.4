@@ -1,5 +1,4 @@
 import Foundation
-import Compression
 #if canImport(CryptoKit)
 import CryptoKit
 #endif
@@ -54,7 +53,7 @@ public enum LoadedCatalogReference {
             var output = [UInt8](repeating: 0, count: count+1)
             let size = output.withUnsafeMutableBufferPointer { dst in
                 source.withUnsafeBytes { src in
-                    compression_decode_buffer(dst.baseAddress!, dst.count, src.bindMemory(to: UInt8.self).baseAddress!, src.count, nil, COMPRESSION_ZLIB)
+                    FixtureInflate.decode(dst.baseAddress!, dst.count, src.bindMemory(to: UInt8.self).baseAddress!, src.count)
                 }
             }
             guard size == count else { throw error("Fixture envelope length") }
@@ -71,7 +70,7 @@ public enum LoadedCatalogReference {
             var output = [UInt8](repeating: 0, count: item.count + 1)
             let count = output.withUnsafeMutableBufferPointer { dst in
                 packed.withUnsafeBytes { src in
-                    compression_decode_buffer(dst.baseAddress!, dst.count, src.bindMemory(to: UInt8.self).baseAddress!, src.count, nil, COMPRESSION_ZLIB)
+                    FixtureInflate.decode(dst.baseAddress!, dst.count, src.bindMemory(to: UInt8.self).baseAddress!, src.count)
                 }
             }
             guard count == item.count else { throw error("DEFLATE length mismatch") }

@@ -20,7 +20,8 @@ let package = Package(
         .target(name: "NTSDCore", dependencies: ["NTSDReplayCodec"], resources: [.copy("Resources/OriginalStartup"), .copy("Resources/OriginalCommonSounds"), .copy("Resources/OriginalLoadingInterface"), .copy("Resources/OriginalCharacterMenu"), .copy("Resources/OriginalWarMenu"), .copy("Resources/OriginalMatchArenas"), .copy("Resources/OriginalCatalog")]),
         .target(name: "NTSDMacPlatform", dependencies: ["NTSDCore"], resources: [.copy("Resources/OriginalMusic")],
                 linkerSettings: [.linkedFramework("AppKit"), .linkedFramework("AVFoundation")]),
-        .target(name: "NTSDReferenceChecks", dependencies: ["NTSDCore"]),
+        .systemLibrary(name: "CZlib", path: "Sources/CZlib"),
+        .target(name: "NTSDReferenceChecks", dependencies: ["NTSDCore", "CZlib"]),
         .executableTarget(name: "NTSDBootstrapCheck", dependencies: ["NTSDReferenceChecks"]),
         .executableTarget(name: "NTSDCatalogCheck", dependencies: ["NTSDReferenceChecks"]),
         .executableTarget(name: "NTSDObjectCheck", dependencies: ["NTSDReferenceChecks"]),
@@ -33,7 +34,7 @@ let package = Package(
         .executableTarget(name: "NTSDApp", dependencies: ["NTSDCore", "NTSDMacPlatform"],
                           linkerSettings: [.linkedFramework("AppKit"), .linkedFramework("SpriteKit"),
                                            .linkedFramework("AVFoundation")]),
-        .testTarget(name: "NTSDCoreTests", dependencies: ["NTSDCore", "NTSDReferenceChecks", "NTSDMacPlatform"], resources: [.copy("Fixtures")])
+        .testTarget(name: "NTSDCoreTests", dependencies: ["NTSDCore", "NTSDReferenceChecks", "NTSDMacPlatform", "CZlib"], resources: [.copy("Fixtures")])
     ],
     swiftLanguageModes: [.v5]
 )

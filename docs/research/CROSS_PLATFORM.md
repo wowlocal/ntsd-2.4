@@ -149,30 +149,33 @@ user's approval to push. Until then, keep the other phases moving.
 | 2026-10-03 | — | Plan and inventory written | text/links only | c753d7c |
 | 2026-10-03 | P0 Linux | Static Linux SDK 6.4.0 installed; probe cross-built for aarch64/x86_64 musl and run in containers. Output equals macOS except `os`/`crypto`. First `NTSDCore` Linux build stops at `import CryptoKit`. | probe compare; Core build log | c649bac |
 | 2026-10-03 | P2a digest | `PortableSHA256` (FIPS 180-4) in Core, exported as `SHA256` only where CryptoKit is missing. CryptoKit imports are conditional in Core (6), reference checks (6) and tests (7); Apple builds still use CryptoKit. The Linux Core build passes CryptoKit and stops at `import Darwin`. | macOS `PortableSHA256Tests`: vectors, lengths 0–200 split into regions, 1,528 packaged files / 874,627,316 bytes equal to CryptoKit; Xcode release build. First compile attempt failed on exclusivity (log `p2a-macos-sha-test.log`) | 4547acc |
-| 2026-10-03 | P2b clock | `OriginalMacStartupClock` imports Darwin/Glibc/Musl/Android per OS with unchanged calls. **`NTSDCore` now cross-compiles for Linux** (aarch64 debug and release, x86_64 debug). `NTSDReferenceChecks` stops at `import Compression`. | macOS clock test `testActualMacClocksAtWholeCallerBoundaries`; Xcode release build; Linux build logs `p2b-*` | this commit |
+| 2026-10-03 | P2b clock | `OriginalMacStartupClock` imports Darwin/Glibc/Musl/Android per OS with unchanged calls. **`NTSDCore` now cross-compiles for Linux** (aarch64 debug and release, x86_64 debug). `NTSDReferenceChecks` stops at `import Compression`. | macOS clock test `testActualMacClocksAtWholeCallerBoundaries`; Xcode release build; Linux build logs `p2b-*` | 65c6916 |
+| 2026-10-03 | P2c inflate | `FixtureInflate.decode` keeps the `compression_decode_buffer(COMPRESSION_ZLIB)` contract. It uses `Compression` on Apple platforms and SDK zlib (new `CZlib` system-library target) elsewhere. Four reference checks and two tests call it; the pinned replay codec is untouched. **All nine check executables cross-compile for Linux aarch64.** | `FixtureInflateTests` with `NTSD_FIXTURE_INFLATE_ALL=1`: zlib equals Compression on all 1,934 fixture blobs (38 zlib-wrapped, header/trailer stripped as their test does), 3,157,901,771 packed / 18,326,948,532 inflated bytes, plus truncation for blobs ≤4 MiB. 21 regression tests (Object, Stage, Background, Bootstrap, WindowInput, CatalogDIBPixels, CatalogSession, LibWarFaultRejection) in the release test build; Xcode release build | this commit |
 
 ## Next task
 
-P2c, raw-deflate decode for the reference checks and tests. Four reference
-checks and two test files call
-`compression_decode_buffer(..., COMPRESSION_ZLIB)` into a buffer of `count+1`
-bytes and compare the returned length with `count`.
+P1, the package graph for portable builds. Only 19 of 319 test files import
+Mac-only modules (`NTSDMacPlatform`, AppKit, AVFoundation, AVFAudio).
 
-- Add one helper with that contract: bytes written, the capacity when the output
-  is truncated, 0 on error.
-- It uses `Compression` on Apple platforms. Elsewhere it uses a system zlib
-  module (raw inflate, `inflateInit2` with window bits -15), declared only for
-  non-Apple platforms in `Package.swift`.
-- Gate: a macOS test proving the zlib path (built on macOS against the SDK's
-  libz) equals `Compression` on every compressed fixture blob, plus the
-  existing reference-check tests. Also the Xcode release build and Linux builds
-  of `NTSDReferenceChecks` and the check executables.
+- Move those files with `git mv` into `Tests/NTSDCoreTests/Mac/`. They stay in
+  the same target on macOS and keep sharing helpers.
+- In `Package.swift`, treat the build as portable on a non-Apple host, or when
+  `NTSD_PORTABLE=1` is set for cross builds from this Mac (the manifest runs on
+  the host).
+- When portable, drop the `NTSDMacPlatform`/`NTSDApp` targets and the
+  `NTSDNative` product, exclude `Mac/` and the `NTSDMacPlatform` test
+  dependency. Check that SwiftPM's manifest cache honours the variable, using
+  separate scratch paths.
+- Gate: on macOS, an unchanged full build and test compile, with the moved test
+  classes still discovered. Then a Linux aarch64 `--build-tests` build under
+  `NTSD_PORTABLE=1`; fix any helpers that leak across the boundary by moving
+  files only.
 
 Following tasks:
 
-- P3 preparation: the portable test subset needs the package split (P1)
-  first, because `NTSDCoreTests` depends on `NTSDMacPlatform`.
-- P1: package graph split.
+- P3: run the cross-built portable tests and check executables in a container
+  on the same fixtures and compare with macOS. The test bundle copies 4.3 GB of
+  fixtures per triple, so watch the X5 reserve.
 - P0-W: Windows SDK. The Swift parts unpack from the 2.1 GB installer with
   sevenzip/msitools. The MSVC CRT and Windows SDK need the user's acceptance of
   Microsoft's license (`xwin --accept-license`); asked 2026-10-03, awaiting an

@@ -2,7 +2,6 @@ import Foundation
 #if canImport(CryptoKit)
 import CryptoKit
 #endif
-import Compression
 import NTSDCore
 
 /// A compact projection of full original Object captures. It compares all header,
@@ -67,7 +66,7 @@ public enum ObjectReference {
             var output = [UInt8](repeating: 0, count: count+1)
             let result = output.withUnsafeMutableBufferPointer { dst in
                 source.withUnsafeBytes { src in
-                    compression_decode_buffer(dst.baseAddress!, dst.count, src.bindMemory(to: UInt8.self).baseAddress!, src.count, nil, COMPRESSION_ZLIB)
+                    FixtureInflate.decode(dst.baseAddress!, dst.count, src.bindMemory(to: UInt8.self).baseAddress!, src.count)
                 }
             }
             guard result == count else { throw OriginalStateError.invalidStorage("Object DEFLATE length mismatch") }
