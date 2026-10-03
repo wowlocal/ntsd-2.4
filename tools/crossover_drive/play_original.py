@@ -71,7 +71,18 @@ def lock():
     returned file is closed."""
     import fcntl
     LOCK.parent.mkdir(parents=True, exist_ok=True)
-    f = open(LOCK, "w"); fcntl.flock(f, fcntl.LOCK_EX); return f
+    f = open(LOCK, "w"); fcntl.flock(f, fcntl.LOCK_EX)
+    # A holder killed without its cleanup leaves its instance running; with
+    # the lock held, any instance of the clone is such a leftover.
+    kill_clone(DEFAULT_CLONE); return f
+
+
+def kill_clone(clone):
+    for line in subprocess.run(["ps", "-axo", "pid,command"], capture_output=True, text=True).stdout.splitlines():
+        # Wine's own processes only (start.exe, winewrapper.exe, the game).
+        if ".exe" in line and (str(clone).replace("/", "\\") in line or str(clone) in line):
+            subprocess.run(["kill", line.split()[0]])
+    time.sleep(1)
 
 
 def start(clone):
@@ -101,10 +112,7 @@ def start(clone):
 
 
 def stop(clone, launcher):
-    for line in subprocess.run(["ps", "-axo", "pid,command"], capture_output=True, text=True).stdout.splitlines():
-        if str(clone).replace("/", "\\") in line or str(clone) in line:
-            subprocess.run(["kill", line.split()[0]])
-    launcher.wait(timeout=30)
+    kill_clone(clone); launcher.wait(timeout=30)
 
 
 def wait_clock(pid):
