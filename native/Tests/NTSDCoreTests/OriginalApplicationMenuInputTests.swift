@@ -37,7 +37,7 @@ final class OriginalApplicationMenuInputTests: XCTestCase {
             XCTAssertTrue(self.referenceIndices.allSatisfy { (0..<50).contains($0) })
             let raw = try XCTUnwrap(JSONSerialization.jsonObject(with:data) as? [String:Any]),parents = try XCTUnwrap(raw["menuParents"] as? [String:[String:Any]])
             XCTAssertEqual(parents.count,expectedCounts.parents)
-            indices = try c.cases.map { c in let p = try XCTUnwrap(parents[c.parent]);return try XCTUnwrap(parent.rawCases.firstIndex { NSDictionary(dictionary:$0).isEqual(to:p) }) }
+            indices = try c.cases.map { c in let p = try XCTUnwrap(parents[c.parent]);return try XCTUnwrap(parent.rawCases.firstIndex { sameJSONObject($0,p) }) }
             extras = try XCTUnwrap(raw["cases"] as? [[String:Any]]).map { raw in try JSONDecoder().decode([ExtraEvent].self,from:JSONSerialization.data(withJSONObject:XCTUnwrap(raw["events"]))) }
         }
         func blob(_ key: String) throws -> [UInt8] {

@@ -74,7 +74,7 @@ final class OriginalApplicationBootstrapTests: XCTestCase {
         let fc = front.c.cases[fi],si = try XCTUnwrap(front.settingKeys.firstIndex(of:fc.parent))
         let sr = front.settings,sc = sr.c.cases[si]
         let rawBitmap = try XCTUnwrap(sr.rawParents[sc.parent])
-        let bi = try XCTUnwrap(br.rawCases.firstIndex { NSDictionary(dictionary:$0).isEqual(to:rawBitmap) })
+        let bi = try XCTUnwrap(br.rawCases.firstIndex { sameJSONObject($0,rawBitmap) })
         let bc = br.c.cases[bi],parents = try XCTUnwrap(bc.parents),parent = parents.parent,lc = parents.loop
         let rawParent = try XCTUnwrap((br.rawCases[bi]["parents"] as? [String:Any])?["parent"] as? [String:Any])
         let package = try OriginalApplicationStartupInputsTests.shared.get()

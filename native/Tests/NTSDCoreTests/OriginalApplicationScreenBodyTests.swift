@@ -29,7 +29,7 @@ final class OriginalApplicationScreenBodyTests: XCTestCase {
             XCTAssertEqual(parents.count,expectedCounts.parents)
             frontIndices = try c.cases.map { c in
                 let parent = try XCTUnwrap(parents[c.parent])
-                return try XCTUnwrap(front.rawCases.firstIndex { NSDictionary(dictionary:$0).isEqual(to:parent) })
+                return try XCTUnwrap(front.rawCases.firstIndex { sameJSONObject($0,parent) })
             }
         }
         func blob(_ key: String) throws -> [UInt8] {
