@@ -1,0 +1,578 @@
+{
+ "characters": {
+  "1": {
+   "mp": {
+    "value": 2110,
+    "evidence": "crossplay-random-vs-3.json",
+    "case": 21
+   },
+   "picking": {
+    "value": 6,
+    "evidence": "crossplay-random-vs-1.json",
+    "case": 1
+   },
+   "attack": {
+    "value": 2045,
+    "evidence": "crossplay-random-vs-1.json",
+    "case": 6
+   },
+   "kill": {
+    "value": 3,
+    "evidence": "crossplay-random-vs-1.json",
+    "case": 6
+   }
+  },
+  "2": {
+   "mp": {
+    "value": 2144,
+    "evidence": "crossplay-random-vs-5.json",
+    "case": 55
+   },
+   "picking": {
+    "value": 8,
+    "evidence": "crossplay-random-vs-5.json",
+    "case": 55
+   },
+   "attack": {
+    "value": 1356,
+    "evidence": "crossplay-random-vs-2.json",
+    "case": 13
+   },
+   "kill": {
+    "value": 3,
+    "evidence": "crossplay-random-vs-2.json",
+    "case": 13
+   }
+  },
+  "3": {
+   "mp": {
+    "value": 1360,
+    "evidence": "crossplay-random-vs-4.json",
+    "case": 26
+   },
+   "picking": {
+    "value": 7,
+    "evidence": "crossplay-random-vs-4.json",
+    "case": 26
+   },
+   "attack": {
+    "value": 1411,
+    "evidence": "crossplay-random-vs-4.json",
+    "case": 26
+   },
+   "kill": {
+    "value": 2,
+    "evidence": "crossplay-random-vs-4.json",
+    "case": 24
+   }
+  },
+  "4": {
+   "mp": {
+    "value": 1105,
+    "evidence": "crossplay-random-vs-2.json",
+    "case": 16
+   },
+   "attack": {
+    "value": 1013,
+    "evidence": "crossplay-random-vs-5.json",
+    "case": 55
+   },
+   "kill": {
+    "value": 1,
+    "evidence": "crossplay-random-vs-2.json",
+    "case": 11
+   },
+   "picking": {
+    "value": 7,
+    "evidence": "crossplay-random-vs-5.json",
+    "case": 53
+   }
+  },
+  "5": {
+   "mp": {
+    "value": 1535,
+    "evidence": "crossplay-random-vs-2.json",
+    "case": 9
+   },
+   "picking": {
+    "value": 9,
+    "evidence": "crossplay-random-vs-1.json",
+    "case": 4
+   },
+   "attack": {
+    "value": 1613,
+    "evidence": "crossplay-random-vs-2.json",
+    "case": 9
+   },
+   "kill": {
+    "value": 2,
+    "evidence": "crossplay-random-vs-2.json",
+    "case": 16
+   }
+  },
+  "6": {
+   "mp": {
+    "value": 1050,
+    "evidence": "crossplay-original-to-mac-1.json",
+    "case": 1
+   },
+   "picking": {
+    "value": 12,
+    "evidence": "crossplay-original-to-mac-1.json",
+    "case": 1
+   },
+   "attack": {
+    "value": 2334,
+    "evidence": "crossplay-original-to-mac-1.json",
+    "case": 1
+   },
+   "kill": {
+    "value": 3,
+    "evidence": "crossplay-original-to-mac-1.json",
+    "case": 1
+   }
+  },
+  "7": {
+   "mp": {
+    "value": 1688,
+    "evidence": "crossplay-random-vs-2.json",
+    "case": 9
+   },
+   "picking": {
+    "value": 8,
+    "evidence": "crossplay-random-vs-3.json",
+    "case": 22
+   },
+   "attack": {
+    "value": 1815,
+    "evidence": "crossplay-random-vs-3.json",
+    "case": 22
+   },
+   "kill": {
+    "value": 5,
+    "evidence": "crossplay-random-vs-2.json",
+    "case": 9
+   }
+  },
+  "8": {
+   "mp": {
+    "value": 3567,
+    "evidence": "crossplay-random-vs-4.json",
+    "case": 23
+   },
+   "picking": {
+    "value": 5,
+    "evidence": "crossplay-random-vs-2.json",
+    "case": 15
+   },
+   "attack": {
+    "value": 1207,
+    "evidence": "crossplay-random-vs-4.json",
+    "case": 23
+   },
+   "kill": {
+    "value": 2,
+    "evidence": "crossplay-random-vs-2.json",
+    "case": 14
+   }
+  },
+  "9": {
+   "mp": {
+    "value": 3030,
+    "evidence": "crossplay-random-vs-3.json",
+    "case": 17
+   },
+   "picking": {
+    "value": 7,
+    "evidence": "crossplay-random-vs-3.json",
+    "case": 17
+   },
+   "attack": {
+    "value": 1847,
+    "evidence": "crossplay-random-vs-3.json",
+    "case": 17
+   },
+   "kill": {
+    "value": 2,
+    "evidence": "crossplay-random-vs-2.json",
+    "case": 13
+   }
+  },
+  "10": {
+   "mp": {
+    "value": 1405,
+    "evidence": "crossplay-random-vs-4.json",
+    "case": 26
+   },
+   "attack": {
+    "value": 895,
+    "evidence": "crossplay-original-to-mac-1.json",
+    "case": 4
+   },
+   "kill": {
+    "value": 2,
+    "evidence": "crossplay-random-vs-2.json",
+    "case": 15
+   },
+   "picking": {
+    "value": 6,
+    "evidence": "crossplay-random-vs-4.json",
+    "case": 26
+   }
+  },
+  "11": {
+   "mp": {
+    "value": 2215,
+    "evidence": "crossplay-random-vs-2.json",
+    "case": 16
+   },
+   "picking": {
+    "value": 6,
+    "evidence": "crossplay-random-vs-4.json",
+    "case": 25
+   },
+   "attack": {
+    "value": 1069,
+    "evidence": "crossplay-random-vs-4.json",
+    "case": 25
+   },
+   "kill": {
+    "value": 2,
+    "evidence": "crossplay-random-vs-2.json",
+    "case": 16
+   }
+  },
+  "12": {
+   "mp": {
+    "value": 863,
+    "evidence": "crossplay-random-vs-1.json",
+    "case": 8
+   },
+   "picking": {
+    "value": 5,
+    "evidence": "crossplay-random-vs-2.json",
+    "case": 9
+   },
+   "attack": {
+    "value": 875,
+    "evidence": "crossplay-random-vs-5.json",
+    "case": 56
+   },
+   "kill": {
+    "value": 2,
+    "evidence": "crossplay-random-vs-5.json",
+    "case": 56
+   }
+  },
+  "13": {
+   "mp": {
+    "value": 1326,
+    "evidence": "crossplay-random-vs-2.json",
+    "case": 12
+   },
+   "picking": {
+    "value": 10,
+    "evidence": "crossplay-random-vs-2.json",
+    "case": 13
+   },
+   "attack": {
+    "value": 1512,
+    "evidence": "crossplay-random-vs-2.json",
+    "case": 12
+   },
+   "kill": {
+    "value": 3,
+    "evidence": "crossplay-random-vs-2.json",
+    "case": 12
+   }
+  },
+  "14": {
+   "mp": {
+    "value": 220,
+    "evidence": "crossplay-random-vs-5.json",
+    "case": 52
+   },
+   "attack": {
+    "value": 1397,
+    "evidence": "crossplay-random-vs-5.json",
+    "case": 52
+   },
+   "picking": {
+    "value": 5,
+    "evidence": "crossplay-random-vs-3.json",
+    "case": 20
+   },
+   "kill": {
+    "value": 1,
+    "evidence": "crossplay-random-vs-5.json",
+    "case": 51
+   }
+  },
+  "15": {
+   "mp": {
+    "value": 750,
+    "evidence": "crossplay-random-vs-5.json",
+    "case": 55
+   },
+   "picking": {
+    "value": 8,
+    "evidence": "crossplay-random-vs-4.json",
+    "case": 25
+   },
+   "attack": {
+    "value": 770,
+    "evidence": "crossplay-random-vs-1.json",
+    "case": 2
+   },
+   "kill": {
+    "value": 2,
+    "evidence": "crossplay-random-vs-1.json",
+    "case": 2
+   }
+  },
+  "16": {
+   "mp": {
+    "value": 665,
+    "evidence": "crossplay-random-vs-1.json",
+    "case": 1
+   },
+   "picking": {
+    "value": 10,
+    "evidence": "crossplay-random-vs-1.json",
+    "case": 1
+   },
+   "attack": {
+    "value": 1945,
+    "evidence": "crossplay-random-vs-5.json",
+    "case": 51
+   },
+   "kill": {
+    "value": 3,
+    "evidence": "crossplay-random-vs-1.json",
+    "case": 1
+   }
+  },
+  "17": {
+   "mp": {
+    "value": 913,
+    "evidence": "crossplay-random-vs-3.json",
+    "case": 18
+   },
+   "picking": {
+    "value": 4,
+    "evidence": "crossplay-random-vs-2.json",
+    "case": 14
+   },
+   "attack": {
+    "value": 1785,
+    "evidence": "crossplay-random-vs-2.json",
+    "case": 14
+   },
+   "kill": {
+    "value": 2,
+    "evidence": "crossplay-random-vs-2.json",
+    "case": 14
+   }
+  },
+  "18": {
+   "mp": {
+    "value": 1180,
+    "evidence": "crossplay-random-vs-2.json",
+    "case": 10
+   },
+   "attack": {
+    "value": 1087,
+    "evidence": "crossplay-random-vs-5.json",
+    "case": 56
+   },
+   "kill": {
+    "value": 2,
+    "evidence": "crossplay-random-vs-5.json",
+    "case": 56
+   },
+   "picking": {
+    "value": 5,
+    "evidence": "crossplay-random-vs-2.json",
+    "case": 10
+   }
+  },
+  "19": {
+   "mp": {
+    "value": 905,
+    "evidence": "crossplay-random-vs-1.json",
+    "case": 2
+   },
+   "picking": {
+    "value": 9,
+    "evidence": "crossplay-original-to-mac-1.json",
+    "case": 5
+   },
+   "attack": {
+    "value": 1675,
+    "evidence": "crossplay-random-vs-2.json",
+    "case": 12
+   },
+   "kill": {
+    "value": 3,
+    "evidence": "crossplay-random-vs-2.json",
+    "case": 12
+   }
+  },
+  "20": {
+   "mp": {
+    "value": 1175,
+    "evidence": "crossplay-random-vs-3.json",
+    "case": 18
+   },
+   "attack": {
+    "value": 965,
+    "evidence": "crossplay-random-vs-2.json",
+    "case": 10
+   },
+   "picking": {
+    "value": 4,
+    "evidence": "crossplay-random-vs-2.json",
+    "case": 10
+   },
+   "kill": {
+    "value": 1,
+    "evidence": "crossplay-random-vs-1.json",
+    "case": 7
+   }
+  },
+  "21": {
+   "mp": {
+    "value": 855,
+    "evidence": "crossplay-random-vs-2.json",
+    "case": 13
+   },
+   "attack": {
+    "value": 751,
+    "evidence": "crossplay-random-vs-2.json",
+    "case": 10
+   },
+   "picking": {
+    "value": 7,
+    "evidence": "crossplay-random-vs-2.json",
+    "case": 13
+   },
+   "kill": {
+    "value": 2,
+    "evidence": "crossplay-random-vs-2.json",
+    "case": 11
+   }
+  },
+  "22": {
+   "mp": {
+    "value": 825,
+    "evidence": "crossplay-random-vs-2.json",
+    "case": 14
+   },
+   "picking": {
+    "value": 6,
+    "evidence": "crossplay-random-vs-5.json",
+    "case": 51
+   },
+   "attack": {
+    "value": 750,
+    "evidence": "crossplay-random-vs-2.json",
+    "case": 14
+   },
+   "kill": {
+    "value": 2,
+    "evidence": "crossplay-random-vs-5.json",
+    "case": 56
+   }
+  },
+  "23": {
+   "mp": {
+    "value": 215,
+    "evidence": "crossplay-random-vs-2.json",
+    "case": 16
+   },
+   "picking": {
+    "value": 6,
+    "evidence": "crossplay-random-vs-5.json",
+    "case": 54
+   },
+   "attack": {
+    "value": 2333,
+    "evidence": "crossplay-random-vs-5.json",
+    "case": 54
+   },
+   "kill": {
+    "value": 5,
+    "evidence": "crossplay-random-vs-2.json",
+    "case": 10
+   }
+  },
+  "24": {
+   "mp": {
+    "value": 648,
+    "evidence": "crossplay-random-vs-1.json",
+    "case": 8
+   },
+   "picking": {
+    "value": 8,
+    "evidence": "crossplay-random-vs-1.json",
+    "case": 8
+   },
+   "attack": {
+    "value": 1477,
+    "evidence": "crossplay-random-vs-1.json",
+    "case": 8
+   },
+   "kill": {
+    "value": 3,
+    "evidence": "crossplay-random-vs-1.json",
+    "case": 8
+   }
+  },
+  "25": {
+   "mp": {
+    "value": 960,
+    "evidence": "crossplay-random-vs-3.json",
+    "case": 19
+   },
+   "picking": {
+    "value": 13,
+    "evidence": "crossplay-random-vs-3.json",
+    "case": 19
+   },
+   "attack": {
+    "value": 2257,
+    "evidence": "crossplay-random-vs-3.json",
+    "case": 19
+   },
+   "kill": {
+    "value": 2,
+    "evidence": "crossplay-random-vs-1.json",
+    "case": 4
+   }
+  },
+  "51": {
+   "mp": {
+    "value": 3396,
+    "evidence": "crossplay-random-vs-4.json",
+    "case": 23
+   },
+   "picking": {
+    "value": 15,
+    "evidence": "crossplay-random-vs-5.json",
+    "case": 51
+   },
+   "attack": {
+    "value": 1719,
+    "evidence": "crossplay-random-vs-2.json",
+    "case": 11
+   },
+   "kill": {
+    "value": 3,
+    "evidence": "crossplay-random-vs-2.json",
+    "case": 11
+   }
+  }
+ },
+ "withoutMP": [],
+ "withoutPicking": []
+}
