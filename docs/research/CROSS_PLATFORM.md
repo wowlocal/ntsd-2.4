@@ -27,9 +27,12 @@ in the tree are listed under "Verified starting point".
   Rosetta x86_64 and Wine/CrossOver are test harnesses here; label their results
   as such. Actual Windows, Linux desktop and device observations stay open
   until they are performed.
-- Pushing branches, enabling CI, publishing releases or installing paid or
-  licensed software needs the user's confirmation. Everything else in this
-  plan is authorized for the loop.
+- On 2026-10-03 the user approved pushing `dev/crossplatform`. It tracks
+  `origin`, and the post-commit hook pushes each commit. They also accepted
+  Microsoft's VS Build Tools license for `xwin` downloads. Enabling CI,
+  publishing releases or installing other paid or licensed software still needs
+  the user's confirmation. Everything else in this plan is authorized for the
+  loop.
 
 ## Verified starting point (2026-10-03, `74be317`)
 
@@ -185,6 +188,19 @@ Following tasks:
   test harness; label it so.
 - P5: the shared runtime extraction on macOS can start in parallel with long
   Linux runs.
-- P0-W: the Swift side is extracted (see ledger). The MSVC CRT and Windows
-  SDK still need the user's acceptance of Microsoft's license
-  (`xwin --accept-license`); asked 2026-10-03, awaiting an answer.
+- P0-W, continued (license accepted 2026-10-03). `xwin` 0.10.0 splats are on
+  X5: MSVC 14.44.17.14 + SDK 10.0.26100 (`winsysroot`) and MSVC 14.29 + SDK
+  10.0.22621 (`winsysroot-vs16`).
+  - `swiftc -target x86_64-unknown-windows-msvc -sdk <Windows.sdk>` with
+    `-visualc-tools-root <winsysroot>/VC/Tools/MSVC/14.44.17.14`,
+    `-windows-sdk-root "<winsysroot>/Windows Kits/10"`, `-windows-sdk-version`
+    and `-use-ld=lld` gets as far as the UCRT module.
+  - Both splats use the same `ucrt.msi` (SHA-256 prefix 54448641…). It lacks
+    `corecrt_math.h`, `corecrt_math_defines.h` and `stdnoreturn.h`, which
+    Swift 6.4's `ucrt.modulemap` names; they are not in the unpacked cache
+    either.
+  - Next: get the full UCRT headers. The Windows SDK installer's "Universal
+    CRT Headers Libraries and Sources" package is the candidate; check whether
+    its terms are covered before downloading. Otherwise add audited shims plus
+    a patched copy of the modulemap: removing `corecrt.math` moved the error on
+    to `stdnoreturn.h`.
