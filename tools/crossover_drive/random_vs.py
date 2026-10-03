@@ -25,7 +25,7 @@ import play_original  # noqa: E402
 APP = ROOT / "build/swiftpm-app/release/NTSDNative"
 
 
-def script(computers, rerolls):
+def script(computers, rerolls, background_steps=0):
     steps = ["20 click 350 230", "60 click 402 218", "100 key 74", "150 key 74", "200 key 74", "250 key 74"]
     t = 1000
     for _ in range(computers - 1): steps.append(f"{t} key 68"); t += 30
@@ -33,22 +33,28 @@ def script(computers, rerolls):
     for _ in range(computers): steps += [f"{t} key 74", f"{t + 100} key 74"]; t += 200
     t += 100
     for _ in range(rerolls): steps.append(f"{t} key 74"); t += 100
-    steps += [f"{t} key 87", f"{t + 30} key 87", f"{t + 80} key 74", "60000 exit"]
+    if background_steps:
+        # The final menu's marker starts at Randomize; S to Background, D cycles it.
+        steps.append(f"{t} key 83"); t += 40
+        for _ in range(background_steps): steps.append(f"{t} key 68"); t += 30
+        steps += [f"{t} key 87", f"{t + 30} key 87", f"{t + 60} key 87", f"{t + 110} key 74", "60000 exit"]
+    else:
+        steps += [f"{t} key 87", f"{t + 30} key 87", f"{t + 80} key 74", "60000 exit"]
     return "; ".join(steps)
 
 
-def run(out, seed, computers, rerolls):
+def run(out, seed, computers, rerolls, background_steps=0):
     d = out / str(seed); d.mkdir(parents=True, exist_ok=True); overlay = d / "overlay"; overlay.mkdir(exist_ok=True)
     mac = d / "mac.json"
     if not mac.exists():
         done = subprocess.run([str(APP), "--original", "--mute-music", "--mute-sounds", "--overlay", str(overlay),
                                "--virtual-clock", str(seed), "8", "--script-clock", "gameplay", "--exit-after-summary",
                                "--summary-json", str(mac), "--summary-capture", str(d / "mac-summary.png"),
-                               "--script", script(computers, rerolls)], capture_output=True, text=True, timeout=1800,
+                               "--script", script(computers, rerolls, background_steps)], capture_output=True, text=True, timeout=1800,
                               env={"TZ": "Etc/GMT-1", "PATH": "/usr/bin:/bin"})
         (d / "mac.stdout").write_text(done.stdout + done.stderr)
     recordings = sorted(overlay.rglob("*.lfr"))
-    result = dict(seed=seed, computers=computers, rerolls=rerolls, recording=[str(r) for r in recordings])
+    result = dict(seed=seed, computers=computers, rerolls=rerolls, backgroundSteps=background_steps, recording=[str(r) for r in recordings])
     if not mac.exists() or not recordings:
         result["result"] = "no Mac summary or recording"; return result
     original = d / "original.json"
@@ -64,10 +70,12 @@ def run(out, seed, computers, rerolls):
 def main():
     p = argparse.ArgumentParser(description=__doc__); p.add_argument("out"); p.add_argument("seeds", nargs="+", type=int)
     p.add_argument("--computers", type=int, default=3); p.add_argument("--rerolls", type=int, default=0)
+    p.add_argument("--background-steps", type=int, nargs="*", default=[], help="per seed: D presses on the Background line")
     a = p.parse_args(); out = Path(a.out); out.mkdir(parents=True, exist_ok=True)
     results = []
-    for seed in a.seeds:
-        r = run(out, seed, a.computers, a.rerolls); results.append(r)
+    for i, seed in enumerate(a.seeds):
+        steps = a.background_steps[i] if i < len(a.background_steps) else 0
+        r = run(out, seed, a.computers, a.rerolls, steps); results.append(r)
         print(seed, r["result"], [s["id"] for s in r.get("mac", {}).get("seats", [])], flush=True)
         (out / "results.json").write_text(json.dumps(results, indent=1))
 

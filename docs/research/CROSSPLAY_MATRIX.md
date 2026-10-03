@@ -41,7 +41,7 @@
 ## 2. Персонажи (приоритет 2)
 
 Каждый из 25 играбельных хотя бы в одном сверенном матче, как игрок или как
-компьютер:
+компьютер. Все 25 покрыты; дополнительно сверен id 51 (выпал в Random, [random VS 2](../evidence/crossplay-random-vs-2.json)):
 
 Sakura(1), Naruto(2), Kakashi(3), Sai(4), Shino(5), Sasori(6), Rock_Lee(7),
 Chiyo(8), Itachi(9), Deidara(10), Sasuke(11), Kiba(12), Yamato(13), Kankuro(14),
@@ -51,22 +51,22 @@ Jiraiya(21), Shikamaru(22), Kabuto(23), Hidan(24), Kakuzu(25).
 | Персонаж | Статус |
 | --- | --- |
 | Sakura | ✓ [random VS 1](../evidence/crossplay-random-vs-1.json) |
-| Naruto | ✓ e2e VS (скрин), памятью — ещё нет |
-| Kakashi | — |
-| Sai | — |
+| Naruto | ✓ [random VS 2](../evidence/crossplay-random-vs-2.json) |
+| Kakashi | ✓ [random VS 2](../evidence/crossplay-random-vs-2.json) |
+| Sai | ✓ [random VS 2](../evidence/crossplay-random-vs-2.json) |
 | Shino | ✓ [random VS 1](../evidence/crossplay-random-vs-1.json) |
 | Sasori | ✓ [random VS 1](../evidence/crossplay-random-vs-1.json) |
 | Rock_Lee | ✓ [random VS 1](../evidence/crossplay-random-vs-1.json) |
-| Chiyo | — |
-| Itachi | — |
+| Chiyo | ✓ [random VS 2](../evidence/crossplay-random-vs-2.json) |
+| Itachi | ✓ [random VS 2](../evidence/crossplay-random-vs-2.json) |
 | Deidara | ✓ [random VS 1](../evidence/crossplay-random-vs-1.json) |
-| Sasuke | ✓ e2e VS (скрин), памятью — ещё нет |
+| Sasuke | ✓ [random VS 2](../evidence/crossplay-random-vs-2.json) |
 | Kiba | ✓ [random VS 1](../evidence/crossplay-random-vs-1.json) |
 | Yamato | ✓ [random VS 1](../evidence/crossplay-random-vs-1.json) |
-| Kankuro | — |
+| Kankuro | ✓ [random VS 2](../evidence/crossplay-random-vs-2.json) |
 | Temari | ✓ [random VS 1](../evidence/crossplay-random-vs-1.json) |
 | Gaara | ✓ [random VS 1](../evidence/crossplay-random-vs-1.json) |
-| Kisame | — |
+| Kisame | ✓ [random VS 2](../evidence/crossplay-random-vs-2.json) |
 | Neji | ✓ [random VS 1](../evidence/crossplay-random-vs-1.json) |
 | Ten_Ten | ✓ [random VS 1](../evidence/crossplay-random-vs-1.json) |
 | Orochimaru | ✓ [random VS 1](../evidence/crossplay-random-vs-1.json) |
@@ -88,13 +88,13 @@ Grassland, Path.
 | SandCountry | ✓ [random VS 1](../evidence/crossplay-random-vs-1.json) |
 | Cave | ✓ [random VS 1](../evidence/crossplay-random-vs-1.json) |
 | Deep | — |
-| Hideout | — |
-| Rain | — |
+| Hideout | ✓ [random VS 2](../evidence/crossplay-random-vs-2.json) |
+| Rain | ✓ [random VS 2](../evidence/crossplay-random-vs-2.json) |
 | SnowCountry | ✓ [random VS 1](../evidence/crossplay-random-vs-1.json) |
 | River | ✓ [random VS 1](../evidence/crossplay-random-vs-1.json) |
 | Forest | ✓ [random VS 1](../evidence/crossplay-random-vs-1.json) |
-| Arena | — |
-| RamenPlace | — |
+| Arena | ✓ [random VS 2](../evidence/crossplay-random-vs-2.json) |
+| RamenPlace | ✓ [random VS 2](../evidence/crossplay-random-vs-2.json) |
 | Springs | ✓ [random VS 1](../evidence/crossplay-random-vs-1.json) |
 | Academy | ✓ [random VS 1](../evidence/crossplay-random-vs-1.json) |
 | CastleRoof | — |
