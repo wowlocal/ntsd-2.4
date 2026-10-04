@@ -1,0 +1,14 @@
+{
+  "study": "docs/research/CROSS_PLATFORM.md",
+  "phase": "P8: music on the iPad host",
+  "date": "2026-10-04",
+  "change": "NTSDiOS plays the packaged ALAC tracks through AVAudioPlayer (NTSDiOSMusicPlayer, the same adapter shape as the macOS host's OriginalMacAVMusicPlayer), with the end of a track reported on the main thread; replaces the silent manifest-duration players",
+  "audioFinding": "with the screen unlocked AVAudioEngine starts in the simulator ('AVAudioEngine 192000 Hz', no abort): the earlier 'Initialize: RPC timeout. Apparently deadlocked. Aborting now.' came from the locked session. Scripted muted runs still open no engine output (declared harness guard)",
+  "results": {
+    "vs": "equal; music reported playing bgm\\\\boss1.wma at gain 0 (muted run)",
+    "matrix": "iPad host rerun in matrix-20261004: 9/10 (playback as on main), all 15,960 frames identical to AppKit; the other seven hosts unchanged (reused)"
+  },
+  "open": [
+    "audible check on a real iPad"
+  ]
+}

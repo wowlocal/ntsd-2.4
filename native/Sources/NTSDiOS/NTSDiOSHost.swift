@@ -55,11 +55,30 @@ final class NTSDiOSCursor {}
     }
 }
 
+/// AVAudioPlayer behind `OriginalMacMusicOutput.Player`, as on the macOS host:
+/// iOS plays the packaged ALAC tracks natively.
+@MainActor final class NTSDiOSMusicPlayer: NSObject, OriginalMacMusicOutput.Player, AVAudioPlayerDelegate {
+    let player: AVAudioPlayer, ended: () -> Void
+    init(_ url: URL,ended: @escaping () -> Void) throws {
+        player = try AVAudioPlayer(contentsOf:url); self.ended = ended
+        super.init(); player.delegate = self; player.prepareToPlay()
+    }
+    var currentTime: TimeInterval { get { player.currentTime } set { player.currentTime = newValue } }
+    var duration: TimeInterval { player.duration }
+    var volume: Float { get { player.volume } set { player.volume = newValue } }
+    var isPlaying: Bool { player.isPlaying }
+    func play() { player.play() }
+    func pause() { player.pause() }
+    nonisolated func audioPlayerDidFinishPlaying(_ player: AVAudioPlayer,successfully flag: Bool) {
+        if Thread.isMainThread { MainActor.assumeIsolated { self.ended() } }
+        else { DispatchQueue.main.async { MainActor.assumeIsolated { self.ended() } } }
+    }
+}
+
 /// The iPad session host: one view, touch and keyboard input, AVAudioEngine
-/// for the effects mixer, silent music by manifest duration (declared, like
-/// the SDL host before it decoded music), CoreText glyph masks with the iOS
-/// system font as macOS uses its system font, Darwin sockets, and the app's
-/// Documents folder as the overlay.
+/// for the effects mixer, the packaged tracks through AVAudioPlayer (as on
+/// macOS), CoreText glyph masks with the iOS system font as macOS uses its
+/// system font, Darwin sockets, and the app's Documents folder as the overlay.
 @MainActor final class NTSDiOSSessionHost: OriginalRuntimeSessionHost {
     let arguments: [String], windows: NTSDiOSWindowHost, musicDirectory: String
     weak var session: OriginalRuntimeSession?
@@ -118,12 +137,24 @@ final class NTSDiOSCursor {}
     }
     func connectedJoysticks() -> Int { 0 }
     func startJoystickSampling(_ session: OriginalRuntimeSession) {}
-    func makeMusicOutput() throws -> OriginalMacMusicOutput { try .silent(directory:URL(fileURLWithPath:musicDirectory,isDirectory:true)) }
+    func makeMusicOutput() throws -> OriginalMacMusicOutput {
+        let directory = URL(fileURLWithPath:musicDirectory,isDirectory:true)
+        guard let manifest = try JSONSerialization.jsonObject(with:Data(contentsOf:directory.appendingPathComponent("manifest.json"))) as? [String:Any],
+              let entries = manifest["entries"] as? [[String:Any]] else { throw OriginalMacMusicOutput.Boundary.manifest }
+        var tracks: [String:URL] = [:]
+        for entry in entries {
+            guard let name = entry["name"] as? String,let resource = entry["resource"] as? String else { throw OriginalMacMusicOutput.Boundary.manifest }
+            let url = directory.appendingPathComponent(resource)
+            guard FileManager.default.fileExists(atPath:url.path) else { throw OriginalMacMusicOutput.Boundary.missingTrack(resource) }
+            tracks[name.lowercased()] = url
+        }
+        return .init(tracks:tracks) { url,ended in try NTSDiOSMusicPlayer(url,ended:ended) }
+    }
     func startSoundOutput(_ effects: OriginalMacSoundEffects,muted: Bool) throws -> String {
-        // Scripted muted checks open no output (declared): the simulator's
-        // CoreAudio aborted the app at engine setup ("RPC timeout ... deadlocked"),
-        // and game state does not depend on an output pulling the mixer (the
-        // headless host has none and matches the references).
+        // Scripted muted checks open no output (declared): with the Mac's screen
+        // locked the simulator's CoreAudio aborted the app at engine setup ("RPC
+        // timeout ... deadlocked"; unlocked it starts), and game state does not
+        // depend on an output pulling the mixer (the headless host has none).
         if muted && scripted { return "muted (no output: scripted)" }
         // iOS needs an active audio session before the engine touches its output
         // (without one, CoreAudio deadlocked and aborted the app in the simulator).
