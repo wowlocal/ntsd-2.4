@@ -29,8 +29,8 @@ final class SDLAudioFeed: @unchecked Sendable {
 }
 
 /// The SDL session host: SDL windows, keyboard, mouse, gamepads, audio and
-/// message boxes. Music is silent by manifest duration until P7 decodes it;
-/// on macOS, text uses the AppKit host's CoreText masks and sockets its
+/// message boxes. Music plays the packaged ALAC tracks decoded without
+/// AVFoundation; on macOS, text uses the AppKit host's CoreText masks and sockets its
 /// Darwin Winsock, so frames and network behaviour match the AppKit app.
 @MainActor final class SDLSessionHost: OriginalRuntimeSessionHost {
     let arguments: [String], windows: SDLWindowHost, musicDirectory: String
@@ -128,7 +128,20 @@ final class SDLAudioFeed: @unchecked Sendable {
             messages.joystick(UInt32(id),x:word(dx),y:word(dy),buttons:buttons)
         }
     }
-    func makeMusicOutput() throws -> OriginalMacMusicOutput { try .silent(directory:URL(fileURLWithPath:musicDirectory,isDirectory:true)) }
+    /// The packaged tracks, decoded and played through SDL (`SDLMusicPlayer`).
+    func makeMusicOutput() throws -> OriginalMacMusicOutput {
+        let directory = URL(fileURLWithPath:musicDirectory,isDirectory:true)
+        guard let manifest = try JSONSerialization.jsonObject(with:Data(contentsOf:directory.appendingPathComponent("manifest.json"))) as? [String:Any],
+              let entries = manifest["entries"] as? [[String:Any]] else { throw OriginalMacMusicOutput.Boundary.manifest }
+        var tracks: [String:URL] = [:]
+        for entry in entries {
+            guard let name = entry["name"] as? String,let resource = entry["resource"] as? String else { throw OriginalMacMusicOutput.Boundary.manifest }
+            let url = directory.appendingPathComponent(resource)
+            guard FileManager.default.fileExists(atPath:url.path) else { throw OriginalMacMusicOutput.Boundary.missingTrack(resource) }
+            tracks[name.lowercased()] = url
+        }
+        return .init(tracks:tracks) { url,ended in try SDLMusicPlayer(url,ended:ended) }
+    }
     func startSoundOutput(_ effects: OriginalMacSoundEffects,muted: Bool) throws -> String {
         var spec = SDL_AudioSpec(),frames: Int32 = 0
         let rate = SDL_GetAudioDeviceFormat(NTSD_SDL_DEFAULT_PLAYBACK,&spec,&frames) && spec.freq > 0 ? spec.freq : 48000

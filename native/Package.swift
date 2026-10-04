@@ -29,7 +29,7 @@ let sdlProducts: [Product] = sdl ? [.executable(name: "NTSDSDL", targets: ["NTSD
 let freetypePrefix = portable ? Context.environment["NTSD_FREETYPE_PREFIX"] : nil
 let sdlTargets: [Target] = sdl ? [
     .systemLibrary(name: "CSDL3", path: "Sources/CSDL3"),
-    .executableTarget(name: "NTSDSDL", dependencies: ["NTSDCore", "NTSDRuntime", "CSDL3"] + (portable ? [] : ["NTSDMacPlatform"])
+    .executableTarget(name: "NTSDSDL", dependencies: ["NTSDCore", "NTSDRuntime", "NTSDMusicDecoder", "CSDL3"] + (portable ? [] : ["NTSDMacPlatform"])
                           + (freetypePrefix == nil ? [] : ["CFreeType"]),
                       swiftSettings: [.unsafeFlags(["-Xcc", "-I\(sdlPrefix)/include"]
                                                    + (freetypePrefix.map { ["-Xcc", "-I\($0)/include/freetype2"] } ?? []))],
@@ -57,6 +57,13 @@ let package = Package(
         .target(name: "NTSDCore", dependencies: ["NTSDReplayCodec"], resources: [.copy("Resources/OriginalStartup"), .copy("Resources/OriginalCommonSounds"), .copy("Resources/OriginalLoadingInterface"), .copy("Resources/OriginalCharacterMenu"), .copy("Resources/OriginalWarMenu"), .copy("Resources/OriginalMatchArenas"), .copy("Resources/OriginalCatalog")]),
         .systemLibrary(name: "CZlib", path: "Sources/CZlib"),
         .target(name: "NTSDRuntime", dependencies: ["NTSDCore"]),
+        // The vendored decoder learns the byte order from TargetConditionals.h
+        // on Apple platforms and only for x86 elsewhere; every non-Apple target
+        // built here (aarch64, x86_64) is little-endian.
+        .target(name: "CALAC", exclude: ["README.md", "upstream.json", "vendor/LICENSE"],
+                cSettings: [.define("TARGET_RT_LITTLE_ENDIAN", to: "1", .when(platforms: [.linux, .android, .windows]))],
+                cxxSettings: [.define("TARGET_RT_LITTLE_ENDIAN", to: "1", .when(platforms: [.linux, .android, .windows]))]),
+        .target(name: "NTSDMusicDecoder", dependencies: ["CALAC"]),
         .executableTarget(name: "NTSDHeadless", dependencies: ["NTSDCore", "NTSDRuntime"]),
         .target(name: "NTSDReferenceChecks", dependencies: ["NTSDCore", "CZlib"]),
         .executableTarget(name: "NTSDBootstrapCheck", dependencies: ["NTSDReferenceChecks"]),
@@ -68,7 +75,7 @@ let package = Package(
         .executableTarget(name: "NTSDMovementCheck", dependencies: ["NTSDCore"]),
         .executableTarget(name: "NTSDCombatCheck", dependencies: ["NTSDCore"]),
         .executableTarget(name: "NTSDStateCheck", dependencies: ["NTSDCore"]),
-        .testTarget(name: "NTSDCoreTests", dependencies: ["NTSDCore", "NTSDReferenceChecks", "NTSDRuntime", "CZlib"] + macTestDependencies,
+        .testTarget(name: "NTSDCoreTests", dependencies: ["NTSDCore", "NTSDReferenceChecks", "NTSDRuntime", "NTSDMusicDecoder", "CZlib"] + macTestDependencies,
                     exclude: portable ? ["Mac"] : [], resources: [.copy("Fixtures")])
     ],
     swiftLanguageModes: [.v5]

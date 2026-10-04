@@ -1,0 +1,24 @@
+{
+  "study": "docs/research/CROSS_PLATFORM.md",
+  "phase": "P7: music without AVFoundation",
+  "date": "2026-10-04",
+  "assets": "native/Sources/NTSDMacPlatform/Resources/OriginalMusic: 8 CAF/ALAC tracks; manifest.json records per track the frame count and the SHA-256 of the 16-bit PCM (FFmpeg float decode of bgm/*.wma, saturate(roundHalfEven(x*32768))) that was ALAC-encoded losslessly",
+  "decoder": {
+    "vendored": "native/Sources/CALAC: Apple ALAC reference decoder, github.com/macosforge/alac c38887c5c5e64a4b31108733bd79ca9b2496d987 codec/, Apache-2.0, 13 files unchanged (upstream.json with original/vendored SHA-256), plus NTSDALAC.cpp (C interface)",
+    "swift": "native/Sources/NTSDMusicDecoder/OriginalALACTrack.swift: CAF reader (desc, kuki, pakt variable-length packet sizes, data; priming/remainder trimming) and per-packet decode",
+    "byteOrder": "vendor/EndianPortable.c defines TARGET_RT_LITTLE_ENDIAN only for x86/Win32 and Apple gets it from TargetConditionals.h; on Linux aarch64 the decoder skipped its byte swaps and rejected the first packet (first Linux run: corrupt(\"packet at 8192\")). Package.swift now defines TARGET_RT_LITTLE_ENDIAN=1 for CALAC on non-Apple platforms; vendored files unchanged"
+  },
+  "player": "NTSDSDL SDLMusicPlayer: OriginalMacMusicOutput.Player on its own SDL audio stream (S16 stereo 44.1 kHz, SDL converts), decoded in the background, duration from the packet table at once, end reported on the main thread like AVAudioPlayer; a failed decode is reported as an sdlMusicError event. Used by every NTSDSDL build (macOS too)",
+  "gates": {
+    "OriginalALACTrackTests macOS": "release test build: 2/2, every track's frames, PCM byte count and PCM SHA-256 equal the manifest (5.6 s)",
+    "OriginalALACTrackTests Linux": "glibc aarch64 test build in swift:6.4.0-noble: before the byte-order define 1 failed; after it 2/2 (41.5 s, debug)",
+    "macOS SDL with music": "all scenarios 9/10 equal; 15,960/15,960 frames identical to AppKit",
+    "Linux SDL with music": "all scenarios 9/10 equal; 15,960/15,960 frames identical to the previous Linux SDL run; 0 sdlMusicError events",
+    "default macOS release build": "ok"
+  },
+  "open": [
+    "audible output on a real Linux desktop",
+    "sample comparison of the played stream (device-rate conversion is SDL's)",
+    "decoded tracks are held in memory per playing track (tens of MB)"
+  ]
+}
