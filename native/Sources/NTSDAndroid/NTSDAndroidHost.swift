@@ -2,6 +2,9 @@ import CAndroidNative
 import Foundation
 import NTSDCore
 import NTSDRuntime
+#if canImport(NTSDFreeTypeText)
+import NTSDFreeTypeText
+#endif
 
 /// A virtual original window: the Android surface shows the window that presents last.
 final class NTSDAndroidWindow {
@@ -96,13 +99,14 @@ final class NTSDAndroidCursor {}
     }
 }
 
-/// The Android session host (first step): one surface, touch as the mouse,
-/// hardware keys through the shared HID table, the shared BSD sockets, and,
-/// as the headless host declares, silent music, no sound output and no text
-/// rasteriser yet.
+/// The Android session host: one surface, touch as the mouse, hardware keys
+/// through the shared HID table, the shared BSD sockets, text through FreeType
+/// with Android's system sans-serif, AAudio for the effects mixer and the
+/// packaged music decoded by NTSDMusicDecoder (as on Linux).
 @MainActor final class NTSDAndroidSessionHost: OriginalRuntimeSessionHost {
     let arguments: [String], windows: NTSDAndroidWindowHost, musicDirectory: String, files: URL, density: Double
     weak var session: OriginalRuntimeSession?
+    private var effects: NTSDAndroidStream?
     /// The last touch as a desktop point: the game reads it with GetCursorPos.
     private var cursor: (Int32,Int32) = (0,0)
     /// Touches as player-like clicks (hover, then a held press).
@@ -121,9 +125,23 @@ final class NTSDAndroidCursor {}
         guard let session,let messages = session.messages,!session.stopped,!session.scripted else { return }
         messages.key(key,down:down,characters:characters)
     }
+    /// TextOutA's glyph masks: Android's system sans-serif (Roboto, weight 700),
+    /// else Droid Sans Bold, through FreeType, as Linux uses its standard bold
+    /// (user decision 2026-10-01: the platform font as a declared stand-in for
+    /// the original's SYSTEM_FONT). Reported once at launch.
+    private lazy var textMask: ([UInt8]) -> OriginalMacDisplayBackend.TextMask = {
+        #if canImport(NTSDFreeTypeText)
+        for (path,weight) in [("/system/fonts/Roboto-Regular.ttf",700.0 as Double?),("/system/fonts/DroidSans-Bold.ttf",nil)] {
+            if let face = OriginalFreeTypeFace(path:path,weight:weight) {
+                Self.report(["event":"androidText","font":path,"weight":weight ?? NSNull()]); return { face.mask($0) }
+            }
+        }
+        #endif
+        Self.report(["event":"androidText","font":NSNull()])
+        return { _ in .init(advance:0,originX:0,originY:0,width:0,height:0,bits:[]) }
+    }()
     var startupHost: OriginalRuntimeStartupHost {
-        // Declared first-step stand-in, as on the headless host: TextOutA draws nothing.
-        .init(windows:windows,textMask:{ _ in .init(advance:0,originX:0,originY:0,width:0,height:0,bits:[]) },
+        .init(windows:windows,textMask:textMask,
               messageBox:{ text,caption in Self.report(["event":"androidMessageBox","text":String(decoding:text,as:UTF8.self),
                                                          "caption":String(decoding:caption,as:UTF8.self)]) })
     }
@@ -137,8 +155,33 @@ final class NTSDAndroidCursor {}
     func beginTimingActivity() {}
     func connectedJoysticks() -> Int { 0 }
     func startJoystickSampling(_ session: OriginalRuntimeSession) {}
-    func makeMusicOutput() throws -> OriginalMacMusicOutput { try .silent(directory:URL(fileURLWithPath:musicDirectory,isDirectory:true)) }
-    func startSoundOutput(_ effects: OriginalMacSoundEffects,muted: Bool) throws -> String { "android (no output yet)" }
+    var scripted: Bool { arguments.contains("--script") }
+    func makeMusicOutput() throws -> OriginalMacMusicOutput {
+        let directory = URL(fileURLWithPath:musicDirectory,isDirectory:true)
+        // Scripted muted checks use the silent manifest players (declared harness
+        // guard: the emulator runs without audio; the decoder is checked on Linux).
+        if scripted && arguments.contains("--mute-music") { return try .silent(directory:directory) }
+        guard let manifest = try JSONSerialization.jsonObject(with:Data(contentsOf:directory.appendingPathComponent("manifest.json"))) as? [String:Any],
+              let entries = manifest["entries"] as? [[String:Any]] else { throw OriginalMacMusicOutput.Boundary.manifest }
+        var tracks: [String:URL] = [:]
+        for entry in entries {
+            guard let name = entry["name"] as? String,let resource = entry["resource"] as? String else { throw OriginalMacMusicOutput.Boundary.manifest }
+            let url = directory.appendingPathComponent(resource)
+            guard FileManager.default.fileExists(atPath:url.path) else { throw OriginalMacMusicOutput.Boundary.missingTrack(resource) }
+            tracks[name.lowercased()] = url
+        }
+        return .init(tracks:tracks) { url,ended in try NTSDAndroidMusicPlayer(url,ended:ended) }
+    }
+    func startSoundOutput(_ effects: OriginalMacSoundEffects,muted: Bool) throws -> String {
+        if muted && scripted { return "muted (no output: scripted)" }   // as on the iPad host
+        let feed = NTSDAndroidEffectsFeed(effects:effects)
+        var rate = 48000.0
+        let stream = try NTSDAndroidStream(float:true,rate:nil,lowLatency:true) { data,frames in
+            if muted { data.assumingMemoryBound(to:Float.self).update(repeating:0,count:frames*2) } else { feed.fill(data,frames:frames,rate:rate) }
+        }
+        rate = Double(stream.rate); self.effects = stream; stream.start()
+        return muted ? "muted" : "AAudio \(stream.rate) Hz"
+    }
     func backingScale(_ window: UInt32,in windows: OriginalRuntimeWindowBackend) -> Double { density }
     func cursorPoint() -> (Int32,Int32) { cursor }
     func attach(_ window: UInt32,in windows: OriginalRuntimeWindowBackend,session: OriginalRuntimeSession) throws {}

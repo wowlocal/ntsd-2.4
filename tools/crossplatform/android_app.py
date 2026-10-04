@@ -6,7 +6,8 @@ the emulator is a test harness, not a device observation).
 Usage: android_app.py OUT_DIR [--scenario NAME] [--skip-build] [--no-install]
 
 Builds libNTSDAndroid.so with SwiftPM (NTSD_PORTABLE=1 NTSD_ANDROID=1,
-aarch64-unknown-linux-android28, static Swift runtime, NDK r30), stages the
+aarch64-unknown-linux-android28, static Swift runtime, NDK r30, FreeType from
+build_android_deps.sh), stages the
 game data (the resource bundle) and the packaged music as APK assets under
 assets/ntsd with a file list, links the manifest with aapt2 (no Java code,
 debuggable so `run-as` reaches the app's files), adds lib/arm64-v8a
@@ -57,7 +58,8 @@ def run(cmd, **kw):
 
 
 def build(out):
-    env = {**os.environ, "NTSD_PORTABLE": "1", "NTSD_ANDROID": "1", "ANDROID_HOME": str(SDK), "ANDROID_NDK_ROOT": str(NDK)}
+    env = {**os.environ, "NTSD_PORTABLE": "1", "NTSD_ANDROID": "1", "ANDROID_HOME": str(SDK), "ANDROID_NDK_ROOT": str(NDK),
+           "NTSD_FREETYPE_PREFIX": str(X5 / "android-deps/freetype/install-aarch64")}   # build_android_deps.sh
     common = [SWIFT, "build", "--package-path", ROOT / "native", "--scratch-path", X5 / "build-android-aarch64",
               "--swift-sdk", "aarch64-unknown-linux-android28", "-c", "release", "--static-swift-stdlib", "--product", "NTSDAndroid"]
     subprocess.run([str(c) for c in common], env=env, check=True)

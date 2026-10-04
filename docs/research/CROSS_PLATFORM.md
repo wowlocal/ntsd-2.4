@@ -220,7 +220,8 @@ user's approval to push. Until then, keep the other phases moving.
 | 2026-10-04 | **P8 Android: `--resources`** | An Android app cannot point `Bundle.main` at its data (CoreFoundation on Linux/Android reads `/proc/self/exe` only), so the runtime session gains `--resources DIR`. It passes that bundle to every loader; without the option it passes `.main` as before. No Core change. **A headless binary away from its bundle reproduces vs through `--resources`; the AppKit app's vs is unchanged.** | [evidence](../evidence/crossplatform-p8-resources-option-20261004.json) | b5d00e4 |
 | 2026-10-04 | **Touch clicks (iPad, Android)** | Taps never selected a menu item: the hosts reported the cursor at 0,0 and sent a tap's press and release at once, while the original reads `GetCursorPos` and the held button across ticks. The hosts now report the last touch as the cursor, and the shared `OriginalRuntimeTouchMouse` moves, presses after a hover and holds like a player's click. | simulator vs equal; AppKit build; Android: one tap opens START | edccfde |
 | 2026-10-04 | **P8: Android app, first step** | `NTSDAndroid`: a `NativeActivity` with no Java. The dispatch main queue runs on the Android main thread through the main `ALooper`; the game data ships as APK assets, extracted once and passed with `--resources`; frames are letterboxed into the surface; touch and hardware keys. Text, sound and music are first-step stand-ins (as headless). `android_app.py` builds, signs and installs the APK and runs scenarios through it. **vs through the app equals the reference, with all 1,832 frames identical to Linux headless; in the emulator the menu shows and a tap starts the game.** | [evidence](../evidence/crossplatform-p8-android-app-20261004.json) | 07bc662 |
-| 2026-10-04 | **Shared FreeType text** | The FreeType face moves unchanged from the SDL host into `NTSDFreeTypeText`, so the Android host can use it too; it gains an optional variable-font weight. `build_android_deps.sh` builds FreeType 2.13.3 (same tarball and options as Linux) with NDK r30. **Linux SDL vs: state equal and all 1,832 frames, DejaVu text included, identical to the matrix run**; the macOS and Windows SDL builds and the Android build pass. | `run_headless_scenarios.py --linux-sdl`, `compare_frames.py` | this commit |
+| 2026-10-04 | **Shared FreeType text** | The FreeType face moves unchanged from the SDL host into `NTSDFreeTypeText`, so the Android host can use it too; it gains an optional variable-font weight. `build_android_deps.sh` builds FreeType 2.13.3 (same tarball and options as Linux) with NDK r30. **Linux SDL vs: state equal and all 1,832 frames, DejaVu text included, identical to the matrix run**; the macOS and Windows SDL builds and the Android build pass. | `run_headless_scenarios.py --linux-sdl`, `compare_frames.py` | af1f808 |
+| 2026-10-04 | **P8: Android app, scenarios, text and audio** | All scenarios through the textless app: **9/10 like every host and all 15,960 frames identical to Linux headless.** Text now uses Roboto at weight 700 through the shared FreeType face: **vs equal, text in the same 446 of 1,826 frames as CoreText.** Sound effects and the packaged music play through AAudio (music decoded as on Linux); interactively in the emulator the app opens its streams and a tap reaches the mode menu with drawn text. The menus take only the mouse, so key input is still to check in a match. | [evidence](../evidence/crossplatform-p8-android-text-audio-20261004.json), [results](../evidence/crossplatform-p8-android-app-scenarios-20261004.jsonl) | this commit |
 
 ## Next task
 
@@ -231,11 +232,10 @@ and approved reporting the miscompile (done, #92905). Installed with Homebrew's
 platform-tools 37.0.1, emulator 37.2.12, NDK 27.3.13750724, platform 35 and
 the `android-35;google_apis;arm64-v8a` system image.
 
-1. **Android app, next steps (P8)**: run all scenarios through the app
-   (`android_app.py --scenario all`); text with FreeType built for Android and
-   a system font (as Linux); AAudio for the effects mixer and the packaged
-   music through `NTSDMusicDecoder`; check hardware keys with
-   `adb shell input keyevent`. Then a real Android device (the user's).
+1. **Android app, next steps (P8)**: check key input in a match (character
+   select, gameplay) with `adb shell input keyevent`; pause audio and the
+   game's timing when the activity goes to the background; then a real
+   Android device (the user's).
 
 Still waiting on the user: real-hardware checks (Linux desktop, Windows PC,
 iPad).

@@ -1,5 +1,6 @@
 // The NDK interfaces the Android host uses (P8, docs/research/CROSS_PLATFORM.md).
 #pragma once
+#include <aaudio/AAudio.h>
 #include <android/asset_manager.h>
 #include <android/configuration.h>
 #include <android/input.h>
