@@ -16,6 +16,11 @@ func option(_ name: String,_ count: Int) -> [String]? {
     return Array(arguments[(i+1)...(i+count)])
 }
 _ = SDL_SetHint("SDL_VIDEO_MAC_FULLSCREEN_SPACES","0")
+// NTSD_SDL_VIDEO_DRIVER / NTSD_SDL_AUDIO_DRIVER select SDL drivers as hints:
+// CrossOver's wine does not pass SDL_* variables to Windows processes.
+for (variable,hint) in [("NTSD_SDL_VIDEO_DRIVER","SDL_VIDEO_DRIVER"),("NTSD_SDL_AUDIO_DRIVER","SDL_AUDIO_DRIVER")] {
+    if let value = ProcessInfo.processInfo.environment[variable] { _ = SDL_SetHint(hint,value) }
+}
 guard SDL_Init(NTSD_SDL_INIT) else {
     FileHandle.standardError.write(Data("SDL_Init: \(String(cString:SDL_GetError()))\n".utf8)); exit(1)
 }

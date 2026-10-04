@@ -75,7 +75,8 @@ def run_wine(out, run_dir):
     def win(p): return "Z:" + str(p).replace("/", "\\")
     with socket.socket() as s:
         s.bind(("127.0.0.1", 12345))
-    env = {**os.environ, "TZ": "Etc/GMT-1", "SDL_VIDEO_DRIVER": "offscreen", "SDL_AUDIO_DRIVER": "dummy"}
+    # CrossOver's wine drops SDL_* variables; NTSDSDL reads these as SDL hints.
+    env = {**os.environ, "TZ": "Etc/GMT-1", "NTSD_SDL_VIDEO_DRIVER": "offscreen", "NTSD_SDL_AUDIO_DRIVER": "dummy"}
     procs = {}
     for role, seed, script, _ in ROLES:
         args = [a if not a.startswith(str(out)) else win(a) for a in arguments(out, role, seed, script, str(MUSIC))]

@@ -206,20 +206,20 @@ user's approval to push. Until then, keep the other phases moving.
 | 2026-10-04 | **P7 Windows: SDL build with GDI text** | `NTSDSDL` cross-builds for Windows against libsdl's official SDL3 3.4.16 VC package (rpath only on macOS/Linux, signed SDL enums under MSVC, C/C++ on the DLL runtime like Swift). On Windows text goes through GDI: TextOutA with the stock SYSTEM_FONT, the original's own font on real Windows (Wine substitutes its own). Sockets stay off on Windows until a real-Winsock adapter exists. **In the CrossOver bottle (offscreen/dummy SDL drivers) all scenarios give 9/10 like every host, and text appears in exactly the same 9,211 of 15,909 frames as on AppKit.** | macOS and Linux SDL still build (RUNPATH kept); [evidence](../evidence/crossplatform-pw-sdl-20261004.json), [results](../evidence/crossplatform-pw-sdl-wine-20261004.jsonl) | 6dfc200 |
 | 2026-10-04 | **P7 Windows: package** | `package_windows.py` assembles `ntsd-windows-x86_64` (NTSDSDL.exe, SDL3.dll, the Swift and MSVC runtime DLLs from the Swift installer, resources, packaged music, licences) into a reproducible 219 MB zip with a manifest. **In a freshly created CrossOver bottle the unpacked package starts with its own music and GDI text and reproduces the vs scenario.** Local artefact only; ONLINE GAME is off until a Winsock adapter exists. | `check_windows_package.sh`; [evidence](../evidence/crossplatform-pw-package-20261004.json) | e300149 |
 | 2026-10-04 | **P7 Windows: ONLINE GAME** | `OriginalWindowsWinsock` answers the original's Winsock calls with the real Winsock 2 stack under the BSD adapter's declared contract; readiness comes from a WSAPoll watcher thread, since the runtime has no real window for WSAAsyncSelect, and bind keeps Windows' default (no SO_REUSEADDR, which on Windows would let the client take the host's port). **The retained two-process ONLINE GAME probe passes between two NTSDSDL.exe processes in the CrossOver bottle, with the same RNG table as every other host and the original run.** | `pair_probe.py --wine`; [evidence](../evidence/crossplatform-pw-winsock-20261004.json), [result](../evidence/crossplatform-pw-pair-wine-20261004.json) | a8ed861 |
-| 2026-10-04 | **P8 step 1: iPad (simulator)** | New `NTSDiOS` (behind `NTSD_IOS=1`): a UIKit scene app on `OriginalRuntimeSession` with one view showing frames scaled to fit, touch as mouse, hardware keyboard through the shared `OriginalHIDKeys`, CoreText masks with the iOS system font, AVAudioEngine effects, Darwin sockets. SwiftPM builds it for the simulator triple and `ios_app.py` wraps, installs and runs it. Resources go at the app root (the loaders' `.app` rule); events go to a file (simctl did not forward stdout); scripted muted runs open no audio output, since the simulator's CoreAudio aborted the app. **All scenarios: 9/10 like every host, and all 15,960 frames byte-identical to the AppKit app's.** | macOS release and Linux builds compile; [evidence](../evidence/crossplatform-p8-ios-20261004.json), [results](../evidence/crossplatform-p8-ios-sim-20261004.jsonl) | this commit |
+| 2026-10-04 | **P8 step 1: iPad (simulator)** | New `NTSDiOS` (behind `NTSD_IOS=1`): a UIKit scene app on `OriginalRuntimeSession` with one view showing frames scaled to fit, touch as mouse, hardware keyboard through the shared `OriginalHIDKeys`, CoreText masks with the iOS system font, AVAudioEngine effects, Darwin sockets. SwiftPM builds it for the simulator triple and `ios_app.py` wraps, installs and runs it. Resources go at the app root (the loaders' `.app` rule); events go to a file (simctl did not forward stdout); scripted muted runs open no audio output, since the simulator's CoreAudio aborted the app. **All scenarios: 9/10 like every host, and all 15,960 frames byte-identical to the AppKit app's.** | macOS release and Linux builds compile; [evidence](../evidence/crossplatform-p8-ios-20261004.json), [results](../evidence/crossplatform-p8-ios-sim-20261004.jsonl) | 8f6d1eb |
+| 2026-10-04 | **Cross-host matrix baseline** | `matrix.py` builds and runs the app_e2e scenarios on every host this Mac drives and compares state and frames. With the Mac's screen locked (from 12:20) the AppKit app stalled, so the AppKit and macOS SDL hosts are reported as blocked and the other six ran: **iPad simulator, Linux headless aarch64 and x86_64, Windows headless, Linux SDL and Windows SDL all give 9/10 (playback as on main); the three textless hosts agree on all 15,960 frames, and FreeType (Linux SDL) and GDI (Windows SDL) put text in exactly the same 9,211 of 15,909 frames as CoreText (iPad).** Correction found on the way: CrossOver drops `SDL_*` variables, so the earlier Windows SDL runs used a real Wine window and WASAPI, not offscreen/dummy as recorded (their results stand); `NTSDSDL` now takes the drivers as hints from `NTSD_SDL_*`. | [report](../evidence/crossplatform-matrix-20261004.json), [correction](../evidence/crossplatform-pw-sdl-drivers-correction-20261004.json) | this commit |
 
 ## Next task
 
-Consolidate before the next platform:
-
-- One cross-host matrix tool (`tools/crossplatform/matrix.py`) that runs the
-  app_e2e scenarios on every host this Mac can drive (AppKit, macOS SDL,
-  Linux headless/SDL aarch64 and x86_64, Windows headless/SDL under Wine,
-  iPad simulator), compares state and frames, and writes one dated report;
-  run it once on the current tree as the cross-platform baseline.
-- Then music on iOS (the ALAC decoder or AVAudioPlayer), Android (P8), and the
-  open real-hardware checks (Linux desktop, Windows PC, iPad), which need the
-  user's devices or decision.
+- When the screen is unlocked: `matrix.py OUT --reuse` with the AppKit and
+  macOS SDL hosts, to complete the baseline (CoreText group: AppKit, macOS SDL
+  and iPad must agree on every frame).
+- Meanwhile, independent work: music on iOS (NTSDMusicDecoder through an
+  AVAudioEngine player node, so iOS and SDL share the decoder), checked in
+  the simulator with the same scripted scenarios.
+- Needs the user: real-hardware checks (Linux desktop, Windows PC, iPad),
+  publishing the Linux/Windows packages, reporting the Swift 6.4.0 Linux
+  miscompile upstream.
 
 Following tasks:
 

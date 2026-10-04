@@ -1,0 +1,161 @@
+{
+  "date": "2026-10-04T17:03:13",
+  "commit": "8f6d1eba0d00d56a9821145b5635b37132135746",
+  "dirty": true,
+  "hosts": {
+    "appkit": {
+      "group": "coretext",
+      "blocked": "screen locked"
+    },
+    "macos-sdl": {
+      "group": "coretext",
+      "blocked": "screen locked"
+    },
+    "ios": {
+      "group": "coretext",
+      "equal": [
+        "vs",
+        "mission",
+        "demo",
+        "war",
+        "tournament",
+        "altenter",
+        "tournament-win",
+        "team-tournament",
+        "joystick"
+      ],
+      "differs": {
+        "playback": [
+          "milestones",
+          "progress"
+        ]
+      }
+    },
+    "linux-headless": {
+      "group": "none",
+      "equal": [
+        "vs",
+        "mission",
+        "demo",
+        "war",
+        "tournament",
+        "altenter",
+        "tournament-win",
+        "team-tournament",
+        "joystick"
+      ],
+      "differs": {
+        "playback": [
+          "milestones",
+          "progress"
+        ]
+      }
+    },
+    "linux-x86_64": {
+      "group": "none",
+      "equal": [
+        "vs",
+        "mission",
+        "demo",
+        "war",
+        "tournament",
+        "altenter",
+        "tournament-win",
+        "team-tournament",
+        "joystick"
+      ],
+      "differs": {
+        "playback": [
+          "milestones",
+          "progress"
+        ]
+      }
+    },
+    "windows": {
+      "group": "none",
+      "equal": [
+        "vs",
+        "mission",
+        "demo",
+        "war",
+        "tournament",
+        "altenter",
+        "tournament-win",
+        "team-tournament",
+        "joystick"
+      ],
+      "differs": {
+        "playback": [
+          "milestones",
+          "progress"
+        ]
+      }
+    },
+    "linux-sdl": {
+      "group": "freetype",
+      "equal": [
+        "vs",
+        "mission",
+        "demo",
+        "war",
+        "tournament",
+        "altenter",
+        "tournament-win",
+        "team-tournament",
+        "joystick"
+      ],
+      "differs": {
+        "playback": [
+          "milestones",
+          "progress"
+        ]
+      }
+    },
+    "windows-sdl": {
+      "group": "gdi",
+      "equal": [
+        "vs",
+        "mission",
+        "demo",
+        "war",
+        "tournament",
+        "altenter",
+        "tournament-win",
+        "team-tournament",
+        "joystick"
+      ],
+      "differs": {
+        "playback": [
+          "milestones",
+          "progress"
+        ]
+      }
+    }
+  },
+  "frames": {
+    "linux-headless==linux-x86_64": {
+      "frames": 15960,
+      "mismatched": 0,
+      "result": "identical"
+    },
+    "linux-headless==windows": {
+      "frames": 15960,
+      "mismatched": 0,
+      "result": "identical"
+    },
+    "text:ios~linux-sdl": {
+      "frames": 15909,
+      "textless": 6698,
+      "text": 9211,
+      "disagree": 0,
+      "result": "agree"
+    },
+    "text:ios~windows-sdl": {
+      "frames": 15909,
+      "textless": 6698,
+      "text": 9211,
+      "disagree": 0,
+      "result": "agree"
+    }
+  }
+}
