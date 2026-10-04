@@ -197,21 +197,23 @@ user's approval to push. Until then, keep the other phases moving.
 | 2026-10-04 | **P7: text on Linux** | Non-Apple `NTSDSDL` rasterises TextOutA with a static FreeType: 13 px em, monochrome, baseline at row 13, the same mask contract as CoreText. Following the user's font decision (SYSTEM_FONT ships with Windows, not the game), it uses the standard Linux font whose widths best match the macOS stand-in: DejaVu Sans Condensed Bold within ±3 px, then Liberation, Noto, FreeSans, then fontconfig's sans-serif bold; plain DejaVu Sans is 15 % wider and clipped the selection screen. **All scenarios: state 9/10; text appears in exactly the same 9,211 of 15,909 frames as on AppKit, and the 6,698 text-free frames are identical.** macOS SDL unchanged (VS 1,832/1,832 frames equal AppKit). | [evidence](../evidence/crossplatform-p7-glyphs-20261004.json), [text frames](../evidence/crossplatform-p7-text-frames-20261004.jsonl), `compare_text_frames.py` | 3e3c712 |
 | 2026-10-04 | **P7: X11 window and real input** | `linux_x11_smoke.sh` runs `NTSDSDL` on Xvfb with SDL's x11 driver in real time with no script, driven by `xdotool`: the window opens at the client size and centre the game was told (794×550 at 243,237 on 1280×1024), and real mouse and keyboard input goes through START, mode and character selection to a Naruto/Sasuke District match (matchLaunched, gameplay, 400 bodies, clean exit). Presses must last like physical ones (150 ms): the game reads input once per iteration and missed xdotool's instant clicks; input during loading is lost, as expected. | [evidence](../evidence/crossplatform-p7-x11-input-20261004.json) | de3ad55 |
 | 2026-10-04 | **P7: music without AVFoundation** | Apple's ALAC reference decoder (Apache-2.0, 13 files vendored unchanged) behind a C interface, and a Swift CAF reader in the new `NTSDMusicDecoder`, decode the packaged tracks; `NTSDSDL` plays them on SDL audio streams through the shared `OriginalMacMusicOutput`. **Every track decodes to exactly the manifest's PCM (frames, bytes, SHA-256) on macOS and on Linux.** The first Linux run failed: the vendored code takes the byte order from Apple headers or x86 macros only, so aarch64 Linux skipped its byte swaps; the manifest now defines it for non-Apple targets. Silent decode failures are now reported. SDL with music: 9/10 and all frames unchanged on macOS and Linux. | `OriginalALACTrackTests` 2/2 macOS release and Linux; [evidence](../evidence/crossplatform-p7-music-20261004.json), [Linux before fix](../evidence/crossplatform-p7-music-linux-suite-before-fix-20261004.jsonl), [after](../evidence/crossplatform-p7-music-linux-suite-20261004.jsonl) | 7c504a6 |
-| 2026-10-04 | **P7: ONLINE GAME on Linux** | The BSD-socket Winsock moved into `NTSDRuntime` (name kept) and runs on Darwin, glibc and musl; `NTSDSDL` uses it everywhere. Linux needed errno mapping to the BSD numbers behind WSAE codes, MSG_NOSIGNAL, Winsock-number argument checks, and a readiness fix: the game selects before `listen()`, Linux reports that socket as hung up, which first produced the game's own "Accpet() Error" box and then left Dispatch not watching (strace: the host never accepted); watching now starts once the socket listens or connects (Darwin unchanged). **The retained two-process ONLINE GAME probe passes between two Linux processes, two macOS SDL processes and two AppKit processes, all with the RNG hash of the retained 2026-10-02 run.** | Winsock tests now portable: macOS 17/17 network tests, Linux 8/8; app_e2e 9/10 = baseline; `pair_probe.py`; [evidence](../evidence/crossplatform-p7-sockets-20261004.json) | this commit |
+| 2026-10-04 | **P7: ONLINE GAME on Linux** | The BSD-socket Winsock moved into `NTSDRuntime` (name kept) and runs on Darwin, glibc and musl; `NTSDSDL` uses it everywhere. Linux needed errno mapping to the BSD numbers behind WSAE codes, MSG_NOSIGNAL, Winsock-number argument checks, and a readiness fix: the game selects before `listen()`, Linux reports that socket as hung up, which first produced the game's own "Accpet() Error" box and then left Dispatch not watching (strace: the host never accepted); watching now starts once the socket listens or connects (Darwin unchanged). **The retained two-process ONLINE GAME probe passes between two Linux processes, two macOS SDL processes and two AppKit processes, all with the RNG hash of the retained 2026-10-02 run.** | Winsock tests now portable: macOS 17/17 network tests, Linux 8/8; app_e2e 9/10 = baseline; `pair_probe.py`; [evidence](../evidence/crossplatform-p7-sockets-20261004.json) | 927f319 |
+| 2026-10-04 | **P7: Linux package** | `package_linux.py` cross-builds `NTSDSDL` with a static Swift runtime and assembles `ntsd-linux-aarch64` (the game, `libSDL3.so.0` beside it via `$ORIGIN`, the resource bundle, the packaged music, licences for SDL3, FreeType, ALAC and Swift, a README) into a reproducible 217 MB tar.gz with a per-file manifest; `NTSDSDL` now finds `OriginalMusic` beside itself. **In a plain Ubuntu 24.04 container without Swift the unpacked package resolves every library, starts with music and font found, reaches a match with real X11 input, and reproduces the vs scenario with identical frames.** Local artefact only. | `check_linux_package.sh`; [evidence](../evidence/crossplatform-p7-linux-package-20261004.json) | this commit |
 
 ## Next task
 
-P7: a Linux package.
+P7: reproducibility of the Linux package, then x86_64.
 
-- `tools/crossplatform/package_linux.py`: cross-build `NTSDSDL` (release,
-  glibc aarch64), and assemble an archive with the executable, its resource
-  bundles, the packaged music, `libSDL3.so.0`, the Swift runtime libraries it
-  needs (or `--static-swift-stdlib`), a launcher that sets `LD_LIBRARY_PATH`,
-  and the licences (SDL3 zlib, FreeType FTL, ALAC Apache-2.0).
-- Gate: the archive unpacked in a clean `ubuntu:24.04` container (no Swift)
-  plus Xvfb runs the X11 smoke and one scripted scenario with equal state;
-  archive bytes and manifest recorded.
-- Then an x86_64 glibc SDK and the same package for x86_64.
+- Rebuild the package from the committed tree and compare the archive and
+  manifest hashes with the first build (the binary carries an absolute
+  RUNPATH entry and build paths; record what differs if anything).
+- Generate an x86_64 glibc Swift SDK (`swift-sdk-generator`, Ubuntu 24.04,
+  as for aarch64), build the Linux deps for linux/amd64 with
+  `build_linux_deps.sh`, package `ntsd-linux-x86_64`, and run
+  `check_linux_package.sh` under Rosetta (test harness; a real x86_64 Linux
+  machine remains the observation).
+- Open: Windows (P0-W, UCRT headers), mobile (P8), interactive play by a
+  person on a real Linux desktop, publishing the package (user decision).
 
 Following tasks:
 

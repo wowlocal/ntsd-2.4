@@ -37,6 +37,10 @@ P6 начат: `NTSDSDL` (SDL3, флаг сборки `NTSD_SDL=1`) на macOS �
 P7: `NTSDSDL` кросс-собирается для Linux (glibc), рисует текст через FreeType
 (шрифт по решению 2026-10-01, ближайший по ширине к macOS) и проходит те же
 сценарии ([evidence](../evidence/crossplatform-p7-glyphs-20261004.json)).
+Linux-сборка теперь с музыкой (ALAC без AVFoundation), сетью (ONLINE GAME между
+двумя процессами) и пакетом: архив запускается в чистом Ubuntu 24.04 без Swift
+([evidence](../evidence/crossplatform-p7-linux-package-20261004.json)); публикация
+пакета — решение пользователя.
 Подробности и открытые решения — в [CROSS_PLATFORM](CROSS_PLATFORM.md).
 
 Побочная находка 2026-10-03: сценарий `playback` в `tools/app_e2e.py` падает
