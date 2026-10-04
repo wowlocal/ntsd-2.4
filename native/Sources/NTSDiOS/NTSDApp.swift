@@ -44,6 +44,11 @@ final class NTSDGameViewController: UIViewController {
     override func pressesEnded(_ presses: Set<UIPress>,with event: UIPressesEvent?) {
         if !gameView.handle(presses,down:false) { super.pressesEnded(presses,with:event) }
     }
+    // iPadOS cancels presses it takes over (app switcher, system shortcuts):
+    // release them, or the game would see the key held.
+    override func pressesCancelled(_ presses: Set<UIPress>,with event: UIPressesEvent?) {
+        if !gameView.handle(presses,down:false) { super.pressesCancelled(presses,with:event) }
+    }
 }
 
 /// Shows the presented framebuffer scaled to fit (nearest), maps touches to

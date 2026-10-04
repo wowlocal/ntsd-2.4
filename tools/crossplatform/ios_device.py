@@ -3,13 +3,15 @@
 (P8). The app is the one ios_app.py wraps for the simulator, built for
 arm64-apple-ios17.0 instead.
 
-Usage: ios_device.py OUT_DIR --device UDID --profile PROFILE.mobileprovision --identity SHA1 [--launch]
+Usage: ios_device.py OUT_DIR --device UDID --profile PROFILE.mobileprovision --identity SHA1
+                     [--ipa PATH] [--no-install | --launch]
 
 Builds with SwiftPM (NTSD_PORTABLE=1 NTSD_IOS=1, scratch on X5), writes
 OUT_DIR/NTSDiOS.app (executable, the Original* resource folders at the app
 root, OriginalMusic, Info.plist, embedded.mobileprovision), signs it with the
 given Apple Development identity and the profile's team, installs it with
-`xcrun devicectl` and, with --launch, starts it. A launched app runs the
+`xcrun devicectl` (unless --no-install) and, with --launch, starts it.
+--ipa also writes the signed app as an IPA, which any Mac can install. A launched app runs the
 game normally (music and sound on, settings in the app's own folder).
 """
 import argparse, os, plistlib, shutil, subprocess, sys
@@ -28,6 +30,7 @@ def main():
     a = argparse.ArgumentParser(); a.add_argument("out", type=Path)
     a.add_argument("--device", required=True); a.add_argument("--profile", type=Path, required=True)
     a.add_argument("--identity", required=True); a.add_argument("--launch", action="store_true")
+    a.add_argument("--no-install", action="store_true"); a.add_argument("--ipa", type=Path)
     args = a.parse_args(); out = args.out.resolve()
     profile = plistlib.loads(run(["security", "cms", "-D", "-i", str(args.profile)]).encode())
     team = profile["TeamIdentifier"][0]
@@ -63,6 +66,13 @@ def main():
                    "get-task-allow": True}, entitlements.open("wb"))
     run(["codesign", "--force", "--sign", args.identity, "--entitlements", str(entitlements), "--timestamp=none", str(app)])
     run(["codesign", "--verify", "--strict", str(app)])
+    if args.ipa:
+        stage = out / "ipa"; shutil.rmtree(stage, ignore_errors=True); (stage / "Payload").mkdir(parents=True)
+        run(["ditto", str(app), str(stage / "Payload/NTSDiOS.app")])
+        args.ipa.unlink(missing_ok=True)
+        run(["ditto", "-c", "-k", "--sequesterRsrc", "--keepParent", "Payload", str(args.ipa.resolve())], cwd=stage)
+        shutil.rmtree(stage); print(args.ipa)
+    if args.no_install: return
     print(run(["xcrun", "devicectl", "device", "install", "app", "--device", args.device, str(app)]).splitlines()[-1])
     if args.launch:
         print(run(["xcrun", "devicectl", "device", "process", "launch", "--device", args.device, "--terminate-existing", BUNDLE_ID]).splitlines()[-1])
