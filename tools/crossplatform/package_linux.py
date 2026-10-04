@@ -11,7 +11,7 @@ and FreeType of build_linux_deps.sh, then assembles:
   ntsd-linux-<arch>/libSDL3.so.0               SDL3 3.4.16
   ntsd-linux-<arch>/NTSDNative_NTSDCore.bundle resources
   ntsd-linux-<arch>/OriginalMusic              packaged tracks + manifest
-  ntsd-linux-<arch>/LICENSES                   SDL3, FreeType, ALAC, Swift
+  ntsd-linux-<arch>/LICENSES                   SDL3, FreeType, ALAC, Swift, ICU
   ntsd-linux-<arch>/README.txt
 
 and a reproducible tar.gz (sorted entries, owner 0, mtime of HEAD's commit)
@@ -70,6 +70,9 @@ def main():
     shutil.copy2(ft / "src/docs/FTL.TXT", lic / "FreeType-FTL.txt")
     shutil.copy2(ROOT / "native/Sources/CALAC/vendor/LICENSE", lic / "ALAC-Apache-2.0.txt")
     shutil.copy2(SWIFT.parent.parent / "share/swift/LICENSE.txt", lic / "Swift-Apache-2.0-runtime-exception.txt")
+    # Foundation's ICU is linked in statically: its own licence and the Swift repository's.
+    shutil.copy2(ROOT / "tools/crossplatform/licenses/ICU-LICENSE.txt", lic / "ICU-Unicode-3.0.txt")
+    shutil.copy2(ROOT / "tools/crossplatform/licenses/swift-foundation-icu-LICENSE.md", lic / "swift-foundation-icu-Apache-2.0.md")
     (stage / "README.txt").write_text(README.format(arch=arch, commit=commit + (" (with uncommitted changes)" if dirty else "")))
 
     files = sorted(p for p in stage.rglob("*") if p.is_file())

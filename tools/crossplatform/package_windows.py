@@ -9,18 +9,19 @@ against libsdl's SDL3 3.4.16 VC package, then assembles:
 
   ntsd-windows-x86_64/NTSDSDL.exe                    the game
   ntsd-windows-x86_64/SDL3.dll                       SDL3 3.4.16 (libsdl's build)
-  ntsd-windows-x86_64/*.dll                          Swift 6.4.0 runtime and the
-                                                     MSVC runtime shipped with it
+  ntsd-windows-x86_64/*.dll                          the Swift 6.4.0 and MSVC runtime
+                                                     DLLs NTSDSDL.exe loads (import
+                                                     closure; the rest are left out)
   ntsd-windows-x86_64/NTSDNative_NTSDCore.resources  resources
   ntsd-windows-x86_64/OriginalMusic                  packaged tracks + manifest
-  ntsd-windows-x86_64/LICENSES, README.txt
+  ntsd-windows-x86_64/LICENSES, README.txt           SDL3, ALAC, Swift, ICU
 
 and a reproducible zip (sorted entries, times of HEAD's commit) with
 manifest.json. Text uses GDI's SYSTEM_FONT, the original's own font; ONLINE
 GAME uses the real Winsock stack. Local artefact only: publishing it is a
 separate decision.
 """
-import argparse, datetime, hashlib, json, os, shutil, subprocess, zipfile
+import argparse, datetime, hashlib, json, os, shutil, subprocess, zipfile, struct
 from pathlib import Path
 
 ROOT = Path(__file__).resolve().parents[2]
@@ -37,6 +38,35 @@ Build: {commit}
 
 def sha(path):
     return hashlib.sha256(path.read_bytes()).hexdigest()
+
+
+def pe_imports(path):
+    """DLL names in a PE32+ file's import and delay-import directories."""
+    b = path.read_bytes(); pe = struct.unpack_from("<I", b, 0x3C)[0]
+    sections, optsize = struct.unpack_from("<H", b, pe + 6)[0], struct.unpack_from("<H", b, pe + 20)[0]
+    opt = pe + 24; assert struct.unpack_from("<H", b, opt)[0] == 0x20B, path
+    table = [struct.unpack_from("<IIII", b, opt + optsize + 40 * i + 8) for i in range(sections)]
+    def offset(rva):
+        return next(raw + rva - va for size, va, rawsize, raw in table if va <= rva < va + max(size, rawsize))
+    def name(rva):
+        o = offset(rva); return b[o:b.index(b"\0", o)].decode("ascii")
+    names = set()
+    for index, step, field in ((1, 20, 12), (13, 32, 4)):
+        rva = struct.unpack_from("<I", b, opt + 112 + 8 * index)[0]
+        if rva == 0: continue
+        o = offset(rva)
+        while any(b[o:o + step]):
+            names.add(name(struct.unpack_from("<I", b, o + field)[0]).lower()); o += step
+    return names
+
+
+def loaded(start, available):
+    """The DLLs in `available` (lowercase name -> path) that `start` loads, transitively."""
+    found, todo = set(), [start]
+    while todo:
+        for dll in pe_imports(todo.pop()):
+            if dll in available and dll not in found: found.add(dll); todo.append(available[dll])
+    return found
 
 
 def main():
@@ -58,14 +88,17 @@ def main():
     shutil.rmtree(args.out, ignore_errors=True); stage.mkdir(parents=True)
     shutil.copy2(products / "NTSDSDL.exe", stage / "NTSDSDL.exe")
     shutil.copy2(sdl / "bin/SDL3.dll", stage / "SDL3.dll")
-    for dll in sorted(runtime.glob("*.dll")):
-        shutil.copy2(dll, stage / dll.name)
+    available = {p.name.lower(): p for p in runtime.glob("*.dll")}
+    for dll in sorted(loaded(stage / "NTSDSDL.exe", available) - {"sdl3.dll"}):
+        shutil.copy2(available[dll], stage / available[dll].name)
     shutil.copytree(products / "NTSDNative_NTSDCore.resources", stage / "NTSDNative_NTSDCore.resources")
     shutil.copytree(ROOT / "native/Sources/NTSDMacPlatform/Resources/OriginalMusic", stage / "OriginalMusic")
     lic = stage / "LICENSES"; lic.mkdir()
     shutil.copy2(sdl / "LICENSE.txt", lic / "SDL3-zlib.txt")
     shutil.copy2(ROOT / "native/Sources/CALAC/vendor/LICENSE", lic / "ALAC-Apache-2.0.txt")
     shutil.copy2(SWIFT.parent.parent / "share/swift/LICENSE.txt", lic / "Swift-Apache-2.0-runtime-exception.txt")
+    shutil.copy2(ROOT / "tools/crossplatform/licenses/ICU-LICENSE.txt", lic / "ICU-Unicode-3.0.txt")
+    shutil.copy2(ROOT / "tools/crossplatform/licenses/swift-foundation-icu-LICENSE.md", lic / "swift-foundation-icu-Apache-2.0.md")
     (stage / "README.txt").write_text(README.format(commit=commit + (" (with uncommitted changes)" if dirty else "")).replace("\n", "\r\n"))
 
     files = sorted(p for p in stage.rglob("*") if p.is_file())
