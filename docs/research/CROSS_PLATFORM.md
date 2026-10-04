@@ -179,24 +179,24 @@ user's approval to push. Until then, keep the other phases moving.
 | 2026-10-04 | P5 step 8 | **The window request model moved to `NTSDRuntime`.** `OriginalRuntimeWindowBackend` now owns: tokens; cursor, class and window leases; request validation; the `perform` dispatch with its order; operations; metrics rules; held/full-screen geometry; present checks. It drives an `OriginalRuntimeWindowHost` (screen size, frame metric, cursor, create, windowCreated, orderFront, update, show, close, nonisolated `released`, client bounds/frame, display geometry, desktop point, present). `OriginalMacWindowHost` reproduces the AppKit code line for line. `OriginalMacWindowBackend` is now a typealias; Mac-only services (observation, `display(CGImage)`, capture, input, close request, macOS full screen, hide, clientPoint, PNG snapshots) are extensions. The lease keeps the host strongly, so a released open window is still closed after the backend is gone. | 51 tests (window, geometry, display, color, framebuffer, front raster, startup, menu, observed ×3, audio) on a fresh test build; 697 listed; Xcode release; Linux `NTSDRuntime`; full app e2e 9/10 = baseline, including altenter | d855299 |
 | 2026-10-04 | P5 step 9 | RuntimeStartupService, WindowStartupService and WindowGeometryService moved to `NTSDRuntime`. The startup service takes its `OriginalMacRuntimeMusic` as an init argument, and the Mac `init(windows:heap:environment:)` supplies the NSAlert one. `FileEffect` gained a public init. | Startup, Menu, Loading, WindowBackend, WindowGeometry, ObservedIteration, ObservedGraphics, MusicOutput 41/41 on a fresh test build; 697 listed; Xcode release; Linux `NTSDRuntime`; full app e2e 9/10 = baseline | 60b463b |
 | 2026-10-04 | P5 step 10 | `OriginalRuntimeSockets` covers every Winsock call the original makes, plus `lastError`/`boundPort` and FD_* `post`. `OriginalRuntimeSocketNotification` and the pure `OriginalRuntimeSocketText` (inet_addr/ntoa/htons) are in `NTSDRuntime`. `OriginalMacRuntimeNetwork` moved there and takes its sockets; the Mac `init(localAddresses:)` supplies `OriginalMacWinsock`, whose statics forward. The first gate run stopped at the test build: the protocol lacked `boundPort`/`lastError`. | Winsock, NetworkHost, NetworkExit, RuntimeMenu, RuntimeLoading 23/23 on a fresh test build; 697 listed; Xcode release; Linux `NTSDRuntime`; full app e2e 9/10 = baseline (including vs's online check) | fb2e1c0 |
-| 2026-10-04 | P5 step 11a | FrontService moved to `NTSDRuntime`. It reaches the runtime window backend through the display's `windows` (a precondition names a display without it); the Mac-only `macWindows` cast is gone. | FrontRaster, ObservedGraphics, ObservedIteration, RuntimeMenu, RuntimeStartup 26/26 on a fresh test build; 697 listed; Xcode release; Linux `NTSDRuntime`; full app e2e 9/10 = baseline | this commit |
+| 2026-10-04 | P5 step 11a | FrontService moved to `NTSDRuntime`. It reaches the runtime window backend through the display's `windows` (a precondition names a display without it); the Mac-only `macWindows` cast is gone. | FrontRaster, ObservedGraphics, ObservedIteration, RuntimeMenu, RuntimeStartup 26/26 on a fresh test build; 697 listed; Xcode release; Linux `NTSDRuntime`; full app e2e 9/10 = baseline | 6e68178 |
+| 2026-10-04 | P5 step 11b | **The startup composition moved to `NTSDRuntime`:** `OriginalMacRuntimeStartup` (prepared inputs, overlay inputs, the attempt loop and audio/window/display/runtime dispatch, `Started`) and `OriginalMacRuntimeOverlay`. `run(...,host:)` takes an `OriginalRuntimeStartupHost` (window host, glyph rasteriser, MessageBoxA presenter). The Mac `run(inputs:overlay:environment:maximumAttempts:)` touches `NSApplication.shared` first and passes `.mac`; `Overlay.standard()` (Application Support) stays Mac; the NSAlert presenter is one shared `OriginalMacRuntimeMusic.alert`. | Startup, Menu, Loading, WindowBackend, ObservedIteration, LoadingAudio ×3 27/27 on a fresh test build; 697 listed; Xcode release; Linux `NTSDRuntime`; full app e2e 9/10 = baseline | this commit |
 
 ## Next task
 
-P5 step 11, the remaining Mac files and the composition root. Left in
-NTSDMacPlatform: RuntimeLoading (NSOpenPanel/NSAlert/NSWorkspace), RuntimeMenu
-(NSAlert, caps lock), FrontService (needs only the runtime window backend),
-RuntimeStartup (composition, `NSApplication.shared`), and the AppKit/AVFoundation
-adapters.
+P5 step 11c, RuntimeMenu and RuntimeLoading.
 
-- Move FrontService.
-- Split RuntimeLoading and RuntimeMenu by injecting their dialogs and caps-lock
-  reads.
-- Add a runtime composition `OriginalRuntimeStartup.run(host:)` that the Mac
-  wrapper calls.
-- Then P6: an SDL3 host on macOS implementing `OriginalRuntimeWindowHost`,
-  `OriginalRuntimeWindowing`, audio output and input, compared with the AppKit
-  host on the same deterministic replay.
+- Inject RuntimeMenu's caps-lock read and diagnostics presenter (both AppKit
+  defaults today).
+- Inject RuntimeLoading's dialogs (NSOpenPanel/UTType recording chooser, NSAlert
+  message box, NSWorkspace open).
+- Move both to `NTSDRuntime` with Mac initializers that keep the current
+  defaults.
+- Gate: RuntimeMenu, RuntimeLoading, NetworkHost/Exit, LoadingAudio ×3 on a
+  fresh test build; 697 listed; Xcode release; Linux `NTSDRuntime`; full app
+  e2e = baseline (vs covers website/controls/online/recording dialogs).
+- After that, NTSDMacPlatform holds only AppKit/AVFoundation/Darwin adapters,
+  and P6 (an SDL3 host on macOS) can start.
 
 Following tasks:
 

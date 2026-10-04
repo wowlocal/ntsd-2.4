@@ -1,4 +1,4 @@
-import AppKit
+import Foundation
 import NTSDCore
 
 /// Writable user data standing in for files the original writes beside its
@@ -8,10 +8,6 @@ public struct OriginalMacRuntimeOverlay {
     public enum Boundary: Error, Equatable { case invalidPath(String) }
     public let root: URL
     public init(root: URL) { self.root = root }
-    public static func standard() throws -> Self {
-        let support = try FileManager.default.url(for:.applicationSupportDirectory,in:.userDomainMask,appropriateFor:nil,create:true)
-        return .init(root:support.appendingPathComponent("NTSD Native",isDirectory:true))
-    }
     public func url(_ path: String) throws -> URL {
         let parts = path.split(separator:"\\",omittingEmptySubsequences:false)
         guard !parts.isEmpty,parts.allSatisfy({ !$0.isEmpty && $0 != "." && $0 != ".." && !$0.contains("/") }) else { throw Boundary.invalidPath(path) }
@@ -31,7 +27,19 @@ public struct OriginalMacRuntimeOverlay {
     }
 }
 
-/// Runs the recovered WinMain on the real Mac window/display/audio services and
+/// What a host supplies to run the original's startup: physical windows, the
+/// TextOutA glyph rasteriser and the MessageBoxA presenter.
+@MainActor public struct OriginalRuntimeStartupHost {
+    public let windows: any OriginalRuntimeWindowHost
+    public let textMask: ([UInt8]) -> OriginalMacDisplayBackend.TextMask
+    public let messageBox: ([UInt8],[UInt8]) -> Void
+    public init(windows: any OriginalRuntimeWindowHost,textMask: @escaping ([UInt8]) -> OriginalMacDisplayBackend.TextMask,
+                messageBox: @escaping ([UInt8],[UInt8]) -> Void) {
+        self.windows = windows; self.textMask = textMask; self.messageBox = messageBox
+    }
+}
+
+/// Runs the recovered WinMain on the host's window/display/audio services and
 /// the runtime startup service, from the packaged initial image to `.started`.
 @MainActor public enum OriginalMacRuntimeStartup {
     public typealias Platform = OriginalApplicationPreparedStartupPlatform
@@ -40,7 +48,7 @@ public struct OriginalMacRuntimeOverlay {
     public enum Boundary: Error, Equatable { case attemptBound(Int), unserved(String), missingWindow }
     public struct Started {
         public let host: Host, driver: Driver, sequence: UInt64, window: UInt32
-        public let windows: OriginalMacWindowBackend, display: OriginalMacDisplayBackend
+        public let windows: OriginalRuntimeWindowBackend, display: OriginalMacDisplayBackend
         public let audio: OriginalMacAudioBackend, runtime: OriginalMacRuntimeStartupService
         /// Every served request kind in exchange order, with its serving owner.
         public let requests: [(owner: String,kind: String)]
@@ -70,16 +78,18 @@ public struct OriginalMacRuntimeOverlay {
         return result
     }
     public static func run(inputs package: OriginalApplicationStartupInputs,overlay: OriginalMacRuntimeOverlay?,
-        environment: OriginalMacRuntimeStartupService.Environment = .init(),maximumAttempts: Int = 2000) throws -> Started {
-        _ = NSApplication.shared
+        environment: OriginalMacRuntimeStartupService.Environment = .init(),maximumAttempts: Int = 2000,
+        host: OriginalRuntimeStartupHost) throws -> Started {
         let inputs = try Self.inputs(package,overlay:overlay)
         let driver = try Driver(platform:Platform(inputs:inputs,prepared:prepared(inputs)),instance:0x400000,show:10,initial:inputs.initial)
-        let windows = OriginalMacWindowBackend(instance:0x400000)
+        let windows = OriginalRuntimeWindowBackend(instance:0x400000,host:host.windows)
         let windowService = OriginalMacWindowStartupService(driver:driver,backend:windows)
         let display = OriginalMacDisplayBackend(windows:windows,maximumBytes:3<<30,freshSurfacesKnownBlack:true,presentUnknownAsBlack:true,rleHolesReadPaletteZero:true,
-                                                keepsOperationLogs:false),displayService = OriginalMacDisplayStartupService(driver:driver,backend:display)
+                                                keepsOperationLogs:false,textMask:host.textMask),displayService = OriginalMacDisplayStartupService(driver:driver,backend:display)
         let audio = OriginalMacAudioBackend(windows:windows),audioService = OriginalMacAudioService(backend:audio)
-        let runtime = OriginalMacRuntimeStartupService(windows:windows,heap:OriginalMacRuntimeHeap(),environment:environment)
+        let heap = OriginalMacRuntimeHeap()
+        let runtime = OriginalMacRuntimeStartupService(windows:windows,heap:heap,environment:environment,
+                                                       music:OriginalMacRuntimeMusic(identities:windows.identities,heap:heap,present:host.messageBox))
         var requests: [(owner: String,kind: String)] = []
         for attempt in 1...maximumAttempts {
             switch try driver.resume() {
@@ -87,7 +97,7 @@ public struct OriginalMacRuntimeOverlay {
                 let kind = OriginalMacRuntimeStartupService.kind(permit.request)
                 switch permit.request {
                 case .sound,.waveAudio: try audioService.serve(permit,on:driver); requests.append(("audio",kind))
-                case .window(let q) where OriginalMacWindowBackend.handles(q): try windowService.serve(permit); requests.append(("window",kind))
+                case .window(let q) where OriginalRuntimeWindowBackend.handles(q): try windowService.serve(permit); requests.append(("window",kind))
                 case .window(let q) where OriginalMacDisplayBackend.handles(q): try displayService.serve(permit); requests.append(("display",kind))
                 case let q where OriginalMacRuntimeStartupService.handles(q): try runtime.serve(permit,on:driver); requests.append(("runtime",kind))
                 default: try driver.cancel(); throw Boundary.unserved(kind)
