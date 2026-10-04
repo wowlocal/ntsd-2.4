@@ -2,22 +2,6 @@ import AVFoundation
 import Foundation
 import NTSDCore
 
-extension OriginalMacSoundEffects {
-    /// PCM, rate, block alignment and registered volume from the audio backend.
-    @MainActor public static func backed(by audio: OriginalMacAudioBackend) -> OriginalMacSoundEffects {
-        OriginalMacSoundEffects { token in
-            try MainActor.assumeIsolated {
-                let pcm = try audio.pcmSnapshot(token),format = try audio.observation(token).format
-                guard let data = pcm.floatChannelData else { throw Boundary.arguments(token) }
-                let frames = Int(pcm.frameLength)
-                let channels = (0..<format.channels).map { Array(UnsafeBufferPointer(start:data[$0],count:frames)) }
-                return .init(channels:channels,rate:Double(format.rate),blockAlign:format.alignment,
-                             volume:try audio.volumeObservation(token) ?? 0)
-            }
-        }
-    }
-}
-
 /// Plays `OriginalMacSoundEffects` through the default output. Muted runs
 /// keep the voices advancing at zero gain. The original creates its buffers
 /// with flags 0xe0 (pan, volume, frequency control) and neither

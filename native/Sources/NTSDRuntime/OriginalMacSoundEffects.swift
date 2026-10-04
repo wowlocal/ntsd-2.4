@@ -206,3 +206,16 @@ extension OriginalMacSoundEffects {
         }
     }
 }
+
+extension OriginalMacSoundEffects {
+    /// PCM, rate, block alignment and registered volume from the audio backend.
+    @MainActor public static func backed(by audio: OriginalMacAudioBackend) -> OriginalMacSoundEffects {
+        OriginalMacSoundEffects { token in
+            try MainActor.assumeIsolated {
+                let (format,channels) = try audio.samples(token)
+                return .init(channels:channels,rate:Double(format.rate),blockAlign:format.alignment,
+                             volume:try audio.volumeObservation(token) ?? 0)
+            }
+        }
+    }
+}
