@@ -210,27 +210,37 @@ user's approval to push. Until then, keep the other phases moving.
 | 2026-10-04 | **Cross-host matrix baseline** | `matrix.py` builds and runs the app_e2e scenarios on every host this Mac drives and compares state and frames. With the Mac's screen locked (from 12:20) the AppKit app stalled, so the AppKit and macOS SDL hosts are reported as blocked and the other six ran: **iPad simulator, Linux headless aarch64 and x86_64, Windows headless, Linux SDL and Windows SDL all give 9/10 (playback as on main); the three textless hosts agree on all 15,960 frames, and FreeType (Linux SDL) and GDI (Windows SDL) put text in exactly the same 9,211 of 15,909 frames as CoreText (iPad).** Correction found on the way: CrossOver drops `SDL_*` variables, so the earlier Windows SDL runs used a real Wine window and WASAPI, not offscreen/dummy as recorded (their results stand); `NTSDSDL` now takes the drivers as hints from `NTSD_SDL_*`. | [report](../evidence/crossplatform-matrix-20261004.json), [correction](../evidence/crossplatform-pw-sdl-drivers-correction-20261004.json) | 87edc32 |
 | 2026-10-04 | **Matrix baseline, all eight hosts** | With the screen unlocked (and kept awake with `caffeinate`), `matrix.py --reuse` added the AppKit app and macOS SDL. **On the clean tree e752f9c every host (AppKit, macOS SDL, iPad simulator, Linux headless aarch64/x86_64, Windows headless, Linux SDL, Windows SDL) gives 9/10 (playback as on main); AppKit, macOS SDL and the iPad agree on all 15,960 frames, the textless hosts on all 15,960, and FreeType and GDI put text in the same 9,211 of 15,909 frames as CoreText.** | [report](../evidence/crossplatform-matrix-20261004-full.json) | 59cb328 |
 | 2026-10-04 | **P8: iPad music** | The iPad host plays the packaged tracks through AVAudioPlayer, as the macOS host does. With the screen unlocked AVAudioEngine starts in the simulator: the earlier abort came from the locked session. **The iPad host still gives 9/10 with frames identical to AppKit across all scenarios.** | [evidence](../evidence/crossplatform-p8-ios-music-20261004.json) | 3045f07 |
-| 2026-10-04 | **P7: Wayland** | `linux_wayland_check.py` runs the Linux SDL build on SDL's Wayland driver under headless Weston. The first run had equal state but every frame shifted by the centred window origin: Wayland exposes no window positions, so the host now reports where it placed the window. `NTSDSDL` also reports the drivers SDL chose (`sdlDrivers`). **vs scenario equal, all 1,832 frames identical to the Linux SDL run.** | [evidence](../evidence/crossplatform-p7-wayland-20261004.json) | this commit |
+| 2026-10-04 | **P7: Wayland** | `linux_wayland_check.py` runs the Linux SDL build on SDL's Wayland driver under headless Weston. The first run had equal state but every frame shifted by the centred window origin: Wayland exposes no window positions, so the host now reports where it placed the window. `NTSDSDL` also reports the drivers SDL chose (`sdlDrivers`). **vs scenario equal, all 1,832 frames identical to the Linux SDL run.** | [evidence](../evidence/crossplatform-p7-wayland-20261004.json) | db3e341 |
+| 2026-10-04 | **Swift miscompile reported** | With the user's approval, filed [swiftlang/swift#92905](https://github.com/swiftlang/swift/issues/92905). A rerun of the issue's short program narrowed the scope: **only the Static Linux (musl) SDK drops the store** (both arches crash 3/3); the glibc aarch64 SDK and macOS compile it correctly. The first filed text overstated the scope and was corrected in place. The Core workaround stays. | [evidence](../evidence/crossplatform-swift640-report-20261004.json) | this commit |
 
 ## Next task
 
-Waiting on inputs (checked 2026-10-04 17:40):
+Inputs received 2026-10-04: the user accepted the Android SDK licences
+(`sdkmanager --licenses`), approved publishing the Linux and Windows packages
+and approved reporting the miscompile (done, #92905). Installed with Homebrew's
+`sdkmanager` into `/opt/homebrew/share/android-commandlinetools` (7.8 GB):
+platform-tools 37.0.1, emulator 37.2.12, NDK 27.3.13750724, platform 35 and
+the `android-35;google_apis;arm64-v8a` system image.
 
-- **Android (P8)**: no Android SDK, NDK or emulator is installed (only
-  Homebrew's `sdkmanager`). Needs the user to accept Google's Android SDK
-  licence (`sdkmanager --licenses`) and approve the NDK/emulator download;
-  then the 6.4.0 Android Swift SDK replaces the installed 6.3.3 one.
-- **User decisions**: real-hardware checks (Linux desktop, Windows PC, iPad),
-  publishing the Linux/Windows packages (they contain the original game's
-  data), reporting the Swift 6.4.0 Linux miscompile upstream.
+1. **Publish the packages**: rebuild `ntsd-linux-aarch64`, `ntsd-linux-x86_64`
+   and `ntsd-windows-x86_64` from a clean committed tree (the Wayland fix
+   changed `NTSDSDL`), rerun `check_linux_package.sh` and
+   `check_windows_package.sh`, then publish them as a GitHub pre-release of
+   `wowlocal/ntsd-2.4` with SHA-256 sums and notes that state what was tested
+   (containers, Wine) and what was not (real hardware).
+2. **Android (P8)**: get the Swift 6.4.0 Android SDK matching the toolchain,
+   build the portable products for `aarch64-unknown-linux-android`, then an
+   app host (SDL3's Android Java glue or a NativeActivity) and run the
+   scenarios in the arm64 emulator.
+
+Still waiting on the user: real-hardware checks (Linux desktop, Windows PC,
+iPad).
 
 Following tasks:
 
 - P3 x86_64 tests: the headless game passes on x86_64; the portable XCTest
   suites there need an x86_64 glibc SDK. Rosetta is a test harness; label it
   so.
-- Report the Swift 6.4.0 Linux miscompile upstream with the reproducer; that
-  publishes it, so ask the user first.
 - P0-W history (license accepted 2026-10-03). `xwin` 0.10.0 splats are on
   X5: MSVC 14.44.17.14 + SDK 10.0.26100 (`winsysroot`) and MSVC 14.29 + SDK
   10.0.22621 (`winsysroot-vs16`).

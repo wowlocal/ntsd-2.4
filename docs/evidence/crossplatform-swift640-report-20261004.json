@@ -1,0 +1,29 @@
+{
+  "study": "docs/research/CROSS_PLATFORM.md",
+  "date": "2026-10-04",
+  "subject": "Swift 6.4.0 miscompile reported upstream; scope narrowed to the Static Linux (musl) SDK",
+  "approval": "user approved reporting the compiler bug (2026-10-04)",
+  "issue": {
+    "url": "https://github.com/swiftlang/swift/issues/92905",
+    "title": "[6.4.0] Static Linux SDK, -O: store to the inout slot of unspecialised generic isKnownUniquelyReferenced is dropped (crash / wrong answer)",
+    "correction": "the first filed version said a glibc aarch64 SDK was also affected and attributed the larger reproducer's aarch64 truncation result to the short program; both were corrected in place (with an edit note) after the rerun below, before any reply"
+  },
+  "snippet": {
+    "History.swift": "public struct History<Element> {\n    final class Node {\n        let element: Element\n        var next: Node?\n        init(_ element: Element,_ next: Node?) { self.element = element; self.next = next }\n        deinit {\n            // Release uniquely owned tails iteratively.\n            var current = next; next = nil\n            while var node = current {\n                current = nil\n                guard isKnownUniquelyReferenced(&node) else { break }\n                current = node.next; node.next = nil\n            }\n        }\n    }\n    var head: Node?\n    public init() {}\n    public mutating func append(_ element: Element) { head = Node(element,head) }\n    public var count: Int { var n = 0, node = head; while let x = node { n += 1; node = x.next }; return n }\n}\n",
+    "main.swift": "var a = History<Int>()\nfor i in 0..<5 { a.append(i) }\nvar b = a; b.append(99)\nb = History()                      // the walk must stop at a's shared head\nprint(\"older kept:\", a.count, \"(expected 5)\")\na = History()\nprint(\"released\")\n",
+    "build": "open-source swift-6.4.0-RELEASE toolchain, swift build -c release, scratch /Volumes/X5/ntsd-2.4-research/crossplatform/swift-issue-snippet"
+  },
+  "results": {
+    "x86_64-swift-linux-musl (static SDK 0.1.0), ubuntu:24.04 under Rosetta": "prints 'older kept: 5 (expected 5)', then SIGSEGV exit 139; 3/3 runs",
+    "aarch64-swift-linux-musl (static SDK 0.1.0), ubuntu:24.04": "prints 'older kept: 5 (expected 5)', then SIGSEGV exit 139; 3/3 runs",
+    "ntsd-6.4.0-ubuntu24.04-aarch64 (glibc, swift-sdk-generator 57190988), swift:6.4.0-noble": "correct, 'released', exit 0; 3/3 runs",
+    "macOS arm64 (open-source 6.4.0)": "correct, exit 0"
+  },
+  "codegen": {
+    "x86_64 musl": "leaq -0x38(%rbp),%r15; movq %r15,%rdi; callq $ss25isKnownUniquelyReferencedySbxzRlzClF -- r14 (node) never stored to -0x38(%rbp)",
+    "aarch64 musl": "add x0, sp, #0x8; bl $ss25isKnownUniquelyReferencedySbxzRlzClF -- x21 never stored to [sp,#8], and not reloaded after the call",
+    "aarch64 glibc": "str x22, [x29, #0x18] before the call, ldr x0, [x29, #0x18] after: correct",
+    "macOS": "str x22, [sp, #0x8] before, ldr x0, [sp, #0x8] after: correct"
+  },
+  "consequence": "the glibc Linux builds (NTSDSDL, packages) compile this pattern correctly; the static musl builds (NTSDHeadless matrix hosts) were the affected ones. The NTSDCore workaround (non-generic link class, crossplatform-swift640-linux-uniqueness-20261004.json) stays: it is correct everywhere and needed for the static SDK. The earlier evidence file is unchanged."
+}
