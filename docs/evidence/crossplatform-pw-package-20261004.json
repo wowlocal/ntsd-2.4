@@ -1,0 +1,48 @@
+{
+  "study": "docs/research/CROSS_PLATFORM.md",
+  "phase": "P7 Windows: the Windows package",
+  "date": "2026-10-04",
+  "tool": "tools/crossplatform/package_windows.py; tools/crossplatform/check_windows_package.sh",
+  "archive": {
+    "name": "ntsd-windows-x86_64-6dfc200.zip",
+    "bytes": 219072125,
+    "sha256": "60614984ca598613d3366b6abde08d291c209f70e9d751970921bf4e3e60ad79"
+  },
+  "commitBuiltFrom": "6dfc200036788b89d0378a508218318ae4e4d4f0",
+  "dirtyAtBuild": false,
+  "contents": {
+    "*.dll": {
+      "files": 36,
+      "bytes": 68696480
+    },
+    "LICENSES": {
+      "files": 3,
+      "bytes": 21747
+    },
+    "NTSDNative_NTSDCore.resources": {
+      "files": 1519,
+      "bytes": 757705350
+    },
+    "NTSDSDL.exe": {
+      "files": 1,
+      "bytes": 40115200
+    },
+    "OriginalMusic": {
+      "files": 9,
+      "bytes": 116921966
+    },
+    "README.txt": {
+      "files": 1,
+      "bytes": 333
+    }
+  },
+  "check": {
+    "bottle": "ntsd-xplat-pkg, created fresh by the check (win10_64), nothing else installed; test harness",
+    "defaultLaunch": "no --music-dir: music from the package's OriginalMusic (resources list), text GDI SYSTEM_FONT, frame written, no sdlMusicError",
+    "vs": "app_e2e vs scenario through the unpacked NTSDSDL.exe (offscreen/dummy SDL): equal to the frozen reference"
+  },
+  "notes": [
+    "the MSVC runtime DLLs are the ones the Swift 6.4.0 installer ships; their redistribution terms are Microsoft's",
+    "built with uncommitted packaging tools at 6dfc200; local artefact on X5, publishing is the user's decision"
+  ]
+}

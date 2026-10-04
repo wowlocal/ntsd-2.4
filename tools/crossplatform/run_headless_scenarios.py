@@ -21,7 +21,7 @@ drivers and the SDL3 libraries from $NTSD_SDL_LIB mounted read-only.
 `--wine` runs RUN_DIR/NTSDHeadless.exe (with its resources and the Swift
 runtime DLLs beside it) in the CrossOver bottle ntsd-xplat-test, a test
 harness; paths are passed as Z:\\ paths and CRLF is stripped from its output.
-$NTSD_WINE_EXE names another exe in RUN_DIR (e.g. NTSDSDL.exe) and
+$NTSD_WINE_BOTTLE picks another bottle, $NTSD_WINE_EXE names another exe in RUN_DIR (e.g. NTSDSDL.exe) and
 $NTSD_WINE_ENV adds KEY=VALUE settings for it, separated by spaces.
 $NTSD_LINUX_PLATFORM sets the container platform (e.g. linux/amd64) and
 $NTSD_LINUX_IMAGE replaces the container image (e.g. ntsd-linux-runtime:noble
@@ -73,7 +73,7 @@ def main():
                        "-v", f"{out}:/out", os.environ.get("NTSD_LINUX_IMAGE", "swift:6.4.0-noble"), f"/app/{binary}", "--music-dir", "/music", *args]
         elif mode == "--wine":
             cx = "/Applications/CrossOver.app/Contents/SharedSupport/CrossOver/bin/wine"
-            command = [cx, "--bottle", "ntsd-xplat-test", "--wait-children", host(Path(target).resolve() / os.environ.get("NTSD_WINE_EXE", "NTSDHeadless.exe")),
+            command = [cx, "--bottle", os.environ.get("NTSD_WINE_BOTTLE", "ntsd-xplat-test"), "--wait-children", host(Path(target).resolve() / os.environ.get("NTSD_WINE_EXE", "NTSDHeadless.exe")),
                        "--music-dir", host(MUSIC), *args]
         else:
             command = [target, "--music-dir", str(MUSIC), *args]

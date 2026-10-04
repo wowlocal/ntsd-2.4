@@ -203,20 +203,24 @@ user's approval to push. Until then, keep the other phases moving.
 | 2026-10-04 | **P7: Linux x86_64 package** | Generated the x86_64 glibc SDK (`ntsd-6.4.0-ubuntu24.04-x86_64`, same generator and options), built SDL3/FreeType for linux/amd64, and packaged `ntsd-linux-x86_64` with `package_linux.py --arch x86_64`. **In a clean amd64 Ubuntu 24.04 container (Rosetta harness) it resolves every library, starts with music and font, reaches a match with real X11 input and reproduces the vs scenario; all 1,832 frames, FreeType text included, equal the aarch64 package's.** | `check_linux_package.sh … linux/amd64`; [evidence](../evidence/crossplatform-p7-linux-package-x86_64-20261004.json) | e1eb5b8 |
 | 2026-10-04 | **P0-W: first Windows executable** | The UCRT xwin downloads is 10.0.26624, which has no `corecrt_math.h`, `stdnoreturn.h` or `stdalign.h` (math lives in `math.h`); Swift 6.4's `ucrt.modulemap` expects an older layout. A reviewed patch removes those three modules in a copy of the SDK; MSVC 14.29 with SDK 10.0.22621 builds the modules (14.44's `threads.h` does not), and the SDK library folders are passed to lld-link explicitly. **A Swift 6.4 probe with Foundation cross-compiles to a PE32+ x86-64 exe and runs in a CrossOver bottle with the Swift runtime DLLs, printing the same results as macOS except the LLP64 `long` size.** | `windows_probe.sh`; [evidence](../evidence/crossplatform-p0w-probe-20261004.json) | c8f475b |
 | 2026-10-04 | **P0-W: the game on Windows (headless)** | `make_windows_sdk.py` builds a Swift SDK bundle for `x86_64-unknown-windows-msvc`; SwiftPM's native build system cross-builds `NTSDHeadless` (swift-build has no Windows platform here). Fixes on the way: Clang's builtin headers linked into the SDK (otherwise MSVC's `iso646.h` pulled a C++-only module into C builds), `math.h` mapped to `corecrt.math` where the prebuilt Foundation module expects `pow`, a Windows branch for the startup clock, and an `OriginalFileFacts` helper for the input loaders (Windows reads file attributes natively; under Wine, Foundation's own path hits the unimplemented `SaferiIsExecutableFileType` and hung). Other hosts keep their exact code paths. **In a CrossOver test bottle the Windows exe reproduces 9/10 app_e2e scenarios (playback as on main) and all 15,960 frames equal the Linux headless run.** | macOS loader/startup tests 24/24, 703 listed; Linux musl builds; **AppKit e2e 9/10 = baseline**; `run_headless_scenarios.py --wine`; [evidence](../evidence/crossplatform-pw-headless-20261004.json), [results](../evidence/crossplatform-pw-headless-wine-20261004.jsonl) | d02c20b |
-| 2026-10-04 | **P7 Windows: SDL build with GDI text** | `NTSDSDL` cross-builds for Windows against libsdl's official SDL3 3.4.16 VC package (rpath only on macOS/Linux, signed SDL enums under MSVC, C/C++ on the DLL runtime like Swift). On Windows text goes through GDI: TextOutA with the stock SYSTEM_FONT, the original's own font on real Windows (Wine substitutes its own). Sockets stay off on Windows until a real-Winsock adapter exists. **In the CrossOver bottle (offscreen/dummy SDL drivers) all scenarios give 9/10 like every host, and text appears in exactly the same 9,211 of 15,909 frames as on AppKit.** | macOS and Linux SDL still build (RUNPATH kept); [evidence](../evidence/crossplatform-pw-sdl-20261004.json), [results](../evidence/crossplatform-pw-sdl-wine-20261004.jsonl) | this commit |
+| 2026-10-04 | **P7 Windows: SDL build with GDI text** | `NTSDSDL` cross-builds for Windows against libsdl's official SDL3 3.4.16 VC package (rpath only on macOS/Linux, signed SDL enums under MSVC, C/C++ on the DLL runtime like Swift). On Windows text goes through GDI: TextOutA with the stock SYSTEM_FONT, the original's own font on real Windows (Wine substitutes its own). Sockets stay off on Windows until a real-Winsock adapter exists. **In the CrossOver bottle (offscreen/dummy SDL drivers) all scenarios give 9/10 like every host, and text appears in exactly the same 9,211 of 15,909 frames as on AppKit.** | macOS and Linux SDL still build (RUNPATH kept); [evidence](../evidence/crossplatform-pw-sdl-20261004.json), [results](../evidence/crossplatform-pw-sdl-wine-20261004.jsonl) | 6dfc200 |
+| 2026-10-04 | **P7 Windows: package** | `package_windows.py` assembles `ntsd-windows-x86_64` (NTSDSDL.exe, SDL3.dll, the Swift and MSVC runtime DLLs from the Swift installer, resources, packaged music, licences) into a reproducible 219 MB zip with a manifest. **In a freshly created CrossOver bottle the unpacked package starts with its own music and GDI text and reproduces the vs scenario.** Local artefact only; ONLINE GAME is off until a Winsock adapter exists. | `check_windows_package.sh`; [evidence](../evidence/crossplatform-pw-package-20261004.json) | this commit |
 
 ## Next task
 
-P7 Windows: the Windows package.
+P7 Windows: ONLINE GAME through real Winsock.
 
-- `package_windows.py`: cross-build `NTSDSDL.exe` (release), and assemble
-  `ntsd-windows-x86_64` with the exe, `SDL3.dll`, the Swift 6.4.0 runtime
-  DLLs and the MSVC runtime DLLs from the installer, the resource folder, the
-  packaged music and licences (SDL3, ALAC, Swift; Microsoft's redistributable
-  terms for the VC runtime), as a reproducible zip with a manifest.
-- Gate: the unpacked zip runs in a fresh CrossOver bottle without anything
-  else installed (scripted vs scenario equal; default launch finds music).
-- Then a real-Winsock adapter for ONLINE GAME on Windows.
+- An `OriginalRuntimeSockets` adapter over WinSDK's Winsock 2 (WSAStartup,
+  socket/bind/listen/accept/connect/send/recv, ioctlsocket FIONBIO, gethostname,
+  getaddrinfo, gethostbyaddr, GetAdaptersAddresses), keeping the contract of
+  the BSD adapter (handles from 0x100 step 4, notifications posted to the
+  main queue). Readiness by WSAEventSelect with a wait thread, or WSAPoll; the
+  runtime has no real HWND for WSAAsyncSelect.
+- Gate: the retained two-process probe passes between two NTSDSDL.exe
+  processes in one CrossOver bottle, and the Winsock tests' scenarios run on
+  Windows (`--no-network` no longer required).
+- Open after that: mobile (P8), actual Windows/Linux hardware checks,
+  publishing the packages (user decision).
 
 Following tasks:
 
