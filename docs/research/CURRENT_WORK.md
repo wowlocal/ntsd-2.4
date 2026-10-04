@@ -41,6 +41,10 @@ Linux-сборка теперь с музыкой (ALAC без AVFoundation), с
 двумя процессами) и пакетом: архив запускается в чистом Ubuntu 24.04 без Swift
 ([evidence](../evidence/crossplatform-p7-linux-package-20261004.json)); публикация
 пакета — решение пользователя.
+Windows (x86_64, кросс-компиляция с этого Mac; проверка в CrossOver как стенде):
+headless и SDL с GDI-текстом проходят те же сценарии, ONLINE GAME через настоящий
+Winsock, есть zip-пакет. iPad: UIKit-хост в симуляторе проходит все сценарии с
+кадрами, побайтно равными AppKit ([evidence](../evidence/crossplatform-p8-ios-20261004.json)).
 Подробности и открытые решения — в [CROSS_PLATFORM](CROSS_PLATFORM.md).
 
 Побочная находка 2026-10-03: сценарий `playback` в `tools/app_e2e.py` падает

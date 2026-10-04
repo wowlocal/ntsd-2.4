@@ -38,10 +38,18 @@ let sdlTargets: [Target] = sdl ? [
                                        .unsafeFlags(["-Xlinker", "-rpath", "-Xlinker", "\(sdlPrefix)/lib"], .when(platforms: [.macOS, .linux]))])]
     + (freetypePrefix == nil ? [] : [.systemLibrary(name: "CFreeType", path: "Sources/CFreeType")]) : []
 
+// NTSD_IOS=1 (with NTSD_PORTABLE=1) adds the iPad host (P8), built for an
+// iOS triple and wrapped into an app by tools/crossplatform/ios_app.py.
+let ios = Context.environment["NTSD_IOS"] == "1"
+let iosProducts: [Product] = ios ? [.executable(name: "NTSDiOS", targets: ["NTSDiOS"])] : []
+let iosTargets: [Target] = ios ? [
+    .executableTarget(name: "NTSDiOS", dependencies: ["NTSDCore", "NTSDRuntime"],
+                      linkerSettings: [.linkedFramework("UIKit"), .linkedFramework("AVFoundation"), .linkedFramework("CoreText")])] : []
+
 let package = Package(
     name: "NTSDNative",
-    platforms: [.macOS(.v14)],
-    products: macProducts + sdlProducts + [
+    platforms: [.macOS(.v14), .iOS(.v17)],
+    products: macProducts + sdlProducts + iosProducts + [
                .executable(name: "NTSDFrameCheck", targets: ["NTSDFrameCheck"]),
                .executable(name: "NTSDMovementCheck", targets: ["NTSDMovementCheck"]),
                .executable(name: "NTSDCombatCheck", targets: ["NTSDCombatCheck"]),
@@ -52,7 +60,7 @@ let package = Package(
                .executable(name: "NTSDBGCheck", targets: ["NTSDBGCheck"]),
                .executable(name: "NTSDStageCheck", targets: ["NTSDStageCheck"]),
                .executable(name: "NTSDHeadless", targets: ["NTSDHeadless"])],
-    targets: macTargets + sdlTargets + [
+    targets: macTargets + sdlTargets + iosTargets + [
         .target(name: "NTSDReplayCodec", exclude: ["README.md", "upstream.json"],
                 publicHeadersPath: "include", cSettings: [.unsafeFlags(["-Wno-deprecated-non-prototype"])]),
         .target(name: "NTSDCore", dependencies: ["NTSDReplayCodec"], resources: [.copy("Resources/OriginalStartup"), .copy("Resources/OriginalCommonSounds"), .copy("Resources/OriginalLoadingInterface"), .copy("Resources/OriginalCharacterMenu"), .copy("Resources/OriginalWarMenu"), .copy("Resources/OriginalMatchArenas"), .copy("Resources/OriginalCatalog")]),

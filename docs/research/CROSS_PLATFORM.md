@@ -205,22 +205,21 @@ user's approval to push. Until then, keep the other phases moving.
 | 2026-10-04 | **P0-W: the game on Windows (headless)** | `make_windows_sdk.py` builds a Swift SDK bundle for `x86_64-unknown-windows-msvc`; SwiftPM's native build system cross-builds `NTSDHeadless` (swift-build has no Windows platform here). Fixes on the way: Clang's builtin headers linked into the SDK (otherwise MSVC's `iso646.h` pulled a C++-only module into C builds), `math.h` mapped to `corecrt.math` where the prebuilt Foundation module expects `pow`, a Windows branch for the startup clock, and an `OriginalFileFacts` helper for the input loaders (Windows reads file attributes natively; under Wine, Foundation's own path hits the unimplemented `SaferiIsExecutableFileType` and hung). Other hosts keep their exact code paths. **In a CrossOver test bottle the Windows exe reproduces 9/10 app_e2e scenarios (playback as on main) and all 15,960 frames equal the Linux headless run.** | macOS loader/startup tests 24/24, 703 listed; Linux musl builds; **AppKit e2e 9/10 = baseline**; `run_headless_scenarios.py --wine`; [evidence](../evidence/crossplatform-pw-headless-20261004.json), [results](../evidence/crossplatform-pw-headless-wine-20261004.jsonl) | d02c20b |
 | 2026-10-04 | **P7 Windows: SDL build with GDI text** | `NTSDSDL` cross-builds for Windows against libsdl's official SDL3 3.4.16 VC package (rpath only on macOS/Linux, signed SDL enums under MSVC, C/C++ on the DLL runtime like Swift). On Windows text goes through GDI: TextOutA with the stock SYSTEM_FONT, the original's own font on real Windows (Wine substitutes its own). Sockets stay off on Windows until a real-Winsock adapter exists. **In the CrossOver bottle (offscreen/dummy SDL drivers) all scenarios give 9/10 like every host, and text appears in exactly the same 9,211 of 15,909 frames as on AppKit.** | macOS and Linux SDL still build (RUNPATH kept); [evidence](../evidence/crossplatform-pw-sdl-20261004.json), [results](../evidence/crossplatform-pw-sdl-wine-20261004.jsonl) | 6dfc200 |
 | 2026-10-04 | **P7 Windows: package** | `package_windows.py` assembles `ntsd-windows-x86_64` (NTSDSDL.exe, SDL3.dll, the Swift and MSVC runtime DLLs from the Swift installer, resources, packaged music, licences) into a reproducible 219 MB zip with a manifest. **In a freshly created CrossOver bottle the unpacked package starts with its own music and GDI text and reproduces the vs scenario.** Local artefact only; ONLINE GAME is off until a Winsock adapter exists. | `check_windows_package.sh`; [evidence](../evidence/crossplatform-pw-package-20261004.json) | e300149 |
-| 2026-10-04 | **P7 Windows: ONLINE GAME** | `OriginalWindowsWinsock` answers the original's Winsock calls with the real Winsock 2 stack under the BSD adapter's declared contract; readiness comes from a WSAPoll watcher thread, since the runtime has no real window for WSAAsyncSelect, and bind keeps Windows' default (no SO_REUSEADDR, which on Windows would let the client take the host's port). **The retained two-process ONLINE GAME probe passes between two NTSDSDL.exe processes in the CrossOver bottle, with the same RNG table as every other host and the original run.** | `pair_probe.py --wine`; [evidence](../evidence/crossplatform-pw-winsock-20261004.json), [result](../evidence/crossplatform-pw-pair-wine-20261004.json) | this commit |
+| 2026-10-04 | **P7 Windows: ONLINE GAME** | `OriginalWindowsWinsock` answers the original's Winsock calls with the real Winsock 2 stack under the BSD adapter's declared contract; readiness comes from a WSAPoll watcher thread, since the runtime has no real window for WSAAsyncSelect, and bind keeps Windows' default (no SO_REUSEADDR, which on Windows would let the client take the host's port). **The retained two-process ONLINE GAME probe passes between two NTSDSDL.exe processes in the CrossOver bottle, with the same RNG table as every other host and the original run.** | `pair_probe.py --wine`; [evidence](../evidence/crossplatform-pw-winsock-20261004.json), [result](../evidence/crossplatform-pw-pair-wine-20261004.json) | a8ed861 |
+| 2026-10-04 | **P8 step 1: iPad (simulator)** | New `NTSDiOS` (behind `NTSD_IOS=1`): a UIKit scene app on `OriginalRuntimeSession` with one view showing frames scaled to fit, touch as mouse, hardware keyboard through the shared `OriginalHIDKeys`, CoreText masks with the iOS system font, AVAudioEngine effects, Darwin sockets. SwiftPM builds it for the simulator triple and `ios_app.py` wraps, installs and runs it. Resources go at the app root (the loaders' `.app` rule); events go to a file (simctl did not forward stdout); scripted muted runs open no audio output, since the simulator's CoreAudio aborted the app. **All scenarios: 9/10 like every host, and all 15,960 frames byte-identical to the AppKit app's.** | macOS release and Linux builds compile; [evidence](../evidence/crossplatform-p8-ios-20261004.json), [results](../evidence/crossplatform-p8-ios-sim-20261004.jsonl) | this commit |
 
 ## Next task
 
-P8 groundwork: an iPadOS host on the shared runtime.
+Consolidate before the next platform:
 
-- A UIKit session host in an `NTSDiOS` app target (Xcode iOS SDK): a view
-  presenting `OriginalFramebuffer` frames scaled to fit, touch mapped to the
-  mouse messages and a hardware keyboard/controller to the existing key
-  table, AVAudioEngine output for the effects mixer and the packaged music,
-  CoreText masks as on macOS, the Darwin Winsock, the app's Documents as the
-  overlay.
-- Gate: the scripted vs scenario in the iPad simulator gives state equal to
-  the reference and frames equal to the AppKit app's.
-- Open across phases: actual Windows/Linux/iPad hardware, publishing the
-  packages (user decision), x86_64 Windows only (arm64 later).
+- One cross-host matrix tool (`tools/crossplatform/matrix.py`) that runs the
+  app_e2e scenarios on every host this Mac can drive (AppKit, macOS SDL,
+  Linux headless/SDL aarch64 and x86_64, Windows headless/SDL under Wine,
+  iPad simulator), compares state and frames, and writes one dated report;
+  run it once on the current tree as the cross-platform baseline.
+- Then music on iOS (the ALAC decoder or AVAudioPlayer), Android (P8), and the
+  open real-hardware checks (Linux desktop, Windows PC, iPad), which need the
+  user's devices or decision.
 
 Following tasks:
 
