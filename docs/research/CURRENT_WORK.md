@@ -34,6 +34,9 @@ Linux-бинарник `NTSDHeadless` проходит все сценарии `
 P6 начат: `NTSDSDL` (SDL3, флаг сборки `NTSD_SDL=1`) на macOS проходит те же
 9/10 сценариев, и все 51 кадр побайтно совпадают с AppKit
 ([evidence](../evidence/crossplatform-p6-sdl-macos-20261004.json)).
+P7: `NTSDSDL` кросс-собирается для Linux (glibc), рисует текст через FreeType
+(шрифт по решению 2026-10-01, ближайший по ширине к macOS) и проходит те же
+сценарии ([evidence](../evidence/crossplatform-p7-glyphs-20261004.json)).
 Подробности и открытые решения — в [CROSS_PLATFORM](CROSS_PLATFORM.md).
 
 Побочная находка 2026-10-03: сценарий `playback` в `tools/app_e2e.py` падает

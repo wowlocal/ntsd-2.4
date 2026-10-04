@@ -41,6 +41,12 @@ final class SDLAudioFeed: @unchecked Sendable {
     private var muted = false, focused = true
     private var activity: NSObjectProtocol?
     var scripted: Bool { arguments.contains("--script") }
+    /// Glyph masks on hosts without CoreText; reported once at launch.
+    private lazy var glyphs: (mask: ([UInt8]) -> OriginalMacDisplayBackend.TextMask,font: String?) = {
+        let made = SDLGlyphs.make()
+        Self.report(["event":"sdlText","font":made.font ?? NSNull()])
+        return made
+    }()
     init(arguments: [String],windows: SDLWindowHost,musicDirectory: String) {
         self.arguments = arguments; self.windows = windows; self.musicDirectory = musicDirectory
     }
@@ -53,9 +59,7 @@ final class SDLAudioFeed: @unchecked Sendable {
         #if canImport(NTSDMacPlatform)
         let textMask = OriginalMacDisplayBackend.textMask
         #else
-        // Declared stand-in until a glyph rasteriser exists on this host: TextOutA
-        // draws nothing (game state is unaffected).
-        let textMask: ([UInt8]) -> OriginalMacDisplayBackend.TextMask = { _ in .init(advance:0,originX:0,originY:0,width:0,height:0,bits:[]) }
+        let textMask = glyphs.mask
         #endif
         return .init(windows:windows,textMask:textMask,messageBox:{ [weak self] text,caption in
             self?.box(NTSD_SDL_MESSAGEBOX_WARNING,String(decoding:caption,as:UTF8.self),String(decoding:text,as:UTF8.self))

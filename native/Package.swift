@@ -24,11 +24,18 @@ let macTestDependencies: [Target.Dependency] = portable ? [] : ["NTSDMacPlatform
 let sdl = Context.environment["NTSD_SDL"] == "1"
 let sdlPrefix = Context.environment["NTSD_SDL_PREFIX"] ?? "/opt/homebrew/opt/sdl3"
 let sdlProducts: [Product] = sdl ? [.executable(name: "NTSDSDL", targets: ["NTSDSDL"])] : []
+// Non-Apple SDL builds rasterise text with a static FreeType from
+// NTSD_FREETYPE_PREFIX (include/freetype2, lib); without it text stays blank.
+let freetypePrefix = portable ? Context.environment["NTSD_FREETYPE_PREFIX"] : nil
 let sdlTargets: [Target] = sdl ? [
     .systemLibrary(name: "CSDL3", path: "Sources/CSDL3"),
-    .executableTarget(name: "NTSDSDL", dependencies: ["NTSDCore", "NTSDRuntime", "CSDL3"] + (portable ? [] : ["NTSDMacPlatform"]),
-                      swiftSettings: [.unsafeFlags(["-Xcc", "-I\(sdlPrefix)/include"])],
-                      linkerSettings: [.unsafeFlags(["-L\(sdlPrefix)/lib", "-Xlinker", "-rpath", "-Xlinker", "\(sdlPrefix)/lib"])])] : []
+    .executableTarget(name: "NTSDSDL", dependencies: ["NTSDCore", "NTSDRuntime", "CSDL3"] + (portable ? [] : ["NTSDMacPlatform"])
+                          + (freetypePrefix == nil ? [] : ["CFreeType"]),
+                      swiftSettings: [.unsafeFlags(["-Xcc", "-I\(sdlPrefix)/include"]
+                                                   + (freetypePrefix.map { ["-Xcc", "-I\($0)/include/freetype2"] } ?? []))],
+                      linkerSettings: [.unsafeFlags(["-L\(sdlPrefix)/lib", "-Xlinker", "-rpath", "-Xlinker", "\(sdlPrefix)/lib"]
+                                                    + (freetypePrefix.map { ["-L\($0)/lib"] } ?? []))])]
+    + (freetypePrefix == nil ? [] : [.systemLibrary(name: "CFreeType", path: "Sources/CFreeType")]) : []
 
 let package = Package(
     name: "NTSDNative",

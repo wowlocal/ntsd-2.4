@@ -18,6 +18,8 @@ with the build and music directories read-only and OUT_DIR mounted at /out;
 Apple silicon: a test harness, not an x86 host observation). `--linux-sdl` runs
 the glibc NTSDSDL build there with SDL's offscreen video and dummy audio
 drivers and the SDL3 libraries from $NTSD_SDL_LIB mounted read-only.
+$NTSD_LINUX_IMAGE replaces the container image (e.g. ntsd-linux-runtime:noble
+from linux-runtime/Dockerfile, which adds fontconfig and DejaVu for text).
 """
 import importlib.util, json, os, shutil, subprocess, sys, time
 from pathlib import Path
@@ -54,7 +56,7 @@ def main():
                 *extra, "--script", setup["script"](inner / "captures")]
         if mode == "--linux":
             command = ["docker", "run", "--rm", *platform, *docker, "-e", "TZ=Etc/GMT-1", "-v", f"{target}:/app:ro", "-v", f"{MUSIC}:/music:ro",
-                       "-v", f"{out}:/out", "swift:6.4.0-noble", f"/app/{binary}", "--music-dir", "/music", *args]
+                       "-v", f"{out}:/out", os.environ.get("NTSD_LINUX_IMAGE", "swift:6.4.0-noble"), f"/app/{binary}", "--music-dir", "/music", *args]
         else:
             command = [target, "--music-dir", str(MUSIC), *args]
         start = time.time()

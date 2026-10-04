@@ -193,25 +193,22 @@ user's approval to push. Until then, keep the other phases moving.
 | 2026-10-04 | **x86_64 Linux; Swift 6.4.0 Linux miscompile fixed in Core** | The x86_64 static `NTSDHeadless` crashed (SIGSEGV) in every scenario right after startup, under Rosetta and identically under QEMU 10 user mode. QEMU's gdb stub put it in `OriginalRetainedHistory.Node.deinit`: the open-source Swift 6.4.0 toolchain for Linux never stores the node into the stack slot it passes to the unspecialised generic `isKnownUniquelyReferenced(&node)`. aarch64 Linux has the same code and survived only by chance; Xcode's Swift 6.4 for macOS is correct, so the AppKit app was never affected. A 20-line reproducer crashes or silently truncates shared tails on both Linux arches. Fix: the tail walk moves to a private non-generic link class, called from the node's deinit, so release order and behaviour are unchanged; the check is now specialised to the loaded reference. Independent read-only review: equivalent; its requested unique-then-shared test was added. **x86_64 and aarch64 Linux both reproduce 9/10 app_e2e scenarios exactly (playback as on main), and all 63 frames are identical across both arches and the pre-fix aarch64 run.** The earlier aarch64 results stay as recorded but came from a binary with this undefined behaviour. | release tests: OriginalRetainedHistoryTests 5/5, 699 listed; Xcode release; **AppKit e2e 9/10 = baseline**; [evidence](../evidence/crossplatform-swift640-linux-uniqueness-20261004.json), [reproducer](../evidence/crossplatform-swift640-linux-uniqueness-repro/), [x86_64](../evidence/crossplatform-headless-scenarios-linux-x86_64-20261004.jsonl), [aarch64](../evidence/crossplatform-headless-scenarios-linux-aarch64-20261004b.jsonl) | a72ae97 |
 | 2026-10-04 | **P6 step 1: SDL3 backend on macOS** | New `NTSDSDL` (behind `NTSD_SDL=1`, SDL3 3.4.16 from Homebrew via `NTSD_SDL_PREFIX`) runs `OriginalRuntimeSession` on SDL windows with a streaming texture, keyboard (SDL scancodes onto the existing key table), mouse, gamepads, an SDL audio stream for the effects mixer and SDL message boxes; music is silent by manifest duration until P7. On macOS it takes the AppKit host's window metrics (SDL cannot report Cocoa borders), CoreText glyph masks and Darwin Winsock. `NTSDRuntime` now keeps each window's last presented crop and writes it with one portable encoder (`--body-frames`, `--body-frame-every`, script `frame`). **All app_e2e scenarios: SDL 9/10 like AppKit, and all 51 presented frames byte-identical between SDL and AppKit;** Linux headless 9/10 on both arches with identical frames; Linux vs AppKit frames differ only in text pixels. | release tests 70/70 (affected runtime classes + new `OriginalFramebufferPNGTests`), 701 listed; Xcode release without SDL; AppKit with `--body-frames` equal to the full reference incl. capture hashes; [evidence](../evidence/crossplatform-p6-sdl-macos-20261004.json), `tools/crossplatform/compare_frames.py` | 6b6ed02 |
 | 2026-10-04 | **P6 step 2: whole matches frame by frame** | `--body-frame-digests` reports the SHA-256 of every presented frame; the scenario runner turns it on and `compare_frames.py` compares the sequences. **AppKit vs SDL: all 15,909 per-body frames (plus the 51 PNGs) identical across the 10 scenarios; Linux aarch64 vs x86_64 likewise.** Linux vs AppKit: 6,698/15,909 equal, the rest are frames with text, which the Linux host does not rasterise yet. State 9/10 on all four hosts (playback as on main). | official app_e2e 9/10 = baseline; [AppKit vs SDL](../evidence/crossplatform-p6-frame-digests-appkit-sdl-20261004.jsonl), [Linux arches](../evidence/crossplatform-p6-frame-digests-linux-arches-20261004.jsonl) | 50c19ea |
-| 2026-10-04 | **P7 groundwork: SDL build on Linux** | `tools/crossplatform/build_linux_deps.sh` builds SDL3 3.4.16 (X11, Wayland, PulseAudio, PipeWire, ALSA, offscreen, dummy) and static FreeType 2.13.3 for Linux in a `swift:6.4.0-noble` container from hash-checked tarballs. `NTSDSDL` cross-builds on this Mac with the generated glibc SDK against that SDL3 and runs in the container with SDL's offscreen video and dummy audio. **All scenarios: 9/10 like every other host, and all 15,960 frames identical to the Linux headless run.** | [evidence](../evidence/crossplatform-p7-linux-sdl-20261004.json), [results](../evidence/crossplatform-p7-linux-sdl-aarch64-20261004.jsonl) | this commit |
+| 2026-10-04 | **P7 groundwork: SDL build on Linux** | `tools/crossplatform/build_linux_deps.sh` builds SDL3 3.4.16 (X11, Wayland, PulseAudio, PipeWire, ALSA, offscreen, dummy) and static FreeType 2.13.3 for Linux in a `swift:6.4.0-noble` container from hash-checked tarballs. `NTSDSDL` cross-builds on this Mac with the generated glibc SDK against that SDL3 and runs in the container with SDL's offscreen video and dummy audio. **All scenarios: 9/10 like every other host, and all 15,960 frames identical to the Linux headless run.** | [evidence](../evidence/crossplatform-p7-linux-sdl-20261004.json), [results](../evidence/crossplatform-p7-linux-sdl-aarch64-20261004.jsonl) | 4bbf311 |
+| 2026-10-04 | **P7: text on Linux** | Non-Apple `NTSDSDL` rasterises TextOutA with a static FreeType: 13 px em, monochrome, baseline at row 13, the same mask contract as CoreText. Following the user's font decision (SYSTEM_FONT ships with Windows, not the game), it uses the standard Linux font whose widths best match the macOS stand-in: DejaVu Sans Condensed Bold within ±3 px, then Liberation, Noto, FreeSans, then fontconfig's sans-serif bold; plain DejaVu Sans is 15 % wider and clipped the selection screen. **All scenarios: state 9/10; text appears in exactly the same 9,211 of 15,909 frames as on AppKit, and the 6,698 text-free frames are identical.** macOS SDL unchanged (VS 1,832/1,832 frames equal AppKit). | [evidence](../evidence/crossplatform-p7-glyphs-20261004.json), [text frames](../evidence/crossplatform-p7-text-frames-20261004.jsonl), `compare_text_frames.py` | this commit |
 
 ## Next task
 
-P7: the glyph rasteriser for non-Apple hosts.
+P7: the X11 window and input path on Linux.
 
-- Follow the user's 2026-10-01 font decision: the original draws GDI's
-  SYSTEM_FONT, which is part of Windows and not in the distribution, so
-  non-Apple hosts use the platform's standard sans-serif bold (fontconfig's
-  match, `NTSD_FONT` to override) as a declared temporary deviation, exactly
-  as macOS uses its system font.
-- Rasterise with the static FreeType from `build_linux_deps.sh`: 13 px em,
-  monochrome, no hinting smoothing, baseline at the cell's row 13, same
-  `TextMask` contract as the CoreText masks; blank masks if no font is found
-  (reported).
-- Gate: Linux SDL draws text (frames differ from headless only where text
-  is); state stays equal on all scenarios; the macOS hosts are unaffected.
-- Then Xvfb/X11 for the window and input path, POSIX sockets, music
-  decoding.
+- Run `NTSDSDL` under Xvfb in the test image with SDL's x11 driver; drive the
+  front menu and a short match with real X input (`xdotool` keys and clicks)
+  instead of `--script`, and capture frames.
+- Gate: the window opens at the client size the game was told, input
+  reaches the game (menu moves, match starts), frames are presented;
+  scripted runs unchanged.
+- Then music decoding without AVFoundation (samples checked against
+  AVFoundation's decode of the packaged tracks), POSIX sockets for ONLINE
+  GAME, and a Linux package.
 
 Following tasks:
 

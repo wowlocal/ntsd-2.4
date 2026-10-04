@@ -1,0 +1,93 @@
+{
+  "study": "docs/research/CROSS_PLATFORM.md",
+  "phase": "P7: glyph rasteriser for non-Apple hosts",
+  "date": "2026-10-04",
+  "decision": "user 2026-10-01: the original's font, else the platform's standard system font with position, size, colour and alignment as close as possible, recorded as a temporary deviation. The original draws GDI SYSTEM_FONT, which ships with Windows, not the game.",
+  "implementation": "NTSDSDL on non-Apple hosts: static FreeType 2.13.3 (build_linux_deps.sh) through CFreeType (NTSD_FREETYPE_PREFIX); 13 px em, FT_LOAD_TARGET_MONO, kerning, baseline at the 16-px cell's row 13, 4-px margin, same TextMask contract as the CoreText masks; blank masks when no font is found; the chosen font is reported as an sdlText event",
+  "fontChoice": {
+    "order": "NTSD_FONT; DejaVu Sans Condensed Bold, Liberation Sans Bold, Noto Sans Bold, FreeSans Bold (fontconfig fc-list, then common paths); fontconfig's sans-serif:bold",
+    "widths13px": {
+      "strings": [
+        "(Press Left/Right to change)",
+        "Independent",
+        "Recording file '20260101_010000_VS.lfr' saved!",
+        "Music: Random",
+        "Computer",
+        "Naruto",
+        "Sasuke",
+        "Deidara"
+      ],
+      "macOS SF Pro Bold (reference stand-in)": [
+        182,
+        82,
+        314,
+        99,
+        65,
+        44,
+        47,
+        50
+      ],
+      "DejaVu Sans Bold": [
+        210,
+        94,
+        351,
+        113,
+        73,
+        50,
+        53,
+        58
+      ],
+      "DejaVu Sans Condensed Bold": [
+        185,
+        82,
+        311,
+        100,
+        65,
+        46,
+        47,
+        52
+      ],
+      "Liberation Sans Bold": [
+        174,
+        80,
+        291,
+        97,
+        62,
+        42,
+        46,
+        50
+      ],
+      "Noto Sans Bold": [
+        181,
+        86,
+        286,
+        100,
+        66,
+        48,
+        46,
+        52
+      ],
+      "FreeSans Bold": [
+        175,
+        80,
+        288,
+        96,
+        62,
+        42,
+        46,
+        48
+      ]
+    },
+    "observed": "with fontconfig's default (DejaVu Sans Bold) the selection screen clipped '(Press Left/Right to change)' at the right edge and overflowed 'Independent'; with DejaVu Sans Condensed Bold it matches the macOS layout"
+  },
+  "harness": "tools/crossplatform/linux-runtime/Dockerfile (ntsd-linux-runtime:noble = swift:6.4.0-noble + fontconfig, fonts-dejavu-core/-extra, fonts-liberation), test only",
+  "results": {
+    "state": "9/10 equal to the frozen references (playback as on main)",
+    "textFrames": "tools/crossplatform/compare_text_frames.py against AppKit (CoreText) with the headless run as text-free baseline: 15,909 frames, 9,211 with text on both, 6,698 without on both (identical across all three), 0 disagreements",
+    "macOS": "NTSDSDL on macOS still CoreText: VS scenario 1,832/1,832 frames identical to AppKit"
+  },
+  "open": [
+    "glyph shapes differ from macOS and from the original by design (declared deviation)",
+    "non-ASCII bytes are decoded as UTF-8 like the CoreText path"
+  ]
+}
