@@ -1,0 +1,17 @@
+{
+  "study": "docs/research/CROSS_PLATFORM.md",
+  "phase": "P8 Android prerequisite: --resources",
+  "date": "2026-10-04",
+  "why": "an Android app's native code sees Bundle.main as app_process (/system/bin) and the bundle beside its library as nativeLibraryDir, which holds only .so files; CoreFoundation on Linux/Android reads /proc/self/exe and ignores CFProcessPath (swift-corelibs-foundation 6.4.0 CFPlatform.c), so the app must name the folder it extracted the data to",
+  "change": "OriginalRuntimeSession reads --resources DIR as Bundle(path:) and passes it to every bundled loader (startup, catalog path in the started event, OriginalMacRuntimeLoading.bundled(..., in:)); without the option it passes .main, the loaders' existing default. A DIR that is no bundle is a session boundary (OriginalRuntimeSessionBoundary.resources). No Core change: every Core loader already takes the bundle",
+  "checks": {
+    "no bundle beside, no option": "pre-existing fatal 'unable to find bundle named NTSDNative_NTSDCore' (generated accessor)",
+    "--resources /nonexistent": "boundary event resources(\"/nonexistent\")",
+    "--resources <bundle> (macOS headless copied away from its bundle)": "started; catalog resolved at <bundle>/Contents/Resources/OriginalCatalog; vs scenario equal",
+    "AppKit app (default path)": "release build includes the change (built after it, symbols present); vs scenario equal",
+    "Linux musl": "NTSDHeadless release build"
+  },
+  "open": [
+    "the Android app passes --resources to the extracted data"
+  ]
+}

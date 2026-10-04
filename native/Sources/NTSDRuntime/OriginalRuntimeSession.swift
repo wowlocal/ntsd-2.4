@@ -86,6 +86,12 @@ import NTSDCore
 /// to those trace checkpoints when diagnosing a state difference.
 /// START runs the whole loading once (blocking, progress frames not shown);
 /// later screens return through cached loaded cycles.
+/// Session-level input errors (not game behaviour).
+public enum OriginalRuntimeSessionBoundary: Error, Equatable {
+    /// `--resources DIR` names no readable bundle.
+    case resources(String)
+}
+
 @MainActor public final class OriginalRuntimeSession {
     public let arguments: [String]
     public let exitAfterStartup: Bool
@@ -113,6 +119,14 @@ import NTSDCore
     public var messages: OriginalMacRuntimeMessages? { menu?.messages }
     /// Scripted runs take keyboard and mouse input from their script only.
     public var scripted: Bool { arguments.contains("--script") }
+    /// `--resources DIR`: the game's resource bundle at DIR (a host whose data is
+    /// not beside its executable, e.g. extracted by an Android app); otherwise
+    /// the loaders' usual places, starting from the main bundle.
+    func resourceBundle() throws -> Bundle {
+        guard let i = arguments.firstIndex(of:"--resources"),i+1 < arguments.count else { return .main }
+        guard let bundle = Bundle(path:arguments[i+1]) else { throw OriginalRuntimeSessionBoundary.resources(arguments[i+1]) }
+        return bundle
+    }
     /// The current original window (replaced by an Alt+Enter recreation).
     public private(set) var gameWindow: UInt32 = 0
     public init(arguments: [String],host: any OriginalRuntimeSessionHost) {
@@ -185,7 +199,8 @@ import NTSDCore
             // Timer precision without throttling, but the machine may still idle-sleep:
             // the original never calls SetThreadExecutionState.
             host.beginTimingActivity()
-            let package = try OriginalApplicationStartupInputs.bundled()
+            let resources = try resourceBundle()
+            let package = try OriginalApplicationStartupInputs.bundled(in:resources)
             let overlay = try overlayRoot()
             let started = try OriginalMacRuntimeStartup.run(inputs:package,overlay:overlay,environment:startupEnvironment(),host:host.startupHost)
             self.started = started
@@ -204,7 +219,7 @@ import NTSDCore
                 "musicOutput":"packaged ALAC tracks; graph-event looping",
                 "soundOutput":soundOutputError ?? soundOutput ?? "",
                 "backingScale":host.backingScale(started.window,in:started.windows),
-                "resources":[(try? OriginalApplicationCatalogInputs.bundledDirectory().path) ?? "",host.musicDirectory]])
+                "resources":[(try? OriginalApplicationCatalogInputs.bundledDirectory(in:resources).path) ?? "",host.musicDirectory]])
             if exitAfterStartup { host.terminate(); return }
             let menu = try OriginalMacRuntimeMenu(started,inputs:package,clock:{ [unowned self] in try self.clock() },
                                                   point:{ [unowned self] in self.cursor() },overlay:overlay,
@@ -318,8 +333,9 @@ import NTSDCore
                 if let n = scriptStep(committedBranch:false) { try runScript(n,menu,started,timeline:&script) }
                 try runScript(cycles,menu,started,timeline:&loadedScript)
                 if first {
-                    loading = try OriginalMacRuntimeLoading.bundled(started,startupInputs:try OriginalApplicationStartupInputs.bundled(),
-                                                                    clock:{ [unowned self] in try self.clock() },dialogs:host.loadingDialogs)
+                    let resources = try resourceBundle()
+                    loading = try OriginalMacRuntimeLoading.bundled(started,startupInputs:try OriginalApplicationStartupInputs.bundled(in:resources),
+                                                                    clock:{ [unowned self] in try self.clock() },dialogs:host.loadingDialogs,in:resources)
                     loading?.overlay = try overlayRoot()
                     loading?.stageCheckpoints = arguments.contains("--stage-checkpoints")
                     loading?.sounds = sounds

@@ -130,9 +130,9 @@ import NTSDCore
         bitmapInputs = .init(resources:resources,files:files)
     }
     public static func bundled(_ started: OriginalMacRuntimeStartup.Started,startupInputs: OriginalApplicationStartupInputs,
-        clock: @escaping () throws -> UInt32,dialogs: OriginalRuntimeLoadingDialogs) throws -> OriginalMacRuntimeLoading {
-        try .init(started,startupInputs:startupInputs,catalogInputs:.bundled(),loadingInputs:.bundled(),
-            interfaceInputs:.bundled(),menuInputs:.bundledWithWar(),arenaInputs:.bundled(),clock:clock,dialogs:dialogs)
+        clock: @escaping () throws -> UInt32,dialogs: OriginalRuntimeLoadingDialogs,in bundle: Bundle = .main) throws -> OriginalMacRuntimeLoading {
+        try .init(started,startupInputs:startupInputs,catalogInputs:.bundled(in:bundle),loadingInputs:.bundled(in:bundle),
+            interfaceInputs:.bundled(in:bundle),menuInputs:.bundledWithWar(in:bundle),arenaInputs:.bundled(in:bundle),clock:clock,dialogs:dialogs)
     }
     /// The host's interactive dialogs.
     public var dialogs: OriginalRuntimeLoadingDialogs
