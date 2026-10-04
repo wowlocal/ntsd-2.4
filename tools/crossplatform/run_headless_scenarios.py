@@ -7,8 +7,9 @@ Usage: run_headless_scenarios.py OUT_DIR (--linux BUILD_DIR | --linux-amd64 BUIL
 The command line is app_e2e's own (`run`): --original --mute-music
 --mute-sounds --overlay --virtual-clock 123456789 8 --script-clock gameplay
 --body-captures, the scenario's extra arguments and script, TZ=Etc/GMT-1, plus
---no-network and --body-frames OUT_DIR/<scenario>/frames (presented framebuffers,
-identical PNG bytes on every host; compare runs with compare_frames.py).
+--no-network, --body-frames OUT_DIR/<scenario>/frames (presented framebuffers,
+identical PNG bytes on every host) and --body-frame-digests (every presented
+frame's SHA-256 as an event); compare runs with compare_frames.py.
 `--local` takes any binary with these options: NTSDHeadless, NTSDSDL or the
 AppKit NTSDNative, which ignores --music-dir and --no-network. `--linux` runs the cross-built static binary in swift:6.4.0-noble
 with the build and music directories read-only and OUT_DIR mounted at /out;
@@ -41,7 +42,7 @@ def main():
             extra = [str(inner / Path(a).relative_to(base)) if a.startswith(str(base)) else a for a in extra]
         args = ["--original", "--mute-music", "--mute-sounds", "--no-network", "--overlay", str(inner / "overlay"),
                 "--virtual-clock", "123456789", "8", "--script-clock", "gameplay", "--body-captures", str(inner / "captures"),
-                "--body-frames", str(inner / "frames"),
+                "--body-frames", str(inner / "frames"), "--body-frame-digests",
                 *extra, "--script", setup["script"](inner / "captures")]
         if mode == "--linux":
             command = ["docker", "run", "--rm", *platform, "-e", "TZ=Etc/GMT-1", "-v", f"{target}:/app:ro", "-v", f"{MUSIC}:/music:ro",

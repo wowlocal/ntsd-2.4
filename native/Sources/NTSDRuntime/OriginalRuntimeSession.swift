@@ -366,6 +366,12 @@ import NTSDCore
                             try started.windows.presentedPNG(gameWindow).write(to:URL(fileURLWithPath:"\(arguments[i+1])/f\(String(format:"%06d",gameplayBodies)).png"))
                         }
                     }
+                    // `--body-frame-digests` reports every presented frame's SHA-256 (XRGB
+                    // pixels), so hosts compare whole matches frame by frame.
+                    if arguments.contains("--body-frame-digests"),let frame = try started.windows.lease(gameWindow).presented {
+                        Self.emit(["event":"frameDigest","gameplayBodies":gameplayBodies,"size":[frame.width,frame.height],
+                                   "sha256":PortableSHA256.hash(data:frame.pixels).map { String(format:"%02x",$0) }.joined()])
+                    }
                     if gameplayBodies % 300 == 0 {
                         var event: [String:Any] = ["event":"progress","gameplayBodies":gameplayBodies,"cycles":cycles,"iterations":committed,
                             "characterAI":loading.counts.characterAI,"objectInputs":loading.counts.objectInputs,"uptime":ProcessInfo.processInfo.systemUptime,

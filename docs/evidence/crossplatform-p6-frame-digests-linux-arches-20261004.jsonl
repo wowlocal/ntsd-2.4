@@ -1,0 +1,11 @@
+{"scenario": "altenter", "frames": 6, "identical": 6, "differ": [], "missing": [], "digests": {"a": 1826, "b": 1826, "equal": true, "firstDifferentBody": null}}
+{"scenario": "demo", "frames": 3, "identical": 3, "differ": [], "missing": [], "digests": {"a": 945, "b": 945, "equal": true, "firstDifferentBody": null}}
+{"scenario": "joystick", "frames": 0, "identical": 0, "differ": [], "missing": [], "digests": {"a": 296, "b": 296, "equal": true, "firstDifferentBody": null}}
+{"scenario": "mission", "frames": 6, "identical": 6, "differ": [], "missing": [], "digests": {"a": 1800, "b": 1800, "equal": true, "firstDifferentBody": null}}
+{"scenario": "playback", "frames": 0, "identical": 0, "differ": [], "missing": []}
+{"scenario": "team-tournament", "frames": 6, "identical": 6, "differ": [], "missing": [], "digests": {"a": 1856, "b": 1856, "equal": true, "firstDifferentBody": null}}
+{"scenario": "tournament", "frames": 6, "identical": 6, "differ": [], "missing": [], "digests": {"a": 1832, "b": 1832, "equal": true, "firstDifferentBody": null}}
+{"scenario": "tournament-win", "frames": 8, "identical": 8, "differ": [], "missing": [], "digests": {"a": 2520, "b": 2520, "equal": true, "firstDifferentBody": null}}
+{"scenario": "vs", "frames": 6, "identical": 6, "differ": [], "missing": [], "digests": {"a": 1826, "b": 1826, "equal": true, "firstDifferentBody": null}}
+{"scenario": "war", "frames": 10, "identical": 10, "differ": [], "missing": [], "digests": {"a": 3008, "b": 3008, "equal": true, "firstDifferentBody": null}}
+{"frames": 15960, "mismatched": 0, "result": "identical"}
