@@ -53,7 +53,14 @@ Linux работает и под Wayland; пакеты Linux (aarch64, x86_64) �
 [swiftlang/swift#92905](https://github.com/swiftlang/swift/issues/92905).
 Android: headless-игра в эмуляторе Android 15 arm64 проходит 9/10, все кадры
 равны Linux ([evidence](../evidence/crossplatform-p8-android-20261004.json));
-следующий шаг — Android-приложение (APK).
+затем Android-приложение (NativeActivity, APK): все сценарии 9/10, текст
+Roboto через FreeType, звук и музыка через AAudio, касания и клавиатура
+([evidence](../evidence/crossplatform-p8-android-text-audio-20261004.json)).
+2026-10-05: матрица из девяти хостов (с iPad и Android) на чистом b9d4b62 —
+везде 9/10, кадры совпадают внутри групп
+([отчёт](../evidence/crossplatform-matrix-20261005-nine-hosts.json)).
+Касания на iPad исправлены (курсор и удержание кнопки); проверка на реальных
+iPad/Android/Linux/Windows — за пользователем.
 Подробности и открытые решения — в [CROSS_PLATFORM](CROSS_PLATFORM.md).
 
 Побочная находка 2026-10-03: сценарий `playback` в `tools/app_e2e.py` падает
