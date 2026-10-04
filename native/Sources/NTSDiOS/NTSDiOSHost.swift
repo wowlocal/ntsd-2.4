@@ -18,6 +18,8 @@ final class NTSDiOSCursor {}
 /// frame or caption (the game derives its client size), windows centred.
 @MainActor final class NTSDiOSWindowHost: OriginalRuntimeWindowHost {
     let screen: CGSize, view: NTSDGameView
+    /// The window that presented last (the one the view shows).
+    private(set) var shown: NTSDiOSWindow?
     init(screen: CGSize,view: NTSDGameView) { self.screen = screen; self.view = view }
     private static func window(_ object: AnyObject) -> NTSDiOSWindow { object as! NTSDiOSWindow }
     func screenSize() throws -> CGSize { screen }
@@ -51,7 +53,7 @@ final class NTSDiOSCursor {}
                                   bitmapInfo:CGBitmapInfo(rawValue:CGImageAlphaInfo.noneSkipFirst.rawValue).union(.byteOrder32Little),
                                   provider:provider,decode:nil,shouldInterpolate:false,intent:.defaultIntent)
         else { throw OriginalRuntimeWindowBackend.Boundary.geometry }
-        view.show(image,size:CGSize(width:frame.width,height:frame.height))
+        view.show(image,size:CGSize(width:frame.width,height:frame.height)); shown = Self.window(window)
     }
 }
 
@@ -84,12 +86,17 @@ final class NTSDiOSCursor {}
     weak var session: OriginalRuntimeSession?
     private let engine = AVAudioEngine()
     private var activity: NSObjectProtocol?
+    /// The last touch as a desktop point: the game reads it with GetCursorPos.
+    private var cursor: (Int32,Int32) = (0,0)
+    /// Touches as player-like clicks (hover, then a held press).
+    lazy var touch = OriginalRuntimeTouchMouse { [unowned self] message,x,y,buttons in self.mouse(message,x:x,y:y,buttons:buttons) }
     init(arguments: [String],view: NTSDGameView,screen: CGSize) {
         self.arguments = arguments; windows = NTSDiOSWindowHost(screen:screen,view:view)
         musicDirectory = Bundle.main.bundleURL.appendingPathComponent("OriginalMusic").path
     }
     var scripted: Bool { arguments.contains("--script") }
     func mouse(_ message: UInt32,x: Int32,y: Int32,buttons: UInt32) {
+        if let w = windows.shown { cursor = (Int32(w.origin.x)+x,Int32(w.origin.y)+y) }
         guard let session,let messages = session.messages,!session.stopped,!session.scripted else { return }
         messages.mouse(message,x:x,y:y,buttons:buttons)
     }
@@ -176,7 +183,7 @@ final class NTSDiOSCursor {}
         return muted ? "muted" : "AVAudioEngine \(Int(rate)) Hz"
     }
     func backingScale(_ window: UInt32,in windows: OriginalRuntimeWindowBackend) -> Double { Double(UIScreen.main.scale) }
-    func cursorPoint() -> (Int32,Int32) { (0,0) }
+    func cursorPoint() -> (Int32,Int32) { cursor }
     func attach(_ window: UInt32,in windows: OriginalRuntimeWindowBackend,session: OriginalRuntimeSession) throws {}
     func snapshotPNG(_ window: UInt32,in windows: OriginalRuntimeWindowBackend) throws -> Data { try windows.presentedPNG(window) }
     func viewPNG(_ window: UInt32,in windows: OriginalRuntimeWindowBackend) throws -> Data { try windows.presentedPNG(window) }

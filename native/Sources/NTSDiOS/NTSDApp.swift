@@ -69,14 +69,14 @@ final class NTSDGameView: UIView {
         let x0 = (bounds.width-frameSize.width*scale)/2,y0 = (bounds.height-frameSize.height*scale)/2
         return (Int32(((p.x-x0)/scale).rounded(.down)),Int32(((p.y-y0)/scale).rounded(.down)))
     }
-    override func touchesBegan(_ touches: Set<UITouch>,with event: UIEvent?) { touch(touches,0x201,1) }
-    override func touchesMoved(_ touches: Set<UITouch>,with event: UIEvent?) { touch(touches,0x200,1) }
-    override func touchesEnded(_ touches: Set<UITouch>,with event: UIEvent?) { touch(touches,0x202,0) }
-    override func touchesCancelled(_ touches: Set<UITouch>,with event: UIEvent?) { touch(touches,0x202,0) }
-    private func touch(_ touches: Set<UITouch>,_ message: UInt32,_ buttons: UInt32) {
-        guard let t = touches.first else { return }
+    override func touchesBegan(_ touches: Set<UITouch>,with event: UIEvent?) { touch(touches) { $0.began(x:$1,y:$2) } }
+    override func touchesMoved(_ touches: Set<UITouch>,with event: UIEvent?) { touch(touches) { $0.moved(x:$1,y:$2) } }
+    override func touchesEnded(_ touches: Set<UITouch>,with event: UIEvent?) { touch(touches) { $0.ended(x:$1,y:$2) } }
+    override func touchesCancelled(_ touches: Set<UITouch>,with event: UIEvent?) { touch(touches) { $0.ended(x:$1,y:$2) } }
+    private func touch(_ touches: Set<UITouch>,_ phase: (OriginalRuntimeTouchMouse,Int32,Int32) -> Void) {
+        guard let t = touches.first,let host else { return }
         let (x,y) = clientPoint(t.location(in:self))
-        MainActor.assumeIsolated { host?.mouse(message,x:x,y:y,buttons:buttons) }
+        MainActor.assumeIsolated { phase(host.touch,x,y) }
     }
     func handle(_ presses: Set<UIPress>,down: Bool) -> Bool {
         var handled = false
