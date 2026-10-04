@@ -33,8 +33,9 @@ let sdlTargets: [Target] = sdl ? [
                           + (freetypePrefix == nil ? [] : ["CFreeType"]),
                       swiftSettings: [.unsafeFlags(["-Xcc", "-I\(sdlPrefix)/include"]
                                                    + (freetypePrefix.map { ["-Xcc", "-I\($0)/include/freetype2"] } ?? []))],
-                      linkerSettings: [.unsafeFlags(["-L\(sdlPrefix)/lib", "-Xlinker", "-rpath", "-Xlinker", "\(sdlPrefix)/lib"]
-                                                    + (freetypePrefix.map { ["-L\($0)/lib"] } ?? []))])]
+                      linkerSettings: [.unsafeFlags(["-L\(sdlPrefix)/lib"] + (freetypePrefix.map { ["-L\($0)/lib"] } ?? [])),
+                                       // lld-link (Windows) has no rpath; SDL3.dll sits beside the exe there.
+                                       .unsafeFlags(["-Xlinker", "-rpath", "-Xlinker", "\(sdlPrefix)/lib"], .when(platforms: [.macOS, .linux]))])]
     + (freetypePrefix == nil ? [] : [.systemLibrary(name: "CFreeType", path: "Sources/CFreeType")]) : []
 
 let package = Package(

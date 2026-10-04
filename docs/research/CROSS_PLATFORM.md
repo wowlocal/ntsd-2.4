@@ -202,22 +202,21 @@ user's approval to push. Until then, keep the other phases moving.
 | 2026-10-04 | **P7: package reproducibility** | Rebuilt from 0f91b25 with the same scratch path, the package differs from the first build only in `README.txt` (it names the commit); the binary is byte-identical. From a fresh scratch path the binary differs: it embeds its absolute scratch path 21 times (bundle accessor, build paths). Reproducible from the canonical scratch path; cross-path reproducibility would need path remapping. | [evidence](../evidence/crossplatform-p7-package-reproducibility-20261004.json) | ee2c6b8 |
 | 2026-10-04 | **P7: Linux x86_64 package** | Generated the x86_64 glibc SDK (`ntsd-6.4.0-ubuntu24.04-x86_64`, same generator and options), built SDL3/FreeType for linux/amd64, and packaged `ntsd-linux-x86_64` with `package_linux.py --arch x86_64`. **In a clean amd64 Ubuntu 24.04 container (Rosetta harness) it resolves every library, starts with music and font, reaches a match with real X11 input and reproduces the vs scenario; all 1,832 frames, FreeType text included, equal the aarch64 package's.** | `check_linux_package.sh … linux/amd64`; [evidence](../evidence/crossplatform-p7-linux-package-x86_64-20261004.json) | e1eb5b8 |
 | 2026-10-04 | **P0-W: first Windows executable** | The UCRT xwin downloads is 10.0.26624, which has no `corecrt_math.h`, `stdnoreturn.h` or `stdalign.h` (math lives in `math.h`); Swift 6.4's `ucrt.modulemap` expects an older layout. A reviewed patch removes those three modules in a copy of the SDK; MSVC 14.29 with SDK 10.0.22621 builds the modules (14.44's `threads.h` does not), and the SDK library folders are passed to lld-link explicitly. **A Swift 6.4 probe with Foundation cross-compiles to a PE32+ x86-64 exe and runs in a CrossOver bottle with the Swift runtime DLLs, printing the same results as macOS except the LLP64 `long` size.** | `windows_probe.sh`; [evidence](../evidence/crossplatform-p0w-probe-20261004.json) | c8f475b |
-| 2026-10-04 | **P0-W: the game on Windows (headless)** | `make_windows_sdk.py` builds a Swift SDK bundle for `x86_64-unknown-windows-msvc`; SwiftPM's native build system cross-builds `NTSDHeadless` (swift-build has no Windows platform here). Fixes on the way: Clang's builtin headers linked into the SDK (otherwise MSVC's `iso646.h` pulled a C++-only module into C builds), `math.h` mapped to `corecrt.math` where the prebuilt Foundation module expects `pow`, a Windows branch for the startup clock, and an `OriginalFileFacts` helper for the input loaders (Windows reads file attributes natively; under Wine, Foundation's own path hits the unimplemented `SaferiIsExecutableFileType` and hung). Other hosts keep their exact code paths. **In a CrossOver test bottle the Windows exe reproduces 9/10 app_e2e scenarios (playback as on main) and all 15,960 frames equal the Linux headless run.** | macOS loader/startup tests 24/24, 703 listed; Linux musl builds; **AppKit e2e 9/10 = baseline**; `run_headless_scenarios.py --wine`; [evidence](../evidence/crossplatform-pw-headless-20261004.json), [results](../evidence/crossplatform-pw-headless-wine-20261004.jsonl) | this commit |
+| 2026-10-04 | **P0-W: the game on Windows (headless)** | `make_windows_sdk.py` builds a Swift SDK bundle for `x86_64-unknown-windows-msvc`; SwiftPM's native build system cross-builds `NTSDHeadless` (swift-build has no Windows platform here). Fixes on the way: Clang's builtin headers linked into the SDK (otherwise MSVC's `iso646.h` pulled a C++-only module into C builds), `math.h` mapped to `corecrt.math` where the prebuilt Foundation module expects `pow`, a Windows branch for the startup clock, and an `OriginalFileFacts` helper for the input loaders (Windows reads file attributes natively; under Wine, Foundation's own path hits the unimplemented `SaferiIsExecutableFileType` and hung). Other hosts keep their exact code paths. **In a CrossOver test bottle the Windows exe reproduces 9/10 app_e2e scenarios (playback as on main) and all 15,960 frames equal the Linux headless run.** | macOS loader/startup tests 24/24, 703 listed; Linux musl builds; **AppKit e2e 9/10 = baseline**; `run_headless_scenarios.py --wine`; [evidence](../evidence/crossplatform-pw-headless-20261004.json), [results](../evidence/crossplatform-pw-headless-wine-20261004.jsonl) | d02c20b |
+| 2026-10-04 | **P7 Windows: SDL build with GDI text** | `NTSDSDL` cross-builds for Windows against libsdl's official SDL3 3.4.16 VC package (rpath only on macOS/Linux, signed SDL enums under MSVC, C/C++ on the DLL runtime like Swift). On Windows text goes through GDI: TextOutA with the stock SYSTEM_FONT, the original's own font on real Windows (Wine substitutes its own). Sockets stay off on Windows until a real-Winsock adapter exists. **In the CrossOver bottle (offscreen/dummy SDL drivers) all scenarios give 9/10 like every host, and text appears in exactly the same 9,211 of 15,909 frames as on AppKit.** | macOS and Linux SDL still build (RUNPATH kept); [evidence](../evidence/crossplatform-pw-sdl-20261004.json), [results](../evidence/crossplatform-pw-sdl-wine-20261004.jsonl) | this commit |
 
 ## Next task
 
-P7 Windows: the SDL build on Windows.
+P7 Windows: the Windows package.
 
-- SDL3 for Windows from libsdl's official 3.4.16 VC development release
-  (zlib licence; record the archive hash), as `NTSD_SDL_PREFIX` for the
-  Windows SDK; cross-build `NTSDSDL` for `x86_64-unknown-windows-msvc`.
-- Text through GDI: TextOutA with the stock SYSTEM_FONT into a monochrome DIB
-  gives the original's own font on real Windows (user decision 2026-10-01:
-  the original's font first); under Wine it is Wine's substitute (declared).
-- Music through NTSDMusicDecoder; sockets stay disabled (`--no-network`)
-  until a real-Winsock adapter exists.
-- Gate: scripted scenarios through NTSDSDL in the CrossOver bottle give state
-  equal to the references and textless frames equal to the other hosts.
+- `package_windows.py`: cross-build `NTSDSDL.exe` (release), and assemble
+  `ntsd-windows-x86_64` with the exe, `SDL3.dll`, the Swift 6.4.0 runtime
+  DLLs and the MSVC runtime DLLs from the installer, the resource folder, the
+  packaged music and licences (SDL3, ALAC, Swift; Microsoft's redistributable
+  terms for the VC runtime), as a reproducible zip with a manifest.
+- Gate: the unpacked zip runs in a fresh CrossOver bottle without anything
+  else installed (scripted vs scenario equal; default launch finds music).
+- Then a real-Winsock adapter for ONLINE GAME on Windows.
 
 Following tasks:
 

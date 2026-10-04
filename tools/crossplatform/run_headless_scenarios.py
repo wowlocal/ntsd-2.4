@@ -21,6 +21,8 @@ drivers and the SDL3 libraries from $NTSD_SDL_LIB mounted read-only.
 `--wine` runs RUN_DIR/NTSDHeadless.exe (with its resources and the Swift
 runtime DLLs beside it) in the CrossOver bottle ntsd-xplat-test, a test
 harness; paths are passed as Z:\\ paths and CRLF is stripped from its output.
+$NTSD_WINE_EXE names another exe in RUN_DIR (e.g. NTSDSDL.exe) and
+$NTSD_WINE_ENV adds KEY=VALUE settings for it, separated by spaces.
 $NTSD_LINUX_PLATFORM sets the container platform (e.g. linux/amd64) and
 $NTSD_LINUX_IMAGE replaces the container image (e.g. ntsd-linux-runtime:noble
 from linux-runtime/Dockerfile, which adds fontconfig and DejaVu for text).
@@ -71,13 +73,14 @@ def main():
                        "-v", f"{out}:/out", os.environ.get("NTSD_LINUX_IMAGE", "swift:6.4.0-noble"), f"/app/{binary}", "--music-dir", "/music", *args]
         elif mode == "--wine":
             cx = "/Applications/CrossOver.app/Contents/SharedSupport/CrossOver/bin/wine"
-            command = [cx, "--bottle", "ntsd-xplat-test", "--wait-children", host(Path(target).resolve() / "NTSDHeadless.exe"),
+            command = [cx, "--bottle", "ntsd-xplat-test", "--wait-children", host(Path(target).resolve() / os.environ.get("NTSD_WINE_EXE", "NTSDHeadless.exe")),
                        "--music-dir", host(MUSIC), *args]
         else:
             command = [target, "--music-dir", str(MUSIC), *args]
         start = time.time()
+        wine_env = dict(kv.split("=", 1) for kv in os.environ.get("NTSD_WINE_ENV", "").split()) if mode == "--wine" else {}
         done = subprocess.run(command, capture_output=True, text=True, timeout=3600,
-                              env={**app_e2e.APP_ENV} if mode != "--linux" else None)
+                              env={**app_e2e.APP_ENV, **wine_env} if mode != "--linux" else None)
         (base / "events.jsonl").write_text(done.stdout.replace("\r\n", "\n")); (base / "stderr.txt").write_text(done.stderr)
         compare = [sys.executable, str(COMPARE), str(base / "events.jsonl"), str(base / "captures"), str(base / "overlay"),
                    str(done.returncode), str(setup["reference"])] + ([f"/out={out}"] if mode == "--linux" else [])

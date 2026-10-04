@@ -25,7 +25,8 @@ enum SDLKeys {
         return t
     }()
     static func key(_ scancode: SDL_Scancode) -> OriginalMacRuntimeKey? {
-        macKeyCode[scancode.rawValue].flatMap { OriginalMacRuntimeKey.table[$0] }
+        // SDL_Scancode is signed with MSVC (Windows) and unsigned elsewhere.
+        macKeyCode[UInt32(truncatingIfNeeded:scancode.rawValue)].flatMap { OriginalMacRuntimeKey.table[$0] }
     }
     /// The characters AppKit would report: with Alt, the character without
     /// modifiers except Shift; with Control, the control code of a letter.

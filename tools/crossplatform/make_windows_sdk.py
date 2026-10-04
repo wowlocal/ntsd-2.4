@@ -15,8 +15,10 @@ Tools terms accepted by the user on 2026-10-03). The bundle contains:
 - usr/lib/swift/clang -> the toolchain's Clang builtin headers: without them
   SwiftPM's -resource-dir made Clang fall through to MSVC's iso646.h, which
   pulls C++-only yvals_core.h into C module builds;
-- a toolset with the MSVC/SDK roots for Swift and C, and the SDK library
-  folders for lld-link (swiftc passes none).
+- a toolset with the MSVC/SDK roots for Swift and C (C/C++ on the DLL runtime
+  /MD like Swift's objects; clang's default /MT fails lld-link's
+  RuntimeLibrary check), and the SDK library folders for lld-link (swiftc
+  passes none).
 
 Build with: swift build --build-system native --swift-sdk ntsd-6.4.0-windows-x86_64
 (the swift-build system has no Windows platform definition here).
@@ -47,7 +49,9 @@ def main():
     libs = [kits / f"Lib/{sdkv}/um/x86_64", kits / f"Lib/{sdkv}/ucrt/x86_64", msvc / "lib/x86_64"]
     swift = ["-visualc-tools-root", str(msvc), "-windows-sdk-root", str(kits), "-windows-sdk-version", sdkv, "-use-ld=lld"]
     for lib in libs: swift += ["-Xlinker", f"-libpath:{lib}"]
-    c = ["-Xmicrosoft-visualc-tools-root", str(msvc), "-Xmicrosoft-windows-sdk-root", str(kits), "-Xmicrosoft-windows-sdk-version", sdkv]
+    # The DLL C runtime (/MD), as Swift's own objects use; clang defaults to /MT.
+    c = ["-Xmicrosoft-visualc-tools-root", str(msvc), "-Xmicrosoft-windows-sdk-root", str(kits), "-Xmicrosoft-windows-sdk-version", sdkv,
+         "-fms-runtime-lib=dll"]
     (variant / "toolset.json").write_text(json.dumps({"schemaVersion": "1.0", "swiftCompiler": {"extraCLIOptions": swift},
         "cCompiler": {"extraCLIOptions": c}, "cxxCompiler": {"extraCLIOptions": c},
         "linker": {"extraCLIOptions": [f"-libpath:{lib}" for lib in libs]}}, indent=2) + "\n")

@@ -67,7 +67,13 @@ final class SDLAudioFeed: @unchecked Sendable {
     }
     func capsLock() -> Int32 { SDL_GetModState() & NTSD_SDL_KMOD_CAPS != 0 ? 1 : 0 }
     /// BSD sockets on Darwin and Linux (`OriginalMacWinsock` in NTSDRuntime).
-    func makeSockets() -> any OriginalRuntimeSockets { OriginalMacWinsock() }
+    func makeSockets() -> any OriginalRuntimeSockets {
+        #if os(Windows)
+        preconditionFailure("NTSDSDL on Windows needs --no-network until a real-Winsock adapter exists")
+        #else
+        return OriginalMacWinsock()
+        #endif
+    }
     var loadingDialogs: OriginalRuntimeLoadingDialogs {
         .init(chooseRecording:{ _ in nil },
               alert:{ [weak self] text in self?.box(NTSD_SDL_MESSAGEBOX_ERROR,"Error",text) },
@@ -180,7 +186,7 @@ final class SDLAudioFeed: @unchecked Sendable {
         return (mask & NTSD_SDL_BUTTON_LMASK != 0 ? 1 : 0) | (mask & NTSD_SDL_BUTTON_RMASK != 0 ? 2 : 0)
     }
     private func handle(_ event: SDL_Event) {
-        let type = SDL_EventType(rawValue:event.type)
+        let type = SDL_EventType(rawValue:.init(truncatingIfNeeded:event.type))
         if type == SDL_EVENT_QUIT { if session?.closeRequested() ?? true { terminate() }; return }
         guard let session,let game = gameWindow() else { return }
         switch type {

@@ -3,6 +3,9 @@ import NTSDRuntime
 #if canImport(CFreeType)
 import CFreeType
 #endif
+#if os(Windows)
+import WinSDK
+#endif
 
 /// TextOutA's glyph masks on hosts without CoreText (user decision
 /// 2026-10-01): the original draws GDI's SYSTEM_FONT, which ships with
@@ -92,8 +95,48 @@ enum SDLGlyphs {
         }
     }
     #endif
+    #if os(Windows)
+    /// Windows draws the original's own SYSTEM_FONT through GDI (user decision
+    /// 2026-10-01: the original's font first): TextOutA of the game's bytes
+    /// into a monochrome top-down DIB, the 16-pixel cell at the margin. Under
+    /// Wine (the test harness) SYSTEM_FONT is Wine's substitute.
+    final class GDIText {
+        private let dc: HDC
+        init?() {
+            guard let dc = CreateCompatibleDC(nil) else { return nil }
+            self.dc = dc
+            SelectObject(dc,GetStockObject(SYSTEM_FONT))
+        }
+        deinit { DeleteDC(dc) }
+        func mask(_ bytes: [UInt8]) -> TextMask {
+            let margin = 4,cell = OriginalMacDisplayBackend.textCell
+            var extent = SIZE()
+            _ = bytes.withUnsafeBufferPointer { $0.withMemoryRebound(to:CHAR.self) { GetTextExtentPoint32A(dc,$0.baseAddress,Int32(bytes.count),&extent) } }
+            let advance = max(0,Int(extent.cx)),width = advance+2*margin,height = cell+2*margin
+            var info = BITMAPINFO()
+            info.bmiHeader.biSize = DWORD(MemoryLayout<BITMAPINFOHEADER>.size)
+            info.bmiHeader.biWidth = LONG(width); info.bmiHeader.biHeight = -LONG(height)   // top-down
+            info.bmiHeader.biPlanes = 1; info.bmiHeader.biBitCount = 32; info.bmiHeader.biCompression = DWORD(BI_RGB)
+            var bits: UnsafeMutableRawPointer?
+            guard let bitmap = CreateDIBSection(dc,&info,UINT(DIB_RGB_COLORS),&bits,nil,0),let bits else { return blank(bytes) }
+            defer { DeleteObject(bitmap) }
+            let previous = SelectObject(dc,bitmap)
+            defer { SelectObject(dc,previous) }
+            memset(bits,0,width*height*4)
+            SetBkMode(dc,TRANSPARENT); SetTextColor(dc,0x00ffffff)
+            _ = bytes.withUnsafeBufferPointer { $0.withMemoryRebound(to:CHAR.self) { TextOutA(dc,Int32(margin),Int32(margin),$0.baseAddress,Int32(bytes.count)) } }
+            GdiFlush()
+            let pixels = bits.assumingMemoryBound(to:UInt32.self)
+            let out = (0..<width*height).map { pixels[$0] & 0x00ffffff != 0 ? UInt8(1) : 0 }
+            return .init(advance:advance,originX:margin,originY:margin,width:width,height:height,bits:out)
+        }
+    }
+    #endif
     /// The host's glyph masks and the font they come from (nil: none, blank text).
     static func make() -> (mask: ([UInt8]) -> TextMask,font: String?) {
+        #if os(Windows)
+        if let gdi = GDIText() { return ({ gdi.mask($0) },"GDI SYSTEM_FONT") }
+        #endif
         #if canImport(CFreeType)
         if let path = fontPath(),let face = Face(path:path) { return ({ face.mask($0) },path) }
         #endif

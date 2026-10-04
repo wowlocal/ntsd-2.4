@@ -15,6 +15,12 @@ func option(_ name: String,_ count: Int) -> [String]? {
     guard let i = arguments.firstIndex(of:name),i+count < arguments.count else { return nil }
     return Array(arguments[(i+1)...(i+count)])
 }
+#if os(Windows)
+guard arguments.contains("--no-network") else {
+    FileHandle.standardError.write(Data("NTSDSDL on Windows needs --no-network until a real-Winsock adapter exists\n".utf8))
+    exit(2)
+}
+#endif
 _ = SDL_SetHint("SDL_VIDEO_MAC_FULLSCREEN_SPACES","0")
 guard SDL_Init(NTSD_SDL_INIT) else {
     FileHandle.standardError.write(Data("SDL_Init: \(String(cString:SDL_GetError()))\n".utf8)); exit(1)
