@@ -10,11 +10,6 @@ extension OriginalMacDisplayBackend {
                   presentUnknownAsBlack:presentUnknownAsBlack,rleHolesReadPaletteZero:rleHolesReadPaletteZero,
                   keepsOperationLogs:keepsOperationLogs,textMask:Self.textMask)
     }
-    /// The AppKit window backend this display was created with.
-    var macWindows: OriginalMacWindowBackend {
-        guard let windows = windows as? OriginalMacWindowBackend else { preconditionFailure("Mac display without Mac windows") }
-        return windows
-    }
     public func image(_ token: UInt32) throws -> CGImage { try framebuffer(token).cgImage() }
     /// Declared temporary stand-in for SYSTEM_FONT (user decision 2026-10-01):
     /// the macOS system font, bold, 13 px em, baseline at the cell's +13.

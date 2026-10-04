@@ -10,9 +10,15 @@ import NTSDCore
     public init(backend: OriginalMacDisplayBackend,diagnostic: Diagnostic? = nil) {
         self.backend = backend;self.diagnostic = diagnostic
     }
+    /// The display's windows are the runtime window backend, which also serves
+    /// the front screen's window requests.
+    private var windowBackend: OriginalRuntimeWindowBackend {
+        guard let windows = backend.windows as? OriginalRuntimeWindowBackend else { preconditionFailure("display without the runtime window backend") }
+        return windows
+    }
     private enum Prepared {
         case display(OriginalMacDisplayBackend.Prepared)
-        case window(OriginalMacWindowBackend.Prepared)
+        case window(OriginalRuntimeWindowBackend.Prepared)
         case front(OriginalMacDisplayBackend.FrontPrepared)
         case diagnostic(OriginalWindowInitialization.Request,Diagnostic)
     }
@@ -46,7 +52,7 @@ import NTSDCore
                 }
                 prepared = .diagnostic(q,diagnostic)
             } else if OriginalMacDisplayBackend.handles(q) { prepared = .display(try backend.prepare(q)) }
-            else { prepared = .window(try backend.macWindows.prepare(q)) }
+            else { prepared = .window(try windowBackend.prepare(q)) }
         case .front(_,let q):prepared = .front(try backend.prepareFront(q))
         case .bitmap:throw OriginalMacDisplayBackend.Boundary.unsupported("bitmap uses its existing service")
         }
@@ -54,14 +60,14 @@ import NTSDCore
         do {
             switch prepared {
             case .display(let q):let r = try backend.perform(q);try answer(.window(r.response),r.resources)
-            case .window(let q):let r = try backend.macWindows.perform(q);try answer(.window(r.response),r.resources)
+            case .window(let q):let r = try windowBackend.perform(q);try answer(.window(r.response),r.resources)
             case .front(let q):let r = try backend.performFront(q);try answer(.front(r.response),r.resources)
             case .diagnostic(let q,let consume):
                 let response = try consume(q)
-                try answer(.window(response),backend.retainedResources+backend.macWindows.retainedResources)
+                try answer(.window(response),backend.retainedResources+windowBackend.retainedResources)
             }
         } catch {
-            try fail(String(reflecting:error),backend.retainedResources+backend.macWindows.retainedResources);throw error
+            try fail(String(reflecting:error),backend.retainedResources+windowBackend.retainedResources);throw error
         }
     }
 }
