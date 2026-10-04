@@ -10,6 +10,8 @@ import NTSDRuntime
 /// framebuffer. `origin` is the client top-left on the desktop, as placed.
 final class SDLWindow {
     let window: OpaquePointer, renderer: OpaquePointer, popup: Bool, client: CGSize
+    /// Where the host placed the client (desktop, top-left origin).
+    var placed = CGPoint.zero
     var texture: UnsafeMutablePointer<SDL_Texture>?, textureSize = CGSize.zero
     /// Where the last frame was drawn in window points (full screen scales it to fit).
     var drawn = CGRect.zero
@@ -56,12 +58,14 @@ final class SDLCursor { let cursor: OpaquePointer?; init(_ cursor: OpaquePointer
         let flags = NTSD_SDL_WINDOW_HIDDEN | (popup ? NTSD_SDL_WINDOW_FULLSCREEN : 0)
         guard let window = SDL_CreateWindow(title,Int32(client.width),Int32(client.height),flags) else { throw Self.error() }
         guard let renderer = SDL_CreateRenderer(window,nil) else { SDL_DestroyWindow(window); throw Self.error() }
+        let w = SDLWindow(window:window,renderer:renderer,popup:popup,client:client)
         if !popup {
             let x = ((screen.width-width)/2).rounded(.down)+metrics.frameX
             let y = ((screen.height-height)/2).rounded(.down)+metrics.caption+metrics.frameY
             _ = SDL_SetWindowPosition(window,Int32(x),Int32(y))
+            w.placed = CGPoint(x:x,y:y)
         }
-        return SDLWindow(window:window,renderer:renderer,popup:popup,client:client)
+        return w
     }
     func windowCreated(_ lease: OriginalRuntimeWindowBackend.WindowLease,popup: Bool,backend: OriginalRuntimeWindowBackend) {}
     func orderFront(_ window: AnyObject) {
@@ -79,8 +83,14 @@ final class SDLCursor { let cursor: OpaquePointer?; init(_ cursor: OpaquePointer
     }
     func clientBounds(_ window: AnyObject) throws -> CGRect { CGRect(origin:.zero,size:Self.window(window).client) }
     func clientFrame(_ window: AnyObject) throws -> CGRect { CGRect(origin:.zero,size:Self.window(window).client) }
+    /// Wayland does not expose window positions (SDL reports 0,0), and the
+    /// game offset its whole scene by the difference from where it asked the
+    /// window to be: there the host reports the position it placed.
+    private static let positionsKnown = SDL_GetCurrentVideoDriver().map { String(cString:$0) } != "wayland"
     private func origin(_ w: SDLWindow) -> CGPoint {
-        var x: Int32 = 0,y: Int32 = 0; _ = SDL_GetWindowPosition(w.window,&x,&y)
+        guard Self.positionsKnown else { return w.placed }
+        var x: Int32 = 0,y: Int32 = 0
+        guard SDL_GetWindowPosition(w.window,&x,&y) else { return w.placed }
         return CGPoint(x:CGFloat(x),y:CGFloat(y))
     }
     func displayGeometry(_ window: AnyObject) throws -> OriginalRuntimeDisplayGeometry {

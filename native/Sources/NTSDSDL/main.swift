@@ -32,6 +32,11 @@ let musicDirectory = option("--music-dir",1)?[0]
     ?? (FileManager.default.fileExists(atPath:besideExecutable+"/manifest.json") ? besideExecutable
         : URL(fileURLWithPath:#filePath).deletingLastPathComponent().deletingLastPathComponent()
             .appendingPathComponent("NTSDMacPlatform/Resources/OriginalMusic").path)
+// The drivers SDL chose, so harness runs show what actually ran (CrossOver,
+// for one, drops SDL_* variables).
+let drivers = ["video":SDL_GetCurrentVideoDriver().map { String(cString:$0) } ?? "",
+               "audio":SDL_GetCurrentAudioDriver().map { String(cString:$0) } ?? ""]
+MainActor.assumeIsolated { OriginalRuntimeSession.emit(["event":"sdlDrivers"].merging(drivers) { a,_ in a }) }
 let session: OriginalRuntimeSession = MainActor.assumeIsolated {
     // The window metrics the game is told: on macOS the AppKit host's (SDL cannot
     // report Cocoa borders), so client sizes and frames match the AppKit app.
