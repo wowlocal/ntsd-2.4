@@ -31,6 +31,9 @@ Linux-бинарник `NTSDHeadless` проходит все сценарии `
 `OriginalRetainedHistory` без изменения поведения; теперь x86_64 и aarch64 дают
 9/10 и одинаковые кадры, AppKit e2e не изменился. Воспроизведение и разбор —
 [evidence](../evidence/crossplatform-swift640-linux-uniqueness-20261004.json).
+P6 начат: `NTSDSDL` (SDL3, флаг сборки `NTSD_SDL=1`) на macOS проходит те же
+9/10 сценариев, и все 51 кадр побайтно совпадают с AppKit
+([evidence](../evidence/crossplatform-p6-sdl-macos-20261004.json)).
 Подробности и открытые решения — в [CROSS_PLATFORM](CROSS_PLATFORM.md).
 
 Побочная находка 2026-10-03: сценарий `playback` в `tools/app_e2e.py` падает

@@ -19,10 +19,21 @@ let macTargets: [Target] = portable ? [] : [
                                        .linkedFramework("AVFoundation")])]
 let macTestDependencies: [Target.Dependency] = portable ? [] : ["NTSDMacPlatform"]
 
+// NTSD_SDL=1 adds the SDL3 host (P6). NTSD_SDL_PREFIX names the SDL3 install
+// (include/ and lib/); default builds never need SDL.
+let sdl = Context.environment["NTSD_SDL"] == "1"
+let sdlPrefix = Context.environment["NTSD_SDL_PREFIX"] ?? "/opt/homebrew/opt/sdl3"
+let sdlProducts: [Product] = sdl ? [.executable(name: "NTSDSDL", targets: ["NTSDSDL"])] : []
+let sdlTargets: [Target] = sdl ? [
+    .systemLibrary(name: "CSDL3", path: "Sources/CSDL3"),
+    .executableTarget(name: "NTSDSDL", dependencies: ["NTSDCore", "NTSDRuntime", "CSDL3"] + (portable ? [] : ["NTSDMacPlatform"]),
+                      swiftSettings: [.unsafeFlags(["-Xcc", "-I\(sdlPrefix)/include"])],
+                      linkerSettings: [.unsafeFlags(["-L\(sdlPrefix)/lib", "-Xlinker", "-rpath", "-Xlinker", "\(sdlPrefix)/lib"])])] : []
+
 let package = Package(
     name: "NTSDNative",
     platforms: [.macOS(.v14)],
-    products: macProducts + [
+    products: macProducts + sdlProducts + [
                .executable(name: "NTSDFrameCheck", targets: ["NTSDFrameCheck"]),
                .executable(name: "NTSDMovementCheck", targets: ["NTSDMovementCheck"]),
                .executable(name: "NTSDCombatCheck", targets: ["NTSDCombatCheck"]),
@@ -33,7 +44,7 @@ let package = Package(
                .executable(name: "NTSDBGCheck", targets: ["NTSDBGCheck"]),
                .executable(name: "NTSDStageCheck", targets: ["NTSDStageCheck"]),
                .executable(name: "NTSDHeadless", targets: ["NTSDHeadless"])],
-    targets: macTargets + [
+    targets: macTargets + sdlTargets + [
         .target(name: "NTSDReplayCodec", exclude: ["README.md", "upstream.json"],
                 publicHeadersPath: "include", cSettings: [.unsafeFlags(["-Wno-deprecated-non-prototype"])]),
         .target(name: "NTSDCore", dependencies: ["NTSDReplayCodec"], resources: [.copy("Resources/OriginalStartup"), .copy("Resources/OriginalCommonSounds"), .copy("Resources/OriginalLoadingInterface"), .copy("Resources/OriginalCharacterMenu"), .copy("Resources/OriginalWarMenu"), .copy("Resources/OriginalMatchArenas"), .copy("Resources/OriginalCatalog")]),

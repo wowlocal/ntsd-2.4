@@ -88,6 +88,8 @@ import NTSDCore
         public internal(set) var fullScreen = false
         /// The last presented crop's size.
         public var contentSize: CGSize?
+        /// The last presented crop itself, for host-independent frame captures.
+        public internal(set) var presented: OriginalFramebuffer?
         /// Host full screen (APPLICATION_MAC_FULL_SCREEN_PLAN.md, declared): the
         /// windowed geometry the game keeps seeing while the view only scales.
         public var held: DisplayGeometry?
@@ -145,6 +147,12 @@ import NTSDCore
         guard owner.fullScreen || size == (owner.held?.clientOnScreen.size ?? bounds.size) else { throw Boundary.geometry }
         owner.contentSize = size
         try host.present(frame,in:owner.window)
+        owner.presented = frame
+    }
+    /// PNG of the window's last presented crop (`OriginalFramebufferPNG`).
+    public func presentedPNG(_ token: UInt32) throws -> Data {
+        guard let frame = try lease(token).presented else { throw Boundary.geometry }
+        return OriginalFramebufferPNG.encode(frame)
     }
     /// Shared LoadCursor(0, IDC_ARROW) identity once the class cursor exists.
     public var arrowCursorToken: UInt32? { cursor?.token }

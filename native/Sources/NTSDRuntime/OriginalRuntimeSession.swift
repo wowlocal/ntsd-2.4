@@ -59,7 +59,8 @@ import NTSDCore
 /// (scripted left click at client point X,Y after N committed iterations).
 /// `--script "N action args; ..."` runs scripted input at committed iteration N:
 /// `click X Y` (button held 10 iterations), `key VK` (held 10 iterations),
-/// `capture PATH`, `musicend` (the current track ends now), `answer yes|no|ok`
+/// `capture PATH`, `frame PATH` (the last presented framebuffer as written by
+/// `OriginalFramebufferPNG`, identical on every host), `musicend` (the current track ends now), `answer yes|no|ok`
 /// (the next MessageBoxA's button; scripted runs never show the box and stop
 /// at a boundary without one), `close` (the window's close button), `exit`.
 /// Counting uses committed outer iterations.
@@ -357,6 +358,14 @@ import NTSDCore
                         let path = "\(arguments[i+1])/b\(String(format:"%06d",gameplayBodies)).png"
                         try host.snapshotPNG(gameWindow,in:started.windows).write(to:URL(fileURLWithPath:path))
                     }
+                    // `--body-frames DIR` writes the presented framebuffer every 300 bodies,
+                    // or every N with `--body-frame-every N`, the same on every host.
+                    if let i = arguments.firstIndex(of:"--body-frames"),i+1 < arguments.count {
+                        let frameEvery = arguments.firstIndex(of:"--body-frame-every").flatMap { $0+1 < arguments.count ? Int(arguments[$0+1]) : nil } ?? 300
+                        if frameEvery > 0,gameplayBodies % frameEvery == 0 {
+                            try started.windows.presentedPNG(gameWindow).write(to:URL(fileURLWithPath:"\(arguments[i+1])/f\(String(format:"%06d",gameplayBodies)).png"))
+                        }
+                    }
                     if gameplayBodies % 300 == 0 {
                         var event: [String:Any] = ["event":"progress","gameplayBodies":gameplayBodies,"cycles":cycles,"iterations":committed,
                             "characterAI":loading.counts.characterAI,"objectInputs":loading.counts.objectInputs,"uptime":ProcessInfo.processInfo.systemUptime,
@@ -481,6 +490,8 @@ import NTSDCore
                     "lastSleeps":Array(loading?.sleeps.suffix(8) ?? []),"menuSleeps":Array(menu.messages.sleeps.suffix(8)),"objectInputs":loading?.counts.objectInputs ?? 0,"characterAI":loading?.counts.characterAI ?? 0,
             "replayFiles":loading?.savedReplays.map { "\($0.path) \($0.bytes.count)" } ?? [],"refusedReplays":loading?.refusedReplayOpens ?? [],
                     "uptime":ProcessInfo.processInfo.systemUptime,"path":words[1],"music":musicReport(),"sounds":soundReport()])
+            case "frame" where words.count == 2:
+                try started.windows.presentedPNG(gameWindow).write(to:URL(fileURLWithPath:words[1]))
             case "musicend": music?.finishTrack()
             case "answer" where words.count == 2 && ["yes","no","ok"].contains(words[1]): messageAnswers.append(words[1])
             case "close": menu.messages.close()
