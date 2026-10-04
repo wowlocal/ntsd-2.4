@@ -6,6 +6,8 @@ import Darwin
 import Glibc
 #elseif canImport(Musl)
 import Musl
+#elseif canImport(Android)
+import Android
 #endif
 import Dispatch
 import Foundation
@@ -43,6 +45,26 @@ private enum Sys {
     static func gethostbyaddr(_ p: UnsafeRawPointer,_ n: socklen_t,_ t: Int32) -> UnsafeMutablePointer<hostent>? { Glibc.gethostbyaddr(p,n,t) }
     static let stream = Int32(SOCK_STREAM.rawValue), tcp = Int32(IPPROTO_TCP), peekNow = Int32(MSG_PEEK) | Int32(MSG_DONTWAIT)
     static let up = Int32(IFF_UP), loopback = Int32(IFF_LOOPBACK)
+    static var hostError: Int32 { __h_errno_location().pointee }
+    #elseif canImport(Android)
+    // Bionic: a Linux kernel (MSG_NOSIGNAL, Linux errno numbers), its own libc.
+    static func socket(_ a: Int32,_ b: Int32,_ c: Int32) -> Int32 { Android.socket(a,b,c) }
+    static func bind(_ fd: Int32,_ a: UnsafePointer<sockaddr>,_ n: socklen_t) -> Int32 { Android.bind(fd,a,n) }
+    static func listen(_ fd: Int32,_ n: Int32) -> Int32 { Android.listen(fd,n) }
+    static func accept(_ fd: Int32) -> Int32 { Android.accept(fd,nil,nil) }
+    static func connect(_ fd: Int32,_ a: UnsafePointer<sockaddr>,_ n: socklen_t) -> Int32 { Android.connect(fd,a,n) }
+    // Bionic declares the buffer non-null: an empty send passes a valid address.
+    static func send(_ fd: Int32,_ p: UnsafeRawPointer?,_ n: Int) -> Int {
+        var zero: UInt8 = 0
+        return withUnsafePointer(to:&zero) { Android.send(fd,p ?? UnsafeRawPointer($0),n,MSG_NOSIGNAL) }
+    }
+    static func recv(_ fd: Int32,_ p: UnsafeMutableRawPointer?,_ n: Int,_ flags: Int32) -> Int { Android.recv(fd,p,n,flags) }
+    static func close(_ fd: Int32) -> Int32 { Android.close(fd) }
+    static func gethostname(_ p: UnsafeMutablePointer<CChar>,_ n: Int) -> Int32 { Android.gethostname(p,n) }
+    static func gethostbyaddr(_ p: UnsafeRawPointer,_ n: socklen_t,_ t: Int32) -> UnsafeMutablePointer<hostent>? { Android.gethostbyaddr(p,n,t) }
+    static let stream = SOCK_STREAM, tcp = Int32(IPPROTO_TCP), peekNow = MSG_PEEK | MSG_DONTWAIT
+    static let up = Int32(IFF_UP.rawValue), loopback = Int32(IFF_LOOPBACK.rawValue)
+    static var hostError: Int32 { __get_h_errno().pointee }
     #else
     static func socket(_ a: Int32,_ b: Int32,_ c: Int32) -> Int32 { Musl.socket(a,b,c) }
     static func bind(_ fd: Int32,_ a: UnsafePointer<sockaddr>,_ n: socklen_t) -> Int32 { Musl.bind(fd,a,n) }
@@ -56,8 +78,8 @@ private enum Sys {
     static func gethostbyaddr(_ p: UnsafeRawPointer,_ n: socklen_t,_ t: Int32) -> UnsafeMutablePointer<hostent>? { Musl.gethostbyaddr(p,n,t) }
     static let stream = SOCK_STREAM, tcp = Int32(IPPROTO_TCP), peekNow = MSG_PEEK | MSG_DONTWAIT
     static let up = IFF_UP, loopback = IFF_LOOPBACK
-    #endif
     static var hostError: Int32 { __h_errno_location().pointee }
+    #endif
     /// Linux errno values differ from BSD's; map the socket errors to the BSD
     /// numbers, so `10000 + errno` names the same WSAE code as on Darwin.
     static func bsd(_ error: Int32) -> Int32 {
