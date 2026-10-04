@@ -1,12 +1,18 @@
 import Foundation
 import XCTest
-@testable import NTSDMacPlatform
+#if canImport(Darwin)
+import Darwin
+#elseif canImport(Glibc)
+import Glibc
+#endif
 @testable import NTSDRuntime
 
-/// NETWORK_PLAY_PLAN.md N1: the Mac Winsock service on loopback, in the order
-/// the original's host notification and client attempt use it.
+/// NETWORK_PLAY_PLAN.md N1: the Winsock service on loopback, in the order
+/// the original's host notification and client attempt use it (Darwin and Linux).
 final class OriginalMacWinsockTests: XCTestCase {
     typealias W = OriginalMacWinsock
+    /// Winsock's AF_INET, SOCK_STREAM and IPPROTO_TCP, as the EXE passes them.
+    static let inet: Int32 = 2, stream: Int32 = 1, tcp: Int32 = 6
     private func spin(until condition: () -> Bool, seconds: Double = 5) {
         let end = Date().addingTimeInterval(seconds)
         while !condition() && Date() < end { RunLoop.main.run(until: Date().addingTimeInterval(0.01)) }
@@ -23,7 +29,7 @@ final class OriginalMacWinsockTests: XCTestCase {
 
     func testStartupNamesAndAddresses() {
         let w = W()
-        XCTAssertEqual(w.socket(family: AF_INET, type: SOCK_STREAM, protocol: IPPROTO_TCP), W.invalidSocket) // before WSAStartup
+        XCTAssertEqual(w.socket(family: Self.inet, type: Self.stream, protocol: Self.tcp), W.invalidSocket) // before WSAStartup
         let (result, data) = w.startup(0x101)
         XCTAssertEqual(result, 0); XCTAssertEqual(data.count, 400)
         XCTAssertEqual(Array(data[0..<4]), [1, 1, 2, 2])
@@ -51,12 +57,12 @@ final class OriginalMacWinsockTests: XCTestCase {
         let w = W(); _ = w.startup(0x101)
         var notes: [W.Notification] = []
         w.post = { notes.append($0) }
-        let listener = w.socket(family: AF_INET, type: SOCK_STREAM, protocol: IPPROTO_TCP)
+        let listener = w.socket(family: Self.inet, type: Self.stream, protocol: Self.tcp)
         XCTAssertNotEqual(listener, W.invalidSocket)
         XCTAssertEqual(w.bind(listener, address: 0, port: 0), 0); XCTAssertEqual(w.listen(listener, backlog: 1), 0)
         let port = try XCTUnwrap(w.boundPort(listener))
         XCTAssertEqual(w.asyncSelect(listener, window: 7, message: 0x401, events: 0x38), 0)
-        let client = w.socket(family: AF_INET, type: SOCK_STREAM, protocol: IPPROTO_TCP)
+        let client = w.socket(family: Self.inet, type: Self.stream, protocol: Self.tcp)
         XCTAssertEqual(w.connect(client, address: 0x0100007f, port: port), 0)
         spin { !notes.isEmpty }
         XCTAssertEqual(notes, [.init(window: 7, message: 0x401, socket: listener, lParam: 8)])
@@ -92,7 +98,7 @@ final class OriginalMacWinsockTests: XCTestCase {
     /// accepted after WSAAsyncSelect(s, hwnd, 0, 0); a refused connect fails.
     func testCancelBlockingAndRefusedConnect() throws {
         let w = W(); _ = w.startup(0x101)
-        let listener = w.socket(family: AF_INET, type: SOCK_STREAM, protocol: IPPROTO_TCP)
+        let listener = w.socket(family: Self.inet, type: Self.stream, protocol: Self.tcp)
         XCTAssertEqual(w.bind(listener, address: 0x0100007f, port: 0), 0); XCTAssertEqual(w.listen(listener, backlog: 1), 0)
         let port = try XCTUnwrap(w.boundPort(listener))
         XCTAssertEqual(w.asyncSelect(listener, window: 7, message: 0x401, events: 0x38), 0)
@@ -100,7 +106,7 @@ final class OriginalMacWinsockTests: XCTestCase {
         XCTAssertEqual(w.asyncSelect(listener, window: 7, message: 0, events: 0), 0)
         XCTAssertEqual(w.setNonBlocking(listener, false), 0)
         XCTAssertEqual(w.close(listener), 0)
-        let client = w.socket(family: AF_INET, type: SOCK_STREAM, protocol: IPPROTO_TCP)
+        let client = w.socket(family: Self.inet, type: Self.stream, protocol: Self.tcp)
         XCTAssertEqual(w.connect(client, address: 0x0100007f, port: port), W.socketError) // nothing listens now
         XCTAssertEqual(w.send(0x9999, [1]), W.socketError); XCTAssertEqual(w.lastError, 10038)
         XCTAssertEqual(w.cleanup(), 0); XCTAssertTrue(w.openHandles.isEmpty)
@@ -112,25 +118,27 @@ final class OriginalMacWinsockTests: XCTestCase {
         for notificationFirst in [true, false] {
             let w = W(); _ = w.startup(0x101)
             defer { _ = w.cleanup() }
-            let listener = w.socket(family: AF_INET, type: SOCK_STREAM, protocol: IPPROTO_TCP)
+            let listener = w.socket(family: Self.inet, type: Self.stream, protocol: Self.tcp)
             XCTAssertEqual(w.bind(listener, address: 0x0100007f, port: 0), 0)
             XCTAssertEqual(w.listen(listener, backlog: 1), 0)
             let port = try XCTUnwrap(w.boundPort(listener))
 
             // A task-owned loopback peer uses SO_LINGER to request an abortive
-            // close. This is a real macOS socket check, not Windows observation.
-            let peer = Darwin.socket(AF_INET, SOCK_STREAM, IPPROTO_TCP)
+            // close. This is a real host socket check, not Windows observation.
+            let peer = Self.rawSocket()
             XCTAssertGreaterThanOrEqual(peer, 0)
             guard peer >= 0 else { return }
             var peerClosed = false
-            defer { if !peerClosed { Darwin.close(peer) } }
+            defer { if !peerClosed { _ = Self.rawClose(peer) } }
             var address = sockaddr_in()
+            #if canImport(Darwin)
             address.sin_len = UInt8(MemoryLayout<sockaddr_in>.size)
+            #endif
             address.sin_family = sa_family_t(AF_INET)
             address.sin_port = port.bigEndian; address.sin_addr.s_addr = 0x0100007f
             let connected = withUnsafePointer(to: &address) {
                 $0.withMemoryRebound(to: sockaddr.self, capacity: 1) {
-                    Darwin.connect(peer, $0, socklen_t(MemoryLayout<sockaddr_in>.size))
+                    Self.rawConnect(peer, $0, socklen_t(MemoryLayout<sockaddr_in>.size))
                 }
             }
             XCTAssertEqual(connected, 0)
@@ -144,7 +152,7 @@ final class OriginalMacWinsockTests: XCTestCase {
             var abortive = linger(l_onoff: 1, l_linger: 0)
             XCTAssertEqual(setsockopt(peer, SOL_SOCKET, SO_LINGER, &abortive,
                                       socklen_t(MemoryLayout<linger>.size)), 0)
-            XCTAssertEqual(Darwin.close(peer), 0); peerClosed = true
+            XCTAssertEqual(Self.rawClose(peer), 0); peerClosed = true
 
             if notificationFirst {
                 spin { !notes.isEmpty }
@@ -173,7 +181,7 @@ final class OriginalMacWinsockTests: XCTestCase {
     func testCloseInsideAcceptNotificationAllowsImmediatePortReuse() throws {
         let w = W(); _ = w.startup(0x101)
         defer { w.post = nil; _ = w.cleanup() }
-        let listener = w.socket(family: AF_INET, type: SOCK_STREAM, protocol: IPPROTO_TCP)
+        let listener = w.socket(family: Self.inet, type: Self.stream, protocol: Self.tcp)
         XCTAssertEqual(w.bind(listener, address: 0x0100007f, port: 0), 0)
         XCTAssertEqual(w.listen(listener, backlog: 1), 0)
         let port = try XCTUnwrap(w.boundPort(listener))
@@ -185,13 +193,13 @@ final class OriginalMacWinsockTests: XCTestCase {
             XCTAssertNotEqual(accepted, W.invalidSocket)
             XCTAssertEqual(w.close(listener), 0)
             // No main-queue turn occurs between close and this bind/listen.
-            let next = w.socket(family: AF_INET, type: SOCK_STREAM, protocol: IPPROTO_TCP)
+            let next = w.socket(family: Self.inet, type: Self.stream, protocol: Self.tcp)
             XCTAssertEqual(w.bind(next, address: 0x0100007f, port: port), 0)
             XCTAssertEqual(w.listen(next, backlog: 1), 0)
             replacement = next
         }
         XCTAssertEqual(w.asyncSelect(listener, window: 7, message: 0x401, events: 8), 0)
-        let client = w.socket(family: AF_INET, type: SOCK_STREAM, protocol: IPPROTO_TCP)
+        let client = w.socket(family: Self.inet, type: Self.stream, protocol: Self.tcp)
         XCTAssertEqual(w.connect(client, address: 0x0100007f, port: port), 0)
         spin { replacement != nil }
         XCTAssertNotNil(replacement)
@@ -206,11 +214,11 @@ final class OriginalMacWinsockTests: XCTestCase {
     func testReplacingSelectionAndRearmingAfterAlreadyReadData() throws {
         let w = W(); _ = w.startup(0x101)
         defer { _ = w.cleanup() }
-        let listener = w.socket(family: AF_INET, type: SOCK_STREAM, protocol: IPPROTO_TCP)
+        let listener = w.socket(family: Self.inet, type: Self.stream, protocol: Self.tcp)
         XCTAssertEqual(w.bind(listener, address: 0x0100007f, port: 0), 0)
         XCTAssertEqual(w.listen(listener, backlog: 1), 0)
         let port = try XCTUnwrap(w.boundPort(listener))
-        let client = w.socket(family: AF_INET, type: SOCK_STREAM, protocol: IPPROTO_TCP)
+        let client = w.socket(family: Self.inet, type: Self.stream, protocol: Self.tcp)
         XCTAssertEqual(w.connect(client, address: 0x0100007f, port: port), 0)
         let server = w.accept(listener)
         XCTAssertNotEqual(server, W.invalidSocket)
@@ -248,7 +256,7 @@ final class OriginalMacWinsockTests: XCTestCase {
         w.post = { notes.append($0) }
         var port: UInt16 = 0
         for i in 0..<32 {
-            let listener = w.socket(family: AF_INET, type: SOCK_STREAM, protocol: IPPROTO_TCP)
+            let listener = w.socket(family: Self.inet, type: Self.stream, protocol: Self.tcp)
             XCTAssertEqual(w.bind(listener, address: 0x0100007f, port: port), 0)
             XCTAssertEqual(w.listen(listener, backlog: 1), 0)
             port = try XCTUnwrap(w.boundPort(listener))
@@ -281,4 +289,14 @@ final class OriginalMacWinsockTests: XCTestCase {
         XCTAssertEqual(w.cleanup(), 0)
         XCTAssertNil(w.hostAddresses(address: 0x0100007f)); XCTAssertEqual(w.lastError, 10093)
     }
+
+    #if canImport(Darwin)
+    static func rawSocket() -> Int32 { Darwin.socket(AF_INET, SOCK_STREAM, IPPROTO_TCP) }
+    static func rawConnect(_ fd: Int32, _ a: UnsafePointer<sockaddr>, _ n: socklen_t) -> Int32 { Darwin.connect(fd, a, n) }
+    static func rawClose(_ fd: Int32) -> Int32 { Darwin.close(fd) }
+    #else
+    static func rawSocket() -> Int32 { Glibc.socket(AF_INET, Int32(SOCK_STREAM.rawValue), Int32(IPPROTO_TCP)) }
+    static func rawConnect(_ fd: Int32, _ a: UnsafePointer<sockaddr>, _ n: socklen_t) -> Int32 { Glibc.connect(fd, a, n) }
+    static func rawClose(_ fd: Int32) -> Int32 { Glibc.close(fd) }
+    #endif
 }

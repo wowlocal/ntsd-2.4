@@ -196,22 +196,22 @@ user's approval to push. Until then, keep the other phases moving.
 | 2026-10-04 | **P7 groundwork: SDL build on Linux** | `tools/crossplatform/build_linux_deps.sh` builds SDL3 3.4.16 (X11, Wayland, PulseAudio, PipeWire, ALSA, offscreen, dummy) and static FreeType 2.13.3 for Linux in a `swift:6.4.0-noble` container from hash-checked tarballs. `NTSDSDL` cross-builds on this Mac with the generated glibc SDK against that SDL3 and runs in the container with SDL's offscreen video and dummy audio. **All scenarios: 9/10 like every other host, and all 15,960 frames identical to the Linux headless run.** | [evidence](../evidence/crossplatform-p7-linux-sdl-20261004.json), [results](../evidence/crossplatform-p7-linux-sdl-aarch64-20261004.jsonl) | 4bbf311 |
 | 2026-10-04 | **P7: text on Linux** | Non-Apple `NTSDSDL` rasterises TextOutA with a static FreeType: 13 px em, monochrome, baseline at row 13, the same mask contract as CoreText. Following the user's font decision (SYSTEM_FONT ships with Windows, not the game), it uses the standard Linux font whose widths best match the macOS stand-in: DejaVu Sans Condensed Bold within ±3 px, then Liberation, Noto, FreeSans, then fontconfig's sans-serif bold; plain DejaVu Sans is 15 % wider and clipped the selection screen. **All scenarios: state 9/10; text appears in exactly the same 9,211 of 15,909 frames as on AppKit, and the 6,698 text-free frames are identical.** macOS SDL unchanged (VS 1,832/1,832 frames equal AppKit). | [evidence](../evidence/crossplatform-p7-glyphs-20261004.json), [text frames](../evidence/crossplatform-p7-text-frames-20261004.jsonl), `compare_text_frames.py` | 3e3c712 |
 | 2026-10-04 | **P7: X11 window and real input** | `linux_x11_smoke.sh` runs `NTSDSDL` on Xvfb with SDL's x11 driver in real time with no script, driven by `xdotool`: the window opens at the client size and centre the game was told (794×550 at 243,237 on 1280×1024), and real mouse and keyboard input goes through START, mode and character selection to a Naruto/Sasuke District match (matchLaunched, gameplay, 400 bodies, clean exit). Presses must last like physical ones (150 ms): the game reads input once per iteration and missed xdotool's instant clicks; input during loading is lost, as expected. | [evidence](../evidence/crossplatform-p7-x11-input-20261004.json) | de3ad55 |
-| 2026-10-04 | **P7: music without AVFoundation** | Apple's ALAC reference decoder (Apache-2.0, 13 files vendored unchanged) behind a C interface, and a Swift CAF reader in the new `NTSDMusicDecoder`, decode the packaged tracks; `NTSDSDL` plays them on SDL audio streams through the shared `OriginalMacMusicOutput`. **Every track decodes to exactly the manifest's PCM (frames, bytes, SHA-256) on macOS and on Linux.** The first Linux run failed: the vendored code takes the byte order from Apple headers or x86 macros only, so aarch64 Linux skipped its byte swaps; the manifest now defines it for non-Apple targets. Silent decode failures are now reported. SDL with music: 9/10 and all frames unchanged on macOS and Linux. | `OriginalALACTrackTests` 2/2 macOS release and Linux; [evidence](../evidence/crossplatform-p7-music-20261004.json), [Linux before fix](../evidence/crossplatform-p7-music-linux-suite-before-fix-20261004.jsonl), [after](../evidence/crossplatform-p7-music-linux-suite-20261004.jsonl) | this commit |
+| 2026-10-04 | **P7: music without AVFoundation** | Apple's ALAC reference decoder (Apache-2.0, 13 files vendored unchanged) behind a C interface, and a Swift CAF reader in the new `NTSDMusicDecoder`, decode the packaged tracks; `NTSDSDL` plays them on SDL audio streams through the shared `OriginalMacMusicOutput`. **Every track decodes to exactly the manifest's PCM (frames, bytes, SHA-256) on macOS and on Linux.** The first Linux run failed: the vendored code takes the byte order from Apple headers or x86 macros only, so aarch64 Linux skipped its byte swaps; the manifest now defines it for non-Apple targets. Silent decode failures are now reported. SDL with music: 9/10 and all frames unchanged on macOS and Linux. | `OriginalALACTrackTests` 2/2 macOS release and Linux; [evidence](../evidence/crossplatform-p7-music-20261004.json), [Linux before fix](../evidence/crossplatform-p7-music-linux-suite-before-fix-20261004.jsonl), [after](../evidence/crossplatform-p7-music-linux-suite-20261004.jsonl) | 7c504a6 |
+| 2026-10-04 | **P7: ONLINE GAME on Linux** | The BSD-socket Winsock moved into `NTSDRuntime` (name kept) and runs on Darwin, glibc and musl; `NTSDSDL` uses it everywhere. Linux needed errno mapping to the BSD numbers behind WSAE codes, MSG_NOSIGNAL, Winsock-number argument checks, and a readiness fix: the game selects before `listen()`, Linux reports that socket as hung up, which first produced the game's own "Accpet() Error" box and then left Dispatch not watching (strace: the host never accepted); watching now starts once the socket listens or connects (Darwin unchanged). **The retained two-process ONLINE GAME probe passes between two Linux processes, two macOS SDL processes and two AppKit processes, all with the RNG hash of the retained 2026-10-02 run.** | Winsock tests now portable: macOS 17/17 network tests, Linux 8/8; app_e2e 9/10 = baseline; `pair_probe.py`; [evidence](../evidence/crossplatform-p7-sockets-20261004.json) | this commit |
 
 ## Next task
 
-P7: POSIX sockets for ONLINE GAME on Linux.
+P7: a Linux package.
 
-- Implement `OriginalRuntimeSockets` over POSIX (Glibc) with the same
-  contract as the Darwin `OriginalMacWinsock` (nonblocking TCP, WSAAsync-style
-  notifications posted to the game's queue, error mapping); share code with
-  the Darwin adapter where the APIs coincide, keeping the Mac app unchanged.
-- Drop the `--no-network` requirement on Linux once it works.
-- Gate: the existing two-process localhost network checks (`--network-loopback`)
-  pass between two Linux containers or two processes in one container, and
-  between Linux and the macOS app; the Mac network tests stay green.
-- Then a Linux package (archive with SDL3, the bundles and a launcher) and an
-  x86_64 glibc SDK.
+- `tools/crossplatform/package_linux.py`: cross-build `NTSDSDL` (release,
+  glibc aarch64), and assemble an archive with the executable, its resource
+  bundles, the packaged music, `libSDL3.so.0`, the Swift runtime libraries it
+  needs (or `--static-swift-stdlib`), a launcher that sets `LD_LIBRARY_PATH`,
+  and the licences (SDL3 zlib, FreeType FTL, ALAC Apache-2.0).
+- Gate: the archive unpacked in a clean `ubuntu:24.04` container (no Swift)
+  plus Xvfb runs the X11 smoke and one scripted scenario with equal state;
+  archive bytes and manifest recorded.
+- Then an x86_64 glibc SDK and the same package for x86_64.
 
 Following tasks:
 

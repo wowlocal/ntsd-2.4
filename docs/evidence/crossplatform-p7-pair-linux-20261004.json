@@ -1,0 +1,9 @@
+{
+  "result": "PASS",
+  "mode": "--linux-sdl",
+  "exitCodes": {
+    "host": 0,
+    "client": 0
+  },
+  "rngSHA256": "5352f941c619060669587370c1974685877d4899a6ad0d1b165f54ecd4aa89c7"
+}

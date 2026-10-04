@@ -1,8 +1,111 @@
+#if canImport(Darwin)
 import Darwin
+#elseif canImport(Glibc)
+import Glibc
+#elseif canImport(Musl)
+import Musl
+#endif
 import Dispatch
 import Foundation
 
-/// Winsock 1.1 for the original's network code over BSD sockets
+/// The host's BSD socket calls (the class's own Winsock methods share their names).
+private enum Sys {
+    #if canImport(Darwin)
+    static func socket(_ a: Int32,_ b: Int32,_ c: Int32) -> Int32 { Darwin.socket(a,b,c) }
+    static func bind(_ fd: Int32,_ a: UnsafePointer<sockaddr>,_ n: socklen_t) -> Int32 { Darwin.bind(fd,a,n) }
+    static func listen(_ fd: Int32,_ n: Int32) -> Int32 { Darwin.listen(fd,n) }
+    static func accept(_ fd: Int32) -> Int32 { Darwin.accept(fd,nil,nil) }
+    static func connect(_ fd: Int32,_ a: UnsafePointer<sockaddr>,_ n: socklen_t) -> Int32 { Darwin.connect(fd,a,n) }
+    static func send(_ fd: Int32,_ p: UnsafeRawPointer?,_ n: Int) -> Int { Darwin.send(fd,p,n,0) }
+    static func recv(_ fd: Int32,_ p: UnsafeMutableRawPointer?,_ n: Int,_ flags: Int32) -> Int { Darwin.recv(fd,p,n,flags) }
+    static func close(_ fd: Int32) -> Int32 { Darwin.close(fd) }
+    static func gethostname(_ p: UnsafeMutablePointer<CChar>,_ n: Int) -> Int32 { Darwin.gethostname(p,n) }
+    static func gethostbyaddr(_ p: UnsafeRawPointer,_ n: socklen_t,_ t: Int32) -> UnsafeMutablePointer<hostent>? { Darwin.gethostbyaddr(p,n,t) }
+    static var hostError: Int32 { h_errno }
+    static let stream = SOCK_STREAM, tcp = IPPROTO_TCP, peekNow = MSG_PEEK | MSG_DONTWAIT
+    static let up = IFF_UP, loopback = IFF_LOOPBACK
+    /// Darwin's errno values are BSD's, which Winsock's WSAE codes follow.
+    static func bsd(_ error: Int32) -> Int32 { error }
+    #else
+    #if canImport(Glibc)
+    static func socket(_ a: Int32,_ b: Int32,_ c: Int32) -> Int32 { Glibc.socket(a,b,c) }
+    static func bind(_ fd: Int32,_ a: UnsafePointer<sockaddr>,_ n: socklen_t) -> Int32 { Glibc.bind(fd,a,n) }
+    static func listen(_ fd: Int32,_ n: Int32) -> Int32 { Glibc.listen(fd,n) }
+    static func accept(_ fd: Int32) -> Int32 { Glibc.accept(fd,nil,nil) }
+    static func connect(_ fd: Int32,_ a: UnsafePointer<sockaddr>,_ n: socklen_t) -> Int32 { Glibc.connect(fd,a,n) }
+    // MSG_NOSIGNAL: send never raises SIGPIPE (Darwin uses SO_NOSIGPIPE).
+    static func send(_ fd: Int32,_ p: UnsafeRawPointer?,_ n: Int) -> Int { Glibc.send(fd,p,n,Int32(MSG_NOSIGNAL)) }
+    static func recv(_ fd: Int32,_ p: UnsafeMutableRawPointer?,_ n: Int,_ flags: Int32) -> Int { Glibc.recv(fd,p,n,flags) }
+    static func close(_ fd: Int32) -> Int32 { Glibc.close(fd) }
+    static func gethostname(_ p: UnsafeMutablePointer<CChar>,_ n: Int) -> Int32 { Glibc.gethostname(p,n) }
+    static func gethostbyaddr(_ p: UnsafeRawPointer,_ n: socklen_t,_ t: Int32) -> UnsafeMutablePointer<hostent>? { Glibc.gethostbyaddr(p,n,t) }
+    static let stream = Int32(SOCK_STREAM.rawValue), tcp = Int32(IPPROTO_TCP), peekNow = Int32(MSG_PEEK) | Int32(MSG_DONTWAIT)
+    static let up = Int32(IFF_UP), loopback = Int32(IFF_LOOPBACK)
+    #else
+    static func socket(_ a: Int32,_ b: Int32,_ c: Int32) -> Int32 { Musl.socket(a,b,c) }
+    static func bind(_ fd: Int32,_ a: UnsafePointer<sockaddr>,_ n: socklen_t) -> Int32 { Musl.bind(fd,a,n) }
+    static func listen(_ fd: Int32,_ n: Int32) -> Int32 { Musl.listen(fd,n) }
+    static func accept(_ fd: Int32) -> Int32 { Musl.accept(fd,nil,nil) }
+    static func connect(_ fd: Int32,_ a: UnsafePointer<sockaddr>,_ n: socklen_t) -> Int32 { Musl.connect(fd,a,n) }
+    static func send(_ fd: Int32,_ p: UnsafeRawPointer?,_ n: Int) -> Int { Musl.send(fd,p,n,MSG_NOSIGNAL) }
+    static func recv(_ fd: Int32,_ p: UnsafeMutableRawPointer?,_ n: Int,_ flags: Int32) -> Int { Musl.recv(fd,p,n,flags) }
+    static func close(_ fd: Int32) -> Int32 { Musl.close(fd) }
+    static func gethostname(_ p: UnsafeMutablePointer<CChar>,_ n: Int) -> Int32 { Musl.gethostname(p,n) }
+    static func gethostbyaddr(_ p: UnsafeRawPointer,_ n: socklen_t,_ t: Int32) -> UnsafeMutablePointer<hostent>? { Musl.gethostbyaddr(p,n,t) }
+    static let stream = SOCK_STREAM, tcp = Int32(IPPROTO_TCP), peekNow = MSG_PEEK | MSG_DONTWAIT
+    static let up = IFF_UP, loopback = IFF_LOOPBACK
+    #endif
+    static var hostError: Int32 { __h_errno_location().pointee }
+    /// Linux errno values differ from BSD's; map the socket errors to the BSD
+    /// numbers, so `10000 + errno` names the same WSAE code as on Darwin.
+    static func bsd(_ error: Int32) -> Int32 {
+        switch error {
+        case EINTR: 4
+        case EBADF: 9
+        case EACCES: 13
+        case EFAULT: 14
+        case EINVAL: 22
+        case EMFILE: 24
+        case EPIPE: 32
+        case EAGAIN: 35
+        case EINPROGRESS: 36
+        case EALREADY: 37
+        case ENOTSOCK: 38
+        case EDESTADDRREQ: 39
+        case EMSGSIZE: 40
+        case EPROTOTYPE: 41
+        case ENOPROTOOPT: 42
+        case EPROTONOSUPPORT: 43
+        case ESOCKTNOSUPPORT: 44
+        case EOPNOTSUPP: 45
+        case EPFNOSUPPORT: 46
+        case EAFNOSUPPORT: 47
+        case EADDRINUSE: 48
+        case EADDRNOTAVAIL: 49
+        case ENETDOWN: 50
+        case ENETUNREACH: 51
+        case ENETRESET: 52
+        case ECONNABORTED: 53
+        case ECONNRESET: 54
+        case ENOBUFS: 55
+        case EISCONN: 56
+        case ENOTCONN: 57
+        case ESHUTDOWN: 58
+        case ETOOMANYREFS: 59
+        case ETIMEDOUT: 60
+        case ECONNREFUSED: 61
+        case ELOOP: 62
+        case ENAMETOOLONG: 63
+        case EHOSTDOWN: 64
+        case EHOSTUNREACH: 65
+        default: error
+        }
+    }
+    #endif
+}
+
+/// Winsock 1.1 for the original's network code over BSD sockets (Darwin, and
+/// Linux with glibc or musl; the name stays from its Mac origin)
 /// (NETWORK_PLAY_PLAN.md N1). The operations follow what the EXE calls through
 /// its WSOCK32 stubs 43f38a..43f3fc; where Windows behaviour is not fixed by
 /// the EXE the answers below are declared:
@@ -14,7 +117,7 @@ import Foundation
 ///   FD_READ is re-armed by recv; FD_CLOSE is posted once when the peer closes;
 /// - recv returns what has arrived (0 on an orderly close, −1 on error);
 /// - bind may reuse a port in TIME_WAIT (SO_REUSEADDR, Windows' default
-///   behaviour); send never raises SIGPIPE (SO_NOSIGPIPE).
+///   behaviour); send never raises SIGPIPE (SO_NOSIGPIPE, MSG_NOSIGNAL on Linux).
 /// The game calls this service on the main thread. Notifications are delivered
 /// on the main queue through `post`; only readiness observation runs elsewhere.
 public final class OriginalMacWinsock {
@@ -30,6 +133,9 @@ public final class OriginalMacWinsock {
     private final class Socket {
         let fd: Int32
         var nonBlocking = false, listening = false, closeReported = false
+        /// Connected by connect or accept (readiness is watched only on
+        /// listening or connected sockets on Linux; see `select`).
+        var connected = false
         // A kernel error observed by either recv or the readiness probe must
         // remain visible to the other consumer until this socket is closed.
         var reset = false
@@ -116,7 +222,7 @@ public final class OriginalMacWinsock {
     /// gethostname into `capacity` bytes, NUL-terminated.
     public func hostName(capacity: Int) -> (result: Int32, name: [UInt8]) {
         var buffer = [CChar](repeating: 0, count: 256)
-        guard Darwin.gethostname(&buffer, buffer.count) == 0 else { lastError = 10022; return (Self.socketError, []) }
+        guard Sys.gethostname(&buffer, buffer.count) == 0 else { lastError = 10022; return (Self.socketError, []) }
         let bytes = buffer.prefix { $0 != 0 }.map { UInt8(bitPattern: $0) }
         guard bytes.count < capacity else { lastError = 10014; return (Self.socketError, []) } // WSAEFAULT
         return (0, bytes + [0])
@@ -131,7 +237,7 @@ public final class OriginalMacWinsock {
         if own.result == 0, Array(own.name.dropLast()) == Array(name.prefix { $0 != 0 }), let local = Self.interfaceAddresses(), !local.isEmpty {
             return local
         }
-        var hints = addrinfo(); hints.ai_family = AF_INET; hints.ai_socktype = SOCK_STREAM
+        var hints = addrinfo(); hints.ai_family = AF_INET; hints.ai_socktype = Sys.stream
         var list: UnsafeMutablePointer<addrinfo>?
         let text = String(decoding: name.prefix { $0 != 0 }, as: UTF8.self)
         guard getaddrinfo(text, nil, &hints, &list) == 0, let first = list else { lastError = 11001; return nil } // WSAHOST_NOT_FOUND
@@ -151,9 +257,9 @@ public final class OriginalMacWinsock {
     public func hostAddresses(address: UInt32) -> [UInt32]? {
         guard started else { lastError = 10093; return nil } // WSANOTINITIALISED
         var raw = address
-        let entry = withUnsafePointer(to: &raw) { Darwin.gethostbyaddr($0, 4, AF_INET) }
+        let entry = withUnsafePointer(to: &raw) { Sys.gethostbyaddr($0, 4, AF_INET) }
         guard let entry else {
-            switch h_errno {
+            switch Sys.hostError {
             case HOST_NOT_FOUND: lastError = 11001
             case TRY_AGAIN: lastError = 11002
             case NO_DATA: lastError = 11004
@@ -180,7 +286,7 @@ public final class OriginalMacWinsock {
         while let node = cursor {
             let flags = Int32(node.pointee.ifa_flags)
             if let address = node.pointee.ifa_addr, address.pointee.sa_family == sa_family_t(AF_INET),
-               flags & IFF_UP != 0, flags & IFF_LOOPBACK == 0 {
+               flags & Sys.up != 0, flags & Sys.loopback == 0 {
                 let word = address.withMemoryRebound(to: sockaddr_in.self, capacity: 1) { $0.pointee.sin_addr.s_addr }
                 if !words.contains(word) { words.append(word) }
             }
@@ -198,8 +304,9 @@ public final class OriginalMacWinsock {
 
     public func socket(family: Int32, type: Int32, protocol proto: Int32) -> UInt32 {
         guard started else { lastError = 10093; return Self.invalidSocket }
-        guard family == AF_INET, type == SOCK_STREAM, proto == 0 || proto == IPPROTO_TCP else { lastError = 10047; return Self.invalidSocket }
-        let fd = Darwin.socket(AF_INET, SOCK_STREAM, IPPROTO_TCP)
+        // Winsock's values (AF_INET 2, SOCK_STREAM 1, IPPROTO_TCP 6), as the EXE passes them.
+        guard family == 2, type == 1, proto == 0 || proto == 6 else { lastError = 10047; return Self.invalidSocket }
+        let fd = Sys.socket(AF_INET, Sys.stream, Sys.tcp)
         guard fd >= 0 else { return fail(Self.invalidSocket) }
         return adopt(fd)
     }
@@ -210,22 +317,23 @@ public final class OriginalMacWinsock {
         setsockopt(s.fd, SOL_SOCKET, SO_REUSEADDR, &reuse, socklen_t(MemoryLayout<Int32>.size))
         var a = Self.socketAddress(address, port)
         let r = withUnsafePointer(to: &a) { $0.withMemoryRebound(to: sockaddr.self, capacity: 1) {
-            Darwin.bind(s.fd, $0, socklen_t(MemoryLayout<sockaddr_in>.size)) } }
+            Sys.bind(s.fd, $0, socklen_t(MemoryLayout<sockaddr_in>.size)) } }
         return r == 0 ? 0 : fail(Self.socketError)
     }
     public func listen(_ handle: UInt32, backlog: Int32) -> Int32 {
         guard let s = lookup(handle) else { return Self.socketError }
-        guard Darwin.listen(s.fd, backlog) == 0 else { return fail(Self.socketError) }
-        s.listening = true; return 0
+        guard Sys.listen(s.fd, backlog) == 0 else { return fail(Self.socketError) }
+        s.listening = true; watchDeferred(handle, s); return 0
     }
     /// accept; the new socket keeps the listener's mode and selection.
     public func accept(_ handle: UInt32) -> UInt32 {
         guard let s = lookup(handle) else { return Self.invalidSocket }
-        let fd = Darwin.accept(s.fd, nil, nil)
+        let fd = Sys.accept(s.fd)
         let error = errno
         rearm(s)
         guard fd >= 0 else { return fail(Self.invalidSocket, error: error) }
         let accepted = adopt(fd), child = sockets[accepted]!
+        child.connected = true
         if s.nonBlocking { _ = setNonBlocking(child, true) }
         if let selection = s.selection { select(accepted, child, selection) }
         return accepted
@@ -236,13 +344,15 @@ public final class OriginalMacWinsock {
         guard let s = lookup(handle) else { return Self.socketError }
         var a = Self.socketAddress(address, port)
         let r = withUnsafePointer(to: &a) { $0.withMemoryRebound(to: sockaddr.self, capacity: 1) {
-            Darwin.connect(s.fd, $0, socklen_t(MemoryLayout<sockaddr_in>.size)) } }
-        return r == 0 ? 0 : fail(Self.socketError)
+            Sys.connect(s.fd, $0, socklen_t(MemoryLayout<sockaddr_in>.size)) } }
+        let error = errno
+        if r == 0 || error == EINPROGRESS { s.connected = true; watchDeferred(handle, s) }
+        return r == 0 ? 0 : fail(Self.socketError, error: error)
     }
     public func send(_ handle: UInt32, _ bytes: [UInt8]) -> Int32 {
         guard let s = lookup(handle) else { return Self.socketError }
         if bytes.isEmpty { return 0 }
-        let n = bytes.withUnsafeBytes { Darwin.send(s.fd, $0.baseAddress, bytes.count, 0) }
+        let n = bytes.withUnsafeBytes { Sys.send(s.fd, $0.baseAddress, bytes.count) }
         return n >= 0 ? Int32(n) : fail(Self.socketError)
     }
     /// sendto on a stream socket: Windows ignores the address of a connected
@@ -254,7 +364,7 @@ public final class OriginalMacWinsock {
         guard capacity > 0 else { return (0, []) }
         if s.reset { lastError = Self.connectionReset; return (Self.socketError, []) }
         var buffer = [UInt8](repeating: 0, count: capacity)
-        let n = buffer.withUnsafeMutableBytes { Darwin.recv(s.fd, $0.baseAddress, capacity, 0) }
+        let n = buffer.withUnsafeMutableBytes { Sys.recv(s.fd, $0.baseAddress, capacity, 0) }
         let error = errno
         if n < 0 && error == ECONNRESET { s.reset = true }
         rearm(s)
@@ -291,8 +401,10 @@ public final class OriginalMacWinsock {
     // MARK: - Internals
 
     private func adopt(_ fd: Int32) -> UInt32 {
+        #if canImport(Darwin)
         var on: Int32 = 1
         setsockopt(fd, SOL_SOCKET, SO_NOSIGPIPE, &on, socklen_t(MemoryLayout<Int32>.size))
+        #endif
         let handle = nextHandle; nextHandle &+= 4
         sockets[handle] = Socket(fd); return handle
     }
@@ -302,7 +414,7 @@ public final class OriginalMacWinsock {
         return s
     }
     private func fail<T>(_ value: T, error: Int32 = errno) -> T {
-        lastError = error == EWOULDBLOCK || error == EAGAIN || error == EINPROGRESS ? Self.wouldBlock : 10000 + error
+        lastError = error == EWOULDBLOCK || error == EAGAIN || error == EINPROGRESS ? Self.wouldBlock : 10000 + Sys.bsd(error)
         return value
     }
     private func setNonBlocking(_ s: Socket, _ on: Bool) -> Int32 {
@@ -314,6 +426,12 @@ public final class OriginalMacWinsock {
         s.selection = selection
         let watched = Event.accept.rawValue | Event.read.rawValue | Event.close.rawValue
         guard selection.events & watched != 0 else { return }
+        #if !canImport(Darwin)
+        // Linux epoll reports a socket that is neither listening nor connected
+        // as hung up, and Dispatch then stops watching it: start once listen,
+        // connect or accept has made the socket meaningful (`watchDeferred`).
+        guard s.listening || s.connected else { return }
+        #endif
         s.observation = ReadObservation(s.fd) { [weak self, weak s] observation in
             DispatchQueue.main.async { [weak self, weak s, weak observation] in
                 guard let self, let s, let observation,
@@ -322,18 +440,30 @@ public final class OriginalMacWinsock {
             }
         }
     }
+    /// A selection made before listen or connect starts watching now (Linux).
+    private func watchDeferred(_ handle: UInt32, _ s: Socket) {
+        #if !canImport(Darwin)
+        if let selection = s.selection, s.observation == nil { select(handle, s, selection) }
+        #endif
+    }
     private func readable(_ handle: UInt32, _ s: Socket, _ selection: Selection) {
         func deliver(_ event: Event) {
             pause(s)
             post?(.init(window: selection.window, message: selection.message, socket: handle, lParam: event.rawValue))
         }
         if s.listening {
+            #if !canImport(Darwin)
+            // Linux reports a socket selected before listen() as readable (an
+            // unconnected TCP socket polls as hung up); FD_ACCEPT needs a
+            // pending connection, which kqueue guarantees on Darwin.
+            guard Self.pendingConnection(s.fd) else { rearm(s); return }
+            #endif
             if selection.events & Event.accept.rawValue != 0 { deliver(.accept) } else { pause(s) }
             return
         }
         if s.reset { reportClose(handle, s, selection, error: Self.connectionReset); return }
         var byte: UInt8 = 0
-        let n = Darwin.recv(s.fd, &byte, 1, MSG_PEEK | MSG_DONTWAIT)
+        let n = Sys.recv(s.fd, &byte, 1, Sys.peekNow)
         if n == 0 {
             reportClose(handle, s, selection, error: 0)
         } else if n < 0 && errno == ECONNRESET {
@@ -351,6 +481,12 @@ public final class OriginalMacWinsock {
                         lParam: Event.close.rawValue | (UInt32(bitPattern: error) << 16)))
         }
     }
+    #if !canImport(Darwin)
+    private static func pendingConnection(_ fd: Int32) -> Bool {
+        var p = pollfd(fd: fd, events: Int16(POLLIN), revents: 0)
+        return poll(&p, 1, 0) > 0 && p.revents & Int16(POLLIN) != 0
+    }
+    #endif
     private func pause(_ s: Socket) { s.observation?.pause() }
     private func rearm(_ s: Socket) { s.observation?.rearm() }
     private func stopWatching(_ s: Socket) {
@@ -358,10 +494,13 @@ public final class OriginalMacWinsock {
         s.observation = nil // invalidate already-enqueued main-queue deliveries
         observation.cancelAndWait()
     }
-    private func release(_ s: Socket) { stopWatching(s); Darwin.close(s.fd) }
+    private func release(_ s: Socket) { stopWatching(s); _ = Sys.close(s.fd) }
     private static func socketAddress(_ address: UInt32, _ port: UInt16) -> sockaddr_in {
         var a = sockaddr_in()
-        a.sin_len = UInt8(MemoryLayout<sockaddr_in>.size); a.sin_family = sa_family_t(AF_INET)
+        #if canImport(Darwin)
+        a.sin_len = UInt8(MemoryLayout<sockaddr_in>.size)
+        #endif
+        a.sin_family = sa_family_t(AF_INET)
         a.sin_port = port.bigEndian; a.sin_addr.s_addr = address
         return a
     }

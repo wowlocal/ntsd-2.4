@@ -30,8 +30,8 @@ final class SDLAudioFeed: @unchecked Sendable {
 
 /// The SDL session host: SDL windows, keyboard, mouse, gamepads, audio and
 /// message boxes. Music plays the packaged ALAC tracks decoded without
-/// AVFoundation; on macOS, text uses the AppKit host's CoreText masks and sockets its
-/// Darwin Winsock, so frames and network behaviour match the AppKit app.
+/// AVFoundation; sockets are the shared BSD Winsock; on macOS, text uses the
+/// AppKit host's CoreText masks, so frames match the AppKit app.
 @MainActor final class SDLSessionHost: OriginalRuntimeSessionHost {
     let arguments: [String], windows: SDLWindowHost, musicDirectory: String
     weak var session: OriginalRuntimeSession?
@@ -66,13 +66,8 @@ final class SDLAudioFeed: @unchecked Sendable {
         })
     }
     func capsLock() -> Int32 { SDL_GetModState() & NTSD_SDL_KMOD_CAPS != 0 ? 1 : 0 }
-    func makeSockets() -> any OriginalRuntimeSockets {
-        #if canImport(NTSDMacPlatform)
-        return OriginalMacWinsock()
-        #else
-        preconditionFailure("SDL runs on this host need --no-network until P7's POSIX sockets")
-        #endif
-    }
+    /// BSD sockets on Darwin and Linux (`OriginalMacWinsock` in NTSDRuntime).
+    func makeSockets() -> any OriginalRuntimeSockets { OriginalMacWinsock() }
     var loadingDialogs: OriginalRuntimeLoadingDialogs {
         .init(chooseRecording:{ _ in nil },
               alert:{ [weak self] text in self?.box(NTSD_SDL_MESSAGEBOX_ERROR,"Error",text) },
