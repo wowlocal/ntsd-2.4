@@ -189,28 +189,35 @@ user's approval to push. Until then, keep the other phases moving.
 | 2026-10-04 | process note | **414a2aa does not build.** The docs-only P3 commit also took the step-11c `git mv` renames already staged in the index (RuntimeMenu/RuntimeLoading moved, not yet edited, so AppKit imports sat in NTSDRuntime). 706dc65 restores a building tree. Both were pushed; history was not rewritten. Skip 414a2aa when bisecting. | `git show --stat 414a2aa` | 2f5e707 |
 | 2026-10-04 | P5 step 12 | **The app session moved to `NTSDRuntime`:** `OriginalRuntimeSession(arguments:host:)` owns options/scripts, virtual clock, startup → menu → loading → gameplay iteration, captures, network trace, summary, music presentation and the boundary stop, copied line for line. `OriginalRuntimeSessionHost` supplies: startup host, caps lock, sockets, loading dialogs, user data, timing activity, joysticks and their sampling, music and sound output, backing scale, cursor, window attach, captures, full screen, hide, message box, open, stop alert, didStart, terminate, exit. NTSDApp's launcher is now a thin delegate plus `OriginalMacSessionHost` (AppKit input, GameController, AVFoundation output, NSAlert/NSWorkspace, menu). `OriginalMacSoundEffects.backed(by:)` moved to the runtime over `samples(_:)`. The trace digest hashes the concatenated bytes and masks (same SHA-256 as the incremental CryptoKit). | SoundEffects, Startup, Menu, Loading, LoadingAudio ×3 26/26 on a fresh test build; 697 listed; Xcode release; Linux `NTSDRuntime` (session object verified); **full app e2e 9/10 = baseline** | da2414f |
 | 2026-10-04 | **P6 groundwork: first whole game on Linux** | New portable executable `NTSDHeadless` runs `OriginalRuntimeSession` on a headless host: offscreen windows with macOS geometry policy, framebuffer PNGs, silent music on the virtual clock with manifest durations (equal to `AVAudioPlayer.duration` for all 8 tracks), no sockets, blank glyph masks as a declared stand-in. The run loop must drain the main queue on the main thread; `dispatchMain()` failed MainActor isolation. **The app_e2e VS scenario (1,826 bodies, Summary, replay) matches the frozen AppKit reference on every state key, on macOS and in a Linux container (static aarch64, cross-compiled); all 7 captured frames are byte-identical between Linux and macOS.** | `tools/crossplatform/compare_headless.py`: exitCode, boundary, milestones 6, progress 6, overlayFiles equal on both; frame SHA-256 equal; Xcode release build with both executables; 697 listed. [evidence](../evidence/crossplatform-headless-vs-20261004.json) | 5dd1933 |
-| 2026-10-04 | **All app_e2e scenarios on Linux** | `tools/crossplatform/run_headless_scenarios.py` runs every app_e2e scenario with app_e2e's own command line (plus `--no-network`) through the cross-built static `NTSDHeadless` in a Linux container, and compares each with its frozen reference. **9/10 equal:** vs, mission, demo, war, tournament, altenter, tournament-win, team-tournament, joystick. playback differs exactly as the AppKit app does on main (the original recording rejected at iteration 251), so the Linux build reproduces the Mac app's behaviour in all ten. | per-scenario compare outputs; [results](../evidence/crossplatform-headless-scenarios-linux-20261004.jsonl); 39–154 s per scenario | this commit |
+| 2026-10-04 | **All app_e2e scenarios on Linux** | `tools/crossplatform/run_headless_scenarios.py` runs every app_e2e scenario with app_e2e's own command line (plus `--no-network`) through the cross-built static `NTSDHeadless` in a Linux container, and compares each with its frozen reference. **9/10 equal:** vs, mission, demo, war, tournament, altenter, tournament-win, team-tournament, joystick. playback differs exactly as the AppKit app does on main (the original recording rejected at iteration 251), so the Linux build reproduces the Mac app's behaviour in all ten. | per-scenario compare outputs; [results](../evidence/crossplatform-headless-scenarios-linux-20261004.jsonl); 39–154 s per scenario | f7de972 |
+| 2026-10-04 | **x86_64 Linux; Swift 6.4.0 Linux miscompile fixed in Core** | The x86_64 static `NTSDHeadless` crashed (SIGSEGV) in every scenario right after startup, under Rosetta and identically under QEMU 10 user mode. QEMU's gdb stub put it in `OriginalRetainedHistory.Node.deinit`: the open-source Swift 6.4.0 toolchain for Linux never stores the node into the stack slot it passes to the unspecialised generic `isKnownUniquelyReferenced(&node)`. aarch64 Linux has the same code and survived only by chance; Xcode's Swift 6.4 for macOS is correct, so the AppKit app was never affected. A 20-line reproducer crashes or silently truncates shared tails on both Linux arches. Fix: the tail walk moves to a private non-generic link class, called from the node's deinit, so release order and behaviour are unchanged; the check is now specialised to the loaded reference. Independent read-only review: equivalent; its requested unique-then-shared test was added. **x86_64 and aarch64 Linux both reproduce 9/10 app_e2e scenarios exactly (playback as on main), and all 63 frames are identical across both arches and the pre-fix aarch64 run.** The earlier aarch64 results stay as recorded but came from a binary with this undefined behaviour. | release tests: OriginalRetainedHistoryTests 5/5, 699 listed; Xcode release; **AppKit e2e 9/10 = baseline**; [evidence](../evidence/crossplatform-swift640-linux-uniqueness-20261004.json), [reproducer](../evidence/crossplatform-swift640-linux-uniqueness-repro/), [x86_64](../evidence/crossplatform-headless-scenarios-linux-x86_64-20261004.jsonl), [aarch64](../evidence/crossplatform-headless-scenarios-linux-aarch64-20261004b.jsonl) | this commit |
 
 ## Next task
 
-Run the other app_e2e scenarios headless on Linux (mission, war, demo,
-tournament, tournament-win, team-tournament, joystick) and compare each with
-its frozen reference via `compare_headless.py`.
+P6: the SDL3 backend on macOS.
 
-- Scenarios that need sockets or host full screen (vs quit/online checks,
-  altenter's popup is fine) are noted, not forced.
-- Then x86_64 (a second static SDK triple, run under Rosetta as a harness).
-- Open decisions for the user:
-  - the glyph rasteriser for non-Apple hosts (fonts);
-  - the OrbStack memory for the 10 heavy Lib* suites;
-  - SDL3 vs native hosts for interactive play.
+- Add `NTSDSDLPlatform` (a C module over SDL3 3.4.16 from Homebrew for now; how
+  SDL ships is P7's question) and an `NTSDSDL` executable on
+  `OriginalRuntimeSession`.
+- Window plus a streaming texture for the framebuffer; keyboard and joystick
+  mapped as the AppKit host maps them; an SDL audio stream fed by
+  `OriginalMacSoundEffects.render`; music by manifest duration until P7
+  decodes it.
+- Text: on macOS reuse the CoreText glyph masks, so framebuffers can be
+  compared exactly. Non-Apple hosts follow the user's 2026-10-01 font decision
+  (the original's font, else the platform's standard system font, recorded as
+  a temporary deviation).
+- Gate: the same scripted runs through the AppKit app and the SDL backend
+  give equal state (`compare_headless.py`) and equal framebuffers; the AppKit
+  app and the headless Linux runs do not regress.
 
 Following tasks:
 
-- P3 x86_64: repeat on `x86_64` with a second generated SDK. Rosetta is a
-  test harness; label it so.
-- P5: the shared runtime extraction on macOS can start in parallel with long
-  Linux runs.
+- P3 x86_64 tests: the headless game passes on x86_64; the portable XCTest
+  suites there need an x86_64 glibc SDK. Rosetta is a test harness; label it
+  so.
+- Report the Swift 6.4.0 Linux miscompile upstream with the reproducer; that
+  publishes it, so ask the user first.
 - P0-W, continued (license accepted 2026-10-03). `xwin` 0.10.0 splats are on
   X5: MSVC 14.44.17.14 + SDK 10.0.26100 (`winsysroot`) and MSVC 14.29 + SDK
   10.0.22621 (`winsysroot-vs16`).

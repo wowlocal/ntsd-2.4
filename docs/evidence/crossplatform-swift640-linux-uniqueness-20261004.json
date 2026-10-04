@@ -1,0 +1,63 @@
+{
+  "study": "docs/research/CROSS_PLATFORM.md",
+  "date": "2026-10-04",
+  "subject": "Swift 6.4.0-RELEASE (open-source toolchain, Linux static musl SDK) miscompiles an inout uniqueness check in a generic class's tail walk; NTSDCore OriginalRetainedHistory fixed without changing behaviour",
+  "symptom": {
+    "x86_64": "every NTSDHeadless scenario exited 139 (SIGSEGV) right after the 'started' event (docker --platform linux/amd64 under Rosetta); reproduced identically under QEMU 10.0.13 user mode (debian:trixie), so not a Rosetta artefact (QEMU 8.2.2 from ubuntu:24.04 crashes internally even without arguments and was not used)",
+    "backtrace": "qemu-x86_64 -g + gdb-multiarch: swift_isUniquelyReferenced_nonNull_native (rdi=0, mov 0x8(%rdi)) <- isKnownUniquelyReferenced<T> (ManagedBuffer.swift:708) <- OriginalRetainedHistory.Node.deinit (OriginalRetainedHistory.swift:15) <- OriginalApplicationIterationDelivery destroy <- OriginalApplicationPreparedStartupPlatform deinit <- OriginalApplicationHostSession.step"
+  },
+  "codegen": {
+    "linux-x86_64 (swift-6.4.0-RELEASE, -O)": "lea -0x38(%rbp),%r15; mov %r15,%rdi; call $ss25isKnownUniquelyReferencedySbxzRlzClF -- the node (r14) is never stored to -0x38(%rbp)",
+    "linux-aarch64 (swift-6.4.0-RELEASE, -O)": "add x0, sp, #0x8; bl $ss25isKnownUniquelyReferencedySbxzRlzClF -- the node (x21) is never stored to [sp,#8]",
+    "macOS arm64 (Xcode Swift 6.4, swiftlang-6.4.0.34.1) and open-source 6.4.0 targeting macOS": "str x22, [sp, #0x8] before the call and ldr x0, [sp, #0x8] after: correct; the shipping AppKit app is unaffected",
+    "Optional-overload rewrite on Linux": "also no store, and the call is hoisted out of the loop (checked once)",
+    "mechanism": "inference: the optimizer treats the unspecialised generic isKnownUniquelyReferenced call as not reading the inout slot (the Linux SDK ships only a binary Swift.swiftmodule, so the attribute was not read directly)"
+  },
+  "reproducer": {
+    "path": "docs/evidence/crossplatform-swift640-linux-uniqueness-repro/",
+    "variants": {
+      "original": "the old Core deinit",
+      "fixed": "Optional-overload rewrite",
+      "linked": "the shipped shape: non-generic link with releaseTail() called from the generic node's deinit"
+    },
+    "results": {
+      "linux-x86_64": {
+        "original": "exit 139",
+        "fixed": "exit 0 but silently truncates shared tails (older kept 1, expected 5; unique-then-shared 1, expected 3)",
+        "linked": "exit 0, all expected, 3/3 runs"
+      },
+      "linux-aarch64": {
+        "original": "truncates a shared tail (1, expected 5) then exit 139 (an earlier build exited 135, SIGBUS)",
+        "fixed": "exit 139",
+        "linked": "exit 0, all expected, 3/3 runs"
+      },
+      "macOS (Xcode)": {
+        "original": "correct",
+        "fixed": "correct",
+        "linked": "correct"
+      }
+    },
+    "note": "results of the miscompiled variants vary between builds/runs (undefined behaviour); silent truncation means the miscompile could corrupt another copy's history, not only crash"
+  },
+  "fix": {
+    "file": "native/Sources/NTSDCore/OriginalRetainedHistory.swift",
+    "change": "next and the iterative tail walk move to a private non-generic class OriginalRetainedHistoryLink (final releaseTail()); the generic Node subclasses it and calls releaseTail() from its deinit, so each node's tail is still released before its own element; elements downcasts links with unsafeDowncast (every link is a Node of the same Element)",
+    "codegen after": "releaseTail calls swift_isUniquelyReferenced_nonNull_native on the loaded reference inside the loop (x86_64 and aarch64 Linux); no generic isKnownUniquelyReferenced call remains in the Node deinit",
+    "review": "independent read-only reviewer: semantic equivalence OK (walk, stop point, node/element release order, count, elements, value semantics), unsafeDowncast/access OK, no other occurrences; it asked for a unique-then-shared test, added as testDroppingANewerCopyReleasesOnlyItsOwnNodes"
+  },
+  "gates": {
+    "macOS": "release test build ok; OriginalRetainedHistoryTests 5/5; 699 tests listed; Xcode release build; app_e2e --build --scenario all 9/10 = baseline (playback pre-existing on main)",
+    "linux-x86_64 headless (Rosetta harness)": "9/10 equal to the frozen AppKit references; playback differs as on main (alert at iteration 251)",
+    "linux-aarch64 headless": "9/10 equal to the frozen AppKit references; playback differs as on main",
+    "frames": "all 63 captured frames byte-identical between x86_64 and aarch64 Linux runs with the fix, and identical to the earlier aarch64 run without it",
+    "results": [
+      "crossplatform-headless-scenarios-linux-x86_64-20261004.jsonl",
+      "crossplatform-headless-scenarios-linux-aarch64-20261004b.jsonl"
+    ]
+  },
+  "consequence": "the earlier aarch64 headless results (crossplatform-headless-vs-20261004.json, crossplatform-headless-scenarios-linux-20261004.jsonl) came from a binary with this undefined behaviour; they are kept unchanged and superseded by the reruns with the fix",
+  "open": [
+    "the Linux XCTest runs (glibc aarch64) of the old code were not rerun in release mode to show the test failing there",
+    "reporting the compiler bug upstream needs the user's approval (publication)"
+  ]
+}

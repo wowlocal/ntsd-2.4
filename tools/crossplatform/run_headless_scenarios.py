@@ -2,13 +2,15 @@
 """Run app_e2e scenarios through NTSDHeadless and compare each with its frozen
 reference (tools/crossplatform/compare_headless.py).
 
-Usage: run_headless_scenarios.py OUT_DIR (--linux BUILD_DIR | --local BINARY) [SCENARIO ...]
+Usage: run_headless_scenarios.py OUT_DIR (--linux BUILD_DIR | --linux-amd64 BUILD_DIR | --local BINARY) [SCENARIO ...]
 
 The command line is app_e2e's own (`run`): --original --mute-music
 --mute-sounds --overlay --virtual-clock 123456789 8 --script-clock gameplay
 --body-captures, the scenario's extra arguments and script, TZ=Etc/GMT-1, plus
 --no-network. `--linux` runs the cross-built static binary in swift:6.4.0-noble
-with the build and music directories read-only and OUT_DIR mounted at /out.
+with the build and music directories read-only and OUT_DIR mounted at /out;
+`--linux-amd64` does the same for an x86_64 build on linux/amd64 (Rosetta on
+Apple silicon: a test harness, not an x86 host observation).
 """
 import importlib.util, json, shutil, subprocess, sys, time
 from pathlib import Path
@@ -22,6 +24,8 @@ COMPARE = ROOT / "tools/crossplatform/compare_headless.py"
 
 def main():
     out = Path(sys.argv[1]).resolve(); mode, target = sys.argv[2], sys.argv[3]
+    platform = ["--platform", "linux/amd64"] if mode == "--linux-amd64" else []
+    if mode == "--linux-amd64": mode = "--linux"
     names = sys.argv[4:] or list(app_e2e.SCENARIOS)
     results = []
     for name in names:
@@ -36,7 +40,7 @@ def main():
                 "--virtual-clock", "123456789", "8", "--script-clock", "gameplay", "--body-captures", str(inner / "captures"),
                 *extra, "--script", setup["script"](inner / "captures")]
         if mode == "--linux":
-            command = ["docker", "run", "--rm", "-e", "TZ=Etc/GMT-1", "-v", f"{target}:/app:ro", "-v", f"{MUSIC}:/music:ro",
+            command = ["docker", "run", "--rm", *platform, "-e", "TZ=Etc/GMT-1", "-v", f"{target}:/app:ro", "-v", f"{MUSIC}:/music:ro",
                        "-v", f"{out}:/out", "swift:6.4.0-noble", "/app/NTSDHeadless", "--music-dir", "/music", *args]
         else:
             command = [target, "--music-dir", str(MUSIC), *args]
