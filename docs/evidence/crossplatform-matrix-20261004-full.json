@@ -1,0 +1,203 @@
+{
+  "date": "2026-10-04T19:46:22",
+  "commit": "e752f9c30d4d46326f0a5f332eaaef32e600743b",
+  "dirty": false,
+  "hosts": {
+    "appkit": {
+      "group": "coretext",
+      "equal": [
+        "vs",
+        "mission",
+        "demo",
+        "war",
+        "tournament",
+        "altenter",
+        "tournament-win",
+        "team-tournament",
+        "joystick"
+      ],
+      "differs": {
+        "playback": [
+          "milestones",
+          "progress"
+        ]
+      }
+    },
+    "macos-sdl": {
+      "group": "coretext",
+      "equal": [
+        "vs",
+        "mission",
+        "demo",
+        "war",
+        "tournament",
+        "altenter",
+        "tournament-win",
+        "team-tournament",
+        "joystick"
+      ],
+      "differs": {
+        "playback": [
+          "milestones",
+          "progress"
+        ]
+      }
+    },
+    "ios": {
+      "group": "coretext",
+      "equal": [
+        "vs",
+        "mission",
+        "demo",
+        "war",
+        "tournament",
+        "altenter",
+        "tournament-win",
+        "team-tournament",
+        "joystick"
+      ],
+      "differs": {
+        "playback": [
+          "milestones",
+          "progress"
+        ]
+      }
+    },
+    "linux-headless": {
+      "group": "none",
+      "equal": [
+        "vs",
+        "mission",
+        "demo",
+        "war",
+        "tournament",
+        "altenter",
+        "tournament-win",
+        "team-tournament",
+        "joystick"
+      ],
+      "differs": {
+        "playback": [
+          "milestones",
+          "progress"
+        ]
+      }
+    },
+    "linux-x86_64": {
+      "group": "none",
+      "equal": [
+        "vs",
+        "mission",
+        "demo",
+        "war",
+        "tournament",
+        "altenter",
+        "tournament-win",
+        "team-tournament",
+        "joystick"
+      ],
+      "differs": {
+        "playback": [
+          "milestones",
+          "progress"
+        ]
+      }
+    },
+    "windows": {
+      "group": "none",
+      "equal": [
+        "vs",
+        "mission",
+        "demo",
+        "war",
+        "tournament",
+        "altenter",
+        "tournament-win",
+        "team-tournament",
+        "joystick"
+      ],
+      "differs": {
+        "playback": [
+          "milestones",
+          "progress"
+        ]
+      }
+    },
+    "linux-sdl": {
+      "group": "freetype",
+      "equal": [
+        "vs",
+        "mission",
+        "demo",
+        "war",
+        "tournament",
+        "altenter",
+        "tournament-win",
+        "team-tournament",
+        "joystick"
+      ],
+      "differs": {
+        "playback": [
+          "milestones",
+          "progress"
+        ]
+      }
+    },
+    "windows-sdl": {
+      "group": "gdi",
+      "equal": [
+        "vs",
+        "mission",
+        "demo",
+        "war",
+        "tournament",
+        "altenter",
+        "tournament-win",
+        "team-tournament",
+        "joystick"
+      ],
+      "differs": {
+        "playback": [
+          "milestones",
+          "progress"
+        ]
+      }
+    }
+  },
+  "frames": {
+    "appkit==macos-sdl": {
+      "frames": 15960,
+      "mismatched": 0,
+      "result": "identical"
+    },
+    "appkit==ios": {
+      "frames": 15960,
+      "mismatched": 0,
+      "result": "identical"
+    },
+    "linux-headless==linux-x86_64": {
+      "frames": 15960,
+      "mismatched": 0,
+      "result": "identical"
+    },
+    "linux-headless==windows": {
+      "frames": 15960,
+      "mismatched": 0,
+      "result": "identical"
+    },
+    "text:appkit~linux-sdl": {
+      "frames": 15909,
+      "textless": 6698,
+      "text": 9211,
+      "disagree": 0,
+      "result": "agree"
+    },
+    "text:appkit~windows-sdl": {
+      "frames": 15909,
+      "textless": 6698,
+      "text": 9211,
+      "disagree": 0,
+      "result": "agree"
+    }
+  }
+}
