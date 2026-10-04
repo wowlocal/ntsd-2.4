@@ -1,7 +1,7 @@
 import Foundation
 import NTSDRuntime
-#if canImport(CFreeType)
-import CFreeType
+#if canImport(NTSDFreeTypeText)
+import NTSDFreeTypeText
 #endif
 #if os(Windows)
 import WinSDK
@@ -54,47 +54,6 @@ enum SDLGlyphs {
         }
         return nil
     }
-    #if canImport(CFreeType)
-    /// FreeType face kept for the process (TextOutA runs on the main actor).
-    final class Face {
-        private var library: FT_Library?, face: FT_Face?
-        let path: String
-        init?(path: String) {
-            self.path = path
-            guard FT_Init_FreeType(&library) == 0 else { return nil }
-            guard FT_New_Face(library,path,0,&face) == 0,FT_Set_Pixel_Sizes(face,0,13) == 0 else { FT_Done_FreeType(library); return nil }
-        }
-        func mask(_ bytes: [UInt8]) -> TextMask {
-            guard let face else { return blank(bytes) }
-            let cell = OriginalMacDisplayBackend.textCell,ascent = OriginalMacDisplayBackend.textAscent,margin = 4
-            struct Glyph { let x: Int, top: Int, left: Int, rows: Int, width: Int, pitch: Int, bits: [UInt8] }
-            var glyphs: [Glyph] = [],pen = 0,previous: FT_UInt = 0
-            for scalar in String(decoding:bytes,as:UTF8.self).unicodeScalars {
-                let index = FT_Get_Char_Index(face,FT_ULong(scalar.value))
-                if previous != 0,index != 0,ntsd_ft_has_kerning(face) != 0 {
-                    var kerning = FT_Vector()
-                    if FT_Get_Kerning(face,previous,index,FT_UInt(FT_KERNING_DEFAULT.rawValue),&kerning) == 0 { pen += Int(kerning.x) }
-                }
-                guard FT_Load_Glyph(face,index,NTSD_FT_LOAD_MONO) == 0,let slot = face.pointee.glyph else { continue }
-                let bitmap = slot.pointee.bitmap,rows = Int(bitmap.rows),width = Int(bitmap.width),pitch = Int(bitmap.pitch)
-                let bits = rows > 0 && pitch > 0 && bitmap.buffer != nil ? Array(UnsafeBufferPointer(start:bitmap.buffer,count:rows*pitch)) : []
-                glyphs.append(Glyph(x:pen,top:Int(slot.pointee.bitmap_top),left:Int(slot.pointee.bitmap_left),rows:rows,width:width,pitch:pitch,bits:bits))
-                pen += Int(slot.pointee.advance.x); previous = index
-            }
-            // Pen positions are 26.6 fixed point; the extent rounds like CoreText's width.
-            let advance = max(0,(pen+32) >> 6),width = advance+2*margin,height = cell+2*margin
-            var out = [UInt8](repeating:0,count:width*height)
-            for g in glyphs where !g.bits.isEmpty {
-                let originX = margin+((g.x+32) >> 6)+g.left,originY = margin+ascent-g.top
-                for row in 0..<g.rows { for column in 0..<g.width where g.bits[row*g.pitch+column/8] & (0x80 >> UInt8(column%8)) != 0 {
-                    let x = originX+column,y = originY+row
-                    if x >= 0,x < width,y >= 0,y < height { out[y*width+x] = 1 }
-                } }
-            }
-            return .init(advance:advance,originX:margin,originY:margin,width:width,height:height,bits:out)
-        }
-    }
-    #endif
     #if os(Windows)
     /// Windows draws the original's own SYSTEM_FONT through GDI (user decision
     /// 2026-10-01: the original's font first): TextOutA of the game's bytes
@@ -137,8 +96,8 @@ enum SDLGlyphs {
         #if os(Windows)
         if let gdi = GDIText() { return ({ gdi.mask($0) },"GDI SYSTEM_FONT") }
         #endif
-        #if canImport(CFreeType)
-        if let path = fontPath(),let face = Face(path:path) { return ({ face.mask($0) },path) }
+        #if canImport(NTSDFreeTypeText)
+        if let path = fontPath(),let face = OriginalFreeTypeFace(path:path) { return ({ face.mask($0) },path) }
         #endif
         return (blank,nil)
     }

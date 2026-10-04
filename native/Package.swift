@@ -30,13 +30,12 @@ let freetypePrefix = portable ? Context.environment["NTSD_FREETYPE_PREFIX"] : ni
 let sdlTargets: [Target] = sdl ? [
     .systemLibrary(name: "CSDL3", path: "Sources/CSDL3"),
     .executableTarget(name: "NTSDSDL", dependencies: ["NTSDCore", "NTSDRuntime", "NTSDMusicDecoder", "CSDL3"] + (portable ? [] : ["NTSDMacPlatform"])
-                          + (freetypePrefix == nil ? [] : ["CFreeType"]),
+                          + (freetypePrefix == nil ? [] : ["NTSDFreeTypeText"]),
                       swiftSettings: [.unsafeFlags(["-Xcc", "-I\(sdlPrefix)/include"]
                                                    + (freetypePrefix.map { ["-Xcc", "-I\($0)/include/freetype2"] } ?? []))],
                       linkerSettings: [.unsafeFlags(["-L\(sdlPrefix)/lib"] + (freetypePrefix.map { ["-L\($0)/lib"] } ?? [])),
                                        // lld-link (Windows) has no rpath; SDL3.dll sits beside the exe there.
-                                       .unsafeFlags(["-Xlinker", "-rpath", "-Xlinker", "\(sdlPrefix)/lib"], .when(platforms: [.macOS, .linux]))])]
-    + (freetypePrefix == nil ? [] : [.systemLibrary(name: "CFreeType", path: "Sources/CFreeType")]) : []
+                                       .unsafeFlags(["-Xlinker", "-rpath", "-Xlinker", "\(sdlPrefix)/lib"], .when(platforms: [.macOS, .linux]))])] : []
 
 // NTSD_IOS=1 (with NTSD_PORTABLE=1) adds the iPad host (P8), built for an
 // iOS triple and wrapped into an app by tools/crossplatform/ios_app.py.
@@ -53,7 +52,16 @@ let android = Context.environment["NTSD_ANDROID"] == "1"
 let androidProducts: [Product] = android ? [.library(name: "NTSDAndroid", type: .dynamic, targets: ["NTSDAndroid"])] : []
 let androidTargets: [Target] = android ? [
     .target(name: "CAndroidNative", linkerSettings: [.linkedLibrary("android"), .linkedLibrary("log")]),
-    .target(name: "NTSDAndroid", dependencies: ["NTSDCore", "NTSDRuntime", "CAndroidNative"])] : []
+    .target(name: "NTSDAndroid", dependencies: ["NTSDCore", "NTSDRuntime", "CAndroidNative"] + (freetypePrefix == nil ? [] : ["NTSDFreeTypeText"]),
+            swiftSettings: [.unsafeFlags(freetypePrefix.map { ["-Xcc", "-I\($0)/include/freetype2"] } ?? [])])] : []
+
+// FreeType glyph masks for the SDL host off Apple platforms and the Android
+// host, from the static FreeType at NTSD_FREETYPE_PREFIX.
+let freetypeTargets: [Target] = (sdl || android) && freetypePrefix != nil ? [
+    .systemLibrary(name: "CFreeType", path: "Sources/CFreeType"),
+    .target(name: "NTSDFreeTypeText", dependencies: ["NTSDRuntime", "CFreeType"],
+            swiftSettings: [.unsafeFlags(["-Xcc", "-I\(freetypePrefix!)/include/freetype2"])],
+            linkerSettings: [.unsafeFlags(["-L\(freetypePrefix!)/lib"])])] : []
 
 let package = Package(
     name: "NTSDNative",
@@ -69,7 +77,7 @@ let package = Package(
                .executable(name: "NTSDBGCheck", targets: ["NTSDBGCheck"]),
                .executable(name: "NTSDStageCheck", targets: ["NTSDStageCheck"]),
                .executable(name: "NTSDHeadless", targets: ["NTSDHeadless"])],
-    targets: macTargets + sdlTargets + iosTargets + androidTargets + [
+    targets: macTargets + sdlTargets + iosTargets + androidTargets + freetypeTargets + [
         .target(name: "NTSDReplayCodec", exclude: ["README.md", "upstream.json"],
                 publicHeadersPath: "include", cSettings: [.unsafeFlags(["-Wno-deprecated-non-prototype"])]),
         .target(name: "NTSDCore", dependencies: ["NTSDReplayCodec"], resources: [.copy("Resources/OriginalStartup"), .copy("Resources/OriginalCommonSounds"), .copy("Resources/OriginalLoadingInterface"), .copy("Resources/OriginalCharacterMenu"), .copy("Resources/OriginalWarMenu"), .copy("Resources/OriginalMatchArenas"), .copy("Resources/OriginalCatalog")]),
