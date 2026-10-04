@@ -1,0 +1,29 @@
+{
+  "study": "docs/research/CROSS_PLATFORM.md",
+  "phase": "P7: Linux package for x86_64",
+  "date": "2026-10-04",
+  "sdk": {
+    "id": "ntsd-6.4.0-ubuntu24.04-x86_64",
+    "command": "swift-sdk-generator (tag swift-6.4.0-RELEASE, 57190988) make-linux-sdk --swift-version 6.4.0-RELEASE --with-docker --distribution-name ubuntu --distribution-version 24.04 --target x86_64-unknown-linux-gnu --no-host-toolchain --sdk-name ntsd-6.4.0-ubuntu24.04-x86_64",
+    "bundle": "1.0 GB; libswiftCore.so is ELF x86-64; XCTest included; installed with swift sdk install"
+  },
+  "deps": "build_linux_deps.sh linux/amd64 (Rosetta harness): SDL3 3.4.16 x86-64 shared, FreeType 2.13.3 static; same hash-checked tarballs",
+  "archive": {
+    "name": "ntsd-linux-x86_64-ee2c6b8.tar.gz",
+    "bytes": 216950011,
+    "sha256": "0fe14b0a8c7f227a754b531f4159e386c70e94e254724973c73397c124bb832a"
+  },
+  "commitBuiltFrom": "ee2c6b8aac4a82fc325cdca0c2824838e296970f",
+  "dirtyAtBuild": false,
+  "check": {
+    "image": "ntsd-linux-clean:noble-amd64 (ubuntu:24.04 amd64 + X11 libraries, fonts, Xvfb, xdotool; no Swift), run under Rosetta: a test harness, not an x86 host observation",
+    "ldd": "all resolved",
+    "defaultLaunch": "music beside the executable, font DejaVu Sans Condensed Bold, exit 0",
+    "x11": "real xdotool input to a match (loaded, matchLaunched, gameplay, progress)",
+    "vs": "equal to the frozen reference; all 1,832 frames identical to the aarch64 package's run (FreeType text included)"
+  },
+  "open": [
+    "a real x86_64 Linux machine",
+    "Windows (P0-W)"
+  ]
+}

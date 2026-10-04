@@ -199,19 +199,24 @@ user's approval to push. Until then, keep the other phases moving.
 | 2026-10-04 | **P7: music without AVFoundation** | Apple's ALAC reference decoder (Apache-2.0, 13 files vendored unchanged) behind a C interface, and a Swift CAF reader in the new `NTSDMusicDecoder`, decode the packaged tracks; `NTSDSDL` plays them on SDL audio streams through the shared `OriginalMacMusicOutput`. **Every track decodes to exactly the manifest's PCM (frames, bytes, SHA-256) on macOS and on Linux.** The first Linux run failed: the vendored code takes the byte order from Apple headers or x86 macros only, so aarch64 Linux skipped its byte swaps; the manifest now defines it for non-Apple targets. Silent decode failures are now reported. SDL with music: 9/10 and all frames unchanged on macOS and Linux. | `OriginalALACTrackTests` 2/2 macOS release and Linux; [evidence](../evidence/crossplatform-p7-music-20261004.json), [Linux before fix](../evidence/crossplatform-p7-music-linux-suite-before-fix-20261004.jsonl), [after](../evidence/crossplatform-p7-music-linux-suite-20261004.jsonl) | 7c504a6 |
 | 2026-10-04 | **P7: ONLINE GAME on Linux** | The BSD-socket Winsock moved into `NTSDRuntime` (name kept) and runs on Darwin, glibc and musl; `NTSDSDL` uses it everywhere. Linux needed errno mapping to the BSD numbers behind WSAE codes, MSG_NOSIGNAL, Winsock-number argument checks, and a readiness fix: the game selects before `listen()`, Linux reports that socket as hung up, which first produced the game's own "Accpet() Error" box and then left Dispatch not watching (strace: the host never accepted); watching now starts once the socket listens or connects (Darwin unchanged). **The retained two-process ONLINE GAME probe passes between two Linux processes, two macOS SDL processes and two AppKit processes, all with the RNG hash of the retained 2026-10-02 run.** | Winsock tests now portable: macOS 17/17 network tests, Linux 8/8; app_e2e 9/10 = baseline; `pair_probe.py`; [evidence](../evidence/crossplatform-p7-sockets-20261004.json) | 927f319 |
 | 2026-10-04 | **P7: Linux package** | `package_linux.py` cross-builds `NTSDSDL` with a static Swift runtime and assembles `ntsd-linux-aarch64` (the game, `libSDL3.so.0` beside it via `$ORIGIN`, the resource bundle, the packaged music, licences for SDL3, FreeType, ALAC and Swift, a README) into a reproducible 217 MB tar.gz with a per-file manifest; `NTSDSDL` now finds `OriginalMusic` beside itself. **In a plain Ubuntu 24.04 container without Swift the unpacked package resolves every library, starts with music and font found, reaches a match with real X11 input, and reproduces the vs scenario with identical frames.** Local artefact only. | `check_linux_package.sh`; [evidence](../evidence/crossplatform-p7-linux-package-20261004.json) | 0f91b25 |
-| 2026-10-04 | **P7: package reproducibility** | Rebuilt from 0f91b25 with the same scratch path, the package differs from the first build only in `README.txt` (it names the commit); the binary is byte-identical. From a fresh scratch path the binary differs: it embeds its absolute scratch path 21 times (bundle accessor, build paths). Reproducible from the canonical scratch path; cross-path reproducibility would need path remapping. | [evidence](../evidence/crossplatform-p7-package-reproducibility-20261004.json) | this commit |
+| 2026-10-04 | **P7: package reproducibility** | Rebuilt from 0f91b25 with the same scratch path, the package differs from the first build only in `README.txt` (it names the commit); the binary is byte-identical. From a fresh scratch path the binary differs: it embeds its absolute scratch path 21 times (bundle accessor, build paths). Reproducible from the canonical scratch path; cross-path reproducibility would need path remapping. | [evidence](../evidence/crossplatform-p7-package-reproducibility-20261004.json) | ee2c6b8 |
+| 2026-10-04 | **P7: Linux x86_64 package** | Generated the x86_64 glibc SDK (`ntsd-6.4.0-ubuntu24.04-x86_64`, same generator and options), built SDL3/FreeType for linux/amd64, and packaged `ntsd-linux-x86_64` with `package_linux.py --arch x86_64`. **In a clean amd64 Ubuntu 24.04 container (Rosetta harness) it resolves every library, starts with music and font, reaches a match with real X11 input and reproduces the vs scenario; all 1,832 frames, FreeType text included, equal the aarch64 package's.** | `check_linux_package.sh … linux/amd64`; [evidence](../evidence/crossplatform-p7-linux-package-x86_64-20261004.json) | this commit |
 
 ## Next task
 
-P7: the Linux package for x86_64.
+P0-W, bounded: the Windows UCRT headers.
 
-- Generate an x86_64 glibc Swift SDK (`swift-sdk-generator`, Ubuntu 24.04,
-  as for aarch64), build the Linux deps for linux/amd64 with
-  `build_linux_deps.sh`, package `ntsd-linux-x86_64`, and run
-  `check_linux_package.sh` under Rosetta (test harness; a real x86_64 Linux
-  machine remains the observation).
-- Open: Windows (P0-W, UCRT headers), mobile (P8), interactive play by a
-  person on a real Linux desktop, publishing the package (user decision).
+- The xwin splats lack `corecrt_math.h`, `corecrt_math_defines.h` and
+  `stdnoreturn.h`, which Swift 6.4's `ucrt.modulemap` names. Find which
+  Windows SDK package carries them (xwin's manifest, the "Universal CRT
+  Headers Libraries and Sources" MSI and its CABs) and whether xwin skipped or
+  filtered them; the user accepted the VS Build Tools terms on 2026-10-03, which
+  cover the Windows SDK packages xwin downloads.
+- Success: `swiftc -target x86_64-unknown-windows-msvc` compiles a probe
+  importing Foundation, then `NTSDCore`. Stop after a bounded attempt and
+  record the evidence if the headers are not obtainable under those terms.
+- Otherwise P8: an iPadOS host (UIKit) on the shared runtime, checked in the
+  simulator.
 
 Following tasks:
 

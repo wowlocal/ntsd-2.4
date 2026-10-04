@@ -18,6 +18,7 @@ with the build and music directories read-only and OUT_DIR mounted at /out;
 Apple silicon: a test harness, not an x86 host observation). `--linux-sdl` runs
 the glibc NTSDSDL build there with SDL's offscreen video and dummy audio
 drivers and the SDL3 libraries from $NTSD_SDL_LIB mounted read-only.
+$NTSD_LINUX_PLATFORM sets the container platform (e.g. linux/amd64) and
 $NTSD_LINUX_IMAGE replaces the container image (e.g. ntsd-linux-runtime:noble
 from linux-runtime/Dockerfile, which adds fontconfig and DejaVu for text).
 """
@@ -34,6 +35,7 @@ COMPARE = ROOT / "tools/crossplatform/compare_headless.py"
 def main():
     out = Path(sys.argv[1]).resolve(); mode, target = sys.argv[2], sys.argv[3]
     platform = ["--platform", "linux/amd64"] if mode == "--linux-amd64" else []
+    if os.environ.get("NTSD_LINUX_PLATFORM"): platform = ["--platform", os.environ["NTSD_LINUX_PLATFORM"]]
     binary, docker = "NTSDHeadless", []
     if mode == "--linux-sdl":
         binary = "NTSDSDL"

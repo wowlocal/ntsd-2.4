@@ -1,18 +1,21 @@
 #!/bin/bash
 # Checks the Linux package from package_linux.py in ntsd-linux-clean:noble
 # (Ubuntu 24.04 without Swift; linux-clean/Dockerfile), a test harness only.
-#   tools/crossplatform/check_linux_package.sh ARCHIVE OUT_DIR
+#   tools/crossplatform/check_linux_package.sh ARCHIVE OUT_DIR [linux/arm64|linux/amd64]
 # 1. every shared library resolves (ldd); 2. a run with no --music-dir starts,
 # finds the packaged music and a font, and writes a frame; 3. the X11 smoke
 # (real xdotool input to a match); 4. the app_e2e vs scenario, compared with
 # its frozen reference.
 set -euo pipefail
-ARCHIVE=$(cd "$(dirname "$1")" && pwd)/$(basename "$1"); OUT=$2
+ARCHIVE=$(cd "$(dirname "$1")" && pwd)/$(basename "$1"); OUT=$2; PLATFORM=${3:-linux/arm64}
+# The clean image is built per platform: ntsd-linux-clean:noble (arm64) and
+# ntsd-linux-clean:noble-amd64 (docker build --platform linux/amd64).
+IMAGE=ntsd-linux-clean:noble; [ "$PLATFORM" = linux/amd64 ] && IMAGE=ntsd-linux-clean:noble-amd64
 TOOLS=$(cd "$(dirname "$0")" && pwd)
 rm -rf "${OUT:?}"; mkdir -p "$OUT/pkg" "$OUT/run"; OUT=$(cd "$OUT" && pwd)
 tar -xzf "$ARCHIVE" -C "$OUT/pkg"
-PKG="$OUT/pkg/ntsd-linux-aarch64"
-docker run --rm -v "$PKG:/app:ro" -v "$OUT/run:/out" ntsd-linux-clean:noble bash -c '
+PKG=$(ls -d "$OUT"/pkg/ntsd-linux-*)
+docker run --rm --platform "$PLATFORM" -v "$PKG:/app:ro" -v "$OUT/run:/out" "$IMAGE" bash -c '
   set -u
   echo "== ldd"; ldd /app/NTSDSDL | tee /out/ldd.txt | grep -c "not found" || true
   ! grep -q "not found" /out/ldd.txt || { echo "missing libraries"; exit 1; }
@@ -23,8 +26,8 @@ docker run --rm -v "$PKG:/app:ro" -v "$OUT/run:/out" ntsd-linux-clean:noble bash
   echo "exit=$?"; grep -o "\"event\":\"[a-zA-Z]*\"\|\"font\":\"[^\"]*\"\|\"musicOutput\":\"[^\"]*\"" /out/events.jsonl | sort | uniq -c
   ! grep -q sdlMusicError /out/events.jsonl'
 mkdir -p "$OUT/x11"
-docker run --rm -v "$PKG:/app:ro" -v "$PKG:/sdl:ro" -v "$PKG/OriginalMusic:/music:ro" -v "$OUT/x11:/out" \
-    -v "$TOOLS/linux_x11_smoke.sh:/smoke.sh:ro" ntsd-linux-clean:noble /smoke.sh
+docker run --rm --platform "$PLATFORM" -v "$PKG:/app:ro" -v "$PKG:/sdl:ro" -v "$PKG/OriginalMusic:/music:ro" -v "$OUT/x11:/out" \
+    -v "$TOOLS/linux_x11_smoke.sh:/smoke.sh:ro" "$IMAGE" /smoke.sh
 echo "== x11: $(grep -o '"event":"[a-zA-Z]*"' "$OUT/x11/events.jsonl" | tr '\n' ' ')"
 grep -q '"event":"gameplay"' "$OUT/x11/events.jsonl"
-NTSD_LINUX_IMAGE=ntsd-linux-clean:noble NTSD_SDL_LIB="$PKG" python3 "$TOOLS/run_headless_scenarios.py" "$OUT/scenarios" --linux-sdl "$PKG" vs
+NTSD_LINUX_PLATFORM="$PLATFORM" NTSD_LINUX_IMAGE="$IMAGE" NTSD_SDL_LIB="$PKG" python3 "$TOOLS/run_headless_scenarios.py" "$OUT/scenarios" --linux-sdl "$PKG" vs
