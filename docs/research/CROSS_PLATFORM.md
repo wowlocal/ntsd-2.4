@@ -213,7 +213,8 @@ user's approval to push. Until then, keep the other phases moving.
 | 2026-10-04 | **P7: Wayland** | `linux_wayland_check.py` runs the Linux SDL build on SDL's Wayland driver under headless Weston. The first run had equal state but every frame shifted by the centred window origin: Wayland exposes no window positions, so the host now reports where it placed the window. `NTSDSDL` also reports the drivers SDL chose (`sdlDrivers`). **vs scenario equal, all 1,832 frames identical to the Linux SDL run.** | [evidence](../evidence/crossplatform-p7-wayland-20261004.json) | db3e341 |
 | 2026-10-04 | **Swift miscompile reported** | With the user's approval, filed [swiftlang/swift#92905](https://github.com/swiftlang/swift/issues/92905). A rerun of the issue's short program narrowed the scope: **only the Static Linux (musl) SDK drops the store** (both arches crash 3/3); the glibc aarch64 SDK and macOS compile it correctly. The first filed text overstated the scope and was corrected in place. The Core workaround stays. | [evidence](../evidence/crossplatform-swift640-report-20261004.json) | b13b1de |
 | 2026-10-04 | **P8 Android: first build** | Installed the Swift 6.4.0 Android SDK (checksum from swift.org's release data) and removed the unused 6.3.3 one. With NTSD_PORTABLE the whole headless game compiles for `aarch64-unknown-linux-android28`; only the socket adapter needed a Bionic branch (its own `h_errno` accessor, a named `net_device_flags` enum, and a non-null buffer for `send`). Linux-kernel behaviour already sits under `!canImport(Darwin)`. **Compile only, not run yet**; the static-runtime link needs `std::__hash_memory` (the runtime was built with Android clang 21–22). | macOS app release build, Linux musl and glibc builds | 38fc1a8 |
-| 2026-10-04 | **P7: packages published** | With the user's approval, published [crossplatform-preview-20261004](https://github.com/wowlocal/ntsd-2.4/releases/tag/crossplatform-preview-20261004) as a pre-release (macOS 0.4.0 stays Latest). Before publishing, the packages gained ICU's licence (Foundation's ICU is in both), and the Windows package dropped 17 DLLs `NTSDSDL.exe` never loads (e240ca2). **At e240ca2, on a clean tree, all three packages pass their checks; the downloaded assets match SHA256SUMS.txt.** The notes say what was not tested (real hardware). | [evidence](../evidence/crossplatform-p7-release-20261004.json) | this commit |
+| 2026-10-04 | **P7: packages published** | With the user's approval, published [crossplatform-preview-20261004](https://github.com/wowlocal/ntsd-2.4/releases/tag/crossplatform-preview-20261004) as a pre-release (macOS 0.4.0 stays Latest). Before publishing, the packages gained ICU's licence (Foundation's ICU is in both), and the Windows package dropped 17 DLLs `NTSDSDL.exe` never loads (e240ca2). **At e240ca2, on a clean tree, all three packages pass their checks; the downloaded assets match SHA256SUMS.txt.** The notes say what was not tested (real hardware). | [evidence](../evidence/crossplatform-p7-release-20261004.json) | 71dd3cb |
+| 2026-10-04 | **P8: Android headless in the emulator** | The static-runtime build needs NDK r30 (the Swift runtime references `std::__hash_memory`); 27.3 and a 29 beta were removed. `run_headless_scenarios.py --android` runs the build in the arm64 Android 15 emulator over adb; `matrix.py` has an `android` host. **All scenarios: 9/10 like every host (playback as on main), and all 15,960 frames identical to the Linux headless run.** | [evidence](../evidence/crossplatform-p8-android-20261004.json), [results](../evidence/crossplatform-p8-android-emulator-20261004.jsonl) | this commit |
 
 ## Next task
 
@@ -224,10 +225,12 @@ and approved reporting the miscompile (done, #92905). Installed with Homebrew's
 platform-tools 37.0.1, emulator 37.2.12, NDK 27.3.13750724, platform 35 and
 the `android-35;google_apis;arm64-v8a` system image.
 
-1. **Android (P8)**: get the Swift 6.4.0 Android SDK matching the toolchain,
-   build the portable products for `aarch64-unknown-linux-android`, then an
-   app host (SDL3's Android Java glue or a NativeActivity) and run the
-   scenarios in the arm64 emulator.
+1. **Android app host (P8)**: the headless game passes in the emulator. Next
+   an app that a person can play: SDL3 built for Android with its Java glue
+   (or a NativeActivity), `NTSDSDL` as a shared library, touch and keyboard
+   input, AAudio output and the packaged music, packed into an APK with
+   the NDK r30 `libc++_shared.so`; install it on the emulator and run the
+   scenarios through it.
 
 Still waiting on the user: real-hardware checks (Linux desktop, Windows PC,
 iPad).

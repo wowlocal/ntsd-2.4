@@ -45,6 +45,15 @@ Windows (x86_64, кросс-компиляция с этого Mac; провер
 headless и SDL с GDI-текстом проходят те же сценарии, ONLINE GAME через настоящий
 Winsock, есть zip-пакет. iPad: UIKit-хост в симуляторе проходит все сценарии с
 кадрами, побайтно равными AppKit ([evidence](../evidence/crossplatform-p8-ios-20261004.json)).
+2026-10-04 вечер: матрица из восьми хостов на чистом дереве даёт 9/10 везде;
+Linux работает и под Wayland; пакеты Linux (aarch64, x86_64) и Windows
+опубликованы с согласия пользователя как pre-release
+[crossplatform-preview-20261004](https://github.com/wowlocal/ntsd-2.4/releases/tag/crossplatform-preview-20261004)
+(проверены только в контейнерах и Wine); ошибка Swift отправлена как
+[swiftlang/swift#92905](https://github.com/swiftlang/swift/issues/92905).
+Android: headless-игра в эмуляторе Android 15 arm64 проходит 9/10, все кадры
+равны Linux ([evidence](../evidence/crossplatform-p8-android-20261004.json));
+следующий шаг — Android-приложение (APK).
 Подробности и открытые решения — в [CROSS_PLATFORM](CROSS_PLATFORM.md).
 
 Побочная находка 2026-10-03: сценарий `playback` в `tools/app_e2e.py` падает

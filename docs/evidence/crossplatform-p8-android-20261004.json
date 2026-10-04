@@ -1,0 +1,24 @@
+{
+  "study": "docs/research/CROSS_PLATFORM.md",
+  "phase": "P8: Android, headless in the emulator",
+  "date": "2026-10-04",
+  "inputs": "user accepted the Android SDK licences (sdkmanager --licenses) and approved the NDK/emulator download (2026-10-04)",
+  "sdk": {
+    "swift": "swift-6.4.0-RELEASE_android 0.1 (swift sdk install with swift.org's release-data checksum 21fb555122a3d801ad943d48df7ebffdd8824de61c25c180bb792d3edaee0b43); 6.3.3 Android SDK removed (it matched the same triples)",
+    "android": "Homebrew sdkmanager root /opt/homebrew/share/android-commandlinetools: platform-tools 37.0.1, emulator 37.2.12, platforms;android-35, system-images;android-35;google_apis;arm64-v8a, NDK 30.0.16248370",
+    "ndk choice": "NDK 27.3 compiled and linked dynamically, but the static Swift runtime (libswiftCore.a, libswift_Concurrency.a) references std::__ndk1::__hash_memory, defined only in NDK r30's libc++ (the runtime was built with Android clang 21-22). 27.3 and an accidentally installed 29.0 beta were uninstalled; swift-build picked the NDK from $ANDROID_HOME/ndk regardless of ANDROID_NDK_ROOT and cached it in the scratch build description, so the scratch path was cleared"
+  },
+  "build": "NTSD_PORTABLE=1 swift build --swift-sdk aarch64-unknown-linux-android28 -c release --static-swift-stdlib --product NTSDHeadless: 108 MB ELF, NEEDED libm, libdl, liblog, libc++_shared (shipped beside it, RUNPATH $ORIGIN), libc",
+  "code": "socket adapter Bionic branch (38fc1a8); no Core change",
+  "harness": "emulator AVD ntsd-xplat-api35 (pixel_tablet, Android 15, arm64-v8a, -no-window -no-audio, 4 GB); run_headless_scenarios.py --android pushes the build and music to /data/local/tmp/ntsd, runs each scenario with adb shell (TZ=Etc/GMT-1), pulls captures/overlay/frames; matrix.py gains an android host (blocked without an adb device)",
+  "results": {
+    "scenarios": "9/10 equal to the frozen AppKit references; playback differs (milestones, progress) as on main and every host",
+    "frames": "all 15,960 frames identical to the linux-headless matrix run (matrix.py --hosts linux-headless,android --reuse)",
+    "results": "crossplatform-p8-android-emulator-20261004.jsonl"
+  },
+  "open": [
+    "an Android app host (window, touch, audio, music), SDL3's Android glue or a NativeActivity",
+    "x86_64 Android",
+    "a real Android device"
+  ]
+}

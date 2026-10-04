@@ -14,15 +14,19 @@ this Mac itself):
   windows         NTSDHeadless.exe in the CrossOver bottle ntsd-xplat-test
   windows-sdl     NTSDSDL.exe in the bottle (GDI text)
   ios             NTSDiOS in the iPad simulator (ios_app.py)
+  android         NTSDHeadless for aarch64-unknown-linux-android28 (static Swift runtime,
+                  NDK r30's libc++_shared.so beside it) in the arm64 emulator adb reaches
 
 Frames are grouped by glyph rasteriser: CoreText (appkit, macos-sdl, ios),
 none (linux-headless, linux-x86_64, windows), FreeType (linux-sdl), GDI
-(windows-sdl). Within a group every frame digest must be equal; across groups
+(windows-sdl); android draws no text either. Within a group every frame digest must be equal; across groups
 the text-free frames must be equal and text must appear in the same frames
 (compare_text_frames.py). Writes OUT_DIR/report.json and prints a summary.
 The AppKit and macOS SDL hosts need an unlocked session: with the screen
 locked the AppKit app stalled (observed 2026-10-04), so they are reported as
 blocked instead of run; the other hosts do not draw to the window server.
+The android host needs a booted emulator (or device) on adb; without one it is
+reported as blocked.
 """
 import argparse, datetime, json, os, shutil, subprocess, sys
 from pathlib import Path
@@ -33,8 +37,11 @@ X5 = Path("/Volumes/X5/ntsd-2.4-research/crossplatform")
 OSS = Path.home() / "Library/Developer/Toolchains/swift-6.4.0-RELEASE.xctoolchain/usr/bin/swift"
 XCODE_BUILD = "/Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/bin/swift-build"
 GROUPS = {"appkit": "coretext", "macos-sdl": "coretext", "ios": "coretext", "linux-headless": "none", "linux-x86_64": "none",
-          "windows": "none", "linux-sdl": "freetype", "windows-sdl": "gdi"}
+          "windows": "none", "linux-sdl": "freetype", "windows-sdl": "gdi", "android": "none"}
 RUNNER = TOOLS / "run_headless_scenarios.py"
+ANDROID_SDK = Path("/opt/homebrew/share/android-commandlinetools")
+ANDROID_NDK = ANDROID_SDK / "ndk/30.0.16248370"
+ADB = str(ANDROID_SDK / "platform-tools/adb")
 
 
 GUI_HOSTS = {"appkit", "macos-sdl"}
@@ -44,6 +51,11 @@ def screen_locked():
     out = subprocess.run(["ioreg", "-n", "Root", "-d1", "-a"], capture_output=True, text=True).stdout
     i = out.find("CGSSessionScreenIsLocked")
     return i >= 0 and out[i:i + 80].find("<true/>") >= 0
+
+
+def android_ready():
+    r = subprocess.run([ADB, "get-state"], capture_output=True, text=True)
+    return r.returncode == 0 and r.stdout.strip() == "device"
 
 
 def sh(cmd, env=None, cwd=ROOT):
@@ -76,6 +88,15 @@ def build(host):
         shutil.copytree(products / "NTSDNative_NTSDCore.resources", run / "NTSDNative_NTSDCore.resources")
         for dll in (X5 / "windows-sdk-extract/tree").glob("*.dll"): shutil.copy2(dll, run / dll.name)
         if host == "windows-sdl": shutil.copy2(X5 / "windows-deps/sdl3/install-x86_64/bin/SDL3.dll", run / "SDL3.dll")
+    elif host == "android":
+        sh([str(OSS), "build", "--package-path", "native", "--scratch-path", str(X5 / "build-android-aarch64"), "--swift-sdk", "aarch64-unknown-linux-android28",
+            "-c", "release", "--static-swift-stdlib", "--product", "NTSDHeadless"],
+           {**linux, "ANDROID_HOME": str(ANDROID_SDK), "ANDROID_NDK_ROOT": str(ANDROID_NDK)})
+        products = X5 / "build-android-aarch64/out/Products/Release-android-aarch64"; run = X5 / "android-headless"
+        shutil.rmtree(run, ignore_errors=True); run.mkdir(parents=True)
+        shutil.copy2(products / "NTSDHeadless", run / "NTSDHeadless")
+        shutil.copytree(products / "NTSDNative_NTSDCore.bundle", run / "NTSDNative_NTSDCore.bundle")
+        shutil.copy2(ANDROID_NDK / "toolchains/llvm/prebuilt/darwin-x86_64/sysroot/usr/lib/aarch64-linux-android/libc++_shared.so", run / "libc++_shared.so")
 
 
 def run(host, out):
@@ -96,6 +117,8 @@ def run(host, out):
     elif host == "windows-sdl":
         sh([sys.executable, str(RUNNER), str(target), "--wine", str(X5 / "win-sdl")],
            {"NTSD_WINE_EXE": "NTSDSDL.exe", "NTSD_WINE_ENV": "NTSD_SDL_VIDEO_DRIVER=offscreen NTSD_SDL_AUDIO_DRIVER=dummy"})
+    elif host == "android":
+        sh([sys.executable, str(RUNNER), str(target), "--android", str(X5 / "android-headless")], {"ADB": ADB})
     elif host == "ios":
         target.mkdir(parents=True, exist_ok=True)
         rows = []
@@ -124,6 +147,9 @@ def main():
     for host in blocked:
         report["hosts"][host] = {"group": GROUPS[host], "blocked": "screen locked"}
         print(host, "blocked: screen locked", flush=True)
+    if "android" in hosts and not android_ready():
+        blocked.append("android"); report["hosts"]["android"] = {"group": GROUPS["android"], "blocked": "no adb device"}
+        print("android blocked: no adb device", flush=True)
     hosts = [h for h in hosts if h not in blocked]
     for host in hosts:
         done = out / host / "results.jsonl"
