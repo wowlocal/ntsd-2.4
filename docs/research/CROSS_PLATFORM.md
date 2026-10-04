@@ -187,26 +187,22 @@ user's approval to push. Until then, keep the other phases moving.
 | 2026-10-04 | **P3 result (aarch64)** | **All 251 portable suites ran on Linux: 241 clean, 581 tests passed, 0 failed**, 1 skipped (FixtureInflate's reference is Apple's Compression). 10 heavy `Lib*` suites were OOM-killed in the 11.7 GiB VM before their assertions ran; that is memory, not a mismatch (see P3 memory). Core gives the same results on Linux as on macOS for everything that ran. | [evidence](../evidence/crossplatform-p3-linux-aarch64-20261004.json), per-suite results jsonl; harness `tools/crossplatform/run_linux_suites.py` | 414a2aa |
 | 2026-10-04 | P5 step 11c | RuntimeMenu and RuntimeLoading moved to `NTSDRuntime`. The menu takes its Caps Lock read and MessageBoxA presenter. Loading takes `OriginalRuntimeLoadingDialogs` (recording chooser, "Error" alert, document open), still wrapped in `MainActor.assumeIsolated` and with the deferred open after Sleep. The Mac initializers and `bundled(...)` keep NSEvent, NSOpenPanel, NSAlert and NSWorkspace. **NTSDMacPlatform is down to ≈930 lines of AppKit/AVFoundation/Darwin adapters; NTSDRuntime is 25 files, ≈4,040 lines.** | Menu, Loading, NetworkHost, NetworkExit, Startup, LoadingAudio ×3 23/23 on a fresh test build (the first run stopped at the test build: missing `@testable import NTSDRuntime` in five Mac tests); 697 listed; Xcode release; Linux `NTSDRuntime`; full app e2e 9/10 = baseline | 706dc65 |
 | 2026-10-04 | process note | **414a2aa does not build.** The docs-only P3 commit also took the step-11c `git mv` renames already staged in the index (RuntimeMenu/RuntimeLoading moved, not yet edited, so AppKit imports sat in NTSDRuntime). 706dc65 restores a building tree. Both were pushed; history was not rewritten. Skip 414a2aa when bisecting. | `git show --stat 414a2aa` | 2f5e707 |
-| 2026-10-04 | P5 step 12 | **The app session moved to `NTSDRuntime`:** `OriginalRuntimeSession(arguments:host:)` owns options/scripts, virtual clock, startup → menu → loading → gameplay iteration, captures, network trace, summary, music presentation and the boundary stop, copied line for line. `OriginalRuntimeSessionHost` supplies: startup host, caps lock, sockets, loading dialogs, user data, timing activity, joysticks and their sampling, music and sound output, backing scale, cursor, window attach, captures, full screen, hide, message box, open, stop alert, didStart, terminate, exit. NTSDApp's launcher is now a thin delegate plus `OriginalMacSessionHost` (AppKit input, GameController, AVFoundation output, NSAlert/NSWorkspace, menu). `OriginalMacSoundEffects.backed(by:)` moved to the runtime over `samples(_:)`. The trace digest hashes the concatenated bytes and masks (same SHA-256 as the incremental CryptoKit). | SoundEffects, Startup, Menu, Loading, LoadingAudio ×3 26/26 on a fresh test build; 697 listed; Xcode release; Linux `NTSDRuntime` (session object verified); **full app e2e 9/10 = baseline** | this commit |
+| 2026-10-04 | P5 step 12 | **The app session moved to `NTSDRuntime`:** `OriginalRuntimeSession(arguments:host:)` owns options/scripts, virtual clock, startup → menu → loading → gameplay iteration, captures, network trace, summary, music presentation and the boundary stop, copied line for line. `OriginalRuntimeSessionHost` supplies: startup host, caps lock, sockets, loading dialogs, user data, timing activity, joysticks and their sampling, music and sound output, backing scale, cursor, window attach, captures, full screen, hide, message box, open, stop alert, didStart, terminate, exit. NTSDApp's launcher is now a thin delegate plus `OriginalMacSessionHost` (AppKit input, GameController, AVFoundation output, NSAlert/NSWorkspace, menu). `OriginalMacSoundEffects.backed(by:)` moved to the runtime over `samples(_:)`. The trace digest hashes the concatenated bytes and masks (same SHA-256 as the incremental CryptoKit). | SoundEffects, Startup, Menu, Loading, LoadingAudio ×3 26/26 on a fresh test build; 697 listed; Xcode release; Linux `NTSDRuntime` (session object verified); **full app e2e 9/10 = baseline** | da2414f |
+| 2026-10-04 | **P6 groundwork: first whole game on Linux** | New portable executable `NTSDHeadless` runs `OriginalRuntimeSession` on a headless host: offscreen windows with macOS geometry policy, framebuffer PNGs, silent music on the virtual clock with manifest durations (equal to `AVAudioPlayer.duration` for all 8 tracks), no sockets, blank glyph masks as a declared stand-in. The run loop must drain the main queue on the main thread; `dispatchMain()` failed MainActor isolation. **The app_e2e VS scenario (1,826 bodies, Summary, replay) matches the frozen AppKit reference on every state key, on macOS and in a Linux container (static aarch64, cross-compiled); all 7 captured frames are byte-identical between Linux and macOS.** | `tools/crossplatform/compare_headless.py`: exitCode, boundary, milestones 6, progress 6, overlayFiles equal on both; frame SHA-256 equal; Xcode release build with both executables; 697 listed. [evidence](../evidence/crossplatform-headless-vs-20261004.json) | this commit |
 
 ## Next task
 
-P6 groundwork, a headless host.
+Run the other app_e2e scenarios headless on Linux (mission, war, demo,
+tournament, tournament-win, team-tournament, joystick) and compare each with
+its frozen reference via `compare_headless.py`.
 
-- `NTSDRuntime` now holds the whole app except the platform adapters. Add a
-  portable headless host to `NTSDRuntime` or a new target:
-  - an offscreen window host (framebuffers kept in memory, fixed screen size
-    and frame metrics);
-  - a no-op or recorded music player and sound output;
-  - POSIX sockets or `--no-network`;
-  - captures written from the framebuffer;
-  - scripted input only.
-- Run a scripted VS match through `OriginalRuntimeSession` on macOS first. Its
-  per-frame framebuffers and summary must equal the AppKit run's state and
-  framebuffer bytes, not its PNG view renders.
-- Then cross-build it for Linux and run it in a container. That is the first
-  whole-game run on Linux.
-- After that, P6 proper: an SDL3 host for interactive play.
+- Scenarios that need sockets or host full screen (vs quit/online checks,
+  altenter's popup is fine) are noted, not forced.
+- Then x86_64 (a second static SDK triple, run under Rosetta as a harness).
+- Open decisions for the user:
+  - the glyph rasteriser for non-Apple hosts (fonts);
+  - the OrbStack memory for the 10 heavy Lib* suites;
+  - SDL3 vs native hosts for interactive play.
 
 Following tasks:
 
