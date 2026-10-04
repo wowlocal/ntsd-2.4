@@ -217,7 +217,9 @@ user's approval to push. Until then, keep the other phases moving.
 | 2026-10-04 | **P8: Android headless in the emulator** | The static-runtime build needs NDK r30 (the Swift runtime references `std::__hash_memory`); 27.3 and a 29 beta were removed. `run_headless_scenarios.py --android` runs the build in the arm64 Android 15 emulator over adb; `matrix.py` has an `android` host. **All scenarios: 9/10 like every host (playback as on main), and all 15,960 frames identical to the Linux headless run.** | [evidence](../evidence/crossplatform-p8-android-20261004.json), [results](../evidence/crossplatform-p8-android-emulator-20261004.jsonl) | 0fc5bb9 |
 | 2026-10-04 | **P8: iPad device build** | At the user's request, `ios_device.py` builds `NTSDiOS` for a real iPad, signs it with the team's development profile and installs it with `devicectl`. Build and signature pass. The install on this Mac failed because CoreDevice could not keep a connection to the iPad (Wi-Fi, then USB, also after restarting `remoted`), so the user installs a signed IPA from another Mac. **The real-iPad check is the user's test, still open.** | [evidence](../evidence/crossplatform-p8-ios-device-20261004.json) | 14e495e |
 | 2026-10-04 | **iPad: cancelled presses** | The iPad host treats a cancelled key press (iPadOS taking over the keyboard) as a release; `ios_device.py --no-install --ipa` writes the signed app as an IPA. The user installs the IPA from another Mac. | simulator vs equal; device build | 9d63735 |
-| 2026-10-04 | **P8 Android: `--resources`** | An Android app cannot point `Bundle.main` at its data (CoreFoundation on Linux/Android reads `/proc/self/exe` only), so the runtime session gains `--resources DIR`. It passes that bundle to every loader; without the option it passes `.main` as before. No Core change. **A headless binary away from its bundle reproduces vs through `--resources`; the AppKit app's vs is unchanged.** | [evidence](../evidence/crossplatform-p8-resources-option-20261004.json) | this commit |
+| 2026-10-04 | **P8 Android: `--resources`** | An Android app cannot point `Bundle.main` at its data (CoreFoundation on Linux/Android reads `/proc/self/exe` only), so the runtime session gains `--resources DIR`. It passes that bundle to every loader; without the option it passes `.main` as before. No Core change. **A headless binary away from its bundle reproduces vs through `--resources`; the AppKit app's vs is unchanged.** | [evidence](../evidence/crossplatform-p8-resources-option-20261004.json) | b5d00e4 |
+| 2026-10-04 | **Touch clicks (iPad, Android)** | Taps never selected a menu item: the hosts reported the cursor at 0,0 and sent a tap's press and release at once, while the original reads `GetCursorPos` and the held button across ticks. The hosts now report the last touch as the cursor, and the shared `OriginalRuntimeTouchMouse` moves, presses after a hover and holds like a player's click. | simulator vs equal; AppKit build; Android: one tap opens START | edccfde |
+| 2026-10-04 | **P8: Android app, first step** | `NTSDAndroid`: a `NativeActivity` with no Java. The dispatch main queue runs on the Android main thread through the main `ALooper`; the game data ships as APK assets, extracted once and passed with `--resources`; frames are letterboxed into the surface; touch and hardware keys. Text, sound and music are first-step stand-ins (as headless). `android_app.py` builds, signs and installs the APK and runs scenarios through it. **vs through the app equals the reference, with all 1,832 frames identical to Linux headless; in the emulator the menu shows and a tap starts the game.** | [evidence](../evidence/crossplatform-p8-android-app-20261004.json) | this commit |
 
 ## Next task
 
@@ -228,12 +230,11 @@ and approved reporting the miscompile (done, #92905). Installed with Homebrew's
 platform-tools 37.0.1, emulator 37.2.12, NDK 27.3.13750724, platform 35 and
 the `android-35;google_apis;arm64-v8a` system image.
 
-1. **Android app host (P8)**: the headless game passes in the emulator. Next
-   an app that a person can play: SDL3 built for Android with its Java glue
-   (or a NativeActivity), `NTSDSDL` as a shared library, touch and keyboard
-   input, AAudio output and the packaged music, packed into an APK with
-   the NDK r30 `libc++_shared.so`; install it on the emulator and run the
-   scenarios through it.
+1. **Android app, next steps (P8)**: run all scenarios through the app
+   (`android_app.py --scenario all`); text with FreeType built for Android and
+   a system font (as Linux); AAudio for the effects mixer and the packaged
+   music through `NTSDMusicDecoder`; check hardware keys with
+   `adb shell input keyevent`. Then a real Android device (the user's).
 
 Still waiting on the user: real-hardware checks (Linux desktop, Windows PC,
 iPad).

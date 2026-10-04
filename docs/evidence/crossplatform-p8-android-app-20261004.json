@@ -1,0 +1,31 @@
+{
+  "study": "docs/research/CROSS_PLATFORM.md",
+  "phase": "P8: Android app, first step",
+  "date": "2026-10-04",
+  "design": {
+    "activity": "android.app.NativeActivity, no Java code; CAndroidNative's ANativeActivity_onCreate (C) hands over to Swift on the process main thread",
+    "main queue": "libdispatch's _dispatch_get_main_queue_handle_4CF eventfd added to the main thread's ALooper; each wake reads the eventfd and calls _dispatch_main_queue_callback_4CF, so the runtime's main actor and DispatchQueue.main run on the Android main thread (SDL3's Android glue runs the game on its own thread, where the main-actor checks would trap)",
+    "data": "the resource bundle and the packaged music ship as APK assets (assets/ntsd + files.txt) and are extracted to files/ntsd-data on a background thread once (marker = files.txt); the session gets --resources",
+    "screen": "the surface in dp (pixels / (density/160)); frames go to the ANativeWindow letterboxed into the surface aspect, B,G,R,X swizzled to RGBX",
+    "input": "AInputQueue on the main looper; Android key codes -> HID usages -> OriginalHIDKeys (Back acts as Escape; characters for letters, digits and space only, declared); touch through OriginalRuntimeTouchMouse",
+    "first-step stand-ins (declared)": "no text rasteriser (TextOutA draws nothing, as the headless host), silent music by manifest duration, no sound output",
+    "harness": "files/args.txt adds session options (written with run-as); --events-file; --tz sets TZ (an app inherits the zygote's environment)"
+  },
+  "apk": "tools/crossplatform/android_app.py: libNTSDAndroid.so (static Swift runtime) + NDK r30 libc++_shared.so, aapt2 link (debuggable, hasCode=false, sensorLandscape), zipalign, apksigner with a local debug key; 220 MB",
+  "findings": {
+    "time zone": "first vs run: state equal except dates and the recording name one hour earlier (TZ not inherited); --tz fixed it",
+    "taps": "on the emulator a tap on START did nothing: the host (like the iPad host) reported the cursor at 0,0, and a tap's press and release arrived together while the original reads GetCursorPos and the held button across game ticks; fixed in edccfde for both hosts (cursor = last touch; OriginalRuntimeTouchMouse: move, press after 80 ms, hold at least 150 ms)"
+  },
+  "results": {
+    "vs scenario through the app": "equal to the frozen reference",
+    "frames": "all 1,832 frames identical to the linux-headless matrix run",
+    "interactive (emulator screenshots)": "the main menu shows letterboxed on the 2560x1600 tablet; after the touch fix one tap on START opens the loading screen"
+  },
+  "open": [
+    "all scenarios through the app",
+    "text (FreeType)",
+    "sound effects (AAudio) and music (ALAC)",
+    "keyboard input check",
+    "a real Android device"
+  ]
+}

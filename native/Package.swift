@@ -46,10 +46,19 @@ let iosTargets: [Target] = ios ? [
     .executableTarget(name: "NTSDiOS", dependencies: ["NTSDCore", "NTSDRuntime"],
                       linkerSettings: [.linkedFramework("UIKit"), .linkedFramework("AVFoundation"), .linkedFramework("CoreText")])] : []
 
+// NTSD_ANDROID=1 (with NTSD_PORTABLE=1) adds the Android host (P8): a
+// NativeActivity library, built for an Android triple and packed into an APK
+// by tools/crossplatform/android_app.py.
+let android = Context.environment["NTSD_ANDROID"] == "1"
+let androidProducts: [Product] = android ? [.library(name: "NTSDAndroid", type: .dynamic, targets: ["NTSDAndroid"])] : []
+let androidTargets: [Target] = android ? [
+    .target(name: "CAndroidNative", linkerSettings: [.linkedLibrary("android"), .linkedLibrary("log")]),
+    .target(name: "NTSDAndroid", dependencies: ["NTSDCore", "NTSDRuntime", "CAndroidNative"])] : []
+
 let package = Package(
     name: "NTSDNative",
     platforms: [.macOS(.v14), .iOS(.v17)],
-    products: macProducts + sdlProducts + iosProducts + [
+    products: macProducts + sdlProducts + iosProducts + androidProducts + [
                .executable(name: "NTSDFrameCheck", targets: ["NTSDFrameCheck"]),
                .executable(name: "NTSDMovementCheck", targets: ["NTSDMovementCheck"]),
                .executable(name: "NTSDCombatCheck", targets: ["NTSDCombatCheck"]),
@@ -60,7 +69,7 @@ let package = Package(
                .executable(name: "NTSDBGCheck", targets: ["NTSDBGCheck"]),
                .executable(name: "NTSDStageCheck", targets: ["NTSDStageCheck"]),
                .executable(name: "NTSDHeadless", targets: ["NTSDHeadless"])],
-    targets: macTargets + sdlTargets + iosTargets + [
+    targets: macTargets + sdlTargets + iosTargets + androidTargets + [
         .target(name: "NTSDReplayCodec", exclude: ["README.md", "upstream.json"],
                 publicHeadersPath: "include", cSettings: [.unsafeFlags(["-Wno-deprecated-non-prototype"])]),
         .target(name: "NTSDCore", dependencies: ["NTSDReplayCodec"], resources: [.copy("Resources/OriginalStartup"), .copy("Resources/OriginalCommonSounds"), .copy("Resources/OriginalLoadingInterface"), .copy("Resources/OriginalCharacterMenu"), .copy("Resources/OriginalWarMenu"), .copy("Resources/OriginalMatchArenas"), .copy("Resources/OriginalCatalog")]),
