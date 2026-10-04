@@ -201,22 +201,23 @@ user's approval to push. Until then, keep the other phases moving.
 | 2026-10-04 | **P7: Linux package** | `package_linux.py` cross-builds `NTSDSDL` with a static Swift runtime and assembles `ntsd-linux-aarch64` (the game, `libSDL3.so.0` beside it via `$ORIGIN`, the resource bundle, the packaged music, licences for SDL3, FreeType, ALAC and Swift, a README) into a reproducible 217 MB tar.gz with a per-file manifest; `NTSDSDL` now finds `OriginalMusic` beside itself. **In a plain Ubuntu 24.04 container without Swift the unpacked package resolves every library, starts with music and font found, reaches a match with real X11 input, and reproduces the vs scenario with identical frames.** Local artefact only. | `check_linux_package.sh`; [evidence](../evidence/crossplatform-p7-linux-package-20261004.json) | 0f91b25 |
 | 2026-10-04 | **P7: package reproducibility** | Rebuilt from 0f91b25 with the same scratch path, the package differs from the first build only in `README.txt` (it names the commit); the binary is byte-identical. From a fresh scratch path the binary differs: it embeds its absolute scratch path 21 times (bundle accessor, build paths). Reproducible from the canonical scratch path; cross-path reproducibility would need path remapping. | [evidence](../evidence/crossplatform-p7-package-reproducibility-20261004.json) | ee2c6b8 |
 | 2026-10-04 | **P7: Linux x86_64 package** | Generated the x86_64 glibc SDK (`ntsd-6.4.0-ubuntu24.04-x86_64`, same generator and options), built SDL3/FreeType for linux/amd64, and packaged `ntsd-linux-x86_64` with `package_linux.py --arch x86_64`. **In a clean amd64 Ubuntu 24.04 container (Rosetta harness) it resolves every library, starts with music and font, reaches a match with real X11 input and reproduces the vs scenario; all 1,832 frames, FreeType text included, equal the aarch64 package's.** | `check_linux_package.sh … linux/amd64`; [evidence](../evidence/crossplatform-p7-linux-package-x86_64-20261004.json) | e1eb5b8 |
-| 2026-10-04 | **P0-W: first Windows executable** | The UCRT xwin downloads is 10.0.26624, which has no `corecrt_math.h`, `stdnoreturn.h` or `stdalign.h` (math lives in `math.h`); Swift 6.4's `ucrt.modulemap` expects an older layout. A reviewed patch removes those three modules in a copy of the SDK; MSVC 14.29 with SDK 10.0.22621 builds the modules (14.44's `threads.h` does not), and the SDK library folders are passed to lld-link explicitly. **A Swift 6.4 probe with Foundation cross-compiles to a PE32+ x86-64 exe and runs in a CrossOver bottle with the Swift runtime DLLs, printing the same results as macOS except the LLP64 `long` size.** | `windows_probe.sh`; [evidence](../evidence/crossplatform-p0w-probe-20261004.json) | this commit |
+| 2026-10-04 | **P0-W: first Windows executable** | The UCRT xwin downloads is 10.0.26624, which has no `corecrt_math.h`, `stdnoreturn.h` or `stdalign.h` (math lives in `math.h`); Swift 6.4's `ucrt.modulemap` expects an older layout. A reviewed patch removes those three modules in a copy of the SDK; MSVC 14.29 with SDK 10.0.22621 builds the modules (14.44's `threads.h` does not), and the SDK library folders are passed to lld-link explicitly. **A Swift 6.4 probe with Foundation cross-compiles to a PE32+ x86-64 exe and runs in a CrossOver bottle with the Swift runtime DLLs, printing the same results as macOS except the LLP64 `long` size.** | `windows_probe.sh`; [evidence](../evidence/crossplatform-p0w-probe-20261004.json) | c8f475b |
+| 2026-10-04 | **P0-W: the game on Windows (headless)** | `make_windows_sdk.py` builds a Swift SDK bundle for `x86_64-unknown-windows-msvc`; SwiftPM's native build system cross-builds `NTSDHeadless` (swift-build has no Windows platform here). Fixes on the way: Clang's builtin headers linked into the SDK (otherwise MSVC's `iso646.h` pulled a C++-only module into C builds), `math.h` mapped to `corecrt.math` where the prebuilt Foundation module expects `pow`, a Windows branch for the startup clock, and an `OriginalFileFacts` helper for the input loaders (Windows reads file attributes natively; under Wine, Foundation's own path hits the unimplemented `SaferiIsExecutableFileType` and hung). Other hosts keep their exact code paths. **In a CrossOver test bottle the Windows exe reproduces 9/10 app_e2e scenarios (playback as on main) and all 15,960 frames equal the Linux headless run.** | macOS loader/startup tests 24/24, 703 listed; Linux musl builds; **AppKit e2e 9/10 = baseline**; `run_headless_scenarios.py --wine`; [evidence](../evidence/crossplatform-pw-headless-20261004.json), [results](../evidence/crossplatform-pw-headless-wine-20261004.jsonl) | this commit |
 
 ## Next task
 
-P0-W continued: the package for Windows.
+P7 Windows: the SDL build on Windows.
 
-- Wrap the probe's flags in a Swift SDK bundle (`swift-sdk.json` and a toolset
-  with the `-visualc-tools-root`, `-windows-sdk-*` and `-libpath` options) so
-  SwiftPM cross-builds `NTSDCore`, `NTSDRuntime` and `NTSDHeadless` for
-  `x86_64-unknown-windows-msvc`.
-- Audit the C targets for LLP64 (`long` is 32-bit on Windows): NTSDReplayCodec
-  (zlib 1.1.4 subset) and CALAC.
-- Gate: `NTSDHeadless` runs the app_e2e scenarios in the CrossOver test bottle
-  with state equal to the references (strip CRLF from its output) and frames
-  equal to the other hosts (no text headless).
-- Then the Windows sockets host (real Winsock) and SDL3 for Windows.
+- SDL3 for Windows from libsdl's official 3.4.16 VC development release
+  (zlib licence; record the archive hash), as `NTSD_SDL_PREFIX` for the
+  Windows SDK; cross-build `NTSDSDL` for `x86_64-unknown-windows-msvc`.
+- Text through GDI: TextOutA with the stock SYSTEM_FONT into a monochrome DIB
+  gives the original's own font on real Windows (user decision 2026-10-01:
+  the original's font first); under Wine it is Wine's substitute (declared).
+- Music through NTSDMusicDecoder; sockets stay disabled (`--no-network`)
+  until a real-Winsock adapter exists.
+- Gate: scripted scenarios through NTSDSDL in the CrossOver bottle give state
+  equal to the references and textless frames equal to the other hosts.
 
 Following tasks:
 

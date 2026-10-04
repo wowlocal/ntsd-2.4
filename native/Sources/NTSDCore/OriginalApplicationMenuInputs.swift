@@ -48,7 +48,7 @@ public struct OriginalApplicationMenuInputs: Equatable {
         func read(_ path: String) throws -> Data {
             let url = directory.appendingPathComponent(path)
             guard FileManager.default.fileExists(atPath:url.path) else { throw Boundary.missing(path) }
-            let v = try url.resourceValues(forKeys:[.isRegularFileKey,.isSymbolicLinkKey])
+            let v = try OriginalFileFacts.of(url,[.isRegularFileKey,.isSymbolicLinkKey])
             guard v.isRegularFile == true,v.isSymbolicLink != true else { throw Boundary.invalid(path) }
             return try Data(contentsOf:url)
         }

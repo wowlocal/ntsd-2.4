@@ -30,7 +30,7 @@ public struct OriginalApplicationArenaInputs {
         func digest(_ bytes: Data) -> String { SHA256.hash(data:bytes).map { String(format:"%02x",$0) }.joined() }
         func read(_ path: String) throws -> Data {
             guard !path.hasPrefix("/"),!path.split(separator:"/").contains("..") else { throw error("Relative file path") }
-            let url = directory.appendingPathComponent(path),values = try url.resourceValues(forKeys:[.isRegularFileKey,.isSymbolicLinkKey])
+            let url = directory.appendingPathComponent(path),values = try OriginalFileFacts.of(url,[.isRegularFileKey,.isSymbolicLinkKey])
             guard values.isRegularFile == true,values.isSymbolicLink != true else { throw error("Ordinary packaged file") }
             return try Data(contentsOf:url)
         }

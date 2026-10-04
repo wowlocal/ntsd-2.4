@@ -92,7 +92,7 @@ public struct OriginalApplicationStartupInputs: Equatable {
         func read(_ path: String) throws -> [UInt8] {
             let url = directory.appendingPathComponent(path)
             guard FileManager.default.fileExists(atPath:url.path) else { throw Boundary.missing(path) }
-            let values = try url.resourceValues(forKeys:[.isRegularFileKey,.isSymbolicLinkKey])
+            let values = try OriginalFileFacts.of(url,[.isRegularFileKey,.isSymbolicLinkKey])
             guard values.isRegularFile == true,values.isSymbolicLink != true else { throw Boundary.invalid(path) }
             return Array(try Data(contentsOf:url))
         }
@@ -114,11 +114,11 @@ public struct OriginalApplicationStartupInputs: Equatable {
         }
         let rootPath = directory.standardizedFileURL.resolvingSymlinksInPath().path
         var actual = Set<String>()
-        guard let iterator = FileManager.default.enumerator(at:directory,includingPropertiesForKeys:[.isDirectoryKey,.isSymbolicLinkKey]) else {
+        guard let iterator = FileManager.default.enumerator(at:directory,includingPropertiesForKeys:OriginalDirectoryPrefetch.keys([.isDirectoryKey,.isSymbolicLinkKey])) else {
             throw Boundary.missing("Package directory")
         }
         for case let url as URL in iterator {
-            let values = try url.resourceValues(forKeys:[.isDirectoryKey,.isSymbolicLinkKey])
+            let values = try OriginalFileFacts.of(url,[.isDirectoryKey,.isSymbolicLinkKey])
             guard values.isSymbolicLink != true else { throw Boundary.invalid("Package symlink") }
             if values.isDirectory != true {
                 let path = url.standardizedFileURL.resolvingSymlinksInPath().path

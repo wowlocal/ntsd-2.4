@@ -1,0 +1,40 @@
+{
+  "study": "docs/research/CROSS_PLATFORM.md",
+  "phase": "P0-W: the game headless on Windows (x86_64)",
+  "date": "2026-10-04",
+  "sdk": {
+    "tool": "tools/crossplatform/make_windows_sdk.py -> ntsd-6.4.0-windows-x86_64 (Swift SDK bundle, installed)",
+    "findings": [
+      "swift-build (Swift 6.4's default build system) reports 'unable to find platform for windows'; SwiftPM's native build system (--build-system native) builds",
+      "SwiftPM passes -resource-dir <sdk>/usr/lib/swift; the Windows SDK has no usr/lib/swift/clang, so Clang lost its builtin headers and fell through to MSVC 14.29's iso646.h, which includes yvals_core.h, a C++-only module: 'module std._Private.yvals_core requires feature cplusplus' while building SwiftShims. A link usr/lib/swift/clang -> the toolchain's clang/21 fixes it (shown by compiling an empty file with and without -resource-dir)",
+      "the prebuilt Foundation.swiftmodule references pow in the corecrt module ('reference to declaration pow broken by a context change', compiler crash); UCRT 10.0.26624 has pow in math.h, so the patch now maps math.h to corecrt.math (and removes it from ucrt.C.math) instead of dropping corecrt.math",
+      "the toolset gives Swift -visualc-tools-root/-windows-sdk-*, C/C++ clang -Xmicrosoft-* options, and lld-link the SDK library folders"
+    ]
+  },
+  "code": {
+    "NTSDCore": [
+      "OriginalMacStartupClock: Windows branch (QueryPerformanceCounter, GetSystemTimePreciseAsFileTime); other hosts unchanged",
+      "OriginalFileFacts: the input loaders' directory/regular-file/symlink/size checks; other hosts call resourceValues(forKeys:) with the same keys as before; Windows uses GetFileAttributesExW (reparse point = symbolic link)",
+      "OriginalDirectoryPrefetch: enumerator prefetch keys dropped on Windows (only a hint)"
+    ],
+    "NTSDRuntime": "the BSD-socket Winsock compiles on non-Windows hosts only (a real-Winsock adapter is a later task); headless runs use --no-network",
+    "why": "under CrossOver Wine any URL.resourceValues on a regular file and any enumerator with prefetch keys reach FoundationEssentials' import of ADVAPI32.SaferiIsExecutableFileType, which Wine does not implement ('Unimplemented function ... aborting', then the debugger waits: the first run hung at 0% CPU). Found with a Windows API probe run case by case (env, fileExists, Bundle, isExecutableFile, writes, mkdir: fine; enumerator with keys and resourceValues on a file: hang); real Windows implements the function"
+  },
+  "harness": "CrossOver Wine, bottle ntsd-xplat-test (win10_64), test harness only; run directory with NTSDHeadless.exe, NTSDNative_NTSDCore.resources and the Swift 6.4.0 and MSVC runtime DLLs from the installer; tools/crossplatform/run_headless_scenarios.py --wine (Z:\\ paths, CRLF stripped)",
+  "results": {
+    "startup": "75 requests in 76 attempts, as on every host",
+    "scenarios": "9/10 equal to the frozen AppKit references; playback differs as on main (the same alert at iteration 251)",
+    "frames": "all 15,960 frames (15,909 per-body digests + 51 PNGs) identical to the Linux headless run (no text on either)"
+  },
+  "gates": {
+    "macOS": "release tests for the input loaders, startup and replay inputs (24/24); 703 listed; Linux musl headless still builds; AppKit e2e: see ledger",
+    "AppKit e2e": "tools/app_e2e.py --build --scenario all: 9/10 = baseline (playback pre-existing on main)"
+  },
+  "open": [
+    "the SDL host and text on Windows (GDI's real SYSTEM_FONT is available there)",
+    "a real-Winsock adapter for ONLINE GAME",
+    "music on Windows (the ALAC decoder is portable)",
+    "actual Windows hardware",
+    "Windows arm64"
+  ]
+}

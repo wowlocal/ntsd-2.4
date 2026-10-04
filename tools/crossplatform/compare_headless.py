@@ -10,7 +10,8 @@ headless captures are framebuffer PNGs without host scaling and, until a
 portable glyph rasteriser exists, without GDI text, while the reference hashes
 AppKit window renders. Everything else (milestones, progress counters, music,
 replay files, boundary, exit code, overlay files) must be equal. A run inside
-a container reports its own paths; CONTAINER_DIR=HOST_DIR maps them back.
+a container reports its own paths; CONTAINER_DIR=HOST_DIR maps them back, and
+Z:\ paths from Windows runs under Wine are mapped to the host's / .
 """
 import importlib.util, json, sys
 from pathlib import Path
@@ -32,6 +33,9 @@ def main():
     events_path, captures, overlay, exit_code, reference_path = sys.argv[1:6]
     mapping = sys.argv[6].split("=", 1) if len(sys.argv) > 6 else None
     events = [json.loads(l) for l in open(events_path) if l.startswith("{")]
+    for e in events:   # a Windows run under Wine reports Z:\ paths (Z: is the host's /)
+        if isinstance(e.get("path"), str) and e["path"].startswith("Z:\\"):
+            e["path"] = e["path"][2:].replace("\\", "/")
     if mapping:
         for e in events:
             if isinstance(e.get("path"), str) and e["path"].startswith(mapping[0]):

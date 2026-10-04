@@ -28,12 +28,12 @@ public struct OriginalApplicationLoadingInputs: Equatable {
     }
     public static func load(directory: URL) throws -> Self {
         guard FileManager.default.fileExists(atPath:directory.path) else { throw Boundary.missing("OriginalCommonSounds") }
-        let root = try directory.resourceValues(forKeys:[.isDirectoryKey,.isSymbolicLinkKey])
+        let root = try OriginalFileFacts.of(directory,[.isDirectoryKey,.isSymbolicLinkKey])
         guard root.isDirectory == true,root.isSymbolicLink != true else { throw Boundary.invalid("Package directory") }
         func read(_ name: String) throws -> [UInt8] {
             let url = directory.appendingPathComponent(name)
             guard FileManager.default.fileExists(atPath:url.path) else { throw Boundary.missing(name) }
-            let values = try url.resourceValues(forKeys:[.isRegularFileKey,.isSymbolicLinkKey])
+            let values = try OriginalFileFacts.of(url,[.isRegularFileKey,.isSymbolicLinkKey])
             guard values.isRegularFile == true,values.isSymbolicLink != true else { throw Boundary.invalid(name) }
             return [UInt8](try Data(contentsOf:url))
         }

@@ -1,3 +1,5 @@
+// BSD sockets only: Windows hosts will use real Winsock (a separate adapter).
+#if !os(Windows)
 #if canImport(Darwin)
 import Darwin
 #elseif canImport(Glibc)
@@ -510,3 +512,5 @@ public final class OriginalMacWinsock {
 }
 
 extension OriginalMacWinsock: OriginalRuntimeSockets {}
+
+#endif

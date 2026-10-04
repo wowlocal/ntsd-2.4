@@ -3,7 +3,7 @@
 reference (tools/crossplatform/compare_headless.py).
 
 Usage: run_headless_scenarios.py OUT_DIR (--linux BUILD_DIR | --linux-amd64 BUILD_DIR | --linux-sdl BUILD_DIR
-                                         | --local BINARY) [SCENARIO ...]
+                                         | --local BINARY | --wine RUN_DIR) [SCENARIO ...]
 
 The command line is app_e2e's own (`run`): --original --mute-music
 --mute-sounds --overlay --virtual-clock 123456789 8 --script-clock gameplay
@@ -18,6 +18,9 @@ with the build and music directories read-only and OUT_DIR mounted at /out;
 Apple silicon: a test harness, not an x86 host observation). `--linux-sdl` runs
 the glibc NTSDSDL build there with SDL's offscreen video and dummy audio
 drivers and the SDL3 libraries from $NTSD_SDL_LIB mounted read-only.
+`--wine` runs RUN_DIR/NTSDHeadless.exe (with its resources and the Swift
+runtime DLLs beside it) in the CrossOver bottle ntsd-xplat-test, a test
+harness; paths are passed as Z:\\ paths and CRLF is stripped from its output.
 $NTSD_LINUX_PLATFORM sets the container platform (e.g. linux/amd64) and
 $NTSD_LINUX_IMAGE replaces the container image (e.g. ntsd-linux-runtime:noble
 from linux-runtime/Dockerfile, which adds fontconfig and DejaVu for text).
@@ -49,22 +52,33 @@ def main():
         base = out / name
         shutil.rmtree(base, ignore_errors=True); (base / "captures").mkdir(parents=True); (base / "overlay").mkdir(); (base / "frames").mkdir()
         inner = Path("/out") / name if mode == "--linux" else base
+        def host(path):   # the path as the game process sees it
+            return "Z:" + str(path).replace("/", "\\") if mode == "--wine" else str(path)
         extra = setup["extra"](base) if callable(setup["extra"]) else list(setup["extra"])
         if mode == "--linux":   # files the scenario placed under base are seen under /out
             extra = [str(inner / Path(a).relative_to(base)) if a.startswith(str(base)) else a for a in extra]
-        args = ["--original", "--mute-music", "--mute-sounds", "--no-network", "--overlay", str(inner / "overlay"),
-                "--virtual-clock", "123456789", "8", "--script-clock", "gameplay", "--body-captures", str(inner / "captures"),
-                "--body-frames", str(inner / "frames"), "--body-frame-digests",
-                *extra, "--script", setup["script"](inner / "captures")]
+        if mode == "--wine":
+            extra = [host(a) if a.startswith("/") else a for a in extra]
+        script = setup["script"](inner / "captures")
+        if mode == "--wine":   # capture paths inside the script
+            script = script.replace(str(inner / "captures"), host(inner / "captures"))
+        args = ["--original", "--mute-music", "--mute-sounds", "--no-network", "--overlay", host(inner / "overlay"),
+                "--virtual-clock", "123456789", "8", "--script-clock", "gameplay", "--body-captures", host(inner / "captures"),
+                "--body-frames", host(inner / "frames"), "--body-frame-digests",
+                *extra, "--script", script]
         if mode == "--linux":
             command = ["docker", "run", "--rm", *platform, *docker, "-e", "TZ=Etc/GMT-1", "-v", f"{target}:/app:ro", "-v", f"{MUSIC}:/music:ro",
                        "-v", f"{out}:/out", os.environ.get("NTSD_LINUX_IMAGE", "swift:6.4.0-noble"), f"/app/{binary}", "--music-dir", "/music", *args]
+        elif mode == "--wine":
+            cx = "/Applications/CrossOver.app/Contents/SharedSupport/CrossOver/bin/wine"
+            command = [cx, "--bottle", "ntsd-xplat-test", "--wait-children", host(Path(target).resolve() / "NTSDHeadless.exe"),
+                       "--music-dir", host(MUSIC), *args]
         else:
             command = [target, "--music-dir", str(MUSIC), *args]
         start = time.time()
         done = subprocess.run(command, capture_output=True, text=True, timeout=3600,
                               env={**app_e2e.APP_ENV} if mode != "--linux" else None)
-        (base / "events.jsonl").write_text(done.stdout); (base / "stderr.txt").write_text(done.stderr)
+        (base / "events.jsonl").write_text(done.stdout.replace("\r\n", "\n")); (base / "stderr.txt").write_text(done.stderr)
         compare = [sys.executable, str(COMPARE), str(base / "events.jsonl"), str(base / "captures"), str(base / "overlay"),
                    str(done.returncode), str(setup["reference"])] + ([f"/out={out}"] if mode == "--linux" else [])
         c = subprocess.run(compare, capture_output=True, text=True)
