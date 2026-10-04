@@ -194,21 +194,23 @@ user's approval to push. Until then, keep the other phases moving.
 | 2026-10-04 | **P6 step 1: SDL3 backend on macOS** | New `NTSDSDL` (behind `NTSD_SDL=1`, SDL3 3.4.16 from Homebrew via `NTSD_SDL_PREFIX`) runs `OriginalRuntimeSession` on SDL windows with a streaming texture, keyboard (SDL scancodes onto the existing key table), mouse, gamepads, an SDL audio stream for the effects mixer and SDL message boxes; music is silent by manifest duration until P7. On macOS it takes the AppKit host's window metrics (SDL cannot report Cocoa borders), CoreText glyph masks and Darwin Winsock. `NTSDRuntime` now keeps each window's last presented crop and writes it with one portable encoder (`--body-frames`, `--body-frame-every`, script `frame`). **All app_e2e scenarios: SDL 9/10 like AppKit, and all 51 presented frames byte-identical between SDL and AppKit;** Linux headless 9/10 on both arches with identical frames; Linux vs AppKit frames differ only in text pixels. | release tests 70/70 (affected runtime classes + new `OriginalFramebufferPNGTests`), 701 listed; Xcode release without SDL; AppKit with `--body-frames` equal to the full reference incl. capture hashes; [evidence](../evidence/crossplatform-p6-sdl-macos-20261004.json), `tools/crossplatform/compare_frames.py` | 6b6ed02 |
 | 2026-10-04 | **P6 step 2: whole matches frame by frame** | `--body-frame-digests` reports the SHA-256 of every presented frame; the scenario runner turns it on and `compare_frames.py` compares the sequences. **AppKit vs SDL: all 15,909 per-body frames (plus the 51 PNGs) identical across the 10 scenarios; Linux aarch64 vs x86_64 likewise.** Linux vs AppKit: 6,698/15,909 equal, the rest are frames with text, which the Linux host does not rasterise yet. State 9/10 on all four hosts (playback as on main). | official app_e2e 9/10 = baseline; [AppKit vs SDL](../evidence/crossplatform-p6-frame-digests-appkit-sdl-20261004.jsonl), [Linux arches](../evidence/crossplatform-p6-frame-digests-linux-arches-20261004.jsonl) | 50c19ea |
 | 2026-10-04 | **P7 groundwork: SDL build on Linux** | `tools/crossplatform/build_linux_deps.sh` builds SDL3 3.4.16 (X11, Wayland, PulseAudio, PipeWire, ALSA, offscreen, dummy) and static FreeType 2.13.3 for Linux in a `swift:6.4.0-noble` container from hash-checked tarballs. `NTSDSDL` cross-builds on this Mac with the generated glibc SDK against that SDL3 and runs in the container with SDL's offscreen video and dummy audio. **All scenarios: 9/10 like every other host, and all 15,960 frames identical to the Linux headless run.** | [evidence](../evidence/crossplatform-p7-linux-sdl-20261004.json), [results](../evidence/crossplatform-p7-linux-sdl-aarch64-20261004.jsonl) | 4bbf311 |
-| 2026-10-04 | **P7: text on Linux** | Non-Apple `NTSDSDL` rasterises TextOutA with a static FreeType: 13 px em, monochrome, baseline at row 13, the same mask contract as CoreText. Following the user's font decision (SYSTEM_FONT ships with Windows, not the game), it uses the standard Linux font whose widths best match the macOS stand-in: DejaVu Sans Condensed Bold within ±3 px, then Liberation, Noto, FreeSans, then fontconfig's sans-serif bold; plain DejaVu Sans is 15 % wider and clipped the selection screen. **All scenarios: state 9/10; text appears in exactly the same 9,211 of 15,909 frames as on AppKit, and the 6,698 text-free frames are identical.** macOS SDL unchanged (VS 1,832/1,832 frames equal AppKit). | [evidence](../evidence/crossplatform-p7-glyphs-20261004.json), [text frames](../evidence/crossplatform-p7-text-frames-20261004.jsonl), `compare_text_frames.py` | this commit |
+| 2026-10-04 | **P7: text on Linux** | Non-Apple `NTSDSDL` rasterises TextOutA with a static FreeType: 13 px em, monochrome, baseline at row 13, the same mask contract as CoreText. Following the user's font decision (SYSTEM_FONT ships with Windows, not the game), it uses the standard Linux font whose widths best match the macOS stand-in: DejaVu Sans Condensed Bold within ±3 px, then Liberation, Noto, FreeSans, then fontconfig's sans-serif bold; plain DejaVu Sans is 15 % wider and clipped the selection screen. **All scenarios: state 9/10; text appears in exactly the same 9,211 of 15,909 frames as on AppKit, and the 6,698 text-free frames are identical.** macOS SDL unchanged (VS 1,832/1,832 frames equal AppKit). | [evidence](../evidence/crossplatform-p7-glyphs-20261004.json), [text frames](../evidence/crossplatform-p7-text-frames-20261004.jsonl), `compare_text_frames.py` | 3e3c712 |
+| 2026-10-04 | **P7: X11 window and real input** | `linux_x11_smoke.sh` runs `NTSDSDL` on Xvfb with SDL's x11 driver in real time with no script, driven by `xdotool`: the window opens at the client size and centre the game was told (794×550 at 243,237 on 1280×1024), and real mouse and keyboard input goes through START, mode and character selection to a Naruto/Sasuke District match (matchLaunched, gameplay, 400 bodies, clean exit). Presses must last like physical ones (150 ms): the game reads input once per iteration and missed xdotool's instant clicks; input during loading is lost, as expected. | [evidence](../evidence/crossplatform-p7-x11-input-20261004.json) | this commit |
 
 ## Next task
 
-P7: the X11 window and input path on Linux.
+P7: music on non-Apple hosts.
 
-- Run `NTSDSDL` under Xvfb in the test image with SDL's x11 driver; drive the
-  front menu and a short match with real X input (`xdotool` keys and clicks)
-  instead of `--script`, and capture frames.
-- Gate: the window opens at the client size the game was told, input
-  reaches the game (menu moves, match starts), frames are presented;
-  scripted runs unchanged.
-- Then music decoding without AVFoundation (samples checked against
-  AVFoundation's decode of the packaged tracks), POSIX sockets for ONLINE
-  GAME, and a Linux package.
+- The packaged tracks are ALAC (`NTSDMacPlatform/Resources/OriginalMusic`,
+  manifest with frames and sample rate). Decode them without AVFoundation
+  (Apple's ALAC decoder is Apache-2.0; or decode once to PCM at package time
+  for non-Apple builds) and play them through the SDL audio stream with the
+  same graph-event looping and gain as `OriginalMacMusicOutput`.
+- Gate: decoded samples equal AVFoundation's decode of every track (same
+  frame count and sample values); state and frames unchanged on all
+  scenarios; music events (track, playing) unchanged.
+- Then POSIX sockets for ONLINE GAME, and a Linux package (archive with
+  SDL3, the bundle and a launcher).
 
 Following tasks:
 
