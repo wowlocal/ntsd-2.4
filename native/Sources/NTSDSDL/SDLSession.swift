@@ -66,10 +66,10 @@ final class SDLAudioFeed: @unchecked Sendable {
         })
     }
     func capsLock() -> Int32 { SDL_GetModState() & NTSD_SDL_KMOD_CAPS != 0 ? 1 : 0 }
-    /// BSD sockets on Darwin and Linux (`OriginalMacWinsock` in NTSDRuntime).
+    /// BSD sockets on Darwin and Linux (`OriginalMacWinsock`), real Winsock on Windows.
     func makeSockets() -> any OriginalRuntimeSockets {
         #if os(Windows)
-        preconditionFailure("NTSDSDL on Windows needs --no-network until a real-Winsock adapter exists")
+        return OriginalWindowsWinsock()
         #else
         return OriginalMacWinsock()
         #endif

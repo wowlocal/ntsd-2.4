@@ -15,7 +15,7 @@ PKG="$OUT/ntsd-windows-x86_64"
 "$CX/cxbottle" --create --bottle $BOTTLE --template win10_64 >/dev/null
 win() { printf 'Z:%s' "$(printf '%s' "$1" | tr '/' '\\')"; }
 SDL_VIDEO_DRIVER=offscreen SDL_AUDIO_DRIVER=dummy TZ=Etc/GMT-1 "$CX/wine" --bottle $BOTTLE --wait-children "$(win "$PKG/NTSDSDL.exe")" \
-    --no-network --virtual-clock 123456789 8 --overlay "$(win "$OUT/run/overlay")" \
+    --virtual-clock 123456789 8 --overlay "$(win "$OUT/run/overlay")" \
     --script "20 frame $(win "$OUT/run")\\menu.png; 30 exit" > "$OUT/run/events.raw" 2> "$OUT/run/stderr.txt"
 tr -d '\r' < "$OUT/run/events.raw" > "$OUT/run/events.jsonl"
 echo "== default launch: $(grep -o '"event":"[a-zA-Z]*"\|"font":"[^"]*"\|"musicOutput":"[^"]*"' "$OUT/run/events.jsonl" | tr '\n' ' ')"

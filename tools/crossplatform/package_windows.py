@@ -16,9 +16,9 @@ against libsdl's SDL3 3.4.16 VC package, then assembles:
   ntsd-windows-x86_64/LICENSES, README.txt
 
 and a reproducible zip (sorted entries, times of HEAD's commit) with
-manifest.json. Text uses GDI's SYSTEM_FONT, the original's own font. ONLINE
-GAME is off (--no-network) until a real-Winsock adapter exists. Local artefact
-only: publishing it is a separate decision.
+manifest.json. Text uses GDI's SYSTEM_FONT, the original's own font; ONLINE
+GAME uses the real Winsock stack. Local artefact only: publishing it is a
+separate decision.
 """
 import argparse, datetime, hashlib, json, os, shutil, subprocess, zipfile
 from pathlib import Path
@@ -28,8 +28,7 @@ SWIFT = Path.home() / "Library/Developer/Toolchains/swift-6.4.0-RELEASE.xctoolch
 X5 = Path("/Volumes/X5/ntsd-2.4-research/crossplatform")
 README = """NTSD native port for Windows (x86_64, SDL3)
 
-Run:   NTSDSDL.exe --no-network
-       (ONLINE GAME needs a Winsock adapter that is not built yet.)
+Run:   NTSDSDL.exe
 Data:  settings and replays go to %APPDATA%\\NTSD Native\\ (SDL_GetPrefPath).
 Text:  GDI's SYSTEM_FONT, as the original game draws it.
 Build: {commit}

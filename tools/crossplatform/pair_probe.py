@@ -3,14 +3,16 @@
 assertions of the retained probe (X5 network-app-client-20261002/pair_probe.py,
 docs/research/NETWORK_PLAY.md "Two-process probe"), run with a chosen binary.
 
-Usage: pair_probe.py OUT_DIR (--local BINARY | --linux-sdl BUILD_DIR) [--trace]
+Usage: pair_probe.py OUT_DIR (--local BINARY | --linux-sdl BUILD_DIR | --wine RUN_DIR) [--trace]
 
 `--local` runs both processes on this machine (the AppKit NTSDNative or a
 local NTSDSDL). `--linux-sdl` runs both NTSDSDL processes in one
 ntsd-linux-runtime:noble container (SDL offscreen/dummy drivers, SDL3 from
 $NTSD_SDL_LIB): real TCP over the container's loopback. Each process gets
 --network-loopback (127.0.0.1 as the local address), --network-ready-state and
---exit-after-network-ready; no game state is injected. `--trace` adds
+--exit-after-network-ready; no game state is injected. `--wine` runs two
+RUN_DIR/NTSDSDL.exe processes in the CrossOver bottle ntsd-xplat-test (test
+harness; real Winsock through Wine, SDL offscreen/dummy drivers). `--trace` adds
 --network-trace OUT_DIR/<role>-trace.jsonl (socket replies, for diagnosis);
 NTSD_PAIR_STRACE=1 wraps the Linux processes in strace (OUT_DIR/<role>.strace).
 """
@@ -68,6 +70,35 @@ def run_local(out, binary):
     return codes
 
 
+def run_wine(out, run_dir):
+    cx = "/Applications/CrossOver.app/Contents/SharedSupport/CrossOver/bin/wine"
+    def win(p): return "Z:" + str(p).replace("/", "\\")
+    with socket.socket() as s:
+        s.bind(("127.0.0.1", 12345))
+    env = {**os.environ, "TZ": "Etc/GMT-1", "SDL_VIDEO_DRIVER": "offscreen", "SDL_AUDIO_DRIVER": "dummy"}
+    procs = {}
+    for role, seed, script, _ in ROLES:
+        args = [a if not a.startswith(str(out)) else win(a) for a in arguments(out, role, seed, script, str(MUSIC))]
+        args = [win(a) if a == str(MUSIC) else a for a in args]
+        log = (out / f"{role}.raw").open("x")
+        procs[role] = (subprocess.Popen([cx, "--bottle", "ntsd-xplat-test", "--wait-children", win(Path(run_dir).resolve() / "NTSDSDL.exe"), *args],
+                                        stdout=log, stderr=subprocess.DEVNULL, env=env), log)
+        if role == "host":
+            deadline = time.monotonic() + 60
+            while time.monotonic() < deadline:
+                rows = subprocess.run(["lsof", "-nP", "-iTCP:12345", "-sTCP:LISTEN", "-Fn"], capture_output=True, text=True).stdout
+                if "n127.0.0.1:12345" in rows:
+                    break
+                time.sleep(0.2)
+            else:
+                raise AssertionError("host did not open its loopback listener")
+    codes = {}
+    for role, (p, log) in procs.items():
+        codes[role] = p.wait(timeout=300); log.close()
+        (out / f"{role}.log").write_text((out / f"{role}.raw").read_text().replace("\r\n", "\n"))
+    return codes
+
+
 def run_linux(out, build):
     script = ["set -u", "export TZ=Etc/GMT-1 SDL_VIDEO_DRIVER=offscreen SDL_AUDIO_DRIVER=dummy LD_LIBRARY_PATH=/sdl"]
     if os.environ.get("NTSD_PAIR_STRACE"):   # diagnosis only: syscall traces of both processes
@@ -116,7 +147,7 @@ def main():
     shutil.rmtree(out, ignore_errors=True); out.mkdir(parents=True)
     for role, _, _, names in ROLES:
         overlay(out, role, names)
-    codes = run_local(out, target) if mode == "--local" else run_linux(out, target)
+    codes = run_local(out, target) if mode == "--local" else run_wine(out, target) if mode == "--wine" else run_linux(out, target)
     rng = check(out, codes)
     result = {"result": "PASS", "mode": mode, "exitCodes": codes, "rngSHA256": rng}
     (out / "result.json").write_text(json.dumps(result, indent=2) + "\n")
