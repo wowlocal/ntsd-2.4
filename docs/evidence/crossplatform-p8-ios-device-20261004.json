@@ -1,0 +1,26 @@
+{
+  "study": "docs/research/CROSS_PLATFORM.md",
+  "phase": "P8: iPad device build",
+  "date": "2026-10-04",
+  "request": "user asked to install the game on their connected iPad Pro 11-inch (M4) to play with its keyboard",
+  "tool": "tools/crossplatform/ios_device.py: SwiftPM build of NTSDiOS for arm64-apple-ios17.0 (scratch build-ios-device on X5), the simulator app's layout, Info.plist for iPhoneOS (plus NSLocalNetworkUsageDescription), the team's wildcard iOS development profile embedded, codesign with the Apple Development identity and entitlements application-identifier H8QG3CBM96.local.ntsd.native.ios + get-task-allow, devicectl install/launch",
+  "built from": "0fc5bb9 with native/ clean (an unrelated uncommitted runtime change was stashed for the build)",
+  "result": {
+    "build": "Build complete (release); codesign --verify --strict passes",
+    "install on this Mac": "not completed: CoreDevice could not hold a connection (first over Wi-Fi, then over USB): states stuck at 'connecting'; after the user restarted remoted the device came up briefly, then 'tunnel connection failed ... NWError 60 timed out', 'Connection was invalidated / peer no longer reachable', and while the iPad rebooted 'usage assertion requirements' (4016). Tailscale and a wireguard-go tunnel were active on this Mac (a possible cause, not confirmed); the user chose to install from another Mac",
+    "ipa": {
+      "path": "/Volumes/X5/ntsd-2.4-research/crossplatform/ios-device/NTSD-iPad-0fc5bb9.ipa",
+      "bytes": 187682213,
+      "sha256": "611ee280b69563d69cbbb7270722a111d9870b5dacc55b7857677784c91f125e",
+      "files": 3238,
+      "note": "served to the user's LAN over a temporary HTTP server bound to 192.168.0.50"
+    }
+  },
+  "known gaps": [
+    "UIKit pressesCancelled is not handled (a key could stay held after a system gesture)",
+    "F1-F12 on the iPad keyboard may be taken by iPadOS"
+  ],
+  "open": [
+    "the game running on the real iPad with its keyboard (the user's test)"
+  ]
+}
