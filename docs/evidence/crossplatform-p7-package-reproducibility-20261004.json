@@ -1,0 +1,16 @@
+{
+  "study": "docs/research/CROSS_PLATFORM.md",
+  "phase": "P7: Linux package reproducibility",
+  "date": "2026-10-04",
+  "builds": {
+    "first": "927f319 + uncommitted packaging changes (dirty), scratch build-linux-glibc-static-aarch64",
+    "commit": "0f91b25, same scratch: archive ntsd-linux-aarch64-0f91b25.tar.gz 216,806,202 bytes, SHA-256 518822a089bdf5b0912cd7a0f5af0502dc9d8ba4df010a65ddd77451e6e08338 (kept on X5 as the canonical local package)",
+    "fresh": "0f91b25, fresh scratch build-linux-glibc-static-fresh-aarch64"
+  },
+  "results": {
+    "first vs commit": "1 of 1,536 files differs: README.txt (it names the commit and the dirty flag); the binary is byte-identical",
+    "commit vs fresh scratch": "1 of 1,536 files differs: NTSDSDL. Each binary embeds its own absolute scratch path 21 times (resource bundle accessor and build paths), so different scratch paths give different bytes and lengths"
+  },
+  "conclusion": "the package is reproducible from the same scratch path (canonical: /Volumes/X5/ntsd-2.4-research/crossplatform/build-linux-glibc-static-aarch64); bit-for-bit reproducibility across paths would need path remapping, including SwiftPM's generated bundle accessor string",
+  "space": "the fresh scratch, the debug Linux test build (12 GB, rebuildable), package staging trees and superseded outputs were removed afterwards to restore the X5 reserve (14 to 28 GB free); manifests and the canonical archive remain"
+}
