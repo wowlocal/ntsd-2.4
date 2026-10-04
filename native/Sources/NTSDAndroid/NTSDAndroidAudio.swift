@@ -2,6 +2,7 @@ import CAndroidNative
 import Foundation
 import NTSDMusicDecoder
 import NTSDRuntime
+import Synchronization
 
 /// An AAudio output stream whose data callback asks `fill` for frames.
 final class NTSDAndroidStream {
@@ -35,14 +36,17 @@ final class NTSDAndroidStream {
     func pause() { _ = AAudioStream_requestPause(stream) }
 }
 
-/// Feeds the sound-effect mixer (planar floats) to an interleaved stream.
+/// Feeds the sound-effect mixer (planar floats) to an interleaved stream;
+/// `silent` outputs zeros (muted, or the window without focus).
 final class NTSDAndroidEffectsFeed: @unchecked Sendable {
     let effects: OriginalMacSoundEffects
+    let silent = Atomic<Bool>(false)
     private var left: [Float] = [], right: [Float] = []
     init(effects: OriginalMacSoundEffects) { self.effects = effects }
     func fill(_ data: UnsafeMutableRawPointer,frames: Int,rate: Double) {
-        if left.count < frames { left = .init(repeating:0,count:frames); right = left }
         let out = data.assumingMemoryBound(to:Float.self)
+        if silent.load(ordering:.relaxed) { out.update(repeating:0,count:frames*2); return }
+        if left.count < frames { left = .init(repeating:0,count:frames); right = left }
         left.withUnsafeMutableBufferPointer { l in
             right.withUnsafeMutableBufferPointer { r in
                 effects.render(frames:frames,rate:rate,left:l.baseAddress!,right:r.baseAddress!)
@@ -117,4 +121,7 @@ final class NTSDAndroidMusicPCM: @unchecked Sendable {
     var isPlaying: Bool { pcm.isPlaying }
     func play() { guard pcm.frame < pcm.frames else { return }; pcm.setPlaying(true); output.start() }
     func pause() { pcm.setPlaying(false); output.pause() }
+    /// The app went to the background: stop the output, keep the track's state.
+    func suspend() { output.pause() }
+    func resume() { if pcm.isPlaying { output.start() } }
 }

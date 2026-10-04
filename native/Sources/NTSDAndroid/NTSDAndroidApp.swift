@@ -26,7 +26,8 @@ func ntsdAndroidOnCreate(_ activity: UnsafeMutablePointer<ANativeActivity>) {
     let activity: UnsafeMutablePointer<ANativeActivity>, files: URL, data: URL
     private(set) var surface: OpaquePointer?
     private var input: OpaquePointer?, looper: OpaquePointer?
-    private var dataReady = false, host: NTSDAndroidSessionHost?, session: OriginalRuntimeSession?
+    private var dataReady = false, session: OriginalRuntimeSession?
+    private(set) var host: NTSDAndroidSessionHost?
 
     init(_ activity: UnsafeMutablePointer<ANativeActivity>) {
         self.activity = activity
@@ -43,9 +44,14 @@ func ntsdAndroidOnCreate(_ activity: UnsafeMutablePointer<ANativeActivity>) {
         let callbacks = activity.pointee.callbacks!
         callbacks.pointee.onNativeWindowCreated = { _,window in MainActor.assumeIsolated { NTSDAndroidApp.shared?.surfaceCreated(window) } }
         callbacks.pointee.onNativeWindowRedrawNeeded = { _,window in MainActor.assumeIsolated { NTSDAndroidApp.shared?.surfaceRedraw(window) } }
-        callbacks.pointee.onNativeWindowDestroyed = { _,_ in MainActor.assumeIsolated { NTSDAndroidApp.shared?.surface = nil } }
+        callbacks.pointee.onNativeWindowDestroyed = { _,_ in
+            MainActor.assumeIsolated { NTSDAndroidApp.shared?.surface = nil; NTSDAndroidApp.shared?.host?.windows.surfaceChanged() }
+        }
         callbacks.pointee.onInputQueueCreated = { _,queue in MainActor.assumeIsolated { NTSDAndroidApp.shared?.inputCreated(queue) } }
         callbacks.pointee.onInputQueueDestroyed = { _,queue in MainActor.assumeIsolated { NTSDAndroidApp.shared?.inputDestroyed(queue) } }
+        callbacks.pointee.onPause = { _ in MainActor.assumeIsolated { NTSDAndroidApp.shared?.host?.setForeground(false) } }
+        callbacks.pointee.onResume = { _ in MainActor.assumeIsolated { NTSDAndroidApp.shared?.host?.setForeground(true) } }
+        callbacks.pointee.onWindowFocusChanged = { _,focused in MainActor.assumeIsolated { NTSDAndroidApp.shared?.host?.setFocused(focused != 0) } }
         callbacks.pointee.onDestroy = { _ in Foundation.exit(0) }
         app.prepareData()
     }
@@ -97,7 +103,7 @@ func ntsdAndroidOnCreate(_ activity: UnsafeMutablePointer<ANativeActivity>) {
     // MARK: session
 
     private func surfaceCreated(_ window: OpaquePointer?) {
-        surface = window
+        surface = window; host?.windows.surfaceChanged()
         startIfReady()
         if let window { host?.windows.draw(window) }
     }

@@ -22,7 +22,11 @@ final class NTSDAndroidCursor {}
     weak var app: NTSDAndroidApp?
     /// The last presented frame (redrawn when the surface comes back) and its window.
     private(set) var frame: OriginalFramebuffer?, shown: NTSDAndroidWindow?
-    private var geometry = (width: Int32(0), height: Int32(0))
+    /// The buffer geometry last set; a new surface (after the app returns from
+    /// the background, possibly at the same address) starts with its own
+    /// defaults, so the app clears this whenever the surface changes.
+    private var geometry: (width: Int32,height: Int32)?
+    func surfaceChanged() { geometry = nil }
     init(screen: CGSize) { self.screen = screen }
     private static func window(_ object: AnyObject) -> NTSDAndroidWindow { object as! NTSDAndroidWindow }
     func screenSize() throws -> CGSize { screen }
@@ -66,11 +70,15 @@ final class NTSDAndroidCursor {}
     func draw(_ surface: OpaquePointer) {
         guard let frame else { return }
         let (bw,bh) = buffer(surface,frame)
-        if geometry != (bw,bh) {
+        if geometry == nil || geometry! != (bw,bh) {
             _ = ANativeWindow_setBuffersGeometry(surface,bw,bh,Int32(WINDOW_FORMAT_RGBX_8888.rawValue)); geometry = (bw,bh)
         }
         var out = ANativeWindow_Buffer()
-        guard ANativeWindow_lock(surface,&out,nil) == 0,let bits = out.bits else { return }
+        guard ANativeWindow_lock(surface,&out,nil) == 0 else { return }
+        // Only a 32-bit buffer takes these pixels.
+        guard let bits = out.bits,out.format == Int32(WINDOW_FORMAT_RGBX_8888.rawValue) || out.format == Int32(WINDOW_FORMAT_RGBA_8888.rawValue) else {
+            _ = ANativeWindow_unlockAndPost(surface); geometry = nil; return
+        }
         let stride = Int(out.stride),width = Int(out.width),height = Int(out.height)
         let dst = bits.assumingMemoryBound(to:UInt32.self)
         for y in 0..<height { (dst+y*stride).update(repeating:0xFF00_0000,count:width) }
@@ -106,7 +114,8 @@ final class NTSDAndroidCursor {}
 @MainActor final class NTSDAndroidSessionHost: OriginalRuntimeSessionHost {
     let arguments: [String], windows: NTSDAndroidWindowHost, musicDirectory: String, files: URL, density: Double
     weak var session: OriginalRuntimeSession?
-    private var effects: NTSDAndroidStream?
+    private var effects: NTSDAndroidStream?, feed: NTSDAndroidEffectsFeed?, effectsMuted = false
+    private var players: [() -> NTSDAndroidMusicPlayer?] = [], focused = true
     /// The last touch as a desktop point: the game reads it with GetCursorPos.
     private var cursor: (Int32,Int32) = (0,0)
     /// Touches as player-like clicks (hover, then a held press).
@@ -170,17 +179,30 @@ final class NTSDAndroidCursor {}
             guard FileManager.default.fileExists(atPath:url.path) else { throw OriginalMacMusicOutput.Boundary.missingTrack(resource) }
             tracks[name.lowercased()] = url
         }
-        return .init(tracks:tracks) { url,ended in try NTSDAndroidMusicPlayer(url,ended:ended) }
+        return .init(tracks:tracks) { [weak self] url,ended in
+            let player = try NTSDAndroidMusicPlayer(url,ended:ended)
+            self?.players.append { [weak player] in player }
+            return player
+        }
     }
     func startSoundOutput(_ effects: OriginalMacSoundEffects,muted: Bool) throws -> String {
         if muted && scripted { return "muted (no output: scripted)" }   // as on the iPad host
         let feed = NTSDAndroidEffectsFeed(effects:effects)
         var rate = 48000.0
-        let stream = try NTSDAndroidStream(float:true,rate:nil,lowLatency:true) { data,frames in
-            if muted { data.assumingMemoryBound(to:Float.self).update(repeating:0,count:frames*2) } else { feed.fill(data,frames:frames,rate:rate) }
-        }
-        rate = Double(stream.rate); self.effects = stream; stream.start()
+        let stream = try NTSDAndroidStream(float:true,rate:nil,lowLatency:true) { data,frames in feed.fill(data,frames:frames,rate:rate) }
+        rate = Double(stream.rate); self.effects = stream; self.feed = feed; effectsMuted = muted; applyGain(); stream.start()
         return muted ? "muted" : "AAudio \(stream.rate) Hz"
+    }
+    /// DirectSound silences the game's buffers while its window is not
+    /// foreground (as the SDL host follows).
+    private func applyGain() { feed?.silent.store(effectsMuted || !focused,ordering:.relaxed) }
+    func setFocused(_ value: Bool) { focused = value; applyGain() }
+    /// Declared Android convention: in the background the app's audio output
+    /// stops (the game keeps running); it resumes where it was.
+    func setForeground(_ value: Bool) {
+        players.removeAll { $0() == nil }
+        if value { effects?.start(); players.forEach { $0()?.resume() } }
+        else { effects?.pause(); players.forEach { $0()?.suspend() } }
     }
     func backingScale(_ window: UInt32,in windows: OriginalRuntimeWindowBackend) -> Double { density }
     func cursorPoint() -> (Int32,Int32) { cursor }
