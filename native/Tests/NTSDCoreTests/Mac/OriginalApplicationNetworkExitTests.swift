@@ -2,6 +2,7 @@ import AppKit
 import XCTest
 @testable import NTSDCore
 @testable import NTSDMacPlatform
+@testable import NTSDRuntime
 
 @MainActor final class OriginalApplicationNetworkExitTests: XCTestCase {
     enum Stop: Error { case limit }

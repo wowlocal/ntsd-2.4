@@ -1,6 +1,5 @@
-import AppKit
+import Foundation
 import NTSDCore
-import UniformTypeIdentifiers
 
 /// Runtime loading after the menu requests it: common sounds, the whole
 /// catalog, the 400-slot pool, first input and the loaded menu, then the Host
@@ -15,6 +14,20 @@ import UniformTypeIdentifiers
 ///   VC80's fscanf("%c") lookahead in the DAT decoder (catalog checksum 1ec3356);
 /// - clock: live; loading PeekMessage sees an empty queue (input stays queued);
 /// - draw/present results inside loading are declared 0 and are not rendered.
+/// Interactive host dialogs of playback and the menu's document links.
+@MainActor public struct OriginalRuntimeLoadingDialogs {
+    /// The recording chooser (GetOpenFileName for .lfr/.txt), starting in
+    /// `directory`: a path, or nil when cancelled.
+    public var chooseRecording: (URL?) -> String?
+    /// MessageBoxA(NULL, text, NULL, MB_OK), which Windows titles "Error".
+    public var alert: (String) -> Void
+    /// ShellExecute's "open" of a document path.
+    public var open: (String) -> Void
+    public init(chooseRecording: @escaping (URL?) -> String?,alert: @escaping (String) -> Void,open: @escaping (String) -> Void) {
+        self.chooseRecording = chooseRecording; self.alert = alert; self.open = open
+    }
+}
+
 @MainActor public final class OriginalMacRuntimeLoading {
     public typealias P = OriginalApplicationPreparedStartupPlatform
     public typealias Host = OriginalApplicationHostSession<P>
@@ -99,8 +112,8 @@ import UniformTypeIdentifiers
     public init(_ started: OriginalMacRuntimeStartup.Started,startupInputs: OriginalApplicationStartupInputs,
         catalogInputs: OriginalApplicationCatalogInputs,loadingInputs: OriginalApplicationLoadingInputs,
         interfaceInputs: OriginalApplicationInterfaceInputs,menuInputs: OriginalApplicationMenuInputs,
-        arenaInputs: OriginalApplicationArenaInputs,clock: @escaping () throws -> UInt32) {
-        self.started = started; self.clock = clock; self.startupInputs = startupInputs
+        arenaInputs: OriginalApplicationArenaInputs,clock: @escaping () throws -> UInt32,dialogs: OriginalRuntimeLoadingDialogs) {
+        self.started = started; self.clock = clock; self.dialogs = dialogs; self.startupInputs = startupInputs
         self.catalogInputs = catalogInputs; self.loadingInputs = loadingInputs
         self.interfaceInputs = interfaceInputs; self.menuInputs = menuInputs; self.arenaInputs = arenaInputs
         // Embedded DIB resources by name; bitmap files by path. Resource names
@@ -117,10 +130,12 @@ import UniformTypeIdentifiers
         bitmapInputs = .init(resources:resources,files:files)
     }
     public static func bundled(_ started: OriginalMacRuntimeStartup.Started,startupInputs: OriginalApplicationStartupInputs,
-        clock: @escaping () throws -> UInt32) throws -> OriginalMacRuntimeLoading {
+        clock: @escaping () throws -> UInt32,dialogs: OriginalRuntimeLoadingDialogs) throws -> OriginalMacRuntimeLoading {
         try .init(started,startupInputs:startupInputs,catalogInputs:.bundled(),loadingInputs:.bundled(),
-            interfaceInputs:.bundled(),menuInputs:.bundledWithWar(),arenaInputs:.bundled(),clock:clock)
+            interfaceInputs:.bundled(),menuInputs:.bundledWithWar(),arenaInputs:.bundled(),clock:clock,dialogs:dialogs)
     }
+    /// The host's interactive dialogs.
+    public var dialogs: OriginalRuntimeLoadingDialogs
     func presentation(_ target: UInt32) throws -> OriginalMenuPresentationInput {
         try JSONDecoder().decode(OriginalMenuPresentationInput.self,from:JSONSerialization.data(withJSONObject:[
             "targetSurface":target,"methodResult":0,"queryResult":0,"audioGetResult":0,"audioSetResult":0,
@@ -280,25 +295,14 @@ import UniformTypeIdentifiers
         if let file = playbackFile { playbackFile = nil; return file }
         guard playbackInteractive else { return nil }
         let directory = try? overlay?.url("recording")
-        return MainActor.assumeIsolated {
-            let panel = NSOpenPanel()
-            panel.title = "Open"
-            panel.allowedContentTypes = ["lfr","txt"].compactMap { UTType(filenameExtension:$0) }
-            panel.canChooseDirectories = false; panel.allowsMultipleSelection = false
-            if let directory { panel.directoryURL = directory }
-            return panel.runModal() == .OK ? panel.url?.path : nil
-        }
+        return MainActor.assumeIsolated { dialogs.chooseRecording(directory) }
     }
     /// MessageBoxA(NULL, text, NULL, MB_OK): Windows titles it "Error".
     func alert(_ message: [UInt8]) {
         let text = String(decoding:message,as:UTF8.self)
         playbackAlerts.append(text)
         guard playbackInteractive else { return }
-        MainActor.assumeIsolated {
-            let alert = NSAlert()
-            alert.messageText = "Error"; alert.informativeText = text
-            alert.runModal()
-        }
+        MainActor.assumeIsolated { dialogs.alert(text) }
     }
     func openDocument(_ path: String) { pendingDocuments.append(path) }
     /// Declared runtime policy for the Demo start: 4025d0 reads its track from
@@ -477,7 +481,8 @@ import UniformTypeIdentifiers
             for path in pendingDocuments {
                 openedDocuments.append(path)
                 if playbackInteractive {
-                    DispatchQueue.main.asyncAfter(deadline:.now() + .milliseconds(Int(slept))) { _ = NSWorkspace.shared.open(URL(fileURLWithPath:path)) }
+                    let open = dialogs.open
+                    DispatchQueue.main.asyncAfter(deadline:.now() + .milliseconds(Int(slept))) { MainActor.assumeIsolated { open(path) } }
                 }
             }
             pendingDocuments = []

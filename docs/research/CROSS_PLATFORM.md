@@ -181,23 +181,25 @@ user's approval to push. Until then, keep the other phases moving.
 | 2026-10-04 | P5 step 10 | `OriginalRuntimeSockets` covers every Winsock call the original makes, plus `lastError`/`boundPort` and FD_* `post`. `OriginalRuntimeSocketNotification` and the pure `OriginalRuntimeSocketText` (inet_addr/ntoa/htons) are in `NTSDRuntime`. `OriginalMacRuntimeNetwork` moved there and takes its sockets; the Mac `init(localAddresses:)` supplies `OriginalMacWinsock`, whose statics forward. The first gate run stopped at the test build: the protocol lacked `boundPort`/`lastError`. | Winsock, NetworkHost, NetworkExit, RuntimeMenu, RuntimeLoading 23/23 on a fresh test build; 697 listed; Xcode release; Linux `NTSDRuntime`; full app e2e 9/10 = baseline (including vs's online check) | fb2e1c0 |
 | 2026-10-04 | P5 step 11a | FrontService moved to `NTSDRuntime`. It reaches the runtime window backend through the display's `windows` (a precondition names a display without it); the Mac-only `macWindows` cast is gone. | FrontRaster, ObservedGraphics, ObservedIteration, RuntimeMenu, RuntimeStartup 26/26 on a fresh test build; 697 listed; Xcode release; Linux `NTSDRuntime`; full app e2e 9/10 = baseline | 6e68178 |
 | 2026-10-04 | P5 step 11b | **The startup composition moved to `NTSDRuntime`:** `OriginalMacRuntimeStartup` (prepared inputs, overlay inputs, the attempt loop and audio/window/display/runtime dispatch, `Started`) and `OriginalMacRuntimeOverlay`. `run(...,host:)` takes an `OriginalRuntimeStartupHost` (window host, glyph rasteriser, MessageBoxA presenter). The Mac `run(inputs:overlay:environment:maximumAttempts:)` touches `NSApplication.shared` first and passes `.mac`; `Overlay.standard()` (Application Support) stays Mac; the NSAlert presenter is one shared `OriginalMacRuntimeMusic.alert`. | Startup, Menu, Loading, WindowBackend, ObservedIteration, LoadingAudio ×3 27/27 on a fresh test build; 697 listed; Xcode release; Linux `NTSDRuntime`; full app e2e 9/10 = baseline | 5ffe2dc |
-| 2026-10-04 | **P3 result (aarch64)** | **All 251 portable suites ran on Linux: 241 clean, 581 tests passed, 0 failed**, 1 skipped (FixtureInflate's reference is Apple's Compression). 10 heavy `Lib*` suites were OOM-killed in the 11.7 GiB VM before their assertions ran; that is memory, not a mismatch (see P3 memory). Core gives the same results on Linux as on macOS for everything that ran. | [evidence](../evidence/crossplatform-p3-linux-aarch64-20261004.json), per-suite results jsonl; harness `tools/crossplatform/run_linux_suites.py` | this commit |
+| 2026-10-04 | **P3 result (aarch64)** | **All 251 portable suites ran on Linux: 241 clean, 581 tests passed, 0 failed**, 1 skipped (FixtureInflate's reference is Apple's Compression). 10 heavy `Lib*` suites were OOM-killed in the 11.7 GiB VM before their assertions ran; that is memory, not a mismatch (see P3 memory). Core gives the same results on Linux as on macOS for everything that ran. | [evidence](../evidence/crossplatform-p3-linux-aarch64-20261004.json), per-suite results jsonl; harness `tools/crossplatform/run_linux_suites.py` | 414a2aa |
+| 2026-10-04 | P5 step 11c | RuntimeMenu and RuntimeLoading moved to `NTSDRuntime`. The menu takes its Caps Lock read and MessageBoxA presenter. Loading takes `OriginalRuntimeLoadingDialogs` (recording chooser, "Error" alert, document open), still wrapped in `MainActor.assumeIsolated` and with the deferred open after Sleep. The Mac initializers and `bundled(...)` keep NSEvent, NSOpenPanel, NSAlert and NSWorkspace. **NTSDMacPlatform is down to ≈930 lines of AppKit/AVFoundation/Darwin adapters; NTSDRuntime is 25 files, ≈4,040 lines.** | Menu, Loading, NetworkHost, NetworkExit, Startup, LoadingAudio ×3 23/23 on a fresh test build (the first run stopped at the test build: missing `@testable import NTSDRuntime` in five Mac tests); 697 listed; Xcode release; Linux `NTSDRuntime`; full app e2e 9/10 = baseline | this commit |
 
 ## Next task
 
-P5 step 11c, RuntimeMenu and RuntimeLoading.
+P5 step 12, the launcher session. `NTSDApp/OriginalRuntimeLaunch` (701
+lines) still mixes portable orchestration with AppKit.
 
-- Inject RuntimeMenu's caps-lock read and diagnostics presenter (both AppKit
-  defaults today).
-- Inject RuntimeLoading's dialogs (NSOpenPanel/UTType recording chooser, NSAlert
-  message box, NSWorkspace open).
-- Move both to `NTSDRuntime` with Mac initializers that keep the current
-  defaults.
-- Gate: RuntimeMenu, RuntimeLoading, NetworkHost/Exit, LoadingAudio ×3 on a
-  fresh test build; 697 listed; Xcode release; Linux `NTSDRuntime`; full app
-  e2e = baseline (vs covers website/controls/online/recording dialogs).
-- After that, NTSDMacPlatform holds only AppKit/AVFoundation/Darwin adapters,
-  and P6 (an SDL3 host on macOS) can start.
+- Portable: argument and script parsing, `iterate` (327-461), traces,
+  summary, `presentMusic`.
+- AppKit: NSEvent translation, GameController, menus, focus, App Nap, alerts.
+- Extract an `OriginalRuntimeSession(arguments:host:)` into `NTSDRuntime`
+  that owns the startup → menu → loading → gameplay iteration and
+  script/clock handling. The AppKit delegate keeps only AppKit work.
+- Preserve main-queue draining points and the `presentMusic` → WM_QUIT →
+  summed Sleep order.
+- Gate: every `tools/app_e2e_*` scenario (= baseline), plus a new session
+  test with a fake host.
+- Then P6: an SDL3 host on macOS.
 
 Following tasks:
 

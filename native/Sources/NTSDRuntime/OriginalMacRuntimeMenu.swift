@@ -1,4 +1,7 @@
-import AppKit
+import Foundation
+#if canImport(CoreGraphics)
+import CoreGraphics
+#endif
 import NTSDCore
 
 /// Advances the recovered front menu one whole Host iteration at a time after
@@ -34,8 +37,8 @@ import NTSDCore
     /// replaced once an iteration commits its `.allocate`.
     private var background: OriginalInterfaceAllocation?
     private let heap: OriginalMacRuntimeHeap
-    /// GetKeyState(VK_CAPITAL): the Caps Lock toggle (1 on, 0 off).
-    public var capsLock: () -> Int32 = { NSEvent.modifierFlags.contains(.capsLock) ? 1 : 0 }
+    /// GetKeyState(VK_CAPITAL): the Caps Lock toggle (1 on, 0 off), read from the host.
+    public var capsLock: () -> Int32
     static func textRead(_ raw: [UInt8]) -> [UInt8] {
         var result: [UInt8] = [],index = 0
         while index < raw.count {
@@ -53,13 +56,11 @@ import NTSDCore
     /// OutputDebugStringA text and MessageBoxA (text, caption) requests seen so far.
     public final class Diagnostics {
         public fileprivate(set) var debug: [[UInt8]] = [], messages: [[[UInt8]]] = []
-        /// Presents MessageBoxA; returns IDOK.
-        public var present: ([UInt8],[UInt8]) -> Void = { text,caption in
-            let alert = NSAlert(); alert.messageText = String(decoding:caption,as:UTF8.self)
-            alert.informativeText = String(decoding:text,as:UTF8.self); alert.runModal()
-        }
+        /// Presents MessageBoxA (text, caption); returns IDOK.
+        public var present: ([UInt8],[UInt8]) -> Void
+        init(present: @escaping ([UInt8],[UInt8]) -> Void) { self.present = present }
     }
-    public let diagnostics = Diagnostics()
+    public let diagnostics: Diagnostics
     public private(set) var iterations = 0, requests = 0, textRequests = 0, emptyBlits = 0
     /// The request being served when a step last stopped, for boundary reports.
     public private(set) var lastRequest: OriginalApplicationIterationRequest?
@@ -81,7 +82,9 @@ import NTSDCore
             bitmapResources:inputs.bitmaps)
     }
     public init(_ started: OriginalMacRuntimeStartup.Started,inputs: OriginalApplicationStartupInputs,
-        clock: @escaping () throws -> UInt32,point: @escaping () -> (Int32,Int32) = { (0,0) },overlay: OriginalMacRuntimeOverlay? = nil) throws {
+        clock: @escaping () throws -> UInt32,point: @escaping () -> (Int32,Int32) = { (0,0) },overlay: OriginalMacRuntimeOverlay? = nil,
+        capsLock: @escaping () -> Int32,messageBox: @escaping ([UInt8],[UInt8]) -> Void) throws {
+        self.capsLock = capsLock; diagnostics = Diagnostics(present:messageBox)
         host = started.host; self.clock = clock; music = started.runtime.music; self.overlay = overlay; heap = started.runtime.heap
         let control = try overlay?.read("data\\control.txt").map(Self.textRead) ?? inputs.controlBytes()
         controlFile = control

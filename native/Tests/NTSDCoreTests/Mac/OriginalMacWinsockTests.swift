@@ -1,6 +1,7 @@
 import Foundation
 import XCTest
 @testable import NTSDMacPlatform
+@testable import NTSDRuntime
 
 /// NETWORK_PLAY_PLAN.md N1: the Mac Winsock service on loopback, in the order
 /// the original's host notification and client attempt use it.

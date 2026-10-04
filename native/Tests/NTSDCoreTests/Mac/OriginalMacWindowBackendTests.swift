@@ -3,6 +3,7 @@ import AppKit
 import XCTest
 @testable import NTSDCore
 @testable import NTSDMacPlatform
+@testable import NTSDRuntime
 
 @MainActor final class OriginalMacWindowBackendTests: XCTestCase {
     typealias N = OriginalApplicationPreparedStartupPlatform
