@@ -211,15 +211,19 @@ user's approval to push. Until then, keep the other phases moving.
 
 ## Next task
 
-- When the screen is unlocked: `matrix.py OUT --reuse` with the AppKit and
-  macOS SDL hosts, to complete the baseline (CoreText group: AppKit, macOS SDL
-  and iPad must agree on every frame).
-- Meanwhile, independent work: music on iOS (NTSDMusicDecoder through an
-  AVAudioEngine player node, so iOS and SDL share the decoder), checked in
-  the simulator with the same scripted scenarios.
-- Needs the user: real-hardware checks (Linux desktop, Windows PC, iPad),
-  publishing the Linux/Windows packages, reporting the Swift 6.4.0 Linux
-  miscompile upstream.
+Waiting on inputs (checked 2026-10-04 17:40):
+
+- **Unlocked screen** (the Mac is locked since 12:20): then `matrix.py OUT
+  --reuse` adds the AppKit and macOS SDL hosts (CoreText group with the iPad
+  must agree on every frame), and iOS music can be tried in the simulator,
+  whose CoreAudio aborted the app while the session was locked.
+- **Android (P8)**: no Android SDK, NDK or emulator is installed (only
+  Homebrew's `sdkmanager`). Needs the user to accept Google's Android SDK
+  licence (`sdkmanager --licenses`) and approve the NDK/emulator download;
+  then the 6.4.0 Android Swift SDK replaces the installed 6.3.3 one.
+- **User decisions**: real-hardware checks (Linux desktop, Windows PC, iPad),
+  publishing the Linux/Windows packages (they contain the original game's
+  data), reporting the Swift 6.4.0 Linux miscompile upstream.
 
 Following tasks:
 
