@@ -200,23 +200,23 @@ user's approval to push. Until then, keep the other phases moving.
 | 2026-10-04 | **P7: ONLINE GAME on Linux** | The BSD-socket Winsock moved into `NTSDRuntime` (name kept) and runs on Darwin, glibc and musl; `NTSDSDL` uses it everywhere. Linux needed errno mapping to the BSD numbers behind WSAE codes, MSG_NOSIGNAL, Winsock-number argument checks, and a readiness fix: the game selects before `listen()`, Linux reports that socket as hung up, which first produced the game's own "Accpet() Error" box and then left Dispatch not watching (strace: the host never accepted); watching now starts once the socket listens or connects (Darwin unchanged). **The retained two-process ONLINE GAME probe passes between two Linux processes, two macOS SDL processes and two AppKit processes, all with the RNG hash of the retained 2026-10-02 run.** | Winsock tests now portable: macOS 17/17 network tests, Linux 8/8; app_e2e 9/10 = baseline; `pair_probe.py`; [evidence](../evidence/crossplatform-p7-sockets-20261004.json) | 927f319 |
 | 2026-10-04 | **P7: Linux package** | `package_linux.py` cross-builds `NTSDSDL` with a static Swift runtime and assembles `ntsd-linux-aarch64` (the game, `libSDL3.so.0` beside it via `$ORIGIN`, the resource bundle, the packaged music, licences for SDL3, FreeType, ALAC and Swift, a README) into a reproducible 217 MB tar.gz with a per-file manifest; `NTSDSDL` now finds `OriginalMusic` beside itself. **In a plain Ubuntu 24.04 container without Swift the unpacked package resolves every library, starts with music and font found, reaches a match with real X11 input, and reproduces the vs scenario with identical frames.** Local artefact only. | `check_linux_package.sh`; [evidence](../evidence/crossplatform-p7-linux-package-20261004.json) | 0f91b25 |
 | 2026-10-04 | **P7: package reproducibility** | Rebuilt from 0f91b25 with the same scratch path, the package differs from the first build only in `README.txt` (it names the commit); the binary is byte-identical. From a fresh scratch path the binary differs: it embeds its absolute scratch path 21 times (bundle accessor, build paths). Reproducible from the canonical scratch path; cross-path reproducibility would need path remapping. | [evidence](../evidence/crossplatform-p7-package-reproducibility-20261004.json) | ee2c6b8 |
-| 2026-10-04 | **P7: Linux x86_64 package** | Generated the x86_64 glibc SDK (`ntsd-6.4.0-ubuntu24.04-x86_64`, same generator and options), built SDL3/FreeType for linux/amd64, and packaged `ntsd-linux-x86_64` with `package_linux.py --arch x86_64`. **In a clean amd64 Ubuntu 24.04 container (Rosetta harness) it resolves every library, starts with music and font, reaches a match with real X11 input and reproduces the vs scenario; all 1,832 frames, FreeType text included, equal the aarch64 package's.** | `check_linux_package.sh … linux/amd64`; [evidence](../evidence/crossplatform-p7-linux-package-x86_64-20261004.json) | this commit |
+| 2026-10-04 | **P7: Linux x86_64 package** | Generated the x86_64 glibc SDK (`ntsd-6.4.0-ubuntu24.04-x86_64`, same generator and options), built SDL3/FreeType for linux/amd64, and packaged `ntsd-linux-x86_64` with `package_linux.py --arch x86_64`. **In a clean amd64 Ubuntu 24.04 container (Rosetta harness) it resolves every library, starts with music and font, reaches a match with real X11 input and reproduces the vs scenario; all 1,832 frames, FreeType text included, equal the aarch64 package's.** | `check_linux_package.sh … linux/amd64`; [evidence](../evidence/crossplatform-p7-linux-package-x86_64-20261004.json) | e1eb5b8 |
+| 2026-10-04 | **P0-W: first Windows executable** | The UCRT xwin downloads is 10.0.26624, which has no `corecrt_math.h`, `stdnoreturn.h` or `stdalign.h` (math lives in `math.h`); Swift 6.4's `ucrt.modulemap` expects an older layout. A reviewed patch removes those three modules in a copy of the SDK; MSVC 14.29 with SDK 10.0.22621 builds the modules (14.44's `threads.h` does not), and the SDK library folders are passed to lld-link explicitly. **A Swift 6.4 probe with Foundation cross-compiles to a PE32+ x86-64 exe and runs in a CrossOver bottle with the Swift runtime DLLs, printing the same results as macOS except the LLP64 `long` size.** | `windows_probe.sh`; [evidence](../evidence/crossplatform-p0w-probe-20261004.json) | this commit |
 
 ## Next task
 
-P0-W, bounded: the Windows UCRT headers.
+P0-W continued: the package for Windows.
 
-- The xwin splats lack `corecrt_math.h`, `corecrt_math_defines.h` and
-  `stdnoreturn.h`, which Swift 6.4's `ucrt.modulemap` names. Find which
-  Windows SDK package carries them (xwin's manifest, the "Universal CRT
-  Headers Libraries and Sources" MSI and its CABs) and whether xwin skipped or
-  filtered them; the user accepted the VS Build Tools terms on 2026-10-03, which
-  cover the Windows SDK packages xwin downloads.
-- Success: `swiftc -target x86_64-unknown-windows-msvc` compiles a probe
-  importing Foundation, then `NTSDCore`. Stop after a bounded attempt and
-  record the evidence if the headers are not obtainable under those terms.
-- Otherwise P8: an iPadOS host (UIKit) on the shared runtime, checked in the
-  simulator.
+- Wrap the probe's flags in a Swift SDK bundle (`swift-sdk.json` and a toolset
+  with the `-visualc-tools-root`, `-windows-sdk-*` and `-libpath` options) so
+  SwiftPM cross-builds `NTSDCore`, `NTSDRuntime` and `NTSDHeadless` for
+  `x86_64-unknown-windows-msvc`.
+- Audit the C targets for LLP64 (`long` is 32-bit on Windows): NTSDReplayCodec
+  (zlib 1.1.4 subset) and CALAC.
+- Gate: `NTSDHeadless` runs the app_e2e scenarios in the CrossOver test bottle
+  with state equal to the references (strip CRLF from its output) and frames
+  equal to the other hosts (no text headless).
+- Then the Windows sockets host (real Winsock) and SDL3 for Windows.
 
 Following tasks:
 
@@ -225,7 +225,7 @@ Following tasks:
   so.
 - Report the Swift 6.4.0 Linux miscompile upstream with the reproducer; that
   publishes it, so ask the user first.
-- P0-W, continued (license accepted 2026-10-03). `xwin` 0.10.0 splats are on
+- P0-W history (license accepted 2026-10-03). `xwin` 0.10.0 splats are on
   X5: MSVC 14.44.17.14 + SDK 10.0.26100 (`winsysroot`) and MSVC 14.29 + SDK
   10.0.22621 (`winsysroot-vs16`).
   - `swiftc -target x86_64-unknown-windows-msvc -sdk <Windows.sdk>` with

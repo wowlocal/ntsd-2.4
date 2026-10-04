@@ -1,0 +1,38 @@
+--- a/Windows.sdk/usr/share/ucrt.modulemap
++++ b/Windows.sdk/usr/share/ucrt.modulemap
+@@ -99,10 +99,7 @@
+       export *
+     }
+ 
+-    module stdalign {
+-      header "stdalign.h"
+-      export  *
+-    }
++    // stdalign.h is absent from UCRT 10.0.26624 (the one xwin downloads).
+ 
+     module stddef {
+       textual header "stddef.h"
+@@ -126,10 +123,7 @@
+       export *
+     }
+ 
+-    module stdnoreturn {
+-      textual header "stdnoreturn.h"
+-      export *
+-    }
++    // stdnoreturn.h is absent from UCRT 10.0.26624 (the one xwin downloads).
+ 
+     module string {
+       header "string.h"
+@@ -233,10 +227,7 @@
+     export *
+   }
+ 
+-  module math {
+-    header "corecrt_math.h"
+-    export *
+-  }
++  // corecrt_math.h is absent from the UCRT that xwin downloads; its declarations live in math.h (module C.math).
+ 
+   module memory {
+     header "corecrt_memory.h"
