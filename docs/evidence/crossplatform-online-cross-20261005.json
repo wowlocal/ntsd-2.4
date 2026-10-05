@@ -1,0 +1,85 @@
+{
+  "study": "docs/research/CROSS_PLATFORM.md",
+  "phase": "ONLINE GAME across platforms",
+  "date": "2026-10-05",
+  "tool": "pair_probe.py --cross HOST CLIENT (local:BINARY | wine:RUN_DIR | android:RUN_DIR); the scripts are the retained probe's, the client still dials 127.0.0.1:12345: adb forward (Android host) or adb reverse (Android client) carries the connection between the emulator and this Mac; Wine processes share the Mac's loopback",
+  "binaries": {
+    "local": "macOS NTSDHeadless (f1acc80)",
+    "wine": "NTSDHeadless.exe in the CrossOver bottle ntsd-xplat-test (real Winsock through Wine)",
+    "android": "NTSDHeadless for Android in the arm64 emulator (Bionic sockets)"
+  },
+  "results": {
+    "mac-android": {
+      "result": "PASS",
+      "mode": "--cross",
+      "exitCodes": {
+        "host": 0,
+        "client": 0
+      },
+      "rngSHA256": "5352f941c619060669587370c1974685877d4899a6ad0d1b165f54ecd4aa89c7",
+      "roles": {
+        "host": "local",
+        "client": "android"
+      }
+    },
+    "android-mac": {
+      "result": "PASS",
+      "mode": "--cross",
+      "exitCodes": {
+        "host": 0,
+        "client": 0
+      },
+      "rngSHA256": "5352f941c619060669587370c1974685877d4899a6ad0d1b165f54ecd4aa89c7",
+      "roles": {
+        "host": "android",
+        "client": "local"
+      }
+    },
+    "wine-local": {
+      "result": "PASS",
+      "mode": "--cross",
+      "exitCodes": {
+        "host": 0,
+        "client": 0
+      },
+      "rngSHA256": "5352f941c619060669587370c1974685877d4899a6ad0d1b165f54ecd4aa89c7",
+      "roles": {
+        "host": "wine",
+        "client": "local"
+      }
+    },
+    "local-wine": {
+      "result": "PASS",
+      "mode": "--cross",
+      "exitCodes": {
+        "host": 0,
+        "client": 0
+      },
+      "rngSHA256": "5352f941c619060669587370c1974685877d4899a6ad0d1b165f54ecd4aa89c7",
+      "roles": {
+        "host": "local",
+        "client": "wine"
+      }
+    },
+    "wine-android": {
+      "result": "PASS",
+      "mode": "--cross",
+      "exitCodes": {
+        "host": 0,
+        "client": 0
+      },
+      "rngSHA256": "5352f941c619060669587370c1974685877d4899a6ad0d1b165f54ecd4aa89c7",
+      "roles": {
+        "host": "wine",
+        "client": "android"
+      }
+    }
+  },
+  "summary": "all five pairings PASS (both processes exit 0, networkReady on both, the probe's role/seat/name/request assertions) with rngSHA256 5352f941c619060669587370c1974685877d4899a6ad0d1b165f54ecd4aa89c7, the retained run's",
+  "tool fix on the way": "the probe's own 'port free' check ran after adb had taken 12345 for forwarding, then failed on the previous run's TIME_WAIT; it now runs before adb and allows TIME_WAIT (SO_REUSEADDR still refuses a live listener)",
+  "harness note": "adb forwarding and Wine are test harnesses; the emulator reaches this Mac through adb, not a real network",
+  "open": [
+    "two real devices on a LAN",
+    "Linux in this matrix (a container's loopback is not the Mac's)"
+  ]
+}
