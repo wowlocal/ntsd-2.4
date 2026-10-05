@@ -60,7 +60,7 @@ definedness mask), plus 2.9 million actor-record copies.
 | 2 | Read `values`/`known` once before each per-pixel loop (the step-3 reviewer's note) | nothing records a write inside those loops | **done** (review OK) |
 | 3 | `OriginalStateRecord` keeps records of ≥ 4 MiB (the replay buffers) in 16 KiB pages, so a rollback copy that is written duplicates one page | same contents, errors and equality; review OK | done when its Core suites pass |
 | 4 | Front-buffer copy loop by row: the source index steps ±1, key bounds read once; `allKnown` by 64-bit words | same pixels in the same order; review OK | **done** |
-| 5 | Copy loop: a fully known source span skips the per-pixel test; the target's known bits are gathered per word and written once | same pixels and bits; the loop never reads the target mask (no independent review: recorded gap) | **done** |
+| 5 | Copy loop: a fully known source span skips the per-pixel test; the target's known bits are gathered per word and written once | same pixels and bits; the loop never reads the target mask; review OK | **done** |
 | 6 | `LoadedMenuSession.Attempt` collects its address ranges locally (each append to the class property paid a dynamic exclusivity check, 3.3% of the phone's time in TLS lookups) and walks the wave owners without copying them (`OriginalWaveLoadResult` copies: 570 refcount samples) | same ranges, order and throw points | next |
 | 7 | Re-profile; then the framebuffer/present path (`memcpy` from `performFront`, Android `WindowHost.draw`) and the bindings' record copies | — | queued |
 

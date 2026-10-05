@@ -24,6 +24,6 @@
   "review": {
     "reviewer": "independent read-only agent (step 4)",
     "verdict": "OK: allKnown returns the old result for every reachable span and cannot read past the allocation; the stepped index equals sourceIndex(x,y) in both directions; the key test is the exact negation; unknown pixels still clear the bit; copy.key always has two elements",
-    "step 5": "author-checked only: same pixel order, known bits merged per word with disjoint set/clear masks, flushed at every word boundary and at the row end; no independent review (recorded gap)"
+    "step 5": "independent read-only agent after the commit: OK — the allKnown span is exactly the row's source indices in both directions and inside the allocation; set/clear masks are disjoint and reproduce the old per-pixel writes; every word is flushed once per row and merge touches only the current word's bits; nothing reads the target mask before the flush; source and target are distinct storages. Not verified by it: test coverage of rows narrower than 64 sharing a word"
   }
 }
