@@ -170,20 +170,24 @@ public struct OriginalApplicationLoadedMenuSession {
             guard output.targetSurface == entry.loading.target else { throw Boundary.dependency("Menu target") }
             guard var images = state.bitmapInputs else { throw Boundary.dependency("Bitmap inputs") }
             try images.addResources(inputs.bitmaps);state.bitmapInputs = images
-            reserve(0x44d000,state.full.bytes.count)
-            for (token,a) in state.memory.allocations where a.live { reserve(token,a.storage.byteCount) }
+            // Collected in a local array and stored once: each append to the
+            // class's `ranges` paid a dynamic exclusivity check, and iterating
+            // the owner arrays by value copied every ownership record
+            // (MOBILE_PERFORMANCE step 6). Same ranges, order and throws.
+            var spans: [(UInt64,UInt64)] = []
+            func add(_ token: UInt32,_ count: Int) { if token != 0 && count > 0 { spans.append((UInt64(token),UInt64(token)+UInt64(count))) } }
+            add(0x44d000,state.full.bytes.count)
+            for (token,a) in state.memory.allocations where a.live { add(token,a.storage.byteCount) }
             let catalog = entry.entry.entry
-            for a in catalog.snapshot.allocations { reserve(a.token,a.count) }
-            for f in catalog.files.streams.values { reserve(f.allocation.buffer,f.allocation.capacity) }
-            for owner in catalog.startup.waveOwners { try retain(owner) }
-            for owner in catalog.entry.waveOwners { try retain(owner) }
-            for owner in catalog.snapshot.waveOwners { try retain(owner) }
-            for (token,record) in audio.allocations { reserve(token,record.bytes.count) }
+            for a in catalog.snapshot.allocations { add(a.token,a.count) }
+            for f in catalog.files.streams.values { add(f.allocation.buffer,f.allocation.capacity) }
+            for owners in [catalog.startup.waveOwners,catalog.entry.waveOwners,catalog.snapshot.waveOwners] {
+                for i in owners.indices { for span in try owners[i].addressedRegions() { add(span.token,span.count) } }
+            }
+            for (token,record) in audio.allocations { add(token,record.bytes.count) }
+            ranges = spans
         }
         func reserve(_ token: UInt32,_ count: Int) { if token != 0 && count > 0 { ranges.append((UInt64(token),UInt64(token)+UInt64(count))) } }
-        func retain(_ owner: OriginalWaveOwnership) throws {
-            for span in try owner.addressedRegions() { reserve(span.token,span.count) }
-        }
         func claim(_ token: UInt32,_ count: Int) throws {
             let lo = UInt64(token),hi = lo+UInt64(count)
             guard token != 0,count > 0,hi <= UInt64(UInt32.max)+1,

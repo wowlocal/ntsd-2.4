@@ -1,0 +1,22 @@
+{
+  "study": "docs/research/MOBILE_PERFORMANCE.md",
+  "step": 6,
+  "date": "2026-10-05",
+  "change": "OriginalApplicationLoadedMenuSession.Attempt.init collects its reserved address ranges in a local array and assigns `ranges` once (each append to the class property paid a dynamic exclusivity check: a TLS lookup through __emutls_get_address on Android); the three wave-owner arrays are walked by index; the unused retain(_:) method is removed",
+  "why": "phone profile after steps 3-4: exclusivity TLS lookups 5.4% of samples, 791 of them in Attempt.reserve",
+  "phone": {
+    "speed (vs script, no frame capture)": "9.3 -> 9.4 ticks per second (within noise)",
+    "profile (simpleperf, 24,074 samples)": "exclusivity TLS lookups 1,301 (5.4%) -> 382 (1.6%); Attempt.reserve no longer appears",
+    "finding": "the OriginalWaveLoadResult copies (672 refcount samples) come from OriginalApplicationGameplaySession.advance, which concatenates the three sound-load lists every cycle to collect their output tokens; addressed separately as step 6b"
+  },
+  "gates": {
+    "headless (frozen binary sha256 fbbed9ad…)": "all 10 scenarios equal; vs frames 1,832 identical to m1-frames-ref",
+    "Core suites (release test build of the tree with only this change)": "25 suites using the loaded menu session pass (see log list p2s6-*.log)",
+    "AppKit (app built with only this change)": "vs and playback equal; 1,832 frames identical to the AppKit step-3 run"
+  },
+  "review": {
+    "reviewer": "independent read-only agent",
+    "verdict": "OK: same ranges in the same order, nothing reads ranges during the build, same throws (a throwing init yields no object; no deinit), retain had no other callers, waveOwners are stored lets, addressedRegions caches in a shared class box so owners[i] behaves like a copy",
+    "note": "OriginalApplicationPoolSession.Attempt keeps the old pattern (menus, not per gameplay cycle; out of scope)"
+  }
+}
