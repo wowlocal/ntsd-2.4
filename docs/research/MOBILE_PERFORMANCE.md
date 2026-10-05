@@ -28,6 +28,7 @@ frames or references.
 | Galaxy A12 after steps 3–5 | **9.3** | ([evidence](../evidence/crossplatform-speed-steps45-20261005.json)) |
 | Galaxy A12 after step 6 | **9.4** | exclusivity TLS 5.4% → 1.6% of samples ([evidence](../evidence/crossplatform-speed-step6-20261005.json)) |
 | Galaxy A12 after step 6b | **9.9** | ([evidence](../evidence/crossplatform-speed-step6b-20261005.json)) |
+| Galaxy A12 after step 7 | **10.2** | ([evidence](../evidence/crossplatform-speed-step7-20261005.json)) |
 
 macOS `sample` of the headless match (20 s): before step 1 the main thread's
 time was in the display backend's front-buffer drawing (`performFront` 1418
@@ -65,7 +66,7 @@ definedness mask), plus 2.9 million actor-record copies.
 | 5 | Copy loop: a fully known source span skips the per-pixel test; the target's known bits are gathered per word and written once | same pixels and bits; the loop never reads the target mask; review OK | **done** |
 | 6 | `LoadedMenuSession.Attempt` collects its address ranges locally (each append to the class property paid a dynamic exclusivity check) and walks the wave owners by index | same ranges, order and throw points; review OK | **done** |
 | 6b | `GameplaySession.advance` collects its sound-buffer tokens without concatenating the three load lists (copied every `OriginalWaveLoadResult` each cycle: 672 refcount samples) | same set, used only for membership; review OK | **done** |
-| 7 | Re-profile; then the framebuffer/present path (`memcpy` from `performFront`, Android `WindowHost.draw`) and the bindings' record copies | — | queued |
+| 7 | Copy loop: rows that are fully known, unkeyed and forward (two thirds of the copied pixels: whole-screen copies) are copied with one row copy and whole mask words | same values and bits; review OK | **done** |
 
 **Phone profile after steps 3–4** (24,085 samples): `performFront` self
 16.2% (half of it `KnownMask` bit get/set in the copy loop), `memcpy` 12.0%
@@ -76,3 +77,15 @@ state 227), exclusivity TLS lookups 5.4% (791 in `Attempt.reserve`).
 Not pursued without the user: building Android with
 `-enforce-exclusivity=unchecked` would remove the TLS lookups everywhere, but
 it drops a runtime safety check rather than changing representation.
+
+**Where the phone's time goes after step 6b** (simpleperf, 24,072 samples,
+inclusive): front-buffer drawing 26.1% (its own copy loop ~14%, Android
+window drawing 4%, the framebuffer copy 3%), gameplay session 17.1%
+(gameplay body 11.4%), loaded cycle 10.9%, bindings store 7.0% and read 2.5%
+(per-cycle conversion between the match model and the session state: 400
+actor records and the allocation dictionary copied each cycle), loaded menu
+attempt 4.6% (iterating every live allocation), menu state replace 2.2%.
+By symbol: `memcpy` 12.5%, `swift_retain`/`release` and atomics ~15%.
+Each remaining item is worth a few percent; reaching the game's ~30 ticks per
+second on this phone would need the per-cycle state plumbing restructured
+(the bindings' round trip and the rollback copies), not further local fixes.

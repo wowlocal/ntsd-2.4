@@ -73,6 +73,14 @@ import NTSDCore
                 if newValue != 0 { words[i >> 6] |= bit } else { words[i >> 6] &= ~bit }
             }
         }
+        /// Marks pixels start..<start+length known (whole words at once).
+        func setRange(_ start: Int,_ length: Int) {
+            var i = start
+            let end = start+length
+            while i < end && i & 63 != 0 { words[i >> 6] |= UInt64(1) << UInt64(i & 63); i += 1 }
+            while end-i >= 64 { words[i >> 6] = ~0; i += 64 }
+            while i < end { words[i >> 6] |= UInt64(1) << UInt64(i & 63); i += 1 }
+        }
         /// Sets the `set` bits and clears the `clear` bits of word `w` (disjoint).
         func merge(_ w: Int,set: UInt64,clear: UInt64) {
             if set|clear != 0 { words[w] = (words[w] & ~clear) | set }
@@ -915,6 +923,14 @@ extension OriginalMacDisplayBackend {
                 for y in rect.top..<rect.bottom {
                     var a = copy.sourceIndex(rect.left,y),b = y*output.width+rect.left
                     let sourceKnown = inputKnown.allKnown(step > 0 ? a : a-(width-1),width)
+                    if sourceKnown && !keyed && step > 0 {
+                        // Every pixel is known and written as is: one row copy and
+                        // whole mask words. Two thirds of a match's copied pixels
+                        // take this path (whole-screen copies; MOBILE_PERFORMANCE step 7).
+                        outputValues.advanced(by:b).update(from:inputValues.advanced(by:a),count:width)
+                        outputKnown.setRange(b,width)
+                        continue
+                    }
                     var word = b >> 6,set: UInt64 = 0,clear: UInt64 = 0
                     for _ in 0..<width {
                         if b >> 6 != word { outputKnown.merge(word,set:set,clear:clear);word = b >> 6;set = 0;clear = 0 }
