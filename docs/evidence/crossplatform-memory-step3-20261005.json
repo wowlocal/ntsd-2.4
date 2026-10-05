@@ -1,0 +1,31 @@
+{
+  "study": "docs/research/MEMORY_FOOTPRINT.md",
+  "step": 3,
+  "date": "2026-10-05",
+  "change": "display surface Storage keeps its buffers private and exposes values/known through accessors that first apply recorded writes in order; the bitmap stretch (StretchBlt of a loaded image into a surface) validates its rectangle at the call and records the pixel writes, applied at the surface's first pixel access; the recorded write captures the image value and decodes it then. Allocation stays at creation (calloc zero pages cost no physical memory until written), so allocation failures fall where they did",
+  "memory (macOS headless, vmmap DefaultMallocZone dirty+swapped)": {
+    "before": "~2.6 GB at 40 s, 2.53 GB at 70 s",
+    "after": "1.5 GB at 40 s (934 MB dirty + 572 MB swapped), 1.52 GB at 70 s (856 + 660)",
+    "note": "virtual heap unchanged (2.7 GB): most image surfaces are allocated but never filled in a match"
+  },
+  "gates": {
+    "macOS app release build": "ok",
+    "display backend suites": "7 suites, 35 tests, 0 failures (whole-catalog loading 3445 s)",
+    "headless vs": "equal; 1,832 frames identical to the linux-headless matrix run",
+    "AppKit vs": "equal"
+  },
+  "review": {
+    "reviewer": "independent read-only agent",
+    "verdict": "OK: every access goes through the applying accessors, no pointer kept across a recorded write, FIFO ordering, captured values match the eager loop, errors unchanged (rectangle checked at the call; the decode's try! cannot trap), no retain cycle, main actor only",
+    "notes": [
+      "hoisting values/known out of hot loops recommended (performance, MOBILE_PERFORMANCE)",
+      "decoding now happens at a surface's first use, which can be a gameplay frame (one-time cost)"
+    ]
+  },
+  "phone (Galaxy A12, 2.8 GB RAM, debug APK with steps 1-3)": {
+    "scripted vs": "completes; state equal to the frozen reference in 668 s (emulator 95 s); all 1,832 frames identical to the emulator run, text included; text placement agrees with AppKit (446 of 1,826 frames). The unreduced build was killed by lmkd during loading",
+    "interactive": "main menu after 13 s; START -> mode menu after ~165 s of loading (RSS 1.35 GB + 0.3 GB swap); VS Mode -> held J closes the controls dialog and joins Player 1 at character select",
+    "speed": "5.3-5.5 gameplay ticks per second without frame capture (busy 454 s), peak RSS 1.26 GB; the game's own rate is about 30, so the A12 is too slow to play in real time (MOBILE_PERFORMANCE)",
+    "kind": "actual device observation over adb (keyevent --duration, input tap); phone kept awake with svc power stayon usb"
+  }
+}

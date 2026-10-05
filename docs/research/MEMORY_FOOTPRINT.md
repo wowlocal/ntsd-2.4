@@ -51,7 +51,7 @@ definedness byte per pixel, and as 32-bit surface values with a known byte.
 | --- | --- | ---: | --- | --- |
 | 1 | `Bitmap` keeps its DIB bytes and resolved pixel offset, not the decoded copy (it still decodes at load, so the same images fail at the same point); each surface's source-colour record keeps a whole-copied bitmap instead of its decoded arrays (decoded once if read). | ~1.0 GB | **done:** live heap 4.1 → 3.02 GB; 15 Core suites (51 tests) pass; vs equal headless and AppKit, frames identical; independent review OK ([evidence](../evidence/crossplatform-memory-step1-20261005.json)) | done |
 | 2 | Surface `known` mask one bit per pixel instead of one byte (budget still counts five bytes per pixel) | ~0.25 GB | **done:** live heap 3.02 → 2.75 GB; 7 display-backend suites (35 tests, whole catalog included) pass; vs equal headless and AppKit, frames identical; review OK ([evidence](../evidence/crossplatform-memory-step2-20261005.json)) | done |
-| 3 | Fill image surfaces lazily: a whole-image copy into a surface is recorded and applied at the surface's first pixel access (allocation stays at creation; untouched calloc pages cost no physical memory). Most of the 851 sprite surfaces are never read in a match. | up to ~1.1 GB resident | as 2, plus resident (dirty+swapped) heap from vmmap | next |
+| 3 | Fill image surfaces lazily: a whole-image copy into a surface is recorded and applied at the surface's first pixel access (allocation stays at creation; untouched calloc pages cost no physical memory). Most of the 851 sprite surfaces are never read in a match. | up to ~1.1 GB resident | **done:** resident heap (vmmap dirty+swapped) 2.6 → 1.5 GB; 7 display suites pass; vs equal headless and AppKit, frames identical; review OK; **the phone now loads and plays the scripted match exactly** ([evidence](../evidence/crossplatform-memory-step3-20261005.json)) | done |
 | 3b | `Bitmap.dib` without the extra copy of each file (slice or mapped file bytes) | up to ~0.6 GB | as 1 | queued |
 | 4 | Remaining large holders (surface values, state-record definedness, frame-loader dictionaries) after re-measuring | open | to be decided from the new attribution | queued |
 
@@ -65,3 +65,9 @@ headless/Android frame comparisons, a new footprint measurement, an
 independent read-only review of the representation change, then a commit.
 Stop condition: the phone loads and plays, or the remaining holders need a
 semantic change (then ask the user).
+
+**Result after step 3 (2026-10-05):** the Galaxy A12 loads the game and plays
+the scripted VS match with the exact reference state and frames identical to
+the emulator. Memory is no longer the limit there; speed is (about 5.4 ticks per
+second against the game's ~30), continued in [MOBILE_PERFORMANCE](MOBILE_PERFORMANCE.md).
+Step 3b (the dib copies) stays queued until memory matters again.

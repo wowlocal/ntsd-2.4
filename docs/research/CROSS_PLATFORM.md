@@ -237,7 +237,8 @@ ONLINE GAME is checked with `pair_probe.py` on each host and across hosts
 | 2026-10-05 | **iPad on the user's device** | The user installed the edccfde IPA on their iPad Pro and reports the game works with its keyboard (an actual-device report, not instrumented). | [evidence](../evidence/crossplatform-p8-ipad-device-20261005.json) | 569c7d7 |
 | 2026-10-05 | **P8: release APK** | `android_release_key.sh` creates the release key once (outside the repository, password only in the Keychain); `android_app.py --release` builds `io.github.wowlocal.ntsd`, not debuggable, version from the commit, with the original's icon, signed with that key. **It installs beside the debug build and runs on the emulator.** Not published. | [evidence](../evidence/crossplatform-p8-android-release-20261005.json) | d2bf295 |
 | 2026-10-05 | **Memory step 1** ([MEMORY_FOOTPRINT](MEMORY_FOOTPRINT.md)) | Malloc stack attribution showed the images held three times. Loaded bitmaps no longer keep a decoded copy, and each surface's colour record keeps the copied bitmap instead of decoded arrays (decoded once if read). **Live heap 4.1 → 3.0 GB**; 15 Core suites pass, vs equal on headless and AppKit with identical frames; independent review OK. | [evidence](../evidence/crossplatform-memory-step1-20261005.json), [attribution](../evidence/crossplatform-memory-attribution-20261005.json) | 2289ad0 |
-| 2026-10-05 | **Memory step 2** | Display surfaces keep pixel knowledge as bits instead of bytes (the allocation budget still counts as before). **Live heap 3.02 → 2.75 GB**; 7 display-backend suites pass, the whole-catalog loading test included; vs equal headless and AppKit, frames identical; review OK. | [evidence](../evidence/crossplatform-memory-step2-20261005.json) | this commit |
+| 2026-10-05 | **Memory step 2** | Display surfaces keep pixel knowledge as bits instead of bytes (the allocation budget still counts as before). **Live heap 3.02 → 2.75 GB**; 7 display-backend suites pass, the whole-catalog loading test included; vs equal headless and AppKit, frames identical; review OK. | [evidence](../evidence/crossplatform-memory-step2-20261005.json) | 58bb8cc |
+| 2026-10-05 | **Memory step 3; the game on the phone** | Image surfaces are filled at their first use instead of at load: the copy is recorded and applied when the surface is first read or written, so most of the 851 sprite surfaces are never filled in a match. **Resident heap 2.6 → 1.5 GB** (from ~3.9 GB before step 1); display suites pass, vs equal headless and AppKit, frames identical; review OK. **On the Galaxy A12 the scripted VS match now completes with the exact reference state and frames identical to the emulator**, and interactive play reaches character select; but it runs at ~5.4 ticks per second against the game's ~30. | [evidence](../evidence/crossplatform-memory-step3-20261005.json) | this commit |
 
 ## Next task
 
@@ -251,16 +252,15 @@ build-tools 36.1.0, CMake 4.1.2, platform 35, NDK 30.0.16248370, and the
 1. **P3 x86_64 tests** (running): the portable XCTest suites on Linux x86_64
    under Rosetta, one suite per container (`run_linux_suites.py --platform
    linux/amd64`); 37/254 passed, 0 failed at 2026-10-05 07:40.
-2. **Memory footprint** (user decision 2026-10-05: do it): the game needs
-   ~4 GB, a 2.8 GB phone kills it while loading. Separate study
-   [MEMORY_FOOTPRINT](MEMORY_FOOTPRINT.md): attribute the heap, then reduce it
-   without changing behaviour (macOS gate, app_e2e, matrix frames,
-   independent review for storage-model changes).
-3. **Release APK**: built (`android_app.py --release`); publishing it, e.g.
-   on the GitHub pre-release, is a separate question for the user. It will
-   only be useful on 3 GB phones after the memory work.
-4. **Waiting on the user**: real Linux desktop and Windows PC checks; a
-   phone check once the footprint is reduced.
+2. **Speed on slow devices** ([MOBILE_PERFORMANCE](MOBILE_PERFORMANCE.md)):
+   memory now fits the Galaxy A12 (steps 1–3 of
+   [MEMORY_FOOTPRINT](MEMORY_FOOTPRINT.md)), but a match runs at ~5.4 ticks per
+   second there. The macOS profile puts the time in the display backend's
+   front-buffer drawing; first remove a validation scan that cannot throw on
+   any host, and read the pixel buffers once per loop.
+3. **Release APK**: built (`android_app.py --release`); publishing it is the
+   user's decision.
+4. **Waiting on the user**: real Linux desktop and Windows PC checks.
 
 Following tasks:
 

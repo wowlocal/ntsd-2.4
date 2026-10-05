@@ -86,8 +86,22 @@ import NTSDCore
         func free() { Foundation.free(words) }
     }
     private final class Storage {
-        let width: Int, height: Int, count: Int, byteCount: Int
-        let values: UnsafeMutablePointer<UInt32>, known: KnownMask, budget: Budget
+        let width: Int, height: Int, count: Int, byteCount: Int, budget: Budget
+        private let valuesStorage: UnsafeMutablePointer<UInt32>, knownStorage: KnownMask
+        /// Writes recorded but not yet applied, in order. A copy of a whole loaded
+        /// image into a surface is recorded and written at the surface's first
+        /// pixel access: the allocation stays at creation (zero pages cost no
+        /// physical memory until written) and most image surfaces are never read
+        /// in a match (MEMORY_FOOTPRINT step 3). Every access goes through
+        /// `values`/`known`, which apply the recorded writes first.
+        private var pending: [(UnsafeMutablePointer<UInt32>,KnownMask) -> Void] = []
+        var values: UnsafeMutablePointer<UInt32> { if !pending.isEmpty { applyPending() }; return valuesStorage }
+        var known: KnownMask { if !pending.isEmpty { applyPending() }; return knownStorage }
+        func record(_ write: @escaping (UnsafeMutablePointer<UInt32>,KnownMask) -> Void) { pending.append(write) }
+        private func applyPending() {
+            let writes = pending; pending = []
+            for write in writes { write(valuesStorage,knownStorage) }
+        }
         init(_ width: Int,_ height: Int,_ budget: Budget) throws {
             guard width > 0,height > 0,width <= Int.max/height,width*height <= Int.max/5 else { throw Boundary.geometry }
             // The budget still counts five bytes per pixel, as the byte mask did,
@@ -96,10 +110,10 @@ import NTSDCore
             try budget.reserve(byteCount)
             guard let pixels = calloc(count,4) else { budget.release(byteCount); throw Boundary.allocationFailed }
             guard let mask = KnownMask(count) else { free(pixels); budget.release(byteCount); throw Boundary.allocationFailed }
-            values = pixels.assumingMemoryBound(to:UInt32.self); known = mask
+            valuesStorage = pixels.assumingMemoryBound(to:UInt32.self); knownStorage = mask
             // Zero allocation bytes are not an original initialized framebuffer.
         }
-        deinit { free(values); known.free(); budget.release(byteCount) }
+        deinit { free(valuesStorage); knownStorage.free(); budget.release(byteCount) }
     }
     private final class Surface: Resource {
         let draw: Draw, width: Int, height: Int, screen: CGRect?
@@ -583,18 +597,23 @@ extension OriginalMacDisplayBackend {
             install(dc);s.activeBitmapDC = dc.token;owners = [dc,s];response = .init(output:dc.token)
         case "stretch":
             let dc = try resource(q.words[0],as:SurfaceDC.self),memory = try resource(q.words[5],as:MemoryDC.self)
-            let p = memory.selected.input!.pixels,s = dc.surface,data = s.storage!
+            let input = memory.selected.input!,s = dc.surface,data = s.storage!
             let (x,y,w,h) = try bitmapRect(q.words[1],q.words[2],q.words[3],q.words[4],s.width,s.height)
-            let sx = Int(q.words[6]),sy = Int(q.words[7]),hole = rleHolesReadPaletteZero ? p.paletteZero : nil
-            for row in 0..<h { for column in 0..<w {
-                let a = (sy+row)*p.width+sx+column,b = (y+row)*data.width+x+column,i = a*3
-                if !p.defined[a],let hole {
-                    data.values[b] = (UInt32(hole[0]) << 16 | UInt32(hole[1]) << 8 | UInt32(hole[2])).littleEndian
-                    data.known[b] = 1;continue
-                }
-                data.values[b] = (UInt32(p.rgb[i]) << 16 | UInt32(p.rgb[i+1]) << 8 | UInt32(p.rgb[i+2])).littleEndian
-                data.known[b] = p.defined[a] ? 1 : 0
-            } }
+            let sx = Int(q.words[6]),sy = Int(q.words[7]),holes = rleHolesReadPaletteZero,width = data.width
+            // Recorded, applied at the surface's first pixel access (the image is
+            // decoded then; nothing else changes the image in between).
+            data.record { values,known in
+                let p = input.pixels,hole = holes ? p.paletteZero : nil
+                for row in 0..<h { for column in 0..<w {
+                    let a = (sy+row)*p.width+sx+column,b = (y+row)*width+x+column,i = a*3
+                    if !p.defined[a],let hole {
+                        values[b] = (UInt32(hole[0]) << 16 | UInt32(hole[1]) << 8 | UInt32(hole[2])).littleEndian
+                        known[b] = 1;continue
+                    }
+                    values[b] = (UInt32(p.rgb[i]) << 16 | UInt32(p.rgb[i+1]) << 8 | UInt32(p.rgb[i+2])).littleEndian
+                    known[b] = p.defined[a] ? 1 : 0
+                } }
+            }
             owners = [dc,memory,s,memory.selected];response = .init(result:1)
         case "releaseDC":
             let s = try bitmapSurface(q.words[0]),dc = try resource(q.words[1],as:SurfaceDC.self)
