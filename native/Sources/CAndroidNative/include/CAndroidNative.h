@@ -16,5 +16,9 @@
 extern int _dispatch_get_main_queue_handle_4CF(void);
 extern void _dispatch_main_queue_callback_4CF(void *_Null_unspecified msg);
 
+// Hides the status and navigation bars (immersive sticky) through the
+// activity's decor view. Call on the main thread (activity->env is its JNIEnv).
+void ntsd_android_hide_system_bars(ANativeActivity *_Nonnull activity);
+
 // Implemented in Swift (NTSDAndroid); ANativeActivity_onCreate forwards to it.
 extern void ntsd_android_on_create(ANativeActivity *_Nonnull activity);

@@ -51,8 +51,14 @@ func ntsdAndroidOnCreate(_ activity: UnsafeMutablePointer<ANativeActivity>) {
         callbacks.pointee.onInputQueueDestroyed = { _,queue in MainActor.assumeIsolated { NTSDAndroidApp.shared?.inputDestroyed(queue) } }
         callbacks.pointee.onPause = { _ in MainActor.assumeIsolated { NTSDAndroidApp.shared?.host?.setForeground(false) } }
         callbacks.pointee.onResume = { _ in MainActor.assumeIsolated { NTSDAndroidApp.shared?.host?.setForeground(true) } }
-        callbacks.pointee.onWindowFocusChanged = { _,focused in MainActor.assumeIsolated { NTSDAndroidApp.shared?.host?.setFocused(focused != 0) } }
+        // Immersive mode is reset by dialogs and the keyboard: hide the bars again
+        // whenever the window regains focus.
+        callbacks.pointee.onWindowFocusChanged = { activity,focused in
+            if focused != 0, let activity { ntsd_android_hide_system_bars(activity) }
+            MainActor.assumeIsolated { NTSDAndroidApp.shared?.host?.setFocused(focused != 0) }
+        }
         callbacks.pointee.onDestroy = { _ in Foundation.exit(0) }
+        ntsd_android_hide_system_bars(activity)
         app.prepareData()
     }
 
