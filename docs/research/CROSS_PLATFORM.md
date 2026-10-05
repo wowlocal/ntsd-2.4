@@ -242,7 +242,8 @@ ONLINE GAME is checked with `pair_probe.py` on each host and across hosts
 | 2026-10-05 | **Speed steps 1–2** | The display backend no longer re-scans the whole delivered rectangle twice per front blit for unknown pixels: that scan could only throw a boundary that every host's runtime turns off (`presentUnknownAsBlack`). Pixel buffers are read once per loop. **Galaxy A12: 5.4 → 7.6 ticks per second** (busy 454 → 339 s); macOS busy 24 → 16 s. vs equal headless and AppKit, 1,832 frames identical, display suites pass, review OK. A phone profile (simpleperf) then put 16% of the phone's time in copying the 6.5 MB replay buffer on every cycle and 27% in front-buffer drawing. | [evidence](../evidence/crossplatform-speed-steps12-20261005.json) | accefc6 |
 | 2026-10-05 | **Playback scenario fixed (harness)** | The `playback` scenario had failed on every host ("Recording file may be corrupted", also before this branch) because the working tree holds the recording's 130-byte Git LFS pointer, which the game rejects. `app_e2e.py` now reads the committed recording from the local LFS store, checked against the pointer's SHA-256. Playback is equal on the AppKit app and headless; other hosts not rerun yet. | [evidence](../evidence/crossplatform-playback-lfs-20261005.json) | 16cb07b |
 | 2026-10-05 | **P3 result (x86_64)** | All 254 portable suites ran on Linux x86_64 (swift:6.4.0-noble containers under Rosetta, `run_linux_suites.py --platform linux/amd64`): **244 clean, 595 tests passed, 0 failed**, 1 skipped (FixtureInflate, as on aarch64). The same 10 heavy `Lib*` suites as on aarch64 were OOM-killed in the Docker VM before their first test. | [evidence](../evidence/crossplatform-p3-x86_64-20261005.json) | 00976c7 |
-| 2026-10-05 | **Speed steps 4–5** | The sprite-copy loop in the display backend walks rows (the source index steps by one pixel), skips the per-pixel known test for fully known source spans, and writes the target's known bits once per 64-bit word. Phone: 8.8 → 9.3 ticks per second on top of step 3. vs equal, frames identical, all 10 scenarios equal, display suites pass. | [evidence](../evidence/crossplatform-speed-steps45-20261005.json) | this commit |
+| 2026-10-05 | **Speed steps 4–5** | The sprite-copy loop in the display backend walks rows (the source index steps by one pixel), skips the per-pixel known test for fully known source spans, and writes the target's known bits once per 64-bit word. Phone: 8.8 → 9.3 ticks per second on top of step 3. vs equal, frames identical, all 10 scenarios equal, display suites pass. | [evidence](../evidence/crossplatform-speed-steps45-20261005.json) | 791ad85 |
+| 2026-10-05 | **Speed step 3: paged replay buffers** | `OriginalStateRecord` keeps records of 4 MiB or more (the 6.5 MB replay buffers) in 16 KiB pages, so the copy each game cycle makes for rollback duplicates one page instead of 13 MB; assembled contents are cached per written version. **Phone: 7.6 → 8.8 ticks per second** (with steps 4–5: 9.3). 31 Core suites, all 10 scenarios and AppKit vs/playback equal, frames identical; two independent reviews OK. Test helpers that compared records byte by byte were made to read each array once (they had doubled two suites' time). | [evidence](../evidence/crossplatform-speed-step3-20261005.json) | this commit |
 
 ## Next task
 
@@ -254,10 +255,10 @@ build-tools 36.1.0, CMake 4.1.2, platform 35, NDK 30.0.16248370, and the
 `android-35;google_apis;arm64-v8a` image (AVD `ntsd-xplat-api35`).
 
 1. **Speed on slow devices** ([MOBILE_PERFORMANCE](MOBILE_PERFORMANCE.md)):
-   7.6 ticks per second on the Galaxy A12 after steps 1–2 (the game's rate is
-   about 30). Step 3 pages the 6.5 MB replay buffers so a cycle's rollback
-   copy no longer duplicates them (reviewed; all 10 scenarios equal; Core
-   suites next), then the front-buffer copy loops.
+   9.3 ticks per second on the Galaxy A12 after steps 1–5 (the game's rate is
+   about 30). Next, step 6: the loaded menu session's per-cycle address-range
+   bookkeeping (dynamic exclusivity checks, 3.3% of the phone's time) and its
+   copies of wave owners; then re-profile.
 2. **Release APK**: built (`android_app.py --release`); publishing it is the
    user's decision.
 3. **Waiting on the user**: real Linux desktop and Windows PC checks.

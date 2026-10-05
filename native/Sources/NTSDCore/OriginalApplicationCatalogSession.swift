@@ -161,7 +161,7 @@ public struct OriginalApplicationCatalogSession {
             guard var images = state.bitmapInputs else { throw Boundary.missingOwners }
             try images.addResources(inputs.bitmaps); state.bitmapInputs = images
             for (token,a) in state.memory.allocations where a.live {
-                ranges.append((UInt64(token),UInt64(token)+UInt64(a.storage.bytes.count)))
+                ranges.append((UInt64(token),UInt64(token)+UInt64(a.storage.byteCount)))
             }
             let device = try word(0x44eecc)
             guard startup.owner.deviceReady,device != 0,

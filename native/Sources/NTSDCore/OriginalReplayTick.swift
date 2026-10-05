@@ -33,7 +33,7 @@ extension OriginalInputControlContext {
             throw OriginalStateError.invalidStorage("Replay tick buffer ownership")
         }
         let address = pointer &+ offset
-        guard address >= pointer, UInt64(address)+UInt64(count) <= UInt64(pointer)+UInt64(allocation.storage.bytes.count) else {
+        guard address >= pointer, UInt64(address)+UInt64(count) <= UInt64(pointer)+UInt64(allocation.storage.byteCount) else {
             throw OriginalStateError.invalidStorage("Replay tick address outside owned allocation")
         }
         return (pointer,Int(address-pointer))

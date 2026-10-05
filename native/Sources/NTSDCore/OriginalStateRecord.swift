@@ -22,19 +22,115 @@ public struct OriginalStateRecord: Equatable, Sendable {
     /// Observed World prefix through the catalog pointer, not a recovered sizeof(World).
     public static let worldPrefixSize = 0x7d8
 
-    public private(set) var bytes: [UInt8]
-    public private(set) var defined: [Bool]
+    /// Records of at least this many bytes (today only the 0x630e18-byte replay
+    /// buffers) keep their bytes and masks in pages, so a copy that is then
+    /// written duplicates one page instead of the whole record: each game cycle
+    /// writes its replay packet into a rollback copy (MOBILE_PERFORMANCE step 3).
+    /// Contents, errors and equality are those of the flat representation.
+    static let pagedThreshold = 0x400000
+    private static let pageShift = 14, pageMask = (1 << 14) - 1
+
+    private var flatBytes: [UInt8]
+    private var flatDefined: [Bool]
+    private var pages: Pages?
+
+    private struct Pages: Equatable, Sendable {
+        var bytes: [[UInt8]]
+        var defined: [[Bool]]
+        /// The assembled contents, built on first read and shared by copies
+        /// with the same contents; every write starts a new one.
+        var whole = Whole()
+        var count: Int { bytes.isEmpty ? 0 : ((bytes.count - 1) << OriginalStateRecord.pageShift) + bytes[bytes.count - 1].count }
+        static func == (lhs: Pages, rhs: Pages) -> Bool { lhs.bytes == rhs.bytes && lhs.defined == rhs.defined }
+        mutating func willWrite() {
+            if isKnownUniquelyReferenced(&whole) { whole.clear() } else { whole = Whole() }
+        }
+    }
+
+    private final class Whole: @unchecked Sendable {
+        private let lock = NSLock()
+        private var bytes: [UInt8]?, defined: [Bool]?
+        func bytes(_ pages: [[UInt8]], _ count: Int) -> [UInt8] {
+            lock.lock(); defer { lock.unlock() }
+            if let bytes { return bytes }
+            let made = assemble(pages, count)
+            bytes = made
+            return made
+        }
+        func defined(_ pages: [[Bool]], _ count: Int) -> [Bool] {
+            lock.lock(); defer { lock.unlock() }
+            if let defined { return defined }
+            let made = assemble(pages, count)
+            defined = made
+            return made
+        }
+        func clear() { lock.lock(); bytes = nil; defined = nil; lock.unlock() }
+    }
+
+    private static func assemble<Element>(_ pages: [[Element]], _ count: Int) -> [Element] {
+        var made = [Element](); made.reserveCapacity(count)
+        for page in pages { made.append(contentsOf: page) }
+        return made
+    }
+
+    /// The whole contents for a single read, without filling a paged record's
+    /// cache: the replay writer reads its buffers once and then frees them,
+    /// and a freed allocation keeps its storage.
+    func readOnce() -> (bytes: [UInt8], defined: [Bool]) {
+        guard let pages else { return (flatBytes, flatDefined) }
+        return (Self.assemble(pages.bytes, pages.count), Self.assemble(pages.defined, pages.count))
+    }
+
+    /// `Array(bytes.prefix(count))` without assembling a paged record.
+    func leadingBytes(_ count: Int) -> [UInt8] {
+        guard let pages else { return Array(flatBytes.prefix(count)) }
+        precondition(count >= 0, "Can't take a prefix of negative length from a collection")
+        var made = [UInt8](); made.reserveCapacity(min(count, pages.count))
+        for page in pages.bytes where made.count < count { made.append(contentsOf: page.prefix(count - made.count)) }
+        return made
+    }
+
+    /// The whole contents. A paged record assembles them once per written
+    /// version (code may index `bytes[i]` in a loop); hot paths use
+    /// `byteCount` and the typed accessors.
+    public var bytes: [UInt8] {
+        guard let pages else { return flatBytes }
+        return pages.whole.bytes(pages.bytes, pages.count)
+    }
+    public var defined: [Bool] {
+        guard let pages else { return flatDefined }
+        return pages.whole.defined(pages.defined, pages.count)
+    }
+    public var byteCount: Int { pages?.count ?? flatBytes.count }
 
     public init(bytes: [UInt8], defined: [Bool]) throws {
         guard bytes.count == defined.count else {
             throw OriginalStateError.invalidStorage("byte and initialization-mask lengths differ")
         }
-        self.bytes = bytes
-        self.defined = defined
+        if bytes.count >= Self.pagedThreshold {
+            let starts = stride(from: 0, to: bytes.count, by: 1 << Self.pageShift)
+            pages = Pages(bytes: starts.map { Array(bytes[$0..<min($0 + (1 << Self.pageShift), bytes.count)]) },
+                          defined: starts.map { Array(defined[$0..<min($0 + (1 << Self.pageShift), defined.count)]) })
+            flatBytes = []
+            flatDefined = []
+        } else {
+            flatBytes = bytes
+            flatDefined = defined
+            pages = nil
+        }
+    }
+
+    public static func == (lhs: Self, rhs: Self) -> Bool {
+        switch (lhs.pages, rhs.pages) {
+        case (nil, nil): return lhs.flatBytes == rhs.flatBytes && lhs.flatDefined == rhs.flatDefined
+        case let (l?, r?): return l == r
+        default: return lhs.byteCount == rhs.byteCount && lhs.bytes == rhs.bytes && lhs.defined == rhs.defined
+        }
     }
 
     private func checkedRange(_ offset: Int, _ count: Int) throws -> Range<Int> {
-        guard offset >= 0, count >= 0, count <= bytes.count, offset <= bytes.count - count else {
+        let total = byteCount
+        guard offset >= 0, count >= 0, count <= total, offset <= total - count else {
             throw OriginalStateError.outOfBounds(offset: offset, count: count)
         }
         return offset..<(offset + count)
@@ -43,10 +139,18 @@ public struct OriginalStateRecord: Equatable, Sendable {
     /// A typed read cannot silently promote allocator contents to a game default.
     public func integer<T: FixedWidthInteger>(at offset: Int, as type: T.Type) throws -> T {
         let region = try checkedRange(offset, T.bitWidth / 8)
-        guard defined[region].allSatisfy({ $0 }) else {
+        guard let pages else {
+            guard flatDefined[region].allSatisfy({ $0 }) else {
+                throw OriginalStateError.undefinedBytes(offset: offset, count: region.count)
+            }
+            return region.enumerated().reduce(T.zero) { $0 | (T(truncatingIfNeeded: flatBytes[$1.element]) << ($1.offset * 8)) }
+        }
+        guard region.allSatisfy({ pages.defined[$0 >> Self.pageShift][$0 & Self.pageMask] }) else {
             throw OriginalStateError.undefinedBytes(offset: offset, count: region.count)
         }
-        return region.enumerated().reduce(T.zero) { $0 | (T(truncatingIfNeeded: bytes[$1.element]) << ($1.offset * 8)) }
+        return region.enumerated().reduce(T.zero) {
+            $0 | (T(truncatingIfNeeded: pages.bytes[$1.element >> Self.pageShift][$1.element & Self.pageMask]) << ($1.offset * 8))
+        }
     }
 
     public func binary64(at offset: Int) throws -> Double {
@@ -56,9 +160,17 @@ public struct OriginalStateRecord: Equatable, Sendable {
     /// Writes preserve exact integer/floating-point bit patterns; no host-width pointer conversion.
     public mutating func write<T: FixedWidthInteger>(_ value: T, at offset: Int) throws {
         let region = try checkedRange(offset, T.bitWidth / 8)
-        for (shift, index) in region.enumerated() {
-            bytes[index] = UInt8(truncatingIfNeeded: value >> (shift * 8))
-            defined[index] = true
+        if pages == nil {
+            for (shift, index) in region.enumerated() {
+                flatBytes[index] = UInt8(truncatingIfNeeded: value >> (shift * 8))
+                flatDefined[index] = true
+            }
+        } else {
+            pages!.willWrite()
+            for (shift, index) in region.enumerated() {
+                pages!.bytes[index >> Self.pageShift][index & Self.pageMask] = UInt8(truncatingIfNeeded: value >> (shift * 8))
+                pages!.defined[index >> Self.pageShift][index & Self.pageMask] = true
+            }
         }
     }
 
@@ -67,7 +179,15 @@ public struct OriginalStateRecord: Equatable, Sendable {
     }
 
     private mutating func zero(_ region: Range<Int>) {
-        for index in region { bytes[index] = 0; defined[index] = true }
+        if pages == nil {
+            for index in region { flatBytes[index] = 0; flatDefined[index] = true }
+        } else {
+            pages!.willWrite()
+            for index in region {
+                pages!.bytes[index >> Self.pageShift][index & Self.pageMask] = 0
+                pages!.defined[index >> Self.pageShift][index & Self.pageMask] = true
+            }
+        }
     }
 
     private static func backing(_ bytes: [UInt8], size: Int, kind: String) throws -> Self {
@@ -88,7 +208,7 @@ public struct OriginalStateRecord: Equatable, Sendable {
     /// Calling the constructor on an existing allocation preserves untouched bytes
     /// AND their prior initialization provenance (e.g. Object* and +0x31c).
     public mutating func reconstructActor() throws {
-        guard bytes.count == Self.actorSize else {
+        guard byteCount == Self.actorSize else {
             throw OriginalStateError.invalidStorage("Actor reconstruction needs \(Self.actorSize) bytes")
         }
         // Sparse ranges deliberately omit untouched bytes, Object*, and the opaque 0x370..0x3e7 area.

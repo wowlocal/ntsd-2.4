@@ -21,7 +21,7 @@ struct OriginalApplicationGameplayDrawingProjection {
             let b = Bitmap(record:state.bitmaps[n].storage,surface:surface)
             c[UInt32(n+1)] = b;r[wrapper] = b
         }
-        for (token,a) in memory.memory.allocations where a.live && a.storage.bytes.count == 0x1f50 {
+        for (token,a) in memory.memory.allocations where a.live && a.storage.byteCount == 0x1f50 {
             var record = a.storage
             let surface = try record.integer(at:0,as:UInt32.self)
             try record.write(UInt32(surface == 0 ? 0 : 1),at:0)

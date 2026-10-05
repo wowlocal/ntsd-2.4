@@ -171,7 +171,7 @@ public struct OriginalApplicationLoadedMenuSession {
             guard var images = state.bitmapInputs else { throw Boundary.dependency("Bitmap inputs") }
             try images.addResources(inputs.bitmaps);state.bitmapInputs = images
             reserve(0x44d000,state.full.bytes.count)
-            for (token,a) in state.memory.allocations where a.live { reserve(token,a.storage.bytes.count) }
+            for (token,a) in state.memory.allocations where a.live { reserve(token,a.storage.byteCount) }
             let catalog = entry.entry.entry
             for a in catalog.snapshot.allocations { reserve(a.token,a.count) }
             for f in catalog.files.streams.values { reserve(f.allocation.buffer,f.allocation.capacity) }

@@ -34,9 +34,10 @@ struct OriginalApplicationGameplayStateProjection {
         guard condition else { throw Source.error("Projection "+detail) }
     }
     static func same(_ actual: OriginalStateRecord,_ expected: OriginalStateRecord,_ label: String) throws {
-        try require(actual.bytes.count == expected.bytes.count,label+" extent")
-        if let n = actual.bytes.indices.first(where:{ actual.bytes[$0] != expected.bytes[$0] || actual.defined[$0] != expected.defined[$0] }) {
-            throw Source.error("Projection \(label) at \(String(n,radix:16)): \(actual.bytes[n])/\(actual.defined[n]) versus \(expected.bytes[n])/\(expected.defined[n])")
+        let ab = actual.bytes,ad = actual.defined,eb = expected.bytes,ed = expected.defined
+        try require(ab.count == eb.count,label+" extent")
+        if let n = ab.indices.first(where:{ ab[$0] != eb[$0] || ad[$0] != ed[$0] }) {
+            throw Source.error("Projection \(label) at \(String(n,radix:16)): \(ab[n])/\(ad[n]) versus \(eb[n])/\(ed[n])")
         }
     }
     func actor(_ slot: Int) throws -> Int {

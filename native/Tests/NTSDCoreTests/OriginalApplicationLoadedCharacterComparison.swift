@@ -95,9 +95,10 @@ final class OriginalApplicationLoadedCharacterComparison {
         return try .init(bytes:b,defined:[Bool](repeating:true,count:b.count))
     }
     func equal(_ a: OriginalStateRecord,_ b: OriginalStateRecord,_ label: String) throws {
-        guard a.bytes.count == b.bytes.count else { throw M.Stop.unexpected(label+" extent") }
-        if let i = a.bytes.indices.first(where:{ a.bytes[$0] != b.bytes[$0] || a.defined[$0] != b.defined[$0] }) {
-            throw M.Stop.unexpected(label+" byte"+String(i,radix:16)+" actual \(a.bytes[i])/\(a.defined[i]) expected \(b.bytes[i])/\(b.defined[i])")
+        let ab = a.bytes,ad = a.defined,bb = b.bytes,bd = b.defined
+        guard ab.count == bb.count else { throw M.Stop.unexpected(label+" extent") }
+        if let i = ab.indices.first(where:{ ab[$0] != bb[$0] || ad[$0] != bd[$0] }) {
+            throw M.Stop.unexpected(label+" byte"+String(i,radix:16)+" actual \(ab[i])/\(ad[i]) expected \(bb[i])/\(bd[i])")
         }
     }
     // Equality over the full possible write footprint prevents idempotent
@@ -121,11 +122,12 @@ final class OriginalApplicationLoadedCharacterComparison {
         } }
     }
     func transition(_ actual: OriginalStateRecord,_ own: OriginalStateRecord,_ before: OriginalStateRecord,_ after: OriginalStateRecord,_ label: String) throws {
-        guard own.bytes.count == before.bytes.count,after.bytes.count == before.bytes.count else { throw M.Stop.unexpected(label+" transition extent") }
-        var bytes = own.bytes,mask = own.defined
-        for i in before.bytes.indices where before.bytes[i] != after.bytes[i] || before.defined[i] != after.defined[i] {
-            guard own.bytes[i] == before.bytes[i],own.defined[i] == before.defined[i] else { throw M.Stop.unexpected(label+" changed entry "+String(i,radix:16)) }
-            bytes[i] = after.bytes[i];mask[i] = after.defined[i]
+        let ob = own.bytes,od = own.defined,bb = before.bytes,bd = before.defined,xb = after.bytes,xd = after.defined
+        guard ob.count == bb.count,xb.count == bb.count else { throw M.Stop.unexpected(label+" transition extent") }
+        var bytes = ob,mask = od
+        for i in bb.indices where bb[i] != xb[i] || bd[i] != xd[i] {
+            guard ob[i] == bb[i],od[i] == bd[i] else { throw M.Stop.unexpected(label+" changed entry "+String(i,radix:16)) }
+            bytes[i] = xb[i];mask[i] = xd[i]
         }
         try equal(actual,.init(bytes:bytes,defined:mask),label)
     }

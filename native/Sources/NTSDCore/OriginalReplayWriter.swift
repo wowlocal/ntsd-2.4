@@ -89,11 +89,15 @@ public enum OriginalReplayWriter {
         if recording == 0 { input = nil }
         else {
             guard let allocation = owned.allocations[recording], allocation.live,
-                  allocation.storage.bytes.count == sourceCount,
-                  allocation.storage.defined.allSatisfy({ $0 }) else {
+                  allocation.storage.byteCount == sourceCount else {
                 throw OriginalStateError.invalidStorage("Replay writer source allocation/provenance")
             }
-            input = allocation.storage.bytes
+            // One uncached read of the paged buffer, which is freed below.
+            let contents = allocation.storage.readOnce()
+            guard contents.defined.allSatisfy({ $0 }) else {
+                throw OriginalStateError.invalidStorage("Replay writer source allocation/provenance")
+            }
+            input = contents.bytes
         }
         let compression = try OriginalReplayCompression.compress(input, sourceCount: UInt32(sourceCount),
             destination: &destination, capacity: UInt32(capacity), failureOrdinal: codecFailureOrdinal)
@@ -134,7 +138,7 @@ public enum OriginalReplayWriter {
                 allocation.live = false; owned.allocations[pointer] = allocation
             } else { try observe(.free(0)) }
         }
-        let stream = try OriginalReplayFileOutput.run(destination.map { Array($0.bytes.prefix(compression.length)) },
+        let stream = try OriginalReplayFileOutput.run(destination.map { $0.leadingBytes(compression.length) },
             length: UInt32(compression.length), path: path, bufferAvailable: bufferAvailable,
             open: open, write: write, close: close,
             returned: { try observe(.streamReturn($0, $1)) }, afterClose: {

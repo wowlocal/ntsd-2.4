@@ -48,7 +48,7 @@ enum OriginalApplicationPausedInput {
             e.controls = try X.control(XCTUnwrap(e.model).globals)
             let token = try state.memory.replayPointers.integer(at:0,as:UInt32.self)
             let before = try XCTUnwrap(state.memory.allocations[token])
-            try P.require(before.live && before.storage.bytes.count == 0x630e18 && (17...22).contains(tick),"Own pause full replay owner")
+            try P.require(before.live && before.storage.byteCount == 0x630e18 && (17...22).contains(tick),"Own pause full replay owner")
             var after = before
             if !paused { for n in 0..<10 { try after.storage.write(UInt8(0),at:0x2b38+10*Int(tick)+n) } }
             e.token = token;e.replayBefore = before;e.replayAfter = after

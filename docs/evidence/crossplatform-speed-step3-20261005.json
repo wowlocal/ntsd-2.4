@@ -1,0 +1,36 @@
+{
+  "study": "docs/research/MOBILE_PERFORMANCE.md",
+  "step": 3,
+  "date": "2026-10-05",
+  "change": "OriginalStateRecord keeps records of at least 0x400000 bytes (only the 0x630e18-byte replay recording/playback buffers today) in 16 KiB pages ([[UInt8]]/[[Bool]]). bytes/defined became computed: a paged record assembles them once per written version into a lock-protected cache shared by copies with the same contents; every write starts a new cache. byteCount was added; == compares contents. Per-cycle storage.bytes.count reads (replay range check, menu/pool reserve loops, catalog ranges) use byteCount. The replay writer reads its source once without caching (readOnce) and takes the compressed prefix with leadingBytes, so freed buffers keep no assembled copy. Test helpers: two .bytes.count reads use byteCount; the launch comparison reads each record's arrays once per call. Three more test comparison helpers (LoadedCharacterComparison.equal/transition, GameplayStateProjection.same) read each record's arrays once per call.",
+  "why": "each game cycle works on rollback copies (var candidate = state ... state = candidate); the replay packet write duplicated the whole buffer (1,659 copies of 6.5 MB plus mask per match on macOS; 16.1% of the phone's time in memcpy under OriginalStateRecord.write<Int8>)",
+  "materializations (temporary probe, macOS vs match)": "4, all at match end (result recording and replay writer)",
+  "speed": {
+    "Galaxy A12, vs script, no frame capture": "7.6 -> 8.8 ticks per second (bodies 300->1800); peak RSS 1.32 GB"
+  },
+  "gates": {
+    "Core suites, release test build (bundle compiled from the tree with the cache, before the writer/readOnce change; display backend with steps 4-5)": "29 suites passed (earlier round, superseded by the final run)",
+    "new unit tests": "OriginalStateRecordPagingTests: paged records against their arrays (reads at page boundaries and the end, out-of-range and undefined errors, copies, rejected writes, equality), cache follows writes on either side and the only-holder path, readOnce/leadingBytes against bytes/prefix",
+    "headless scenarios (frozen binary sha256 72dd151f…)": "all 10 equal (playback with the real recording); vs frames 1,832 identical to m1-frames-ref; the final sources rebuild to the identical binary",
+    "AppKit (built from the final sources)": "vs and playback equal; 1,832 frames identical to the AppKit steps 1-2 run",
+    "Core suites on the final tree (release test build; tree diff sha256 52df9214…)": "31 suites, 0 failures: the 29 above plus ResultLayout and HostGameplay; HostGameplay 613.6 s (HEAD 620 s), LoadedLaunch 52.8 s (HEAD 53.1 s)"
+  },
+  "review": {
+    "reviewer": "independent read-only agent",
+    "verdict": "OK: value semantics hold (nested array writes copy only the shared page), equality equals the old synthesized one, errors and their order unchanged, page arithmetic correct, no reliance on the stored properties, no per-cycle materialization",
+    "applied suggestions": [
+      "materialize with reserved capacity",
+      "test helpers use byteCount"
+    ],
+    "note": "default String(describing:) of a record now shows flatBytes/flatDefined/pages (diagnostic text only, no stored fixture contains it)",
+    "cache review": "independent reviewer (same agent): OK; no copy can observe a cache of other contents, thread-safe, nothing observable changed; found that replay save left assembled copies in freed allocations (+26 MB until the addresses are reused), fixed with readOnce/leadingBytes; suggested the only-holder test, added"
+  },
+  "incident (uncached first version)": "OriginalApplicationLoadedLaunchTests.testLaunchFailuresPreserveTheRetainedStartAndAllEarlierCommits ran >30 min instead of 37 s: its helper indexes actual.bytes[$0] per element, and each access re-assembled 6.5 MB. The run was stopped (logs p2s3-*.log) and the cache added; with it ReplayTick/MatchRound/InputControl suites ran 3x faster than uncached (60/64/35 s against 179/192/101 s under load).",
+  "timing note": "tests that compare replay buffers element by element through .bytes[i] take a lock per access and run about 2x slower than before (LoadedLaunch 117 s against 59 s); production paths assemble only at match end (4 times per vs match)",
+  "test time": {
+    "finding": "with bytes/defined computed, test helpers in another module that index record.bytes[i] per element pay a call plus retain/release per access (stored properties were borrowed): OriginalApplicationLoadedLaunchTests 53 s at HEAD against 108-125 s, OriginalApplicationHostGameplayTests 620 s against 1,041-1,073 s",
+    "tried": "@inlinable accessors and a _read accessor: no measurable change (the accessor stayed out of line in the test module); reverted",
+    "fix": "the hot helpers read each array once per call (test code only, no fixtures or expected values): LoadedLaunch 53.9 s, equal to HEAD's 53.1 s",
+    "memory": "OriginalApplicationHostGameplayTests peak footprint 12.97 GB at HEAD, 12.95 GB with the step (max RSS 7.6 / 8.9 GB)"
+  }
+}
