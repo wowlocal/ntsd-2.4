@@ -78,10 +78,7 @@ public struct OriginalApplicationMenuSession {
             guard start >= 0, start <= full.bytes.count-record.bytes.count else {
                 throw OriginalStateError.invalidStorage("Menu replacement extent")
             }
-            var bytes = full.bytes, mask = full.defined
-            bytes.replaceSubrange(start..<start+record.bytes.count,with:record.bytes)
-            mask.replaceSubrange(start..<start+record.bytes.count,with:record.defined)
-            full = try .init(bytes:bytes,defined:mask)
+            full.overwrite(at:start,with:record)
         }
         fileprivate mutating func mergeAliases(counter: UInt32) throws {
             try replace(OriginalApplicationMenuSession.replayStart,memory.replayPointers)

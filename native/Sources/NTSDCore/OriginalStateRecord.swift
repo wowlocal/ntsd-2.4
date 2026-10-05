@@ -174,6 +174,32 @@ public struct OriginalStateRecord: Equatable, Sendable {
         }
     }
 
+    /// Copies `record`'s bytes and definedness over start..<start+record.byteCount
+    /// in place (one copy if this record's storage is shared). The caller has
+    /// checked the extent; the result equals rebuilding the record from arrays
+    /// with that subrange replaced (MOBILE_PERFORMANCE step 8).
+    mutating func overwrite(at start: Int, with record: OriginalStateRecord) {
+        let count = record.byteCount
+        precondition(start >= 0 && count <= byteCount && start <= byteCount - count, "record overwrite extent")
+        if pages == nil && record.pages == nil {
+            flatBytes.replaceSubrange(start..<start + count, with: record.flatBytes)
+            flatDefined.replaceSubrange(start..<start + count, with: record.flatDefined)
+            return
+        }
+        let bytes = record.bytes, defined = record.defined
+        if pages == nil {
+            flatBytes.replaceSubrange(start..<start + count, with: bytes)
+            flatDefined.replaceSubrange(start..<start + count, with: defined)
+            return
+        }
+        pages!.willWrite()
+        for k in 0..<count {
+            let index = start + k
+            pages!.bytes[index >> Self.pageShift][index & Self.pageMask] = bytes[k]
+            pages!.defined[index >> Self.pageShift][index & Self.pageMask] = defined[k]
+        }
+    }
+
     public mutating func writeBinary64(_ value: Double, at offset: Int) throws {
         try write(value.bitPattern, at: offset)
     }

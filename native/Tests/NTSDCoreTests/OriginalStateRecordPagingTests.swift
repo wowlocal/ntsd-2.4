@@ -127,6 +127,47 @@ final class OriginalStateRecordPagingTests: XCTestCase {
         XCTAssertEqual(small.readOnce().defined, [true, false, true])
     }
 
+    /// overwrite(at:with:) equals rebuilding the record from arrays with the
+    /// subrange replaced, for flat and paged records, and leaves copies alone.
+    func testOverwriteEqualsRebuilding() throws {
+        for count in [0xc3a8, OriginalReplayRecording.byteCount] {
+            let (bytes, defined) = contents(count, seed: UInt64(count) ^ 0x55)
+            let (pieceBytes, pieceDefined) = contents(0x7d8, seed: 9)
+            let piece = try OriginalStateRecord(bytes: pieceBytes, defined: pieceDefined)
+            for start in [0, 0x3f00, count - 0x7d8] {
+                var record = try OriginalStateRecord(bytes: bytes, defined: defined)
+                let copy = record
+                record.overwrite(at: start, with: piece)
+                var b = bytes, d = defined
+                b.replaceSubrange(start..<start + 0x7d8, with: pieceBytes)
+                d.replaceSubrange(start..<start + 0x7d8, with: pieceDefined)
+                XCTAssertEqual(record, try OriginalStateRecord(bytes: b, defined: d), "count \(count) start \(start)")
+                XCTAssertEqual(record.bytes, b)
+                XCTAssertEqual(record.defined, d)
+                XCTAssertEqual(copy.bytes, bytes, "a copy keeps its contents")
+                XCTAssertEqual(copy.defined, defined)
+                XCTAssertEqual(copy, try OriginalStateRecord(bytes: bytes, defined: defined))
+            }
+            // A sole holder whose assembled contents were read first (State.replace
+            // reads full.bytes in its guard), an empty piece, and a whole-size piece.
+            var sole = try OriginalStateRecord(bytes: bytes, defined: defined)
+            XCTAssertEqual(sole.bytes.count, count)
+            sole.overwrite(at: 5, with: piece)
+            var b = bytes, d = defined
+            b.replaceSubrange(5..<5 + 0x7d8, with: pieceBytes); d.replaceSubrange(5..<5 + 0x7d8, with: pieceDefined)
+            XCTAssertEqual(sole.bytes, b)
+            XCTAssertEqual(sole.defined, d)
+            let empty = try OriginalStateRecord(bytes: [], defined: [])
+            sole.overwrite(at: count, with: empty)
+            XCTAssertEqual(sole.bytes, b)
+            let (wholeBytes, wholeDefined) = contents(count, seed: 11)
+            sole.overwrite(at: 0, with: try OriginalStateRecord(bytes: wholeBytes, defined: wholeDefined))
+            XCTAssertEqual(sole.bytes, wholeBytes)
+            XCTAssertEqual(sole.defined, wholeDefined)
+            XCTAssertEqual(sole, try OriginalStateRecord(bytes: wholeBytes, defined: wholeDefined))
+        }
+    }
+
     func testFlatRecordsBelowTheThreshold() throws {
         let (bytes, defined) = contents(OriginalStateRecord.pagedThreshold - 1, seed: 7)
         let record = try OriginalStateRecord(bytes: bytes, defined: defined)

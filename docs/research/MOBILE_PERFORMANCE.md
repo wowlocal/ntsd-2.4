@@ -67,6 +67,7 @@ definedness mask), plus 2.9 million actor-record copies.
 | 6 | `LoadedMenuSession.Attempt` collects its address ranges locally (each append to the class property paid a dynamic exclusivity check) and walks the wave owners by index | same ranges, order and throw points; review OK | **done** |
 | 6b | `GameplaySession.advance` collects its sound-buffer tokens without concatenating the three load lists (copied every `OriginalWaveLoadResult` each cycle: 672 refcount samples) | same set, used only for membership; review OK | **done** |
 | 7 | Copy loop: rows that are fully known, unkeyed and forward (two thirds of the copied pixels: whole-screen copies) are copied with one row copy and whole mask words | same values and bits; review OK | **done** |
+| 8 | `MenuSession.State.replace` overwrites the record in place (`OriginalStateRecord.overwrite`) instead of copying it twice and rebuilding it | same record; review OK; no measurable phone change (10.2 → 10.1, noise) ([evidence](../evidence/crossplatform-speed-step8-20261006.json)) | **done** |
 
 **Phone profile after steps 3–4** (24,085 samples): `performFront` self
 16.2% (half of it `KnownMask` bit get/set in the copy loop), `memcpy` 12.0%
