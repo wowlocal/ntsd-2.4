@@ -35,5 +35,16 @@
   "emulator": "installs beside the debug build, not debuggable (run-as refused), first launch shows the main menu",
   "location": "X5 crossplatform/android-release; the morning build (569c7d7, sha256 f89729d1…) moved to T7 crossplatform-scratch-20261005/android-release-569c7d7 after an identical-hash copy",
   "published": "no (the user's decision)"
+ },
+ "rebuild 2026-10-05 late (immersive mode)": {
+  "commit": "412e34c",
+  "apk": "ntsd-android-arm64-412e34c.apk",
+  "sha256": "94f6b234a1d8ba5d5c2b262c480a2bb889fcd005436b6a930bf54308988448de",
+  "versionName": "0.1.564-412e34c",
+  "versionCode": 564,
+  "signature": "Signer #1 SHA-256 70194aaa…0d61d (same release key)",
+  "emulator": "installs and shows the main menu with the system bars hidden",
+  "location": "X5 crossplatform/android-release; the 7f15b7b build moved to T7 android-release-7f15b7b after an identical-hash copy",
+  "published": "no (the user's decision)"
  }
 }
