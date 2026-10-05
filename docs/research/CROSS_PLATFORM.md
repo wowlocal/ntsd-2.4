@@ -223,7 +223,8 @@ user's approval to push. Until then, keep the other phases moving.
 | 2026-10-04 | **Shared FreeType text** | The FreeType face moves unchanged from the SDL host into `NTSDFreeTypeText`, so the Android host can use it too; it gains an optional variable-font weight. `build_android_deps.sh` builds FreeType 2.13.3 (same tarball and options as Linux) with NDK r30. **Linux SDL vs: state equal and all 1,832 frames, DejaVu text included, identical to the matrix run**; the macOS and Windows SDL builds and the Android build pass. | `run_headless_scenarios.py --linux-sdl`, `compare_frames.py` | af1f808 |
 | 2026-10-04 | **P8: Android app, scenarios, text and audio** | All scenarios through the textless app: **9/10 like every host and all 15,960 frames identical to Linux headless.** Text now uses Roboto at weight 700 through the shared FreeType face: **vs equal, text in the same 446 of 1,826 frames as CoreText.** Sound effects and the packaged music play through AAudio (music decoded as on Linux); interactively in the emulator the app opens its streams and a tap reaches the mode menu with drawn text. The menus take only the mouse, so key input is still to check in a match. | [evidence](../evidence/crossplatform-p8-android-text-audio-20261004.json), [results](../evidence/crossplatform-p8-android-app-scenarios-20261004.jsonl) | 1fc52f2 |
 | 2026-10-04 | **P8: Android lifecycle and keys** | Hardware keys work in the game (a held J joins Player 1 at character select). Focus loss silences the effects, as DirectSound does; in the background all audio output pauses and resumes on return (declared Android convention). A crash on the first resume (a new surface at the same address kept its 16-bit default buffer, and the cached geometry was not reapplied) is fixed: the geometry resets on every surface change. **No crash across Home/return rounds; vs through the app equal.** | [evidence](../evidence/crossplatform-p8-android-lifecycle-20261004.json) | b9d4b62 |
-| 2026-10-05 | **Matrix baseline, nine hosts** | `matrix.py` on the clean tree b9d4b62 with every host: AppKit, macOS SDL, iPad simulator, Linux headless aarch64/x86_64, Windows headless, Linux SDL, Windows SDL, Android (headless in the emulator). **Every host 9/10 (playback as on main); CoreText hosts identical on all frames, the textless hosts (Linux, Windows, Android) identical on all frames, and FreeType and GDI put text in the same frames as CoreText.** X5 dipped under its reserve twice during the run; task-owned staging that builds recreate was removed. | [report](../evidence/crossplatform-matrix-20261005-nine-hosts.json) | this commit |
+| 2026-10-05 | **Matrix baseline, nine hosts** | `matrix.py` on the clean tree b9d4b62 with every host: AppKit, macOS SDL, iPad simulator, Linux headless aarch64/x86_64, Windows headless, Linux SDL, Windows SDL, Android (headless in the emulator). **Every host 9/10 (playback as on main); CoreText hosts identical on all frames, the textless hosts (Linux, Windows, Android) identical on all frames, and FreeType and GDI put text in the same frames as CoreText.** X5 dipped under its reserve twice during the run; task-owned staging that builds recreate was removed. | [report](../evidence/crossplatform-matrix-20261005-nine-hosts.json) | 2fe64be |
+| 2026-10-05 | **P8: ONLINE GAME on Android** | The headless host can use the shared sockets (`--network-loopback`), and `pair_probe.py --android` runs two headless processes in the emulator. **The retained two-process probe passes on Android (Bionic sockets) and with the macOS headless binary, both with the RNG hash of the retained run.** | [evidence](../evidence/crossplatform-p8-android-online-20261005.json) | this commit |
 
 ## Next task
 
@@ -237,9 +238,10 @@ the `android-35;google_apis;arm64-v8a` system image.
 1. **Android on a real device**: the app is ready to try (APK from
    `android_app.py`); needs the user's Android device with USB debugging, or
    the APK sideloaded.
-2. **ONLINE GAME on Android**: the Bionic socket branch compiles but has
-   not run; extend `pair_probe.py` to two processes in the emulator and
-   compare the RNG table with the retained run.
+2. **ONLINE GAME across platforms**: every host passes the probe with itself;
+   run the host on one platform and the client on another (e.g. macOS SDL
+   host with a Linux container or the Android emulator as client), which the
+   original's protocol should allow.
 
 Still waiting on the user: real-hardware checks (Linux desktop, Windows PC,
 iPad).

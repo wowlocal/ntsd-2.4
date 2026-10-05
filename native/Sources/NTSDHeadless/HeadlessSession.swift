@@ -6,7 +6,8 @@ import NTSDCore
 import NTSDRuntime
 
 /// The headless session host: offscreen windows, framebuffer PNG captures,
-/// silent music and sound, no sockets and scripted input only.
+/// silent music and sound, scripted input only, and the shared sockets for
+/// loopback ONLINE GAME probes.
 @MainActor final class HeadlessSessionHost: OriginalRuntimeSessionHost {
     let arguments: [String], windows: HeadlessWindowHost, musicDirectory: String
     weak var session: OriginalRuntimeSession?
@@ -22,7 +23,14 @@ import NTSDRuntime
                                                          "caption":String(decoding:caption,as:UTF8.self)]) })
     }
     func capsLock() -> Int32 { 0 }
-    func makeSockets() -> any OriginalRuntimeSockets { preconditionFailure("headless runs need --no-network") }
+    /// BSD sockets off Windows (`OriginalMacWinsock`), real Winsock on Windows.
+    func makeSockets() -> any OriginalRuntimeSockets {
+        #if os(Windows)
+        return OriginalWindowsWinsock()
+        #else
+        return OriginalMacWinsock()
+        #endif
+    }
     var loadingDialogs: OriginalRuntimeLoadingDialogs {
         .init(chooseRecording:{ _ in nil },alert:{ text in Self.report(["event":"headlessAlert","text":text]) },
               open:{ path in Self.report(["event":"headlessOpen","path":path]) })

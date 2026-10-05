@@ -3,7 +3,7 @@
 assertions of the retained probe (X5 network-app-client-20261002/pair_probe.py,
 docs/research/NETWORK_PLAY.md "Two-process probe"), run with a chosen binary.
 
-Usage: pair_probe.py OUT_DIR (--local BINARY | --linux-sdl BUILD_DIR | --wine RUN_DIR) [--trace]
+Usage: pair_probe.py OUT_DIR (--local BINARY | --linux-sdl BUILD_DIR | --wine RUN_DIR | --android RUN_DIR) [--trace]
 
 `--local` runs both processes on this machine (the AppKit NTSDNative or a
 local NTSDSDL). `--linux-sdl` runs both NTSDSDL processes in one
@@ -12,7 +12,11 @@ $NTSD_SDL_LIB): real TCP over the container's loopback. Each process gets
 --network-loopback (127.0.0.1 as the local address), --network-ready-state and
 --exit-after-network-ready; no game state is injected. `--wine` runs two
 RUN_DIR/NTSDSDL.exe processes in the CrossOver bottle ntsd-xplat-test (test
-harness; real Winsock through Wine, SDL offscreen/dummy drivers). `--trace` adds
+harness; real Winsock through Wine, SDL offscreen/dummy drivers). `--android`
+pushes RUN_DIR (NTSDHeadless built for Android, libc++_shared.so, the resource
+bundle; matrix.py stages it) and the music to /data/local/tmp/ntsd-pair on the
+device adb reaches (an emulator: a test harness) and runs both headless
+processes there over the device's loopback ($ADB names adb). `--trace` adds
 --network-trace OUT_DIR/<role>-trace.jsonl (socket replies, for diagnosis);
 NTSD_PAIR_STRACE=1 wraps the Linux processes in strace (OUT_DIR/<role>.strace).
 """
@@ -121,6 +125,30 @@ def run_linux(out, build):
     return {role: int((out / f"{role}.exit").read_text()) for role, *_ in ROLES}
 
 
+def run_android(out, run_dir):
+    adb = os.environ.get("ADB", "adb"); device = "/data/local/tmp/ntsd-pair"
+    def sh(*args, **kw): return subprocess.run([adb, *args], check=True, capture_output=True, text=True, **kw)
+    sh("shell", f"rm -rf {device} && mkdir -p {device}")
+    sh("push", str(Path(run_dir).resolve()), f"{device}/app"); sh("push", str(MUSIC), f"{device}/music")
+    for role, *_ in ROLES: sh("push", str(out / f"{role}-overlay"), f"{device}/{role}-overlay")
+    script = ["cd " + device + "/app && chmod 755 NTSDHeadless", "export TZ=Etc/GMT-1"]
+    for role, seed, s, _ in ROLES:
+        args = " ".join("'" + a.replace("'", "'\\''") + "'" for a in arguments(device, role, seed, s, f"{device}/music"))
+        script.append(f"./NTSDHeadless {args} >{device}/{role}.log 2>&1 & {role}=$!")
+        if role == "host":   # 127.0.0.1:12345 (0100007F:3039) in state LISTEN (0A)
+            script.append("for _ in $(seq 300); do grep -q ' 0100007F:3039 00000000:0000 0A' /proc/net/tcp && break; sleep 0.1; done")
+            script.append(f"grep -q ' 0100007F:3039 00000000:0000 0A' /proc/net/tcp || {{ echo 'no listener' >{device}/error; kill $host; exit 1; }}")
+    script += [f"wait $host; echo $? >{device}/host.exit", f"wait $client; echo $? >{device}/client.exit"]
+    (out / "run.sh").write_text("\n".join(script) + "\n")
+    sh("push", str(out / "run.sh"), f"{device}/run.sh")
+    sh("shell", f"sh {device}/run.sh", timeout=300)
+    for name in ("error", "host.exit", "client.exit", "host.log", "client.log", "host.json", "client.json", "host-trace.jsonl", "client-trace.jsonl"):
+        subprocess.run([adb, "pull", f"{device}/{name}", str(out / name)], capture_output=True)
+    if (out / "error").exists():
+        raise AssertionError((out / "error").read_text())
+    return {role: int((out / f"{role}.exit").read_text()) for role, *_ in ROLES}
+
+
 def check(out, codes):
     for role, *_ in ROLES:
         assert codes[role] == 0, (role, codes[role])
@@ -148,7 +176,8 @@ def main():
     shutil.rmtree(out, ignore_errors=True); out.mkdir(parents=True)
     for role, _, _, names in ROLES:
         overlay(out, role, names)
-    codes = run_local(out, target) if mode == "--local" else run_wine(out, target) if mode == "--wine" else run_linux(out, target)
+    codes = (run_local(out, target) if mode == "--local" else run_wine(out, target) if mode == "--wine"
+             else run_android(out, target) if mode == "--android" else run_linux(out, target))
     rng = check(out, codes)
     result = {"result": "PASS", "mode": mode, "exitCodes": codes, "rngSHA256": rng}
     (out / "result.json").write_text(json.dumps(result, indent=2) + "\n")
