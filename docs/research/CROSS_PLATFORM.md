@@ -233,7 +233,8 @@ ONLINE GAME is checked with `pair_probe.py` on each host and across hosts
 | 2026-10-05 | **ONLINE GAME across platforms: Linux** | `pair_probe.py --cross` gains `linux:BUILD_DIR` (the static headless build in a host-network container, which OrbStack bridges to this Mac's loopback). **Linux host with a macOS client passes with the retained RNG hash.** macOS host with a Linux client did not connect in this harness (both waited, no error on either side, while a plain container client reached the same host): open, cause undetermined. | [evidence](../evidence/crossplatform-online-cross-20261005.json) | 0a3707d |
 | 2026-10-05 | **ONLINE GAME: macOS host, Linux client** | strace explained the hang: the client binds 127.0.0.1:12345 itself on entering ONLINE GAME, so in the container's own port space dialling 127.0.0.1 reached its own socket (a probe artefact; on a network the client dials the host's address). The Linux client now types the Mac's address as the container sees it. **It passes with the retained RNG hash: every cross-platform pairing passes.** No game change. | [evidence](../evidence/crossplatform-online-cross-linux-client-20261005.json) | e509c32 |
 | 2026-10-05 | **P8: Android on a real phone** | The user connected a Galaxy A12 (Android 12, 2.8 GB RAM). The APK installs and runs. Its small screen (853×384 dp) put the game's window partly above the screen, and the first blit was refused; the host now reports a screen of at least 800×600 in the device's aspect (the tablet is unchanged: vs equal, text frames agree). **Then Android's low-memory killer ended the game during startup loading**: 1.3 GB resident plus 2.5 GB swapped. The macOS build of the same run peaks at a 4.2 GB footprint, so the game needs about 4 GB, more than this phone has. | [evidence](../evidence/crossplatform-p8-android-phone-20261005.json) | 36e7e8e |
-| 2026-10-05 | **Memory footprint (measurement)** | The macOS headless vs run peaks at ~3.9 GB, almost all heap (mapped files 35 MB). At 3.6 GB: byte arrays 1.86 GB (108k: loaded files and bitmaps as copies), display-backend surface pixels 1.21 GB (890 surfaces) and their per-pixel "known" masks 0.31 GB, Bool arrays 0.46 GB, String→Int32 dictionaries 0.17 GB. No change yet; the user decides whether to start a reduction study. | [evidence](../evidence/crossplatform-memory-footprint-20261005.json) | this commit |
+| 2026-10-05 | **Memory footprint (measurement)** | The macOS headless vs run peaks at ~3.9 GB, almost all heap (mapped files 35 MB). At 3.6 GB: byte arrays 1.86 GB (108k: loaded files and bitmaps as copies), display-backend surface pixels 1.21 GB (890 surfaces) and their per-pixel "known" masks 0.31 GB, Bool arrays 0.46 GB, String→Int32 dictionaries 0.17 GB. No change yet; the user decides whether to start a reduction study. | [evidence](../evidence/crossplatform-memory-footprint-20261005.json) | 1dbaacb |
+| 2026-10-05 | **iPad on the user's device** | The user installed the edccfde IPA on their iPad Pro and reports the game works with its keyboard (an actual-device report, not instrumented). | [evidence](../evidence/crossplatform-p8-ipad-device-20261005.json) | this commit |
 
 ## Next task
 
@@ -247,14 +248,17 @@ build-tools 36.1.0, CMake 4.1.2, platform 35, NDK 30.0.16248370, and the
 1. **P3 x86_64 tests** (running): the portable XCTest suites on Linux x86_64
    under Rosetta, one suite per container (`run_linux_suites.py --platform
    linux/amd64`); 37/254 passed, 0 failed at 2026-10-05 07:40.
-2. **Memory footprint for phones**: the game needs ~4 GB (macOS peak
-   footprint 4.2 GB), so a 3 GB phone kills it while loading. A study of
-   where the memory goes (read-only game data held as copies, startup inputs
-   kept after loading) comes first; changing how Core holds its inputs needs
-   the macOS gate and must not change behaviour. Ask the user before starting.
-3. **Waiting on the user**: a release keystore and a decision for a signed
-   APK; real Linux desktop, Windows PC and iPad checks (the iPad IPA was
-   delivered); a phone with more memory, if available.
+2. **Memory footprint** (user decision 2026-10-05: do it): the game needs
+   ~4 GB, a 2.8 GB phone kills it while loading. Separate study
+   [MEMORY_FOOTPRINT](MEMORY_FOOTPRINT.md): attribute the heap, then reduce it
+   without changing behaviour (macOS gate, app_e2e, matrix frames,
+   independent review for storage-model changes).
+3. **Release APK** (user decision 2026-10-05: needed): a non-debuggable APK
+   with a proper application id, version and icon, signed with a release key
+   kept outside the repository (password in the macOS Keychain). Publishing
+   it is a separate question for the user.
+4. **Waiting on the user**: real Linux desktop and Windows PC checks; a
+   phone check once the footprint is reduced.
 
 Following tasks:
 
