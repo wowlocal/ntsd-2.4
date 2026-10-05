@@ -111,9 +111,34 @@ def joystick_script(captures):
 ORIGINAL_RECORDING = ROOT / "downloads/NTSD_2.4_2.0a/NTSD 2.4_2.0a/recording/20260331_012329_VS.lfr"
 
 
+LFS_POINTER = b"version https://git-lfs.github.com/spec/v1\n"
+
+
+def recording_bytes():
+    """The committed recording. The repository keeps it in Git LFS, and a
+    working tree without the smudge filter holds the 130-byte pointer, which
+    the game rejects as a corrupted recording; read the content from the
+    local LFS store then (not through git-lfs, which installs hooks), checked
+    against the pointer's SHA-256 and size."""
+    data = ORIGINAL_RECORDING.read_bytes()
+    if not data.startswith(LFS_POINTER):
+        return data
+    fields = dict(line.split(" ", 1) for line in data.decode().splitlines()[1:] if " " in line)
+    oid = fields.get("oid", "").removeprefix("sha256:")
+    common = subprocess.run(["git", "rev-parse", "--git-common-dir"], capture_output=True, text=True,
+                            check=True, cwd=ROOT).stdout.strip()
+    stored = (ROOT / common / "lfs" / "objects" / oid[0:2] / oid[2:4] / oid)
+    if not stored.is_file():
+        raise SystemExit(f"{ORIGINAL_RECORDING} is a Git LFS pointer and {stored} is missing (git lfs fetch)")
+    content = stored.read_bytes()
+    if hashlib.sha256(content).hexdigest() != oid or int(fields.get("size", -1)) != len(content):
+        raise SystemExit(f"LFS content of {ORIGINAL_RECORDING} does not match its pointer")
+    return content
+
+
 def playback_file(scratch):
     path = scratch / ORIGINAL_RECORDING.name
-    path.write_bytes(ORIGINAL_RECORDING.read_bytes())
+    path.write_bytes(recording_bytes())
     return ["--playback-file", str(path)]
 
 
