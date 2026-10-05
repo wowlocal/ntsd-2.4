@@ -250,7 +250,7 @@ ONLINE GAME is checked with `pair_probe.py` on each host and across hosts
 | 2026-10-05 | **Matrix on today's code: 10/10 on all nine hosts** | `matrix.py` at 870c24a (clean tree): AppKit, macOS SDL, iPad simulator, Linux headless aarch64/x86_64, Linux SDL, Windows headless/SDL and Android each ran all 10 scenarios against the frozen references. **All equal, playback included for the first time**; the Windows playback comparison needed a comparator fix (the dialog's file name from a Windows path). Frames identical within each rasteriser group (18,088 per pair), text in the same frames across groups. | [evidence](../evidence/crossplatform-matrix-20261005-speed.json) | 7f15b7b |
 | 2026-10-05 | **Release APK rebuilt** | `android_app.py --release` at 7f15b7b (with the memory and speed work): `io.github.wowlocal.ntsd` 0.1.562-7f15b7b, signed with the same release key; on the emulator it installs beside the debug build and shows the main menu. Not published. | [evidence](../evidence/crossplatform-p8-android-release-20261005.json) | 8a94b71 |
 | 2026-10-05 | **P8: immersive mode on Android** | The Android host hides the status and navigation bars (immersive sticky, through JNI on the main thread, again whenever the window regains focus). Emulator: bars hidden, vs equal and frames identical to the earlier app run; Galaxy A12: the navigation buttons are hidden and the game fills the screen height. | [evidence](../evidence/crossplatform-p8-android-immersive-20261005.json) | 412e34c |
-| 2026-10-06 | **Speed step 8** | The menu session's state replace overwrites the globals record in place instead of copying it twice and rebuilding it (several times per cycle). Correct and reviewed, 87 suites and all scenarios pass, but no measurable phone change: the remaining cost is the inherent copy of the new globals. | [evidence](../evidence/crossplatform-speed-step8-20261006.json) | this commit |
+| 2026-10-06 | **Speed step 8** | The menu session's state replace overwrites the globals record in place instead of copying it twice and rebuilding it (several times per cycle). Correct and reviewed, 87 suites and all scenarios pass, but no measurable phone change: the remaining cost is the inherent copy of the new globals. | [evidence](../evidence/crossplatform-speed-step8-20261006.json) | c8177d7 |
 
 ## Next task
 
@@ -262,16 +262,19 @@ build-tools 36.1.0, CMake 4.1.2, platform 35, NDK 30.0.16248370, and the
 `android-35;google_apis;arm64-v8a` image (AVD `ntsd-xplat-api35`).
 
 1. **Speed on slow devices** ([MOBILE_PERFORMANCE](MOBILE_PERFORMANCE.md)):
-   10.2 ticks per second on the Galaxy A12 after steps 1–7 (the game's rate
-   is about 30). The remaining time is spread over the per-cycle state
-   plumbing (bindings, rollback copies), drawing and reference counting;
-   each local fix is worth a few percent (see MOBILE_PERFORMANCE). Building Android with
-   `-enforce-exclusivity=unchecked` would remove the last TLS lookups but
-   drops a runtime safety check: the user's decision.
+   10.2 ticks per second on the Galaxy A12 (5.4 before the work; the game's
+   rate is about 30). Step 8 showed local fixes now land within measurement
+   noise. Reaching real time on this phone needs the per-cycle state plumbing
+   restructured (the bindings' model/state round trip, rollback copies of
+   the allocation table and actor records): a Core design change, **paused
+   for the user's decision**. Smaller open items: the keyed sprite loop, the
+   present path's frame copy, and building Android with
+   `-enforce-exclusivity=unchecked` (drops a safety check; the user's call).
 2. **Release APK**: rebuilt at 412e34c (0.1.564, with immersive mode);
    publishing it is the user's decision.
 3. **Waiting on the user**: real Linux desktop and Windows PC checks; whether
-   to build Android with `-enforce-exclusivity=unchecked`.
+   to build Android with `-enforce-exclusivity=unchecked`; whether to
+   restructure the per-cycle state for real-time play on slow phones.
 
 Following tasks:
 
