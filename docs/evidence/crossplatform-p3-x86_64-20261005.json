@@ -1,0 +1,31 @@
+{
+  "date": "2026-10-05",
+  "phase": "P3 portable suites on Linux x86_64",
+  "harness": "tools/crossplatform/run_linux_suites.py --platform linux/amd64 --jobs 1: one suite per swift:6.4.0-noble container under Rosetta (a test harness); test bundle cross-built with the ntsd-6.4.0-ubuntu24.04-x86_64 SDK",
+  "result": {
+    "suites": 254,
+    "clean": 244,
+    "tests passed": 595,
+    "tests failed": 0,
+    "skipped": [
+      [
+        "FixtureInflateTests",
+        1
+      ]
+    ],
+    "killed (exit 137, out of memory in the Docker VM before their first test)": [
+      "OriginalLibSelectionCommandsTests",
+      "OriginalLibSelectionStageTests",
+      "OriginalLibStageModeTests",
+      "OriginalLibTeamTournamentBracketTests",
+      "OriginalLibTeamTournamentPreparationTests",
+      "OriginalLibTeamTournamentSetupTests",
+      "OriginalLibTournamentArenaReleaseTests",
+      "OriginalLibTournamentBracketTests",
+      "OriginalLibTournamentPreparationTests",
+      "OriginalLibTournamentSetupTests"
+    ]
+  },
+  "comparison": "aarch64 run 2026-10-04: 251 suites, 241 clean, 581 passed, 0 failed, 1 skipped, the same 10 Lib* suites OOM-killed; 3 suites were added since",
+  "kind": "container under Rosetta, not a real x86_64 Linux machine"
+}

@@ -2,13 +2,14 @@
 """Run every portable XCTest suite of a cross-built Linux test bundle, one
 suite per container, and append one JSON line per suite.
 
-Usage: run_linux_suites.py BUILD_DIR OUT.jsonl [--jobs N] [--timeout SECONDS] [--only A,B]
+Usage: run_linux_suites.py BUILD_DIR OUT.jsonl [--jobs N] [--timeout SECONDS] [--only A,B] [--platform linux/amd64]
 
 BUILD_DIR is the Linux products directory holding NTSDCoreTests-test-runner.
 The repository and BUILD_DIR are mounted read-only into swift:6.4.0-noble and
 their macOS absolute paths are recreated by tools/crossplatform/linux-test-run.sh,
 so #filePath and Bundle.module resolve. Suites already in OUT.jsonl are skipped,
-so an interrupted run resumes.
+so an interrupted run resumes. --platform runs the containers for another
+architecture (linux/amd64 under Rosetta on Apple silicon: a test harness).
 """
 import argparse, concurrent.futures, json, os, re, subprocess, sys, time
 
@@ -17,8 +18,11 @@ IMAGE = "swift:6.4.0-noble"
 TOOLS = os.path.dirname(os.path.abspath(__file__))
 
 
+PLATFORM = []
+
+
 def docker(build, args, timeout):
-    cmd = ["docker", "run", "--rm", "-e", f"NTSD_REPO={REPO}", "-e", f"NTSD_BUILD={build}",
+    cmd = ["docker", "run", "--rm", *PLATFORM, "-e", f"NTSD_REPO={REPO}", "-e", f"NTSD_BUILD={build}",
            "-v", f"{REPO}:/repo:ro", "-v", f"{build}:/build:ro", "-v", f"{TOOLS}:/tools:ro",
            IMAGE, "/tools/linux-test-run.sh", *args]
     return subprocess.run(cmd, capture_output=True, text=True, timeout=timeout)
@@ -57,8 +61,9 @@ def main():
     a = argparse.ArgumentParser()
     a.add_argument("build"); a.add_argument("out")
     a.add_argument("--jobs", type=int, default=2); a.add_argument("--timeout", type=int, default=7200)
-    a.add_argument("--only", default="")
+    a.add_argument("--only", default=""); a.add_argument("--platform", default="")
     o = a.parse_args()
+    if o.platform: PLATFORM[:] = ["--platform", o.platform]
     logdir = os.path.splitext(o.out)[0] + "-logs"
     os.makedirs(logdir, exist_ok=True)
     done = set()
