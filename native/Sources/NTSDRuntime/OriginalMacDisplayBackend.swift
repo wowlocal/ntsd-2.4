@@ -320,15 +320,16 @@ import NTSDCore
     private func framebuffer(_ data: Storage,_ region: (Int,Int,Int,Int,UInt32?)) throws -> OriginalFramebuffer {
         let (x,y,w,h,_) = region
         var bytes = Data(count:w*h*4)
+        let values = data.values,known = data.known   // once per frame (MOBILE_PERFORMANCE step 2)
         try bytes.withUnsafeMutableBytes { destination in
             for row in 0..<h {
                 let start = (y+row)*data.width+x
-                if data.known.allKnown(start,w) {
-                    destination.baseAddress!.advanced(by:row*w*4).copyMemory(from:data.values+start,byteCount:w*4)
+                if known.allKnown(start,w) {
+                    destination.baseAddress!.advanced(by:row*w*4).copyMemory(from:values+start,byteCount:w*4)
                 } else {
                     guard presentUnknownAsBlack else { throw Boundary.unknownPixel }
                     let out = destination.baseAddress!.advanced(by:row*w*4).assumingMemoryBound(to:UInt32.self)
-                    for i in 0..<w { out[i] = data.known[start+i] != 0 ? data.values[start+i] : 0 }
+                    for i in 0..<w { out[i] = known[start+i] != 0 ? values[start+i] : 0 }
                 }
             }
         }
@@ -408,7 +409,8 @@ import NTSDCore
             let s = try resource(q.words[0],as:Surface.self),color = try record(q,100).integer(at:80,as:UInt32.self)
             guard let data = s.storage else { throw Boundary.released(s.token) }
             let rect = try rectangle(s),(x,y,w,h,window) = rect
-            for row in y..<(y+h) { for column in x..<(x+w) { let i = row*data.width+column;data.values[i] = color.littleEndian;data.known[i] = 1 } }
+            let values = data.values,known = data.known
+            for row in y..<(y+h) { for column in x..<(x+w) { let i = row*data.width+column;values[i] = color.littleEndian;known[i] = 1 } }
             if let window { try windows.present(framebuffer(data,rect),in:window) }
             retained = [s];response = .init()
         default:throw Boundary.unsupported(q.kind)
@@ -705,9 +707,10 @@ extension OriginalMacDisplayBackend {
         let s = dc.surface
         guard let data = s.storage else { throw Boundary.released(s.token) }
         let mask = textMask(bytes),background = Self.xrgb(dc.background),color = Self.xrgb(dc.color)
+        let values = data.values,known = data.known
         func set(_ column: Int,_ row: Int,_ value: UInt32) {
             guard column >= 0,row >= 0,column < data.width,row < data.height else { return }
-            let i = row*data.width+column;data.values[i] = value.littleEndian;data.known[i] = 1
+            let i = row*data.width+column;values[i] = value.littleEndian;known[i] = 1
         }
         if dc.opaque { for row in 0..<Self.textCell { for column in 0..<mask.advance { set(x+column,y+row,background) } } }
         for row in 0..<mask.height { for column in 0..<mask.width where mask.bits[row*mask.width+column] != 0 {
@@ -750,10 +753,13 @@ extension OriginalMacDisplayBackend {
         return .init(surface:surface,region:destination.intersection(clip),delivery:delivery)
     }
     private func frontKnown(_ target: FrontTarget,replacing known: (Int,Int) -> Bool) throws {
-        guard target.delivery.4 != nil else { return }
-        let (x,y,w,h,_) = target.delivery,data = target.surface.storage!
+        // The scan can only throw unknownPixel, which presentUnknownAsBlack rules
+        // out (every host's runtime sets it): it ran over the whole delivered
+        // rectangle twice per blit (MOBILE_PERFORMANCE step 1).
+        guard target.delivery.4 != nil,!presentUnknownAsBlack else { return }
+        let (x,y,w,h,_) = target.delivery,data = target.surface.storage!,mask = data.known
         for row in y..<(y+h) { for column in x..<(x+w) {
-            let isKnown = target.region?.contains(column,row) == true ? known(column,row) : data.known[row*data.width+column] != 0
+            let isKnown = target.region?.contains(column,row) == true ? known(column,row) : mask[row*data.width+column] != 0
             guard isKnown || presentUnknownAsBlack else { throw Boundary.unknownPixel }
         } }
     }
@@ -782,8 +788,8 @@ extension OriginalMacDisplayBackend {
         let copy = FrontCopy(target:try frontTarget(target,d),source:src,sourceRect:s,destination:d,mirrored:mirrored,key:key)
         let input = src.storage!,output = target.storage!
         try frontKnown(copy.target) { x,y in
-            let i = copy.sourceIndex(x,y)
-            guard input.known[i] != 0 else { return false }
+            let i = copy.sourceIndex(x,y),inputKnown = input.known
+            guard inputKnown[i] != 0 else { return false }
             let value = UInt32(littleEndian:input.values[i]) & 0xffffff
             if let key, value >= key[0] && value <= key[1] { return output.known[y*output.width+x] != 0 }
             return true
@@ -876,8 +882,9 @@ extension OriginalMacDisplayBackend {
         case let .fill(target,color):
             let data = target.surface.storage!
             if let rect = target.region {
+                let values = data.values,known = data.known
                 for y in rect.top..<rect.bottom { for x in rect.left..<rect.right {
-                    let i = y*data.width+x;data.values[i] = color.littleEndian;data.known[i] = 1
+                    let i = y*data.width+x;values[i] = color.littleEndian;known[i] = 1
                 } }
             }
             if let window = target.delivery.4 { try windows.present(framebuffer(data,target.delivery),in:window) }
@@ -885,12 +892,13 @@ extension OriginalMacDisplayBackend {
         case .copy(let copy):
             let input = copy.source.storage!,output = copy.target.surface.storage!
             if let rect = copy.target.region {
+                let inputValues = input.values,inputKnown = input.known,outputValues = output.values,outputKnown = output.known
                 for y in rect.top..<rect.bottom { for x in rect.left..<rect.right {
                     let a = copy.sourceIndex(x,y),b = y*output.width+x
-                    guard input.known[a] != 0 else { output.known[b] = 0;continue }
-                    let value = UInt32(littleEndian:input.values[a]) & 0xffffff
+                    guard inputKnown[a] != 0 else { outputKnown[b] = 0;continue }
+                    let value = UInt32(littleEndian:inputValues[a]) & 0xffffff
                     if let key = copy.key,value >= key[0] && value <= key[1] { continue }
-                    output.values[b] = input.values[a];output.known[b] = 1
+                    outputValues[b] = inputValues[a];outputKnown[b] = 1
                 } }
             }
             if let window = copy.target.delivery.4 { try windows.present(framebuffer(output,copy.target.delivery),in:window) }
