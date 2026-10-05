@@ -12,7 +12,7 @@
   "gates": {
     "headless (frozen binary sha256 fbbed9ad…)": "all 10 scenarios equal; vs frames 1,832 identical to m1-frames-ref",
     "Core suites (release test build of the tree with only this change)": "25 suites using the loaded menu session pass (see log list p2s6-*.log)",
-    "AppKit (app built with only this change)": "vs and playback equal; 1,832 frames identical to the AppKit step-3 run"
+    "AppKit (app built with only this change)": "vs and playback equal; 3,960 frames (both scenarios) identical to the AppKit step-3 run"
   },
   "review": {
     "reviewer": "independent read-only agent",

@@ -64,8 +64,16 @@ public struct OriginalApplicationGameplaySession {
             { _ in throw Menu.Boundary.dependency("Unexpected gameplay menu clock") },observe,{ _,_,_ in })
         a.outputPhase = true
         let catalog = entry.entry.entry
-        let soundBuffers = Set((catalog.startup.owner.loads + catalog.entry.common.sounds +
-            Array(catalog.snapshot.sounds.buffers.values)).map(\.output).filter { $0 != 0 })
+        // The same set as concatenating the three load lists and mapping
+        // `output`, without copying every load result each cycle
+        // (MOBILE_PERFORMANCE step 6b).
+        var tokens = Set<UInt32>()
+        for loads in [catalog.startup.owner.loads,catalog.entry.common.sounds] {
+            for i in loads.indices where loads[i].output != 0 { tokens.insert(loads[i].output) }
+        }
+        let registered = catalog.snapshot.sounds.buffers
+        for i in registered.indices where registered[i].value.output != 0 { tokens.insert(registered[i].value.output) }
+        let soundBuffers = tokens
         var drainingSound = false
         var model = entry.match,context = entry.inputContext,random = entry.state.random,local = caller
         // A state without destinations for lib.dll's Actor+7b4 write takes the

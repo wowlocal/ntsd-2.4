@@ -27,6 +27,7 @@ frames or references.
 | Galaxy A12 after steps 3–4 | **9.2** | |
 | Galaxy A12 after steps 3–5 | **9.3** | ([evidence](../evidence/crossplatform-speed-steps45-20261005.json)) |
 | Galaxy A12 after step 6 | **9.4** | exclusivity TLS 5.4% → 1.6% of samples ([evidence](../evidence/crossplatform-speed-step6-20261005.json)) |
+| Galaxy A12 after step 6b | **9.9** | ([evidence](../evidence/crossplatform-speed-step6b-20261005.json)) |
 
 macOS `sample` of the headless match (20 s): before step 1 the main thread's
 time was in the display backend's front-buffer drawing (`performFront` 1418
@@ -63,7 +64,7 @@ definedness mask), plus 2.9 million actor-record copies.
 | 4 | Front-buffer copy loop by row: the source index steps ±1, key bounds read once; `allKnown` by 64-bit words | same pixels in the same order; review OK | **done** |
 | 5 | Copy loop: a fully known source span skips the per-pixel test; the target's known bits are gathered per word and written once | same pixels and bits; the loop never reads the target mask; review OK | **done** |
 | 6 | `LoadedMenuSession.Attempt` collects its address ranges locally (each append to the class property paid a dynamic exclusivity check) and walks the wave owners by index | same ranges, order and throw points; review OK | **done** |
-| 6b | `GameplaySession.advance` collects its sound-buffer tokens without concatenating the three load lists (copied every `OriginalWaveLoadResult` each cycle: 672 refcount samples) | same set, used only for membership; review OK | testing |
+| 6b | `GameplaySession.advance` collects its sound-buffer tokens without concatenating the three load lists (copied every `OriginalWaveLoadResult` each cycle: 672 refcount samples) | same set, used only for membership; review OK | **done** |
 | 7 | Re-profile; then the framebuffer/present path (`memcpy` from `performFront`, Android `WindowHost.draw`) and the bindings' record copies | — | queued |
 
 **Phone profile after steps 3–4** (24,085 samples): `performFront` self
