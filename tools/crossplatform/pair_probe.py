@@ -24,6 +24,11 @@ in the emulator) or linux:BUILD_DIR (the static headless build in a
 swift:6.4.0-noble container with host networking, which OrbStack bridges to
 this Mac's loopback); the client still connects to 127.0.0.1:12345, which adb
 forwards into the emulator (Android host) or back to this Mac (Android client).
+A Linux client facing a host off Linux types the Mac's address as its container
+sees it (host.docker.internal) instead: entering ONLINE GAME the client binds
+127.0.0.1:12345 itself, so in the container's own port space dialling 127.0.0.1
+reaches its own socket (strace, 2026-10-05), which two machines on a network
+never do.
 `--trace` adds
 --network-trace OUT_DIR/<role>-trace.jsonl (socket replies, for diagnosis);
 NTSD_PAIR_STRACE=1 wraps the Linux processes in strace (OUT_DIR/<role>.strace).
@@ -35,9 +40,15 @@ ROOT = Path(__file__).resolve().parents[2]
 MUSIC = ROOT / "native/Sources/NTSDMacPlatform/Resources/OriginalMusic"
 CONTROL = ROOT / "native/Sources/NTSDCore/Resources/OriginalStartup/data/control.txt"
 HOST_SCRIPT = "20 click 410 262; 60 click 400 287; 2000 exit"
-CLIENT_SCRIPT = "; ".join(["20 click 410 262", "60 click 400 317"]
-                          + [f"{100 + 25 * i} key {190 if ch == '.' else ord(ch)}" for i, ch in enumerate("127.0.0.1")]
-                          + ["350 key 13", "2000 exit"])
+TYPED = {"client": "127.0.0.1"}   # the address the client types (its ready state reports it as localAddress)
+
+
+def client_script(address):
+    """The client's UI script: ONLINE GAME, join, type the host's address, Enter."""
+    return "; ".join(["20 click 410 262", "60 click 400 317"]
+                     + [f"{100 + 25 * i} key {190 if ch == '.' else ord(ch)}" for i, ch in enumerate(address)]
+                     + [f"{max(350, 125 + 25 * len(address))} key 13", "2000 exit"])
+CLIENT_SCRIPT = client_script("127.0.0.1")
 ROLES = [("host", 123456789, HOST_SCRIPT, ["Host1", "Host2", "Host3", "Host4"]),
          ("client", 271828182, CLIENT_SCRIPT, ["Peer1", "Peer2", "Peer3", "Peer4"])]
 
@@ -59,8 +70,8 @@ def arguments(base, role, seed, script, music):
 
 def run_local(out, binary):
     music = str(MUSIC) if "NTSDSDL" in Path(binary).name else None
-    with socket.socket() as s:
-        s.bind(("127.0.0.1", 12345))
+    with socket.socket() as s:   # no listener on the port (TIME_WAIT from a previous run is fine)
+        s.setsockopt(socket.SOL_SOCKET, socket.SO_REUSEADDR, 1); s.bind(("127.0.0.1", 12345))
     procs = {}
     for role, seed, script, _ in ROLES:
         log = (out / f"{role}.log").open("x")
@@ -85,8 +96,8 @@ def run_local(out, binary):
 def run_wine(out, run_dir):
     cx = "/Applications/CrossOver.app/Contents/SharedSupport/CrossOver/bin/wine"
     def win(p): return "Z:" + str(p).replace("/", "\\")
-    with socket.socket() as s:
-        s.bind(("127.0.0.1", 12345))
+    with socket.socket() as s:   # no listener on the port (TIME_WAIT from a previous run is fine)
+        s.setsockopt(socket.SOL_SOCKET, socket.SO_REUSEADDR, 1); s.bind(("127.0.0.1", 12345))
     # CrossOver's wine drops SDL_* variables; NTSDSDL reads these as SDL hints.
     env = {**os.environ, "TZ": "Etc/GMT-1", "NTSD_SDL_VIDEO_DRIVER": "offscreen", "NTSD_SDL_AUDIO_DRIVER": "dummy"}
     procs = {}
@@ -175,15 +186,23 @@ def run_cross(out, host_spec, client_spec):
     procs = {}
     for role, seed, script, _ in ROLES:
         kind, target = specs[role]
+        if role == "client" and kind == "linux" and specs["host"][0] != "linux":
+            mac = subprocess.run(["docker", "run", "--rm", "--network", "host", "alpine:3.22", "getent", "ahostsv4", "host.docker.internal"],
+                                 capture_output=True, text=True, check=True).stdout.split()[0]
+            script = client_script(mac); TYPED["client"] = mac
         if kind == "android":
             subprocess.run([adb, "push", str(out / f"{role}-overlay"), f"{device}/{role}-overlay"], check=True, capture_output=True)
             args = " ".join("'" + a.replace("'", "'\\''") + "'" for a in arguments(device, role, seed, script, f"{device}/music"))
             command = [adb, "shell", f"cd {device}/app && chmod 755 NTSDHeadless && TZ=Etc/GMT-1 ./NTSDHeadless {args} >{device}/{role}.log 2>&1"]
             env = None
         elif kind == "linux":
+            game = ["/app/NTSDHeadless", *arguments("/out", role, seed, script, "/music")]
+            if os.environ.get("NTSD_PAIR_STRACE"):   # diagnosis only: the process's network syscalls
+                quoted = " ".join("'" + a.replace("'", "'\\''") + "'" for a in game)
+                game = ["bash", "-c", "apt-get update -qq >/dev/null 2>&1; apt-get install -y -qq strace >/dev/null 2>&1; "
+                        f"exec strace -f -tt -e trace=network,poll,epoll_wait,epoll_ctl -o /out/{role}.strace {quoted}"]
             command = ["docker", "run", "--rm", "--name", f"ntsd-pair-{role}", "--network", "host", "-e", "TZ=Etc/GMT-1",
-                       "-v", f"{Path(target).resolve()}:/app:ro", "-v", f"{MUSIC}:/music:ro", "-v", f"{out}:/out", "swift:6.4.0-noble",
-                       "/app/NTSDHeadless", *arguments("/out", role, seed, script, "/music")]
+                       "-v", f"{Path(target).resolve()}:/app:ro", "-v", f"{MUSIC}:/music:ro", "-v", f"{out}:/out", "swift:6.4.0-noble", *game]
             env = None
         elif kind == "wine":
             args = [win(a) if a.startswith(str(out)) or a == str(MUSIC) else a for a in arguments(out, role, seed, script, str(MUSIC))]
@@ -232,7 +251,7 @@ def check(out, codes):
     assert h["role"] == 2 and c["role"] == 1
     assert h["world"] == c["world"] == 2
     assert h["selector"] == 2 and c["selector"] == 4
-    assert h["localAddress"] == c["localAddress"] == [127, 0, 0, 1]
+    assert h["localAddress"] == [127, 0, 0, 1] and c["localAddress"] == [int(n) for n in TYPED["client"].split(".")]
     assert h["notificationRequests"] == 9 and h["clientRequests"] == 0
     assert c["notificationRequests"] == 0 and c["clientRequests"] == 11
     assert len(h["rng"]) == 3001 and h["rng"] == c["rng"]
@@ -256,6 +275,7 @@ def main():
     rng = check(out, codes)
     result = {"result": "PASS", "mode": mode, "exitCodes": codes, "rngSHA256": rng}
     if client: result["roles"] = {"host": target.split(":")[0], "client": client.split(":")[0]}
+    if TYPED["client"] != "127.0.0.1": result["clientTyped"] = TYPED["client"]
     (out / "result.json").write_text(json.dumps(result, indent=2) + "\n")
     print(json.dumps(result))
 
