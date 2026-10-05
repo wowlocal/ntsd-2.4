@@ -125,8 +125,14 @@ func ntsdAndroidOnCreate(_ activity: UnsafeMutablePointer<ANativeActivity>) {
         let config = AConfiguration_new(); defer { AConfiguration_delete(config) }
         AConfiguration_fromAssetManager(config,activity.pointee.assetManager)
         let density = max(1,Double(AConfiguration_getDensity(config))/160)
-        let screen = CGSize(width:(Double(ANativeWindow_getWidth(surface))/density).rounded(.down),
-                            height:(Double(ANativeWindow_getHeight(surface))/density).rounded(.down))
+        // The screen the game is told: the surface in density-independent pixels,
+        // scaled up (same aspect) to at least 800x600, the desktop the original
+        // was made for. A phone's 853x384 dp would leave the 794x550 window
+        // partly above the screen, where the game's first blit is refused
+        // (declared host policy; frames are letterboxed to the surface anyway).
+        let dp = CGSize(width:Double(ANativeWindow_getWidth(surface))/density,height:Double(ANativeWindow_getHeight(surface))/density)
+        let fit = max(1,800/dp.width,600/dp.height)
+        let screen = CGSize(width:(dp.width*fit).rounded(.down),height:(dp.height*fit).rounded(.down))
         let host = NTSDAndroidSessionHost(arguments:arguments,screen:screen,density:density,musicDirectory:music,files:files)
         host.windows.app = self
         let session = OriginalRuntimeSession(arguments:arguments,host:host)

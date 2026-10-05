@@ -232,6 +232,7 @@ ONLINE GAME is checked with `pair_probe.py` on each host and across hosts
 | 2026-10-05 | **ONLINE GAME across platforms** | `pair_probe.py --cross` runs the host and the client on different platforms (macOS, Windows under Wine, Android in the emulator through adb forwarding). **macOS↔Android both ways, Windows↔macOS both ways and Windows→Android all pass the retained probe with its RNG hash.** | [evidence](../evidence/crossplatform-online-cross-20261005.json) | c9803c9 |
 | 2026-10-05 | **ONLINE GAME across platforms: Linux** | `pair_probe.py --cross` gains `linux:BUILD_DIR` (the static headless build in a host-network container, which OrbStack bridges to this Mac's loopback). **Linux host with a macOS client passes with the retained RNG hash.** macOS host with a Linux client did not connect in this harness (both waited, no error on either side, while a plain container client reached the same host): open, cause undetermined. | [evidence](../evidence/crossplatform-online-cross-20261005.json) | 0a3707d |
 | 2026-10-05 | **ONLINE GAME: macOS host, Linux client** | strace explained the hang: the client binds 127.0.0.1:12345 itself on entering ONLINE GAME, so in the container's own port space dialling 127.0.0.1 reached its own socket (a probe artefact; on a network the client dials the host's address). The Linux client now types the Mac's address as the container sees it. **It passes with the retained RNG hash: every cross-platform pairing passes.** No game change. | [evidence](../evidence/crossplatform-online-cross-linux-client-20261005.json) | e509c32 |
+| 2026-10-05 | **P8: Android on a real phone** | The user connected a Galaxy A12 (Android 12, 2.8 GB RAM). The APK installs and runs. Its small screen (853×384 dp) put the game's window partly above the screen, and the first blit was refused; the host now reports a screen of at least 800×600 in the device's aspect (the tablet is unchanged: vs equal, text frames agree). **Then Android's low-memory killer ended the game during startup loading**: 1.3 GB resident plus 2.5 GB swapped. The macOS build of the same run peaks at a 4.2 GB footprint, so the game needs about 4 GB, more than this phone has. | [evidence](../evidence/crossplatform-p8-android-phone-20261005.json) | this commit |
 
 ## Next task
 
@@ -242,13 +243,17 @@ miscompile (done, #92905). Android tools (Homebrew `sdkmanager`, root
 build-tools 36.1.0, CMake 4.1.2, platform 35, NDK 30.0.16248370, and the
 `android-35;google_apis;arm64-v8a` image (AVD `ntsd-xplat-api35`).
 
-1. **P3 x86_64 tests**: the portable XCTest suites, which pass on Linux
-   aarch64, have not run on x86_64; the x86_64 glibc SDK
-   (`ntsd-6.4.0-ubuntu24.04-x86_64`) now exists. Build them for it and run them
-   in an amd64 container (Rosetta: a test harness).
-2. **Waiting on the user**: an Android device (USB debugging) or sideloading
-   the APK; a keystore and a decision for a release-signed APK; real Linux
-   desktop, Windows PC and iPad checks (the iPad IPA was delivered).
+1. **P3 x86_64 tests** (running): the portable XCTest suites on Linux x86_64
+   under Rosetta, one suite per container (`run_linux_suites.py --platform
+   linux/amd64`); 37/254 passed, 0 failed at 2026-10-05 07:40.
+2. **Memory footprint for phones**: the game needs ~4 GB (macOS peak
+   footprint 4.2 GB), so a 3 GB phone kills it while loading. A study of
+   where the memory goes (read-only game data held as copies, startup inputs
+   kept after loading) comes first; changing how Core holds its inputs needs
+   the macOS gate and must not change behaviour. Ask the user before starting.
+3. **Waiting on the user**: a release keystore and a decision for a signed
+   APK; real Linux desktop, Windows PC and iPad checks (the iPad IPA was
+   delivered); a phone with more memory, if available.
 
 Following tasks:
 
