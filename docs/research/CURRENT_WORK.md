@@ -58,7 +58,9 @@ Roboto через FreeType, звук и музыка через AAudio, каса
 ([evidence](../evidence/crossplatform-p8-android-text-audio-20261004.json)).
 2026-10-05: матрица из девяти хостов (с iPad и Android) на чистом b9d4b62 —
 везде 9/10, кадры совпадают внутри групп
-([отчёт](../evidence/crossplatform-matrix-20261005-nine-hosts.json)).
+([отчёт](../evidence/crossplatform-matrix-20261005-nine-hosts.json)); вечером на
+870c24a (после работ по памяти и скорости) — везде 10/10, включая `playback`
+([отчёт](../evidence/crossplatform-matrix-20261005-speed.json)).
 Касания на iPad исправлены (курсор и удержание кнопки); проверка на реальных
 iPad/Android/Linux/Windows — за пользователем.
 2026-10-05: память — [MEMORY_FOOTPRINT](MEMORY_FOOTPRINT.md) (шаги 1–3,

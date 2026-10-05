@@ -18,7 +18,7 @@ import argparse
 import hashlib
 import json
 import os
-from pathlib import Path
+from pathlib import Path, PureWindowsPath
 import shutil
 import subprocess
 import sys
@@ -360,7 +360,9 @@ def summarize(events, captures, overlay):
             out["milestones"].append({"event": kind, "iterations": e["iterations"], "capture": sha(e["path"]),
                                       "track": m.get("track"), "musicPlaying": m.get("playing")})
         elif kind == "playbackDialog":
-            out["milestones"].append({"event": kind, "file": Path(e["file"]).name, "iterations": e["iterations"]})
+            # The file's name only; the Windows build reports a Windows path.
+            name = PureWindowsPath(e["file"]).name if "\\" in e["file"] else Path(e["file"]).name
+            out["milestones"].append({"event": kind, "file": name, "iterations": e["iterations"]})
         elif kind == "playbackAlert":
             out["milestones"].append({"event": kind, "text": e["text"], "iterations": e["iterations"]})
         elif kind == "boundary":
