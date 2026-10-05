@@ -72,17 +72,21 @@ Established in P0 ([evidence](../evidence/crossplatform-p0-20261003.json)):
   `--show-bin-path`.
 - Cross-built probe: `tools/crossplatform/probe`.
 
-| Target | SDK built on this Mac | Test harness here | Real observation |
-| --- | --- | --- | --- |
-| Linux x86_64/aarch64, headless | Swift Static Linux SDK 6.4.0 (musl), checksum from swift.org's releases API — **working** | OrbStack container; aarch64 native, x86_64 under Rosetta | Linux host |
-| Linux desktop (SDL3) | glibc Swift SDK (e.g. `swift-sdk-generator` from an Ubuntu 24.04 image), since static musl cannot `dlopen` SDL's video/audio drivers; SDL3 built for that sysroot | container with virtual display/audio for smoke runs | Linux desktop |
-| Windows x86_64 (arm64 later) | `*-unknown-windows-msvc`: Windows SDK headers/libs plus the Swift Windows runtime; swift.org publishes no Windows SDK bundle for 6.4.0 (installer/Docker only), so feasibility is unproven and is P0-W's question | CrossOver/Wine, test only | Windows PC |
-| Android arm64 | `swift-6.3.3-RELEASE_android` installed; move to the 6.4.0 Android SDK + NDK | emulator/device | device |
-| iPadOS | Xcode iOS SDK | simulator | device |
+State on 2026-10-05 (each row: SDK, how to build, how it is checked here,
+what still needs real hardware):
 
-If Windows cross-compilation proves infeasible, record the evidence. The fallback
-is a native Windows build, e.g. a GitHub Actions runner, which requires the
-user's approval to push. Until then, keep the other phases moving.
+| Target | SDK / build | Check on this Mac (test harness) | Real observation |
+| --- | --- | --- | --- |
+| macOS AppKit (reference) | Xcode Swift 6.4, `tools/build-native.sh` | `tools/app_e2e.py`; `matrix.py --hosts appkit` | this Mac |
+| macOS SDL | `NTSD_SDL=1`, Homebrew SDL3 | `matrix.py --hosts macos-sdl` | this Mac |
+| Linux headless (aarch64, x86_64) | Static Linux SDK 6.4.0 (musl), `NTSD_PORTABLE=1 … --product NTSDHeadless` | `run_headless_scenarios.py --linux[-amd64]` (OrbStack; x86_64 under Rosetta) | — |
+| Linux desktop (SDL3, FreeType) | glibc SDKs `ntsd-6.4.0-ubuntu24.04-{aarch64,x86_64}` (swift-sdk-generator); SDL3/FreeType from `build_linux_deps.sh`; `package_linux.py` | `run_headless_scenarios.py --linux-sdl`, `linux_x11_smoke.sh`, `linux_wayland_check.py`, `check_linux_package.sh` | a Linux desktop |
+| Windows x86_64 (headless, SDL3, GDI text, Winsock) | `ntsd-6.4.0-windows-x86_64` from `make_windows_sdk.py` (xwin MSVC 14.29 + SDK 10.0.22621, `--build-system native`); `package_windows.py` | `run_headless_scenarios.py --wine`, `check_windows_package.sh` (CrossOver) | a Windows PC |
+| iPadOS | Xcode iOS SDK, `NTSD_IOS=1`; `ios_app.py` (simulator), `ios_device.py` (signed app / IPA) | `ios_app.py SCENARIO` (iPad simulator) | the user's iPad (IPA delivered) |
+| Android arm64 (app) | Swift 6.4.0 Android SDK + NDK r30 (`ANDROID_NDK_ROOT`; the static runtime needs r30's libc++), FreeType from `build_android_deps.sh`; `android_app.py` builds, signs (debug key) and installs the APK | `android_app.py --scenario NAME`, `run_headless_scenarios.py --android` (arm64 emulator) | an Android device |
+
+ONLINE GAME is checked with `pair_probe.py` on each host and across hosts
+(`--cross`); `matrix.py` runs every host's scenarios and compares frames.
 
 ## Phases and gates
 
@@ -227,32 +231,27 @@ user's approval to push. Until then, keep the other phases moving.
 | 2026-10-05 | **P8: ONLINE GAME on Android** | The headless host can use the shared sockets (`--network-loopback`), and `pair_probe.py --android` runs two headless processes in the emulator. **The retained two-process probe passes on Android (Bionic sockets) and with the macOS headless binary, both with the RNG hash of the retained run.** | [evidence](../evidence/crossplatform-p8-android-online-20261005.json) | f1acc80 |
 | 2026-10-05 | **ONLINE GAME across platforms** | `pair_probe.py --cross` runs the host and the client on different platforms (macOS, Windows under Wine, Android in the emulator through adb forwarding). **macOS↔Android both ways, Windows↔macOS both ways and Windows→Android all pass the retained probe with its RNG hash.** | [evidence](../evidence/crossplatform-online-cross-20261005.json) | c9803c9 |
 | 2026-10-05 | **ONLINE GAME across platforms: Linux** | `pair_probe.py --cross` gains `linux:BUILD_DIR` (the static headless build in a host-network container, which OrbStack bridges to this Mac's loopback). **Linux host with a macOS client passes with the retained RNG hash.** macOS host with a Linux client did not connect in this harness (both waited, no error on either side, while a plain container client reached the same host): open, cause undetermined. | [evidence](../evidence/crossplatform-online-cross-20261005.json) | 0a3707d |
-| 2026-10-05 | **ONLINE GAME: macOS host, Linux client** | strace explained the hang: the client binds 127.0.0.1:12345 itself on entering ONLINE GAME, so in the container's own port space dialling 127.0.0.1 reached its own socket (a probe artefact; on a network the client dials the host's address). The Linux client now types the Mac's address as the container sees it. **It passes with the retained RNG hash: every cross-platform pairing passes.** No game change. | [evidence](../evidence/crossplatform-online-cross-linux-client-20261005.json) | this commit |
+| 2026-10-05 | **ONLINE GAME: macOS host, Linux client** | strace explained the hang: the client binds 127.0.0.1:12345 itself on entering ONLINE GAME, so in the container's own port space dialling 127.0.0.1 reached its own socket (a probe artefact; on a network the client dials the host's address). The Linux client now types the Mac's address as the container sees it. **It passes with the retained RNG hash: every cross-platform pairing passes.** No game change. | [evidence](../evidence/crossplatform-online-cross-linux-client-20261005.json) | e509c32 |
 
 ## Next task
 
-Inputs received 2026-10-04: the user accepted the Android SDK licences
-(`sdkmanager --licenses`), approved publishing the Linux and Windows packages
-and approved reporting the miscompile (done, #92905). Installed with Homebrew's
-`sdkmanager` into `/opt/homebrew/share/android-commandlinetools` (7.8 GB):
-platform-tools 37.0.1, emulator 37.2.12, NDK 27.3.13750724, platform 35 and
-the `android-35;google_apis;arm64-v8a` system image.
+Inputs received 2026-10-04: the user accepted the Android SDK licences,
+approved publishing the Linux and Windows packages and approved reporting the
+miscompile (done, #92905). Android tools (Homebrew `sdkmanager`, root
+`/opt/homebrew/share/android-commandlinetools`): platform-tools, emulator,
+build-tools 36.1.0, CMake 4.1.2, platform 35, NDK 30.0.16248370, and the
+`android-35;google_apis;arm64-v8a` image (AVD `ntsd-xplat-api35`).
 
-1. **Android on a real device**: the app is ready to try (APK from
-   `android_app.py`); needs the user's Android device with USB debugging, or
-   the APK sideloaded.
-2. **Android package**: a release-signed APK needs a keystore the user owns
-   and their decision to publish; until then the debug APK from
-   `android_app.py` is the artefact.
-
-Still waiting on the user: real-hardware checks (Linux desktop, Windows PC,
-iPad).
+1. **P3 x86_64 tests**: the portable XCTest suites, which pass on Linux
+   aarch64, have not run on x86_64; the x86_64 glibc SDK
+   (`ntsd-6.4.0-ubuntu24.04-x86_64`) now exists. Build them for it and run them
+   in an amd64 container (Rosetta: a test harness).
+2. **Waiting on the user**: an Android device (USB debugging) or sideloading
+   the APK; a keystore and a decision for a release-signed APK; real Linux
+   desktop, Windows PC and iPad checks (the iPad IPA was delivered).
 
 Following tasks:
 
-- P3 x86_64 tests: the headless game passes on x86_64; the portable XCTest
-  suites there need an x86_64 glibc SDK. Rosetta is a test harness; label it
-  so.
 - P0-W history (license accepted 2026-10-03). `xwin` 0.10.0 splats are on
   X5: MSVC 14.44.17.14 + SDK 10.0.26100 (`winsysroot`) and MSVC 14.29 + SDK
   10.0.22621 (`winsysroot-vs16`).
