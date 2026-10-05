@@ -4,6 +4,7 @@ device adb reaches and optionally run an app_e2e scenario through it (P8;
 the emulator is a test harness, not a device observation).
 
 Usage: android_app.py OUT_DIR [--scenario NAME] [--skip-build] [--no-install]
+       android_app.py OUT_DIR --release [--no-install]
 
 Builds libNTSDAndroid.so with SwiftPM (NTSD_PORTABLE=1 NTSD_ANDROID=1,
 aarch64-unknown-linux-android28, static Swift runtime, NDK r30, FreeType from
@@ -18,8 +19,16 @@ local debug key and installs OUT_DIR/ntsd.apk.
 (paths inside the app's files folder), starts the activity, waits for the
 process to exit, pulls the results into OUT_DIR/<scenario>, removes args.txt
 and compares them with the scenario's frozen reference.
+
+--release builds the distributable APK instead: application id
+io.github.wowlocal.ntsd (the debug build keeps local.ntsd.port, so both can be
+installed), not debuggable, version code = commit count, version name
+0.1.<count>-<commit>, signed with the release key of android_release_key.sh
+(its password read from the login Keychain, never printed), written as
+OUT_DIR/ntsd-android-arm64-<commit>.apk. Both builds carry the original EXE's
+icon (tools/make_app_icon.py). Scenarios need the debuggable build.
 """
-import argparse, importlib.util, json, os, shutil, subprocess, sys, tarfile, time
+import argparse, importlib.util, json, os, shutil, struct, subprocess, sys, tarfile, time
 from pathlib import Path
 
 ROOT = Path(__file__).resolve().parents[2]
@@ -33,11 +42,14 @@ ADB = str(SDK / "platform-tools/adb")
 SWIFT = Path.home() / "Library/Developer/Toolchains/swift-6.4.0-RELEASE.xctoolchain/usr/bin/swift"
 MUSIC = ROOT / "native/Sources/NTSDMacPlatform/Resources/OriginalMusic"
 PACKAGE = "local.ntsd.port"
+RELEASE_PACKAGE = "io.github.wowlocal.ntsd"
+RELEASE_KEY = Path.home() / ".config/ntsd/android-release.p12"
+EXE = ROOT / "downloads/NTSD_2.4_2.0a_clean/NTSD 2.4_2.0a/NTSD 2.4.exe"
 FILES = f"/data/user/0/{PACKAGE}/files"
-MANIFEST = f"""<?xml version="1.0" encoding="utf-8"?>
-<manifest xmlns:android="http://schemas.android.com/apk/res/android" package="{PACKAGE}">
+MANIFEST = """<?xml version="1.0" encoding="utf-8"?>
+<manifest xmlns:android="http://schemas.android.com/apk/res/android" package="{package}">
   <uses-permission android:name="android.permission.INTERNET"/>
-  <application android:label="NTSD" android:hasCode="false" android:extractNativeLibs="true"
+  <application android:label="NTSD" android:icon="@mipmap/ic_launcher" android:hasCode="false" android:extractNativeLibs="true"
       android:theme="@android:style/Theme.NoTitleBar.Fullscreen">
     <activity android:name="android.app.NativeActivity" android:exported="true" android:launchMode="singleTask"
         android:screenOrientation="sensorLandscape"
@@ -57,7 +69,17 @@ def run(cmd, **kw):
     return subprocess.run([str(c) for c in cmd], check=True, capture_output=True, text=True, **kw).stdout.strip()
 
 
-def build(out):
+def icon(res):
+    """The original EXE's 32x32 icon at 6x (192 px, xxxhdpi), nearest-neighbour."""
+    spec = importlib.util.spec_from_file_location("make_app_icon", ROOT / "tools/make_app_icon.py")
+    m = importlib.util.module_from_spec(spec); spec.loader.exec_module(m)
+    exe = EXE.read_bytes(); group = m.resource(exe, 14, 121)
+    width, height, rows = m.decode(m.resource(exe, 3, struct.unpack_from("<H", group, 6 + 12)[0]))
+    assert (width, height) == (32, 32)
+    (res / "mipmap-xxxhdpi").mkdir(parents=True); (res / "mipmap-xxxhdpi/ic_launcher.png").write_bytes(m.png(rows, 6))
+
+
+def build(out, release=False):
     env = {**os.environ, "NTSD_PORTABLE": "1", "NTSD_ANDROID": "1", "ANDROID_HOME": str(SDK), "ANDROID_NDK_ROOT": str(NDK),
            "NTSD_FREETYPE_PREFIX": str(X5 / "android-deps/freetype/install-aarch64")}   # build_android_deps.sh
     common = [SWIFT, "build", "--package-path", ROOT / "native", "--scratch-path", X5 / "build-android-aarch64",
@@ -73,19 +95,30 @@ def build(out):
     shutil.copytree(MUSIC, assets / "OriginalMusic")
     listing = sorted(p for p in assets.rglob("*") if p.is_file())
     (assets / "files.txt").write_text("".join(f"{p.relative_to(assets)}\t{p.stat().st_size}\n" for p in listing))
-    (stage / "AndroidManifest.xml").write_text(MANIFEST)
-    unaligned, aligned, apk = out / "unaligned.apk", out / "aligned.apk", out / "ntsd.apk"
+    (stage / "AndroidManifest.xml").write_text(MANIFEST.format(package=RELEASE_PACKAGE if release else PACKAGE))
+    icon(stage / "res"); run([TOOLS / "aapt2", "compile", "--dir", stage / "res", "-o", stage / "res.zip"])
+    commit = run(["git", "-C", ROOT, "rev-parse", "--short", "HEAD"]); count = run(["git", "-C", ROOT, "rev-list", "--count", "HEAD"])
+    unaligned, aligned = out / "unaligned.apk", out / "aligned.apk"
+    apk = out / (f"ntsd-android-arm64-{commit}.apk" if release else "ntsd.apk")
     for p in (unaligned, aligned, apk): p.unlink(missing_ok=True)
     run([TOOLS / "aapt2", "link", "-o", unaligned, "--manifest", stage / "AndroidManifest.xml", "-I", SDK / "platforms/android-35/android.jar",
-         "-A", stage / "assets", "--min-sdk-version", "28", "--target-sdk-version", "35", "--version-code", "1", "--version-name", "0.1",
-         "--debug-mode"])
+         "-A", stage / "assets", "--min-sdk-version", "28", "--target-sdk-version", "35", "--version-code", count,
+         "--version-name", f"0.1.{count}-{commit}", stage / "res.zip", *([] if release else ["--debug-mode"])])
     run(["zip", "-q", "-r", unaligned, "lib"], cwd=stage)
     run([TOOLS / "zipalign", "-p", "-f", "4", unaligned, aligned])
-    key = X5 / "android-debug.keystore"   # local debug key only
-    if not key.exists():
-        run(["keytool", "-genkeypair", "-keystore", key, "-storepass", "android", "-keypass", "android", "-alias", "androiddebugkey",
-             "-keyalg", "RSA", "-keysize", "2048", "-validity", "10000", "-dname", "CN=Android Debug,O=Android,C=US"])
-    run([TOOLS / "apksigner", "sign", "--ks", key, "--ks-pass", "pass:android", "--out", apk, aligned])
+    if release:   # the release key; its password goes from the Keychain to apksigner's environment only
+        password = subprocess.run(["security", "find-generic-password", "-s", "ntsd-android-release-keystore", "-a", "ntsd", "-w"],
+                                  check=True, capture_output=True, text=True).stdout.strip()
+        subprocess.run([str(TOOLS / "apksigner"), "sign", "--ks", str(RELEASE_KEY), "--ks-type", "PKCS12", "--ks-key-alias", "ntsd",
+                        "--ks-pass", "env:NTSD_KS_PASS", "--key-pass", "env:NTSD_KS_PASS", "--out", str(apk), str(aligned)],
+                       check=True, capture_output=True, env={**os.environ, "NTSD_KS_PASS": password})
+        del password
+    else:
+        key = X5 / "android-debug.keystore"   # local debug key only
+        if not key.exists():
+            run(["keytool", "-genkeypair", "-keystore", key, "-storepass", "android", "-keypass", "android", "-alias", "androiddebugkey",
+                 "-keyalg", "RSA", "-keysize", "2048", "-validity", "10000", "-dname", "CN=Android Debug,O=Android,C=US"])
+        run([TOOLS / "apksigner", "sign", "--ks", key, "--ks-pass", "pass:android", "--out", apk, aligned])
     run([TOOLS / "apksigner", "verify", apk])
     unaligned.unlink(); aligned.unlink()
     return apk
@@ -131,8 +164,10 @@ def scenario(out, name):
 def main():
     a = argparse.ArgumentParser(); a.add_argument("out", type=Path); a.add_argument("--scenario", action="append", default=[])
     a.add_argument("--skip-build", action="store_true"); a.add_argument("--no-install", action="store_true")
+    a.add_argument("--release", action="store_true")
     args = a.parse_args(); out = args.out.resolve(); out.mkdir(parents=True, exist_ok=True)
-    apk = out / "ntsd.apk" if args.skip_build else build(out)
+    if args.release and (args.scenario or args.skip_build): sys.exit("--release builds the distributable APK; scenarios need the debuggable build")
+    apk = out / "ntsd.apk" if args.skip_build else build(out, release=args.release)
     print(apk, apk.stat().st_size, flush=True)
     if not args.no_install: print(run([ADB, "install", "-r", apk]).splitlines()[-1], flush=True)
     rows = [scenario(out, name) for name in (list(app_e2e.SCENARIOS) if args.scenario == ["all"] else args.scenario)]
