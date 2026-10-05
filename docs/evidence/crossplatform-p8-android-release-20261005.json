@@ -1,27 +1,39 @@
 {
-  "study": "docs/research/CROSS_PLATFORM.md",
-  "phase": "P8: release APK",
-  "date": "2026-10-05",
-  "decision": "user (2026-10-05): 'we need proper APK'",
-  "key": {
-    "script": "tools/crossplatform/android_release_key.sh",
-    "keystore": "~/.config/ntsd/android-release.p12 (PKCS#12, alias ntsd, RSA 4096, valid 2026-10-05 to 2056-09-27), outside the repository",
-    "password": "random, only in the login Keychain (service ntsd-android-release-keystore, account ntsd); never written to a file or printed; reaches keytool/apksigner through an environment variable",
-    "certificate": "CN=NTSD Native port, SHA-256 70194aaa0740d0376a91338af4b34c17fd99ff51629eb65fcc7f65ccfbf0d61d",
-    "backup": "the user should keep a copy of the keystore (and the Keychain entry): without it updates cannot be signed with the same key"
-  },
-  "build": {
-    "tool": "android_app.py --release",
-    "apk": "ntsd-android-arm64-569c7d7.apk",
-    "bytes": 221413927,
-    "sha256": "f89729d129a0239871f333a9c9dce8adc84fbce0733d0c2f69884683ab038fd9",
-    "manifest": "package io.github.wowlocal.ntsd (the debug harness build keeps local.ntsd.port), versionCode 546 (commit count), versionName 0.1.546-569c7d7, minSdk 28, targetSdk 35, not debuggable, label NTSD, icon = the original EXE's 32x32 icon at 6x (make_app_icon.py)",
-    "native": "libNTSDAndroid.so built from the committed Android host (unchanged since 36e7e8e)"
-  },
-  "checks": {
-    "apksigner verify --print-certs": "Signer #1 CN=NTSD Native port, SHA-256 70194aaa…0d61d",
-    "aapt2 dump badging": "package/version/label/icon as above, no application-debuggable",
-    "emulator": "installs beside the debug build; first launch extracts the data and shows the main menu after ~6 s; run-as refused (not debuggable)"
-  },
-  "not done": "publishing (a separate decision for the user); a run on a phone with enough memory"
+ "study": "docs/research/CROSS_PLATFORM.md",
+ "phase": "P8: release APK",
+ "date": "2026-10-05",
+ "decision": "user (2026-10-05): 'we need proper APK'",
+ "key": {
+  "script": "tools/crossplatform/android_release_key.sh",
+  "keystore": "~/.config/ntsd/android-release.p12 (PKCS#12, alias ntsd, RSA 4096, valid 2026-10-05 to 2056-09-27), outside the repository",
+  "password": "random, only in the login Keychain (service ntsd-android-release-keystore, account ntsd); never written to a file or printed; reaches keytool/apksigner through an environment variable",
+  "certificate": "CN=NTSD Native port, SHA-256 70194aaa0740d0376a91338af4b34c17fd99ff51629eb65fcc7f65ccfbf0d61d",
+  "backup": "the user should keep a copy of the keystore (and the Keychain entry): without it updates cannot be signed with the same key"
+ },
+ "build": {
+  "tool": "android_app.py --release",
+  "apk": "ntsd-android-arm64-569c7d7.apk",
+  "bytes": 221413927,
+  "sha256": "f89729d129a0239871f333a9c9dce8adc84fbce0733d0c2f69884683ab038fd9",
+  "manifest": "package io.github.wowlocal.ntsd (the debug harness build keeps local.ntsd.port), versionCode 546 (commit count), versionName 0.1.546-569c7d7, minSdk 28, targetSdk 35, not debuggable, label NTSD, icon = the original EXE's 32x32 icon at 6x (make_app_icon.py)",
+  "native": "libNTSDAndroid.so built from the committed Android host (unchanged since 36e7e8e)"
+ },
+ "checks": {
+  "apksigner verify --print-certs": "Signer #1 CN=NTSD Native port, SHA-256 70194aaa…0d61d",
+  "aapt2 dump badging": "package/version/label/icon as above, no application-debuggable",
+  "emulator": "installs beside the debug build; first launch extracts the data and shows the main menu after ~6 s; run-as refused (not debuggable)"
+ },
+ "not done": "publishing (a separate decision for the user); a run on a phone with enough memory",
+ "rebuild 2026-10-05 evening": {
+  "commit": "7f15b7b (memory steps 1-3, speed steps 1-7)",
+  "apk": "ntsd-android-arm64-7f15b7b.apk",
+  "bytes": 222630439,
+  "sha256": "120ceea8e09656a0e25044511da75917767df02b30a190e9a1c6cad6da208e66",
+  "versionName": "0.1.562-7f15b7b",
+  "versionCode": 562,
+  "signature": "apksigner verify: Signer #1 CN=NTSD Native port, SHA-256 70194aaa…0d61d (the same release key)",
+  "emulator": "installs beside the debug build, not debuggable (run-as refused), first launch shows the main menu",
+  "location": "X5 crossplatform/android-release; the morning build (569c7d7, sha256 f89729d1…) moved to T7 crossplatform-scratch-20261005/android-release-569c7d7 after an identical-hash copy",
+  "published": "no (the user's decision)"
+ }
 }

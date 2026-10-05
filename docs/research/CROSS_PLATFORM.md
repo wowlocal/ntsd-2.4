@@ -247,7 +247,8 @@ ONLINE GAME is checked with `pair_probe.py` on each host and across hosts
 | 2026-10-05 | **Speed step 6** | The loaded menu session's per-cycle attempt collects its address ranges in a local array instead of appending to a class property, which paid a dynamic exclusivity check (a slow TLS lookup on Android) per range. Phone exclusivity lookups 5.4% → 1.6% of samples; speed 9.3 → 9.4 ticks per second. All 10 scenarios equal, 25 suites pass, review OK. | [evidence](../evidence/crossplatform-speed-step6-20261005.json) | 0667838 |
 | 2026-10-05 | **Speed step 6b** | The gameplay session collects its sound-buffer tokens without concatenating the three sound-load lists, which copied every load result each cycle. Phone 9.4 → 9.9 ticks per second. All 10 scenarios and AppKit equal, frames identical, gameplay suites pass, review OK. | [evidence](../evidence/crossplatform-speed-step6b-20261005.json) | 0b5e9f7 |
 | 2026-10-05 | **Speed step 7** | Two thirds of the pixels the display backend copies are whole-screen copies with no colour key and a fully known source; those rows are now one row copy plus whole mask words. Phone 9.9 → 10.2 ticks per second. All 10 scenarios and AppKit equal, frames identical, display suites pass, review OK. | [evidence](../evidence/crossplatform-speed-step7-20261005.json) | 870c24a |
-| 2026-10-05 | **Matrix on today's code: 10/10 on all nine hosts** | `matrix.py` at 870c24a (clean tree): AppKit, macOS SDL, iPad simulator, Linux headless aarch64/x86_64, Linux SDL, Windows headless/SDL and Android each ran all 10 scenarios against the frozen references. **All equal, playback included for the first time**; the Windows playback comparison needed a comparator fix (the dialog's file name from a Windows path). Frames identical within each rasteriser group (18,088 per pair), text in the same frames across groups. | [evidence](../evidence/crossplatform-matrix-20261005-speed.json) | this commit |
+| 2026-10-05 | **Matrix on today's code: 10/10 on all nine hosts** | `matrix.py` at 870c24a (clean tree): AppKit, macOS SDL, iPad simulator, Linux headless aarch64/x86_64, Linux SDL, Windows headless/SDL and Android each ran all 10 scenarios against the frozen references. **All equal, playback included for the first time**; the Windows playback comparison needed a comparator fix (the dialog's file name from a Windows path). Frames identical within each rasteriser group (18,088 per pair), text in the same frames across groups. | [evidence](../evidence/crossplatform-matrix-20261005-speed.json) | 7f15b7b |
+| 2026-10-05 | **Release APK rebuilt** | `android_app.py --release` at 7f15b7b (with the memory and speed work): `io.github.wowlocal.ntsd` 0.1.562-7f15b7b, signed with the same release key; on the emulator it installs beside the debug build and shows the main menu. Not published. | [evidence](../evidence/crossplatform-p8-android-release-20261005.json) | this commit |
 
 ## Next task
 
@@ -265,7 +266,7 @@ build-tools 36.1.0, CMake 4.1.2, platform 35, NDK 30.0.16248370, and the
    each local fix is worth a few percent (see MOBILE_PERFORMANCE). Building Android with
    `-enforce-exclusivity=unchecked` would remove the last TLS lookups but
    drops a runtime safety check: the user's decision.
-2. **Release APK**: built (`android_app.py --release`); publishing it is the
+2. **Release APK**: rebuilt at 7f15b7b (0.1.562); publishing it is the
    user's decision.
 3. **Waiting on the user**: real Linux desktop and Windows PC checks; whether
    to build Android with `-enforce-exclusivity=unchecked`.
