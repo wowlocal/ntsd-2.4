@@ -50,8 +50,9 @@ definedness byte per pixel, and as 32-bit surface values with a known byte.
 | Step | Change | Expected saving | Proof | Status |
 | --- | --- | ---: | --- | --- |
 | 1 | `Bitmap` keeps its DIB bytes and resolved pixel offset, not the decoded copy (it still decodes at load, so the same images fail at the same point); each surface's source-colour record keeps a whole-copied bitmap instead of its decoded arrays (decoded once if read). | ~1.0 GB | **done:** live heap 4.1 → 3.02 GB; 15 Core suites (51 tests) pass; vs equal headless and AppKit, frames identical; independent review OK ([evidence](../evidence/crossplatform-memory-step1-20261005.json)) | done |
-| 2 | Surface `known` mask one bit per pixel instead of one byte | ~0.25 GB | display backend tests, app_e2e, frames | in progress |
-| 3 | `Bitmap.dib` without the extra copy of each file (slice or mapped file bytes) | up to ~0.6 GB | as 1 | queued |
+| 2 | Surface `known` mask one bit per pixel instead of one byte (budget still counts five bytes per pixel) | ~0.25 GB | **done:** live heap 3.02 → 2.75 GB; 7 display-backend suites (35 tests, whole catalog included) pass; vs equal headless and AppKit, frames identical; review OK ([evidence](../evidence/crossplatform-memory-step2-20261005.json)) | done |
+| 3 | Fill image surfaces lazily: a whole-image copy into a surface is recorded and applied at the surface's first pixel access (allocation stays at creation; untouched calloc pages cost no physical memory). Most of the 851 sprite surfaces are never read in a match. | up to ~1.1 GB resident | as 2, plus resident (dirty+swapped) heap from vmmap | next |
+| 3b | `Bitmap.dib` without the extra copy of each file (slice or mapped file bytes) | up to ~0.6 GB | as 1 | queued |
 | 4 | Remaining large holders (surface values, state-record definedness, frame-loader dictionaries) after re-measuring | open | to be decided from the new attribution | queued |
 
 Metric: the live heap (`heap -s` 40 s into the computer-vs run). The macOS

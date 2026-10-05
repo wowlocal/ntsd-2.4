@@ -58,19 +58,48 @@ import NTSDCore
         }
         func release(_ bytes: Int) { lock.lock(); used -= bytes; lock.unlock() }
     }
+    /// Pixel knowledge, one bit per pixel (it was one byte; MEMORY_FOOTPRINT
+    /// step 2). The subscript reads and writes 0 or 1 like the byte mask did.
+    private struct KnownMask {
+        let words: UnsafeMutablePointer<UInt64>, count: Int
+        init?(_ count: Int) {
+            guard let raw = calloc((count+63)/64,8) else { return nil }
+            words = raw.assumingMemoryBound(to:UInt64.self); self.count = count
+        }
+        subscript(i: Int) -> UInt8 {
+            get { UInt8(truncatingIfNeeded:words[i >> 6] >> UInt64(i & 63)) & 1 }
+            nonmutating set {
+                let bit = UInt64(1) << UInt64(i & 63)
+                if newValue != 0 { words[i >> 6] |= bit } else { words[i >> 6] &= ~bit }
+            }
+        }
+        /// Every pixel known (bits past `count` stay clear).
+        func setAll() {
+            let full = count/64
+            for w in 0..<full { words[w] = ~0 }
+            if count%64 != 0 { words[full] = (UInt64(1) << UInt64(count%64))-1 }
+        }
+        var knownCount: Int { (0..<(count+63)/64).reduce(0) { $0+words[$1].nonzeroBitCount } }
+        /// Whether pixels start..<start+length are all known.
+        func allKnown(_ start: Int,_ length: Int) -> Bool { (start..<start+length).allSatisfy { self[$0] != 0 } }
+        var bools: [Bool] { (0..<count).map { self[$0] != 0 } }
+        func free() { Foundation.free(words) }
+    }
     private final class Storage {
         let width: Int, height: Int, count: Int, byteCount: Int
-        let values: UnsafeMutablePointer<UInt32>, known: UnsafeMutablePointer<UInt8>, budget: Budget
+        let values: UnsafeMutablePointer<UInt32>, known: KnownMask, budget: Budget
         init(_ width: Int,_ height: Int,_ budget: Budget) throws {
             guard width > 0,height > 0,width <= Int.max/height,width*height <= Int.max/5 else { throw Boundary.geometry }
+            // The budget still counts five bytes per pixel, as the byte mask did,
+            // so allocation-budget boundaries fall where they did.
             self.width = width; self.height = height; count = width*height; byteCount = count*5; self.budget = budget
             try budget.reserve(byteCount)
             guard let pixels = calloc(count,4) else { budget.release(byteCount); throw Boundary.allocationFailed }
-            guard let mask = calloc(count,1) else { free(pixels); budget.release(byteCount); throw Boundary.allocationFailed }
-            values = pixels.assumingMemoryBound(to:UInt32.self); known = mask.assumingMemoryBound(to:UInt8.self)
+            guard let mask = KnownMask(count) else { free(pixels); budget.release(byteCount); throw Boundary.allocationFailed }
+            values = pixels.assumingMemoryBound(to:UInt32.self); known = mask
             // Zero allocation bytes are not an original initialized framebuffer.
         }
-        deinit { free(values); free(known); budget.release(byteCount) }
+        deinit { free(values); known.free(); budget.release(byteCount) }
     }
     private final class Surface: Resource {
         let draw: Draw, width: Int, height: Int, screen: CGRect?
@@ -137,7 +166,7 @@ import NTSDCore
     }
     private func storage(_ width: Int,_ height: Int) throws -> Storage {
         let value = try Storage(width,height,budget)
-        if freshSurfacesKnownBlack { memset(value.known,1,value.count) }
+        if freshSurfacesKnownBlack { value.known.setAll() }
         return value
     }
     public nonisolated static func handles(_ q: Window.Request) -> Bool {
@@ -157,7 +186,7 @@ import NTSDCore
         let value = try lease(token),s = value as? Surface,c = value as? Clipper,d = value as? Draw
         let known: Int
         if let storage = s?.storage {
-            known = Array(UnsafeBufferPointer(start:storage.known,count:storage.count)).filter { $0 != 0 }.count
+            known = storage.known.knownCount
         } else { known = 0 }
         return .init(token:token,kind:value.kind,references:value.references,width:s?.width ?? 0,height:s?.height ?? 0,
             window:c?.window?.token ?? d?.window?.token ?? s?.draw.window?.token,clipper:s?.clipper?.token,knownPixels:known)
@@ -167,7 +196,7 @@ import NTSDCore
         guard let data = s.storage else { throw Boundary.released(token) }
         return .init(width:data.width,height:data.height,
             values:Array(UnsafeBufferPointer(start:data.values,count:data.count)),
-            defined:UnsafeBufferPointer(start:data.known,count:data.count).map { $0 != 0 })
+            defined:data.known.bools)
     }
     private func record(_ q: Window.Request,_ size: Int) throws -> OriginalStateRecord {
         guard let b = q.bytes,let m = q.defined,b.count == size,m.count == size else { throw Boundary.arguments(q.kind) }
@@ -280,7 +309,7 @@ import NTSDCore
         try bytes.withUnsafeMutableBytes { destination in
             for row in 0..<h {
                 let start = (y+row)*data.width+x
-                if UnsafeBufferPointer(start:data.known+start,count:w).allSatisfy({ $0 != 0 }) {
+                if data.known.allKnown(start,w) {
                     destination.baseAddress!.advanced(by:row*w*4).copyMemory(from:data.values+start,byteCount:w*4)
                 } else {
                     guard presentUnknownAsBlack else { throw Boundary.unknownPixel }
