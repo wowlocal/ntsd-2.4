@@ -23,6 +23,9 @@ frames or references.
 | Galaxy A12, vs script, no frame capture | 5.4 | busy 454 s; peak resident 1.26 GB |
 | macOS headless after steps 1–2 | 30.1 | busy 16.4 s |
 | Galaxy A12 after steps 1–2 | **7.6** | busy 339 s ([evidence](../evidence/crossplatform-speed-steps12-20261005.json)) |
+| Galaxy A12 after step 3 | **8.8** | peak RSS 1.32 GB |
+| Galaxy A12 after steps 3–4 | **9.2** | |
+| Galaxy A12 after steps 3–5 | **9.3** | ([evidence](../evidence/crossplatform-speed-steps45-20261005.json)) |
 
 macOS `sample` of the headless match (20 s): before step 1 the main thread's
 time was in the display backend's front-buffer drawing (`performFront` 1418
@@ -55,6 +58,18 @@ definedness mask), plus 2.9 million actor-record copies.
 | --- | --- | --- | --- |
 | 1 | `frontKnown` returns at once when `presentUnknownAsBlack` is set (every host's runtime sets it): its scan of the whole delivered rectangle, run twice per blit, can only throw an unknown-pixel boundary, which that flag rules out | the scan has no other effect than that throw | **done** (review OK) |
 | 2 | Read `values`/`known` once before each per-pixel loop (the step-3 reviewer's note) | nothing records a write inside those loops | **done** (review OK) |
-| 3 | `OriginalStateRecord` keeps records of ≥ 4 MiB (the replay buffers) in 16 KiB pages, so a rollback copy that is written duplicates one page | same contents, errors and equality; review | in progress |
-| 4 | Front-buffer copy loops by row and by mask word instead of per pixel | same pixels | queued |
-| 5 | Re-profile on the phone; continue with what dominates (retain/release, bindings, actor copies) | — | queued |
+| 3 | `OriginalStateRecord` keeps records of ≥ 4 MiB (the replay buffers) in 16 KiB pages, so a rollback copy that is written duplicates one page | same contents, errors and equality; review OK | done when its Core suites pass |
+| 4 | Front-buffer copy loop by row: the source index steps ±1, key bounds read once; `allKnown` by 64-bit words | same pixels in the same order; review OK | **done** |
+| 5 | Copy loop: a fully known source span skips the per-pixel test; the target's known bits are gathered per word and written once | same pixels and bits; the loop never reads the target mask (no independent review: recorded gap) | **done** |
+| 6 | `LoadedMenuSession.Attempt` collects its address ranges locally (each append to the class property paid a dynamic exclusivity check, 3.3% of the phone's time in TLS lookups) and walks the wave owners without copying them (`OriginalWaveLoadResult` copies: 570 refcount samples) | same ranges, order and throw points | next |
+| 7 | Re-profile; then the framebuffer/present path (`memcpy` from `performFront`, Android `WindowHost.draw`) and the bindings' record copies | — | queued |
+
+**Phone profile after steps 3–4** (24,085 samples): `performFront` self
+16.2% (half of it `KnownMask` bit get/set in the copy loop), `memcpy` 12.0%
+(framebuffer copies 763 samples, bindings store/read 700), reference
+counting 19.9% (`OriginalWaveLoadResult` copies 570, record copies 281, menu
+state 227), exclusivity TLS lookups 5.4% (791 in `Attempt.reserve`).
+
+Not pursued without the user: building Android with
+`-enforce-exclusivity=unchecked` would remove the TLS lookups everywhere, but
+it drops a runtime safety check rather than changing representation.

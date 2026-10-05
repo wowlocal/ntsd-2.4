@@ -73,6 +73,10 @@ import NTSDCore
                 if newValue != 0 { words[i >> 6] |= bit } else { words[i >> 6] &= ~bit }
             }
         }
+        /// Sets the `set` bits and clears the `clear` bits of word `w` (disjoint).
+        func merge(_ w: Int,set: UInt64,clear: UInt64) {
+            if set|clear != 0 { words[w] = (words[w] & ~clear) | set }
+        }
         /// Every pixel known (bits past `count` stay clear).
         func setAll() {
             let full = count/64
@@ -80,8 +84,15 @@ import NTSDCore
             if count%64 != 0 { words[full] = (UInt64(1) << UInt64(count%64))-1 }
         }
         var knownCount: Int { (0..<(count+63)/64).reduce(0) { $0+words[$1].nonzeroBitCount } }
-        /// Whether pixels start..<start+length are all known.
-        func allKnown(_ start: Int,_ length: Int) -> Bool { (start..<start+length).allSatisfy { self[$0] != 0 } }
+        /// Whether pixels start..<start+length are all known (whole words at once).
+        func allKnown(_ start: Int,_ length: Int) -> Bool {
+            var i = start
+            let end = start+length
+            while i < end && i & 63 != 0 { if self[i] == 0 { return false }; i += 1 }
+            while end-i >= 64 { if words[i >> 6] != ~0 { return false }; i += 64 }
+            while i < end { if self[i] == 0 { return false }; i += 1 }
+            return true
+        }
         var bools: [Bool] { (0..<count).map { self[$0] != 0 } }
         func free() { Foundation.free(words) }
     }
@@ -893,13 +904,29 @@ extension OriginalMacDisplayBackend {
             let input = copy.source.storage!,output = copy.target.surface.storage!
             if let rect = copy.target.region {
                 let inputValues = input.values,inputKnown = input.known,outputValues = output.values,outputKnown = output.known
-                for y in rect.top..<rect.bottom { for x in rect.left..<rect.right {
-                    let a = copy.sourceIndex(x,y),b = y*output.width+x
-                    guard inputKnown[a] != 0 else { outputKnown[b] = 0;continue }
-                    let value = UInt32(littleEndian:inputValues[a]) & 0xffffff
-                    if let key = copy.key,value >= key[0] && value <= key[1] { continue }
-                    outputValues[b] = inputValues[a];outputKnown[b] = 1
-                } }
+                // Row by row: the source index steps by one pixel (back for a
+                // mirrored copy), the key bounds are read once, a fully known
+                // source span skips the per-pixel test, and the target's known
+                // bits are gathered per 64-bit word and written once
+                // (MOBILE_PERFORMANCE steps 4-5). Same pixels and bits; the
+                // loop never reads the target's mask.
+                let keyed = copy.key != nil,low = copy.key?[0] ?? 0,high = copy.key?[1] ?? 0,step = copy.mirrored ? -1 : 1
+                let width = rect.right-rect.left
+                for y in rect.top..<rect.bottom {
+                    var a = copy.sourceIndex(rect.left,y),b = y*output.width+rect.left
+                    let sourceKnown = inputKnown.allKnown(step > 0 ? a : a-(width-1),width)
+                    var word = b >> 6,set: UInt64 = 0,clear: UInt64 = 0
+                    for _ in 0..<width {
+                        if b >> 6 != word { outputKnown.merge(word,set:set,clear:clear);word = b >> 6;set = 0;clear = 0 }
+                        let bit = UInt64(1) << UInt64(b & 63)
+                        if !sourceKnown && inputKnown[a] == 0 { clear |= bit } else {
+                            let pixel = inputValues[a],value = UInt32(littleEndian:pixel) & 0xffffff
+                            if !keyed || value < low || value > high { outputValues[b] = pixel;set |= bit }
+                        }
+                        a += step;b += 1
+                    }
+                    outputKnown.merge(word,set:set,clear:clear)
+                }
             }
             if let window = copy.target.delivery.4 { try windows.present(framebuffer(output,copy.target.delivery),in:window) }
             owners = [copy.target.surface,copy.source];response = .init(result:0)
