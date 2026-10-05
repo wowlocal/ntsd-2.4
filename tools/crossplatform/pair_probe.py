@@ -19,8 +19,10 @@ bundle; matrix.py stages it) and the music to /data/local/tmp/ntsd-pair on the
 device adb reaches (an emulator: a test harness) and runs both headless
 processes there over the device's loopback ($ADB names adb). `--cross HOST
 CLIENT` runs the host and the client on different platforms, each given as
-local:BINARY, wine:RUN_DIR (an exe in the bottle) or android:RUN_DIR (headless
-in the emulator); the client still connects to 127.0.0.1:12345, which adb
+local:BINARY, wine:RUN_DIR (an exe in the bottle), android:RUN_DIR (headless
+in the emulator) or linux:BUILD_DIR (the static headless build in a
+swift:6.4.0-noble container with host networking, which OrbStack bridges to
+this Mac's loopback); the client still connects to 127.0.0.1:12345, which adb
 forwards into the emulator (Android host) or back to this Mac (Android client).
 `--trace` adds
 --network-trace OUT_DIR/<role>-trace.jsonl (socket replies, for diagnosis);
@@ -178,6 +180,11 @@ def run_cross(out, host_spec, client_spec):
             args = " ".join("'" + a.replace("'", "'\\''") + "'" for a in arguments(device, role, seed, script, f"{device}/music"))
             command = [adb, "shell", f"cd {device}/app && chmod 755 NTSDHeadless && TZ=Etc/GMT-1 ./NTSDHeadless {args} >{device}/{role}.log 2>&1"]
             env = None
+        elif kind == "linux":
+            command = ["docker", "run", "--rm", "--name", f"ntsd-pair-{role}", "--network", "host", "-e", "TZ=Etc/GMT-1",
+                       "-v", f"{Path(target).resolve()}:/app:ro", "-v", f"{MUSIC}:/music:ro", "-v", f"{out}:/out", "swift:6.4.0-noble",
+                       "/app/NTSDHeadless", *arguments("/out", role, seed, script, "/music")]
+            env = None
         elif kind == "wine":
             args = [win(a) if a.startswith(str(out)) or a == str(MUSIC) else a for a in arguments(out, role, seed, script, str(MUSIC))]
             exe = "NTSDSDL.exe" if (Path(target) / "NTSDSDL.exe").exists() else "NTSDHeadless.exe"
@@ -191,8 +198,9 @@ def run_cross(out, host_spec, client_spec):
         if role == "host":
             deadline = time.monotonic() + 60
             while time.monotonic() < deadline:
-                if kind == "android":
-                    tcp = subprocess.run([adb, "shell", "cat /proc/net/tcp"], capture_output=True, text=True).stdout
+                if kind in ("android", "linux"):
+                    reader = [adb, "shell", "cat /proc/net/tcp"] if kind == "android" else ["docker", "exec", "ntsd-pair-host", "cat", "/proc/net/tcp"]
+                    tcp = subprocess.run(reader, capture_output=True, text=True).stdout
                     if " 0100007F:3039 00000000:0000 0A" in tcp: break
                 else:
                     rows = subprocess.run(["lsof", "-nP", "-iTCP:12345", "-sTCP:LISTEN", "-Fn"], capture_output=True, text=True).stdout
