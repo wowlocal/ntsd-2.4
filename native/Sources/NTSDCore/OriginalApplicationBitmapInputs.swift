@@ -59,11 +59,13 @@ public struct OriginalApplicationBitmapInputs: Equatable {
         resources = next
     }
 
-    public func pixels(forImage handle: UInt32) throws -> OriginalDIBPixels {
+    public func pixels(forImage handle: UInt32) throws -> OriginalDIBPixels { try bitmap(forImage:handle).pixels }
+    /// The live image's bitmap (its pixels decode on read).
+    func bitmap(forImage handle: UInt32) throws -> OriginalApplicationStartupInputs.Bitmap {
         guard let image = images[handle],!image.deleted else {
             throw OriginalStateError.invalidStorage("Bitmap input live image pixels")
         }
-        return image.bitmap.pixels
+        return image.bitmap
     }
 
     public func sourceColors(forSurface handle: UInt32) throws -> OriginalSurfaceSourceColors {
@@ -136,14 +138,14 @@ public struct OriginalApplicationBitmapInputs: Equatable {
             guard q.words.count == 11,q.words[10] == 0x00cc0020,q.words[3] == q.words[8],q.words[4] == q.words[9],
                   let target = activeSurfaceDCs[q.words[0]],let source = activeMemoryDCs[q.words[5]],
                   let image = memoryDCs[source].selectedImage else { throw invalid("one-to-one copy ownership") }
-            let pixels = try pixels(forImage:image),token = surfaceDCs[target].surface
+            let bitmap = try bitmap(forImage:image),token = surfaceDCs[target].surface
             guard var surface = surfaces[token] else { throw invalid("copy surface") }
             let x = Int(Int32(bitPattern:q.words[1])),y = Int(Int32(bitPattern:q.words[2]))
             let width = Int(Int32(bitPattern:q.words[3])),height = Int(Int32(bitPattern:q.words[4]))
             let sx = Int(Int32(bitPattern:q.words[6])),sy = Int(Int32(bitPattern:q.words[7]))
             // Validate both rectangles even on a failed BOOL response, before
             // publishing any owner or history changes.
-            try surface.sourceColors.copy(pixels,sourceX:sx,sourceY:sy,width:width,height:height,x:x,y:y)
+            try surface.sourceColors.copy(bitmap,sourceX:sx,sourceY:sy,width:width,height:height,x:x,y:y)
             if control.result == 0 { try surface.sourceColors.invalidate(x:x,y:y,width:width,height:height) }
             surface.copies.append(.init(words:q.words,result:control.result,sourceImage:image,memoryGeneration:source,surfaceGeneration:target))
             surfaces[token] = surface

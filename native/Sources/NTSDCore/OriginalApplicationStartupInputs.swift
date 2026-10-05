@@ -14,8 +14,17 @@ public struct OriginalApplicationStartupInputs: Equatable {
         public let dib: [UInt8]
         /// Exact file header distinguishes a file image from an embedded DIB.
         public let bitmapFileHeader: [UInt8]?
-        public var pixelOffset: Int { pixels.pixelOffset }
-        public let pixels: OriginalDIBPixels
+        /// Where the pixel data starts in `dib`, as resolved when the bitmap loaded.
+        public let pixelOffset: Int
+        /// The decoded source colours, decoded on each read rather than kept: every
+        /// bitmap was decoded (so validated) when it loaded, and decoding is a pure
+        /// function of `dib` and the declared offset. A kept copy of each bitmap
+        /// (three colour bytes and a definedness byte per pixel) held about 1 GB
+        /// over the game's images (MEMORY_FOOTPRINT step 1).
+        public var pixels: OriginalDIBPixels { try! OriginalDIBPixels(dib:dib,pixelOffset:declaredPixelOffset) }
+        /// The offset the bitmap was decoded with: the file header's for a file
+        /// image, nil (just after the palette) for an embedded DIB.
+        private let declaredPixelOffset: Int?
         public let width: Int32, height: Int32, rowBytes: Int32
         public let planes: UInt16, bitsPerPixel: UInt16
         init(_ dib: [UInt8]) throws { try self.init(dib:dib) }
@@ -54,7 +63,9 @@ public struct OriginalApplicationStartupInputs: Equatable {
                     throw Boundary.invalid("BMP pixel offset or palette")
                 }
             }
-            pixels = try OriginalDIBPixels(dib:dib,pixelOffset:pixelOffset)
+            // Decoded once here, so an invalid image still fails at load.
+            self.pixelOffset = try OriginalDIBPixels(dib:dib,pixelOffset:pixelOffset).pixelOffset
+            declaredPixelOffset = pixelOffset
         }
         /// Win32 BITMAP fields at the declared image boundary, not pixels or a
         /// host graphics object. Source colors/masks remain separate from surfaces.
