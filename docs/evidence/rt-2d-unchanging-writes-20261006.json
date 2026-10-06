@@ -1,0 +1,41 @@
+{
+ "study": "docs/research/CORE_REALTIME.md",
+ "phase": "2d (unchanging record writes return early)",
+ "date": "2026-10-06",
+ "finding": "The copy probe (scratch build) marked each copy-on-write copy of a flat record by whether the write that caused it stored what was already there. Per computer-vs run (2,264 cycles): the globals record (0xc3a8) copied 26,688 times by an 8-byte overwrite with unchanged bytes (all of its 8-byte overwrite copies) and 5,249 times by unchanged writes (all), its 0xb440 slice 16,202 of 27,968 times, the 0xb440 overwrite of the globals 2,433 of 8,387 times, actor records 82,975 of 120,443 times: about 2.6 GB of bytes plus as much mask of the ~3.9 GB copied in gameplay.",
+ "change": "OriginalStateRecord, flat path: write(_:at:) returns before mutating when every byte of the region already equals the value's little-endian byte and is defined; overwrite(at:with:) (flat into flat) returns when the range already holds the record's bytes and definedness (memcmp over both arrays). checkedRange and the overwrite precondition still run first; paged paths unchanged.",
+ "phone": {
+  "baseline": "phase 2c: 14.55 / 14.54 ticks/s",
+  "after": [
+   {
+    "label": "rt2d-run1",
+    "serial": "R58R36F7VFD",
+    "runSeconds": 370,
+    "peakResidentMB": 1337,
+    "ticksPerSecond": 14.85,
+    "busySeconds": 238.87,
+    "bodies": 1800
+   },
+   {
+    "label": "rt2d-run2",
+    "serial": "R58R36F7VFD",
+    "runSeconds": 370,
+    "peakResidentMB": 1190,
+    "ticksPerSecond": 14.69,
+    "busySeconds": 240.22,
+    "bodies": 1800
+   }
+  ],
+  "result": "14.85 / 14.69 ticks/s (+1.5%)",
+  "note": "apks/rt2d.apk built from native diff 84277c51 (2c + 2d before two comments were reworded and the unit test was added; the code is the same). It compiled for Android (memcmp through Foundation)."
+ },
+ "emulator": {
+  "result": "vs equal, 1,832 frames identical to the earlier Android app run"
+ },
+ "gates": {
+  "headless": "vs equal, 1,832 frames identical (frozen a96813de, rt-2d); all 10 scenarios equal, frames identical (rt-2d-all)",
+  "AppKit": "vs and playback equal; 3,960 frames identical to the 2c AppKit run (rt-2d-appkit)",
+  "Core suites": "release test build swiftpm-test-release of native diff 84277c51 (2c + 2d before the comment rewording and the unit test): 154 suites (the 2c set plus every suite constructing records), 437 tests, 0 failures, run in two lanes; bundle swiftpm-test-release-c of the final tree 6a8b95df: OriginalStateRecordPagingTests 5 tests (including the new one), 0 failures"
+ },
+ "review": "independent read-only review: OK. A skip happens only when the old code would have stored identical bytes and true flags (partially defined targets and mask differences take the old path); errors unchanged; nothing in the Core observes record buffer identity or uniqueness; the skip never adds a copy. Notes acted on: two comments reworded; a unit test for the four skip cases (matching undefined bytes become defined, a shared copy stays equal and independent, a mask difference is written, an exact overwrite and an empty one change nothing). Open: memcmp relies on Foundation re-exporting the C library on Linux and Windows (Android compiles); the phase-end matrix checks it."
+}

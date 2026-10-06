@@ -168,6 +168,52 @@ final class OriginalStateRecordPagingTests: XCTestCase {
         }
     }
 
+    /// Writes and overwrites that store what is already there return early
+    /// (CORE_REALTIME phase 2d): matching but undefined bytes still become
+    /// defined, a matching mask difference is still written, and copies that
+    /// share storage stay equal and independent.
+    func testUnchangingWritesKeepContentsAndDefinedness() throws {
+        let count = 0xc3a8
+        var (bytes, defined) = contents(count, seed: 21)
+        for i in 0x100..<0x104 { defined[i] = false }
+        var record = try OriginalStateRecord(bytes: bytes, defined: defined)
+        let value = UInt32(bytes[0x100]) | UInt32(bytes[0x101]) << 8 | UInt32(bytes[0x102]) << 16 | UInt32(bytes[0x103]) << 24
+        try record.write(value, at: 0x100)
+        for i in 0x100..<0x104 { defined[i] = true }
+        XCTAssertEqual(record.defined, defined, "matching undefined bytes become defined")
+        XCTAssertEqual(record, try OriginalStateRecord(bytes: bytes, defined: defined))
+
+        let copy = record
+        try record.write(value, at: 0x100)
+        XCTAssertEqual(record, copy)
+        XCTAssertEqual(try record.integer(at: 0x100, as: UInt32.self), value)
+        try record.write(UInt8(bytes[0x200] &+ 1), at: 0x200)
+        XCTAssertNotEqual(record, copy)
+        XCTAssertEqual(copy.bytes, bytes, "a later change leaves the copy alone")
+        XCTAssertEqual(copy.defined, defined)
+        XCTAssertEqual(error { try record.write(UInt16(1), at: count - 1) },
+                       String(describing: OriginalStateError.outOfBounds(offset: count - 1, count: 2)))
+
+        let pieceBytes = Array(bytes[0x300..<0x308])
+        var pieceDefined = Array(defined[0x300..<0x308])
+        pieceDefined[2].toggle()
+        var target = try OriginalStateRecord(bytes: bytes, defined: defined)
+        let original = target
+        target.overwrite(at: 0x300, with: try OriginalStateRecord(bytes: pieceBytes, defined: pieceDefined))
+        var expected = defined
+        expected[0x302].toggle()
+        XCTAssertEqual(target.bytes, bytes)
+        XCTAssertEqual(target.defined, expected, "the same bytes with another mask update the mask")
+        XCTAssertEqual(original.defined, defined)
+
+        let before = target
+        target.overwrite(at: 0x300, with: try OriginalStateRecord(bytes: pieceBytes, defined: pieceDefined))
+        XCTAssertEqual(target, before)
+        XCTAssertEqual(target.defined, expected)
+        target.overwrite(at: count, with: try OriginalStateRecord(bytes: [], defined: []))
+        XCTAssertEqual(target, before)
+    }
+
     func testFlatRecordsBelowTheThreshold() throws {
         let (bytes, defined) = contents(OriginalStateRecord.pagedThreshold - 1, seed: 7)
         let record = try OriginalStateRecord(bytes: bytes, defined: defined)

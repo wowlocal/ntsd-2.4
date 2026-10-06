@@ -161,6 +161,10 @@ public struct OriginalStateRecord: Equatable, Sendable {
     public mutating func write<T: FixedWidthInteger>(_ value: T, at offset: Int) throws {
         let region = try checkedRange(offset, T.bitWidth / 8)
         if pages == nil {
+            // Storing the bytes already there, all defined, changes nothing;
+            // returning leaves a buffer that a rollback copy shares untouched
+            // instead of copying the whole record (CORE_REALTIME phase 2d).
+            if flatHolds(value, region) { return }
             for (shift, index) in region.enumerated() {
                 flatBytes[index] = UInt8(truncatingIfNeeded: value >> (shift * 8))
                 flatDefined[index] = true
@@ -175,13 +179,17 @@ public struct OriginalStateRecord: Equatable, Sendable {
     }
 
     /// Copies `record`'s bytes and definedness over start..<start+record.byteCount
-    /// in place (one copy if this record's storage is shared). The caller has
+    /// in place (at most one copy if this record's storage is shared, none
+    /// when the range already holds the record). The caller has
     /// checked the extent; the result equals rebuilding the record from arrays
     /// with that subrange replaced (MOBILE_PERFORMANCE step 8).
     mutating func overwrite(at start: Int, with record: OriginalStateRecord) {
         let count = record.byteCount
         precondition(start >= 0 && count <= byteCount && start <= byteCount - count, "record overwrite extent")
         if pages == nil && record.pages == nil {
+            // An overwrite with the bytes and definedness already there changes
+            // nothing (phase 2d, as in write).
+            if flatHolds(record, at: start) { return }
             flatBytes.replaceSubrange(start..<start + count, with: record.flatBytes)
             flatDefined.replaceSubrange(start..<start + count, with: record.flatDefined)
             return
@@ -198,6 +206,27 @@ public struct OriginalStateRecord: Equatable, Sendable {
             pages!.bytes[index >> Self.pageShift][index & Self.pageMask] = bytes[k]
             pages!.defined[index >> Self.pageShift][index & Self.pageMask] = defined[k]
         }
+    }
+
+    /// Whether the flat bytes over `region` are `value`'s little-endian bytes,
+    /// all defined.
+    private func flatHolds<T: FixedWidthInteger>(_ value: T, _ region: Range<Int>) -> Bool {
+        for (shift, index) in region.enumerated() {
+            if !flatDefined[index] || flatBytes[index] != UInt8(truncatingIfNeeded: value >> (shift * 8)) { return false }
+        }
+        return true
+    }
+    /// Whether this flat record already holds flat `record`'s bytes and
+    /// definedness at `start` (the caller checked the extent).
+    private func flatHolds(_ record: OriginalStateRecord, at start: Int) -> Bool {
+        let count = record.flatBytes.count
+        guard count > 0 else { return true }
+        func same<E>(_ a: [E], _ b: [E]) -> Bool {
+            a.withUnsafeBytes { a in b.withUnsafeBytes { b in
+                memcmp(a.baseAddress! + start * MemoryLayout<E>.stride, b.baseAddress!, count * MemoryLayout<E>.stride) == 0
+            } }
+        }
+        return same(flatBytes, record.flatBytes) && same(flatDefined, record.flatDefined)
     }
 
     public mutating func writeBinary64(_ value: Double, at offset: Int) throws {
