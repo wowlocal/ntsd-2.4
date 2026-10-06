@@ -108,28 +108,23 @@ while measuring; restore `svc power stayon false` when the loop pauses or stops.
 | 2026-10-06 | Phase 2a: per-session caches (R1, R2) | MatchBindings and the static address ranges built once per loaded session; the attempt's starting ranges collected only when an allocation needs them. **10.07/10.16 → 10.47/10.48 ticks per second** (two runs). 86 suites, all scenarios and AppKit equal; review OK | [evidence](../evidence/rt-2a-session-caches-20261006.json) | 90e23bf |
 | 2026-10-06 | Phase 2b: actor pair cache | MatchBindings keeps each actor's last session/model record pair; an actor unchanged since the last read or store is neither converted nor rewritten (first step toward DATAFLOW R3). **10.47/10.48 → 11.21/11.20 ticks per second** (+7%); Mac busy time −7.3%. 87 suites, all scenarios and AppKit equal; review OK | [evidence](../evidence/rt-2b-actor-pairs-20261006.json) | 6bbda82 |
 | 2026-10-06 | Phase 1c: render pipelining | Committed gameplay batches' pixel work, crop and present run on a serial render thread on headless and Android (at most one batch in flight; every other display entry point, observation and exit flushes; AppKit/iOS/SDL unchanged). **11.21/11.20 → 11.94/11.92 ticks per second** (+6.5%); game-thread busy 285 → 270 s; Mac busy −6.2%. All 10 scenarios equal with frame digests and with full overlap, frames identical; ThreadSanitizer clean; AppKit equal; 13 suites; review OK after four fixes | [evidence](../evidence/rt-1c-render-pipelining-20261006.json), [design](CORE_REALTIME_RENDER.md) | 72b9521 |
-| 2026-10-06 | Phase 1d: colour fills by row | The DirectDraw colour fill (`blt`, served by the menu loop every frame) and the front fill write one row store and whole mask words per row instead of a value and a bit per pixel. **11.94/11.92 → 12.11/12.10 ticks per second** (+1.5%); Mac process CPU −3.0%. All 10 scenarios and AppKit equal, frames identical; 13 suites; review OK | [evidence](../evidence/rt-1d-row-fills-20261006.json) | this commit |
+| 2026-10-06 | Phase 1d: colour fills by row | The DirectDraw colour fill (`blt`, served by the menu loop every frame) and the front fill write one row store and whole mask words per row instead of a value and a bit per pixel. **11.94/11.92 → 12.11/12.10 ticks per second** (+1.5%); Mac process CPU −3.0%. All 10 scenarios and AppKit equal, frames identical; 13 suites; review OK | [evidence](../evidence/rt-1d-row-fills-20261006.json) | 1e364bc |
+| 2026-10-06 | Phase 1e: pipelined text | Every text step flushed the render queue, so a batch drawing HUD text waited for its pixel work (20% of the Mac main thread's busy time). The DC steps no longer flush; TextOutA keeps its checks and glyph mask on the main thread and queues the pixels and present. **12.11/12.10 → 14.22/14.18 ticks per second** (+17%). All 10 scenarios and AppKit equal, frames identical; Android frames (with glyphs) identical; ThreadSanitizer clean; 13 suites; review OK | [evidence](../evidence/rt-1e-pipelined-text-20261006.json) | this commit |
 
 ## Next task
 
-Phase 1e, pipelined text (in the working tree): a Mac sample of the 1d build
-showed the main thread waiting on the render thread for 20% of its busy time
-(`RenderExecutor.flush ← performFront ← replay`): every text step flushed, so
-any batch that draws HUD text gave up most of the overlap. Now only TextOutA
-touches pixels; it keeps its checks and glyph mask on the main thread and
-queues the pixels and present (the synchronous path is the old code after a
-flush). Done so far: vs equal with 1,832 frames identical (frozen 93d8d0b2),
-full-overlap vs, playback and war equal. Open: Mac A/B, a Mac sample for the
-remaining waits, all 10 scenarios, ThreadSanitizer, AppKit, the display suites,
-review, phone.
+Phase 2c, resource records kept per session (in the working tree): a copy
+probe found gameplay's `resource` helper copying the 0x1f50-byte bitmap
+resource record about 108 times per cycle (writing 0/1 at offset 0 into a
+record the allocation table still holds). The model branch's write is dropped
+(the value is already there) and the allocated branch's result is kept per
+token in `PendingInput.Derived`. Done: vs and all 10 scenarios equal with
+frames identical, AppKit equal, emulator frames identical, phone 14.55/14.54
+(+2.4%), review OK. Open: the 94 Core suites (bundle B).
 
-Then profile the phone on that build. The phone's main thread after 1d is two
-thirds of its samples (render thread 29%); retain/release 24%, their atomics
-5% and memcpy 9% of it. On the Mac the largest single source of copying is
-`Array._consumeAndCreateNew` under `OriginalStateRecord.write`/`overwrite`
-(record buffers copied on write because another reference holds them: the
-menu state's `replace`, the loaded match entry, the bitmap font's resource
-writes), 12% of busy time. Candidates: keep those records uniquely referenced
-(or write through the owner), the discarded host results, R4. The DWARF
-profile on the phone (`--call-graph dwarf,65528 -f 100`) produced no data;
-`dwarf,16384 -f 200` gives truncated stacks.
+Then the globals record: the probe counts the 0xc3a8-byte globals overwritten
+~15 times and its 0xb440-byte slice written ~12 times per cycle (each a copy
+of ~45–50 KB of bytes plus as much mask, because rollback and attempt copies
+hold the old buffer). Candidates: page the globals (copies one page instead of
+the whole record; reads get one more indirection), or keep one owner per
+attempt (DATAFLOW R3/R5). Measure the read cost of paging first.

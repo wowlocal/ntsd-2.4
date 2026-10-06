@@ -101,10 +101,17 @@ merge presents within a batch; flush before `exit`; a TSan pass on macOS.
   host's non-throwing concurrent presenter, then records `presented` under a
   lock. A failed present check applies the pixels first and throws at the same
   draw, as before.
-- Every other display entry point (perform, prepare, bitmap paths, text steps,
+- Every other display entry point (perform, prepare, bitmap paths,
   observations, pixels, framebuffer) flushes first. Window observations
   (`presentedFrame`, `presentedPNG`, `flushPresents` before snapshots) flush,
   and the session flushes before every exit and in `stop`.
+- Text (phase 1e): the DC steps (acquire, mode, background, colour, release)
+  change the text DC alone and do not flush. TextOutA keeps its checks and the
+  glyph mask (host rasteriser, main thread only) on the main thread and queues
+  the pixels and present with the DC's state copied as values; without
+  pipelining it is the old code after a flush. The headless host's glyph mask
+  is empty, so headless runs cover only its empty-bounds branch; Android runs
+  (FreeType masks) and the display suite's pipelined-text test cover drawing.
 - Android keeps the frame, surface and buffer geometry in a locked target that
   the surface callbacks also take; the window and the presented size used for
   touches are set on the main thread when the draw is replayed.

@@ -3,7 +3,8 @@
 own progress events (CORE_REALTIME phase 0; a test harness).
 
 Usage: android_speed.py OUT_DIR [--serial S] [--apk PATH] [--label L]
-                        [--profile SECONDS] [--lib DIR]
+                        [--profile SECONDS] [--lib DIR] [--call-graph fp|dwarf,N]
+                        [--frequency HZ]
 
 Runs the debuggable build (local.ntsd.port; the release build cannot be
 scripted) with app_e2e's computer-vs script, music, sounds and network off and
@@ -75,7 +76,7 @@ def progress(serial):
     return [json.loads(l) for l in text.splitlines() if l.startswith("{")]
 
 
-def record_profile(serial, seconds, out, label, lib):
+def record_profile(serial, seconds, out, label, lib, call_graph="fp", frequency=1000):
     simpleperf = NDK / "simpleperf/bin/android/arm64/simpleperf"
     folder = out / f"{label}-profile"; folder.mkdir(exist_ok=True)
     data = folder / "perf.data"
@@ -86,8 +87,8 @@ def record_profile(serial, seconds, out, label, lib):
         # Emulators have no hardware counters: sample the cpu-clock software event there.
         hardware = "cpu-cycles" in shell(serial, "/data/local/tmp/simpleperf list hw")
         event = "" if hardware else "-e cpu-clock "
-        r = adb(serial, "shell", f"/data/local/tmp/simpleperf record --app {PACKAGE} {event}--call-graph fp "
-                f"--duration {seconds} -f 1000 -o /data/local/tmp/ntsd-perf.data")
+        r = adb(serial, "shell", f"/data/local/tmp/simpleperf record --app {PACKAGE} {event}--call-graph {call_graph} "
+                f"--duration {seconds} -f {frequency} -o /data/local/tmp/ntsd-perf.data")
         adb(serial, "pull", "/data/local/tmp/ntsd-perf.data", str(data))
     finally:
         shell(serial, "rm -f /data/local/tmp/ntsd-perf.data /data/local/tmp/simpleperf")
@@ -126,6 +127,9 @@ def main():
     a.add_argument("--apk"); a.add_argument("--label", default=time.strftime("%Y%m%d-%H%M%S"))
     a.add_argument("--profile", type=int, default=0); a.add_argument("--lib", type=Path, default=DEFAULT_LIB)
     a.add_argument("--timeout", type=int, default=1800)
+    # dwarf,16384 at -f 200 gives whole stacks where frame pointers stop
+    # (runtime leaf functions) at ~3 MB per second of data on the device.
+    a.add_argument("--call-graph", default="fp"); a.add_argument("--frequency", type=int, default=1000)
     a.add_argument("--restore-stayon", action="store_true")
     o = a.parse_args()
     out = Path(o.out); out.mkdir(parents=True, exist_ok=True)
@@ -171,7 +175,7 @@ def main():
                 peak = max(peak, int(hwm[1]))
             if o.profile and profiled is None:
                 if any(e.get("event") == "progress" and e.get("gameplayBodies", 0) >= 300 for e in progress(s)):
-                    profiled = record_profile(s, o.profile, out, o.label, o.lib)
+                    profiled = record_profile(s, o.profile, out, o.label, o.lib, o.call_graph, o.frequency)
             if time.time() - start > o.timeout:
                 shell(s, f"am force-stop {PACKAGE}"); break
             time.sleep(5)

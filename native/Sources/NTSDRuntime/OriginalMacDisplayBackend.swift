@@ -750,7 +750,7 @@ extension OriginalMacDisplayBackend {
     public static let textDCHandle: UInt32 = 0x0d0c0001
     /// GDI's default SYSTEM_FONT cell at 96 DPI: 16 px high, ascent 13,
     /// internal leading 3, so a 13 px em with the baseline 13 px below the top.
-    public static let textCell = 16, textAscent = 13
+    public nonisolated static let textCell = 16, textAscent = 13
     /// One TextOutA's glyph pixels (no smoothing): `bits[row*width+column]` is
     /// set for the cell pixel (column−originX, row−originY); `advance` is the
     /// text extent's width.
@@ -767,24 +767,62 @@ extension OriginalMacDisplayBackend {
         guard let textDC,dc == Self.textDCHandle else { throw Boundary.owner(dc) }
         return textDC
     }
-    private func drawText(_ bytes: [UInt8],x: Int,y: Int,_ dc: TextDC) throws {
-        let s = dc.surface
-        guard let data = s.storage else { throw Boundary.released(s.token) }
-        let mask = textMask(bytes),background = Self.xrgb(dc.background),color = Self.xrgb(dc.color)
-        let values = data.values,known = data.known
+    /// One TextOutA's pixels: the storage, the glyph mask and the DC's state
+    /// when it was drawn (values only, for the render thread).
+    private struct TextPlan {
+        let data: Storage, mask: TextMask, x: Int, y: Int, opaque: Bool, background: UInt32, color: UInt32
+        /// The glyphs' bounding rectangle clipped to the surface (nil: empty).
+        var bounds: FrontRect? {
+            let left = max(0,x-mask.originX),top = max(0,y-mask.originY)
+            let right = min(data.width,x-mask.originX+mask.width),bottom = min(data.height,y-mask.originY+mask.height)
+            return left < right && top < bottom ? .init(left:left,top:top,right:right,bottom:bottom) : nil
+        }
+    }
+    private func textPlan(_ bytes: [UInt8],x: Int,y: Int,_ dc: TextDC,_ data: Storage) -> TextPlan {
+        .init(data:data,mask:textMask(bytes),x:x,y:y,opaque:dc.opaque,background:Self.xrgb(dc.background),color:Self.xrgb(dc.color))
+    }
+    private nonisolated static func textPixels(_ p: TextPlan) {
+        let data = p.data,mask = p.mask,values = data.values,known = data.known
         func set(_ column: Int,_ row: Int,_ value: UInt32) {
             guard column >= 0,row >= 0,column < data.width,row < data.height else { return }
             let i = row*data.width+column;values[i] = value.littleEndian;known[i] = 1
         }
-        if dc.opaque { for row in 0..<Self.textCell { for column in 0..<mask.advance { set(x+column,y+row,background) } } }
+        if p.opaque { for row in 0..<textCell { for column in 0..<mask.advance { set(p.x+column,p.y+row,p.background) } } }
         for row in 0..<mask.height { for column in 0..<mask.width where mask.bits[row*mask.width+column] != 0 {
-            set(x+column-mask.originX,y+row-mask.originY,color)
+            set(p.x+column-mask.originX,p.y+row-mask.originY,p.color)
         } }
-        let left = max(0,x-mask.originX),top = max(0,y-mask.originY)
-        let right = min(data.width,x-mask.originX+mask.width),bottom = min(data.height,y-mask.originY+mask.height)
-        if left < right,top < bottom {
-            let target = try frontTarget(s,.init(left:left,top:top,right:right,bottom:bottom))
-            if let window = target.delivery.4 { try windows.present(framebuffer(data,target.delivery),in:window) }
+    }
+    private func drawText(_ bytes: [UInt8],x: Int,y: Int,_ dc: TextDC) throws {
+        let s = dc.surface
+        guard pipelinesFront && presentUnknownAsBlack else {
+            // Synchronous: the pixels, then the target check and the present.
+            try renderer.flush()
+            guard let data = s.storage else { throw Boundary.released(s.token) }
+            let plan = textPlan(bytes,x:x,y:y,dc,data)
+            Self.textPixels(plan)
+            if let r = plan.bounds {
+                let target = try frontTarget(s,r)
+                if let window = target.delivery.4 { try windows.present(framebuffer(data,target.delivery),in:window) }
+            }
+            return
+        }
+        // Pipelined (CORE_REALTIME 1e): the checks and the glyph mask on the
+        // main thread, the pixels and the present on the render thread. A check
+        // that fails leaves the state the synchronous order leaves: nothing
+        // drawn when the surface is released, the pixels drawn when the target
+        // or present check fails. frontTarget reads no pixels (rectangle and
+        // geometry only), so checking it before the pixels changes nothing.
+        guard let data = s.storage else { try renderer.flush(); throw Boundary.released(s.token) }
+        let plan = textPlan(bytes,x:x,y:y,dc,data)
+        guard let r = plan.bounds else { renderer.submit { Self.textPixels(plan) }; return }
+        let target: FrontTarget
+        do { target = try frontTarget(s,r) } catch { try renderer.flush(); Self.textPixels(plan); throw error }
+        let rect = target.delivery
+        if let present = try pipeline(rect,pixels:{ Self.textPixels(plan) }) {
+            renderer.submit { Self.textPixels(plan); if let present { present.deliver(try Self.crop(data,rect,black:true)) } }
+        } else {
+            Self.textPixels(plan)
+            if let window = rect.4 { try windows.present(framebuffer(data,rect),in:window) }
         }
     }
     /// Whether a Blt rectangle (nil: whole surface) lies inside the surface with
@@ -1057,7 +1095,8 @@ extension OriginalMacDisplayBackend {
             }
             owners = surfaces;response = .init(result:0)
         case .text(let step):
-            try renderer.flush()
+            // Only TextOutA touches pixels (drawText orders it); the DC steps
+            // change the DC's state alone.
             switch step {
             case .acquire(let s):
                 textDC = TextDC(s);owners = [s];response = .init(result:0,output:Self.textDCHandle)
