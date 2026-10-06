@@ -175,6 +175,10 @@ extension OriginalApplicationBootstrap {
         guard let session,startup != nil else { throw Boundary.notStarted }
         return try session.makeLoadedCycle(pending:pending)
     }
+    /// Install an idle iteration computed by the session's `idleIteration`
+    /// (CORE_REALTIME A1).
+    mutating func commitIdle(_ idle: Session.IdleIteration) { session!.commitIdle(idle) }
+
     /// Keep the actual application Session and its current loaded owners in one
     /// commit. The caller environment remains tentative through the final hook.
     @discardableResult

@@ -150,6 +150,46 @@ public struct OriginalApplicationMenuSession {
         public let effects: [Effect]
         public let graphics: [OriginalApplicationGraphics.Command]
     }
+    /// An idle message-loop iteration (no message, the timer not due) as
+    /// `step` would commit it: the loop after it and its effects (CORE_REALTIME A1).
+    struct IdleIteration { let loop: Loop, effects: [Effect] }
+    private struct NotIdle: Error {}
+    private struct ProviderFailure: Error { let error: Error }
+    /// `step`'s message-loop iteration when it is idle: the same loop code and
+    /// requests through `queue`, on a copy. nil when the iteration is anything
+    /// else (a message, the timer due, a failed check); the caller then runs
+    /// `step`, which replays the served requests and raises any error itself.
+    /// Errors of `queue` itself propagate unchanged (CORE_REALTIME A1).
+    func idleIteration(queue: (Loop.Request) throws -> Loop.Response) throws -> IdleIteration? {
+        guard (try? state.validateAliases()) != nil,revision < UInt64.max else { return nil }
+        var loop = self.loop,staged = state,effects: [Effect] = []
+        do {
+            let result = try loop.step(context:&staged,
+                speed:{ try $0.full.integer(at:0x2c,as:Int32.self) },
+                target:{ _ in throw NotIdle() },
+                perform:{ request,_ in
+                    switch request.kind {
+                    case .peek,.time,.sleep:break
+                    default:throw NotIdle()
+                    }
+                    let response: Loop.Response
+                    do { response = try queue(request) } catch { throw ProviderFailure(error:error) }
+                    if request.kind == .sleep { effects.append(.sleep(request.arguments[0])) }
+                    return response
+                })
+            guard result == .continued else { return nil }
+            try staged.checkMergeAliases()
+        } catch let failure as ProviderFailure { throw failure.error }
+        catch { return nil }
+        return .init(loop:loop,effects:effects)
+    }
+    /// Install an idle iteration as `step` commits it (CORE_REALTIME A1).
+    mutating func commitIdle(_ idle: IdleIteration) {
+        loop = idle.loop
+        // idleIteration ran the merge's checks on this same state.
+        try! state.mergeAliases(counter:loop.counter)
+        revision += 1
+    }
     /// Child-entry evidence only. The tentative timer work in the caller has
     /// not returned. These operations must not be dispatched as committed IO.
     public struct PendingLoading {

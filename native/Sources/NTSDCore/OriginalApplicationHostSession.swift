@@ -39,6 +39,10 @@ public final class OriginalApplicationHostSession<Platform: OriginalApplicationS
             self.application = application
             retainedPlatform = try OriginalApplicationHostSession<Platform>.copy(platform)
         }
+        /// With the platform copy already made (CORE_REALTIME A1).
+        fileprivate init(application: Application, retainedPlatform: Platform) {
+            self.application = application; self.retainedPlatform = retainedPlatform
+        }
         /// A caller may mutate this independent inspection copy without changing
         /// the batch or Host. stagedCopy retains its existing value-state contract.
         public func platformSnapshot() throws -> Platform {
@@ -133,6 +137,39 @@ public final class OriginalApplicationHostSession<Platform: OriginalApplicationS
     private func publish(_ contents: Batch.Contents, context: DeliveryContext) -> UInt64 {
         sequence += 1; batches.append(.init(sequence: sequence, contents: contents, context: context))
         return sequence
+    }
+
+    private var idleCommits: UInt64 = 0
+    /// Iterations committed by `stepIdle` (a diagnostic for tests and probes).
+    public var idleCommitCount: UInt64 { locked { idleCommits } }
+    /// `step` for an idle message-loop iteration (no message, the timer not
+    /// due) without the whole step: the same checks in `step`'s order, the
+    /// session's `idleIteration` (the step's own loop code and requests), then
+    /// the same publication, committing in place once nothing can fail. nil
+    /// when the iteration is anything else; the caller then runs `step`, which
+    /// raises any error itself (CORE_REALTIME A1).
+    func stepIdle(prepare: (Platform, Session.State) throws -> Inputs,
+        queue: (Session.Loop.Request, Platform) throws -> Session.Loop.Response,
+        beforePublication: (Platform) throws -> Void = { _ in },
+        expectedSequence: UInt64? = nil) throws -> Outcome? {
+        try attempt {
+            try requirePublication()
+            guard expectedSequence == nil || expectedSequence == sequence else { throw Boundary.staleSequence }
+            guard application.session != nil else { throw Application.Boundary.notStarted }
+            let candidate = try Self.copy(platform)
+            let inputs = try prepare(candidate, application.session!.state)
+            guard application.startup != nil, inputs.initialization == nil, inputs.queue.isEmpty, inputs.windowDefault.isEmpty,
+                  inputs.surface.isEmpty, inputs.lifecycle.isEmpty,
+                  let idle = try application.session!.idleIteration(queue: { q in try queue(q, candidate) }) else { return nil }
+            // The delivery context's platform copy, then the final hook, as `step`.
+            let retained = try Self.copy(candidate)
+            try beforePublication(candidate)
+            application.commitIdle(idle); idleCommits += 1
+            let value = Session.Committed(result: .continued, effects: idle.effects, graphics: [])
+            platform = candidate
+            return .committed(sequence: publish(.iteration(value), context: .init(application: application, retainedPlatform: retained)),
+                              result: .continued)
+        }
     }
 
     /// A value snapshot of the last committed Core owner. Observers during an

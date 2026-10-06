@@ -138,7 +138,8 @@ while measuring; restore `svc power stayon false` when the loop pauses or stops.
 | 2026-10-06 | Phase 4e: the random table in one copy | Fourteen sites (AI, physics, links, contacts, hits, control, post-draw, mission, war, music…) rebuilt the 3000-byte random table on every random draw with 3000 checked single-byte reads; `OriginalRandom.table` copies it at once when every byte is in range and defined and otherwise runs the same reads (same first error). AI draw 4.5% → 0.9% of the main thread. 19.82/19.78 → 20.30/19.94 ticks per second (~+1%: the harness's virtual clock adds ~16 ms of the game's own sleeping to every tick). All 10 scenarios and AppKit equal, frames identical; 146 suites and a new table test; review OK | [evidence](../evidence/rt-4e-random-table-20261006.json) | 6d06ad3 |
 | 2026-10-06 | Phase 4f: the presentation input built directly | The runtime built the gameplay session's `OriginalMenuPresentationInput` every tick through JSONSerialization and JSONDecoder (2.6% of the main thread) for want of a public initializer; it now has one and the runtime builds the same values directly. 20.30/19.94 → 20.39/20.28/20.35 ticks per second (+1.4%); compute per tick main 30.4 ms, render 22.2 ms; real clock 30.25 ticks per second. All 10 scenarios and AppKit equal, frames identical; 35 suites and the 4e review's extra table cases | [evidence](../evidence/rt-4f-presentation-input-20261006.json) | e4b89f0 |
 | 2026-10-07 | Phase 4g: each replayed draw validated once; menu-step timing | `prepareFront` validated every draw and discarded the result before `performFront` validated it again; the committed-batch replay now uses `prepareAndPerformFront` (one validation). The progress events also time the message-loop iteration, and the harness reports the tick split. Phone: complete 22.5 → 22.3/22.4 ms, main 30.7 → 30.4/30.6 ms per tick (within variation; committed as strictly less work). Split: loaded cycle 22.3 ms + 4.12 iterations × 1.51 ms + ~2 ms. All 10 scenarios and AppKit equal, frames identical; 13 suites incl. a side-by-side test of both paths; review OK | [evidence](../evidence/rt-4g-single-validation-20261007.json) | 97df2ec |
-| 2026-10-07 | A0: no merged copy for an absent observer | Each message-loop iteration and each tick copied the ~100 KB `full` record only to give a `beforeCommit` observer a merged state; production attaches none, so the runtime passes `observesCommit: false` and the menu session runs the merge's checks without the copy ([design](CORE_REALTIME_TIER2.md)). Iteration 1.51 → 1.44 ms, main 30.4/30.6 → 29.9/30.3 ms per tick. All 10 scenarios and AppKit equal, frames identical; 48 suites and an on/off test (its first setup was wrong and was fixed); review OK | [evidence](../evidence/rt-a0-lazy-merge-20261007.json) | this commit |
+| 2026-10-07 | A0: no merged copy for an absent observer | Each message-loop iteration and each tick copied the ~100 KB `full` record only to give a `beforeCommit` observer a merged state; production attaches none, so the runtime passes `observesCommit: false` and the menu session runs the merge's checks without the copy ([design](CORE_REALTIME_TIER2.md)). Iteration 1.51 → 1.44 ms, main 30.4/30.6 → 29.9/30.3 ms per tick. All 10 scenarios and AppKit equal, frames identical; 48 suites and an on/off test (its first setup was wrong and was fixed); review OK | [evidence](../evidence/rt-a0-lazy-merge-20261007.json) | 0ae8cbf |
+| 2026-10-07 | A1 + A2: idle iterations through a Host kernel | An idle message-loop iteration (no message, the timer not due) runs the step's own loop code on a copy and commits in place (`HostSession.stepIdle`, `ObservedIteration.resumeIdleFirst`); anything else falls back to the whole step over a fresh cursor that replays the served requests; the iteration delivery's cursor is updated in place ([design](CORE_REALTIME_TIER2.md)). Iteration 1.44 → 1.22 ms, main 29.9/30.3 → 29.2/29.0 ms per tick (−1 ms; the design estimated ~3: a kernel iteration still costs ~1.05 ms on the phone); real clock 30.24 ticks per second, main 25.5 ms. All 10 scenarios and AppKit equal, frames identical; 50 suites and a side-by-side test (menus, a key press, request bounds, a clock leap past the 100 ms catch-up, clock failures); review OK (gap: the design's Core-level two-Host oracle) | [evidence](../evidence/rt-a1-idle-kernel-20261007.json) | this commit |
 
 ## Next task
 
@@ -157,12 +158,15 @@ time becomes compute per tick (to be rewritten with the first measurements).
 Tier 2 ([design](CORE_REALTIME_TIER2.md), 16 ms per thread; main 30.4 ms
 and render 22.0 ms per tick under the virtual clock after 4g), in order:
 
-- **A1 + A2** (in flight): idle message-loop iterations through a Host
-  kernel (`stepIdle`, `resumeIdleFirst`) with the whole step as fallback and
-  reference; the iteration delivery's cursor updated in place. Phone:
-  iteration 1.44 → 1.22 ms, main 29.0/29.2 ms per tick (−1 ms; the kernel
-  still costs ~1.05 ms per idle iteration); real clock 30.24 ticks per
-  second; review OK; open: 50 suites, AppKit.
+- **1h** (tried, reverted): colour-keyed and mirrored copies four pixels at
+  a time (SIMD); review OK and a per-pixel model test passed, but the phone's
+  render thread stayed at 21.9 ms per tick (copy loop 34% → 32% of its
+  samples): the render thread is bound by memory traffic (a 1.75 MB back
+  buffer streamed several times per tick), not arithmetic. The model test is
+  kept as a regression test.
+- **1i** (in flight): the crop buffer of each present reused instead of a
+  fresh zero-filled 1.75 MB allocation (page faults, zeroing, returning the
+  pages); headless vs equal, frames identical.
 - Then B1 (R3 stages 3–4: `full` in parts), B2 (R5/M3 in-place nested
   candidates), B3 (one loaded attempt per tick), the replay check, R3 stage
   2; then the gameplay body and the render thread.

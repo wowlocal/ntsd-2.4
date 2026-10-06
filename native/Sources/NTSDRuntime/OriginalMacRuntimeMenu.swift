@@ -70,6 +70,10 @@ import NTSDCore
     /// (CORE_REALTIME M2); false keeps every request a permit (one attempt per
     /// request).
     public var servesQueueInline = true
+    /// Idle iterations (no message, the timer not due) through the Host's
+    /// kernel (CORE_REALTIME A1); false keeps the whole step for every
+    /// iteration (the reference path for tests).
+    public var servesIdleDirectly = true
     private let clock: () throws -> UInt32
 
     /// Runtime first-menu inputs. The worker thread named by the identities is
@@ -155,7 +159,10 @@ import NTSDCore
         while served < maximumRequests {
             // No beforeCommit observer here: the menu session skips the merged
             // copy of its state made for one (CORE_REALTIME A0).
-            switch try driver.resume(prepare:{ _,state in try self.inputs(state) },observesCommit:false,network:network != nil,inline:inline) {
+            let resumed = try servesQueueInline && servesIdleDirectly
+                ? driver.resumeIdleFirst(prepare:{ _,state in try self.inputs(state) },network:network != nil,inline:inline)
+                : driver.resume(prepare:{ _,state in try self.inputs(state) },observesCommit:false,network:network != nil,inline:inline)
+            switch resumed {
             case .request(let permit):
                 served += 1; requests += 1; lastRequest = permit.request
                 switch permit.request {

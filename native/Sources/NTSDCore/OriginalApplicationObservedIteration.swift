@@ -56,8 +56,11 @@ public struct OriginalApplicationIterationDelivery {
         self.cursor = cursor
     }
     public mutating func response(for request: OriginalApplicationIterationRequest) throws -> OriginalApplicationIterationRequest.Reply {
-        guard var cursor else { throw OriginalApplicationObservedIterationBoundary.missingCursor }
-        defer { self.cursor = cursor };return try cursor.response(for:request)
+        // In place (CORE_REALTIME A2): copying the cursor out copied its
+        // receipts for every reply; on a throw it keeps what it recorded, as
+        // the copy written back by the old `defer` did.
+        guard cursor != nil else { throw OriginalApplicationObservedIterationBoundary.missingCursor }
+        return try cursor!.response(for:request)
     }
 }
 public enum OriginalApplicationObservedIterationBoundary: Error, Equatable {
@@ -123,64 +126,116 @@ public final class OriginalApplicationObservedIteration<Platform: OriginalApplic
         try attempt {
             let gate = inline.map(Gate.init)
             defer { gate?.inline = nil }
-            let cursor = try gate.map { gate in
-                try exchange.inlineCursor(accepting:{ gate.inline?.accepts($0) ?? false }) { permit,exchange in
-                    try gate.inline!.serve(permit,exchange)
-                }
-            } ?? exchange.snapshot.cursor()
-            func graphics(_ q: OriginalMenuGraphicsRequest,_ p: Platform) throws -> OriginalMenuGraphicsRequest.Reply {
-                guard case .graphics(let r) = try p.iterationDelivery.response(for:.graphics(q)) else { throw Boundary.invalidResponse }
-                return r
-            }
+            let cursor = try makeCursor(gate)
             do {
-                let result = try host.step(prepare:{ p,state in
+                return .advanced(try fullStep(prepare:{ p,state in
                     p.iterationDelivery.begin(cursor);return try prepare(p,state)
                 },observe:observe,menuObserve:menuObserve,graphicsObserve:graphicsObserve,
                 checkpoint:checkpoint,bodyProduced:bodyProduced,beforeCommit:beforeCommit,observesCommit:observesCommit,
-                bitmap:{ stage,q,p in
-                    guard case .bitmap(let r) = try graphics(.bitmap(stage,q),p) else { throw Boundary.invalidResponse }
-                    return r
-                },lifecycle:{ q,p in
-                    guard case .window(let r) = try graphics(.window(q),p) else { throw Boundary.invalidResponse }
-                    return r
-                },surface:{ q,p in
-                    guard case .window(let r) = try graphics(.window(q),p) else { throw Boundary.invalidResponse }
-                    return r
-                },front:{ stage,q,p in
-                    guard case .front(let r) = try graphics(.front(stage,q),p) else { throw Boundary.invalidResponse }
-                    return r
-                },queue:{ q,p in
-                    guard case .queue(let r) = try p.iterationDelivery.response(for:.queue(q)) else { throw Boundary.invalidResponse }
-                    return r
-                },windowDefault:{ q,p in
-                    guard case .windowDefault(let r) = try p.iterationDelivery.response(for:.windowDefault(q)) else { throw Boundary.invalidResponse }
-                    return r
-                },graph:{ q,p in
-                    guard case .graph(let r) = try p.iterationDelivery.response(for:.graph(q)) else { throw Boundary.invalidResponse }
-                    return r
-                },network:network ? { e,p in
-                    guard case .network(let r) = try p.iterationDelivery.response(for:.network(e)) else { throw Boundary.invalidResponse }
-                    return r
-                } : nil,socket:{ q,p in
-                    guard case .socket(let r) = try p.iterationDelivery.response(for:.socket(q)) else { throw Boundary.invalidResponse }
-                    return r
-                },client:network ? { q,p in
-                    guard case .client(let r) = try p.iterationDelivery.response(for:.client(q)) else { throw Boundary.invalidResponse }
-                    return r
-                } : nil,networkExit:network ? { q,p in
-                    guard case .networkExit(let r) = try p.iterationDelivery.response(for:.networkExit(q)) else { throw Boundary.invalidResponse }
-                    return r
-                } : nil,beforePublication:{ p in
-                    try beforePublication(p)
-                    guard let consumed = p.iterationDelivery.cursor else { throw Boundary.missingCursor }
-                    _ = try self.exchange.finish(consumed)
-                },expectedSequence:sequence)
-                return .advanced(result)
+                beforePublication:beforePublication,network:network))
             } catch let needed as Exchange.RequestNeeded {
                 // The entire Host/Core attempt has unwound before claim/service.
                 return .request(try exchange.claim(needed))
             }
         }
+    }
+    /// `resume` without observers that first tries the Host's idle kernel
+    /// (`stepIdle`); when the iteration is not idle, the whole step runs over a
+    /// fresh cursor that replays the requests the kernel served (none is served
+    /// twice) with the same prepared inputs (`prepare` runs once per resume)
+    /// (CORE_REALTIME A1). `prepare` must not change the platform it is given:
+    /// when the iteration is not idle its inputs are reused with a fresh copy.
+    public func resumeIdleFirst(prepare: (Platform, Host.Session.State) throws -> Host.Inputs,
+        beforePublication: (Platform) throws -> Void = { _ in },
+        network: Bool = false,inline: Inline? = nil) throws -> Outcome {
+        try attempt {
+            let gate = inline.map(Gate.init)
+            defer { gate?.inline = nil }
+            let idle = try makeCursor(gate)
+            var inputs: Host.Inputs?
+            func prepared(_ p: Platform,_ state: Host.Session.State,_ cursor: Exchange.Cursor) throws -> Host.Inputs {
+                p.iterationDelivery.begin(cursor)
+                if let inputs { return inputs }
+                let made = try prepare(p,state);inputs = made;return made
+            }
+            do {
+                if let outcome = try host.stepIdle(prepare:{ p,state in try prepared(p,state,idle) },queue:{ q,p in
+                    guard case .queue(let r) = try p.iterationDelivery.response(for:.queue(q)) else { throw Boundary.invalidResponse }
+                    return r
+                },beforePublication:{ p in try self.finishPublication(p,beforePublication) },expectedSequence:sequence) {
+                    return .advanced(outcome)
+                }
+                let full = try makeCursor(gate)
+                return .advanced(try fullStep(prepare:{ p,state in try prepared(p,state,full) },observesCommit:false,
+                                              beforePublication:beforePublication,network:network))
+            } catch let needed as Exchange.RequestNeeded {
+                return .request(try exchange.claim(needed))
+            }
+        }
+    }
+    private func makeCursor(_ gate: Gate?) throws -> Exchange.Cursor {
+        try gate.map { gate in
+            try exchange.inlineCursor(accepting:{ gate.inline?.accepts($0) ?? false }) { permit,exchange in
+                try gate.inline!.serve(permit,exchange)
+            }
+        } ?? exchange.snapshot.cursor()
+    }
+    private func finishPublication(_ p: Platform,_ beforePublication: (Platform) throws -> Void) throws {
+        try beforePublication(p)
+        guard let consumed = p.iterationDelivery.cursor else { throw Boundary.missingCursor }
+        _ = try exchange.finish(consumed)
+    }
+    /// One whole Host step with every request through the platform's
+    /// iteration delivery (`resume`'s body).
+    private func fullStep(prepare: (Platform, Host.Session.State) throws -> Host.Inputs,
+        observe: @escaping (Host.Application.Observation) throws -> Void = { _ in },
+        menuObserve: @escaping (OriginalFrontScreenEvent) throws -> Void = { _ in },
+        graphicsObserve: @escaping (OriginalApplicationGraphics.Command) throws -> Void = { _ in },
+        checkpoint: (Host.Session.Checkpoint, OriginalStateRecord, Int32?) throws -> Void = { _,_,_ in },
+        bodyProduced: (OriginalFrontScreenBody.StartupResult) throws -> Void = { _ in },
+        beforeCommit: (Host.Session.Loop, Host.Session.State) throws -> Void = { _,_ in },
+        observesCommit: Bool = true,
+        beforePublication: (Platform) throws -> Void,network: Bool) throws -> Host.Outcome {
+        func graphics(_ q: OriginalMenuGraphicsRequest,_ p: Platform) throws -> OriginalMenuGraphicsRequest.Reply {
+            guard case .graphics(let r) = try p.iterationDelivery.response(for:.graphics(q)) else { throw Boundary.invalidResponse }
+            return r
+        }
+        return try host.step(prepare:prepare,observe:observe,menuObserve:menuObserve,graphicsObserve:graphicsObserve,
+            checkpoint:checkpoint,bodyProduced:bodyProduced,beforeCommit:beforeCommit,observesCommit:observesCommit,
+            bitmap:{ stage,q,p in
+                guard case .bitmap(let r) = try graphics(.bitmap(stage,q),p) else { throw Boundary.invalidResponse }
+                return r
+            },lifecycle:{ q,p in
+                guard case .window(let r) = try graphics(.window(q),p) else { throw Boundary.invalidResponse }
+                return r
+            },surface:{ q,p in
+                guard case .window(let r) = try graphics(.window(q),p) else { throw Boundary.invalidResponse }
+                return r
+            },front:{ stage,q,p in
+                guard case .front(let r) = try graphics(.front(stage,q),p) else { throw Boundary.invalidResponse }
+                return r
+            },queue:{ q,p in
+                guard case .queue(let r) = try p.iterationDelivery.response(for:.queue(q)) else { throw Boundary.invalidResponse }
+                return r
+            },windowDefault:{ q,p in
+                guard case .windowDefault(let r) = try p.iterationDelivery.response(for:.windowDefault(q)) else { throw Boundary.invalidResponse }
+                return r
+            },graph:{ q,p in
+                guard case .graph(let r) = try p.iterationDelivery.response(for:.graph(q)) else { throw Boundary.invalidResponse }
+                return r
+            },network:network ? { e,p in
+                guard case .network(let r) = try p.iterationDelivery.response(for:.network(e)) else { throw Boundary.invalidResponse }
+                return r
+            } : nil,socket:{ q,p in
+                guard case .socket(let r) = try p.iterationDelivery.response(for:.socket(q)) else { throw Boundary.invalidResponse }
+                return r
+            },client:network ? { q,p in
+                guard case .client(let r) = try p.iterationDelivery.response(for:.client(q)) else { throw Boundary.invalidResponse }
+                return r
+            } : nil,networkExit:network ? { q,p in
+                guard case .networkExit(let r) = try p.iterationDelivery.response(for:.networkExit(q)) else { throw Boundary.invalidResponse }
+                return r
+            } : nil,beforePublication:{ p in try self.finishPublication(p,beforePublication) },expectedSequence:sequence)
     }
     public func beginService(_ permit: Exchange.Permit) throws { try attempt { try exchange.beginService(permit) } }
     public func answer(_ permit: Exchange.Permit,response: Exchange.Response,

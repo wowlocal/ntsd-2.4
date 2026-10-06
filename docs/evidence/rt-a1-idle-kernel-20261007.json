@@ -1,0 +1,98 @@
+{
+ "study": "docs/research/CORE_REALTIME.md",
+ "phase": "A1 + A2 (idle message-loop iterations through a Host kernel; the delivery cursor in place)",
+ "date": "2026-10-07",
+ "design": "docs/research/CORE_REALTIME_TIER2.md section A, steps A1 and A2, invariants 1-8",
+ "change": "OriginalApplicationMenuSession.idleIteration(queue:) runs the real message-loop step on a copy with a provider that serves only peek, time and sleep (nil on anything else, on the timer coming due, on any Core error or failed alias/revision check; the provider's own errors propagate unchanged); commitIdle installs the loop, the counter merge and revision. OriginalApplicationHostSession.stepIdle (internal) does step's checks in step's order, bails out unless startup is set and the prepared arrays are empty, then makes the delivery context's platform copy, runs beforePublication and commits in place before publishing the same Committed batch; idleCommitCount is a diagnostic. OriginalApplicationObservedIteration: resume's body moved into fullStep; resumeIdleFirst tries stepIdle and otherwise runs fullStep over a fresh cursor that replays the receipts the kernel recorded, with prepare memoized (once per resume); A2: IterationDelivery.response mutates the cursor in place. OriginalMacRuntimeMenu.servesIdleDirectly (default true) uses resumeIdleFirst.",
+ "phone": {
+  "before": [
+   {
+    "label": "rta0-run1",
+    "runSeconds": 331,
+    "peakResidentMB": 1515,
+    "ticksPerSecond": 20.63,
+    "busySeconds": 218.65,
+    "bodies": 1800,
+    "completeMsPerTick": 22.0,
+    "menuMsPerStep": 1.44,
+    "menuStepsPerTick": 4.12,
+    "mainCpuShare": 0.618,
+    "renderCpuShare": 0.459,
+    "mainMsPerTick": 29.9,
+    "renderMsPerTick": 22.2
+   },
+   {
+    "label": "rta0-run2",
+    "runSeconds": 331,
+    "peakResidentMB": 1210,
+    "ticksPerSecond": 20.45,
+    "busySeconds": 218.57,
+    "bodies": 1800,
+    "completeMsPerTick": 22.5,
+    "menuMsPerStep": 1.45,
+    "menuStepsPerTick": 4.12,
+    "mainCpuShare": 0.62,
+    "renderCpuShare": 0.449,
+    "mainMsPerTick": 30.3,
+    "renderMsPerTick": 21.9
+   }
+  ],
+  "after": [
+   {
+    "label": "rta1-run1",
+    "runSeconds": 331,
+    "peakResidentMB": 1219,
+    "ticksPerSecond": 20.89,
+    "busySeconds": 220.24,
+    "bodies": 1800,
+    "completeMsPerTick": 22.3,
+    "menuMsPerStep": 1.23,
+    "menuStepsPerTick": 4.12,
+    "mainCpuShare": 0.61,
+    "renderCpuShare": 0.461,
+    "mainMsPerTick": 29.2,
+    "renderMsPerTick": 22.0
+   },
+   {
+    "label": "rta1-run2",
+    "runSeconds": 326,
+    "peakResidentMB": 1299,
+    "ticksPerSecond": 20.98,
+    "busySeconds": 218.27,
+    "bodies": 1800,
+    "completeMsPerTick": 22.1,
+    "menuMsPerStep": 1.22,
+    "menuStepsPerTick": 4.12,
+    "mainCpuShare": 0.607,
+    "renderCpuShare": 0.467,
+    "mainMsPerTick": 29.0,
+    "renderMsPerTick": 22.3
+   },
+   {
+    "label": "rta1-realclock",
+    "runSeconds": 384,
+    "peakResidentMB": 1544,
+    "ticksPerSecond": 30.24,
+    "busySeconds": 275.69,
+    "bodies": 3900,
+    "completeMsPerTick": 21.9,
+    "menuMsPerStep": 1.52,
+    "menuStepsPerTick": 1.94,
+    "mainCpuShare": 0.771,
+    "renderCpuShare": 0.56,
+    "mainMsPerTick": 25.5,
+    "renderMsPerTick": 18.5
+   }
+  ],
+  "result": "message-loop iteration 1.44 -> 1.22/1.23 ms (4.12 per tick under the virtual clock); main thread 29.9/30.3 -> 29.2/29.0 ms per tick (about -1 ms; the design estimated ~3 ms: a kernel iteration still costs ~1.05 ms on the phone); real clock 30.24 ticks per second, main 25.5 ms, render 18.5 ms",
+  "mac": "headless vs: menuBusySeconds 1.48 -> 1.08 s over 9,365 steps; stepIdle 0.4% of main-thread samples (idleIteration 35% of it, platform copies 13%, publish 12%)"
+ },
+ "gates": {
+  "headless": "vs equal, 1,832 frames identical (frozen-rta1, rt-a1)",
+  "scenarios": "all 10 equal, frames identical (rt-a1-all)",
+  "AppKit": "vs and playback equal, 3,960 frames identical to the A0 AppKit run (rt-a1-appkit vs rt-a0-appkit)",
+  "emulator": "vs equal, 1,832 frames identical",
+  "tests": "bundle C (native diff 45789fbc against 97df2ec, before the review's edits): 50 suites that use the menu session, bootstrap, Host, observed iteration, iteration delivery or the runtime menu/loading, incl. the new testIdleKernelMatchesTheWholeStep, all pass incl. OriginalMacLoadingAudioTests (3,108 s); bundle B (the committed tree, 88b22080 against 97df2ec, with the review's edits: stepIdle internal, the prepare contract documented, the test strengthened): OriginalMacRuntimeMenuTests (8 tests incl. the idle test with the loop's timer/counter/message compared per step, a clock leaping past the 100 ms catch-up, and clock failures at distinct points of which at least one reaches a step), OriginalApplicationMenuInputTests (5), OriginalApplicationObservedIterationTests (3) pass"
+ },
+ "review": "independent read-only review: correct for the production path, no counterexample (the full path's extra work in an idle iteration neither throws nor changes state; committed values, delivery state, context timing and exchange equal; a bail-out leaves exactly the receipts and counters a discarded attempt left and the fallback cursor replays them; provider errors identical, Core errors raised by the fallback at the same point; the in-place commit follows the last failure point and try! cannot trap; A2 equivalent including on throw; the refactor behaviour-identical). Contract gap noted and documented: prepare must not change its platform (production's ignores it). Acted on: stepIdle internal, the prepare contract documented, the runtime test strengthened. Review gap (recorded): the design's Core-level oracle of two Hosts compared after every step with its edge cases (lag over 100 ms is covered by the clock-leap run; broken alias, undefined speed word, pending loading, stale sequence, non-empty arrays and an undrained earlier batch are not tested directly)."
+}

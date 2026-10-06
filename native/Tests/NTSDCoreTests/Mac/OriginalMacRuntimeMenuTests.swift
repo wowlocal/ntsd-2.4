@@ -281,6 +281,79 @@ import XCTest
         XCTAssertTrue(a.steps.last?.hasPrefix("failed") == true)
     }
 
+    /// Idle iterations through the Host's kernel (CORE_REALTIME A1) give the
+    /// same counters, delivered messages, sleeps, clock calls, committed globals,
+    /// commits, frames, request bounds and failures as the whole step for every
+    /// iteration, with the same number of prepared inputs.
+    func testIdleKernelMatchesTheWholeStep() throws {
+        func run(idle: Bool,failAt: Int? = nil,jumps: Bool = false) throws -> (steps: [String],frame: Data?,prepares: Int,clockCalls: Int,idleCommits: UInt64) {
+            let root = FileManager.default.temporaryDirectory.appendingPathComponent("ntsd-idle-\(UUID().uuidString)",isDirectory:true)
+            defer { try? FileManager.default.removeItem(at:root) }
+            let (started,package) = try startup(root)
+            while try started.host.takeCommitted() != nil {}
+            var now: UInt32 = 5_000_000,clockCalls = 0,prepares = 0
+            let menu = try OriginalMacRuntimeMenu(started,inputs:package,clock:{
+                clockCalls += 1
+                if let failAt,clockCalls == failAt { throw Stop.limit }
+                // `jumps`: every 50th call the clock leaps 150 ms (the timer's
+                // catch-up past 100 ms behind).
+                now &+= jumps && clockCalls % 50 == 0 ? 150 : 7; return now
+            })
+            menu.capsLock = { prepares += 1; return 0 }
+            menu.servesIdleDirectly = idle
+            var steps: [String] = []
+            func record(_ kind: String) {
+                var globals = Hasher()
+                globals.combine(started.host.snapshot.session?.state.full.bytes ?? [])
+                globals.combine(started.host.snapshot.session?.state.full.defined ?? [])
+                let loop = started.host.snapshot.session?.loop
+                globals.combine(loop?.timer.baseline);globals.combine(loop?.counter);globals.combine(loop?.message.bytes)
+                globals.combine(loop?.message.defined)
+                steps.append("\(kind) \(menu.requests) \(menu.textRequests) \(menu.emptyBlits) \(menu.iterations) \(clockCalls) "
+                    + "\(String(describing:menu.lastRequest)) \(menu.messages.delivered.map(\.message)) \(menu.messages.sleeps) "
+                    + "\(started.host.committedSequence) \(started.display.frontOperationCount) \(started.display.operationCount) "
+                    + "\(prepares) \(globals.finalize())")
+            }
+            func step() throws -> Bool {
+                switch try menu.step() {
+                case .committed: record("committed"); return true
+                case .loading: record("loading"); return false
+                }
+            }
+            do {
+                for _ in 0..<400 where try XCTUnwrap(started.host.snapshot.session).state.settings == nil { guard try step() else { throw Stop.limit } }
+                for _ in 0..<40 { guard try step() else { throw Stop.limit } }
+                let key = try XCTUnwrap(OriginalMacRuntimeKey.table[0x00])
+                menu.messages.key(key,down:true,characters:"a"); menu.messages.key(key,down:false)
+                for _ in 0..<20 where !menu.messages.queue.isEmpty { if !(try step()) { break } }
+                for _ in 0..<20 { if !(try step()) { break } }
+            } catch { record("failed \(error)"); return (steps,nil,prepares,clockCalls,started.host.idleCommitCount) }
+            for bound in [0,1,2,3] {
+                do { _ = try menu.step(maximumRequests:bound); record("unbounded \(bound)") } catch { record("bound \(bound) \(error)") }
+            }
+            return (steps,try started.windows.snapshotPNG(started.window),prepares,clockCalls,started.host.idleCommitCount)
+        }
+        let kernel = try run(idle:true),whole = try run(idle:false)
+        XCTAssertEqual(kernel.steps.count,whole.steps.count)
+        for (a,b) in zip(kernel.steps,whole.steps) { XCTAssertEqual(a,b) }
+        XCTAssertEqual(kernel.frame,whole.frame);XCTAssertEqual(kernel.prepares,whole.prepares)
+        XCTAssertGreaterThan(kernel.idleCommits,0,"idle iterations went through the kernel");XCTAssertEqual(whole.idleCommits,0)
+        // A clock leaping past the timer's 100 ms catch-up.
+        let kernelJumps = try run(idle:true,jumps:true),wholeJumps = try run(idle:false,jumps:true)
+        XCTAssertEqual(kernelJumps.steps,wholeJumps.steps);XCTAssertEqual(kernelJumps.frame,wholeJumps.frame)
+        XCTAssertGreaterThan(kernelJumps.idleCommits,0)
+        // A clock failing at the same call fails the same way on both paths, at
+        // several distinct points of the run (a failing call that only stamps a
+        // message's time is answered 0 by the message queue, on both paths).
+        var failures = 0
+        for failAt in Set([2,kernel.clockCalls/3,kernel.clockCalls/2,kernel.clockCalls-3].map { max(2,$0) }).sorted() {
+            let a = try run(idle:true,failAt:failAt),b = try run(idle:false,failAt:failAt)
+            XCTAssertEqual(a.steps,b.steps,"clock failing at call \(failAt)")
+            if a.steps.last?.hasPrefix("failed") == true { failures += 1 }
+        }
+        XCTAssertGreaterThan(failures,0,"some clock failures reached a step")
+    }
+
     /// The end of the menu track: EC_COMPLETE and the registered 0x400 go through
     /// PeekMessage/DispatchMessage into the recovered WndProc graph callback.
     func testGraphNotificationRestartsTheMenuTrack() throws {
