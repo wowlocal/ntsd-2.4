@@ -7,6 +7,15 @@ public struct OriginalMenuPresentationInput: Codable, Sendable {
     public let methodResult: Int32, queryResult: Int32, audioGetResult: Int32, audioSetResult: Int32
     public let queriedAudio: UInt32, audioVolume: Int32
     public let dcResult: Int32, dc: UInt32, postResult: Int32
+    /// The memberwise initializer, public so the runtime builds this input
+    /// directly (CORE_REALTIME 4f: it decoded it from JSON every tick).
+    public init(targetSurface: UInt32, methodResult: Int32, queryResult: Int32, audioGetResult: Int32,
+                audioSetResult: Int32, queriedAudio: UInt32, audioVolume: Int32, dcResult: Int32, dc: UInt32,
+                postResult: Int32) {
+        self.targetSurface = targetSurface; self.methodResult = methodResult; self.queryResult = queryResult
+        self.audioGetResult = audioGetResult; self.audioSetResult = audioSetResult; self.queriedAudio = queriedAudio
+        self.audioVolume = audioVolume; self.dcResult = dcResult; self.dc = dc; self.postResult = postResult
+    }
 }
 
 public struct OriginalMenuPresentationEvent: Codable, Equatable, Sendable {

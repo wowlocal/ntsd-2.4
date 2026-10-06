@@ -39,5 +39,14 @@ final class OriginalRandomTableTests: XCTestCase {
         same(paged, 0x200000, "paged, defined")
         same(paged, (1 << 14)-1000, "paged, across a page boundary")
         same(paged, paged.byteCount-100, "paged, past the end")
+        // Review follow-up: extreme offsets (a wrong guard order would trap),
+        // a record exactly the table's size, and the paged record's edges.
+        for offset in [Int.max, Int.max-2999, Int.max-3000, Int.min, Int.min+1] { same(flat, offset, "offset \(offset)") }
+        same(try record(3000), 0, "exactly 3000 bytes")
+        same(try record(3000, undefined: [2999]), 0, "exactly 3000 bytes, last undefined")
+        same(paged, paged.byteCount-3000, "paged, ends at the last byte")
+        same(paged, -1, "paged, negative offset")
+        same(paged, 0x123456+700, "paged, first byte undefined")
+        same(paged, 0x123456+700-2999, "paged, last byte undefined")
     }
 }

@@ -140,9 +140,9 @@ import NTSDCore
     /// The host's interactive dialogs.
     public var dialogs: OriginalRuntimeLoadingDialogs
     func presentation(_ target: UInt32) throws -> OriginalMenuPresentationInput {
-        try JSONDecoder().decode(OriginalMenuPresentationInput.self,from:JSONSerialization.data(withJSONObject:[
-            "targetSurface":target,"methodResult":0,"queryResult":0,"audioGetResult":0,"audioSetResult":0,
-            "queriedAudio":0,"audioVolume":0,"dcResult":0,"dc":OriginalMacDisplayBackend.textDCHandle,"postResult":0]))
+        // The same values the JSON round trip produced, without it (CORE_REALTIME 4f).
+        .init(targetSurface:target,methodResult:0,queryResult:0,audioGetResult:0,audioSetResult:0,
+              queriedAudio:0,audioVolume:0,dcResult:0,dc:OriginalMacDisplayBackend.textDCHandle,postResult:0)
     }
     func bitmap(_ q: OriginalBitmapSurfaceLoading.Request) throws -> OriginalBitmapSurfaceLoading.Response {
         counts.bitmapRequests += 1
