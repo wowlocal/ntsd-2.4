@@ -116,17 +116,19 @@ while measuring; restore `svc power stayon false` when the loop pauses or stops.
 | 2026-10-06 | Phase 4b: graphics consumed in place per draw | Both `emit` paths called `consume` on a copy of the graphics owner and stored it back; `consume` is all-or-nothing, so it now runs on the owner in place ([copy map](CORE_REALTIME_COPIES.md) M4). 16.01/16.04 → 16.01/16.06 ticks per second (no measurable change; committed as strictly less work: one owner copy, about 14–21 reference-count operations, fewer per draw). All 10 scenarios and AppKit equal, frames identical; 105 suites; review OK | [evidence](../evidence/rt-4b-graphics-in-place-20261006.json) | 7190530 |
 | 2026-10-06 | Phase 4c: flat record reads through the buffers | `integer(at:as:)` (3.4% self plus `checkedRange` 1.8% of the phone's main thread) checked definedness through an array slice and assembled the value byte by byte; it now loops over the mask's buffer and loads the value unaligned, with the same errors in the same order. 16.01/16.06 → 16.10 ticks per second (one run; within noise, less work). All 10 scenarios and AppKit equal, frames identical; 154 suites and a new flat-read unit test; review OK | [evidence](../evidence/rt-4c-flat-reads-20261006.json) | 81b40e4 |
 | 2026-10-06 | M2a: message-queue requests served inside the Host attempt | A gameplay tick ran the menu loop's Host attempt 5–6 times, once per unrecorded request; an opt-in accepting inline cursor now serves `.queue` requests inside the attempt (same requests, order, replies, counters and bound; production passes no observers) ([design](CORE_REALTIME_M2.md)). **16.10 → 16.70/16.57 ticks per second** (+3.6%); Mac CPU −2.6%. All 10 scenarios and AppKit equal, frames identical; 105 suites; side-by-side test (counters, messages, clock calls, committed globals, frames, bounds, a failing clock); review OK | [evidence](../evidence/rt-m2a-inline-queue-20261006.json) | dda500b |
-| 2026-10-06 | M2b: the window Blt served inside the attempt | The back-buffer clear (dispatch entry each iteration, ArtSetup, Alt+Enter) is served inline too, so a gameplay tick runs the Host attempt once; its target is always the back buffer (nothing presented). 16.70/16.57 → 16.66/16.73 ticks per second (within noise); Mac CPU −2.7% (four rounds). All 10 scenarios and AppKit equal, frames identical; 105 suites; review OK | [evidence](../evidence/rt-m2b-inline-blt-20261006.json) | this commit |
+| 2026-10-06 | M2b: the window Blt served inside the attempt | The back-buffer clear (dispatch entry each iteration, ArtSetup, Alt+Enter) is served inline too, so a gameplay tick runs the Host attempt once; its target is always the back buffer (nothing presented). 16.70/16.57 → 16.66/16.73 ticks per second (within noise); Mac CPU −2.7% (four rounds). All 10 scenarios and AppKit equal, frames identical; 105 suites; review OK | [evidence](../evidence/rt-m2b-inline-blt-20261006.json) | b22545a |
+| 2026-10-06 | Phase 1f: back-buffer fill queued on the render thread | The DirectDraw colour fill that clears the back buffer every iteration (the menu step's Blt, 2.5% of the phone's main thread after M2b) joins the render queue without a flush on hosts that present concurrently, in menus too; a primary's fill flushes and presents on the main thread. **16.66/16.73 → 16.87/16.87 ticks per second** (+1%). All 10 scenarios and AppKit equal, frames identical; full-overlap runs equal; ThreadSanitizer clean; 13 suites; review OK | [evidence](../evidence/rt-1f-back-fill-20261006.json) | this commit |
 
 ## Next task
 
 Commit the checked increments in order as their suites finish (each on its
 snapshot; the tested tree hash is against the HEAD of its test build):
 
-- **1f**, back-buffer colour fill queued on the render thread (the menu
-  step's Blt fill was 2.5% of the phone's main thread after M2b): vs equal,
-  full-overlap vs/playback/war equal, review OK; phone, all 10, AppKit,
-  ThreadSanitizer and suites running.
+- **R3 stage 1**, the actor tier ([CORE_REALTIME_R3](CORE_REALTIME_R3.md)):
+  phone 19.09/19.26 (+13.6%), vs equal with frames identical, no tier
+  dissolves in a vs run, review OK after a compile fix (a reference check took
+  the old dictionary type); all 10, AppKit, the table and oracle tests and the
+  suites open.
 - **M5** (skip the menu session's slicing on gameplay ticks): designed and
   shown equivalent, but it saves about 96 KB of copying and comparing per tick
   (under 1% of a tick) and adds a branch to keep in step: not done.

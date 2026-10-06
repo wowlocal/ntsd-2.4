@@ -177,11 +177,15 @@ import NTSDCore
     public private(set) var allocationCount = 0
     public var allocatedBytes: Int { budget.allocated }
     /// While set (the runtime's replay of a committed gameplay batch), front
-    /// fill/copy/flip validate and update metadata here and queue their pixels
-    /// and present on the render thread; every other entry point first waits
-    /// for that work (CORE_REALTIME phase 1c). Needs presentUnknownAsBlack, so
+    /// fill/copy/flip and text validate and update metadata here and queue their
+    /// pixels and present on the render thread; every other entry point except a
+    /// queued back-buffer fill (`pipelinesBackFill`) first waits for that work
+    /// (CORE_REALTIME phases 1c, 1e, 1f). Needs presentUnknownAsBlack, so
     /// validation never reads pixels.
     public var pipelinesFront = false
+    /// Queue back-buffer colour fills on the render thread (CORE_REALTIME 1f);
+    /// set by the runtime on hosts that present concurrently.
+    public var pipelinesBackFill = false
     private let renderer = RenderExecutor()
     /// Waits for queued pixel work; rethrows an error the queued work threw
     /// (none can: presenters cannot fail and the crop of a black-filled
@@ -274,8 +278,19 @@ import NTSDCore
     /// Pure payload/identity validation. Only flagged structure fields are read;
     /// ignored private bytes stay untouched and do not become known zero.
     public func prepare(_ q: Window.Request) throws -> Prepared {
-        try renderer.flush()
-        try validate(q); return .init(request:q,identity:identity,once:Once())
+        let queuesFill = queuesBackFill(q)
+        if !queuesFill { try renderer.flush() }
+        do { try validate(q) } catch { if queuesFill { try renderer.flush() }; throw error }
+        return .init(request:q,identity:identity,once:Once())
+    }
+    /// Whether a DirectDraw colour fill (Blt) skips waiting for the queued
+    /// pixel work (CORE_REALTIME 1f): its checks read no pixels, the queue keeps
+    /// its order, and every reader of pixels flushes first. `perform` queues
+    /// only a fill with nothing to present (a back buffer) and flushes before a
+    /// primary's fill and present; a failed check flushes before it throws, as
+    /// the old order did.
+    private func queuesBackFill(_ q: Window.Request) -> Bool {
+        pipelinesBackFill && presentUnknownAsBlack && q.kind == "blt"
     }
     private func validate(_ q: Window.Request) throws {
         guard Self.handles(q) else { throw Boundary.unsupported(q.kind) }
@@ -403,7 +418,12 @@ import NTSDCore
         return try framebuffer(data,rectangle(s))
     }
     public func perform(_ prepared: Prepared) throws -> Served {
-        try renderer.flush()
+        let queuesFill = queuesBackFill(prepared.request)
+        if !queuesFill { try renderer.flush() }
+        do { return try perform(prepared,queuesFill:queuesFill) }
+        catch { if queuesFill { try renderer.flush() }; throw error }
+    }
+    private func perform(_ prepared: Prepared,queuesFill: Bool) throws -> Served {
         guard prepared.identity === identity else { throw Boundary.foreignPreparation }
         guard !prepared.once.used else { throw Boundary.repeatedPreparation }
         try validate(prepared.request); prepared.once.used = true
@@ -471,8 +491,14 @@ import NTSDCore
             let s = try resource(q.words[0],as:Surface.self),color = try record(q,100).integer(at:80,as:UInt32.self)
             guard let data = s.storage else { throw Boundary.released(s.token) }
             let rect = try rectangle(s),(x,y,w,h,window) = rect
-            Self.fillRows(data,y..<(y+h),x,x+w,color)
-            if let window { try windows.present(framebuffer(data,rect),in:window) }
+            if queuesFill && window == nil {
+                let rows = y..<(y+h),right = x+w
+                renderer.submit { Self.fillRows(data,rows,x,right,color) }
+            } else {
+                if queuesFill { try renderer.flush() }
+                Self.fillRows(data,y..<(y+h),x,x+w,color)
+                if let window { try windows.present(framebuffer(data,rect),in:window) }
+            }
             retained = [s];response = .init()
         default:throw Boundary.unsupported(q.kind)
         }

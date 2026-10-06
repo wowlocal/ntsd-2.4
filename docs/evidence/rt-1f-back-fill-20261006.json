@@ -1,0 +1,42 @@
+{
+ "study": "docs/research/CORE_REALTIME.md",
+ "phase": "1f (back-buffer colour fill queued on the render thread)",
+ "date": "2026-10-06",
+ "finding": "Phone profile of the M2b build (rtm2b-profile): the menu loop's Host step 11.8% of the main thread, of it the front service's serve of the window Blt 2.42% (display perform 1.09%, KnownMask.setRange 1.0%, part of memcpy): the colour fill that clears the back buffer every iteration ran on the main thread, outside the pipelined replay.",
+ "change": "OriginalMacDisplayBackend.pipelinesBackFill (set by OriginalRuntimeSession at startup when --synchronous-render is absent and the window host presents concurrently: headless, Android). prepare and perform of a window blt skip the initial flush in that mode; perform queues fillRows on the render thread when the target has no window to present (a back buffer) and otherwise flushes and fills/presents on the main thread; any throw flushes before rethrowing. Applies in menus and loading too.",
+ "phone": {
+  "baseline": "M2b: 16.66 / 16.73 ticks/s",
+  "after": [
+   {
+    "label": "rt1f-run1",
+    "serial": "R58R36F7VFD",
+    "runSeconds": 349,
+    "peakResidentMB": 1288,
+    "ticksPerSecond": 16.87,
+    "busySeconds": 237.01,
+    "bodies": 1800
+   },
+   {
+    "label": "rt1f-run2",
+    "serial": "R58R36F7VFD",
+    "runSeconds": 349,
+    "peakResidentMB": 1150,
+    "ticksPerSecond": 16.87,
+    "busySeconds": 233.1,
+    "bodies": 1800
+   }
+  ],
+  "result": "16.87 / 16.87 ticks/s (+1%)",
+  "note": "apks/rt1f.apk built from native diff f51626df against b22545a's parent tree (M2b + 1f)"
+ },
+ "emulator": {
+  "result": "vs equal, 1,832 frames identical to the earlier Android app run"
+ },
+ "gates": {
+  "headless": "vs equal with frame digests, 1,832 frames identical (frozen 48cc721c, rt-1f); full overlap vs, playback, war equal (rt-1f-overlap); all 10 scenarios equal, frames identical (rt-1f-all)",
+  "AppKit": "vs and playback equal; 3,960 frames identical to the M2b AppKit run (rt-1f-appkit); AppKit does not enable the mode",
+  "ThreadSanitizer": "headless vs under -sanitize=thread, with frame digests and with full overlap: 0 warnings, 6 progress events each",
+  "Core suites": "release test build swiftpm-test-release of native diff ef54911d against b22545a (the committed content): the 13 display, window and runtime suites (MacDisplayBackend, MacBitmapBackend, MacFrontRaster, MacDisplayColor, ObservedGraphics, ObservedBitmap, ObservedIteration, MacAudioBackend, MacRuntimeLoading, MacRuntimeMenu, MacWindowBackend, MacWindowGeometry, MacLoadingAudio), 62 tests, 0 failures"
+ },
+ "review": "independent read-only review: OK. Every main-thread access to a Storage's pixels is still preceded by a flush (observation, pixels, framebuffer, non-blt prepare/perform, bitmap paths, the synchronous performFront path through pipeline(), drawText's synchronous branch); validateFront reads no pixels under presentUnknownAsBlack; Flip's storage swap before the flush is safe (queued closures hold Storage objects); new surfaces are created after a flush; the blt's checks read no pixels and a back buffer never presents; errors equivalent; Budget locked; the flag is set after startup, so startup's fills stay synchronous; AppKit/iOS/SDL unchanged. Acted on: comments and CORE_REALTIME_RENDER.md corrected (they claimed every other entry point flushes, and a pipelined-text unit test that does not exist). Open: no unit test drives the pipelined paths (their checks are the frame comparisons, full-overlap runs and ThreadSanitizer)."
+}

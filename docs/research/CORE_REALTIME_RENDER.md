@@ -111,7 +111,17 @@ merge presents within a batch; flush before `exit`; a TSan pass on macOS.
   the pixels and present with the DC's state copied as values; without
   pipelining it is the old code after a flush. The headless host's glyph mask
   is empty, so headless runs cover only its empty-bounds branch; Android runs
-  (FreeType masks) and the display suite's pipelined-text test cover drawing.
+  (FreeType masks, frames compared with the Android reference) cover drawing.
+  No unit test drives the pipelined paths yet (open): their checks are the
+  frame comparisons against references recorded with synchronous drawing,
+  the full-overlap scenario runs and ThreadSanitizer.
+- Back-buffer fill (phase 1f): with `pipelinesBackFill` (set by the session at
+  startup on hosts that present concurrently, unless `--synchronous-render`),
+  the DirectDraw colour fill (Blt) that clears the back buffer every iteration
+  is queued on the render thread without a flush, in menus and loading too,
+  not only during replay; the queue therefore carries work outside replay as
+  well. Its checks read no pixels; a primary's fill flushes and presents on
+  the main thread; a failed check flushes before it throws.
 - Android keeps the frame, surface and buffer geometry in a locked target that
   the surface callbacks also take; the window and the presented size used for
   touches are set on the main thread when the draw is replayed.

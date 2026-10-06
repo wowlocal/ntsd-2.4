@@ -204,6 +204,7 @@ public enum OriginalRuntimeSessionBoundary: Error, Equatable {
             let overlay = try overlayRoot()
             let started = try OriginalMacRuntimeStartup.run(inputs:package,overlay:overlay,environment:startupEnvironment(),host:host.startupHost)
             self.started = started
+            started.display.pipelinesBackFill = !arguments.contains("--synchronous-render") && started.windows.presentsConcurrently
             while try started.host.takeCommitted() != nil {}
             let music = try host.makeMusicOutput()
             music.muted = arguments.contains("--mute-music"); self.music = music
