@@ -15,13 +15,16 @@ With --profile it records that many seconds of simpleperf call graphs
 (`simpleperf record --app`, frame pointers) once gameplay reaches 300 bodies,
 symbolizes them with the unstripped libNTSDAndroid.so in --lib, and writes
 OUT_DIR/<label>-profile/profile.json: inclusive shares of the per-cycle phases
-and the top symbols (perf.data and the symbol cache beside it). security.perf_harden is lowered only for the recording and
+and the top symbols (perf.data and the symbol cache beside it); cpu-clock
+samples where the device has no hardware counters (emulators).
+security.perf_harden is lowered only for the recording and
 restored, and debug.perf_event_max_sample_rate is cleared again.
 
 The device is kept awake (svc power stayon usb). It is left that way so it
 cannot lock between runs (a locked phone pauses the game behind the lock
 screen); --restore-stayon restores `svc power stayon false` afterwards. A
-device showing its lock screen is refused at once.
+swipe lock screen is dismissed (wm dismiss-keyguard); a device still showing its
+lock screen (a PIN) is refused at once.
 """
 import argparse, collections, json, os, subprocess, sys, time
 from pathlib import Path
@@ -79,14 +82,17 @@ def record_profile(serial, seconds, out, label, lib):
     shell(serial, "chmod 755 /data/local/tmp/simpleperf")
     shell(serial, "setprop security.perf_harden 0")
     try:
-        r = adb(serial, "shell", f"/data/local/tmp/simpleperf record --app {PACKAGE} --call-graph fp "
+        # Emulators have no hardware counters: sample the cpu-clock software event there.
+        hardware = "cpu-cycles" in shell(serial, "/data/local/tmp/simpleperf list hw")
+        event = "" if hardware else "-e cpu-clock "
+        r = adb(serial, "shell", f"/data/local/tmp/simpleperf record --app {PACKAGE} {event}--call-graph fp "
                 f"--duration {seconds} -f 1000 -o /data/local/tmp/ntsd-perf.data")
         adb(serial, "pull", "/data/local/tmp/ntsd-perf.data", str(data))
     finally:
         shell(serial, "rm -f /data/local/tmp/ntsd-perf.data /data/local/tmp/simpleperf")
         shell(serial, "setprop security.perf_harden 1")
         shell(serial, "setprop debug.perf_event_max_sample_rate ''")
-    if not data.exists():
+    if not data.exists() or data.stat().st_size == 0:
         raise SystemExit("simpleperf produced no data: " + (r.stdout + r.stderr)[-400:])
     # binary_cache_builder writes ./binary_cache next to the data.
     subprocess.run([sys.executable, str(NDK / "simpleperf/binary_cache_builder.py"), "-i", str(data), "-lib", str(lib),
@@ -124,11 +130,17 @@ def main():
     out = Path(o.out); out.mkdir(parents=True, exist_ok=True)
     s = o.serial
     if o.apk:
-        adb(s, "install", "-r", o.apk, check=True)
+        # -d: builds from older commits have lower version codes (debuggable build).
+        r = adb(s, "install", "-r", "-d", o.apk)
+        if r.returncode != 0:
+            raise SystemExit("install failed: " + (r.stdout + r.stderr).strip()[-300:])
     shell(s, "svc power stayon usb")
     shell(s, "input keyevent KEYCODE_WAKEUP")
     if "isKeyguardShowing=true" in shell(s, "dumpsys window"):
-        raise SystemExit(f"{s} shows its lock screen: unlock it (the game pauses behind it)")
+        # A swipe lock goes away on request; a secure lock shows its PIN screen and stays.
+        shell(s, "wm dismiss-keyguard"); time.sleep(3)
+        if "isKeyguardShowing=true" in shell(s, "dumpsys window"):
+            raise SystemExit(f"{s} shows its lock screen: unlock it (the game pauses behind it)")
     try:
         shell(s, f"am force-stop {PACKAGE}")
         shell(s, f"run-as {PACKAGE} sh -c 'rm -rf files/speed && mkdir -p files/speed/overlay && cat > files/args.txt'",
