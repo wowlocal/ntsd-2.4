@@ -211,6 +211,45 @@ import XCTest
         }
         XCTAssertThrowsError(try failing.response(for:.milliseconds)); XCTAssertEqual(g.snapshot.status,.indeterminate)
     }
+    /// An accepting inline cursor serves only the requests it takes (CORE_REALTIME
+    /// M2): any other suspends at its ordinal and goes through a permit, retries
+    /// replay receipts without serving again, a failing serve leaves the exchange
+    /// as a failed permit does, and the cursor does not keep its exchange alive.
+    func testAcceptingInlineCursorSuspendsForOtherRequests() throws {
+        typealias E = OriginalStartupRequestExchange
+        let e = E(); var served = 0
+        let serve: (E.Permit,E) throws -> Void = { permit,exchange in
+            served += 1; try exchange.beginService(permit); try exchange.answer(permit,response:.milliseconds(UInt32(200+served)))
+        }
+        func value(_ r: OriginalStartupResponse) -> UInt32? { if case .milliseconds(let v) = r { return v }; return nil }
+        var first = try e.inlineCursor(accepting:{ $0 == .milliseconds },serve)
+        XCTAssertEqual(value(try first.response(for:.milliseconds)),201)
+        var ticket: E.RequestNeeded?
+        XCTAssertThrowsError(try first.response(for:.filetime)) { ticket = $0 as? E.RequestNeeded }
+        XCTAssertEqual(ticket?.ordinal,1); XCTAssertTrue(first.isSuspended)
+        XCTAssertEqual(served,1); XCTAssertEqual(e.snapshot.receipts.count,1)
+        let permit = try e.claim(try XCTUnwrap(ticket))
+        try e.beginService(permit); try e.answer(permit,response:.filetime(77))
+        var retry = try e.inlineCursor(accepting:{ $0 == .milliseconds },serve)
+        XCTAssertEqual(value(try retry.response(for:.milliseconds)),201)
+        guard case .filetime(77) = try retry.response(for:.filetime) else { return XCTFail("replayed filetime") }
+        XCTAssertEqual(value(try retry.response(for:.milliseconds)),202)
+        XCTAssertEqual(served,2); XCTAssertEqual(e.snapshot.receipts.count,3)
+        _ = try e.finish(retry)
+
+        // A failing inline serve ends the exchange as a failed permit service does.
+        let f = E(); var failing = try f.inlineCursor(accepting:{ _ in true }) { permit,exchange in
+            try exchange.beginService(permit); try exchange.fail(permit,diagnostic:"device"); throw Stop.limit
+        }
+        XCTAssertThrowsError(try failing.response(for:.milliseconds)) { XCTAssertTrue($0 is Stop) }
+        XCTAssertEqual(f.snapshot.status,.indeterminate); XCTAssertEqual(f.snapshot.failure?.diagnostic,"device")
+
+        // Without its exchange the cursor suspends instead of serving.
+        var orphan: E.Cursor
+        do { let g = E(); orphan = try g.inlineCursor(accepting:{ _ in true },serve) }
+        XCTAssertThrowsError(try orphan.response(for:.milliseconds)) { XCTAssertTrue($0 is E.RequestNeeded) }
+        XCTAssertEqual(served,2)
+    }
     func testStartLoadsCatalogPoolAndLoadedMenuInOneAttempt() throws {
         let root = FileManager.default.temporaryDirectory.appendingPathComponent("ntsd-loading-\(UUID().uuidString)",isDirectory:true)
         defer { try? FileManager.default.removeItem(at:root) }

@@ -8,7 +8,8 @@ public protocol OriginalExchangeRequest: Equatable {
 }
 
 /// Prepared responses for a typed external request consumer. Pure
-/// value cursors run inside a Core attempt; claim/answer/fail run outside it.
+/// value cursors run inside a Core attempt; claim/answer/fail run outside it,
+/// except for an inline cursor's server, which runs them inside the attempt.
 /// Retrying Native calculation reuses values, not already performed host IO.
 public final class OriginalRequestExchange<Input: OriginalExchangeRequest, Resource> {
     public typealias Request = Input
@@ -55,8 +56,9 @@ public final class OriginalRequestExchange<Input: OriginalExchangeRequest, Resou
         public private(set) var position = 0
         fileprivate var pending: RequestNeeded?
         /// Inline service: answers a missing request synchronously and records
-        /// its receipt instead of suspending the attempt. Nil for permit cursors.
-        fileprivate var inline: ((RequestNeeded) throws -> Receipt)?
+        /// its receipt instead of suspending the attempt; nil from it suspends
+        /// as a permit cursor does. Nil for permit cursors.
+        fileprivate var inline: ((RequestNeeded) throws -> Receipt?)?
         public var isSuspended: Bool { pending != nil }
         /// Whether any receipt keeps a resource alive.
         public var retainsResources: Bool { receipts.contains { !$0.resources.isEmpty } }
@@ -71,8 +73,7 @@ public final class OriginalRequestExchange<Input: OriginalExchangeRequest, Resou
                 position += 1; return receipt.response
             }
             let ticket = RequestNeeded(request: request, ordinal: position, owner: owner, revision: receipts.count)
-            if let inline {
-                let receipt = try inline(ticket)
+            if let inline, let receipt = try inline(ticket) {
                 receipts.append(receipt); position += 1; return receipt.response
             }
             pending = ticket; throw ticket
@@ -105,6 +106,26 @@ public final class OriginalRequestExchange<Input: OriginalExchangeRequest, Resou
         cursor.inline = { [unowned self] ticket in
             let permit = try self.claim(ticket)
             try serve(permit)
+            return try self.locked {
+                guard self.status == .open || self.status == .finished,self.active == nil,
+                      self.receipts.count == ticket.ordinal+1 else { throw Boundary.unconsumedReplies }
+                return self.receipts[ticket.ordinal]
+            }
+        }
+        return cursor
+    }
+    /// Inline cursor that serves only the missing requests `accepts` takes; any
+    /// other suspends the attempt as a permit cursor does. `accepts` runs before
+    /// the claim (a claim cannot be undone); `serve` gets this exchange and must
+    /// begin service and answer (or fail) through the permit, as a permit
+    /// service would (CORE_REALTIME M2). The cursor holds the exchange weakly.
+    public func inlineCursor(accepting accepts: @escaping (Request) -> Bool,
+                             _ serve: @escaping (Permit, OriginalRequestExchange) throws -> Void) throws -> Cursor {
+        var cursor = try snapshot.cursor()
+        cursor.inline = { [weak self] ticket in
+            guard let self, accepts(ticket.request) else { return nil }
+            let permit = try self.claim(ticket)
+            try serve(permit, self)
             return try self.locked {
                 guard self.status == .open || self.status == .finished,self.active == nil,
                       self.receipts.count == ticket.ordinal+1 else { throw Boundary.unconsumedReplies }

@@ -71,6 +71,24 @@ def arguments():
             "8", "--script-clock", "gameplay", "--script", script]
 
 
+def sha256(path):
+    import hashlib
+    h = hashlib.sha256()
+    with open(path, "rb") as f:
+        for block in iter(lambda: f.read(1 << 20), b""):
+            h.update(block)
+    return h.hexdigest()
+
+
+def installed_sha256(serial):
+    """SHA-256 of the installed base.apk, or None when the package is not installed."""
+    path = shell(serial, f"pm path {PACKAGE}").strip().removeprefix("package:")
+    if not path.endswith(".apk"):
+        return None
+    out = shell(serial, f"sha256sum {path}").split()
+    return out[0] if out else None
+
+
 def progress(serial):
     text = shell(serial, f"run-as {PACKAGE} cat files/speed/events.jsonl 2>/dev/null")
     return [json.loads(l) for l in text.splitlines() if l.startswith("{")]
@@ -134,6 +152,8 @@ def main():
     o = a.parse_args()
     out = Path(o.out); out.mkdir(parents=True, exist_ok=True)
     s = o.serial
+    if o.apk and installed_sha256(s) == sha256(o.apk):
+        o.apk = None   # already installed: a same-size reinstall needs room for two copies
     if o.apk:
         # -d: builds from older commits have lower version codes (debuggable build).
         r = adb(s, "install", "-r", "-d", o.apk)
@@ -159,6 +179,12 @@ def main():
     if "isKeyguardShowing=true" in shell(s, "dumpsys window"):
         # A swipe lock goes away on request; a secure lock shows its PIN screen and stays.
         shell(s, "wm dismiss-keyguard"); time.sleep(3)
+        # Fallbacks for a swipe lock that ignores the request after a long
+        # sleep: a swipe up, then the MENU key (unlocks a non-secure keyguard).
+        for gesture in ("input swipe 360 1400 360 300 300", "input keyevent 82"):
+            if "isKeyguardShowing=true" not in shell(s, "dumpsys window"):
+                break
+            shell(s, gesture); time.sleep(2)
         if "isKeyguardShowing=true" in shell(s, "dumpsys window"):
             raise SystemExit(f"{s} shows its lock screen: unlock it (the game pauses behind it)")
     try:

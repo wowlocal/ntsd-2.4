@@ -68,7 +68,8 @@ public protocol OriginalApplicationObservedIterationPlatform: OriginalApplicatio
 }
 
 /// One whole Host iteration on its existing owner, with every external request
-/// suspended as a permit. Prepared `Inputs` must leave queue/window/surface/
+/// suspended as a permit unless an `Inline` server takes it inside the attempt.
+/// Prepared `Inputs` must leave queue/window/surface/
 /// lifecycle arrays empty; menu initialization values remain explicit inputs.
 public final class OriginalApplicationObservedIteration<Platform: OriginalApplicationObservedIterationPlatform> {
     public typealias Host = OriginalApplicationHostSession<Platform>
@@ -78,6 +79,22 @@ public final class OriginalApplicationObservedIteration<Platform: OriginalApplic
         case request(Exchange.Permit)
         case advanced(Host.Outcome)
     }
+    /// Requests served inside the attempt instead of suspending it
+    /// (CORE_REALTIME M2): `accepts` picks them and `serve` begins service and
+    /// answers or fails through the exchange. It must not call this driver or
+    /// the Host (they throw `reentrantAttempt`) or touch the platform. Every
+    /// other request suspends as a permit.
+    public struct Inline {
+        public let accepts: (Exchange.Request) -> Bool
+        public let serve: (Exchange.Permit, Exchange) throws -> Void
+        public init(accepts: @escaping (Exchange.Request) -> Bool,serve: @escaping (Exchange.Permit, Exchange) throws -> Void) {
+            self.accepts = accepts;self.serve = serve
+        }
+    }
+    /// The cursor stays in the committed or pending platform after the attempt;
+    /// the attempt disarms this on exit so a stored cursor suspends and does not
+    /// keep the server alive.
+    private final class Gate { var inline: Inline?; init(_ inline: Inline) { self.inline = inline } }
     private let host: Host, sequence: UInt64, exchange = Exchange(), lock = NSRecursiveLock()
     private var inFlight = false
     public init(host: Host) { self.host = host;sequence = host.committedSequence }
@@ -99,9 +116,15 @@ public final class OriginalApplicationObservedIteration<Platform: OriginalApplic
         bodyProduced: (OriginalFrontScreenBody.StartupResult) throws -> Void = { _ in },
         beforeCommit: (Host.Session.Loop, Host.Session.State) throws -> Void = { _,_ in },
         beforePublication: (Platform) throws -> Void = { _ in },
-        network: Bool = false) throws -> Outcome {
+        network: Bool = false,inline: Inline? = nil) throws -> Outcome {
         try attempt {
-            let cursor = try exchange.snapshot.cursor()
+            let gate = inline.map(Gate.init)
+            defer { gate?.inline = nil }
+            let cursor = try gate.map { gate in
+                try exchange.inlineCursor(accepting:{ gate.inline?.accepts($0) ?? false }) { permit,exchange in
+                    try gate.inline!.serve(permit,exchange)
+                }
+            } ?? exchange.snapshot.cursor()
             func graphics(_ q: OriginalMenuGraphicsRequest,_ p: Platform) throws -> OriginalMenuGraphicsRequest.Reply {
                 guard case .graphics(let r) = try p.iterationDelivery.response(for:.graphics(q)) else { throw Boundary.invalidResponse }
                 return r

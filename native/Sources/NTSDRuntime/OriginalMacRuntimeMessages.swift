@@ -242,15 +242,28 @@ public struct OriginalMacRuntimeKey: Equatable {
         }
     }
     public func serve<P>(_ permit: OriginalApplicationIterationExchange.Permit,on driver: OriginalApplicationObservedIteration<P>) throws {
+        try serve(permit,begin:{ try driver.beginService($0) },reply:{ try driver.answer($0,response:$1) },
+                  fail:{ try driver.fail($0,diagnostic:$1) })
+    }
+    /// The same service through the exchange, for a request served inside the
+    /// Core attempt (CORE_REALTIME M2).
+    public func serve(_ permit: OriginalApplicationIterationExchange.Permit,on exchange: OriginalApplicationIterationExchange) throws {
+        try serve(permit,begin:{ try exchange.beginService($0) },reply:{ try exchange.answer($0,response:$1) },
+                  fail:{ try exchange.fail($0,diagnostic:$1) })
+    }
+    private func serve(_ permit: OriginalApplicationIterationExchange.Permit,
+                       begin: (OriginalApplicationIterationExchange.Permit) throws -> Void,
+                       reply: (OriginalApplicationIterationExchange.Permit,OriginalApplicationIterationExchange.Response) throws -> Void,
+                       fail: (OriginalApplicationIterationExchange.Permit,String) throws -> Void) throws {
         if case .graphics = permit.request { throw Boundary.unsupported("graphics family") }
-        try driver.beginService(permit)
+        try begin(permit)
         do {
             switch permit.request {
-            case .queue(let q): try driver.answer(permit,response:.queue(try answer(q)))
-            case .windowDefault(let q): try driver.answer(permit,response:.windowDefault(try answer(q)))
+            case .queue(let q): try reply(permit,.queue(try answer(q)))
+            case .windowDefault(let q): try reply(permit,.windowDefault(try answer(q)))
             case .graphics,.graph,.network,.socket,.client,.networkExit: throw Boundary.unsupported("graphics/graph/network/socket/client/exit family")
             }
-        } catch { try driver.fail(permit,diagnostic:String(reflecting:error)); throw error }
+        } catch { try fail(permit,String(reflecting:error)); throw error }
     }
 }
 

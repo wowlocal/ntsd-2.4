@@ -221,6 +221,65 @@ import XCTest
             "front operations",started.display.frontOperationCount,"capture",capture.path)
     }
 
+    /// Message-queue requests served inside the attempt (CORE_REALTIME M2) give
+    /// the same counters, delivered messages, clock calls, committed globals,
+    /// commits and frames as serving every request as a permit, the same request
+    /// bounds and the same failure, while preparing fewer attempts.
+    func testInlineQueueServingMatchesPermitService() throws {
+        func run(inline: Bool,failAt: Int? = nil) throws -> (steps: [String],frame: Data?,prepares: Int,clockCalls: Int) {
+            let root = FileManager.default.temporaryDirectory.appendingPathComponent("ntsd-inline-\(UUID().uuidString)",isDirectory:true)
+            defer { try? FileManager.default.removeItem(at:root) }
+            let (started,package) = try startup(root)
+            while try started.host.takeCommitted() != nil {}
+            var now: UInt32 = 5_000_000,clockCalls = 0,prepares = 0
+            let menu = try OriginalMacRuntimeMenu(started,inputs:package,clock:{
+                clockCalls += 1
+                if let failAt,clockCalls == failAt { throw Stop.limit }
+                now &+= 7; return now
+            })
+            // Called once per prepared attempt; a fixed value instead of the Mac's key state.
+            menu.capsLock = { prepares += 1; return 0 }
+            menu.servesQueueInline = inline
+            var steps: [String] = []
+            func record(_ kind: String) {
+                var globals = Hasher()
+                globals.combine(started.host.snapshot.session?.state.full.bytes ?? [])
+                steps.append("\(kind) \(menu.requests) \(menu.textRequests) \(menu.emptyBlits) \(menu.iterations) \(clockCalls) "
+                    + "\(String(describing:menu.lastRequest)) \(menu.messages.delivered.map(\.message)) \(menu.messages.sleeps) "
+                    + "\(started.host.committedSequence) \(started.display.frontOperationCount) \(globals.finalize())")
+            }
+            func step() throws -> Bool {
+                switch try menu.step() {
+                case .committed: record("committed"); return true
+                case .loading: record("loading"); return false
+                }
+            }
+            do {
+                for _ in 0..<400 where try XCTUnwrap(started.host.snapshot.session).state.settings == nil { guard try step() else { throw Stop.limit } }
+                for _ in 0..<5 { guard try step() else { throw Stop.limit } }
+                let key = try XCTUnwrap(OriginalMacRuntimeKey.table[0x00])
+                menu.messages.key(key,down:true,characters:"a"); menu.messages.key(key,down:false)
+                for _ in 0..<20 where !menu.messages.queue.isEmpty { if !(try step()) { break } }
+            } catch { record("failed \(error)"); return (steps,nil,prepares,clockCalls) }
+            for bound in [0,1,2] {
+                do { _ = try menu.step(maximumRequests:bound); record("unbounded \(bound)") } catch { record("bound \(bound) \(error)") }
+            }
+            return (steps,try started.windows.snapshotPNG(started.window),prepares,clockCalls)
+        }
+        let inline = try run(inline:true),permits = try run(inline:false)
+        XCTAssertEqual(inline.steps.count,permits.steps.count)
+        for (a,b) in zip(inline.steps,permits.steps) { XCTAssertEqual(a,b) }
+        XCTAssertEqual(inline.frame,permits.frame)
+        XCTAssertTrue(inline.steps.suffix(3).allSatisfy { $0.hasPrefix("bound") })
+        XCTAssertLessThan(inline.prepares,permits.prepares,"queue requests were served inside the attempt")
+        // A clock failing at the same call (half way through the run) fails the
+        // same way in both modes.
+        let failAt = max(2,inline.clockCalls/2)
+        let a = try run(inline:true,failAt:failAt),b = try run(inline:false,failAt:failAt)
+        XCTAssertEqual(a.steps,b.steps)
+        XCTAssertTrue(a.steps.last?.hasPrefix("failed") == true)
+    }
+
     /// The end of the menu track: EC_COMPLETE and the registered 0x400 go through
     /// PeekMessage/DispatchMessage into the recovered WndProc graph callback.
     func testGraphNotificationRestartsTheMenuTrack() throws {
