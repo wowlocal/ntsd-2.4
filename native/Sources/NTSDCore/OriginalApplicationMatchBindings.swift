@@ -1,3 +1,5 @@
+import Foundation
+
 /// Translate only the recovered World catalog/Actor table and Actor Object
 /// references between logical application tokens and the shared match ordinals.
 /// Ordinal zero is a live first owner. All other bytes and masks stay intact.
@@ -9,6 +11,34 @@ public struct OriginalApplicationMatchBindings {
     }
     public let catalogToken: UInt32, actorTokens: [UInt32], objectTokens: [UInt32]
     private let actors: [UInt32:UInt32], objects: [UInt32:UInt32]
+    /// The last session/model pair of each actor record (CORE_REALTIME R3).
+    /// read and store rewrite only the Object reference at +0x368, in opposite
+    /// directions over unique tokens, so a record equal to one side of a pair
+    /// converts to the other side with no error; equality checks buffer
+    /// identity first, so an actor unchanged since the last read or store is
+    /// neither copied nor rewritten. Copies of these bindings share the pairs.
+    private let pairs: ActorPairs
+    final class ActorPairs {
+        private let lock = NSLock()
+        private var stored = [OriginalStateRecord?](repeating:nil,count:400)
+        private var model = [OriginalStateRecord?](repeating:nil,count:400)
+        /// The model form of `record` when it equals the stored side of pair `i`.
+        func model(_ i: Int,for record: OriginalStateRecord) -> OriginalStateRecord? {
+            lock.lock(); defer { lock.unlock() }
+            guard let s = stored[i],s == record else { return nil }
+            return model[i]
+        }
+        /// The stored form of `record` when it equals the model side of pair `i`.
+        func stored(_ i: Int,for record: OriginalStateRecord) -> OriginalStateRecord? {
+            lock.lock(); defer { lock.unlock() }
+            guard let m = model[i],m == record else { return nil }
+            return stored[i]
+        }
+        func set(_ i: Int,stored s: OriginalStateRecord,model m: OriginalStateRecord) {
+            lock.lock(); defer { lock.unlock() }
+            stored[i] = s; model[i] = m
+        }
+    }
 
     public init(catalogToken: UInt32, actorTokens: [UInt32], objectTokens: [UInt32]) throws {
         let all = [catalogToken]+actorTokens+objectTokens
@@ -17,6 +47,7 @@ public struct OriginalApplicationMatchBindings {
         self.catalogToken = catalogToken;self.actorTokens = actorTokens;self.objectTokens = objectTokens
         actors = Dictionary(uniqueKeysWithValues:actorTokens.enumerated().map { ($0.element,UInt32($0.offset)) })
         objects = Dictionary(uniqueKeysWithValues:objectTokens.enumerated().map { ($0.element,UInt32($0.offset)) })
+        pairs = ActorPairs()
     }
 
     /// Built once per loaded session (CORE_REALTIME R1); the same value or
@@ -52,11 +83,15 @@ public struct OriginalApplicationMatchBindings {
             guard let ordinal = actors[token] else { throw Boundary.actor(token) }
             try world.write(ordinal,at:0x194+seat*4)
         }
-        let records = try actorTokens.map { token -> OriginalStateRecord in
-            var record = try actor(token,in:state.memory)
-            let object = try record.integer(at:0x368,as:UInt32.self)
+        let records = try actorTokens.indices.map { i -> OriginalStateRecord in
+            let record = try actor(actorTokens[i],in:state.memory)
+            if let converted = pairs.model(i,for:record) { return converted }
+            var converted = record
+            let object = try converted.integer(at:0x368,as:UInt32.self)
             guard let ordinal = objects[object] else { throw Boundary.object(object) }
-            try record.write(ordinal,at:0x368);return record
+            try converted.write(ordinal,at:0x368)
+            pairs.set(i,stored:record,model:converted)
+            return converted
         }
         return try .init(catalog:catalog,world:world,actors:records,
             globals:State.slice(state.full,0,OriginalMatchPreparation.globalSize),
@@ -100,11 +135,19 @@ public struct OriginalApplicationMatchBindings {
         for (i,token) in actorTokens.enumerated() {
             _ = try actor(token,in:state.memory)
             guard memory.allocations[token] == state.memory.allocations[token] else { throw Boundary.conflictingActor(token) }
-            var record = match.actors[i]
-            let ordinal = try record.integer(at:0x368,as:UInt32.self)
-            guard ordinal < objectTokens.count else { throw Boundary.ordinal(ordinal) }
-            try record.write(objectTokens[Int(ordinal)],at:0x368)
-            memory.allocations[token] = .init(storage:record)
+            let record: OriginalStateRecord
+            if let converted = pairs.stored(i,for:match.actors[i]) { record = converted } else {
+                var converted = match.actors[i]
+                let ordinal = try converted.integer(at:0x368,as:UInt32.self)
+                guard ordinal < objectTokens.count else { throw Boundary.ordinal(ordinal) }
+                try converted.write(objectTokens[Int(ordinal)],at:0x368)
+                pairs.set(i,stored:converted,model:match.actors[i])
+                record = converted
+            }
+            // An entry already holding this record is left as it is (the same
+            // value), so an unchanged actor does not copy the allocation table.
+            let allocation = OriginalMenuPresentationMemory.Allocation(storage:record)
+            if memory.allocations[token] != allocation { memory.allocations[token] = allocation }
         }
         next.memory = memory
         try next.replace(0,match.globals);try next.replace(0xbb00,world)

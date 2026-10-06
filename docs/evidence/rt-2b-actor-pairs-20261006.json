@@ -1,0 +1,124 @@
+{
+ "study": "docs/research/CORE_REALTIME.md",
+ "phase": "2b (narrow first step toward DATAFLOW R3; the code comment calls it R3)",
+ "date": "2026-10-06",
+ "change": "OriginalApplicationMatchBindings keeps each actor record's last session/model pair (ActorPairs: 400 slots per side, NSLock, shared by copies of the per-session memoized bindings). read returns the cached model form when the session record equals the cached stored side; store returns the cached stored form when the model record equals the cached model side, and leaves an allocation entry alone when it already equals the new one. Pairs are set only after a successful conversion.",
+ "phone": {
+  "baseline": "phase 2a: 10.47 / 10.48 ticks/s (rt2a-run1/2)",
+  "after": [
+   {
+    "label": "rt3-run1",
+    "serial": "R58R36F7VFD",
+    "runSeconds": 419,
+    "peakResidentMB": 1229,
+    "ticksPerSecond": 11.21,
+    "busySeconds": 285.4,
+    "bodies": 1800
+   },
+   {
+    "label": "rt3-run2",
+    "serial": "R58R36F7VFD",
+    "runSeconds": 416,
+    "peakResidentMB": 1292,
+    "ticksPerSecond": 11.2,
+    "busySeconds": 284.12,
+    "bodies": 1800
+   }
+  ],
+  "note": "rt3-run1 measured by another session on this machine (same harness, apks/rt3.apk built from the R3 tree); rt3-run2 by this loop, alternating with the phase 1c APK. An earlier rt3-run1 attempt at 07:xx returned no progress events (lock screen; the row with error is kept in speed.jsonl).",
+  "result": "11.21 / 11.20 ticks/s against 10.47 / 10.48 for phase 2a (+7.0%)"
+ },
+ "mac": {
+  "method": "frozen headless binaries in rotation, computer-vs script, no captures (scratchpad mac_speed.py); the Mac reaches the game's paced rate, so busySeconds (game-thread busy time) is the measure",
+  "rows": [
+   {
+    "label": "rt2a2",
+    "round": 0,
+    "exit": 0,
+    "ticksPerSecond": 37.67,
+    "busySeconds": 12.98,
+    "bodies": 1800
+   },
+   {
+    "label": "rt3",
+    "round": 0,
+    "exit": 0,
+    "ticksPerSecond": 38.18,
+    "busySeconds": 11.99,
+    "bodies": 1800
+   },
+   {
+    "label": "rt2a2",
+    "round": 1,
+    "exit": 0,
+    "ticksPerSecond": 39.63,
+    "busySeconds": 12.06,
+    "bodies": 1800
+   },
+   {
+    "label": "rt3",
+    "round": 1,
+    "exit": 0,
+    "ticksPerSecond": 40.27,
+    "busySeconds": 11.18,
+    "bodies": 1800
+   },
+   {
+    "label": "rt2a2",
+    "round": 2,
+    "exit": 0,
+    "ticksPerSecond": 39.64,
+    "busySeconds": 11.99,
+    "bodies": 1800
+   },
+   {
+    "label": "rt3",
+    "round": 2,
+    "exit": 0,
+    "ticksPerSecond": 40.19,
+    "busySeconds": 11.18,
+    "bodies": 1800
+   }
+  ],
+  "result": "busy seconds median 12.06 (2a, 5b8fab93) -> 11.18 (R3, 5f7e2a55): -7.3%"
+ },
+ "emulator": {
+  "rows": [
+   {
+    "label": "emu-rt3",
+    "serial": "emulator-5554",
+    "runSeconds": 81,
+    "peakResidentMB": 1702,
+    "ticksPerSecond": 36.31,
+    "busySeconds": 16,
+    "bodies": 1800
+   },
+   {
+    "label": "emu-rt3-run2",
+    "serial": "emulator-5554",
+    "runSeconds": 76,
+    "peakResidentMB": 1705,
+    "ticksPerSecond": 37.51,
+    "busySeconds": 16,
+    "bodies": 1800
+   },
+   {
+    "label": "emu-rt3-run3",
+    "serial": "emulator-5554",
+    "runSeconds": 76,
+    "peakResidentMB": 1704,
+    "ticksPerSecond": 37.58,
+    "busySeconds": 15,
+    "bodies": 1800
+   }
+  ],
+  "note": "R3 APK alone; at the paced rate (busy seconds rounded to integers by the harness then); no 2a APK to compare"
+ },
+ "gates": {
+  "headless": "vs equal; 1,832 frames identical to m1-frames-ref (frozen binary 5f7e2a55, run rt-3, re-compared from the T7 archive); all 10 scenarios equal (rt-3-all)",
+  "AppKit": "vs and playback equal (frozen app 97d5b4cb); 3,960 frames identical to the phase 2a AppKit run",
+  "Core suites": "87 suites, 243 tests, 0 failures (release test build swiftpm-test-release-b, native diff 97ef3666...; MatchBindings.swift unchanged since 07:13, before that build at 07:24)",
+  "runs archived": "T7 ntsd-2.4-artifacts/crossplatform-scratch-20261006 (rt-3-all.tar, small-0007.tar)"
+ },
+ "review": "independent read-only review: OK. Equal records imply equal conversions (objects and objectTokens are private lets set with the cache and are exact inverses), failed conversions never populate the cache, record and Allocation equality cover everything observable, a skipped assignment keeps the existing key and order. Notes: the DATAFLOW R3 label names a larger change (documented there); the cache can make gameplay's first write to a just-read actor copy its record; the 400 matches the init guard."
+}

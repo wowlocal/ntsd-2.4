@@ -70,3 +70,9 @@ by the Host API and the Core tests, not by play.
 | R6 | Move the committed state into the attempt (undo journal / no-retry mode) | high; breaks the Host retry contract: the user's decision |
 
 Order: R1, R2, then R3 with R4 as one reviewed storage-model change, then R5.
+
+Phase 2b (2026-10-06) took a narrow first step toward R3 without changing who
+owns the state: `MatchBindings` keeps each actor's last session/model record
+pair (`ActorPairs`; the code comment calls it R3), so an actor unchanged since
+the last read or store is neither converted nor rewritten. The authoritative
+model, the actor mirror and the deferred store remain open as R3.
