@@ -37,9 +37,40 @@ public struct OriginalApplicationPoolSession {
         case preceding(Catalog.Operation), allocation(Allocation), menu(Session.Effect)
     }
     public struct PendingInput {
-        public let entry: Catalog.PendingPool,loaded: OriginalInitialLoading,state: Session.State
-        public let allocations: [Allocation],actorTokens: [UInt32],interfaceTokens: [UInt32],interfaceSurfaces: [UInt32]
-        public let operations: [Operation],graphics: [OriginalApplicationGraphics.Command]
+        /// The loaded session's values, built once and never changed, in one
+        /// shared object: every copy of the owners holding this input (menu
+        /// session, bootstrap, continuations; ~40 per game cycle) retains one
+        /// reference instead of about 250 (CORE_REALTIME phase 4a,
+        /// CORE_REALTIME_COPIES M1). Reads borrow through `_read`.
+        private final class Storage {
+            let entry: Catalog.PendingPool,loaded: OriginalInitialLoading,state: Session.State
+            let allocations: [Allocation],actorTokens: [UInt32],interfaceTokens: [UInt32],interfaceSurfaces: [UInt32]
+            let operations: [Operation],graphics: [OriginalApplicationGraphics.Command]
+            let derived = Derived()
+            init(entry: Catalog.PendingPool,loaded: OriginalInitialLoading,state: Session.State,allocations: [Allocation],
+                 actorTokens: [UInt32],interfaceTokens: [UInt32],interfaceSurfaces: [UInt32],operations: [Operation],
+                 graphics: [OriginalApplicationGraphics.Command]) {
+                self.entry = entry;self.loaded = loaded;self.state = state;self.allocations = allocations
+                self.actorTokens = actorTokens;self.interfaceTokens = interfaceTokens;self.interfaceSurfaces = interfaceSurfaces
+                self.operations = operations;self.graphics = graphics
+            }
+        }
+        private let storage: Storage
+        init(entry: Catalog.PendingPool,loaded: OriginalInitialLoading,state: Session.State,allocations: [Allocation],
+             actorTokens: [UInt32],interfaceTokens: [UInt32],interfaceSurfaces: [UInt32],operations: [Operation],
+             graphics: [OriginalApplicationGraphics.Command]) {
+            storage = .init(entry:entry,loaded:loaded,state:state,allocations:allocations,actorTokens:actorTokens,
+                interfaceTokens:interfaceTokens,interfaceSurfaces:interfaceSurfaces,operations:operations,graphics:graphics)
+        }
+        public var entry: Catalog.PendingPool { _read { yield storage.entry } }
+        public var loaded: OriginalInitialLoading { _read { yield storage.loaded } }
+        public var state: Session.State { _read { yield storage.state } }
+        public var allocations: [Allocation] { _read { yield storage.allocations } }
+        public var actorTokens: [UInt32] { _read { yield storage.actorTokens } }
+        public var interfaceTokens: [UInt32] { _read { yield storage.interfaceTokens } }
+        public var interfaceSurfaces: [UInt32] { _read { yield storage.interfaceSurfaces } }
+        public var operations: [Operation] { _read { yield storage.operations } }
+        public var graphics: [OriginalApplicationGraphics.Command] { _read { yield storage.graphics } }
         /// Per-session memos shared by copies (CORE_REALTIME R1, phase 2c).
         /// `bindings` and `ranges` derive only from the immutable fields above
         /// and are built once per loaded session instead of in every game
@@ -50,7 +81,7 @@ public struct OriginalApplicationPoolSession {
         /// checks its kept result against the given source on every call and
         /// keeps nothing on failure. None of them calls another (the lock is
         /// not recursive).
-        let derived = Derived()
+        var derived: Derived { storage.derived }
         final class Derived {
             private let lock = NSLock()
             private var bindings: Result<OriginalApplicationMatchBindings,Error>?

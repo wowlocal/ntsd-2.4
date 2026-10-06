@@ -1,0 +1,43 @@
+{
+ "study": "docs/research/CORE_REALTIME.md",
+ "phase": "4a (immutable loaded-session data in one shared object; CORE_REALTIME_COPIES M1)",
+ "date": "2026-10-06",
+ "finding": "docs/research/CORE_REALTIME_COPIES.md: a static copy map (read-only analyst) finds OriginalApplicationPoolSession.PendingInput (built once per loaded session, all fields let) holding ~250 retained references and copied ~40 times per game cycle inside the menu session, bootstrap and continuations, ~10k of ~17k retain/release pairs per cycle; a Mac sample of the 2d build attributed reference counting (24.6% of busy main-thread time) to MenuSession 3.0% and Bootstrap 2.0% among others.",
+ "change": "PendingInput keeps its nine fields and its Derived memo in one private final class Storage; the struct holds only that reference, keeps an internal init with the old memberwise labels and exposes the same public fields through _read accessors (borrows, no copy); derived is computed from the storage.",
+ "mac sample": "same 25 s gameplay window, frozen 2d a96813de vs 4a 013b6e77 (Mac under other load): busy main-thread samples 2,389 -> 1,893; reference counting 24.6% -> 22.4% of busy; MenuSession 3.0% -> 1.3%, Bootstrap 2.0% -> 0.7%",
+ "phone": {
+  "baseline": "phase 2d: 14.85 / 14.69 ticks/s",
+  "after": [
+   {
+    "label": "rt4a-run1",
+    "serial": "R58R36F7VFD",
+    "runSeconds": 354,
+    "peakResidentMB": 1316,
+    "ticksPerSecond": 16.01,
+    "busySeconds": 234.99,
+    "bodies": 1800
+   },
+   {
+    "label": "rt4a-run2",
+    "serial": "R58R36F7VFD",
+    "runSeconds": 355,
+    "peakResidentMB": 1222,
+    "ticksPerSecond": 16.04,
+    "busySeconds": 234.66,
+    "bodies": 1800
+   }
+  ],
+  "result": "16.01 / 16.04 ticks/s (+8.5%); busy seconds 239 -> 235 (most of the saved copies are in the menu step, which busySeconds does not count)",
+  "note": "apks/rt4a.apk built from native diff d8026ad2 (2c + 2d + 4a: the committed 4a content)"
+ },
+ "emulator": {
+  "result": "vs equal, 1,832 frames identical to the earlier Android app run"
+ },
+ "gates": {
+  "headless": "vs equal, 1,832 frames identical (frozen 013b6e77, rt-4a)",
+  "all 10": "all 10 scenarios equal, 1,832 frames identical (rt-4a-all)",
+  "AppKit": "vs and playback equal; 3,960 frames identical to the 2d AppKit run (rt-4a-appkit)",
+  "Core suites": "release test build swiftpm-test-release-c of native diff d8026ad2 against 86d5e5d (2c + 2d + 4a; the committed 4a content on top of f3cf76a): the 94-suite set, 253 tests, 0 failures"
+ },
+ "review": "independent read-only review: OK. Every former field was an immutable let and PendingInput has no conformances, key paths or identity checks; one Derived per init as before (single construction site); the explicit init keeps the memberwise labels; the _read accessors borrow lets of a final class (no copy, no dynamic exclusivity check); Storage is immutable apart from Derived's own lock. Notes: first _read accessors in the package (underscored but supported by every toolchain used); cross-module reads go through a coroutine call (not on hot paths)."
+}
