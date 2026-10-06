@@ -108,7 +108,7 @@ public enum OriginalRuntimeSessionBoundary: Error, Equatable {
     private var networkTrace: FileHandle?
     private var networkStateCycles: Set<Int> = []
     private var committed = 0, steps = 0, gameplayClock: (steps: Int,committed: Int)?,
-        busy = 0.0, waited = 0
+        busy = 0.0, waited = 0, menuBusy = 0.0, menuSteps = 0
     public private(set) var stopped = false
     private var music: OriginalMacMusicOutput?
     /// DirectSound buffer voices (APPLICATION_SOUND_EFFECTS_PLAN.md) and their
@@ -296,7 +296,12 @@ public enum OriginalRuntimeSessionBoundary: Error, Equatable {
         guard let menu,let started,!stopped else { return }
         let sleeps = menu.messages.sleeps.count
         do {
-            switch try menu.step() {
+            // The message-loop iteration's own time, reported with `busySeconds`
+            // (the loaded cycle's) so a tick's cost splits by iteration kind.
+            let stepBegin = Date()
+            let stepped = try menu.step()
+            menuBusy += Date().timeIntervalSince(stepBegin); menuSteps += 1
+            switch stepped {
             case .committed(_,let result):
                 if case .quit(let code) = result {
                     // The loop returned WM_QUIT's wParam: WinMain ends.
@@ -393,7 +398,7 @@ public enum OriginalRuntimeSessionBoundary: Error, Equatable {
                     if gameplayBodies % 300 == 0 {
                         var event: [String:Any] = ["event":"progress","gameplayBodies":gameplayBodies,"cycles":cycles,"iterations":committed,
                             "characterAI":loading.counts.characterAI,"objectInputs":loading.counts.objectInputs,"uptime":ProcessInfo.processInfo.systemUptime,
-                            "busySeconds":busy,"waitedMilliseconds":waited,"lastSleeps":Array(loading.sleeps.suffix(6)),"music":musicReport(),
+                            "busySeconds":busy,"menuBusySeconds":menuBusy,"menuSteps":menuSteps,"waitedMilliseconds":waited,"lastSleeps":Array(loading.sleeps.suffix(6)),"music":musicReport(),
                             "sounds":soundReport()]
                         if gameplayBodies % every == 0,let i = arguments.firstIndex(of:"--body-captures"),i+1 < arguments.count {
                             let path = "\(arguments[i+1])/b\(String(format:"%06d",gameplayBodies)).png"

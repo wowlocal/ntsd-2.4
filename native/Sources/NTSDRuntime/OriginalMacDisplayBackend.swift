@@ -1114,6 +1114,18 @@ extension OriginalMacDisplayBackend {
         guard prepared.identity === identity else { throw Boundary.foreignPreparation }
         guard !prepared.once.used else { throw Boundary.repeatedPreparation }
         let action = try validateFront(prepared.request);prepared.once.used = true
+        return try serveFront(action,request:prepared.request)
+    }
+    /// `performFront(prepareFront(q))` validating once instead of twice:
+    /// nothing runs between those two calls, and validation changes no state a
+    /// second validation or the perform could observe (its only mutation,
+    /// applying recorded pixel writes, is idempotent), so both give the same
+    /// action or the same error (CORE_REALTIME 4g; the committed-batch replay
+    /// draws this way).
+    public func prepareAndPerformFront(_ q: OriginalFrontScreenEvent) throws -> FrontServed {
+        try serveFront(validateFront(q),request:q)
+    }
+    private func serveFront(_ action: FrontAction,request: OriginalFrontScreenEvent) throws -> FrontServed {
         let owners: [any OriginalApplicationStartupResource],response: OriginalLibSurfaceText.Response
         switch action {
         case let .fill(target,color):
@@ -1174,7 +1186,7 @@ extension OriginalMacDisplayBackend {
                 textDC = nil;owners = [dc.surface];response = .init(result:0)
             }
         }
-        frontOperationCount += 1; if keepsOperationLogs { frontOperations.append(.init(request:prepared.request,response:response)) }
+        frontOperationCount += 1; if keepsOperationLogs { frontOperations.append(.init(request:request,response:response)) }
         return .init(response:response,resources:owners)
     }
 }

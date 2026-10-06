@@ -136,7 +136,8 @@ while measuring; restore `svc power stayon false` when the loop pauses or stops.
 | 2026-10-06 | Phase 1g: known-mask full flag (render thread) | The display backend's known mask keeps a flag meaning every pixel is known (set by a whole fill, a whole unkeyed copy of a full source or `setAll`, cleared by any bit-clearing write, recomputed after recorded image writes); the render thread's per-row `allKnown`/`setRange` work (13.9% of its samples) returns at once while it is set, which in the live app is always. Phone 19.19/19.10 ticks per second (main thread unchanged); **render thread −7.4% per tick** (render/main samples 0.606 → 0.561, ~32 → ~29.6 ms). All 10 scenarios and AppKit equal, frames identical; 13 suites incl. a new flag regression test; review OK | [evidence](../evidence/rt-1g-known-flag-20261006.json) | 11bb598 |
 | 2026-10-06 | Phase 4d: no drawing detail nobody observes | On every gameplay tick each bitmap draw built read and clip records and the drawing helpers built draw and rectangle events, all no-ops in every session's `front`, for observers production never attaches (4.7% of the main thread for reads alone). A `detail` parameter (default true) lets the runtime, which passes no observer, skip them; stage events and blits are never gated. **19.19/19.10 → 19.82/19.78 ticks per second** (+3.4%; ~50.5 ms per tick). All 10 scenarios and AppKit equal, frames identical; a side-by-side test of every active gameplay tick with and without detail; 54 suites; review OK | [evidence](../evidence/rt-4d-draw-detail-20261006.json) | 29a15de |
 | 2026-10-06 | Phase 4e: the random table in one copy | Fourteen sites (AI, physics, links, contacts, hits, control, post-draw, mission, war, music…) rebuilt the 3000-byte random table on every random draw with 3000 checked single-byte reads; `OriginalRandom.table` copies it at once when every byte is in range and defined and otherwise runs the same reads (same first error). AI draw 4.5% → 0.9% of the main thread. 19.82/19.78 → 20.30/19.94 ticks per second (~+1%: the harness's virtual clock adds ~16 ms of the game's own sleeping to every tick). All 10 scenarios and AppKit equal, frames identical; 146 suites and a new table test; review OK | [evidence](../evidence/rt-4e-random-table-20261006.json) | 6d06ad3 |
-| 2026-10-06 | Phase 4f: the presentation input built directly | The runtime built the gameplay session's `OriginalMenuPresentationInput` every tick through JSONSerialization and JSONDecoder (2.6% of the main thread) for want of a public initializer; it now has one and the runtime builds the same values directly. 20.30/19.94 → 20.39/20.28/20.35 ticks per second (+1.4%); compute per tick main 30.4 ms, render 22.2 ms; real clock 30.25 ticks per second. All 10 scenarios and AppKit equal, frames identical; 35 suites and the 4e review's extra table cases | [evidence](../evidence/rt-4f-presentation-input-20261006.json) | this commit |
+| 2026-10-06 | Phase 4f: the presentation input built directly | The runtime built the gameplay session's `OriginalMenuPresentationInput` every tick through JSONSerialization and JSONDecoder (2.6% of the main thread) for want of a public initializer; it now has one and the runtime builds the same values directly. 20.30/19.94 → 20.39/20.28/20.35 ticks per second (+1.4%); compute per tick main 30.4 ms, render 22.2 ms; real clock 30.25 ticks per second. All 10 scenarios and AppKit equal, frames identical; 35 suites and the 4e review's extra table cases | [evidence](../evidence/rt-4f-presentation-input-20261006.json) | e4b89f0 |
+| 2026-10-07 | Phase 4g: each replayed draw validated once; menu-step timing | `prepareFront` validated every draw and discarded the result before `performFront` validated it again; the committed-batch replay now uses `prepareAndPerformFront` (one validation). The progress events also time the message-loop iteration, and the harness reports the tick split. Phone: complete 22.5 → 22.3/22.4 ms, main 30.7 → 30.4/30.6 ms per tick (within variation; committed as strictly less work). Split: loaded cycle 22.3 ms + 4.12 iterations × 1.51 ms + ~2 ms. All 10 scenarios and AppKit equal, frames identical; 13 suites incl. a side-by-side test of both paths; review OK | [evidence](../evidence/rt-4g-single-validation-20261007.json) | this commit |
 
 ## Next task
 
@@ -152,8 +153,17 @@ ticks per second under the virtual clock undercount compute savings (4e, 4f:
 1500) and has `--real-clock`; the [budget](CORE_REALTIME_BUDGET.md)'s frame
 time becomes compute per tick (to be rewritten with the first measurements).
 
-In flight:
+Tier 2 ([design](CORE_REALTIME_TIER2.md), 16 ms per thread; main 30.4 ms
+and render 22.0 ms per tick under the virtual clock after 4g), in order:
 
-- Then, by compute per tick: FreeType glyph masks (2.5%), the Host step
-  closure (3.6%) and `store` (4.0%), R3 stages 2–4, R5/M3, the render
-  thread (copy loop and frame copy, ~29 ms per tick).
+- **A0** (in flight): no merged copy of `full` for an absent `beforeCommit`
+  observer (`observesCommit: false` from the runtime); phone main 30.4/30.6 →
+  29.9/30.3 ms, iteration 1.51 → 1.44 ms; review OK; open: its suites and the
+  on/off test (fixed setup), scenarios, AppKit.
+- **A1 + A2** (written, to apply after A0's test build): idle message-loop
+  iterations through a Host kernel (`stepIdle`, `resumeIdleFirst`) with the
+  whole step as fallback and reference; the iteration delivery's cursor
+  updated in place. Estimate ~3 ms per tick.
+- Then B1 (R3 stages 3–4: `full` in parts), B2 (R5/M3 in-place nested
+  candidates), B3 (one loaded attempt per tick), the replay check, R3 stage
+  2; then the gameplay body and the render thread.

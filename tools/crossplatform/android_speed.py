@@ -241,6 +241,15 @@ def main():
         first, last = marks[0], marks[-1]
         row.update(ticksPerSecond=round((last["gameplayBodies"] - first["gameplayBodies"]) / (last["uptime"] - first["uptime"]), 2),
                    busySeconds=round(last.get("busySeconds", 0), 2), bodies=last["gameplayBodies"])
+        ticks = last["gameplayBodies"] - first["gameplayBodies"]
+        if ticks > 0 and "busySeconds" in first:
+            # Wall time inside the loaded cycle (the gameplay body) and inside
+            # message-loop iterations, from the game's own progress events.
+            row["completeMsPerTick"] = round(1000 * (last["busySeconds"] - first["busySeconds"]) / ticks, 1)
+        if ticks > 0 and "menuSteps" in first and last["menuSteps"] > first["menuSteps"]:
+            steps = last["menuSteps"] - first["menuSteps"]
+            row["menuMsPerStep"] = round(1000 * (last["menuBusySeconds"] - first["menuBusySeconds"]) / steps, 2)
+            row["menuStepsPerTick"] = round(steps / ticks, 2)
         if cpu_a and cpu_b and cpu_b[0] > cpu_a[0]:
             wall = cpu_b[0] - cpu_a[0]
             share = {name: (cpu_b[1][name] - cpu_a[1][name]) / 1e9 / wall for name in cpu_b[1]}

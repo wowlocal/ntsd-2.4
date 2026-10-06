@@ -311,6 +311,40 @@ import XCTest
         XCTAssertEqual(try b.observation(back).knownPixels,width*height-1)
         withExtendedLifetime((e1,e2,e3)) {}
     }
+    /// CORE_REALTIME 4g: validating once (`prepareAndPerformFront`, the
+    /// committed-batch replay) equals `performFront(prepareFront(_))` for
+    /// draws, rejected rectangles and validation errors.
+    func testSingleValidationEqualsPrepareThenPerform() throws {
+        func run(_ once: Bool) throws -> ([String],B.Pixels,Int) {
+            let r = try D().run(late:false);defer { try? D().close(r) };let b = r.setup.display,(device,_,back,_) = try D().ids(r)
+            let colors: [UInt32] = [0,0xff0000,0xff00,0xff,0x110022,0,0x334455,0]
+            let service = OriginalMacBitmapService(backend:b,inputs:.init(resources:["pattern":try bitmap(colors,width:4,height:2),
+                "unknown":try unknownBitmap()],files:["pattern":.missing,"unknown":.missing]))
+            let (_,e1) = try M().construct(service,"pattern",device),source = try M().surface(e1)
+            let (_,e2) = try M().construct(service,"unknown",device),unknown = try M().surface(e2)
+            let events: [Event] = [
+                try fill(back,0xabcdef,[0,0,794,550]),try fill(back,0x10206c,[7,9,9,11]),
+                try blt(source,back,[0,0,4,2],[1,1,5,3]),try blt(source,back,[0,0,4,2],[10,1,14,3],mirror:true),
+                try blt(source,back,[1,0,3,2],[20,1,22,3],key:false),try blt(unknown,back,[0,0,2,1],[30,1,32,2]),
+                try blt(source,back,[0,0,4,2],[-5,-5,-1,-3]),   // outside: rejected
+                try blt(source,back,[0,0,4,2],[790,548,794,550]),
+                try blt(source,source,[0,0,1,1],[1,1,2,2]),     // the same surface: a validation error
+                .init("textOut",[0x1234,0,0,1],[[0x41]]),       // no held DC: a validation error
+                .init("unknownKind"),
+            ]
+            var log: [String] = []
+            for q in events {
+                do { let served = once ? try b.prepareAndPerformFront(q) : try perform(b,q);log.append("ok \(served.response.result)") }
+                catch { log.append("error \(error)") }
+            }
+            withExtendedLifetime((e1,e2)) {}
+            return (log,try b.pixels(back),b.frontOperationCount)
+        }
+        let (twice,pixelsTwice,countTwice) = try run(false),(once,pixelsOnce,countOnce) = try run(true)
+        XCTAssertEqual(once,twice);XCTAssertEqual(pixelsOnce.values,pixelsTwice.values)
+        XCTAssertEqual(pixelsOnce.defined,pixelsTwice.defined);XCTAssertEqual(countOnce,countTwice)
+        XCTAssertTrue(twice.contains { $0.hasPrefix("error") } && twice.contains { $0.hasPrefix("ok") },"both outcomes covered")
+    }
     func testKnownFramePresentationClipsToOwnedWindowAndUnknownPreflightIsAtomic() throws {
         let r = try D().run(late:false);defer { try? D().close(r) };let b = r.setup.display,(_,primary,back,_) = try D().ids(r)
         let rect = try W().rectangle(W().window(r)),base: UInt32 = 0x336699

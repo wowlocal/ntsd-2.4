@@ -568,14 +568,14 @@ import NTSDCore
             // GDI text: the Core declared GetDC success with the display's DC
             // handle; each call replays in order (APPLICATION_GDI_TEXT_PLAN.md).
             case "getDC","setBackgroundMode","setBackgroundColor","setTextColor","textOut","releaseDC":
-                let served = try display.performFront(display.prepareFront(e))
+                let served = try display.prepareAndPerformFront(e)
                 if e.kind == "getDC",served.response.output != OriginalMacDisplayBackend.textDCHandle { throw Boundary.unexpected("text DC") }
                 counts.replayedText += 1; continue
             default: continue
             }
             // Core recorded declared success; the recovered callers ignore the
             // result, so a DDERR_INVALIDRECT Blt only leaves the pixels unchanged.
-            let served = try display.performFront(display.prepareFront(e)); counts.replayedDraws += 1
+            let served = try display.prepareAndPerformFront(e); counts.replayedDraws += 1
             if served.response.result == OriginalMacDisplayBackend.invalidRect { counts.rejectedDraws += 1 }
         }
     }
