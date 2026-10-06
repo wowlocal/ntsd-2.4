@@ -113,16 +113,19 @@ while measuring; restore `svc power stayon false` when the loop pauses or stops.
 | 2026-10-06 | Phase 2c: resource records kept per session | A copy probe found gameplay's `resource` helper copying the 0x1f50-byte bitmap resource record ~108 times per cycle; the model branch's no-op write is dropped and the allocated branch's result is kept per token in `PendingInput.Derived`. 0x1f50 copies 363,586 → 119,791 per run (the rest at load). **14.22/14.18 → 14.55/14.54 ticks per second** (+2.4%). All 10 scenarios and AppKit equal, frames identical; 94 suites; review OK | [evidence](../evidence/rt-2c-resource-records-20261006.json) | 709c178 |
 | 2026-10-06 | Phase 2d: unchanging record writes return early | The probe found most copy-on-write copies of large records caused by writes storing what was already there (the globals' 8-byte replace 26,688 times per run, its slice 16,202, actor records 82,975). Flat `write`/`overwrite` now return when the bytes and definedness are already there; a unit test covers the four cases. **14.55/14.54 → 14.85/14.69 ticks per second** (+1.5%). All 10 scenarios and AppKit equal, frames identical; 154 suites (437 tests); review OK | [evidence](../evidence/rt-2d-unchanging-writes-20261006.json) | f3cf76a |
 | 2026-10-06 | Phase 4a: loaded-session data in one shared object | `PendingInput` (built once per loaded session, ~250 retained references, copied ~40 times per cycle inside the menu session, bootstrap and continuations) keeps its fields and memo in one final class read through `_read` accessors ([copy map](CORE_REALTIME_COPIES.md) M1). **14.85/14.69 → 16.01/16.04 ticks per second** (+8.5%); Mac sample: MenuSession 3.0% → 1.3%, Bootstrap 2.0% → 0.7% of busy time. All 10 scenarios and AppKit equal, frames identical; 94 suites; review OK | [evidence](../evidence/rt-4a-shared-loaded-session-20261006.json) | 45f3cdf |
-| 2026-10-06 | Phase 4b: graphics consumed in place per draw | Both `emit` paths called `consume` on a copy of the graphics owner and stored it back; `consume` is all-or-nothing, so it now runs on the owner in place ([copy map](CORE_REALTIME_COPIES.md) M4). 16.01/16.04 → 16.01/16.06 ticks per second (no measurable change; committed as strictly less work: one owner copy, about 14–21 reference-count operations, fewer per draw). All 10 scenarios and AppKit equal, frames identical; 105 suites; review OK | [evidence](../evidence/rt-4b-graphics-in-place-20261006.json) | this commit |
+| 2026-10-06 | Phase 4b: graphics consumed in place per draw | Both `emit` paths called `consume` on a copy of the graphics owner and stored it back; `consume` is all-or-nothing, so it now runs on the owner in place ([copy map](CORE_REALTIME_COPIES.md) M4). 16.01/16.04 → 16.01/16.06 ticks per second (no measurable change; committed as strictly less work: one owner copy, about 14–21 reference-count operations, fewer per draw). All 10 scenarios and AppKit equal, frames identical; 105 suites; review OK | [evidence](../evidence/rt-4b-graphics-in-place-20261006.json) | 7190530 |
+| 2026-10-06 | Phase 4c: flat record reads through the buffers | `integer(at:as:)` (3.4% self plus `checkedRange` 1.8% of the phone's main thread) checked definedness through an array slice and assembled the value byte by byte; it now loops over the mask's buffer and loads the value unaligned, with the same errors in the same order. 16.01/16.06 → 16.10 ticks per second (one run; within noise, less work). All 10 scenarios and AppKit equal, frames identical; 154 suites and a new flat-read unit test; review OK | [evidence](../evidence/rt-4c-flat-reads-20261006.json) | this commit |
 
 ## Next task
 
 Commit the checked increments in order as their suites finish (each on its
 snapshot; the tested tree hash is against the HEAD of its test build):
 
-- **4c**, flat record reads through the buffers: vs and all 10 equal with
-  frames identical, emulator frames identical, review OK, phone run 1 16.10
-  (within noise of 4b; less work); AppKit and the 154 suites open.
+- **M2a**, message-queue requests served inside the Host attempt
+  ([CORE_REALTIME_M2](CORE_REALTIME_M2.md)): phone 16.70/16.57 (+3.6%), Mac
+  CPU −2.6%, vs equal, emulator frames identical, review OK (tests
+  strengthened, all runtime menu tests pass); all 10, AppKit and the suites
+  open.
 
 **Phone blocked (2026-10-06 ~15:10).** The A12's data partition is 96–97%
 full (about 1 GB free, the rest the user's own data). Installing a second copy

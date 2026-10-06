@@ -140,10 +140,18 @@ public struct OriginalStateRecord: Equatable, Sendable {
     public func integer<T: FixedWidthInteger>(at offset: Int, as type: T.Type) throws -> T {
         let region = try checkedRange(offset, T.bitWidth / 8)
         guard let pages else {
-            guard flatDefined[region].allSatisfy({ $0 }) else {
-                throw OriginalStateError.undefinedBytes(offset: offset, count: region.count)
+            // The checks and value of the slice and reduce this replaced, read
+            // through the buffers: every byte defined, then the little-endian
+            // value (CORE_REALTIME phase 4c; reads are most of the Core's record
+            // traffic).
+            let count = region.count
+            let defined = flatDefined.withUnsafeBufferPointer { d in
+                var all = true
+                for i in region where !d[i] { all = false; break }
+                return all
             }
-            return region.enumerated().reduce(T.zero) { $0 | (T(truncatingIfNeeded: flatBytes[$1.element]) << ($1.offset * 8)) }
+            guard defined else { throw OriginalStateError.undefinedBytes(offset: offset, count: count) }
+            return flatBytes.withUnsafeBytes { T(littleEndian: $0.loadUnaligned(fromByteOffset: offset, as: T.self)) }
         }
         guard region.allSatisfy({ pages.defined[$0 >> Self.pageShift][$0 & Self.pageMask] }) else {
             throw OriginalStateError.undefinedBytes(offset: offset, count: region.count)

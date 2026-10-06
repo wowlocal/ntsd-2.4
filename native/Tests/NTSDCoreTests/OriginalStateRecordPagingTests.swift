@@ -214,6 +214,47 @@ final class OriginalStateRecordPagingTests: XCTestCase {
         XCTAssertEqual(target, before)
     }
 
+    /// Flat records read through their buffers (CORE_REALTIME phase 4c):
+    /// values, signed types and errors at every edge equal the plain arrays.
+    func testFlatReadsMatchTheirArrays() throws {
+        let count = 0xc3a8
+        let (bytes, mask) = contents(count, seed: 33)
+        var defined = mask
+        for i in 0x40..<0x48 { defined[i] = true }
+        defined[0x44] = false
+        for i in 0x80..<0x88 { defined[i] = true }
+        let record = try OriginalStateRecord(bytes: bytes, defined: defined)
+        func expected(_ offset: Int, _ size: Int) -> UInt64 {
+            var v: UInt64 = 0
+            for i in 0..<size { v |= UInt64(bytes[offset + i]) << (8 * i) }
+            return v
+        }
+        for offset in [0, 1, 0x3f, 0x40, 0x41, 0x43, 0x44, 0x45, count - 8, count - 4, count - 2, count - 1, count, -1, Int.max] {
+            for size in [1, 2, 4, 8] {
+                let outcome = error {
+                    let value: UInt64, signed: Int64
+                    switch size {
+                    case 1: value = UInt64(try record.integer(at: offset, as: UInt8.self)); signed = Int64(try record.integer(at: offset, as: Int8.self))
+                    case 2: value = UInt64(try record.integer(at: offset, as: UInt16.self)); signed = Int64(try record.integer(at: offset, as: Int16.self))
+                    case 4: value = UInt64(try record.integer(at: offset, as: UInt32.self)); signed = Int64(try record.integer(at: offset, as: Int32.self))
+                    default: value = try record.integer(at: offset, as: UInt64.self); signed = try record.integer(at: offset, as: Int64.self)
+                    }
+                    XCTAssertEqual(value, expected(offset, size), "read \(size) at \(offset)")
+                    let shift = UInt64(64 - 8 * size)
+                    XCTAssertEqual(signed, Int64(bitPattern: expected(offset, size) << shift) >> Int64(shift), "signed \(size) at \(offset)")
+                }
+                if offset < 0 || size > count || offset > count - size {
+                    XCTAssertEqual(outcome, String(describing: OriginalStateError.outOfBounds(offset: offset, count: size)))
+                } else if !defined[offset..<offset + size].allSatisfy({ $0 }) {
+                    XCTAssertEqual(outcome, String(describing: OriginalStateError.undefinedBytes(offset: offset, count: size)))
+                } else {
+                    XCTAssertNil(outcome, "read \(size) at \(offset)")
+                }
+            }
+        }
+        XCTAssertEqual(try record.binary64(at: 0x80).bitPattern, expected(0x80, 8))
+    }
+
     func testFlatRecordsBelowTheThreshold() throws {
         let (bytes, defined) = contents(OriginalStateRecord.pagedThreshold - 1, seed: 7)
         let record = try OriginalStateRecord(bytes: bytes, defined: defined)
