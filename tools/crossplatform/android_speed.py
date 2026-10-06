@@ -8,7 +8,8 @@ Usage: android_speed.py OUT_DIR [--serial S] [--apk PATH] [--label L]
 Runs the debuggable build (local.ntsd.port; the release build cannot be
 scripted) with app_e2e's computer-vs script, music, sounds and network off and
 no frame capture, and reports ticks per second: gameplay bodies 300 -> 1800
-over the app's uptime. Also the busy seconds, the run time and the peak
+over the app's uptime. Also the busy seconds (the game thread's busy time: the
+measure where the game reaches its own paced rate, as on the emulator), the run time and the peak
 resident memory (VmHWM). Appends a JSON line to OUT_DIR/speed.jsonl.
 
 With --profile it records that many seconds of simpleperf call graphs
@@ -169,7 +170,7 @@ def main():
     if len(marks) > 1:
         first, last = marks[0], marks[-1]
         row.update(ticksPerSecond=round((last["gameplayBodies"] - first["gameplayBodies"]) / (last["uptime"] - first["uptime"]), 2),
-                   busySeconds=round(last.get("busySeconds", 0)), bodies=last["gameplayBodies"])
+                   busySeconds=round(last.get("busySeconds", 0), 2), bodies=last["gameplayBodies"])
     else:
         row["error"] = "no progress events: " + ", ".join(str(e.get("event")) for e in events[:6])
     if profiled:
