@@ -58,4 +58,6 @@ final class HeadlessCursor {}
     }
     /// The backend keeps the presented crop (`WindowLease.presented`).
     func present(_ frame: OriginalFramebuffer,in window: AnyObject) throws {}
+    var presentsConcurrently: Bool { true }
+    func concurrentPresenter(_ window: AnyObject,width: Int,height: Int) -> (@Sendable (OriginalFramebuffer) -> Void)? { { _ in } }
 }

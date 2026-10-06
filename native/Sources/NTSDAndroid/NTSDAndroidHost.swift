@@ -20,13 +20,23 @@ final class NTSDAndroidCursor {}
 @MainActor final class NTSDAndroidWindowHost: OriginalRuntimeWindowHost {
     let screen: CGSize
     weak var app: NTSDAndroidApp?
-    /// The last presented frame (redrawn when the surface comes back) and its window.
-    private(set) var frame: OriginalFramebuffer?, shown: NTSDAndroidWindow?
-    /// The buffer geometry last set; a new surface (after the app returns from
-    /// the background, possibly at the same address) starts with its own
-    /// defaults, so the app clears this whenever the surface changes.
-    private var geometry: (width: Int32,height: Int32)?
-    func surfaceChanged() { geometry = nil }
+    /// The window and size of the last presented frame, set on the main thread
+    /// when the draw is replayed (touches map with them).
+    private(set) var shown: NTSDAndroidWindow?, shownSize: (width: Int,height: Int)?
+    /// The last presented frame (redrawn when the surface comes back), the
+    /// surface and the buffer geometry last set, shared with the display
+    /// backend's render thread: everything that touches the ANativeWindow holds
+    /// `lock` (CORE_REALTIME phase 1c). A new surface (after the app returns
+    /// from the background, possibly at the same address) starts with its own
+    /// defaults, so the geometry is cleared whenever the surface changes.
+    final class Target: @unchecked Sendable {
+        let lock = NSLock()
+        var frame: OriginalFramebuffer?, surface: OpaquePointer?, geometry: (width: Int32,height: Int32)?
+        func withLock<T>(_ body: () -> T) -> T { lock.lock(); defer { lock.unlock() }; return body() }
+    }
+    let target = Target()
+    /// The app's surface came or went; drawing waits for any present in progress.
+    func setSurface(_ surface: OpaquePointer?) { target.withLock { target.surface = surface; target.geometry = nil } }
     init(screen: CGSize) { self.screen = screen }
     private static func window(_ object: AnyObject) -> NTSDAndroidWindow { object as! NTSDAndroidWindow }
     func screenSize() throws -> CGSize { screen }
@@ -55,29 +65,42 @@ final class NTSDAndroidCursor {}
         let w = Self.window(window); return CGPoint(x:w.origin.x+point.x,y:w.origin.y+point.y)
     }
     func present(_ frame: OriginalFramebuffer,in window: AnyObject) throws {
-        self.frame = frame; shown = Self.window(window)
-        if let surface = app?.surface { draw(surface) }
+        shown = Self.window(window); shownSize = (frame.width,frame.height)
+        Self.show(frame,target)
     }
+    var presentsConcurrently: Bool { true }
+    /// Presents from the render thread; the window is recorded now, at the
+    /// replayed draw, as the synchronous present did.
+    func concurrentPresenter(_ window: AnyObject,width: Int,height: Int) -> (@Sendable (OriginalFramebuffer) -> Void)? {
+        shown = Self.window(window); shownSize = (width,height)
+        let target = target
+        return { frame in Self.show(frame,target) }
+    }
+    private nonisolated static func show(_ frame: OriginalFramebuffer,_ target: Target) {
+        target.withLock { target.frame = frame; if let surface = target.surface { draw(surface,frame,target) } }
+    }
+    /// Redraws the last frame (a new or invalidated surface).
+    func redraw() { target.withLock { if let surface = target.surface,let frame = target.frame { Self.draw(surface,frame,target) } } }
     /// The buffer size that fits the frame into the surface's aspect.
-    private func buffer(_ surface: OpaquePointer,_ frame: OriginalFramebuffer) -> (Int32,Int32) {
+    private nonisolated static func buffer(_ surface: OpaquePointer,_ width: Int,_ height: Int) -> (Int32,Int32) {
         let sw = Int(ANativeWindow_getWidth(surface)),sh = Int(ANativeWindow_getHeight(surface))
-        guard sw > 0,sh > 0 else { return (Int32(frame.width),Int32(frame.height)) }
-        if sw*frame.height > sh*frame.width { return (Int32((frame.height*sw+sh-1)/sh),Int32(frame.height)) }
-        return (Int32(frame.width),Int32((frame.width*sh+sw-1)/sw))
+        guard sw > 0,sh > 0 else { return (Int32(width),Int32(height)) }
+        if sw*height > sh*width { return (Int32((height*sw+sh-1)/sh),Int32(height)) }
+        return (Int32(width),Int32((width*sh+sw-1)/sw))
     }
     /// Copies the last frame into the surface, centred on black. The game's
     /// pixels are B,G,R,X bytes; the surface buffer is R,G,B,X.
-    func draw(_ surface: OpaquePointer) {
-        guard let frame else { return }
-        let (bw,bh) = buffer(surface,frame)
-        if geometry == nil || geometry! != (bw,bh) {
-            _ = ANativeWindow_setBuffersGeometry(surface,bw,bh,Int32(WINDOW_FORMAT_RGBX_8888.rawValue)); geometry = (bw,bh)
+    /// The caller holds target.lock.
+    private nonisolated static func draw(_ surface: OpaquePointer,_ frame: OriginalFramebuffer,_ target: Target) {
+        let (bw,bh) = buffer(surface,frame.width,frame.height)
+        if target.geometry == nil || target.geometry! != (bw,bh) {
+            _ = ANativeWindow_setBuffersGeometry(surface,bw,bh,Int32(WINDOW_FORMAT_RGBX_8888.rawValue)); target.geometry = (bw,bh)
         }
         var out = ANativeWindow_Buffer()
         guard ANativeWindow_lock(surface,&out,nil) == 0 else { return }
         // Only a 32-bit buffer takes these pixels.
         guard let bits = out.bits,out.format == Int32(WINDOW_FORMAT_RGBX_8888.rawValue) || out.format == Int32(WINDOW_FORMAT_RGBA_8888.rawValue) else {
-            _ = ANativeWindow_unlockAndPost(surface); geometry = nil; return
+            _ = ANativeWindow_unlockAndPost(surface); target.geometry = nil; return
         }
         let stride = Int(out.stride),width = Int(out.width),height = Int(out.height)
         let dst = bits.assumingMemoryBound(to:UInt32.self)
@@ -100,7 +123,7 @@ final class NTSDAndroidCursor {}
         _ = ANativeWindow_unlockAndPost(surface)
     }
     /// B,G,R,X words to R,G,B,X with X = 0xFF (little-endian), four at a time.
-    static func swapChannels(_ from: UnsafePointer<UInt32>,_ to: UnsafeMutablePointer<UInt32>,_ count: Int) {
+    nonisolated static func swapChannels(_ from: UnsafePointer<UInt32>,_ to: UnsafeMutablePointer<UInt32>,_ count: Int) {
         var i = 0
         while i+4 <= count {
             let v = UnsafeRawPointer(from+i).loadUnaligned(as:SIMD4<UInt32>.self)
@@ -116,12 +139,12 @@ final class NTSDAndroidCursor {}
     }
     /// A surface pixel as the drawn frame's client point.
     func clientPoint(_ x: Float,_ y: Float,surface: OpaquePointer) -> (Int32,Int32)? {
-        guard let frame else { return nil }
+        guard let size = shownSize else { return nil }
         let sw = Float(ANativeWindow_getWidth(surface)),sh = Float(ANativeWindow_getHeight(surface))
         guard sw > 0,sh > 0 else { return nil }
-        let (bw,bh) = buffer(surface,frame)
+        let (bw,bh) = Self.buffer(surface,size.width,size.height)
         let bx = x*Float(bw)/sw,by = y*Float(bh)/sh
-        return (Int32((bx-Float((Int(bw)-frame.width)/2)).rounded(.down)),Int32((by-Float((Int(bh)-frame.height)/2)).rounded(.down)))
+        return (Int32((bx-Float((Int(bw)-size.width)/2)).rounded(.down)),Int32((by-Float((Int(bh)-size.height)/2)).rounded(.down)))
     }
 }
 

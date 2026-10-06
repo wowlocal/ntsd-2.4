@@ -45,7 +45,7 @@ func ntsdAndroidOnCreate(_ activity: UnsafeMutablePointer<ANativeActivity>) {
         callbacks.pointee.onNativeWindowCreated = { _,window in MainActor.assumeIsolated { NTSDAndroidApp.shared?.surfaceCreated(window) } }
         callbacks.pointee.onNativeWindowRedrawNeeded = { _,window in MainActor.assumeIsolated { NTSDAndroidApp.shared?.surfaceRedraw(window) } }
         callbacks.pointee.onNativeWindowDestroyed = { _,_ in
-            MainActor.assumeIsolated { NTSDAndroidApp.shared?.surface = nil; NTSDAndroidApp.shared?.host?.windows.surfaceChanged() }
+            MainActor.assumeIsolated { NTSDAndroidApp.shared?.surface = nil; NTSDAndroidApp.shared?.host?.windows.setSurface(nil) }
         }
         callbacks.pointee.onInputQueueCreated = { _,queue in MainActor.assumeIsolated { NTSDAndroidApp.shared?.inputCreated(queue) } }
         callbacks.pointee.onInputQueueDestroyed = { _,queue in MainActor.assumeIsolated { NTSDAndroidApp.shared?.inputDestroyed(queue) } }
@@ -109,11 +109,11 @@ func ntsdAndroidOnCreate(_ activity: UnsafeMutablePointer<ANativeActivity>) {
     // MARK: session
 
     private func surfaceCreated(_ window: OpaquePointer?) {
-        surface = window; host?.windows.surfaceChanged()
+        surface = window; host?.windows.setSurface(window)
         startIfReady()
-        if let window { host?.windows.draw(window) }
+        host?.windows.redraw()
     }
-    private func surfaceRedraw(_ window: OpaquePointer?) { if let window { host?.windows.draw(window) } }
+    private func surfaceRedraw(_ window: OpaquePointer?) { host?.windows.redraw() }
 
     private func startIfReady() {
         guard session == nil,dataReady,let surface else { return }
@@ -140,7 +140,7 @@ func ntsdAndroidOnCreate(_ activity: UnsafeMutablePointer<ANativeActivity>) {
         let fit = max(1,800/dp.width,600/dp.height)
         let screen = CGSize(width:(dp.width*fit).rounded(.down),height:(dp.height*fit).rounded(.down))
         let host = NTSDAndroidSessionHost(arguments:arguments,screen:screen,density:density,musicDirectory:music,files:files)
-        host.windows.app = self
+        host.windows.app = self; host.windows.setSurface(surface)
         let session = OriginalRuntimeSession(arguments:arguments,host:host)
         host.session = session; self.host = host; self.session = session
         session.start()

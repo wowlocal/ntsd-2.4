@@ -31,4 +31,11 @@ public struct OriginalRuntimeDisplayGeometry: Equatable {
     func windowClosed(_ token: UInt32) throws -> Bool
     /// Shows a finished crop in the window's client area.
     func present(_ frame: OriginalFramebuffer, in token: UInt32) throws
+    /// present's checks now and a delivery for the render thread, or nil when
+    /// presents stay on the main thread (CORE_REALTIME phase 1c).
+    func preparePresent(width: Int, height: Int, in token: UInt32) throws -> OriginalPresentDelivery?
+}
+
+public extension OriginalRuntimeWindowing {
+    func preparePresent(width: Int, height: Int, in token: UInt32) throws -> OriginalPresentDelivery? { nil }
 }

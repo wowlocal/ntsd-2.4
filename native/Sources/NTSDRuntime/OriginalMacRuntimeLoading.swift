@@ -62,6 +62,9 @@ import NTSDCore
     /// Per-stage owned snapshots of gameplay bodies and loaded cycles. The app
     /// never consumes them; `true` runs the unchanged observation path.
     public var stageCheckpoints = false
+    /// Replay committed gameplay batches' pixels on the display backend's render
+    /// thread where the host presents concurrently (CORE_REALTIME 1c).
+    public var pipelinesRendering = true
     /// Replay files written by the gameplay body, applied only after the
     /// enclosing Host batch commits (a discarded attempt writes nothing).
     public private(set) var savedReplays: [OriginalMacRuntimeStartupService.FileEffect] = []
@@ -547,6 +550,11 @@ import NTSDCore
     }
     func replay(_ commands: [OriginalApplicationGraphics.Command]) throws {
         let display = started.display
+        // Pixels of the committed batch run on the render thread while the next
+        // tick is computed; at most one batch is in flight (CORE_REALTIME 1c).
+        try display.flushRendering()
+        display.pipelinesFront = pipelinesRendering && started.windows.presentsConcurrently
+        defer { display.pipelinesFront = false }
         for command in commands {
             guard let e = command.event else { continue }
             switch e.kind {

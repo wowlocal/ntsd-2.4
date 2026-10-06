@@ -8,7 +8,8 @@ Usage: android_speed.py OUT_DIR [--serial S] [--apk PATH] [--label L]
 Runs the debuggable build (local.ntsd.port; the release build cannot be
 scripted) with app_e2e's computer-vs script, music, sounds and network off and
 no frame capture, and reports ticks per second: gameplay bodies 300 -> 1800
-over the app's uptime. Also the busy seconds, the run time and the peak
+over the app's uptime. Also the busy seconds (the game thread's busy time: the
+measure where the game reaches its own paced rate, as on the emulator), the run time and the peak
 resident memory (VmHWM). Appends a JSON line to OUT_DIR/speed.jsonl.
 
 With --profile it records that many seconds of simpleperf call graphs
@@ -132,6 +133,21 @@ def main():
     if o.apk:
         # -d: builds from older commits have lower version codes (debuggable build).
         r = adb(s, "install", "-r", "-d", o.apk)
+        if r.returncode != 0 and "INSUFFICIENT_STORAGE" in r.stdout + r.stderr:
+            # The test phone's storage is nearly full and install -r keeps the
+            # old code until the new one is in place (two 222 MB APKs plus
+            # libraries). First let the system trim app caches (disposable by
+            # contract; it does the same under storage pressure) and retry.
+            adb(s, "shell", "pm trim-caches 4G")
+            r = adb(s, "install", "-r", "-d", o.apk)
+        if r.returncode != 0 and "INSUFFICIENT_STORAGE" in r.stdout + r.stderr:
+            # Then remove the old code but keep the app's data (-k: files/ntsd-data
+            # is not extracted again for the same assets).
+            adb(s, "shell", f"pm uninstall -k {PACKAGE}")
+            r = adb(s, "install", "-d", o.apk)
+            if r.returncode != 0:
+                raise SystemExit(f"install failed after `pm uninstall -k` ({PACKAGE} is uninstalled, its data kept): "
+                                 + (r.stdout + r.stderr).strip()[-300:])
         if r.returncode != 0:
             raise SystemExit("install failed: " + (r.stdout + r.stderr).strip()[-300:])
     shell(s, "svc power stayon usb")
@@ -169,7 +185,7 @@ def main():
     if len(marks) > 1:
         first, last = marks[0], marks[-1]
         row.update(ticksPerSecond=round((last["gameplayBodies"] - first["gameplayBodies"]) / (last["uptime"] - first["uptime"]), 2),
-                   busySeconds=round(last.get("busySeconds", 0)), bodies=last["gameplayBodies"])
+                   busySeconds=round(last.get("busySeconds", 0), 2), bodies=last["gameplayBodies"])
     else:
         row["error"] = "no progress events: " + ", ".join(str(e.get("event")) for e in events[:6])
     if profiled:

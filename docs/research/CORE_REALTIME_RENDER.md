@@ -69,13 +69,12 @@ render operations holding **strong references to `Storage`** (never
 window; phase A never reads pixels or the known mask, and throws at the same
 tick in the same order. Phase B on one serial render executor: the operations
 in order, the crop, the present through a host render target confined to the
-executor, then publish `presented`; a host present failure is held and rethrown
-at the next flush (declared as a host failure).
+executor, then publish `presented`; the concurrent presenter cannot fail (its
+checks run in phase A; see As built).
 
 **Backpressure:** wait for batch N before submitting N+1 (at most one in
 flight): batch N's pixels overlap tick N+1's Core work. **API:**
-`submit(ops, tag)`, `flush()` (wait, run main-side presents inline, publish
-`presented`, rethrow a held host error). **Digests:** body N's digest when batch
+`submit(ops, tag)`, `flush()` (wait for the queued work). **Digests:** body N's digest when batch
 N completes (compare_frames matches by body number). **Opt-in:** only with
 `presentUnknownAsBlack` and operation logs off; tests stay synchronous.
 
@@ -87,3 +86,28 @@ budget with flush-before-create); input-related host state must stay in phase
 A or GetCursorPos/mouse mapping would depend on render timing (virtual-clock
 runs report (0,0) and would not catch it); serialise text rasterisers; never
 merge presents within a batch; flush before `exit`; a TSan pass on macOS.
+
+## As built (phase 1c)
+
+- `OriginalMacDisplayBackend.pipelinesFront` is set only inside
+  `OriginalMacRuntimeLoading.replay` (gameplay batches) when the window host
+  declares `presentsConcurrently` (headless, Android); AppKit, iOS and SDL keep
+  every draw synchronous, and `--synchronous-render` turns pipelining off.
+  `replay` flushes the previous batch first (at most one in flight).
+- Front fill, copy and flip validate and change metadata on the main thread;
+  `WindowBackend.preparePresent` runs present's checks there and returns a
+  delivery. The render closure holds only `Storage` objects and values (a copy
+  takes a `CopyPlan`, not the surfaces), applies the pixels, crops and calls the
+  host's non-throwing concurrent presenter, then records `presented` under a
+  lock. A failed present check applies the pixels first and throws at the same
+  draw, as before.
+- Every other display entry point (perform, prepare, bitmap paths, text steps,
+  observations, pixels, framebuffer) flushes first. Window observations
+  (`presentedFrame`, `presentedPNG`, `flushPresents` before snapshots) flush,
+  and the session flushes before every exit and in `stop`.
+- Android keeps the frame, surface and buffer geometry in a locked target that
+  the surface callbacks also take; the window and the presented size used for
+  touches are set on the main thread when the draw is replayed.
+- With `--body-frame-digests` every body flushes right after its replay (no
+  overlap); `run_headless_scenarios.py` with `NTSD_NO_FRAME_DIGESTS=1` runs with
+  full overlap and still compares the game state and the 300-body frames.

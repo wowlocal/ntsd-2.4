@@ -176,6 +176,40 @@ import NTSDCore
     public private(set) var operations: [Operation] = []
     public private(set) var allocationCount = 0
     public var allocatedBytes: Int { budget.allocated }
+    /// While set (the runtime's replay of a committed gameplay batch), front
+    /// fill/copy/flip validate and update metadata here and queue their pixels
+    /// and present on the render thread; every other entry point first waits
+    /// for that work (CORE_REALTIME phase 1c). Needs presentUnknownAsBlack, so
+    /// validation never reads pixels.
+    public var pipelinesFront = false
+    private let renderer = RenderExecutor()
+    /// Waits for queued pixel work; rethrows an error the queued work threw
+    /// (none can: presenters cannot fail and the crop of a black-filled
+    /// front buffer never throws).
+    public func flushRendering() throws { try renderer.flush() }
+    /// One serial render thread for pipelined pixel work.
+    private final class RenderExecutor: @unchecked Sendable {
+        private let queue = DispatchQueue(label:"ntsd.render")
+        private let lock = NSLock()
+        private var failure: Error?, queued = false
+        func submit(_ work: @escaping @Sendable () throws -> Void) {
+            queued = true
+            queue.async { do { try work() } catch { self.lock.lock(); if self.failure == nil { self.failure = error }; self.lock.unlock() } }
+        }
+        func flush() throws {
+            guard queued else { return }
+            queue.sync {}; queued = false
+            lock.lock(); let held = failure; failure = nil; lock.unlock()
+            if let held { throw held }
+        }
+    }
+    /// For a present of `region`: nil when it must stay synchronous (the host
+    /// presents on the main thread), .some(nil) when there is no window.
+    private func pipelinedPresent(_ region: (Int,Int,Int,Int,UInt32?)) throws -> OriginalPresentDelivery?? {
+        guard let window = region.4 else { return .some(nil) }
+        guard let delivery = try windows.preparePresent(width:region.2,height:region.3,in:window) else { return nil }
+        return .some(delivery)
+    }
     public var retainedResources: [any OriginalApplicationStartupResource] { Array(live.values) }
     /// Declared live-app policies: fresh surfaces start as known black, and
     /// presentation shows still-unknown pixels as black. The defaults keep
@@ -216,6 +250,7 @@ import NTSDCore
         live[value.token] = value; history[value.token] = WeakResource(value); allocationCount += 1
     }
     public func observation(_ token: UInt32) throws -> Observation {
+        try renderer.flush()
         let value = try lease(token),s = value as? Surface,c = value as? Clipper,d = value as? Draw
         let known: Int
         if let storage = s?.storage {
@@ -225,6 +260,7 @@ import NTSDCore
             window:c?.window?.token ?? d?.window?.token ?? s?.draw.window?.token,clipper:s?.clipper?.token,knownPixels:known)
     }
     public func pixels(_ token: UInt32) throws -> Pixels {
+        try renderer.flush()
         let s = try resource(token,as:Surface.self)
         guard let data = s.storage else { throw Boundary.released(token) }
         return .init(width:data.width,height:data.height,
@@ -238,6 +274,7 @@ import NTSDCore
     /// Pure payload/identity validation. Only flagged structure fields are read;
     /// ignored private bytes stay untouched and do not become known zero.
     public func prepare(_ q: Window.Request) throws -> Prepared {
+        try renderer.flush()
         try validate(q); return .init(request:q,identity:identity,once:Once())
     }
     private func validate(_ q: Window.Request) throws {
@@ -337,6 +374,10 @@ import NTSDCore
     /// The region's presentation words; unknown pixels are black only when
     /// `presentUnknownAsBlack` allows it.
     private func framebuffer(_ data: Storage,_ region: (Int,Int,Int,Int,UInt32?)) throws -> OriginalFramebuffer {
+        try Self.crop(data,region,black:presentUnknownAsBlack)
+    }
+    /// The region as a framebuffer; unknown pixels are black or a boundary.
+    private nonisolated static func crop(_ data: Storage,_ region: (Int,Int,Int,Int,UInt32?),black presentUnknownAsBlack: Bool) throws -> OriginalFramebuffer {
         let (x,y,w,h,_) = region
         var bytes = Data(count:w*h*4)
         let values = data.values,known = data.known   // once per frame (MOBILE_PERFORMANCE step 2)
@@ -356,11 +397,13 @@ import NTSDCore
     }
     /// The surface's presentation rectangle as a framebuffer.
     public func framebuffer(_ token: UInt32) throws -> OriginalFramebuffer {
+        try renderer.flush()
         let s = try resource(token,as:Surface.self)
         guard let data = s.storage else { throw Boundary.released(token) }
         return try framebuffer(data,rectangle(s))
     }
     public func perform(_ prepared: Prepared) throws -> Served {
+        try renderer.flush()
         guard prepared.identity === identity else { throw Boundary.foreignPreparation }
         guard !prepared.once.used else { throw Boundary.repeatedPreparation }
         try validate(prepared.request); prepared.once.used = true
@@ -479,6 +522,7 @@ extension OriginalMacDisplayBackend {
         init(_ token: UInt32,_ surface: Surface) { self.surface = surface;super.init(token,.surfaceDC) }
     }
     public func bitmapObservation(_ token: UInt32) throws -> BitmapObservation {
+        try renderer.flush()
         let r = try lease(token),m = r as? MemoryDC,d = r as? SurfaceDC,s = r as? Surface
         return .init(selected:m?.selected.token,surface:d?.surface.token,activeDC:s?.activeBitmapDC,colorKey:s?.sourceColorKey)
     }
@@ -487,6 +531,7 @@ extension OriginalMacDisplayBackend {
          "getDC","stretch","releaseDC","deleteDC","deleteObject","colorKey","release"].contains(q.kind)
     }
     public func prepareBitmap(_ q: BitmapAPI.Request,inputs: BitmapInputs) throws -> BitmapPrepared {
+        try renderer.flush()
         _ = try validateBitmap(q,inputs:inputs)
         return .init(request:q,inputs:inputs,identity:identity,once:Once())
     }
@@ -578,6 +623,7 @@ extension OriginalMacDisplayBackend {
         return nil
     }
     public func performBitmap(_ prepared: BitmapPrepared) throws -> BitmapServed {
+        try renderer.flush()
         guard prepared.identity === identity else { throw Boundary.foreignPreparation }
         guard !prepared.once.used else { throw Boundary.repeatedPreparation }
         let q = prepared.request,input = try validateBitmap(q,inputs:prepared.inputs)
@@ -892,6 +938,73 @@ extension OriginalMacDisplayBackend {
     public func prepareFront(_ q: OriginalFrontScreenEvent) throws -> FrontPrepared {
         _ = try validateFront(q);return .init(request:q,identity:identity,once:Once())
     }
+    /// Whether a front draw is pipelined: nil runs it synchronously (after the
+    /// queued work); otherwise its present delivery (nil without a window). A
+    /// failed present check applies the pixels first, as the synchronous order
+    /// did, then throws.
+    private func pipeline(_ rect: (Int,Int,Int,Int,UInt32?),pixels: () -> Void) throws -> OriginalPresentDelivery?? {
+        guard pipelinesFront && presentUnknownAsBlack else { try renderer.flush(); return nil }
+        do {
+            guard let present = try pipelinedPresent(rect) else { try renderer.flush(); return nil }
+            return .some(present)
+        } catch { try renderer.flush(); pixels(); throw error }
+    }
+    private nonisolated static func fillPixels(_ data: Storage,_ region: FrontRect?,_ color: UInt32) {
+        guard let rect = region else { return }
+        let values = data.values,known = data.known
+        for y in rect.top..<rect.bottom { for x in rect.left..<rect.right {
+            let i = y*data.width+x;values[i] = color.littleEndian;known[i] = 1
+        } }
+    }
+    /// What a copy's pixel loop needs, without the surfaces (the render thread
+    /// holds only storages and values).
+    private struct CopyPlan {
+        let region: FrontRect?, sourceRect: FrontRect, destination: FrontRect, mirrored: Bool, key: [UInt32]?, sourceWidth: Int
+        init(_ copy: FrontCopy) {
+            region = copy.target.region; sourceRect = copy.sourceRect; destination = copy.destination
+            mirrored = copy.mirrored; key = copy.key; sourceWidth = copy.source.width
+        }
+        func sourceIndex(_ x: Int,_ y: Int) -> Int {
+            let column = mirrored ? sourceRect.right-1-(x-destination.left) : sourceRect.left+x-destination.left
+            return (sourceRect.top+y-destination.top)*sourceWidth+column
+        }
+    }
+    private nonisolated static func copyPixels(_ copy: CopyPlan,_ input: Storage,_ output: Storage) {
+        if let rect = copy.region {
+            let inputValues = input.values,inputKnown = input.known,outputValues = output.values,outputKnown = output.known
+            // Row by row: the source index steps by one pixel (back for a
+            // mirrored copy), the key bounds are read once, a fully known
+            // source span skips the per-pixel test, and the target's known
+            // bits are gathered per 64-bit word and written once
+            // (MOBILE_PERFORMANCE steps 4-5). Same pixels and bits; the
+            // loop never reads the target's mask.
+            let keyed = copy.key != nil,low = copy.key?[0] ?? 0,high = copy.key?[1] ?? 0,step = copy.mirrored ? -1 : 1
+            let width = rect.right-rect.left
+            for y in rect.top..<rect.bottom {
+                var a = copy.sourceIndex(rect.left,y),b = y*output.width+rect.left
+                let sourceKnown = inputKnown.allKnown(step > 0 ? a : a-(width-1),width)
+                if sourceKnown && !keyed && step > 0 {
+                    // Every pixel is known and written as is: one row copy and
+                    // whole mask words. Two thirds of a match's copied pixels
+                    // take this path (whole-screen copies; MOBILE_PERFORMANCE step 7).
+                    outputValues.advanced(by:b).update(from:inputValues.advanced(by:a),count:width)
+                    outputKnown.setRange(b,width)
+                    continue
+                }
+                var word = b >> 6,set: UInt64 = 0,clear: UInt64 = 0
+                for _ in 0..<width {
+                    if b >> 6 != word { outputKnown.merge(word,set:set,clear:clear);word = b >> 6;set = 0;clear = 0 }
+                    let bit = UInt64(1) << UInt64(b & 63)
+                    if !sourceKnown && inputKnown[a] == 0 { clear |= bit } else {
+                        let pixel = inputValues[a],value = UInt32(littleEndian:pixel) & 0xffffff
+                        if !keyed || value < low || value > high { outputValues[b] = pixel;set |= bit }
+                    }
+                    a += step;b += 1
+                }
+                outputKnown.merge(word,set:set,clear:clear)
+            }
+        }
+    }
     public func performFront(_ prepared: FrontPrepared) throws -> FrontServed {
         guard prepared.identity === identity else { throw Boundary.foreignPreparation }
         guard !prepared.once.used else { throw Boundary.repeatedPreparation }
@@ -899,52 +1012,22 @@ extension OriginalMacDisplayBackend {
         let owners: [any OriginalApplicationStartupResource],response: OriginalLibSurfaceText.Response
         switch action {
         case let .fill(target,color):
-            let data = target.surface.storage!
-            if let rect = target.region {
-                let values = data.values,known = data.known
-                for y in rect.top..<rect.bottom { for x in rect.left..<rect.right {
-                    let i = y*data.width+x;values[i] = color.littleEndian;known[i] = 1
-                } }
+            let data = target.surface.storage!,region = target.region,rect = target.delivery
+            if let present = try pipeline(rect,pixels:{ Self.fillPixels(data,region,color) }) {
+                renderer.submit { Self.fillPixels(data,region,color); if let present { present.deliver(try Self.crop(data,rect,black:true)) } }
+            } else {
+                Self.fillPixels(data,region,color)
+                if let window = rect.4 { try windows.present(framebuffer(data,rect),in:window) }
             }
-            if let window = target.delivery.4 { try windows.present(framebuffer(data,target.delivery),in:window) }
             owners = [target.surface];response = .init(result:0)
         case .copy(let copy):
-            let input = copy.source.storage!,output = copy.target.surface.storage!
-            if let rect = copy.target.region {
-                let inputValues = input.values,inputKnown = input.known,outputValues = output.values,outputKnown = output.known
-                // Row by row: the source index steps by one pixel (back for a
-                // mirrored copy), the key bounds are read once, a fully known
-                // source span skips the per-pixel test, and the target's known
-                // bits are gathered per 64-bit word and written once
-                // (MOBILE_PERFORMANCE steps 4-5). Same pixels and bits; the
-                // loop never reads the target's mask.
-                let keyed = copy.key != nil,low = copy.key?[0] ?? 0,high = copy.key?[1] ?? 0,step = copy.mirrored ? -1 : 1
-                let width = rect.right-rect.left
-                for y in rect.top..<rect.bottom {
-                    var a = copy.sourceIndex(rect.left,y),b = y*output.width+rect.left
-                    let sourceKnown = inputKnown.allKnown(step > 0 ? a : a-(width-1),width)
-                    if sourceKnown && !keyed && step > 0 {
-                        // Every pixel is known and written as is: one row copy and
-                        // whole mask words. Two thirds of a match's copied pixels
-                        // take this path (whole-screen copies; MOBILE_PERFORMANCE step 7).
-                        outputValues.advanced(by:b).update(from:inputValues.advanced(by:a),count:width)
-                        outputKnown.setRange(b,width)
-                        continue
-                    }
-                    var word = b >> 6,set: UInt64 = 0,clear: UInt64 = 0
-                    for _ in 0..<width {
-                        if b >> 6 != word { outputKnown.merge(word,set:set,clear:clear);word = b >> 6;set = 0;clear = 0 }
-                        let bit = UInt64(1) << UInt64(b & 63)
-                        if !sourceKnown && inputKnown[a] == 0 { clear |= bit } else {
-                            let pixel = inputValues[a],value = UInt32(littleEndian:pixel) & 0xffffff
-                            if !keyed || value < low || value > high { outputValues[b] = pixel;set |= bit }
-                        }
-                        a += step;b += 1
-                    }
-                    outputKnown.merge(word,set:set,clear:clear)
-                }
+            let input = copy.source.storage!,output = copy.target.surface.storage!,rect = copy.target.delivery,plan = CopyPlan(copy)
+            if let present = try pipeline(rect,pixels:{ Self.copyPixels(plan,input,output) }) {
+                renderer.submit { Self.copyPixels(plan,input,output); if let present { present.deliver(try Self.crop(output,rect,black:true)) } }
+            } else {
+                Self.copyPixels(plan,input,output)
+                if let window = rect.4 { try windows.present(framebuffer(output,rect),in:window) }
             }
-            if let window = copy.target.delivery.4 { try windows.present(framebuffer(output,copy.target.delivery),in:window) }
             owners = [copy.target.surface,copy.source];response = .init(result:0)
         case .release(let s):
             release(s);owners = [s];response = .init(result:Int32(bitPattern:s.references))
@@ -956,9 +1039,15 @@ extension OriginalMacDisplayBackend {
             let surfaces = [primary]+primary.chain,storages = surfaces.map(\.storage)
             for (i,s) in surfaces.enumerated() { s.storage = storages[(i+1)%surfaces.count] }
             let data = primary.storage!,window = primary.draw.window!.token
-            try windows.present(framebuffer(data,(0,0,data.width,data.height,window)),in:window)
+            let rect: (Int,Int,Int,Int,UInt32?) = (0,0,data.width,data.height,window)
+            if let present = try pipeline(rect,pixels:{}) {
+                renderer.submit { if let present { present.deliver(try Self.crop(data,rect,black:true)) } }
+            } else {
+                try windows.present(framebuffer(data,rect),in:window)
+            }
             owners = surfaces;response = .init(result:0)
         case .text(let step):
+            try renderer.flush()
             switch step {
             case .acquire(let s):
                 textDC = TextDC(s);owners = [s];response = .init(result:0,output:Self.textDCHandle)

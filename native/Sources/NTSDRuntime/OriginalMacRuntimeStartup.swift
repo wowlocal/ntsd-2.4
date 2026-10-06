@@ -86,6 +86,7 @@ public struct OriginalMacRuntimeOverlay {
         let windowService = OriginalMacWindowStartupService(driver:driver,backend:windows)
         let display = OriginalMacDisplayBackend(windows:windows,maximumBytes:3<<30,freshSurfacesKnownBlack:true,presentUnknownAsBlack:true,rleHolesReadPaletteZero:true,
                                                 keepsOperationLogs:false,textMask:host.textMask),displayService = OriginalMacDisplayStartupService(driver:driver,backend:display)
+        windows.flushRendering = { [weak display] in try display?.flushRendering() }
         let audio = OriginalMacAudioBackend(windows:windows),audioService = OriginalMacAudioService(backend:audio)
         let heap = OriginalMacRuntimeHeap()
         let runtime = OriginalMacRuntimeStartupService(windows:windows,heap:heap,environment:environment,

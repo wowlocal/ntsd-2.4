@@ -220,7 +220,7 @@ public enum OriginalRuntimeSessionBoundary: Error, Equatable {
                 "soundOutput":soundOutputError ?? soundOutput ?? "",
                 "backingScale":host.backingScale(started.window,in:started.windows),
                 "resources":[(try? OriginalApplicationCatalogInputs.bundledDirectory(in:resources).path) ?? "",host.musicDirectory]])
-            if exitAfterStartup { host.terminate(); return }
+            if exitAfterStartup { flushBeforeExit(); host.terminate(); return }
             let menu = try OriginalMacRuntimeMenu(started,inputs:package,clock:{ [unowned self] in try self.clock() },
                                                   point:{ [unowned self] in self.cursor() },overlay:overlay,
                                                   capsLock:{ [unowned host] in host.capsLock() },messageBox:host.startupHost.messageBox)
@@ -300,7 +300,7 @@ public enum OriginalRuntimeSessionBoundary: Error, Equatable {
                 if case .quit(let code) = result {
                     // The loop returned WM_QUIT's wParam: WinMain ends.
                     Self.emit(["event":"quit","code":code,"iterations":committed,"uptime":ProcessInfo.processInfo.systemUptime])
-                    stopped = true; host.exit(Int32(bitPattern:code))
+                    stopped = true; flushBeforeExit(); host.exit(Int32(bitPattern:code))
                 }
                 committed += 1
                 if let click = clickAt,committed == click.count {
@@ -314,10 +314,10 @@ public enum OriginalRuntimeSessionBoundary: Error, Equatable {
                 // Hold the button across game ticks, as a player's click does.
                 if let click = clickAt,committed == click.count+15 { menu.messages.mouse(0x202,x:click.x,y:click.y,buttons:0) }
                 if let capture = captureAfter,committed == capture.count {
-                    try host.snapshotPNG(gameWindow,in:started.windows).write(to:URL(fileURLWithPath:capture.path))
+                    try started.windows.flushPresents(); try host.snapshotPNG(gameWindow,in:started.windows).write(to:URL(fileURLWithPath:capture.path))
                     Self.emit(["event":"captured","iterations":committed,"path":capture.path,"permits":menu.requests,
                         "getDCFailures":menu.textRequests,"emptyBlits":menu.emptyBlits])
-                    if arguments.contains("--exit-after-capture") { host.terminate(); return }
+                    if arguments.contains("--exit-after-capture") { flushBeforeExit(); host.terminate(); return }
                 }
                 try presentMusic(started,menu)
                 // The original's thread slept every Sleep of the iteration (a menu's
@@ -338,6 +338,7 @@ public enum OriginalRuntimeSessionBoundary: Error, Equatable {
                                                                     clock:{ [unowned self] in try self.clock() },dialogs:host.loadingDialogs,in:resources)
                     loading?.overlay = try overlayRoot()
                     loading?.stageCheckpoints = arguments.contains("--stage-checkpoints")
+                    loading?.pipelinesRendering = !arguments.contains("--synchronous-render")
                     loading?.sounds = sounds
                     loading?.shell = menu.messages.shell
                     loading?.network = menu.network
@@ -372,7 +373,7 @@ public enum OriginalRuntimeSessionBoundary: Error, Equatable {
                     if gameplayBodies % every == 0,gameplayBodies % 300 != 0,
                        let i = arguments.firstIndex(of:"--body-captures"),i+1 < arguments.count {
                         let path = "\(arguments[i+1])/b\(String(format:"%06d",gameplayBodies)).png"
-                        try host.snapshotPNG(gameWindow,in:started.windows).write(to:URL(fileURLWithPath:path))
+                        try started.windows.flushPresents(); try host.snapshotPNG(gameWindow,in:started.windows).write(to:URL(fileURLWithPath:path))
                     }
                     // `--body-frames DIR` writes the presented framebuffer every 300 bodies,
                     // or every N with `--body-frame-every N`, the same on every host.
@@ -384,7 +385,7 @@ public enum OriginalRuntimeSessionBoundary: Error, Equatable {
                     }
                     // `--body-frame-digests` reports every presented frame's SHA-256 (XRGB
                     // pixels), so hosts compare whole matches frame by frame.
-                    if arguments.contains("--body-frame-digests"),let frame = try started.windows.lease(gameWindow).presented {
+                    if arguments.contains("--body-frame-digests"),let frame = try started.windows.presentedFrame(gameWindow) {
                         Self.emit(["event":"frameDigest","gameplayBodies":gameplayBodies,"size":[frame.width,frame.height],
                                    "sha256":PortableSHA256.hash(data:frame.pixels).map { String(format:"%02x",$0) }.joined()])
                     }
@@ -395,12 +396,12 @@ public enum OriginalRuntimeSessionBoundary: Error, Equatable {
                             "sounds":soundReport()]
                         if gameplayBodies % every == 0,let i = arguments.firstIndex(of:"--body-captures"),i+1 < arguments.count {
                             let path = "\(arguments[i+1])/b\(String(format:"%06d",gameplayBodies)).png"
-                            try host.snapshotPNG(gameWindow,in:started.windows).write(to:URL(fileURLWithPath:path)); event["path"] = path
+                            try started.windows.flushPresents(); try host.snapshotPNG(gameWindow,in:started.windows).write(to:URL(fileURLWithPath:path)); event["path"] = path
                         }
                         Self.emit(event)
                     }
                     if let i = arguments.firstIndex(of:"--exit-after-bodies"),i+1 < arguments.count,let n = Int(arguments[i+1]),gameplayBodies >= n {
-                        host.terminate(); return
+                        flushBeforeExit(); host.terminate(); return
                     }
                 case .menu:
                     // The first loaded menu step after a match (epilogue, selection).
@@ -466,7 +467,7 @@ public enum OriginalRuntimeSessionBoundary: Error, Equatable {
         try JSONSerialization.data(withJSONObject:value,options:[.sortedKeys]).write(to:URL(fileURLWithPath:path),options:.atomic)
         networkReadyRecorded = true
         Self.emit(["event":"networkReady","role":role,"path":path,"iterations":committed])
-        if arguments.contains("--exit-after-network-ready") { stopped = true; host.terminate(); return true }
+        if arguments.contains("--exit-after-network-ready") { stopped = true; flushBeforeExit(); host.terminate(); return true }
         return false
     }
     /// `committed` (default): committed message-loop iterations, which stop
@@ -507,7 +508,7 @@ public enum OriginalRuntimeSessionBoundary: Error, Equatable {
                 guard let id = UInt32(words[1]),let x = UInt32(words[2]),let y = UInt32(words[3]),let b = UInt32(words[4]) else { continue }
                 menu.messages.joystick(id,x:x,y:y,buttons:b)
             case "capture" where words.count == 2:
-                try host.snapshotPNG(gameWindow,in:started.windows).write(to:URL(fileURLWithPath:words[1]))
+                try started.windows.flushPresents(); try host.snapshotPNG(gameWindow,in:started.windows).write(to:URL(fileURLWithPath:words[1]))
                 Self.emit(["event":"captured","iterations":n,"cycles":cycles,"gameplayBodies":gameplayBodies,
                     "lastSleeps":Array(loading?.sleeps.suffix(8) ?? []),"menuSleeps":Array(menu.messages.sleeps.suffix(8)),"objectInputs":loading?.counts.objectInputs ?? 0,"characterAI":loading?.counts.characterAI ?? 0,
             "replayFiles":loading?.savedReplays.map { "\($0.path) \($0.bytes.count)" } ?? [],"refusedReplays":loading?.refusedReplayOpens ?? [],
@@ -521,7 +522,7 @@ public enum OriginalRuntimeSessionBoundary: Error, Equatable {
             case "captureview" where words.count == 2:
                 try host.viewPNG(gameWindow,in:started.windows).write(to:URL(fileURLWithPath:words[1]))
                 Self.emit(["event":"capturedView","iterations":n,"path":words[1]])
-            case "exit": host.terminate()
+            case "exit": flushBeforeExit(); host.terminate()
             default: Self.emit(["event":"scriptIgnored","entry":words.joined(separator:" ")])
             }
         }
@@ -573,7 +574,7 @@ public enum OriginalRuntimeSessionBoundary: Error, Equatable {
               let model = started.host.snapshot.session?.loadedOwners?.match,
               try (144..<350).contains(model.globals.integer(at:0x450bdc-OriginalMatchPreparation.globalBase,as:Int32.self)) else { return false }
         if let i = arguments.firstIndex(of:"--summary-capture"),i+1 < arguments.count {
-            try host.snapshotPNG(gameWindow,in:started.windows).write(to:URL(fileURLWithPath:arguments[i+1]))
+            try started.windows.flushPresents(); try host.snapshotPNG(gameWindow,in:started.windows).write(to:URL(fileURLWithPath:arguments[i+1]))
         }
         let values = try Self.summaryValues(model)
         if let i = arguments.firstIndex(of:"--summary-json"),i+1 < arguments.count {
@@ -581,7 +582,7 @@ public enum OriginalRuntimeSessionBoundary: Error, Equatable {
         }
         Self.emit(["event":"summary","cycles":cycles,"gameplayBodies":gameplayBodies,"values":values,
             "replayFiles":loading?.savedReplays.map { "\($0.path) \($0.bytes.count)" } ?? []])
-        stopped = true;host.terminate();return true
+        stopped = true;flushBeforeExit(); host.terminate();return true
     }
     /// The Summary's sources (OriginalResultLayout): per active seat the object
     /// id, Kill +358, Attack +348, HP Lost +34c, MP Usage +350, Picking +35c,
@@ -660,6 +661,9 @@ public enum OriginalRuntimeSessionBoundary: Error, Equatable {
                 "graphRequests":started?.runtime.music.graphOperations.count ?? 0,
                 "time":(s.time*1000).rounded()/1000,"unresolved":music?.unresolved.map { String(decoding:$0,as:UTF8.self) } ?? []]
     }
+    /// Waits for pipelined pixel work before the game ends, so the last frame
+    /// is shown (CORE_REALTIME 1c); a held host failure no longer matters here.
+    private func flushBeforeExit() { try? started?.windows.flushPresents() }
     private func stop(_ error: Error) {
         stopped = true
         Self.emit(["event":"boundary","error":String(reflecting:error),"iterations":committed,
@@ -667,7 +671,7 @@ public enum OriginalRuntimeSessionBoundary: Error, Equatable {
             "replayFiles":loading?.savedReplays.map { "\($0.path) \($0.bytes.count)" } ?? [],"refusedReplays":loading?.refusedReplayOpens ?? [],
             "request":menu?.lastRequest.map { String(describing:$0).prefix(400) }.map(String.init) ?? ""])
         // Scripted runs report the boundary and end; only interactive runs show it.
-        if exitAfterStartup || arguments.contains("--exit-after-capture") || arguments.contains("--script") { host.exit(1) }
+        if exitAfterStartup || arguments.contains("--exit-after-capture") || arguments.contains("--script") { flushBeforeExit(); host.exit(1) }
         let text = String(reflecting:error)
         // A source fault is the original's own crash at this point, reproduced
         // as a stop; anything else is a part of the game not yet supported.

@@ -31,6 +31,13 @@ import NTSDCore
     /// The last lease went away (possibly off the main thread); `closed` says
     /// whether DestroyWindow already ran.
     nonisolated func released(_ window: AnyObject, closed: Bool, platformState: AnyObject?)
+    /// A presenter callable from the display backend's render thread, or nil
+    /// when presents must stay on the main thread (CORE_REALTIME phase 1c).
+    /// Called on the main thread when the draw is replayed, with the crop's
+    /// size; the presenter itself cannot fail (present's checks already ran).
+    func concurrentPresenter(_ window: AnyObject, width: Int, height: Int) -> (@Sendable (OriginalFramebuffer) -> Void)?
+    /// Whether the display backend may pipeline this host's presents.
+    var presentsConcurrently: Bool { get }
     /// The open client view's bounds; `Boundary.geometry` without one.
     func clientBounds(_ window: AnyObject) throws -> CGRect
     /// The open client view's frame; `Boundary.geometry` without one.
@@ -41,6 +48,29 @@ import NTSDCore
     func desktopPoint(_ window: AnyObject, client point: CGPoint) throws -> CGPoint
     /// Shows a finished crop; the runtime has checked the window and the size.
     func present(_ frame: OriginalFramebuffer, in window: AnyObject) throws
+}
+
+public extension OriginalRuntimeWindowHost {
+    func concurrentPresenter(_ window: AnyObject, width: Int, height: Int) -> (@Sendable (OriginalFramebuffer) -> Void)? { nil }
+    var presentsConcurrently: Bool { false }
+}
+
+/// The last presented crop of a window, written by the render thread when
+/// presents are pipelined and read on the main thread (CORE_REALTIME 1c).
+public final class OriginalPresentedFrame: @unchecked Sendable {
+    private let lock = NSLock()
+    private var frame: OriginalFramebuffer?
+    public var value: OriginalFramebuffer? {
+        get { lock.lock(); defer { lock.unlock() }; return frame }
+        set { lock.lock(); frame = newValue; lock.unlock() }
+    }
+}
+
+/// A present whose checks ran on the main thread; `deliver` shows the crop
+/// from the render thread and records it as the window's presented frame.
+public struct OriginalPresentDelivery: @unchecked Sendable {
+    let presenter: @Sendable (OriginalFramebuffer) -> Void, presented: OriginalPresentedFrame
+    public func deliver(_ frame: OriginalFramebuffer) { presenter(frame); presented.value = frame }
 }
 
 /// The original's window family (metrics, icon, cursor, class, CreateWindow,
@@ -89,7 +119,11 @@ import NTSDCore
         /// The last presented crop's size.
         public var contentSize: CGSize?
         /// The last presented crop itself, for host-independent frame captures.
-        public internal(set) var presented: OriginalFramebuffer?
+        public internal(set) var presented: OriginalFramebuffer? {
+            get { presentedFrame.value }
+            set { presentedFrame.value = newValue }
+        }
+        let presentedFrame = OriginalPresentedFrame()
         /// Host full screen (APPLICATION_MAC_FULL_SCREEN_PLAN.md, declared): the
         /// windowed geometry the game keeps seeing while the view only scales.
         public var held: DisplayGeometry?
@@ -149,9 +183,29 @@ import NTSDCore
         try host.present(frame,in:owner.window)
         owner.presented = frame
     }
+    /// present's checks for a crop of width x height, made when the draw is
+    /// replayed, and a delivery for the render thread; nil when the host
+    /// presents on the main thread only (CORE_REALTIME 1c).
+    public func preparePresent(width: Int,height: Int,in token: UInt32) throws -> OriginalPresentDelivery? {
+        let owner = try lease(token)
+        guard !owner.closed else { throw Boundary.geometry }
+        let size = CGSize(width:width,height:height),bounds = try host.clientBounds(owner.window)
+        guard owner.fullScreen || size == (owner.held?.clientOnScreen.size ?? bounds.size) else { throw Boundary.geometry }
+        guard let presenter = host.concurrentPresenter(owner.window,width:width,height:height) else { return nil }
+        owner.contentSize = size
+        return .init(presenter:presenter,presented:owner.presentedFrame)
+    }
+    /// Waits for pipelined presents (the display backend's render thread).
+    public var flushRendering: (() throws -> Void)?
+    public func flushPresents() throws { try flushRendering?() }
+    public var presentsConcurrently: Bool { host.presentsConcurrently }
+    /// The window's last presented crop, once pipelined presents are done.
+    public func presentedFrame(_ token: UInt32) throws -> OriginalFramebuffer? {
+        try flushPresents(); return try lease(token).presented
+    }
     /// PNG of the window's last presented crop (`OriginalFramebufferPNG`).
     public func presentedPNG(_ token: UInt32) throws -> Data {
-        guard let frame = try lease(token).presented else { throw Boundary.geometry }
+        guard let frame = try presentedFrame(token) else { throw Boundary.geometry }
         return OriginalFramebufferPNG.encode(frame)
     }
     /// Shared LoadCursor(0, IDC_ARROW) identity once the class cursor exists.

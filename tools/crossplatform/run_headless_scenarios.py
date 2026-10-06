@@ -80,7 +80,8 @@ def main():
             script = script.replace(str(inner / "captures"), host(inner / "captures"))
         args = ["--original", "--mute-music", "--mute-sounds", "--no-network", "--overlay", host(inner / "overlay"),
                 "--virtual-clock", "123456789", "8", "--script-clock", "gameplay", "--body-captures", host(inner / "captures"),
-                "--body-frames", host(inner / "frames"), "--body-frame-digests",
+                "--body-frames", host(inner / "frames"),
+                *([] if os.environ.get("NTSD_NO_FRAME_DIGESTS") else ["--body-frame-digests"]),
                 *extra, "--script", script]
         if mode == "--linux":
             command = ["docker", "run", "--rm", *platform, *docker, "-e", "TZ=Etc/GMT-1", "-v", f"{target}:/app:ro", "-v", f"{MUSIC}:/music:ro",
