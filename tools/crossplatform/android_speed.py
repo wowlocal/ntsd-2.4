@@ -18,8 +18,10 @@ OUT_DIR/<label>-profile/profile.json: inclusive shares of the per-cycle phases
 and the top symbols (perf.data and the symbol cache beside it). security.perf_harden is lowered only for the recording and
 restored, and debug.perf_event_max_sample_rate is cleared again.
 
-The device is kept awake (svc power stayon usb) during the run and
-`svc power stayon false` is restored afterwards.
+The device is kept awake (svc power stayon usb). It is left that way so it
+cannot lock between runs (a locked phone pauses the game behind the lock
+screen); --restore-stayon restores `svc power stayon false` afterwards. A
+device showing its lock screen is refused at once.
 """
 import argparse, collections, json, os, subprocess, sys, time
 from pathlib import Path
@@ -117,12 +119,16 @@ def main():
     a.add_argument("--apk"); a.add_argument("--label", default=time.strftime("%Y%m%d-%H%M%S"))
     a.add_argument("--profile", type=int, default=0); a.add_argument("--lib", type=Path, default=DEFAULT_LIB)
     a.add_argument("--timeout", type=int, default=1800)
+    a.add_argument("--restore-stayon", action="store_true")
     o = a.parse_args()
     out = Path(o.out); out.mkdir(parents=True, exist_ok=True)
     s = o.serial
     if o.apk:
         adb(s, "install", "-r", o.apk, check=True)
     shell(s, "svc power stayon usb")
+    shell(s, "input keyevent KEYCODE_WAKEUP")
+    if "isKeyguardShowing=true" in shell(s, "dumpsys window"):
+        raise SystemExit(f"{s} shows its lock screen: unlock it (the game pauses behind it)")
     try:
         shell(s, f"am force-stop {PACKAGE}")
         shell(s, f"run-as {PACKAGE} sh -c 'rm -rf files/speed && mkdir -p files/speed/overlay && cat > files/args.txt'",
@@ -144,7 +150,8 @@ def main():
         events = progress(s)
     finally:
         shell(s, f"run-as {PACKAGE} rm -f files/args.txt")
-        shell(s, "svc power stayon false")
+        if o.restore_stayon:
+            shell(s, "svc power stayon false")
     marks = [e for e in events if e.get("event") == "progress"]
     row = {"label": o.label, "serial": s, "runSeconds": round(time.time() - start), "peakResidentMB": peak // 1024}
     if len(marks) > 1:
