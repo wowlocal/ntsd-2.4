@@ -57,7 +57,7 @@ public enum OriginalActorControl {
         mutating func face(_ value: UInt8) throws { try actor.write(value, at: 0x80) }
         mutating func velocity(_ offset: Int,_ value: Double) throws { try actor.writeBinary64(value, at: offset) }
         mutating func draw(_ tag: Int32) throws -> Int32 {
-            var random = OriginalRandom(table: try (0..<3000).map { try globals.integer(at: 0x44ff90-OriginalMatchPreparation.globalBase+$0, as: UInt8.self) },
+            var random = OriginalRandom(table: try OriginalRandom.table(globals, at: 0x44ff90-OriginalMatchPreparation.globalBase),
                 index: Int(try g(0x450bcc)), counter: Int(try g(0x450c34)), source: "owned Actor control globals", sourceSHA256: "")
             try random.validate()
             let result = Int32(random.next(2))

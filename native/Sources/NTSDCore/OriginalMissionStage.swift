@@ -93,7 +93,7 @@ struct OriginalMissionStagePass {
     /// Signed 32-bit division by 10 and its remainder, as the compiler's magic multiply.
     static func tenths(_ v: Int32) -> (Int32,Int32) { (v/10,v%10) }
     mutating func draw(_ stream: Int32,_ range: Int32) throws -> Int32 {
-        var rng = OriginalRandom(table: try (0..<3000).map { try globals.integer(at: 0x44ff90-0x44d000+$0,as: UInt8.self) },
+        var rng = OriginalRandom(table: try OriginalRandom.table(globals, at: 0x44ff90-0x44d000),
             index: Int(try g(0x450bcc)),counter: Int(try g(0x450c34)),source: "owned mission stage",sourceSHA256: "")
         try rng.validate();let result = Int32(rng.next(Int(range)))
         try setG(0x450bcc,Int32(rng.index));try setG(0x450c34,Int32(rng.counter))

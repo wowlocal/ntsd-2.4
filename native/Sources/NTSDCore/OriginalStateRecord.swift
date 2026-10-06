@@ -161,6 +161,19 @@ public struct OriginalStateRecord: Equatable, Sendable {
         }
     }
 
+    /// The bytes start..<start+count when all are in range and defined, else
+    /// nil (the caller then reads them one by one for the exact error).
+    func definedBytes(_ start: Int, _ count: Int) -> [UInt8]? {
+        guard start >= 0, count >= 0, count <= byteCount, start <= byteCount - count else { return nil }
+        let range = start..<(start + count)
+        if let pages {
+            return range.allSatisfy({ pages.defined[$0 >> Self.pageShift][$0 & Self.pageMask] })
+                ? range.map { pages.bytes[$0 >> Self.pageShift][$0 & Self.pageMask] } : nil
+        }
+        let all = flatDefined.withUnsafeBufferPointer { d in !d[range].contains(false) }
+        return all ? Array(flatBytes[range]) : nil
+    }
+
     public func binary64(at offset: Int) throws -> Double {
         Double(bitPattern: try integer(at: offset, as: UInt64.self))
     }

@@ -129,18 +129,30 @@ while measuring; restore `svc power stayon false` when the loop pauses or stops.
 | 2026-10-06 | Phase 1f: back-buffer fill queued on the render thread | The DirectDraw colour fill that clears the back buffer every iteration (the menu step's Blt, 2.5% of the phone's main thread after M2b) joins the render queue without a flush on hosts that present concurrently, in menus too; a primary's fill flushes and presents on the main thread. **16.66/16.73 → 16.87/16.87 ticks per second** (+1%). All 10 scenarios and AppKit equal, frames identical; full-overlap runs equal; ThreadSanitizer clean; 13 suites; review OK | [evidence](../evidence/rt-1f-back-fill-20261006.json) | e122049 |
 | 2026-10-06 | R3 stage 1: the actor tier | The presentation memory's allocations become an `OriginalAllocationTable` (the dictionary's API) whose actor tier holds the 400 actor records in match-model form while a match is loaded; `read` takes them as they are and `store` keeps today's per-index checks with constant-time shortcuts and installs the model's records instead of converting and writing 400 entries; any other actor change moves the tier back into the dictionary ([design](CORE_REALTIME_R3.md)). **16.87/16.87 → 19.09/19.26 ticks per second** (+13.6%; 59 → 52 ms per tick); Mac CPU within noise. All 10 scenarios and AppKit equal, frames identical; 162 suites incl. oracle tests (store and read against the per-entry algorithm under single and multiple faults) and a table-against-dictionary test; no tier dissolves in a vs run; review OK after a compile fix | [evidence](../evidence/rt-r3s1-actor-tier-20261006.json) | a83c5ad |
 | 2026-10-06 | Phase 1g: known-mask full flag (render thread) | The display backend's known mask keeps a flag meaning every pixel is known (set by a whole fill, a whole unkeyed copy of a full source or `setAll`, cleared by any bit-clearing write, recomputed after recorded image writes); the render thread's per-row `allKnown`/`setRange` work (13.9% of its samples) returns at once while it is set, which in the live app is always. Phone 19.19/19.10 ticks per second (main thread unchanged); **render thread −7.4% per tick** (render/main samples 0.606 → 0.561, ~32 → ~29.6 ms). All 10 scenarios and AppKit equal, frames identical; 13 suites incl. a new flag regression test; review OK | [evidence](../evidence/rt-1g-known-flag-20261006.json) | 11bb598 |
-| 2026-10-06 | Phase 4d: no drawing detail nobody observes | On every gameplay tick each bitmap draw built read and clip records and the drawing helpers built draw and rectangle events, all no-ops in every session's `front`, for observers production never attaches (4.7% of the main thread for reads alone). A `detail` parameter (default true) lets the runtime, which passes no observer, skip them; stage events and blits are never gated. **19.19/19.10 → 19.82/19.78 ticks per second** (+3.4%; ~50.5 ms per tick). All 10 scenarios and AppKit equal, frames identical; a side-by-side test of every active gameplay tick with and without detail; 54 suites; review OK | [evidence](../evidence/rt-4d-draw-detail-20261006.json) | this commit |
+| 2026-10-06 | Phase 4d: no drawing detail nobody observes | On every gameplay tick each bitmap draw built read and clip records and the drawing helpers built draw and rectangle events, all no-ops in every session's `front`, for observers production never attaches (4.7% of the main thread for reads alone). A `detail` parameter (default true) lets the runtime, which passes no observer, skip them; stage events and blits are never gated. **19.19/19.10 → 19.82/19.78 ticks per second** (+3.4%; ~50.5 ms per tick). All 10 scenarios and AppKit equal, frames identical; a side-by-side test of every active gameplay tick with and without detail; 54 suites; review OK | [evidence](../evidence/rt-4d-draw-detail-20261006.json) | 29a15de |
+| 2026-10-06 | Phase 4e: the random table in one copy | Fourteen sites (AI, physics, links, contacts, hits, control, post-draw, mission, war, music…) rebuilt the 3000-byte random table on every random draw with 3000 checked single-byte reads; `OriginalRandom.table` copies it at once when every byte is in range and defined and otherwise runs the same reads (same first error). AI draw 4.5% → 0.9% of the main thread. 19.82/19.78 → 20.30/19.94 ticks per second (~+1%: the harness's virtual clock adds ~16 ms of the game's own sleeping to every tick). All 10 scenarios and AppKit equal, frames identical; 146 suites and a new table test; review OK | [evidence](../evidence/rt-4e-random-table-20261006.json) | this commit |
 
 ## Next task
 
-Tier 1 of the [budget](CORE_REALTIME_BUDGET.md) (33 ms per tick; ~50 ms after
-4d). Increments in flight, committed in order as their gates pass (each from
-its snapshot; tested hashes via a temporary index so new files count):
+**Measurement first (2026-10-06 evening).** The speed harness's virtual
+clock (`--virtual-clock 123456789 8`: 8 ms per message-loop iteration) makes
+the game's 33 ms timer take about four iterations per tick, and the idle
+ones sleep 5 ms each for real: ~16 ms of every tick is the game's own pacing
+whatever the compute time (off-CPU profile `rt4f-offcpu-profile`: 99.8% of
+the main thread's off-CPU time in `Looper::pollOnce`, waits of ~5 ms). So
+ticks per second under the virtual clock undercount compute savings (4e, 4f:
+~+1% each). `android_speed.py` now reports each thread's compute per tick
+(`mainMsPerTick`, `renderMsPerTick`, from schedstat between bodies 600 and
+1500) and has `--real-clock`; the [budget](CORE_REALTIME_BUDGET.md)'s frame
+time becomes compute per tick (to be rewritten with the first measurements).
 
-- **4e** (next): the 3000-byte random table is rebuilt with 3000 checked
-  byte reads on every random draw at 14 sites (AI draw alone 4.3% of the main
-  thread after 4d); read it in one copy when every byte is in range and
-  defined, else the same per-byte reads.
-- Then: the runtime's per-tick `presentation` input built through JSON
-  (2.3%; a public initializer), FreeType glyph masks (2.5%), the Host step
-  closure (3.5%) and `store` (3.7%), R3 stages 2–4, R5/M3.
+In flight:
+
+- **4f** (the runtime's per-tick presentation input built directly instead
+  of through JSONSerialization and JSONDecoder; 2.6% of the main thread):
+  phone 20.39/20.28/20.35 (+1.4% over 4e); headless vs and emulator equal,
+  frames identical; open: bundle B suites (36 + the extended table test), 10
+  scenarios, AppKit.
+- Then, by compute per tick: FreeType glyph masks (2.5%), the Host step
+  closure (3.6%) and `store` (4.0%), R3 stages 2–4, R5/M3, the render
+  thread (copy loop and frame copy, ~29 ms per tick).

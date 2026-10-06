@@ -46,7 +46,7 @@ public enum OriginalWorldLinks {
         func v(_ a: Int,_ offset: Int) throws -> Double { try pool[a].binary64(at: offset) }
         func store(_ a: Int,_ offset: Int,_ value: Double) throws { try pool[a].writeBinary64(value,at: offset) }
         func draw(_ slot: Int,_ stream: Int32,_ range: Int32) throws -> Int32 {
-            var random = OriginalRandom(table: try (0..<3000).map { try owned.integer(at: 0x44ff90-0x44d000+$0,as: UInt8.self) },
+            var random = OriginalRandom(table: try OriginalRandom.table(owned, at: 0x44ff90-0x44d000),
                 index: Int(try owned.integer(at: 0x450bcc-0x44d000,as: Int32.self)),counter: Int(try owned.integer(at: 0x450c34-0x44d000,as: Int32.self)),source: "owned World links",sourceSHA256: "")
             try random.validate();let result = Int32(random.next(Int(range)))
             try owned.write(Int32(random.index),at: 0x450bcc-0x44d000);try owned.write(Int32(random.counter),at: 0x450c34-0x44d000)

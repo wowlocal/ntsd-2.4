@@ -83,7 +83,7 @@ public enum OriginalPostDrawCommands {
         func h(_ actor: Int, _ offset: Int) throws -> Int32 { try header(object(actor)).integer(at: offset, as: Int32.self) }
         mutating func put(_ actor: Int, _ offset: Int, _ value: Int32) throws { try actors[actor].write(value, at: offset) }
         mutating func draw(_ stream: Int32, _ range: Int32) throws -> Int32 {
-            var random = OriginalRandom(table: try (0..<3000).map { try globals.integer(at: 0x44ff90-0x44d000+$0, as: UInt8.self) },
+            var random = OriginalRandom(table: try OriginalRandom.table(globals, at: 0x44ff90-0x44d000),
                 index: Int(try global(0x450bcc)), counter: Int(try global(0x450c34)), source: "post-draw commands", sourceSHA256: "")
             try random.validate(); let result = Int32(random.next(Int(range)))
             try globals.write(Int32(random.index), at: 0x450bcc-0x44d000)

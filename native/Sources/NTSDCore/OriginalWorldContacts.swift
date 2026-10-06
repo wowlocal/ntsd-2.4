@@ -110,7 +110,7 @@ struct OriginalContactPass {
     static func magnitude(_ value: Int32) -> Int32 { value < 0 ? 0 &- value : value }
     mutating func draw(_ attacker: Int,_ defender: Int,_ stream: Int32,
                        observe: (OriginalWorldContactsEvent) throws -> Void) throws -> Int32 {
-        var random = OriginalRandom(table: try (0..<3000).map { try globals.integer(at: 0x44ff90-0x44d000+$0,as: UInt8.self) },
+        var random = OriginalRandom(table: try OriginalRandom.table(globals, at: 0x44ff90-0x44d000),
             index: Int(try globals.integer(at: 0x450bcc-0x44d000,as: Int32.self)),counter: Int(try globals.integer(at: 0x450c34-0x44d000,as: Int32.self)),source: "owned contacts",sourceSHA256: "")
         try random.validate();let result = Int32(random.next(2))
         try globals.write(Int32(random.index),at: 0x450bcc-0x44d000);try globals.write(Int32(random.counter),at: 0x450c34-0x44d000)

@@ -124,7 +124,7 @@ public enum OriginalPostDrawLifecycle {
         }
         mutating func draw(_ stream: Int32, _ range: Int32) throws -> Int32 {
             let base = OriginalMatchPreparation.globalBase
-            var random = OriginalRandom(table: try (0..<3000).map { try globals.integer(at: 0x44ff90-base+$0, as: UInt8.self) },
+            var random = OriginalRandom(table: try OriginalRandom.table(globals, at: 0x44ff90-base),
                 index: Int(try globals.integer(at: 0x450bcc-base, as: Int32.self)),
                 counter: Int(try globals.integer(at: 0x450c34-base, as: Int32.self)), source: "post-draw lifecycle", sourceSHA256: "")
             try random.validate(); let result = Int32(random.next(Int(range)))

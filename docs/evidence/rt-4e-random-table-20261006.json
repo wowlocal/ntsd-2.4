@@ -1,0 +1,66 @@
+{
+ "study": "docs/research/CORE_REALTIME.md",
+ "phase": "4e (random table read in one copy)",
+ "date": "2026-10-06",
+ "profile_before": "rt-speed/rt4d-profile-profile: OriginalCharacterAIPass.draw 4.52% inclusive of the main thread, 2.64% of it OriginalStateRecord.integer for the 3000 single-byte reads; the same (0..<3000).map pattern at 14 sites",
+ "change": "OriginalRandom.table(record, at:) returns record.definedBytes(offset, 3000) (one copy when all 3000 bytes are in range and defined, flat or paged) and otherwise the old per-byte map, so the first failing byte throws the same error; the 14 sites (actor control, actor hits, character AI, match continuation, mission stage, music configuration, object input, post-draw commands, lifecycle, slot prefix, war battle, world contacts, links, physics) call it instead of the map.",
+ "profile_after": "rt-speed/rt4e-profile-profile: OriginalCharacterAIPass.draw 4.52% -> 0.90% inclusive",
+ "phone": {
+  "before": [
+   {
+    "label": "rt4d-run1",
+    "ticksPerSecond": 19.82,
+    "busySeconds": 224.53,
+    "peakResidentMB": 1347,
+    "runSeconds": 334
+   },
+   {
+    "label": "rt4d-run2",
+    "ticksPerSecond": 19.78,
+    "busySeconds": 221.77,
+    "peakResidentMB": 1286,
+    "runSeconds": 334
+   },
+   {
+    "label": "rt4d-profile",
+    "ticksPerSecond": 19.87,
+    "busySeconds": 221.5,
+    "peakResidentMB": 1556,
+    "runSeconds": 332
+   }
+  ],
+  "after": [
+   {
+    "label": "rt4e-run1",
+    "ticksPerSecond": 20.3,
+    "busySeconds": 218.95,
+    "peakResidentMB": 1446,
+    "runSeconds": 329
+   },
+   {
+    "label": "rt4e-run2",
+    "ticksPerSecond": 19.94,
+    "busySeconds": 221.35,
+    "peakResidentMB": 1344,
+    "runSeconds": 334
+   },
+   {
+    "label": "rt4e-profile",
+    "ticksPerSecond": 19.9,
+    "busySeconds": 219.99,
+    "peakResidentMB": 1515,
+    "runSeconds": 332
+   }
+  ],
+  "result": "19.82 / 19.78 -> 20.30 / 19.94 ticks per second (profile runs 19.87 -> 19.90): about +1%",
+  "why_small": "the harness's virtual clock (8 ms per message-loop iteration) makes every tick sleep ~3.3 x 5 ms for real whatever the compute time (off-CPU profile rt4f-offcpu-profile: 99.8% of the main thread's off-CPU time in Looper::pollOnce, 1,316 of 1,785 waits 4-6 ms); compute savings show only partly in ticks per second"
+ },
+ "gates": {
+  "headless": "vs equal, 1,832 frames identical (frozen-rt4e, rt-4e)",
+  "scenarios": "all 10 equal, frames identical (rt-4e-all)",
+  "AppKit": "vs and playback equal, 3,960 frames identical to the 4d AppKit run (rt-4e-appkit vs rt-4d-appkit)",
+  "emulator": "vs equal, 1,832 frames identical (APK from native diff e735c5cb, verified before and after the build)",
+  "tests": "bundle A (native diff 515976f2 against a83c5ad via a temporary index, new files included): OriginalRandomTableTests (new) and 146 suites that use the changed files, OriginalRandom or OriginalStateRecord, all pass (OriginalMacLoadingAudioTests 3,110 s)"
+ },
+ "review": "independent read-only review: correct, no counterexample (the fallback is the old expression; the bounds guard equals checkedRange's; no new overflow traps, including Int.min/Int.max and offsets where offset+3000 overflows; values equal on flat and paged records; the record and offset expressions at all 14 sites are side-effect-free values; evaluation order unchanged). Suggested more boundary cases (extreme offsets, a 3000-byte record, paged edges): added in the test and run with phase 4f's bundle."
+}

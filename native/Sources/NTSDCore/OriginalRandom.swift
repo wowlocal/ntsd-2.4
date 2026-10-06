@@ -15,6 +15,14 @@ public struct OriginalRandom: Codable, Equatable, Sendable {
             throw OriginalLoaderError.outsideVerifiedDomain("Invalid original replay RNG state")
         }
     }
+    /// The 3000-byte table at `offset` of `record`, exactly what reading its
+    /// bytes one at a time with `integer(at:as: UInt8.self)` returns: one copy
+    /// when every byte is in range and defined (CORE_REALTIME 4e), otherwise
+    /// those reads, so the first failing byte throws the same error.
+    public static func table(_ record: OriginalStateRecord, at offset: Int) throws -> [UInt8] {
+        if let bytes = record.definedBytes(offset, 3000) { return bytes }
+        return try (0..<3000).map { try record.integer(at: offset+$0, as: UInt8.self) }
+    }
     public mutating func next(_ range: Int) -> Int {
         guard range > 0 else { return 0 }
         counter = (counter + 1) % 1234

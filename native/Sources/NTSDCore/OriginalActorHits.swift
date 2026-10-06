@@ -81,7 +81,7 @@ struct OriginalHitPass {
     }
     mutating func draw(_ stream: Int32,_ range: Int32,observe: (OriginalHitEvent) throws -> Void) throws -> Int32 {
         guard range != 0 else { throw OriginalStateError.invalidStorage("Original hit RNG division by zero") }
-        var rng = OriginalRandom(table: try (0..<3000).map { try globals.integer(at: 0x44ff90-0x44d000+$0,as: UInt8.self) },
+        var rng = OriginalRandom(table: try OriginalRandom.table(globals, at: 0x44ff90-0x44d000),
             index: Int(try globals.integer(at: 0x450bcc-0x44d000,as: Int32.self)),counter: Int(try globals.integer(at: 0x450c34-0x44d000,as: Int32.self)),source: "owned hits",sourceSHA256: "")
         try rng.validate();let result = Int32(rng.next(Int(range)))
         try globals.write(Int32(rng.index),at: 0x450bcc-0x44d000);try globals.write(Int32(rng.counter),at: 0x450c34-0x44d000)
