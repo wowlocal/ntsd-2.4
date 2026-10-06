@@ -36,7 +36,9 @@ public struct OriginalBitmapClip: Codable, Equatable, Sendable {
 public enum OriginalBitmapDrawing {
     /// Rebind only the known surface pointer. Other untouched words retain
     /// their supplied backing and their initialization provenance.
-    static func word(_ offset: UInt32,bitmap: OriginalStateRecord,surface: UInt32,
+    /// `detail` false: nobody observes the reads, so no read record is built
+    /// and `observe` is not called (CORE_REALTIME 4d; value and errors unchanged).
+    static func word(_ offset: UInt32,bitmap: OriginalStateRecord,surface: UInt32,detail: Bool = true,
                      observe: (OriginalBitmapDrawRead) throws -> Void) throws -> Int32 {
         guard bitmap.bytes.count == 0x1f50 else { throw OriginalStateError.invalidStorage("Bitmap draw extent") }
         let i = Int(offset)
@@ -46,21 +48,24 @@ public enum OriginalBitmapDrawing {
             guard value == (surface == 0 ? 0 : 1) else { throw OriginalStateError.invalidStorage("Bitmap surface binding") }
             value = surface
         }
-        try observe(.init(offset: i,value: value,defined: bitmap.defined[i..<i+4].allSatisfy { $0 }))
+        if detail { try observe(.init(offset: i,value: value,defined: bitmap.defined[i..<i+4].allSatisfy { $0 })) }
         return Int32(bitPattern: value)
     }
     /// Bitmap backing is an explicit input. This helper really reads untouched
     /// allocator words, notably +0c after43ee50 and negative frame indices.
     /// Observe their provenance without marking them initialized or inventing0.
     /// This does not establish where a Windows allocator obtained those bytes.
+    /// `detail` false: the read and clip records are neither built nor
+    /// observed (nobody observes them; CORE_REALTIME 4d). The blit, its result
+    /// and every error are the same.
     @discardableResult
-    public static func draw(_ input: OriginalBitmapDrawInput, bitmap: OriginalStateRecord,
+    public static func draw(_ input: OriginalBitmapDrawInput, bitmap: OriginalStateRecord, detail: Bool = true,
                             observeRead: (OriginalBitmapDrawRead) throws -> Void = { _ in },
                             observeClip: (OriginalBitmapClip) throws -> Void = { _ in },
                             perform: (OriginalBitmapBlit) throws -> Int32) throws -> Int32 {
         guard bitmap.bytes.count == 0x1f50 else { throw OriginalStateError.invalidStorage("Bitmap draw extent") }
         func word(_ offset: UInt32) throws -> Int32 {
-            try Self.word(offset,bitmap: bitmap,surface: input.sourceSurface,observe: observeRead)
+            try Self.word(offset,bitmap: bitmap,surface: input.sourceSurface,detail: detail,observe: observeRead)
         }
         func clip(_ destination: inout [Int32], _ source: inout [Int32]) throws -> Bool {
             let beforeSource = source, beforeDestination = destination
@@ -78,8 +83,10 @@ public enum OriginalBitmapDrawing {
             return true
             }
             let visible = apply()
-            try observeClip(.init(beforeSource: beforeSource,beforeDestination: beforeDestination,
-                                  source: source,destination: destination,visible: visible))
+            if detail {
+                try observeClip(.init(beforeSource: beforeSource,beforeDestination: beforeDestination,
+                                      source: source,destination: destination,visible: visible))
+            }
             return visible
         }
         let effects: [UInt8]?
@@ -122,10 +129,10 @@ public enum OriginalBitmapDrawing {
 public enum OriginalRectangleDrawing {
     @discardableResult
     public static func draw(bitmap: OriginalStateRecord,surface: UInt32,target: UInt32,
-        sourceX: Int32,sourceY: Int32,width: Int32,height: Int32,x: Int32,y: Int32,
+        sourceX: Int32,sourceY: Int32,width: Int32,height: Int32,x: Int32,y: Int32,detail: Bool = true,
         observeRead: (OriginalBitmapDrawRead) throws -> Void = { _ in },
         perform: (OriginalBitmapBlit) throws -> Int32) throws -> Int32 {
-        _ = try OriginalBitmapDrawing.word(0,bitmap: bitmap,surface: surface,observe: observeRead)
+        _ = try OriginalBitmapDrawing.word(0,bitmap: bitmap,surface: surface,detail: detail,observe: observeRead)
         guard target != 0 else { throw OriginalStateError.invalidStorage("Null rectangle target") }
         return try perform(.init(sourceSurface: surface,targetSurface: target,
             source: [sourceX,sourceY,sourceX &+ width,sourceY &+ height],

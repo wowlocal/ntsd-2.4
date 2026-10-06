@@ -4,6 +4,7 @@ public enum OriginalModeLabel {
     public static func draw(mode: Int32, alternateLine: UInt32, globals: inout OriginalStateRecord,
         resourceBitmap: (UInt32) throws -> (OriginalStateRecord, UInt32),
         performBlit: (OriginalBitmapBlit) throws -> Int32,
+        detail: Bool = true,
         observe: (OriginalFrontScreenEvent) throws -> Void = { _ in }) throws {
         var staged = globals
         let base = 0x450c38-0x44d000
@@ -51,7 +52,7 @@ public enum OriginalModeLabel {
         let fontGlobals = staged
         try OriginalBitmapFont.draw(.fourPass, text: &staged, offset: base, x: x, y: y,
             columns: 64, lines: 4, style: 0, cursor: 0, globals: fontGlobals,
-            resourceBitmap: resourceBitmap, performBlit: performBlit, observe: observe)
+            resourceBitmap: resourceBitmap, performBlit: performBlit, detail: detail, observe: observe)
         globals = staged
     }
 }

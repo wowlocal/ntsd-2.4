@@ -68,6 +68,10 @@ public enum OriginalGameplayBody {
         write: ([UInt8]) throws -> Int32, close: () throws -> Int32,
         soundRequest: OriginalQueuedSound.Request,
         music: OriginalMusicPlayback.Request = { _ in throw OriginalStateError.invalidStorage("Gameplay music request provider") },
+        /// false: nobody observes the drawing's read, clip, draw and rectangle
+        /// events, so they are not built (CORE_REALTIME 4d). Every other event,
+        /// value and error is the same.
+        detail: Bool = true,
         observe: (Event) throws -> Void = { _ in },
         checkpoint: (Stage, OriginalMatchPreparation, OriginalInputControlContext, OriginalCRTRandom) throws -> Void = { _,_,_,_ in },
         ownedCheckpoint: (Stage, OriginalMatchPreparation, OriginalInputControlContext, OriginalCRTRandom, Library?) throws -> Void = { _,_,_,_,_ in }) throws -> Library? {
@@ -125,12 +129,12 @@ public enum OriginalGameplayBody {
         let mode = try next.globals.integer(at: 0x451160-0x44d000, as: Int32.self)
         try OriginalWorldCamera.apply(state: &next, mode: mode, target: target,
             sse2Conversion: sse2, surface: surface, fillBacking: fillBacking,
-            performFill: performFill, performBlit: performBlit, observe: { try observe(.drawing(.camera, $0)) })
+            performFill: performFill, performBlit: performBlit, detail: detail, observe: { try observe(.drawing(.camera, $0)) })
         try emitCheckpoint(.camera, next, owned, random)
         let phase = try next.globals.integer(at: 0x450bd8-0x44d000, as: Int32.self)
         try OriginalWorldDrawing.apply(state: &next, target: target, phase: phase,
             surface: surface, resourceBitmap: resourceBitmap, performBlit: performBlit,
-            observe: { try observe(.drawing(.drawing, $0)) })
+            detail: detail, observe: { try observe(.drawing(.drawing, $0)) })
         try emitCheckpoint(.drawing, next, owned, random)
         // Mission stage logic (mode1): its callee calls become the gameplay
         // body's own draws, fills, text, sounds and music requests.
@@ -147,7 +151,7 @@ public enum OriginalGameplayBody {
                     let width = try g(0x44d78c), height = try g(0x44d790)
                     let input = OriginalBitmapDrawInput(x: a[0], y: a[1], frame: a[2], colorKey: c.arguments[3], mirrored: c.arguments[4],
                         sourceSurface: source, targetSurface: c.arguments[5], viewportWidth: width, viewportHeight: height)
-                    try OriginalBitmapDrawing.draw(input, bitmap: record, observeRead: { r in
+                    try OriginalBitmapDrawing.draw(input, bitmap: record, detail: detail, observeRead: { r in
                         var e = OriginalFrontScreenEvent("read"); e.read = r; try observe(.drawing(.impulses, e))
                     }, observeClip: { clip in
                         var e = OriginalFrontScreenEvent("clip"); e.clip = clip; try observe(.drawing(.impulses, e))
@@ -192,7 +196,7 @@ public enum OriginalGameplayBody {
                     var label = try OriginalStateRecord(bytes: c.text+[0], defined: [Bool](repeating: true, count: c.text.count+1))
                     try OriginalBitmapFont.draw(.fourPass, text: &label, x: a[0], y: a[1], columns: a[2], lines: a[3], style: a[4],
                         cursor: c.arguments[5], globals: globals, resourceBitmap: resourceBitmap, performBlit: performBlit,
-                        observe: { try observe(.drawing(.impulses, $0)) })
+                        detail: detail, observe: { try observe(.drawing(.impulses, $0)) })
                 }
             })
             return true
@@ -226,7 +230,7 @@ public enum OriginalGameplayBody {
             observe: { try observe(.commands($0)) })
         try emitCheckpoint(.commands, next, owned, random)
         try OriginalWorldHUD.apply(state: &next, surface: surface, resourceBitmap: resourceBitmap,
-            performBlit: performBlit, observe: { try observe(.drawing(.hud, $0)) })
+            performBlit: performBlit, detail: detail, observe: { try observe(.drawing(.hud, $0)) })
         try emitCheckpoint(.hud, next, owned, random)
         var notice: OriginalStateRecord?
         if let storage = retained.formatter {
@@ -248,11 +252,11 @@ public enum OriginalGameplayBody {
         try OriginalResultLayout.apply(state: &next, context: owned, continuation: result.continuation,
             stageDefeated: round.stageDefeated, indicatorTarget: retained.indicatorTarget, local: &retained.formatter,
             dcResult: presentation.dcResult, dc: presentation.dc, surface: surface, resourceBitmap: resourceBitmap,
-            performBlit: performBlit, textRenderer: textRenderer, observe: { try observe(.drawing(.layout, $0)) })
+            performBlit: performBlit, textRenderer: textRenderer, detail: detail, observe: { try observe(.drawing(.layout, $0)) })
         try emitCheckpoint(.layout, next, owned, random)
         try OriginalGameplayOutput.returnFromDispatcher(world: &next.world, globals: &next.globals,
             memory: &owned.memory, input: presentation, resourceBitmap: resourceBitmap,
-            performBlit: performBlit, soundRequest: soundRequest, textRenderer: textRenderer, observe: { try observe(.drawing(.output, $0)) })
+            performBlit: performBlit, soundRequest: soundRequest, textRenderer: textRenderer, detail: detail, observe: { try observe(.drawing(.output, $0)) })
         try emitCheckpoint(.output, next, owned, random)
         state = next; context = owned; crt = random; caller = retained
         return installed

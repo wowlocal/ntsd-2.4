@@ -6,9 +6,10 @@ public enum OriginalWorldHUD {
         surface: (Int) throws -> UInt32,
         resourceBitmap: (UInt32) throws -> (OriginalStateRecord, UInt32),
         performBlit: (OriginalBitmapBlit) throws -> Int32,
+        detail: Bool = true,
         observe: (OriginalFrontScreenEvent) throws -> Void = { _ in }) throws {
         try draw(state: &state, clearingCommands: true, surface: surface, resourceBitmap: resourceBitmap,
-            performBlit: performBlit, observe: observe)
+            performBlit: performBlit, detail: detail, observe: observe)
     }
 
     /// Whole41ae60 callee. The paused41d765 caller does not execute421a1c/
@@ -26,6 +27,7 @@ public enum OriginalWorldHUD {
         surface: (Int) throws -> UInt32,
         resourceBitmap: (UInt32) throws -> (OriginalStateRecord, UInt32),
         performBlit: (OriginalBitmapBlit) throws -> Int32,
+        detail: Bool = true,
         observe: (OriginalFrontScreenEvent) throws -> Void) throws {
         let catalog = state.catalog, bitmaps = state.bitmaps, released = state.releasedBitmaps
         guard try state.world.integer(at: 0x7d4, as: UInt32.self) == 0 else { throw error("Catalog binding") }
@@ -36,7 +38,7 @@ public enum OriginalWorldHUD {
             }, catalogBitmap: { token in
                 guard token != 0, Int(token)-1 < bitmaps.count, !released.contains(Int(token)-1) else { throw error("Bitmap binding") }
                 return try (bitmaps[Int(token)-1].storage, surface(Int(token)-1))
-            }, resourceBitmap: resourceBitmap, performBlit: performBlit, observe: observe)
+            }, resourceBitmap: resourceBitmap, performBlit: performBlit, detail: detail, observe: observe)
     }
     private static func error(_ detail: String) -> OriginalStateError { .invalidStorage("World HUD: "+detail) }
 
@@ -46,6 +48,7 @@ public enum OriginalWorldHUD {
         catalogBitmap: (UInt32) throws -> (OriginalStateRecord, UInt32),
         resourceBitmap: (UInt32) throws -> (OriginalStateRecord, UInt32),
         performBlit: (OriginalBitmapBlit) throws -> Int32,
+        detail: Bool = true,
         observe: (OriginalFrontScreenEvent) throws -> Void = { _ in }) throws {
         var next = globals
         // Original EDI is0 at this caller after the resource loop. Keep these
@@ -71,22 +74,24 @@ public enum OriginalWorldHUD {
         }
         func picture(_ bitmap: UInt32, catalog: Bool, x: Int32, y: Int32, frame: Int32, key: UInt32) throws {
             let destination = try token(0x455608)
-            try observe(.init("draw", [bitmap, UInt32(bitPattern: x), UInt32(bitPattern: y), UInt32(bitPattern: frame), key, 0, destination]))
+            if detail { try observe(.init("draw", [bitmap, UInt32(bitPattern: x), UInt32(bitPattern: y), UInt32(bitPattern: frame), key, 0, destination])) }
             guard bitmap != 0 else { throw error("Null bitmap") }
             let (record, surface) = try catalog ? catalogBitmap(bitmap) : resourceBitmap(bitmap)
             let input = try OriginalBitmapDrawInput(x: x, y: y, frame: frame, colorKey: key, mirrored: 0,
                 sourceSurface: surface, targetSurface: destination, viewportWidth: g(0x44d78c), viewportHeight: g(0x44d790))
-            try OriginalBitmapDrawing.draw(input, bitmap: record, observeRead: read, observeClip: { value in
+            try OriginalBitmapDrawing.draw(input, bitmap: record, detail: detail, observeRead: read, observeClip: { value in
                 var event = OriginalFrontScreenEvent("clip"); event.clip = value; try observe(event)
             }, perform: blit)
         }
         func bar(_ width: Int32, row: Int32, x: Int32, y: Int32) throws {
             let destination = try token(0x455608), bitmap = try token(0x44fd7c)
-            try observe(.init("rectangle", [bitmap, 0, UInt32(bitPattern: row), UInt32(bitPattern: width), 10,
-                                            UInt32(bitPattern: x), UInt32(bitPattern: y), destination]))
+            if detail {
+                try observe(.init("rectangle", [bitmap, 0, UInt32(bitPattern: row), UInt32(bitPattern: width), 10,
+                                                UInt32(bitPattern: x), UInt32(bitPattern: y), destination]))
+            }
             let (record, surface) = try resourceBitmap(bitmap)
             try OriginalRectangleDrawing.draw(bitmap: record, surface: surface, target: destination,
-                sourceX: 0, sourceY: row, width: width, height: 10, x: x, y: y, observeRead: read, perform: blit)
+                sourceX: 0, sourceY: row, width: width, height: 10, x: x, y: y, detail: detail, observeRead: read, perform: blit)
         }
         func width(_ value: Int32) -> Int32 { (value &* 31)/125 }
         for cell in 0..<8 {

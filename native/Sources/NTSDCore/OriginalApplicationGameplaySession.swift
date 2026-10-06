@@ -53,6 +53,9 @@ public struct OriginalApplicationGameplaySession {
         pausedCheckpoint: @escaping (OriginalPausedGameplay.Stage,Menu.Snapshot,inout Environment) throws -> Void = { _,_,_ in },
         checkpoints: Bool = true,
         transformBacking: ((OriginalApplicationMatchBindings) throws -> OriginalLibTransformBacking)? = nil,
+        /// false: the body builds no read, clip, draw or rectangle events, so `observe`
+        /// never sees them; the paused branch ignores the flag (CORE_REALTIME 4d).
+        detail: Bool = true,
         beforeCommit: (Menu.PendingReturn,inout Environment) throws -> Void = { _,_ in }) throws -> Menu.PendingReturn {
         guard pendingReturn == nil else { throw Menu.Boundary.alreadyPrepared }
         let a = try Menu.Attempt(entry,.init(bitmaps:[:]),environment,
@@ -171,7 +174,7 @@ public struct OriginalApplicationGameplaySession {
             },
             soundRequest:sound,music:{ e in
                 let r = try music(e,&a.environment);a.operations.append(.music(e,r));return r
-            },observe:{ event in
+            },detail:detail,observe:{ event in
                 switch event {
                 case .drawing(let stage,let e):
                     try front(e,stage == .output)

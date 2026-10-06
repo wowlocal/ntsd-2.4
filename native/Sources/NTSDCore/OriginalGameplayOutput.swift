@@ -11,11 +11,12 @@ public enum OriginalGameplayOutput {
         performBlit: (OriginalBitmapBlit) throws -> Int32,
         soundRequest: OriginalQueuedSound.Request,
         textRenderer: OriginalSurfaceText.Renderer? = nil,
+        detail: Bool = true,
         observe: (OriginalFrontScreenEvent) throws -> Void = { _ in }) throws {
         var stagedWorld = world, stagedGlobals = globals, stagedMemory = memory
         try apply(world: &stagedWorld, globals: &stagedGlobals, memory: &stagedMemory,
             input: input, resourceBitmap: resourceBitmap, performBlit: performBlit,
-            soundRequest: soundRequest, textRenderer: textRenderer, observe: observe)
+            soundRequest: soundRequest, textRenderer: textRenderer, detail: detail, observe: observe)
         try stagedGlobals.write(UInt32(0), at: 0x457580-0x44d000)
         try observe(.init("dispatcherWrite", [0x457580, 0]))
         world = stagedWorld; globals = stagedGlobals; memory = stagedMemory
@@ -27,13 +28,14 @@ public enum OriginalGameplayOutput {
         performBlit: (OriginalBitmapBlit) throws -> Int32,
         soundRequest: OriginalQueuedSound.Request,
         textRenderer: OriginalSurfaceText.Renderer? = nil,
+        detail: Bool = true,
         observe: (OriginalFrontScreenEvent) throws -> Void = { _ in }) throws {
         var stagedWorld = world, stagedGlobals = globals, stagedMemory = memory
         let alternate = try stagedGlobals.integer(at: 0x450b84-0x44d000, as: UInt32.self)
         let mode = try stagedGlobals.integer(at: 0x451160-0x44d000, as: Int32.self)
         try observe(.init("stage", [0x41b130]))
         try OriginalModeLabel.draw(mode: mode, alternateLine: alternate, globals: &stagedGlobals,
-            resourceBitmap: resourceBitmap, performBlit: performBlit, observe: observe)
+            resourceBitmap: resourceBitmap, performBlit: performBlit, detail: detail, observe: observe)
         try observe(.init("stage", [0x4028a0]))
         try OriginalMenuPresentation.apply(.overlay, input: input, world: &stagedWorld,
             globals: &stagedGlobals, memory: &stagedMemory, textRenderer: textRenderer) {

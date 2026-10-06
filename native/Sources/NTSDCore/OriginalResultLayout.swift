@@ -11,6 +11,7 @@ public enum OriginalResultLayout {
         resourceBitmap: (UInt32) throws -> (OriginalStateRecord, UInt32),
         performBlit: (OriginalBitmapBlit) throws -> Int32,
         textRenderer: OriginalSurfaceText.Renderer? = nil,
+        detail: Bool = true,
         observe: (OriginalFrontScreenEvent) throws -> Void = { _ in }) throws {
         let catalog = state.catalog, bitmaps = state.bitmaps, released = state.releasedBitmaps
         try draw(world: state.world, actors: state.actors, globals: &state.globals,
@@ -25,7 +26,7 @@ public enum OriginalResultLayout {
                 let pointer = try context.memory.replayPointers.integer(at: 4, as: UInt32.self)
                 guard pointer != 0, let allocation = context.memory.allocations[pointer], allocation.live else { throw error("Playback ownership") }
                 return try allocation.storage.integer(at: 0x144, as: Int32.self)
-            }, resourceBitmap: resourceBitmap, performBlit: performBlit, textRenderer: textRenderer, observe: observe)
+            }, resourceBitmap: resourceBitmap, performBlit: performBlit, textRenderer: textRenderer, detail: detail, observe: observe)
     }
 
     private static func error(_ text: String) -> OriginalStateError { .invalidStorage("Result layout: "+text) }
@@ -38,6 +39,7 @@ public enum OriginalResultLayout {
         resourceBitmap: (UInt32) throws -> (OriginalStateRecord, UInt32),
         performBlit: (OriginalBitmapBlit) throws -> Int32,
         textRenderer: OriginalSurfaceText.Renderer? = nil,
+        detail: Bool = true,
         observe: (OriginalFrontScreenEvent) throws -> Void = { _ in }) throws {
         guard local == nil || local?.bytes.count == localSize else { throw error("Caller string extent") }
         var next = globals, scratch = local
@@ -57,12 +59,12 @@ public enum OriginalResultLayout {
         func picture(_ bitmap: UInt32, catalog: Bool = false, x: Int32, y: Int32,
                      frame: Int32 = -1, key: UInt32 = 0, destination: UInt32? = nil) throws {
             let target = try destination ?? token(0x455608)
-            try observe(.init("draw", [bitmap, UInt32(bitPattern: x), UInt32(bitPattern: y), UInt32(bitPattern: frame), key, 0, target]))
+            if detail { try observe(.init("draw", [bitmap, UInt32(bitPattern: x), UInt32(bitPattern: y), UInt32(bitPattern: frame), key, 0, target])) }
             guard bitmap != 0 else { throw error("Null bitmap") }
             let (record, surface) = try catalog ? catalogBitmap(bitmap) : resourceBitmap(bitmap)
             let input = try OriginalBitmapDrawInput(x: x, y: y, frame: frame, colorKey: key, mirrored: 0,
                 sourceSurface: surface, targetSurface: target, viewportWidth: g(0x44d78c), viewportHeight: g(0x44d790))
-            try OriginalBitmapDrawing.draw(input, bitmap: record, observeRead: { value in
+            try OriginalBitmapDrawing.draw(input, bitmap: record, detail: detail, observeRead: { value in
                 var event = OriginalFrontScreenEvent("read"); event.read = value; try observe(event)
             }, observeClip: { value in
                 var event = OriginalFrontScreenEvent("clip"); event.clip = value; try observe(event)
@@ -162,7 +164,7 @@ public enum OriginalResultLayout {
             if try g(0x44d030) != 0 {
                 let current = try g(0x450bbc), recorded = try playbackTicks(), mode = try g(0x451160)
                 try OriginalPlaybackInformation.draw(mode: mode, recordedTicks: recorded, currentTicks: current,
-                    globals: &next, resourceBitmap: resourceBitmap, performBlit: performBlit, observe: observe)
+                    globals: &next, resourceBitmap: resourceBitmap, performBlit: performBlit, detail: detail, observe: observe)
             }
         }
         globals = next; local = scratch

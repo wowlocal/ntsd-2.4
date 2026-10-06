@@ -6,6 +6,7 @@ public enum OriginalBackgroundDrawing {
         fillBacking: () throws -> [UInt8],
         performFill: (OriginalSurfaceFillRequest) throws -> Int32,
         performBlit: (OriginalBitmapBlit) throws -> Int32,
+        detail: Bool = true,
         observe: (OriginalFrontScreenEvent) throws -> Void = { _ in }) throws {
         func g(_ address: Int) throws -> Int32 { try globals.integer(at: address-0x44d000,as: Int32.self) }
         let arena = Int(try g(0x44d024))
@@ -13,12 +14,12 @@ public enum OriginalBackgroundDrawing {
         var bg = backgrounds[arena]
         func value(_ offset: Int,_ layer: Int = 0) throws -> Int32 { try bg.integer(at: offset+4*layer,as: Int32.self) }
         func draw(_ token: UInt32,_ x: Int32,_ y: Int32,_ key: UInt32) throws {
-            try observe(.init("draw",[token,UInt32(bitPattern: x),UInt32(bitPattern: y),UInt32.max,key,0,target]))
+            if detail { try observe(.init("draw",[token,UInt32(bitPattern: x),UInt32(bitPattern: y),UInt32.max,key,0,target])) }
             guard token != 0 else { throw error("Null bitmap") }
             let (record,surface) = try bitmap(token)
             let input = try OriginalBitmapDrawInput(x: x,y: y,frame: -1,colorKey: key,mirrored: 0,sourceSurface: surface,targetSurface: target,
                 viewportWidth: g(0x44d78c),viewportHeight: g(0x44d790))
-            try OriginalBitmapDrawing.draw(input,bitmap: record,observeRead: { r in
+            try OriginalBitmapDrawing.draw(input,bitmap: record,detail: detail,observeRead: { r in
                 var e = OriginalFrontScreenEvent("read");e.read = r;try observe(e)
             },observeClip: { c in
                 var e = OriginalFrontScreenEvent("clip");e.clip = c;try observe(e)

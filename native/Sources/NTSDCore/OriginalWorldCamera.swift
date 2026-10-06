@@ -6,6 +6,7 @@ public enum OriginalWorldCamera {
         fillBacking: () throws -> [UInt8],
         performFill: (OriginalSurfaceFillRequest) throws -> Int32,
         performBlit: (OriginalBitmapBlit) throws -> Int32,
+        detail: Bool = true,
         observe: (OriginalFrontScreenEvent) throws -> Void = { _ in }) throws {
         var next = state
         let catalog = next.catalog,bitmaps = next.bitmaps,released = next.releasedBitmaps,backgrounds = next.backgrounds
@@ -23,7 +24,7 @@ public enum OriginalWorldCamera {
         try OriginalBackgroundDrawing.draw(backgrounds: &next.backgrounds,globals: next.globals,target: target,bitmap: { token in
             guard token != 0,Int(token)-1 < bitmaps.count,!released.contains(Int(token)-1) else { throw error("Bitmap binding") }
             return try (bitmaps[Int(token)-1].storage,surface(Int(token)-1))
-        },fillBacking: fillBacking,performFill: performFill,performBlit: performBlit,observe: observe)
+        },fillBacking: fillBacking,performFill: performFill,performBlit: performBlit,detail: detail,observe: observe)
         state = next
     }
     private static func error(_ detail: String) -> OriginalStateError { .invalidStorage("World camera: "+detail) }

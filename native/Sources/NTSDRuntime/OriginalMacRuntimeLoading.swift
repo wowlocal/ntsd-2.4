@@ -411,7 +411,10 @@ import NTSDCore
                     self.counts.musicResumes += 1
                     return try self.music(.init(.method,[control,0x1c])).result
                 },music:{ e,_ in try self.music(e) },checkpoints:self.stageCheckpoints,
-                transformBacking:{ try Self.transformBacking($0.actorTokens) })
+                transformBacking:{ try Self.transformBacking($0.actorTokens) },
+                // Nothing here observes the drawing's read, clip, draw and
+                // rectangle events (no observer is passed): skip building them.
+                detail:false)
         })
     }
     /// Runtime heap policy for lib.dll's write through Actor+0x7b4

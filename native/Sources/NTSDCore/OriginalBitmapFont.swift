@@ -11,6 +11,7 @@ public enum OriginalBitmapFont {
         globals: OriginalStateRecord,
         resourceBitmap: (UInt32) throws -> (OriginalStateRecord, UInt32),
         performBlit: (OriginalBitmapBlit) throws -> Int32,
+        detail: Bool = true,
         observe: (OriginalFrontScreenEvent) throws -> Void = { _ in }) throws {
         var storage = text
         func word(_ address: Int) throws -> UInt32 { try globals.integer(at: address-0x44d000, as: UInt32.self) }
@@ -31,14 +32,16 @@ public enum OriginalBitmapFont {
             default: return
             }
             let bitmap = try word(address), target = try word(0x455608)
-            try observe(.init("draw", [bitmap, UInt32(bitPattern: px), UInt32(bitPattern: py),
-                UInt32(bitPattern: character), 1, 0, target]))
+            if detail {
+                try observe(.init("draw", [bitmap, UInt32(bitPattern: px), UInt32(bitPattern: py),
+                    UInt32(bitPattern: character), 1, 0, target]))
+            }
             guard bitmap != 0 else { throw OriginalStateError.invalidStorage("Bitmap font: Null resource") }
             let (record, surface) = try resourceBitmap(bitmap)
             let input = try OriginalBitmapDrawInput(x: px, y: py, frame: character, colorKey: 1, mirrored: 0,
                 sourceSurface: surface, targetSurface: target,
                 viewportWidth: Int32(bitPattern: word(0x44d78c)), viewportHeight: Int32(bitPattern: word(0x44d790)))
-            try OriginalBitmapDrawing.draw(input, bitmap: record, observeRead: { value in
+            try OriginalBitmapDrawing.draw(input, bitmap: record, detail: detail, observeRead: { value in
                 var event = OriginalFrontScreenEvent("read"); event.read = value; try observe(event)
             }, observeClip: { value in
                 var event = OriginalFrontScreenEvent("clip"); event.clip = value; try observe(event)
