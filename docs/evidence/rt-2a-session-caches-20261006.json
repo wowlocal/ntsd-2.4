@@ -1,0 +1,47 @@
+{
+ "study": "docs/research/CORE_REALTIME.md",
+ "phase": "2a (R1, R2)",
+ "date": "2026-10-06",
+ "change": {
+  "R1": "OriginalApplicationPoolSession.PendingInput holds a Derived box (lock-protected memoized Results) with the MatchBindings (built twice per game cycle before) and the session's static address ranges (catalog allocations, file streams, wave-owner regions); MatchBindings.init(pending:) returns the memoized value or rethrows the kept error",
+  "R2": "LoadedMenuSession.Attempt collects its starting ranges lazily from values captured in init (globals extent, live allocations, static ranges, audio); only claim/reserve use them; reserve appends in place"
+ },
+ "phone": {
+  "baseline": "10.07 / 10.16 ticks/s",
+  "after": [
+   {
+    "label": "rt2a-run1",
+    "serial": "R58R36F7VFD",
+    "runSeconds": 439,
+    "peakResidentMB": 1069,
+    "ticksPerSecond": 10.47,
+    "busySeconds": 301,
+    "bodies": 1800
+   },
+   {
+    "label": "rt2a-run2",
+    "serial": "R58R36F7VFD",
+    "runSeconds": 433,
+    "peakResidentMB": 1290,
+    "ticksPerSecond": 10.48,
+    "busySeconds": 298,
+    "bodies": 1800
+   }
+  ],
+  "result": "10.47 / 10.48 ticks/s (+3.5%), peak 1.07-1.29 GB"
+ },
+ "gates": {
+  "headless": "vs equal and frames identical; all 10 scenarios equal (frozen binaries 77e77fb4 and, with the in-place reserve, 5b8fab93)",
+  "AppKit": "vs and playback equal; 3,960 frames identical to the step-8 AppKit run",
+  "Core suites": "86 suites using the menu session, bindings, pool, loading, match launch, bootstrap or input session (release test build of the tree without the in-place reserve), 0 failures; with the in-place reserve: 11 claim/reserve suites (match launch, loaded menu/launch/selection, active recording, gameplay provider, menu return, war/tournament preparation, host gameplay), 0 failures",
+  "staged diff sha256": "44c4b07f\u2026 (identical to the tested tree)"
+ },
+ "review": {
+  "reviewer": "independent read-only agent",
+  "verdict": "OK: PendingInput immutable and created in one place; MatchBindings construction deterministic, kept error rethrown from the same call sites; same ranges in the same order from captured values; wave-owner throw at the same point; nothing else reads ranges; closure does not capture self",
+  "applied": [
+   "in-place reserve append (get/set would copy per reserve)",
+   "comment reconciling the kept failure with OriginalWaveOwnership's success-only cache"
+  ]
+ }
+}

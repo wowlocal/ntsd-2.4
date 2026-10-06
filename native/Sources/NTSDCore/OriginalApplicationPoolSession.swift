@@ -1,3 +1,5 @@
+import Foundation
+
 /// Own application continuation from the completed catalog through400 Actors,
 /// eight staging reconstructions and ten UI constructors, before41c581. Shared
 /// recovered loaders execute the rules. A failed attempt publishes no effects.
@@ -38,6 +40,44 @@ public struct OriginalApplicationPoolSession {
         public let entry: Catalog.PendingPool,loaded: OriginalInitialLoading,state: Session.State
         public let allocations: [Allocation],actorTokens: [UInt32],interfaceTokens: [UInt32],interfaceSurfaces: [UInt32]
         public let operations: [Operation],graphics: [OriginalApplicationGraphics.Command]
+        /// Values derived only from the immutable fields above, built once per
+        /// loaded session instead of in every game cycle (CORE_REALTIME R1).
+        /// Copies share them. Unlike OriginalWaveOwnership's own cache, a
+        /// failure is kept: the derivation is deterministic over immutable
+        /// inputs and throws an equatable error, so rethrowing the kept error is
+        /// the same as deriving again. The two makers never call each other
+        /// (the lock is not recursive).
+        let derived = Derived()
+        final class Derived {
+            private let lock = NSLock()
+            private var bindings: Result<OriginalApplicationMatchBindings,Error>?
+            private var ranges: Result<[(UInt64,UInt64)],Error>?
+            func bindings(_ make: () throws -> OriginalApplicationMatchBindings) throws -> OriginalApplicationMatchBindings {
+                lock.lock(); defer { lock.unlock() }
+                if bindings == nil { bindings = Result { try make() } }
+                return try bindings!.get()
+            }
+            func ranges(_ make: () throws -> [(UInt64,UInt64)]) throws -> [(UInt64,UInt64)] {
+                lock.lock(); defer { lock.unlock() }
+                if ranges == nil { ranges = Result { try make() } }
+                return try ranges!.get()
+            }
+        }
+        /// The loaded session's fixed address ranges, in order: catalog
+        /// allocations, file streams, then the startup, entry and snapshot wave
+        /// owners' addressed regions (empty ones left out).
+        func staticRanges() throws -> [(UInt64,UInt64)] {
+            try derived.ranges {
+                var spans: [(UInt64,UInt64)] = []
+                func add(_ token: UInt32,_ count: Int) { if token != 0 && count > 0 { spans.append((UInt64(token),UInt64(token)+UInt64(count))) } }
+                for a in entry.snapshot.allocations { add(a.token,a.count) }
+                for f in entry.files.streams.values { add(f.allocation.buffer,f.allocation.capacity) }
+                for owners in [entry.startup.waveOwners,entry.entry.waveOwners,entry.snapshot.waveOwners] {
+                    for i in owners.indices { for span in try owners[i].addressedRegions() { add(span.token,span.count) } }
+                }
+                return spans
+            }
+        }
     }
     public let entry: Catalog.PendingPool
     public private(set) var pendingInput: PendingInput?

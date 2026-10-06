@@ -19,7 +19,13 @@ public struct OriginalApplicationMatchBindings {
         objects = Dictionary(uniqueKeysWithValues:objectTokens.enumerated().map { ($0.element,UInt32($0.offset)) })
     }
 
+    /// Built once per loaded session (CORE_REALTIME R1); the same value or
+    /// error every time.
     public init(pending: OriginalApplicationPoolSession.PendingInput) throws {
+        self = try pending.derived.bindings { try Self(building:pending) }
+    }
+
+    private init(building pending: OriginalApplicationPoolSession.PendingInput) throws {
         let catalog = pending.entry.snapshot.allocations.filter { $0.kind == .catalog }
         guard catalog.count == 1 else { throw Boundary.catalog }
         try self.init(catalogToken:catalog[0].token,actorTokens:pending.actorTokens,

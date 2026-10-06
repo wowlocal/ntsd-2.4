@@ -142,7 +142,16 @@ public struct OriginalApplicationLoadedMenuSession {
         var audio: OriginalMusicMemory,resources = OriginalMenuResourceLoading()
         var backgrounds: [UInt32:OriginalLoadedBitmap] = [:]
         var local: OriginalStateRecord,operations: [Operation],graphics: [OriginalApplicationGraphics.Command]
-        var ranges: [(UInt64,UInt64)] = [],surfaces: [UInt32:UInt32] = [:],current: UInt32?,outputPhase = false
+        var surfaces: [UInt32:UInt32] = [:],current: UInt32?,outputPhase = false
+        /// The address ranges reserved at the attempt's start, then claims. Only
+        /// claim/reserve use them (allocation events), so the starting ranges
+        /// are collected on first use from values captured in init
+        /// (CORE_REALTIME R2).
+        var ranges: [(UInt64,UInt64)] { collectStartingRanges(); return collectedRanges! }
+        private var collectedRanges: [(UInt64,UInt64)]?, collectRanges: (() -> [(UInt64,UInt64)])?
+        private func collectStartingRanges() {
+            if collectedRanges == nil { collectedRanges = collectRanges!(); collectRanges = nil }
+        }
         var target: UInt32 { entry.loading.target }
         init(_ entry: Input.PendingContinuation,_ inputs: OriginalApplicationMenuInputs,_ env: E,
              _ screen: OriginalFrontScreenBodyInput,_ output: OriginalMenuPresentationInput,
@@ -170,24 +179,25 @@ public struct OriginalApplicationLoadedMenuSession {
             guard output.targetSurface == entry.loading.target else { throw Boundary.dependency("Menu target") }
             guard var images = state.bitmapInputs else { throw Boundary.dependency("Bitmap inputs") }
             try images.addResources(inputs.bitmaps);state.bitmapInputs = images
-            // Collected in a local array and stored once: each append to the
-            // class's `ranges` paid a dynamic exclusivity check, and iterating
-            // the owner arrays by value copied every ownership record
-            // (MOBILE_PERFORMANCE step 6). Same ranges, order and throws.
-            var spans: [(UInt64,UInt64)] = []
-            func add(_ token: UInt32,_ count: Int) { if token != 0 && count > 0 { spans.append((UInt64(token),UInt64(token)+UInt64(count))) } }
-            add(0x44d000,state.full.bytes.count)
-            for (token,a) in state.memory.allocations where a.live { add(token,a.storage.byteCount) }
-            let catalog = entry.entry.entry
-            for a in catalog.snapshot.allocations { add(a.token,a.count) }
-            for f in catalog.files.streams.values { add(f.allocation.buffer,f.allocation.capacity) }
-            for owners in [catalog.startup.waveOwners,catalog.entry.waveOwners,catalog.snapshot.waveOwners] {
-                for i in owners.indices { for span in try owners[i].addressedRegions() { add(span.token,span.count) } }
+            // The starting ranges, in the order they were always reserved: the
+            // globals, live allocations, the session's static ranges (built once
+            // per session; a wave-owner failure throws here as before), audio.
+            let fullCount = state.full.bytes.count,allocations = state.memory.allocations
+            let staticRanges = try entry.entry.staticRanges(),audioAllocations = audio.allocations
+            collectRanges = {
+                var spans: [(UInt64,UInt64)] = []
+                func add(_ token: UInt32,_ count: Int) { if token != 0 && count > 0 { spans.append((UInt64(token),UInt64(token)+UInt64(count))) } }
+                add(0x44d000,fullCount)
+                for (token,a) in allocations where a.live { add(token,a.storage.byteCount) }
+                spans += staticRanges
+                for (token,record) in audioAllocations { add(token,record.bytes.count) }
+                return spans
             }
-            for (token,record) in audio.allocations { add(token,record.bytes.count) }
-            ranges = spans
         }
-        func reserve(_ token: UInt32,_ count: Int) { if token != 0 && count > 0 { ranges.append((UInt64(token),UInt64(token)+UInt64(count))) } }
+        func reserve(_ token: UInt32,_ count: Int) {
+            guard token != 0 && count > 0 else { return }
+            collectStartingRanges(); collectedRanges!.append((UInt64(token),UInt64(token)+UInt64(count)))
+        }
         func claim(_ token: UInt32,_ count: Int) throws {
             let lo = UInt64(token),hi = lo+UInt64(count)
             guard token != 0,count > 0,hi <= UInt64(UInt32.max)+1,
