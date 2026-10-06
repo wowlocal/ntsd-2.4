@@ -81,20 +81,38 @@ final class NTSDAndroidCursor {}
         }
         let stride = Int(out.stride),width = Int(out.width),height = Int(out.height)
         let dst = bits.assumingMemoryBound(to:UInt32.self)
-        for y in 0..<height { (dst+y*stride).update(repeating:0xFF00_0000,count:width) }
         let x0 = max(0,(width-frame.width)/2),y0 = max(0,(height-frame.height)/2)
         let w = min(frame.width,width),h = min(frame.height,height)
-        frame.pixels.withUnsafeBytes { raw in
-            let src = raw.bindMemory(to:UInt32.self)
-            for y in 0..<h {
-                let row = dst+(y0+y)*stride+x0,from = y*frame.width
-                for x in 0..<w {
-                    let v = UInt32(littleEndian:src[from+x])
-                    row[x] = UInt32(littleEndian:((v >> 16) & 0xFF) | (v & 0xFF00) | ((v & 0xFF) << 16) | 0xFF00_0000)
-                }
+        // Black outside the frame only; the frame's own pixels are written below
+        // (CORE_REALTIME phase 1a: one pass per pixel instead of two).
+        for y in 0..<height {
+            let row = dst+y*stride
+            if y < y0 || y >= y0+h { row.update(repeating:0xFF00_0000,count:width); continue }
+            if x0 > 0 { row.update(repeating:0xFF00_0000,count:x0) }
+            if x0+w < width { (row+x0+w).update(repeating:0xFF00_0000,count:width-x0-w) }
+        }
+        if w > 0 && h > 0 {
+            frame.pixels.withUnsafeBytes { raw in
+                let src = raw.baseAddress!.assumingMemoryBound(to:UInt32.self)
+                for y in 0..<h { Self.swapChannels(src+y*frame.width,dst+(y0+y)*stride+x0,w) }
             }
         }
         _ = ANativeWindow_unlockAndPost(surface)
+    }
+    /// B,G,R,X words to R,G,B,X with X = 0xFF (little-endian), four at a time.
+    static func swapChannels(_ from: UnsafePointer<UInt32>,_ to: UnsafeMutablePointer<UInt32>,_ count: Int) {
+        var i = 0
+        while i+4 <= count {
+            let v = UnsafeRawPointer(from+i).loadUnaligned(as:SIMD4<UInt32>.self)
+            let rgb = ((v &>> 16) & 0xFF) | (v & 0xFF00) | ((v & 0xFF) &<< 16) | 0xFF00_0000
+            UnsafeMutableRawPointer(to+i).storeBytes(of:rgb,as:SIMD4<UInt32>.self)
+            i += 4
+        }
+        while i < count {
+            let v = from[i]
+            to[i] = ((v >> 16) & 0xFF) | (v & 0xFF00) | ((v & 0xFF) << 16) | 0xFF00_0000
+            i += 1
+        }
     }
     /// A surface pixel as the drawn frame's client point.
     func clientPoint(_ x: Float,_ y: Float,surface: OpaquePointer) -> (Int32,Int32)? {
