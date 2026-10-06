@@ -63,7 +63,7 @@ and after.
 
 | Phase | Work | Status |
 | --- | --- | --- |
-| 0 | Measurement harness in the repository: `tools/crossplatform/android_speed.py` (speed without frame capture, peak memory, optional simpleperf profile with an inclusive phase table and restoring the phone's settings); baseline at the branch start | next |
+| 0 | Measurement harness in the repository: `tools/crossplatform/android_speed.py` (speed without frame capture, peak memory, optional simpleperf profile with an inclusive phase table and restoring the phone's settings); baseline at the branch start | **done** |
 | 1 | Display path: the keyed sprite copy loop (a third of the copied pixels), the present path (frame copy, Android channel swap), fill loops | queued |
 | 2 | Per-cycle round trip: keep the match model across cycles instead of `bindings.read`/`store` every cycle; a design note first (who reads the session memory between cycles, which invariants and commit points must hold) | queued |
 | 3 | Rollback copies: the allocation table copied per cycle; the attempt's per-cycle setup over every allocation made incremental | queued |
@@ -92,10 +92,14 @@ while measuring and restore `svc power stayon false` when pausing.
 
 | Date | Step | Result | Evidence | Commit |
 | --- | --- | --- | --- | --- |
-| 2026-10-06 | Branch and card | `exp/core-realtime` from 9df1054; this card | — | this commit |
+| 2026-10-06 | Branch and card | `exp/core-realtime` from 9df1054; this card | — | 36edf83 |
+| 2026-10-06 | Phase 0: harness and baseline | `android_speed.py` committed; **baseline 10.07 ticks per second**, peak 1.33 GB. Inclusive: front-buffer drawing 19.7%, gameplay session 17.3% (body 11.4%), loaded cycle 11.3%, bindings store 7.4%, Android window drawing 6.8%, loaded menu attempt 4.7%, loaded match entry 4.2%, display perform 3.1%, bindings read 2.7%, menu state replace 1.9%. Self: memcpy 16.1%, retain/release 14.6% (+ atomics 3.9%) | [evidence](../evidence/rt-baseline-20261006.json) | this commit |
 
 ## Next task
 
-Phase 0: commit `tools/crossplatform/android_speed.py` (from the session's
-`phone_speed.sh` and profile scripts) and measure the branch baseline on the
-Galaxy A12 (speed, peak memory, inclusive profile).
+Phase 1a: the Android host's channel swap (`NTSDAndroidWindowHost.draw`, 4.4%
+of phone time on its own): a contiguous pointer loop the compiler can
+vectorize, same output bytes. Then the present path's frame copy (memcpy in the
+runtime's `replay`/`performFront`, 6.8% together with the game's own row copies)
+and the keyed sprite loop. In parallel, a read-only map of the per-cycle data
+flow for phase 2.
