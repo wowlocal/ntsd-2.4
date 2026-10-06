@@ -219,8 +219,9 @@ public struct OriginalApplicationMenuSession {
         var bitmapInputs = state.bitmapInputs ?? initialization?.bitmapResources.map { OriginalApplicationBitmapInputs(resources:$0) }
         var graphics = state.graphics, graphicsCommands: [OriginalApplicationGraphics.Command] = []
         func emit(_ effect: Effect) throws {
-            if var owner = graphics {
-                let command = try owner.consume(effect,inputs:bitmapInputs);graphics = owner
+            if graphics != nil {
+                // In place: consume is all-or-nothing (CORE_REALTIME phase 4b).
+                let command = try graphics!.consume(effect,inputs:bitmapInputs)
                 if let command { graphicsCommands.append(command);try graphicsObserve(command) }
             }
             effects.append(effect)

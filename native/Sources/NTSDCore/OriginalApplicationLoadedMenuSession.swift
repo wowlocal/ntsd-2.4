@@ -205,9 +205,13 @@ public struct OriginalApplicationLoadedMenuSession {
             reserve(token,count)
         }
         func emit(_ effect: Session.Effect) throws {
-            guard var owner = state.graphics else { throw Boundary.dependency("Graphics") }
-            if let command = try owner.consume(effect,inputs:state.bitmapInputs) { graphics.append(command) }
-            state.graphics = owner;operations.append(.menu(effect))
+            guard state.graphics != nil else { throw Boundary.dependency("Graphics") }
+            // consume works on its own copy and assigns it only on success, so
+            // updating the owner in place leaves it unchanged on a throw, as the
+            // copy taken here did (CORE_REALTIME phase 4b).
+            let inputs = state.bitmapInputs
+            if let command = try state.graphics!.consume(effect,inputs:inputs) { graphics.append(command) }
+            operations.append(.menu(effect))
         }
         func allocate(_ kind: AllocationKind) throws -> OriginalInterfaceAllocation {
             let a = try allocation(kind,0x1f50,&environment)
