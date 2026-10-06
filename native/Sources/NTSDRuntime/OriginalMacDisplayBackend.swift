@@ -471,8 +471,7 @@ import NTSDCore
             let s = try resource(q.words[0],as:Surface.self),color = try record(q,100).integer(at:80,as:UInt32.self)
             guard let data = s.storage else { throw Boundary.released(s.token) }
             let rect = try rectangle(s),(x,y,w,h,window) = rect
-            let values = data.values,known = data.known
-            for row in y..<(y+h) { for column in x..<(x+w) { let i = row*data.width+column;values[i] = color.littleEndian;known[i] = 1 } }
+            Self.fillRows(data,y..<(y+h),x,x+w,color)
             if let window { try windows.present(framebuffer(data,rect),in:window) }
             retained = [s];response = .init()
         default:throw Boundary.unsupported(q.kind)
@@ -951,10 +950,21 @@ extension OriginalMacDisplayBackend {
     }
     private nonisolated static func fillPixels(_ data: Storage,_ region: FrontRect?,_ color: UInt32) {
         guard let rect = region else { return }
-        let values = data.values,known = data.known
-        for y in rect.top..<rect.bottom { for x in rect.left..<rect.right {
-            let i = y*data.width+x;values[i] = color.littleEndian;known[i] = 1
-        } }
+        fillRows(data,rect.top..<rect.bottom,rect.left,rect.right,color)
+    }
+    /// One colour over columns left..<right of each row: a row store and whole
+    /// mask words instead of a store and a bit per pixel (CORE_REALTIME 1d).
+    /// The same pixels and bits; the column range is formed per row, as the
+    /// per-pixel loops did.
+    private nonisolated static func fillRows(_ data: Storage,_ rows: Range<Int>,_ left: Int,_ right: Int,_ color: UInt32) {
+        let values = data.values,known = data.known,value = color.littleEndian
+        for row in rows {
+            let columns = left..<right
+            guard !columns.isEmpty else { continue }
+            let start = row*data.width+left
+            values.advanced(by:start).update(repeating:value,count:columns.count)
+            known.setRange(start,columns.count)
+        }
     }
     /// What a copy's pixel loop needs, without the surfaces (the render thread
     /// holds only storages and values).

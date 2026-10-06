@@ -1,0 +1,138 @@
+{
+ "study": "docs/research/CORE_REALTIME.md",
+ "phase": "1d (colour fills by row)",
+ "date": "2026-10-06",
+ "change": "OriginalMacDisplayBackend: perform's DirectDraw colour fill (blt) and the front-buffer fill (fillPixels, on the render thread since 1c) wrote a value and a mask bit per pixel; fillRows writes each row with one UnsafeMutablePointer.update(repeating:count:) and KnownMask.setRange (whole words). The row and column ranges are formed as before, so the same pixels, bits and traps.",
+ "profile": "emulator after 1c (emu-rt3-1c-profile): perform 6.5% self of the main thread, all of it the blt colour fill served by the menu loop's front service (not counted in busySeconds, which covers only loading.complete)",
+ "phone": {
+  "baseline": "phase 1c: 11.94 / 11.92 ticks/s",
+  "after": [
+   {
+    "label": "rt1d-run1",
+    "serial": "R58R36F7VFD",
+    "runSeconds": 406,
+    "peakResidentMB": 1030,
+    "ticksPerSecond": 12.11,
+    "busySeconds": 269.02,
+    "bodies": 1800
+   },
+   {
+    "label": "rt1d-run2",
+    "serial": "R58R36F7VFD",
+    "runSeconds": 406,
+    "peakResidentMB": 1377,
+    "ticksPerSecond": 12.1,
+    "busySeconds": 271.94,
+    "bodies": 1800
+   }
+  ],
+  "result": "12.11 / 12.10 ticks/s (+1.5%); busy seconds unchanged (269-272), as expected: the fill runs in the menu step",
+  "note": "apks/rt1d.apk built from native diff e407c17e (1c + 1d before 1c was committed; the committed 1d content is the same file). The install needed `pm trim-caches` on the nearly full phone."
+ },
+ "mac": {
+  "rows": [
+   {
+    "label": "rt1c",
+    "round": 0,
+    "exit": 0,
+    "cpuSeconds": 15.65,
+    "ticksPerSecond": 40.67,
+    "busySeconds": 10.61,
+    "bodies": 1800
+   },
+   {
+    "label": "rt1d",
+    "round": 0,
+    "exit": 0,
+    "cpuSeconds": 15.18,
+    "ticksPerSecond": 40.83,
+    "busySeconds": 10.43,
+    "bodies": 1800
+   },
+   {
+    "label": "rt1c",
+    "round": 1,
+    "exit": 0,
+    "cpuSeconds": 15.48,
+    "ticksPerSecond": 40.64,
+    "busySeconds": 10.55,
+    "bodies": 1800
+   },
+   {
+    "label": "rt1d",
+    "round": 1,
+    "exit": 0,
+    "cpuSeconds": 15.08,
+    "ticksPerSecond": 40.91,
+    "busySeconds": 10.39,
+    "bodies": 1800
+   },
+   {
+    "label": "rt1c",
+    "round": 2,
+    "exit": 0,
+    "cpuSeconds": 15.69,
+    "ticksPerSecond": 40.66,
+    "busySeconds": 10.65,
+    "bodies": 1800
+   },
+   {
+    "label": "rt1d",
+    "round": 2,
+    "exit": 0,
+    "cpuSeconds": 15.3,
+    "ticksPerSecond": 40.78,
+    "busySeconds": 10.49,
+    "bodies": 1800
+   }
+  ],
+  "result": "process CPU seconds median 15.65 (1c, a61d9f6c) -> 15.18 (1d, 834fc05d): -3.0%; busy seconds 10.61 -> 10.43"
+ },
+ "emulator": {
+  "rows": [
+   {
+    "label": "emu-rt1d-run1",
+    "serial": "emulator-5554",
+    "runSeconds": 76,
+    "peakResidentMB": 1705,
+    "ticksPerSecond": 39.54,
+    "busySeconds": 13.94,
+    "bodies": 1800
+   },
+   {
+    "label": "emu-rt1c-run3",
+    "serial": "emulator-5554",
+    "runSeconds": 76,
+    "peakResidentMB": 1705,
+    "ticksPerSecond": 39.24,
+    "busySeconds": 13.68,
+    "bodies": 1800
+   },
+   {
+    "label": "emu-rt1d-run2",
+    "serial": "emulator-5554",
+    "runSeconds": 76,
+    "peakResidentMB": 1705,
+    "ticksPerSecond": 39.5,
+    "busySeconds": 13.73,
+    "bodies": 1800
+   },
+   {
+    "label": "emu-rt1c-run4",
+    "serial": "emulator-5554",
+    "runSeconds": 76,
+    "peakResidentMB": 1705,
+    "ticksPerSecond": 39.28,
+    "busySeconds": 13.46,
+    "bodies": 1800
+   }
+  ],
+  "result": "vs equal, 1,832 frames identical to the earlier Android app run; ticks/s at the paced rate (39.5 vs 39.3) and busy seconds unchanged (fill in the menu step)"
+ },
+ "gates": {
+  "headless": "vs equal, 1,832 frames identical (frozen 834fc05d, rt-1d); all 10 scenarios equal, frames identical (rt-1d-all)",
+  "AppKit": "vs and playback equal; 3,960 frames identical to the 1c AppKit run (rt-1d-appkit)",
+  "Core suites": "release test build swiftpm-test-release-b of native diff e407c17e (1c + 1d; the committed 1d file is that tree's): MacDisplayBackend, MacBitmapBackend, MacFrontRaster, MacDisplayColor, ObservedGraphics, ObservedBitmap, ObservedIteration, MacAudioBackend, MacRuntimeLoading, MacRuntimeMenu, MacWindowBackend, MacWindowGeometry and MacLoadingAudio (2,975 s): 13 suites, 0 failures"
+ },
+ "review": "independent read-only review: OK. Same pixels and bits for every reachable rectangle (blt: whole surface or the clipped window area, both inside storage and non-empty; front fill: a non-empty intersection inside the surface); setRange sets exactly start..<start+length; the colour store is identical; traps and overflow in the same cases except at Int.max or for unreachable empty/inverted ranges; the render closure still holds only Storage and values."
+}

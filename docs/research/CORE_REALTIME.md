@@ -66,7 +66,7 @@ and after.
 | Phase | Work | Status |
 | --- | --- | --- |
 | 0 | Measurement harness in the repository: `tools/crossplatform/android_speed.py` (speed without frame capture, peak memory, optional simpleperf profile with an inclusive phase table and restoring the phone's settings); baseline at the branch start | **done** |
-| 1 | Display path: the keyed sprite copy loop (a third of the copied pixels), the present path (frame copy, Android channel swap), fill loops | 1a done; 1d (colour fills by row) in checks |
+| 1 | Display path: the keyed sprite copy loop (a third of the copied pixels), the present path (frame copy, Android channel swap), fill loops | 1a, 1d done |
 | 1c | **Render pipelining:** replay each committed batch's draw commands on a render thread while the main thread computes the next tick. The Core records declared results for draws and never reads pixels back (`OriginalMacRuntimeLoading.replay`), so the replay (pixel copies, frame copy, Android drawing: ~25–30% of the phone's main thread) only needs its order kept and flushes wherever a frame is observed (captures, frame digests, window events, errors). The A12 has eight cores with one busy. A design note first (display backend isolation, flush points, error propagation) | done |
 | 2 | Per-cycle round trip: keep the match model across cycles instead of `bindings.read`/`store` every cycle; a design note first (who reads the session memory between cycles, which invariants and commit points must hold): [CORE_REALTIME_DATAFLOW](CORE_REALTIME_DATAFLOW.md) | 2a, 2b done; R3–R5 open |
 | 3 | Rollback copies: the allocation table copied per cycle; the attempt's per-cycle setup over every allocation made incremental | queued |
@@ -107,24 +107,29 @@ while measuring; restore `svc power stayon false` when the loop pauses or stops.
 | 2026-10-06 | Phase 1a: Android window drawing | Black only outside the frame, channel swap four pixels at a time (SIMD). Window drawing 6.8% → 3.2% of phone time; 10.07 → 10.16 ticks per second (within run variation). Emulator vs equal, frames identical; swap checked equal to the old formula. | [evidence](../evidence/rt-1a-android-draw-20261006.json) | f8a3758 |
 | 2026-10-06 | Phase 2a: per-session caches (R1, R2) | MatchBindings and the static address ranges built once per loaded session; the attempt's starting ranges collected only when an allocation needs them. **10.07/10.16 → 10.47/10.48 ticks per second** (two runs). 86 suites, all scenarios and AppKit equal; review OK | [evidence](../evidence/rt-2a-session-caches-20261006.json) | 90e23bf |
 | 2026-10-06 | Phase 2b: actor pair cache | MatchBindings keeps each actor's last session/model record pair; an actor unchanged since the last read or store is neither converted nor rewritten (first step toward DATAFLOW R3). **10.47/10.48 → 11.21/11.20 ticks per second** (+7%); Mac busy time −7.3%. 87 suites, all scenarios and AppKit equal; review OK | [evidence](../evidence/rt-2b-actor-pairs-20261006.json) | 6bbda82 |
-| 2026-10-06 | Phase 1c: render pipelining | Committed gameplay batches' pixel work, crop and present run on a serial render thread on headless and Android (at most one batch in flight; every other display entry point, observation and exit flushes; AppKit/iOS/SDL unchanged). **11.21/11.20 → 11.94/11.92 ticks per second** (+6.5%); game-thread busy 285 → 270 s; Mac busy −6.2%. All 10 scenarios equal with frame digests and with full overlap, frames identical; ThreadSanitizer clean; AppKit equal; 13 suites; review OK after four fixes | [evidence](../evidence/rt-1c-render-pipelining-20261006.json), [design](CORE_REALTIME_RENDER.md) | this commit |
+| 2026-10-06 | Phase 1c: render pipelining | Committed gameplay batches' pixel work, crop and present run on a serial render thread on headless and Android (at most one batch in flight; every other display entry point, observation and exit flushes; AppKit/iOS/SDL unchanged). **11.21/11.20 → 11.94/11.92 ticks per second** (+6.5%); game-thread busy 285 → 270 s; Mac busy −6.2%. All 10 scenarios equal with frame digests and with full overlap, frames identical; ThreadSanitizer clean; AppKit equal; 13 suites; review OK after four fixes | [evidence](../evidence/rt-1c-render-pipelining-20261006.json), [design](CORE_REALTIME_RENDER.md) | 72b9521 |
+| 2026-10-06 | Phase 1d: colour fills by row | The DirectDraw colour fill (`blt`, served by the menu loop every frame) and the front fill write one row store and whole mask words per row instead of a value and a bit per pixel. **11.94/11.92 → 12.11/12.10 ticks per second** (+1.5%); Mac process CPU −3.0%. All 10 scenarios and AppKit equal, frames identical; 13 suites; review OK | [evidence](../evidence/rt-1d-row-fills-20261006.json) | this commit |
 
 ## Next task
 
-Phase 1d, colour fills by row (in the working tree, on top of 1c): `perform`'s
-DirectDraw colour fill (`blt`) cleared a surface pixel by pixel through the
-menu loop's front service every frame, 6.5% of the emulator's main thread
-after 1c; the front fill on the render thread used the same loop. Now one row
-store and whole mask words per row. Done so far: vs equal and 1,832 frames
-identical (frozen 834fc05d), independent review OK, Mac CPU −3.0%. Open: all
-10 scenarios, AppKit, the 13 display/window/runtime suites (bundle B) and the
-phone (`rt1d-run1/2`). Note that `busySeconds` counts only `loading.complete`,
-not the menu step, so on the Mac and the emulator use the process CPU time.
+Phase 1e, pipelined text (in the working tree): a Mac sample of the 1d build
+showed the main thread waiting on the render thread for 20% of its busy time
+(`RenderExecutor.flush ← performFront ← replay`): every text step flushed, so
+any batch that draws HUD text gave up most of the overlap. Now only TextOutA
+touches pixels; it keeps its checks and glyph mask on the main thread and
+queues the pixels and present (the synchronous path is the old code after a
+flush). Done so far: vs equal with 1,832 frames identical (frozen 93d8d0b2),
+full-overlap vs, playback and war equal. Open: Mac A/B, a Mac sample for the
+remaining waits, all 10 scenarios, ThreadSanitizer, AppKit, the display suites,
+review, phone.
 
-Then profile the phone on the 1d build and choose the next mechanism. The
-emulator's main thread after 1c: gameplay session 33% (the gameplay body's
-drawing commands: bitmap drawing, mode label and bitmap font), the menu loop's
-observed iteration 18%, the loaded cycle 13%, replay 8%, and 4.5% destroying
-the `PendingReturn` values that `complete`/`finish` discard. Candidates: the
-discarded host results, R4 (replay buffers and actors out of the allocation
-dictionary), the drawing-command generation.
+Then profile the phone on that build. The phone's main thread after 1d is two
+thirds of its samples (render thread 29%); retain/release 24%, their atomics
+5% and memcpy 9% of it. On the Mac the largest single source of copying is
+`Array._consumeAndCreateNew` under `OriginalStateRecord.write`/`overwrite`
+(record buffers copied on write because another reference holds them: the
+menu state's `replace`, the loaded match entry, the bitmap font's resource
+writes), 12% of busy time. Candidates: keep those records uniquely referenced
+(or write through the owner), the discarded host results, R4. The DWARF
+profile on the phone (`--call-graph dwarf,65528 -f 100`) produced no data;
+`dwarf,16384 -f 200` gives truncated stacks.
