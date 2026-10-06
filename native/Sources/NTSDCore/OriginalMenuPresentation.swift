@@ -31,7 +31,7 @@ public struct OriginalMenuPresentationMemory {
         public var live: Bool
         public init(storage: OriginalStateRecord, live: Bool = true) { self.storage = storage; self.live = live }
     }
-    public var allocations: [UInt32: Allocation] = [:]
+    public var allocations = OriginalAllocationTable()
     /// 4588a8 and 4588ac are outside the ordinary globals region.
     public var replayPointers: OriginalStateRecord
     public init(replayPointers: OriginalStateRecord) { self.replayPointers = replayPointers }

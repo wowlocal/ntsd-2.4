@@ -150,7 +150,7 @@ public enum FrontMenuLoopReference {
                 guard h.pop == pop,h.saved.count == 4,h.returnSP == h.entrySP+4+pop,h.result != nil,helperReturns[h.entry]?.contains(h.returnPC) == true else { throw error("Helper ABI "+String(h.entry,radix:16)) };result.helpers += 1
             }
         }
-        func draw(_ args: [UInt32],_ results: [Int32],_ blits: inout Int,_ width: Int32,_ height: Int32,_ allocations: [UInt32:OriginalMenuPresentationMemory.Allocation],_ event: (OriginalFrontScreenEvent) throws -> Void) throws {
+        func draw(_ args: [UInt32],_ results: [Int32],_ blits: inout Int,_ width: Int32,_ height: Int32,_ allocations: OriginalAllocationTable,_ event: (OriginalFrontScreenEvent) throws -> Void) throws {
             guard args.count == 7,!results.isEmpty,let bitmap = allocations[args[0]],bitmap.live else { throw error("Unbound bitmap/device input") }
             let input = OriginalBitmapDrawInput(x: Int32(bitPattern: args[1]),y: Int32(bitPattern: args[2]),frame: Int32(bitPattern: args[3]),colorKey: args[4],mirrored: args[5],
                 sourceSurface: try bitmap.storage.integer(at: 0,as: UInt32.self),targetSurface: args[6],viewportWidth: width,viewportHeight: height)

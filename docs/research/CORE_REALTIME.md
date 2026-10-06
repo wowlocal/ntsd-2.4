@@ -9,6 +9,14 @@ Galaxy A12 (Helio P35, Cortex-A53 cores, 2.8 GB RAM): the scripted VS match runs
 at the game's own rate, **≥ 30 gameplay ticks per second** without frame capture
 (`tools/crossplatform/android_speed.py`, bodies 300→1800), and then plays
 smoothly by hand. Every host keeps exactly the same game.
+**Frame-time targets (user, 2026-10-06):** "I want 8ms per frame on the A12.
+starting from 33ms per frame, them we should strive to 16ms, then to 8ms".
+Frame time is the unthrottled compute time per gameplay tick in the speed
+harness, 1000 / ticks per second: **33 ms (30 ticks/s), then 16 ms (62.5),
+then 8 ms (125)**. With the render pipeline both threads count: the main
+thread and the render thread must each fit the budget. Plan per tier:
+[CORE_REALTIME_BUDGET](CORE_REALTIME_BUDGET.md). Starting point today:
+~99 ms (10.1 ticks/s); after 1f ~59 ms; R3 stage 1 ~52 ms.
 **Reason:** user decision 2026-10-06: "make an experimental branch and do core
 redesign for real time play on slow phones like A12. Original game was published
 at 2008 and Samsung A12 has comparable performance GPU/CPU to the average
@@ -72,6 +80,7 @@ and after.
 | 3 | Rollback copies: the allocation table copied per cycle; the attempt's per-cycle setup over every allocation made incremental | queued |
 | 4 | Gameplay session/body overheads and reference-counting traffic (record copies, dictionary iteration) | queued |
 | 5 | Loading time on the phone (~4.5 minutes) | queued |
+| 6 | Frame-time tiers 33 → 16 → 8 ms per tick on the A12 (user, 2026-10-06): where each millisecond goes and the steps per tier, [CORE_REALTIME_BUDGET](CORE_REALTIME_BUDGET.md) | tier 1 in progress |
 
 ## Gates (every increment)
 
@@ -117,36 +126,27 @@ while measuring; restore `svc power stayon false` when the loop pauses or stops.
 | 2026-10-06 | Phase 4c: flat record reads through the buffers | `integer(at:as:)` (3.4% self plus `checkedRange` 1.8% of the phone's main thread) checked definedness through an array slice and assembled the value byte by byte; it now loops over the mask's buffer and loads the value unaligned, with the same errors in the same order. 16.01/16.06 → 16.10 ticks per second (one run; within noise, less work). All 10 scenarios and AppKit equal, frames identical; 154 suites and a new flat-read unit test; review OK | [evidence](../evidence/rt-4c-flat-reads-20261006.json) | 81b40e4 |
 | 2026-10-06 | M2a: message-queue requests served inside the Host attempt | A gameplay tick ran the menu loop's Host attempt 5–6 times, once per unrecorded request; an opt-in accepting inline cursor now serves `.queue` requests inside the attempt (same requests, order, replies, counters and bound; production passes no observers) ([design](CORE_REALTIME_M2.md)). **16.10 → 16.70/16.57 ticks per second** (+3.6%); Mac CPU −2.6%. All 10 scenarios and AppKit equal, frames identical; 105 suites; side-by-side test (counters, messages, clock calls, committed globals, frames, bounds, a failing clock); review OK | [evidence](../evidence/rt-m2a-inline-queue-20261006.json) | dda500b |
 | 2026-10-06 | M2b: the window Blt served inside the attempt | The back-buffer clear (dispatch entry each iteration, ArtSetup, Alt+Enter) is served inline too, so a gameplay tick runs the Host attempt once; its target is always the back buffer (nothing presented). 16.70/16.57 → 16.66/16.73 ticks per second (within noise); Mac CPU −2.7% (four rounds). All 10 scenarios and AppKit equal, frames identical; 105 suites; review OK | [evidence](../evidence/rt-m2b-inline-blt-20261006.json) | b22545a |
-| 2026-10-06 | Phase 1f: back-buffer fill queued on the render thread | The DirectDraw colour fill that clears the back buffer every iteration (the menu step's Blt, 2.5% of the phone's main thread after M2b) joins the render queue without a flush on hosts that present concurrently, in menus too; a primary's fill flushes and presents on the main thread. **16.66/16.73 → 16.87/16.87 ticks per second** (+1%). All 10 scenarios and AppKit equal, frames identical; full-overlap runs equal; ThreadSanitizer clean; 13 suites; review OK | [evidence](../evidence/rt-1f-back-fill-20261006.json) | this commit |
+| 2026-10-06 | Phase 1f: back-buffer fill queued on the render thread | The DirectDraw colour fill that clears the back buffer every iteration (the menu step's Blt, 2.5% of the phone's main thread after M2b) joins the render queue without a flush on hosts that present concurrently, in menus too; a primary's fill flushes and presents on the main thread. **16.66/16.73 → 16.87/16.87 ticks per second** (+1%). All 10 scenarios and AppKit equal, frames identical; full-overlap runs equal; ThreadSanitizer clean; 13 suites; review OK | [evidence](../evidence/rt-1f-back-fill-20261006.json) | e122049 |
+| 2026-10-06 | R3 stage 1: the actor tier | The presentation memory's allocations become an `OriginalAllocationTable` (the dictionary's API) whose actor tier holds the 400 actor records in match-model form while a match is loaded; `read` takes them as they are and `store` keeps today's per-index checks with constant-time shortcuts and installs the model's records instead of converting and writing 400 entries; any other actor change moves the tier back into the dictionary ([design](CORE_REALTIME_R3.md)). **16.87/16.87 → 19.09/19.26 ticks per second** (+13.6%; 59 → 52 ms per tick); Mac CPU within noise. All 10 scenarios and AppKit equal, frames identical; 162 suites incl. oracle tests (store and read against the per-entry algorithm under single and multiple faults) and a table-against-dictionary test; no tier dissolves in a vs run; review OK after a compile fix | [evidence](../evidence/rt-r3s1-actor-tier-20261006.json) | this commit |
 
 ## Next task
 
-Commit the checked increments in order as their suites finish (each on its
-snapshot; the tested tree hash is against the HEAD of its test build):
+Tier 1 of the [budget](CORE_REALTIME_BUDGET.md) (33 ms per tick; ~50 ms after
+4d). Increments in flight, committed in order as their gates pass (each from
+its snapshot; tested hashes via a temporary index so new files count):
 
-- **R3 stage 1**, the actor tier ([CORE_REALTIME_R3](CORE_REALTIME_R3.md)):
-  phone 19.09/19.26 (+13.6%), vs equal with frames identical, no tier
-  dissolves in a vs run, review OK after a compile fix (a reference check took
-  the old dictionary type); all 10, AppKit, the table and oracle tests and the
-  suites open.
-- **M5** (skip the menu session's slicing on gameplay ticks): designed and
-  shown equivalent, but it saves about 96 KB of copying and comparing per tick
-  (under 1% of a tick) and adds a branch to keep in step: not done.
-
-**Phone blocked (2026-10-06 ~15:10).** The A12's data partition is 96–97%
-full (about 1 GB free, the rest the user's own data). Installing a second copy
-of the same 4c APK for its second run failed with
-INSUFFICIENT_STORAGE; the harness then trimmed caches (nothing freed) and
-uninstalled with `-k` (data kept), and the fresh install failed too, so
-`local.ntsd.port` is uninstalled with its data kept (`pm list packages -u`).
-The harness now skips installing an APK whose SHA-256 matches the installed
-one. Resolved at ~15:55: the phone had 1.7 GB free again and the 4c APK
-installed fresh with the app's data intact (files/ntsd-data, files/NTSD
-Native); nothing was deleted.
-
-Then the next mechanisms from the copy map: M2 (serve the message loop's queue
-requests inside the attempt instead of re-running `HS.step` 3–5 times per
-tick), M3 (nested copies within one attempt), M5 (skip the menu loop's work on
-gameplay ticks). After 4a the phone's main thread is 68% of samples and the
-render thread 31%: the render thread starts to matter at about twice the
-current rate.
+- **1g** (known-mask full flag, render thread): phone 19.19/19.10 (ticks
+  unchanged), render thread −7.4% per tick; review OK; headless vs and
+  emulator equal, frames identical; 12 of 13 suites; open: the audio suite,
+  10 scenarios, AppKit ([draft evidence](../evidence/rt-1g-known-flag-20261006.json)).
+- **4d** (no drawing detail when nobody observes it): phone 19.82/19.78
+  (+3.4%); review OK; headless vs and emulator equal; the new side-by-side
+  test passes; open: 55 suites, 10 scenarios, AppKit
+  ([draft evidence](../evidence/rt-4d-draw-detail-20261006.json)).
+- **4e** (next): the 3000-byte random table is rebuilt with 3000 checked
+  byte reads on every random draw at 14 sites (AI draw alone 4.3% of the main
+  thread after 4d); read it in one copy when every byte is in range and
+  defined, else the same per-byte reads.
+- Then: the runtime's per-tick `presentation` input built through JSON
+  (2.3%; a public initializer), FreeType glyph masks (2.5%), the Host step
+  closure (3.5%) and `store` (3.7%), R3 stages 2–4, R5/M3.

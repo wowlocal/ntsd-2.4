@@ -18,6 +18,10 @@ public struct OriginalApplicationMatchBindings {
     /// identity first, so an actor unchanged since the last read or store is
     /// neither copied nor rewritten. Copies of these bindings share the pairs.
     private let pairs: ActorPairs
+    /// The actor tier these bindings read and store in the session memory's
+    /// allocation table (CORE_REALTIME R3 stage 1): while the state holds it,
+    /// the 400 actors stay in model form across ticks.
+    private let shape: OriginalAllocationTable.ActorShape
     final class ActorPairs {
         private let lock = NSLock()
         private var stored = [OriginalStateRecord?](repeating:nil,count:400)
@@ -48,6 +52,7 @@ public struct OriginalApplicationMatchBindings {
         actors = Dictionary(uniqueKeysWithValues:actorTokens.enumerated().map { ($0.element,UInt32($0.offset)) })
         objects = Dictionary(uniqueKeysWithValues:objectTokens.enumerated().map { ($0.element,UInt32($0.offset)) })
         pairs = ActorPairs()
+        shape = .init(tokens:actorTokens,objectTokens:objectTokens,pairs:pairs)
     }
 
     /// Built once per loaded session (CORE_REALTIME R1); the same value or
@@ -83,7 +88,9 @@ public struct OriginalApplicationMatchBindings {
             guard let ordinal = actors[token] else { throw Boundary.actor(token) }
             try world.write(ordinal,at:0x194+seat*4)
         }
-        let records = try actorTokens.indices.map { i -> OriginalStateRecord in
+        // The state's own actor tier is already the model form; its records
+        // passed these checks when they were stored (R3 stage 1).
+        let records = try state.memory.allocations.actorRecords(shape) ?? actorTokens.indices.map { i -> OriginalStateRecord in
             let record = try actor(actorTokens[i],in:state.memory)
             if let converted = pairs.model(i,for:record) { return converted }
             var converted = record
@@ -132,23 +139,26 @@ public struct OriginalApplicationMatchBindings {
             guard ordinal < actorTokens.count else { throw Boundary.ordinal(ordinal) }
             try world.write(actorTokens[Int(ordinal)],at:0x194+seat*4)
         }
+        // The same checks per actor and in the same order as writing each
+        // entry: the state's actor (implied when the state holds this tier),
+        // no conflicting write through the context (equal tiers compare once),
+        // a defined Object ordinal in range. The records then become the
+        // table's actor tier in model form instead of 400 converted entries
+        // (R3 stage 1); the logical entries are the converted records, live.
+        let stateHolds = state.memory.allocations.actorRecords(shape) != nil
+        let sameActors = memory.allocations.sameActors(shape,as:state.memory.allocations)
         for (i,token) in actorTokens.enumerated() {
-            _ = try actor(token,in:state.memory)
-            guard memory.allocations[token] == state.memory.allocations[token] else { throw Boundary.conflictingActor(token) }
-            let record: OriginalStateRecord
-            if let converted = pairs.stored(i,for:match.actors[i]) { record = converted } else {
+            if !stateHolds { _ = try actor(token,in:state.memory) }
+            if !sameActors { guard memory.allocations[token] == state.memory.allocations[token] else { throw Boundary.conflictingActor(token) } }
+            if pairs.stored(i,for:match.actors[i]) == nil {
                 var converted = match.actors[i]
                 let ordinal = try converted.integer(at:0x368,as:UInt32.self)
                 guard ordinal < objectTokens.count else { throw Boundary.ordinal(ordinal) }
                 try converted.write(objectTokens[Int(ordinal)],at:0x368)
                 pairs.set(i,stored:converted,model:match.actors[i])
-                record = converted
             }
-            // An entry already holding this record is left as it is (the same
-            // value), so an unchanged actor does not copy the allocation table.
-            let allocation = OriginalMenuPresentationMemory.Allocation(storage:record)
-            if memory.allocations[token] != allocation { memory.allocations[token] = allocation }
         }
+        memory.allocations.installActors(shape,match.actors)
         next.memory = memory
         try next.replace(0,match.globals);try next.replace(0xbb00,world)
         try next.replace(0xb588,context.savedPlayback);try next.replace(0xb8a8,memory.replayPointers)
