@@ -11,12 +11,17 @@ at the game's own rate, **≥ 30 gameplay ticks per second** without frame captu
 smoothly by hand. Every host keeps exactly the same game.
 **Frame-time targets (user, 2026-10-06):** "I want 8ms per frame on the A12.
 starting from 33ms per frame, them we should strive to 16ms, then to 8ms".
-Frame time is the unthrottled compute time per gameplay tick in the speed
-harness, 1000 / ticks per second: **33 ms (30 ticks/s), then 16 ms (62.5),
-then 8 ms (125)**. With the render pipeline both threads count: the main
-thread and the render thread must each fit the budget. Plan per tier:
-[CORE_REALTIME_BUDGET](CORE_REALTIME_BUDGET.md). Starting point today:
-~99 ms (10.1 ticks/s); after 1f ~59 ms; R3 stage 1 ~52 ms.
+Frame time is the engine's compute per gameplay tick on each thread (main
+and render each within the budget), from schedstat in `android_speed.py`
+(`mainMsPerTick`, `renderMsPerTick`); wall time per tick includes the
+original's own 33 ms pacing sleeps. **Tier 1 met on 2026-10-06 (phase 4f):**
+virtual clock main 30.4 / render 22.2 ms per tick; with `--real-clock` the
+scripted match runs at **30.25 ticks per second, the game's own rate** (main
+26.1, render 19.3 ms). Next: 16 ms, then 8 ms. Plan per tier:
+[CORE_REALTIME_BUDGET](CORE_REALTIME_BUDGET.md). Wall time per tick under
+the virtual clock, for history: ~99 ms at the branch start (10.1 ticks/s, the
+main thread ~98% busy with rendering on it), ~59 ms after 1f, ~52 ms after
+R3 stage 1, ~49 ms after 4f.
 **Reason:** user decision 2026-10-06: "make an experimental branch and do core
 redesign for real time play on slow phones like A12. Original game was published
 at 2008 and Samsung A12 has comparable performance GPU/CPU to the average

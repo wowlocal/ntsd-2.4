@@ -4,7 +4,7 @@ own progress events (CORE_REALTIME phase 0; a test harness).
 
 Usage: android_speed.py OUT_DIR [--serial S] [--apk PATH] [--label L]
                         [--profile SECONDS] [--lib DIR] [--call-graph fp|dwarf,N]
-                        [--frequency HZ]
+                        [--frequency HZ] [--offcpu] [--real-clock]
 
 Runs the debuggable build (local.ntsd.port; the release build cannot be
 scripted) with app_e2e's computer-vs script, music, sounds and network off and
@@ -64,11 +64,28 @@ def shell(serial, command, input=None):
     return adb(serial, "shell", command, input=input).stdout
 
 
-def arguments():
+def arguments(real_clock=False):
     script = (ROOT / "tools/app_e2e_computer_vs.script").read_text().strip() + "; 9200 exit"
+    # The virtual clock advances 8 ms per message-loop iteration, so the game's
+    # 33 ms timer takes about four iterations per tick and the three idle ones
+    # each sleep 5 ms for real: ~16 ms of every tick is the game's own pacing,
+    # whatever the compute time. --real-clock lets the game pace by real time
+    # (it sleeps only while ahead of its 33 ms schedule).
+    clock = [] if real_clock else ["--virtual-clock", "123456789", "8"]
     return ["--events-file", f"{FILES}/speed/events.jsonl", "--tz", "Etc/GMT-1", "--original", "--mute-music",
-            "--mute-sounds", "--no-network", "--overlay", f"{FILES}/speed/overlay", "--virtual-clock", "123456789",
-            "8", "--script-clock", "gameplay", "--script", script]
+            "--mute-sounds", "--no-network", "--overlay", f"{FILES}/speed/overlay", *clock,
+            "--script-clock", "gameplay", "--script", script]
+
+
+def thread_cpu(serial, pid):
+    """Host time and on-CPU nanoseconds per thread name (schedstat)."""
+    out = shell(serial, f"for t in /proc/{pid}/task/*; do echo $(cat $t/comm | tr ' ' _) $(cut -d' ' -f1 $t/schedstat); done")
+    cpu = collections.Counter()
+    for line in out.splitlines():
+        part = line.split()
+        if len(part) == 2 and part[1].isdigit():
+            cpu[part[0]] += int(part[1])
+    return time.time(), cpu
 
 
 def sha256(path):
@@ -94,7 +111,7 @@ def progress(serial):
     return [json.loads(l) for l in text.splitlines() if l.startswith("{")]
 
 
-def record_profile(serial, seconds, out, label, lib, call_graph="fp", frequency=1000):
+def record_profile(serial, seconds, out, label, lib, call_graph="fp", frequency=1000, offcpu=False):
     simpleperf = NDK / "simpleperf/bin/android/arm64/simpleperf"
     folder = out / f"{label}-profile"; folder.mkdir(exist_ok=True)
     data = folder / "perf.data"
@@ -105,6 +122,8 @@ def record_profile(serial, seconds, out, label, lib, call_graph="fp", frequency=
         # Emulators have no hardware counters: sample the cpu-clock software event there.
         hardware = "cpu-cycles" in shell(serial, "/data/local/tmp/simpleperf list hw")
         event = "" if hardware else "-e cpu-clock "
+        # Off-CPU time (where threads block) needs the cpu-clock event.
+        if offcpu: event = "-e cpu-clock --trace-offcpu "
         r = adb(serial, "shell", f"/data/local/tmp/simpleperf record --app {PACKAGE} {event}--call-graph {call_graph} "
                 f"--duration {seconds} -f {frequency} -o /data/local/tmp/ntsd-perf.data")
         adb(serial, "pull", "/data/local/tmp/ntsd-perf.data", str(data))
@@ -148,6 +167,8 @@ def main():
     # dwarf,16384 at -f 200 gives whole stacks where frame pointers stop
     # (runtime leaf functions) at ~3 MB per second of data on the device.
     a.add_argument("--call-graph", default="fp"); a.add_argument("--frequency", type=int, default=1000)
+    a.add_argument("--offcpu", action="store_true", help="also record off-CPU time (where threads block)")
+    a.add_argument("--real-clock", action="store_true", help="pace by real time instead of the virtual clock")
     a.add_argument("--restore-stayon", action="store_true")
     o = a.parse_args()
     out = Path(o.out); out.mkdir(parents=True, exist_ok=True)
@@ -190,18 +211,22 @@ def main():
     try:
         shell(s, f"am force-stop {PACKAGE}")
         shell(s, f"run-as {PACKAGE} sh -c 'rm -rf files/speed && mkdir -p files/speed/overlay && cat > files/args.txt'",
-              input="\n".join(arguments()) + "\n")
+              input="\n".join(arguments(o.real_clock)) + "\n")
         start = time.time()
         shell(s, f"am start -n {PACKAGE}/android.app.NativeActivity")
         time.sleep(5)
-        peak, profiled = 0, None
+        peak, profiled, cpu_a, cpu_b = 0, None, None, None
         while (pid := shell(s, f"pidof {PACKAGE}").strip()):
             hwm = shell(s, f"grep VmHWM /proc/{pid}/status 2>/dev/null").split()
             if len(hwm) > 1 and hwm[1].isdigit():
                 peak = max(peak, int(hwm[1]))
-            if o.profile and profiled is None:
-                if any(e.get("event") == "progress" and e.get("gameplayBodies", 0) >= 300 for e in progress(s)):
-                    profiled = record_profile(s, o.profile, out, o.label, o.lib, o.call_graph, o.frequency)
+            bodies = max((e.get("gameplayBodies", 0) for e in progress(s) if e.get("event") == "progress"), default=0)
+            # Thread CPU between bodies 600 and 1500: each thread's share of the
+            # wall time, times the wall time per tick, is its compute per tick.
+            if cpu_a is None and bodies >= 600: cpu_a = thread_cpu(s, pid)
+            if cpu_b is None and bodies >= 1500: cpu_b = thread_cpu(s, pid)
+            if o.profile and profiled is None and bodies >= 300:
+                profiled = record_profile(s, o.profile, out, o.label, o.lib, o.call_graph, o.frequency, o.offcpu)
             if time.time() - start > o.timeout:
                 shell(s, f"am force-stop {PACKAGE}"); break
             time.sleep(5)
@@ -216,6 +241,13 @@ def main():
         first, last = marks[0], marks[-1]
         row.update(ticksPerSecond=round((last["gameplayBodies"] - first["gameplayBodies"]) / (last["uptime"] - first["uptime"]), 2),
                    busySeconds=round(last.get("busySeconds", 0), 2), bodies=last["gameplayBodies"])
+        if cpu_a and cpu_b and cpu_b[0] > cpu_a[0]:
+            wall = cpu_b[0] - cpu_a[0]
+            share = {name: (cpu_b[1][name] - cpu_a[1][name]) / 1e9 / wall for name in cpu_b[1]}
+            main = share.get(PACKAGE[:15], 0.0); render = share.get("DispatchWorker", 0.0)
+            row.update(mainCpuShare=round(main, 3), renderCpuShare=round(render, 3),
+                       mainMsPerTick=round(1000 * main / row["ticksPerSecond"], 1),
+                       renderMsPerTick=round(1000 * render / row["ticksPerSecond"], 1))
     else:
         row["error"] = "no progress events: " + ", ".join(str(e.get("event")) for e in events[:6])
     if profiled:

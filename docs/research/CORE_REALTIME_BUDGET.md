@@ -6,23 +6,43 @@ then to 8ms".
 
 ## What is measured
 
-Frame time is the unthrottled compute time per gameplay tick in
-`tools/crossplatform/android_speed.py` (no frame capture, the scripted VS
-match): **1000 / ticks per second**. The game itself keeps its own rate; a
-shorter frame time is headroom (smooth play, slower phones, battery and heat).
-Presenting at 60 or 120 Hz is a separate question: more ticks per second
-would speed the game up, so higher presentation rates would need
-presentation-only pacing, never extra ticks.
+**Frame time is the engine's compute per gameplay tick on each thread**, not
+wall time: the original game paces itself with a 33 ms timer and sleeps in
+steps of at most 5 ms while it is ahead of schedule (`OriginalApplicationTimer`,
+EXE 43d157..43d1ef), so its own rate is ~30.3 ticks per second and its sleeps
+are part of every wall-clock tick. `tools/crossplatform/android_speed.py`
+reports, from the kernel's per-thread schedstat between gameplay bodies 600
+and 1500, each thread's share of wall time and **`mainMsPerTick` /
+`renderMsPerTick`** (share × wall time per tick). The render pipeline (phases
+1c–1f) splits a tick over two threads, and **each must fit the budget**.
 
-The render pipeline (phases 1c–1f) splits a tick over two threads: the main
-thread computes tick n+1 while the render thread replays tick n's pixel work
-and presents it. **Each thread must fit the budget on its own.**
+Two clocks:
 
-| Target | Ticks per second | Main thread | Render thread |
-| --- | ---: | ---: | ---: |
-| 33 ms | 30 | ≤ 33 ms | ≤ 33 ms |
-| 16 ms | 62.5 | ≤ 16 ms | ≤ 16 ms |
-| 8 ms | 125 | ≤ 8 ms | ≤ 8 ms |
+- **Virtual clock** (the default; deterministic): 8 ms per message-loop
+  iteration, so every tick runs about four iterations, three of them idle
+  with a real 5 ms sleep. Ticks per second here (~20) mostly measure the
+  pacing; compute per tick includes three idle iterations (~1.6 ms each on
+  the phone). This is the tracked number: the same work every run.
+- **Real clock** (`--real-clock`): the game sleeps only while ahead; ticks
+  per second shows whether it reaches its own rate.
+
+| Target | Main thread | Render thread |
+| --- | ---: | ---: |
+| 33 ms | ≤ 33 ms | ≤ 33 ms |
+| 16 ms | ≤ 16 ms | ≤ 16 ms |
+| 8 ms | ≤ 8 ms | ≤ 8 ms |
+
+**Where it stands (4f, 2026-10-06 22:40):** virtual clock: main 30.4 ms,
+render 22.2 ms per tick (20.43 ticks per second); **real clock: 30.25 ticks
+per second, the game's own rate**, main 26.1 ms, render 19.3 ms. **Tier 1
+(33 ms) is met** and the scripted match runs at full game speed on the A12;
+playing it by hand is the open manual check.
+
+(The first version of this note counted wall time per tick, 1000 / ticks
+per second under the virtual clock. That includes ~16 ms of the game's own
+sleeping and could never reach 8 ms; superseded the same evening after the
+off-CPU profile `rt4f-offcpu-profile` showed the main thread's off-CPU time
+was these sleeps.)
 
 ## Where the time goes (R3 stage 1, 2026-10-06)
 
@@ -50,10 +70,11 @@ another ~4%.
 window copy) 27%, known-mask checks 14% (phase 1g), Android channel swap 8.5%,
 window post (`ioctl`) 6%.
 
-## Tier 1 — 33 ms (main thread −20 ms)
+## Tier 1 — 33 ms (met: main 30.4 / 26.1 ms, render 22.2 / 19.3 ms)
 
-The render thread already fits after 1g. The main thread needs about −37%,
-all from orchestration and copies, without touching game logic:
+Planned as below (estimates in wall time per tick, before the measurement
+correction); done so far: 4d, 4e (random table), 4f (presentation input).
+The rest move to tier 2:
 
 | Step | Estimate |
 | --- | --- |
@@ -68,7 +89,15 @@ all from orchestration and copies, without touching game logic:
 Sum: about −15 to −20 ms, so ~32–37 ms. Each step is measured on the phone;
 the order follows the profile after each commit.
 
-## Tier 2 — 16 ms (both threads about halved again)
+## Tier 2 — 16 ms (main −14 ms, render −6 ms under the virtual clock)
+
+- **Idle message-loop iterations:** each costs ~1.6 ms of main-thread CPU on
+  the phone (a whole Host attempt to peek, read the clock and sleep). The
+  faster the game, the more of them per tick in real play (it sleeps in 5 ms
+  steps while ahead), so they must become cheap: serve an iteration that
+  only peeks, reads the time and sleeps without rebuilding the attempt.
+- The remaining tier 1 list above (orchestration copies, R3 stages 2–4,
+  R5/M3, glyph masks, exclusivity checks).
 
 - **Main thread: a direct gameplay tick.** Orchestration has to fall from
   ~23 ms to ~2 ms. When a tick needs no host round trip (the common case
