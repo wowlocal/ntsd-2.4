@@ -1,0 +1,101 @@
+# RT — Real-time play on slow phones (core redesign)
+
+Workflow: [WORKFLOW](WORKFLOW.md), [PROGRESS_RULES](PROGRESS_RULES.md); parent
+studies [MOBILE_PERFORMANCE](MOBILE_PERFORMANCE.md) (steps 1–8) and
+[CROSS_PLATFORM](CROSS_PLATFORM.md) (P8 Android).
+
+**Consumer in native/ and integration criterion:** the Android app on the user's
+Galaxy A12 (Helio P35, Cortex-A53 cores, 2.8 GB RAM): the scripted VS match runs
+at the game's own rate, **≥ 30 gameplay ticks per second** without frame capture
+(`tools/crossplatform/android_speed.py`, bodies 300→1800), and then plays
+smoothly by hand. Every host keeps exactly the same game.
+**Reason:** user decision 2026-10-06: "make an experimental branch and do core
+redesign for real time play on slow phones like A12. Original game was published
+at 2008 and Samsung A12 has comparable performance GPU/CPU to the average
+computers at that time."
+**Status:** research and transfer.
+**Branch:** `exp/core-realtime`, from `dev/crossplatform` 9df1054. Local only: it
+has no upstream, so the post-commit hook's `git push` fails harmlessly. Not
+pushed, merged into `dev/crossplatform`/`main`, or published without the user.
+**Game result:** unchanged by definition. Only how the port computes the game
+changes (architecture, representation, loops), never what it computes or shows.
+**Reference:** the pinned EXE (SHA-256 `3f7ac67c…ff71c`) is not touched. The
+comparators are the frozen app_e2e references (10 scenarios), the frame
+references (`m1-frames-ref`, the AppKit runs, the matrix groups) and the Core
+suites.
+**Declared scope:** the per-cycle architecture of Core and the runtime: the
+session ↔ match-model bindings, rollback/transaction copies, per-cycle attempt
+setup, allocation tables and record storage; the display backend's drawing and
+present path; the Android host's drawing.
+**Out of scope:** game rules, numeric semantics, error boundaries and their
+order, fixtures, references and expected values; dropping runtime safety checks
+(e.g. `-enforce-exclusivity=unchecked`) without the user.
+**Executor / independent reviewer:** Claude / a separate read-only reviewer agent
+for every storage-model or architecture change; a missing review is stated.
+**Allowed paths:** `native/Sources/NTSDCore`, `native/Sources/NTSDRuntime`,
+`native/Sources/NTSDAndroid`, `native/Sources/CAndroidNative`, test helpers and
+new tests in `native/Tests`, `tools/crossplatform`, this card and its evidence.
+
+## Starting point (2026-10-06, 9df1054)
+
+Galaxy A12: **10.2 ticks per second** (5.4 before MOBILE_PERFORMANCE steps 1–8),
+the main thread 98% busy. Inclusive phone profile after step 6b (simpleperf,
+24,072 samples):
+
+| Phase | Share |
+| --- | ---: |
+| Front-buffer drawing (`performFront`; copy loop ~14% own, Android window 4%, frame copy 3%) | 26.1% |
+| Gameplay session (gameplay body 11.4%) | 17.1% |
+| Loaded cycle (`LoadedMatchEntry.run` 4.0%) | 10.9% |
+| Bindings store / read (model ↔ session state every cycle) | 7.0% / 2.5% |
+| Loaded menu attempt (setup over every live allocation) | 4.6% |
+| Menu state replace | 2.2% |
+
+By symbol: `memcpy` 12.5%, reference counting ~15%. The remaining cost is spread
+over the per-cycle round trip between the session state and the match model,
+whole-state rollback copies, and drawing; each local fix in MOBILE_PERFORMANCE
+gained a few percent, step 8 none measurable.
+
+## Plan
+
+Profile first, then one mechanism per increment, measured on the phone before
+and after.
+
+| Phase | Work | Status |
+| --- | --- | --- |
+| 0 | Measurement harness in the repository: `tools/crossplatform/android_speed.py` (speed without frame capture, peak memory, optional simpleperf profile with an inclusive phase table and restoring the phone's settings); baseline at the branch start | next |
+| 1 | Display path: the keyed sprite copy loop (a third of the copied pixels), the present path (frame copy, Android channel swap), fill loops | queued |
+| 2 | Per-cycle round trip: keep the match model across cycles instead of `bindings.read`/`store` every cycle; a design note first (who reads the session memory between cycles, which invariants and commit points must hold) | queued |
+| 3 | Rollback copies: the allocation table copied per cycle; the attempt's per-cycle setup over every allocation made incremental | queued |
+| 4 | Gameplay session/body overheads and reference-counting traffic (record copies, dictionary iteration) | queued |
+| 5 | Loading time on the phone (~4.5 minutes) | queued |
+
+## Gates (every increment)
+
+1. Cheap compile checks, then the macOS release headless build.
+2. Headless vs equal and its 1,832 frames identical to `m1-frames-ref`.
+3. All 10 scenarios equal on a frozen copy of the binary.
+4. AppKit vs and playback equal, frames identical to the previous AppKit run.
+5. The affected Core suites in a release test build (`build/swiftpm-test-release`;
+   no source edits while a bundle compiles).
+6. Phone speed with `android_speed.py`; a profile when the result needs explaining.
+7. An independent read-only review for storage-model or architecture changes.
+8. At each phase end: the full nine-host matrix (`matrix.py`).
+
+Commit an increment only when every gate passes and it is either measurably
+faster or strictly less work without added complexity; otherwise record the
+result here and revert. Keep X5 above 20 GiB free (archive finished runs to T7
+with per-file verification). Keep the phone awake (`svc power stayon usb`) only
+while measuring and restore `svc power stayon false` when pausing.
+
+## Ledger
+
+| Date | Step | Result | Evidence | Commit |
+| --- | --- | --- | --- | --- |
+| 2026-10-06 | Branch and card | `exp/core-realtime` from 9df1054; this card | — | this commit |
+
+## Next task
+
+Phase 0: commit `tools/crossplatform/android_speed.py` (from the session's
+`phone_speed.sh` and profile scripts) and measure the branch baseline on the
+Galaxy A12 (speed, peak memory, inclusive profile).
