@@ -1,0 +1,60 @@
+{
+ "study": "docs/research/CORE_REALTIME.md",
+ "phase": "1g (known-mask full flag)",
+ "date": "2026-10-06",
+ "budget": "docs/research/CORE_REALTIME_BUDGET.md",
+ "profile_before": "rt-speed/rtr3s1-profile-profile: render thread self time copyPixels 27.3%, memcpy 27.1%, swapChannels 8.5%, KnownMask.allKnown 7.6%, KnownMask.setRange 6.3%, ioctl 6.2%",
+ "change": "OriginalMacDisplayBackend.KnownMask gains a heap flag meaning 'every pixel known' (a cache: true implies every bit 0..<count is set). allKnown answers at once and setRange returns at once while it is set. Cleared by a subscript write of 0 and by merge with clear bits; set by setAll, by a fill of the whole storage, and by an unkeyed copy of a fully known source over the whole output; recomputed after each batch of recorded (deferred) image writes. In the live app (fresh surfaces known black, RLE holes read as palette 0) masks are full, so the render thread's mask checks disappear.",
+ "phone": {
+  "before": [
+   {
+    "label": "rtr3s1-run1",
+    "ticksPerSecond": 19.09,
+    "busySeconds": 222.93,
+    "peakResidentMB": 1288,
+    "runSeconds": 334
+   },
+   {
+    "label": "rtr3s1-run2",
+    "ticksPerSecond": 19.26,
+    "busySeconds": 226.38,
+    "peakResidentMB": 1245,
+    "runSeconds": 339
+   }
+  ],
+  "after": [
+   {
+    "label": "rt1g-run1",
+    "ticksPerSecond": 19.19,
+    "busySeconds": 226.74,
+    "peakResidentMB": 1337,
+    "runSeconds": 339
+   },
+   {
+    "label": "rt1g-run2",
+    "ticksPerSecond": 19.1,
+    "busySeconds": 225.07,
+    "peakResidentMB": 1210,
+    "runSeconds": 339
+   },
+   {
+    "label": "rt1g-profile",
+    "ticksPerSecond": 19.07,
+    "busySeconds": 225.76,
+    "peakResidentMB": 1545,
+    "runSeconds": 337
+   }
+  ],
+  "ticks": "19.19 / 19.10 ticks per second (stage 1: 19.09 / 19.26): unchanged, the main thread is the limit",
+  "render_thread": "render/main samples 0.606 (11,875/19,586) -> 0.561 (10,747/19,154): render thread work per tick -7.4% (~32 -> ~29.6 ms); KnownMask functions gone from the profile; copyPixels' own share rose (their fast path inlined)"
+ },
+ "gates": {
+  "headless": "vs equal, 1,832 frames identical (frozen 4400c438 rt-1g; rebuilt with the debug assertion, frozen-rt1g-b)",
+  "scenarios": "all 10 equal, frames identical (rt-1g-all on frozen-rt1g-b)",
+  "AppKit": "vs and playback equal, 3,960 frames identical to the stage 1 AppKit run (rt-1g-appkit vs rt-r3s1-appkit)",
+  "emulator": "vs equal, 1,832 frames identical",
+  "tests": "bundle B (build/swiftpm-test-release-b; native diff f83fa09f against e122049, tracked files): all 13 display/runtime suites pass incl. the new OriginalMacFrontRasterTests.testKnownFlagFollowsClearsFillsAndWholeCopies (front raster 8 tests) and OriginalMacLoadingAudioTests (3,127 s)"
+ },
+ "review": "independent read-only review: correct, no counterexample (every bit-clearing path clears the flag or is followed by refreshFull; both markFull sites set every bit; the flag is read and written only inside mask calls that touch the same storage's words on the same thread, so ordering is unchanged; allocation and free paired; nothing observable changes). Acted on: a debug range assertion in allKnown/setRange, the refreshFull comment, a regression test with fresh-black surfaces (clears by an image with an unknown pixel, an unkeyed, a keyed and a mirrored keyed copy; a whole fill and a whole unkeyed copy). Declined: storing the flag in the words allocation (one small allocation per surface; would change the measured release code).",
+ "commit_rule": "committed as strictly less work: render-thread CPU per tick -7.4% on the phone with ticks unchanged; needed for the 16 ms render budget"
+}

@@ -272,6 +272,45 @@ import XCTest
         XCTAssertEqual(try b.pixels(source).values,colors)
         XCTAssertEqual(try b.pixels(unknown).defined,[true,false])
     }
+    /// CORE_REALTIME 1g: the known mask's "every pixel known" flag. With the
+    /// live app's fresh-black surfaces every mask starts full; a stretched image
+    /// with an unknown pixel, an unkeyed copy of it and a keyed copy of it must
+    /// each leave that pixel unknown in later copies, and a whole fill or a
+    /// whole unkeyed copy of known pixels makes every pixel known again.
+    func testKnownFlagFollowsClearsFillsAndWholeCopies() throws {
+        let r = try D().run(late:false,freshSurfacesKnownBlack:true);defer { try? D().close(r) }
+        let b = r.setup.display,(device,_,back,_) = try D().ids(r)
+        let p = try b.pixels(back),width = p.width,height = p.height
+        XCTAssertTrue(p.defined.allSatisfy { $0 },"fresh surfaces start known black")
+        let colors: [UInt32] = [0,0xff0000,0xff00,0xff,0x110022,0,0x334455,0],whole: UInt32 = 0x123456
+        let service = OriginalMacBitmapService(backend:b,inputs:.init(resources:["pattern":try bitmap(colors,width:4,height:2),
+            "unknown":try unknownBitmap(),"whole":try bitmap(Array(repeating:whole,count:width*height),width:width,height:height)],
+            files:["pattern":.missing,"unknown":.missing,"whole":.missing]))
+        let (_,e1) = try M().construct(service,"pattern",device),pattern = try M().surface(e1)
+        let (_,e2) = try M().construct(service,"unknown",device),unknown = try M().surface(e2)
+        let (_,e3) = try M().construct(service,"whole",device),source = try M().surface(e3)
+        XCTAssertEqual(try b.pixels(unknown).defined,[true,false],"the image's unknown pixel clears a fresh-black bit")
+        func probe() throws -> [Bool] {
+            // Back pixels (30,1) and (31,1) copied into the pattern's first row.
+            _ = try perform(b,blt(back,pattern,[30,1,32,2],[0,0,2,1],key:false))
+            return Array(try b.pixels(pattern).defined[0..<2])
+        }
+        func unknownCount() throws -> Int { try b.pixels(back).defined.filter { !$0 }.count }
+        _ = try perform(b,blt(unknown,back,[0,0,2,1],[30,1,32,2],key:false))
+        XCTAssertEqual(try unknownCount(),1);XCTAssertEqual(try probe(),[true,false],"unkeyed copy cleared the flag")
+        _ = try perform(b,fill(back,0xabcdef,[0,0,Int32(width),Int32(height)]))
+        XCTAssertEqual(try unknownCount(),0);XCTAssertEqual(try probe(),[true,true],"a whole fill")
+        XCTAssertEqual(Array(try b.pixels(pattern).values[0..<2]),[0xabcdef,0xabcdef])
+        _ = try perform(b,blt(unknown,back,[0,0,2,1],[30,1,32,2]))
+        XCTAssertEqual(try unknownCount(),1);XCTAssertEqual(try probe(),[true,false],"keyed copy cleared the flag")
+        _ = try perform(b,blt(source,back,[0,0,Int32(width),Int32(height)],[0,0,Int32(width),Int32(height)],key:false))
+        XCTAssertEqual(try unknownCount(),0);XCTAssertEqual(try probe(),[true,true],"a whole unkeyed copy of known pixels")
+        XCTAssertEqual(Array(try b.pixels(pattern).values[0..<2]),[whole,whole])
+        _ = try perform(b,blt(unknown,back,[0,0,2,1],[30,1,32,2],mirror:true))
+        XCTAssertEqual(try unknownCount(),1);XCTAssertEqual(try probe(),[false,true],"mirrored keyed copy cleared the flag")
+        XCTAssertEqual(try b.observation(back).knownPixels,width*height-1)
+        withExtendedLifetime((e1,e2,e3)) {}
+    }
     func testKnownFramePresentationClipsToOwnedWindowAndUnknownPreflightIsAtomic() throws {
         let r = try D().run(late:false);defer { try? D().close(r) };let b = r.setup.display,(_,primary,back,_) = try D().ids(r)
         let rect = try W().rectangle(W().window(r)),base: UInt32 = 0x336699

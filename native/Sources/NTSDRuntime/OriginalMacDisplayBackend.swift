@@ -62,19 +62,39 @@ import NTSDCore
     /// step 2). The subscript reads and writes 0 or 1 like the byte mask did.
     private struct KnownMask {
         let words: UnsafeMutablePointer<UInt64>, count: Int
+        /// True only while every pixel is known (CORE_REALTIME 1g): cleared by
+        /// any write that can clear a bit, set where an operation is known to
+        /// set every bit. While true, `allKnown` answers at once and
+        /// `setRange` has nothing to do.
+        private let fullFlag: UnsafeMutablePointer<Bool>
         init?(_ count: Int) {
             guard let raw = calloc((count+63)/64,8) else { return nil }
+            guard let flag = calloc(1,1) else { Foundation.free(raw); return nil }
             words = raw.assumingMemoryBound(to:UInt64.self); self.count = count
+            fullFlag = flag.assumingMemoryBound(to:Bool.self)
+        }
+        var isFull: Bool { fullFlag.pointee }
+        /// The caller has just set every bit.
+        func markFull() { fullFlag.pointee = true }
+        /// Recompute the flag from the bits (after each batch of recorded writes).
+        func refreshFull() {
+            let full = count/64
+            var all = true
+            for w in 0..<full where words[w] != ~0 { all = false; break }
+            if all && count%64 != 0 { all = words[full] == (UInt64(1) << UInt64(count%64))-1 }
+            fullFlag.pointee = all
         }
         subscript(i: Int) -> UInt8 {
             get { UInt8(truncatingIfNeeded:words[i >> 6] >> UInt64(i & 63)) & 1 }
             nonmutating set {
                 let bit = UInt64(1) << UInt64(i & 63)
-                if newValue != 0 { words[i >> 6] |= bit } else { words[i >> 6] &= ~bit }
+                if newValue != 0 { words[i >> 6] |= bit } else { words[i >> 6] &= ~bit; fullFlag.pointee = false }
             }
         }
         /// Marks pixels start..<start+length known (whole words at once).
         func setRange(_ start: Int,_ length: Int) {
+            assert(start >= 0 && length >= 0 && start+length <= count,"known range")
+            if fullFlag.pointee { return }
             var i = start
             let end = start+length
             while i < end && i & 63 != 0 { words[i >> 6] |= UInt64(1) << UInt64(i & 63); i += 1 }
@@ -83,6 +103,7 @@ import NTSDCore
         }
         /// Sets the `set` bits and clears the `clear` bits of word `w` (disjoint).
         func merge(_ w: Int,set: UInt64,clear: UInt64) {
+            if clear != 0 { fullFlag.pointee = false }
             if set|clear != 0 { words[w] = (words[w] & ~clear) | set }
         }
         /// Every pixel known (bits past `count` stay clear).
@@ -90,10 +111,13 @@ import NTSDCore
             let full = count/64
             for w in 0..<full { words[w] = ~0 }
             if count%64 != 0 { words[full] = (UInt64(1) << UInt64(count%64))-1 }
+            fullFlag.pointee = true
         }
         var knownCount: Int { (0..<(count+63)/64).reduce(0) { $0+words[$1].nonzeroBitCount } }
         /// Whether pixels start..<start+length are all known (whole words at once).
         func allKnown(_ start: Int,_ length: Int) -> Bool {
+            assert(start >= 0 && length >= 0 && start+length <= count,"known range")
+            if fullFlag.pointee { return true }
             var i = start
             let end = start+length
             while i < end && i & 63 != 0 { if self[i] == 0 { return false }; i += 1 }
@@ -102,7 +126,7 @@ import NTSDCore
             return true
         }
         var bools: [Bool] { (0..<count).map { self[$0] != 0 } }
-        func free() { Foundation.free(words) }
+        func free() { Foundation.free(words); Foundation.free(fullFlag) }
     }
     private final class Storage {
         let width: Int, height: Int, count: Int, byteCount: Int, budget: Budget
@@ -120,6 +144,7 @@ import NTSDCore
         private func applyPending() {
             let writes = pending; pending = []
             for write in writes { write(valuesStorage,knownStorage) }
+            knownStorage.refreshFull()
         }
         init(_ width: Int,_ height: Int,_ budget: Budget) throws {
             guard width > 0,height > 0,width <= Int.max/height,width*height <= Int.max/5 else { throw Boundary.geometry }
@@ -1029,6 +1054,8 @@ extension OriginalMacDisplayBackend {
             values.advanced(by:start).update(repeating:value,count:columns.count)
             known.setRange(start,columns.count)
         }
+        // A fill of the whole storage made every pixel known (1g).
+        if rows == 0..<data.height && left == 0 && right == data.width { known.markFull() }
     }
     /// What a copy's pixel loop needs, without the surfaces (the render thread
     /// holds only storages and values).
@@ -1077,6 +1104,10 @@ extension OriginalMacDisplayBackend {
                 }
                 outputKnown.merge(word,set:set,clear:clear)
             }
+            // An unkeyed copy of fully known pixels over the whole output made
+            // every pixel known (1g).
+            if copy.key == nil && inputKnown.isFull && rect.left == 0 && rect.top == 0
+                && rect.right == output.width && rect.bottom == output.height { outputKnown.markFull() }
         }
     }
     public func performFront(_ prepared: FrontPrepared) throws -> FrontServed {
