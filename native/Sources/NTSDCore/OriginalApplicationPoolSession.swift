@@ -40,13 +40,16 @@ public struct OriginalApplicationPoolSession {
         public let entry: Catalog.PendingPool,loaded: OriginalInitialLoading,state: Session.State
         public let allocations: [Allocation],actorTokens: [UInt32],interfaceTokens: [UInt32],interfaceSurfaces: [UInt32]
         public let operations: [Operation],graphics: [OriginalApplicationGraphics.Command]
-        /// Values derived only from the immutable fields above, built once per
-        /// loaded session instead of in every game cycle (CORE_REALTIME R1).
-        /// Copies share them. Unlike OriginalWaveOwnership's own cache, a
-        /// failure is kept: the derivation is deterministic over immutable
-        /// inputs and throws an equatable error, so rethrowing the kept error is
-        /// the same as deriving again. The two makers never call each other
-        /// (the lock is not recursive).
+        /// Per-session memos shared by copies (CORE_REALTIME R1, phase 2c).
+        /// `bindings` and `ranges` derive only from the immutable fields above
+        /// and are built once per loaded session instead of in every game
+        /// cycle. Unlike OriginalWaveOwnership's own cache, their failure is
+        /// kept: the derivation is deterministic over immutable inputs and
+        /// throws an equatable error, so rethrowing the kept error is the same
+        /// as deriving again. `resource` depends on gameplay state instead: it
+        /// checks its kept result against the given source on every call and
+        /// keeps nothing on failure. None of them calls another (the lock is
+        /// not recursive).
         let derived = Derived()
         final class Derived {
             private let lock = NSLock()
@@ -61,6 +64,21 @@ public struct OriginalApplicationPoolSession {
                 lock.lock(); defer { lock.unlock() }
                 if ranges == nil { ranges = Result { try make() } }
                 return try ranges!.get()
+            }
+            /// Gameplay's resource bitmap records with `value` written at offset
+            /// 0 (OriginalApplicationGameplaySession's `resource`), per
+            /// allocation token: the result for an equal source and value is
+            /// returned again instead of copying the 0x1f50-byte record on every
+            /// call (CORE_REALTIME phase 2c). Records compare by contents
+            /// (buffer identity first), so a changed source is written anew.
+            private var resources: [UInt32:(source: OriginalStateRecord,value: UInt32,record: OriginalStateRecord)] = [:]
+            func resource(_ token: UInt32,_ source: OriginalStateRecord,writing value: UInt32) throws -> OriginalStateRecord {
+                lock.lock(); defer { lock.unlock() }
+                if let kept = resources[token],kept.value == value,kept.source == source { return kept.record }
+                var record = source
+                try record.write(value,at:0)
+                resources[token] = (source,value,record)
+                return record
             }
         }
         /// The loaded session's fixed address ranges, in order: catalog

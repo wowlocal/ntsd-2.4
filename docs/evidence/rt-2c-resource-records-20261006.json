@@ -1,0 +1,42 @@
+{
+ "study": "docs/research/CORE_REALTIME.md",
+ "phase": "2c (resource records kept per session)",
+ "date": "2026-10-06",
+ "finding": "A copy probe (scratch build only: OriginalStateRecord write/overwrite recording when a flat record's array storage moves, by record size; computer-vs run, 2,264 cycles) counted 363,586 copies of 0x1f50-byte records (2.9 GB of bytes plus as much mask). Branch counters and sampled call stacks put about 244,000 of them (~108 per cycle) in gameplay's nested resource(token) (OriginalApplicationGameplaySession), called from the bitmap font, mode label, world drawing, camera and HUD: 208,451 calls took an allocated record and wrote 1 over the surface token at offset 0, 35,368 took a model bitmap that already held the value; the rest were catalog loading (OriginalObjectLoader.finishSheet). Other copies per run: the globals record (0xc3a8) overwritten 35,079 times and its 0xb440 slice written 27,968 times (rollback/attempt copies, DATAFLOW R3/R5), actor records 120,443.",
+ "change": "resource(token): the model-bitmap branch no longer writes (its guard already read the value there, so the bytes are defined and equal); the allocated branch gets its record from Pool.PendingInput.Derived.resource(token, source, writing:), which returns the kept result for an equal source and value (contents compared, buffer identity first) and otherwise writes and keeps the new one.",
+ "probe after": "0x1f50 copies 363,586 -> 119,791 (the remainder at catalog load); writes 33,060,996 -> 32,817,201",
+ "phone": {
+  "baseline": "phase 1e: 14.22 / 14.18 ticks/s",
+  "after": [
+   {
+    "label": "rt2c-run1",
+    "serial": "R58R36F7VFD",
+    "runSeconds": 370,
+    "peakResidentMB": 1420,
+    "ticksPerSecond": 14.55,
+    "busySeconds": 237.77,
+    "bodies": 1800
+   },
+   {
+    "label": "rt2c-run2",
+    "serial": "R58R36F7VFD",
+    "runSeconds": 370,
+    "peakResidentMB": 1271,
+    "ticksPerSecond": 14.54,
+    "busySeconds": 240.54,
+    "bodies": 1800
+   }
+  ],
+  "result": "14.55 / 14.54 ticks/s (+2.4%); busy seconds 243-246 -> 238-241",
+  "note": "apks/rt2c.apk built from native diff ddd3a005 (1e + 2c before the Derived comment was updated; the code is the same)"
+ },
+ "emulator": {
+  "result": "vs equal, 1,832 frames identical to the earlier Android app run"
+ },
+ "gates": {
+  "headless": "vs equal, 1,832 frames identical (frozen 298519c5, rt-2c); all 10 scenarios equal, frames identical (rt-2c-all)",
+  "AppKit": "vs and playback equal; 3,960 frames identical to the 1e AppKit run (rt-2c-appkit)",
+  "Core suites": "release test build swiftpm-test-release-b of native diff 92af3d35 against 1e364bc (1e + 2c with the final Derived comment; the committed content on top of 86d5e5d): 94 suites (R3's 86 plus every suite using the gameplay session's resource path: BitmapFont, GameplayOutput, ModeLabel, PausedGameplay, PlaybackInformation, PostHUDNotices, ResultLayout, WorldDrawing), 253 tests, 0 failures"
+ },
+ "review": "independent read-only review: OK. Dropping the model-branch write is exact (the guard requires the four bytes defined and equal); a kept result is returned only for an equal source and value, so it equals a fresh write; keying by token cannot collide (every hit is checked by contents); error points unchanged; callers only read the record; the lock runs no caller code. Nit fixed: the Derived comment now describes the resource memo. Notes: the memo can keep a stale source until the next miss (memory only), and a later in-place write of the state's own buffer costs one extra copy."
+}

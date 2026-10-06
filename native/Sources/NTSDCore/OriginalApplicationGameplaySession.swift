@@ -81,23 +81,28 @@ public struct OriginalApplicationGameplaySession {
         var transforms = entry.state.libraryTransforms
         if transforms.destinations.isEmpty,let transformBacking { transforms = try transformBacking(a.bindings) }
         let library = OriginalGameplayBody.Library(text:entry.state.libraryText,hits:entry.state.libraryHits,transforms:transforms)
+        let derived = entry.entry.derived
         func resource(_ token: UInt32) throws -> (OriginalStateRecord,UInt32) {
             var record: OriginalStateRecord
-            let surface: UInt32
+            let surface: UInt32,allocated: Bool
             if let allocation = a.state.memory.allocations[token] {
                 guard allocation.live,allocation.storage.bytes.count == 0x1f50 else { throw Menu.Boundary.owner(token) }
-                record = allocation.storage;surface = try record.integer(at:0,as:UInt32.self)
+                record = allocation.storage;surface = try record.integer(at:0,as:UInt32.self);allocated = true
             } else {
                 guard let ordinal = a.model.bitmapOwners.first(where:{ $0.value == token })?.key,
                       a.model.bitmaps.indices.contains(ordinal),!a.model.releasedBitmaps.contains(ordinal),
                       let currentSurface = a.model.bitmapSurfaceOwners[ordinal] else { throw Menu.Boundary.owner(token) }
-                record = a.model.bitmaps[ordinal].storage;surface = currentSurface
+                record = a.model.bitmaps[ordinal].storage;surface = currentSurface;allocated = false
                 guard try record.integer(at:0,as:UInt32.self) == (surface == 0 ? 0 : 1) else { throw Menu.Boundary.owner(token) }
             }
             guard surface == 0 || a.state.graphics?.currentResources[surface]?.kind == "bitmapSurface" else {
                 throw Menu.Boundary.owner(surface)
             }
-            try record.write(UInt32(surface == 0 ? 0 : 1),at:0)
+            // The record with 0 or 1 at offset 0. A model bitmap already holds
+            // that value there (checked above, so those bytes are defined) and
+            // writing it would change nothing; an allocated one is written once
+            // per source record and kept for the session (phase 2c).
+            if allocated { record = try derived.resource(token,record,writing:UInt32(surface == 0 ? 0 : 1)) }
             return (record,surface)
         }
         func surface(_ ordinal: Int) throws -> UInt32 {
