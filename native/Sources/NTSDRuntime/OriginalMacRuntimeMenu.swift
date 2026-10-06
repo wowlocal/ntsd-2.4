@@ -6,8 +6,9 @@ import NTSDCore
 
 /// Advances the recovered front menu one whole Host iteration at a time after
 /// runtime startup. Every external request is served by the display/bitmap
-/// services or the runtime message queue: queue requests inside the Host
-/// attempt (CORE_REALTIME M2), the others as permits. Declared runtime policies:
+/// services or the runtime message queue: queue requests and the back-buffer
+/// clear (window Blt) inside the Host attempt (CORE_REALTIME M2), the others as
+/// permits. Declared runtime policies:
 /// GetDC for text fails (E_FAIL) until a GDI text contract exists, so the game
 /// omits text; OutputDebugStringA is recorded; MessageBoxA shows an alert.
 @MainActor public final class OriginalMacRuntimeMenu {
@@ -65,8 +66,9 @@ import NTSDCore
     public private(set) var iterations = 0, requests = 0, textRequests = 0, emptyBlits = 0
     /// The request being served when a step last stopped, for boundary reports.
     public private(set) var lastRequest: OriginalApplicationIterationRequest?
-    /// Serve message-queue requests inside the Host attempt (CORE_REALTIME M2);
-    /// false keeps every request a permit (one attempt per request).
+    /// Serve message-queue requests and the window Blt inside the Host attempt
+    /// (CORE_REALTIME M2); false keeps every request a permit (one attempt per
+    /// request).
     public var servesQueueInline = true
     private let clock: () throws -> UInt32
 
@@ -129,17 +131,26 @@ import NTSDCore
     /// served, except sound methods, which have no permit and play on commit.
     public func step(maximumRequests: Int = 20000) throws -> Host.Outcome {
         let driver = Driver(host:host)
-        // Message-queue requests are served inside the attempt (CORE_REALTIME
-        // M2) instead of unwinding and re-running it for each one; the same
-        // requests are counted and answered in the same order. The bound is
-        // kept: the request that reaches it goes through the permit path.
+        // Message-queue requests and the window Blt are served inside the
+        // attempt (CORE_REALTIME M2) instead of unwinding and re-running it for
+        // each one; the same requests are counted and answered in the same
+        // order. The bound is kept: the request that reaches it goes through
+        // the permit path.
         var served = 0
         let inline = servesQueueInline ? Driver.Inline(accepts:{ q in
-            if case .queue = q { return served+1 < maximumRequests }
-            return false
+            switch q {
+            case .queue: return served+1 < maximumRequests
+            // The window Blt (M2b): the dispatch entry's back-buffer clear each
+            // iteration, ArtSetup's and Alt+Enter's clears. It takes the permit
+            // arm's generic graphics service, with no counter of its own; its
+            // target is always the back buffer, so it fills and presents nothing.
+            case .graphics(.window(let w)) where w.kind == "blt": return served+1 < maximumRequests
+            default: return false
+            }
         },serve:{ [unowned self] permit,exchange in
             served += 1; requests += 1; lastRequest = permit.request
-            try messages.serve(permit,on:exchange)
+            if case .graphics = permit.request { try front.serve(permit,on:exchange) }
+            else { try messages.serve(permit,on:exchange) }
         }) : nil
         while served < maximumRequests {
             switch try driver.resume(prepare:{ _,state in try self.inputs(state) },network:network != nil,inline:inline) {

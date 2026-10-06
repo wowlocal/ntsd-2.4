@@ -246,7 +246,8 @@ import XCTest
                 globals.combine(started.host.snapshot.session?.state.full.bytes ?? [])
                 steps.append("\(kind) \(menu.requests) \(menu.textRequests) \(menu.emptyBlits) \(menu.iterations) \(clockCalls) "
                     + "\(String(describing:menu.lastRequest)) \(menu.messages.delivered.map(\.message)) \(menu.messages.sleeps) "
-                    + "\(started.host.committedSequence) \(started.display.frontOperationCount) \(globals.finalize())")
+                    + "\(started.host.committedSequence) \(started.display.frontOperationCount) \(started.display.operationCount) "
+                    + "\(globals.finalize())")
             }
             func step() throws -> Bool {
                 switch try menu.step() {
@@ -271,7 +272,7 @@ import XCTest
         for (a,b) in zip(inline.steps,permits.steps) { XCTAssertEqual(a,b) }
         XCTAssertEqual(inline.frame,permits.frame)
         XCTAssertTrue(inline.steps.suffix(3).allSatisfy { $0.hasPrefix("bound") })
-        XCTAssertLessThan(inline.prepares,permits.prepares,"queue requests were served inside the attempt")
+        XCTAssertLessThan(inline.prepares,permits.prepares,"requests were served inside the attempt")
         // A clock failing at the same call (half way through the run) fails the
         // same way in both modes.
         let failAt = max(2,inline.clockCalls/2)

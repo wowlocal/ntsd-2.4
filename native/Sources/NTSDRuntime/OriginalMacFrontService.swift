@@ -34,6 +34,14 @@ import NTSDCore
             answer:{ try driver.answer(permit,response:.graphics($0),retaining:$1) },
             fail:{ try driver.fail(permit,diagnostic:$0,retaining:$1) })
     }
+    /// The same through the whole-iteration exchange, for a request served
+    /// inside the Core attempt (CORE_REALTIME M2b).
+    public func serve(_ permit: OriginalApplicationIterationExchange.Permit,on exchange: OriginalApplicationIterationExchange) throws {
+        guard case .graphics(let q) = permit.request else { throw OriginalMacDisplayBackend.Boundary.unsupported("iteration non-graphics family") }
+        try serve(q,begin:{ try exchange.beginService(permit) },
+            answer:{ try exchange.answer(permit,response:.graphics($0),retaining:$1) },
+            fail:{ try exchange.fail(permit,diagnostic:$0,retaining:$1) })
+    }
     public func serve(_ permit: E.Permit,on exchange: E) throws {
         try serve(permit.request,begin:{ try exchange.beginService(permit) },
             answer:{ try exchange.answer(permit,response:$0,retaining:$1) },
