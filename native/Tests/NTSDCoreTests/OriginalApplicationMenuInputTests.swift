@@ -352,6 +352,53 @@ final class OriginalApplicationMenuInputTests: XCTestCase {
         XCTAssertEqual(session.state.full,committed.state.full);XCTAssertEqual(session.loop.message,committed.loop.message)
     }
 
+    /// CORE_REALTIME A0: without a beforeCommit observer (`observesCommit:
+    /// false`) the step skips the merged copy made for one; idle, message and
+    /// quit iterations, the counter's reset and a failing hook commit or fail
+    /// exactly as with an observer.
+    func testCommitWithoutObserverEqualsObservedCommit() throws {
+        typealias Session = OriginalApplicationMenuSession
+        var bytes = [UInt8](repeating:0,count:0xc3a8)
+        for i in 0..<8 { bytes[0xb8a8+i] = UInt8(0xb0+i) }
+        bytes[0xb580] = 58   // the counter alias equals the loop's counter (Session.init checks it)
+        let mask = [Bool](repeating:true,count:0xc3a8),full = try OriginalStateRecord(bytes:bytes,defined:mask)
+        let pointers = try OriginalStateRecord(bytes:Array(bytes[0xb8a8..<0xb8b0]),defined:Array(mask[0xb8a8..<0xb8b0]))
+        let state = try Session.State(full:full,memory:.init(replayPointers:pointers),front:.init(),frontSurfaces:[:],
+                                      earlyScreen:.init(),libraryText:.init(),random:.init(),screenBody:nil)
+        let replies = Session.Responses(draw:0,presentation:0,sound:0,release:0,dcResult:0,dc:9)
+        var message = try OriginalStateRecord(bytes:[UInt8](repeating:0,count:28),defined:[Bool](repeating:true,count:28))
+        try message.write(UInt32(0x200),at:4);try message.write(UInt32(230 << 16 | 350),at:12)
+        func run(_ observes: Bool) throws -> ([String],[OriginalStateRecord]) {
+            var session = try Session(state:state,loop:.init(baseline:123,counter:58))
+            var log: [String] = [],states: [OriginalStateRecord] = [],observed = 0
+            // 0: idle (a constant clock keeps the timer from coming due), 1: a
+            // message, 2: WM_QUIT; the fifth iteration's hook throws.
+            for (i,kind) in [0,0,1,0,0,0,2,0].enumerated() {
+                func queue(_ q: Loop.Request) throws -> Loop.Response {
+                    switch q.kind {
+                    case .peek: return kind == 0 ? .init(result:0) : .init(result:1,writes:[.init(offset:0,bytes:message.bytes)])
+                    case .get: return .init(result:kind == 2 ? 0 : 1,writes:[.init(offset:0,bytes:message.bytes)])
+                    case .translate,.dispatchMessage,.sleep: return .init()
+                    case .time: return .init(result:124)
+                    default: throw Stop.late
+                    }
+                }
+                do {
+                    let outcome = try session.step(responses:replies,queue:queue,windowDefault:{ _ in -123 },surface:{ _ in throw Stop.late },
+                        beforeCommit:{ _,_ in observed += 1;if i == 4 { throw Stop.late } },observesCommit:observes)
+                    guard case .committed(let batch) = outcome else { log.append("not committed");continue }
+                    log.append("committed \(batch.result) \(batch.effects)")
+                } catch { log.append("error \(error)") }
+                log.append("loop \(session.loop.counter) \(session.loop.timer.baseline) \(session.loop.message.bytes) hooks \(observed)")
+                states.append(session.state.full)
+            }
+            return (log,states)
+        }
+        let (observedLog,observedStates) = try run(true),(plainLog,plainStates) = try run(false)
+        XCTAssertEqual(plainLog,observedLog);XCTAssertEqual(plainStates,observedStates)
+        XCTAssertTrue(observedLog.contains { $0.hasPrefix("error") } && observedLog.contains { $0.contains("quit") },"failure and quit covered")
+    }
+
     func testSessionRejectsMissingAndDeadCurrentBitmapOwners() throws {
         typealias Session = OriginalApplicationMenuSession
         let fr = try F.Resources(),body = try Body.Resources(fr),mr = try M.Resources(body,fr),br = try B.Resources(),er = try B.Entry.Resources()

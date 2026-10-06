@@ -115,6 +115,9 @@ public final class OriginalApplicationObservedIteration<Platform: OriginalApplic
         checkpoint: (Host.Session.Checkpoint, OriginalStateRecord, Int32?) throws -> Void = { _,_,_ in },
         bodyProduced: (OriginalFrontScreenBody.StartupResult) throws -> Void = { _ in },
         beforeCommit: (Host.Session.Loop, Host.Session.State) throws -> Void = { _,_ in },
+        /// false: `beforeCommit` ignores the state (it gets the step's staged
+        /// state without the alias merge); see OriginalApplicationMenuSession.step.
+        observesCommit: Bool = true,
         beforePublication: (Platform) throws -> Void = { _ in },
         network: Bool = false,inline: Inline? = nil) throws -> Outcome {
         try attempt {
@@ -133,7 +136,7 @@ public final class OriginalApplicationObservedIteration<Platform: OriginalApplic
                 let result = try host.step(prepare:{ p,state in
                     p.iterationDelivery.begin(cursor);return try prepare(p,state)
                 },observe:observe,menuObserve:menuObserve,graphicsObserve:graphicsObserve,
-                checkpoint:checkpoint,bodyProduced:bodyProduced,beforeCommit:beforeCommit,
+                checkpoint:checkpoint,bodyProduced:bodyProduced,beforeCommit:beforeCommit,observesCommit:observesCommit,
                 bitmap:{ stage,q,p in
                     guard case .bitmap(let r) = try graphics(.bitmap(stage,q),p) else { throw Boundary.invalidResponse }
                     return r

@@ -153,7 +153,9 @@ import NTSDCore
             else { try messages.serve(permit,on:exchange) }
         }) : nil
         while served < maximumRequests {
-            switch try driver.resume(prepare:{ _,state in try self.inputs(state) },network:network != nil,inline:inline) {
+            // No beforeCommit observer here: the menu session skips the merged
+            // copy of its state made for one (CORE_REALTIME A0).
+            switch try driver.resume(prepare:{ _,state in try self.inputs(state) },observesCommit:false,network:network != nil,inline:inline) {
             case .request(let permit):
                 served += 1; requests += 1; lastRequest = permit.request
                 switch permit.request {

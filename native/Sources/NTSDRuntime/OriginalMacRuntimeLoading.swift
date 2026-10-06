@@ -463,7 +463,7 @@ import NTSDCore
                 self.sleeps.append(request.arguments[0]); return .init()
             default: throw Boundary.unexpected("tail \(request.kind)")
             }
-        })
+        },observesCommit:false)   // no beforeCommit observer (CORE_REALTIME A0)
         if case .committed = outcome,let exchange = controlDelivery?.exchange,let cursor = controlCursor {
             _ = try exchange.finish(cursor);controlCursor = nil;controlDelivery = nil
         }

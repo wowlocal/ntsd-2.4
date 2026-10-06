@@ -195,6 +195,9 @@ public final class OriginalApplicationHostSession<Platform: OriginalApplicationS
         checkpoint: (Session.Checkpoint, OriginalStateRecord, Int32?) throws -> Void = { _,_,_ in },
         bodyProduced: (OriginalFrontScreenBody.StartupResult) throws -> Void = { _ in },
         beforeCommit: (Session.Loop, Session.State) throws -> Void = { _,_ in },
+        /// false: `beforeCommit` ignores the state (it gets the step's staged
+        /// state without the alias merge); see OriginalApplicationMenuSession.step.
+        observesCommit: Bool = true,
         bitmap: ((Application.Stage, OriginalBitmapSurfaceLoading.Request, Platform) throws -> OriginalBitmapSurfaceLoading.Response)? = nil,
         lifecycle: ((OriginalWindowInitialization.Request, Platform) throws -> OriginalWindowInitialization.Response)? = nil,
         surface: ((OriginalWindowInitialization.Request, Platform) throws -> OriginalWindowInitialization.Response)? = nil,
@@ -219,7 +222,7 @@ public final class OriginalApplicationHostSession<Platform: OriginalApplicationS
                 queue: inputs.queue, windowDefault: inputs.windowDefault, surface: inputs.surface,
                 lifecycle: inputs.lifecycle, observe: observe, menuObserve: menuObserve,
                 graphicsObserve: graphicsObserve, checkpoint: checkpoint, bodyProduced: bodyProduced,
-                beforeCommit: beforeCommit,
+                beforeCommit: beforeCommit, observesCommit: observesCommit,
                 bitmap: bitmap.map { callback in { stage,q in try callback(stage,q,candidate) } },
                 lifecycleProvider: lifecycle.map { callback in { q in try callback(q,candidate) } },
                 surfaceProvider: surface.map { callback in { q in try callback(q,candidate) } },
@@ -370,7 +373,10 @@ public final class OriginalApplicationHostSession<Platform: OriginalApplicationS
     @discardableResult
     public func finishLoadedMenu(
         perform: (Session.Loop.Request, Platform) throws -> Session.Loop.Response,
-        beforeCommit: (Session.Loop, Session.State, Platform) throws -> Void = { _,_,_ in }
+        beforeCommit: (Session.Loop, Session.State, Platform) throws -> Void = { _,_,_ in },
+        /// false: `beforeCommit` ignores the state (it gets the step's staged
+        /// state without the alias merge); see OriginalApplicationMenuSession.step.
+        observesCommit: Bool = true
     ) throws -> Outcome {
         try attempt {
             guard let pending else { throw Boundary.noPendingLoading }
@@ -380,7 +386,7 @@ public final class OriginalApplicationHostSession<Platform: OriginalApplicationS
             var candidate = try Self.copy(preparedPlatform), next = application
             let result = try next.finishLoadedMenu(child,environment:&candidate,
                 perform:{ request,platform in try perform(request,platform) },
-                beforeCommit:{ loop,state,platform in try beforeCommit(loop,state,platform) })
+                beforeCommit:{ loop,state,platform in try beforeCommit(loop,state,platform) },observesCommit:observesCommit)
             let context = try DeliveryContext(application: next, platform: candidate)
             application = next;self.platform = candidate;self.prepared = nil;self.pending = nil
             return .committed(sequence:publish(.loaded(result),context:context),result:result.result)

@@ -84,6 +84,16 @@ public struct OriginalApplicationMenuSession {
             try replace(OriginalApplicationMenuSession.replayStart,memory.replayPointers)
             try full.write(counter,at:OriginalApplicationMenuSession.counterOffset)
         }
+        /// The checks `mergeAliases` makes, in its order and with its errors,
+        /// without writing (CORE_REALTIME A0).
+        fileprivate func checkMergeAliases() throws {
+            let start = OriginalApplicationMenuSession.replayStart
+            guard start >= 0, start <= full.bytes.count-memory.replayPointers.bytes.count else {
+                throw OriginalStateError.invalidStorage("Menu replacement extent")
+            }
+            let offset = OriginalApplicationMenuSession.counterOffset,total = full.byteCount
+            guard offset >= 0, 4 <= total, offset <= total-4 else { throw OriginalStateError.outOfBounds(offset:offset,count:4) }
+        }
     }
 
     public struct Responses {
@@ -197,6 +207,10 @@ public struct OriginalApplicationMenuSession {
         checkpoint: (Checkpoint,OriginalStateRecord,Int32?) throws -> Void = { _,_,_ in },
         bodyProduced: (OriginalFrontScreenBody.StartupResult) throws -> Void = { _ in },
         beforeCommit: (Loop,State) throws -> Void = { _,_ in },
+        /// false: the caller's `beforeCommit` ignores the state, so the merged
+        /// copy of `full` made for it is skipped (CORE_REALTIME A0); the merge's
+        /// checks still run in the same place.
+        observesCommit: Bool = true,
         initialization: OriginalApplicationBootstrap.MenuInputs? = nil,
         initializationBitmap: ((OriginalApplicationBootstrap.Stage,OriginalBitmapSurfaceLoading.Request) throws -> OriginalBitmapSurfaceLoading.Response)? = nil,
         frontProvider: ((OriginalApplicationBootstrap.Stage,OriginalFrontScreenEvent) throws -> OriginalLibSurfaceText.Response)? = nil,
@@ -762,8 +776,10 @@ public struct OriginalApplicationMenuSession {
                     try point(.dispatchReturn,owned.full,result)
                     return .init(result:result)
                 },counterWritten:{ try event(.init("write",[0x458580,4,$0])) },beforeCommit:{ timer,staged,_ in
-                    var coherent = staged; try coherent.mergeAliases(counter:timer.counter)
-                    try beforeCommit(timer,coherent)
+                    if observesCommit {
+                        var coherent = staged; try coherent.mergeAliases(counter:timer.counter)
+                        try beforeCommit(timer,coherent)
+                    } else { try staged.checkMergeAliases(); try beforeCommit(timer,staged) }
                 })
             try next.state.mergeAliases(counter:next.loop.counter)
             next.revision += 1;self = next
@@ -789,7 +805,11 @@ extension OriginalApplicationMenuSession {
     public mutating func finishLoadedMenu<Environment>(_ pending: OriginalApplicationLoadedMenuSession.PendingReturn,
         environment: inout Environment,
         perform: (Loop.Request,inout Environment) throws -> Loop.Response,
-        beforeCommit: (Loop,State,inout Environment) throws -> Void = { _,_,_ in }) throws -> LoadedCommit {
+        beforeCommit: (Loop,State,inout Environment) throws -> Void = { _,_,_ in },
+        /// false: the caller's `beforeCommit` ignores the state, so the merged
+        /// copy of `full` made for it is skipped (CORE_REALTIME A0); the merge's
+        /// checks still run in the same place.
+        observesCommit: Bool = true) throws -> LoadedCommit {
         let origin = pending.loading
         guard ownerID == origin.ownerID,revision == origin.revision,revision < UInt64.max else {
             throw Boundary.dependency("Stale or foreign loaded continuation")
@@ -802,8 +822,10 @@ extension OriginalApplicationMenuSession {
             let response = try perform(request,&candidate)
             operations.append(.loop(request,response));return response
         },beforeCommit:{ timer,context,_ in
-            var coherent = context;try coherent.mergeAliases(counter:timer.counter)
-            try beforeCommit(timer,coherent,&candidate)
+            if observesCommit {
+                var coherent = context;try coherent.mergeAliases(counter:timer.counter)
+                try beforeCommit(timer,coherent,&candidate)
+            } else { try context.checkMergeAliases(); try beforeCommit(timer,context,&candidate) }
         })
         try staged.mergeAliases(counter:complete.loop.counter)
         state = staged;loop = complete.loop;revision += 1;environment = candidate

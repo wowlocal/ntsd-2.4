@@ -1,0 +1,82 @@
+{
+ "study": "docs/research/CORE_REALTIME.md",
+ "phase": "A0 (no merged copy of full for an absent beforeCommit observer)",
+ "date": "2026-10-07",
+ "design": "docs/research/CORE_REALTIME_TIER2.md section A, step A0",
+ "change": "A new observesCommit: Bool = true parameter on OriginalApplicationMenuSession.step and .finishLoadedMenu, OriginalApplicationBootstrap.step and .finishLoadedMenu, OriginalApplicationHostSession.step and .finishLoadedMenu and OriginalApplicationObservedIteration.resume. When false the menu session's loop-continuation hook no longer builds `var coherent = staged; coherent.mergeAliases(...)` (a copy-on-write copy of the ~100 KB full record per iteration and per tick) for the caller's beforeCommit; it runs State.checkMergeAliases (the merge's checks with its errors, without writing) and passes the staged state. The committed state is still merged afterwards. Only the runtime passes false (OriginalMacRuntimeMenu.step and OriginalMacRuntimeLoading.finish, which attach no observer).",
+ "phone": {
+  "before": [
+   {
+    "label": "rt4g-run1",
+    "runSeconds": 326,
+    "peakResidentMB": 1230,
+    "ticksPerSecond": 20.4,
+    "busySeconds": 217.97,
+    "bodies": 1800,
+    "completeMsPerTick": 22.3,
+    "menuMsPerStep": 1.51,
+    "menuStepsPerTick": 4.12,
+    "mainCpuShare": 0.621,
+    "renderCpuShare": 0.449,
+    "mainMsPerTick": 30.4,
+    "renderMsPerTick": 22.0
+   },
+   {
+    "label": "rt4g-run2",
+    "runSeconds": 331,
+    "peakResidentMB": 1397,
+    "ticksPerSecond": 20.34,
+    "busySeconds": 219.41,
+    "bodies": 1800,
+    "completeMsPerTick": 22.4,
+    "menuMsPerStep": 1.51,
+    "menuStepsPerTick": 4.12,
+    "mainCpuShare": 0.623,
+    "renderCpuShare": 0.447,
+    "mainMsPerTick": 30.6,
+    "renderMsPerTick": 22.0
+   }
+  ],
+  "after": [
+   {
+    "label": "rta0-run1",
+    "runSeconds": 331,
+    "peakResidentMB": 1515,
+    "ticksPerSecond": 20.63,
+    "busySeconds": 218.65,
+    "bodies": 1800,
+    "completeMsPerTick": 22.0,
+    "menuMsPerStep": 1.44,
+    "menuStepsPerTick": 4.12,
+    "mainCpuShare": 0.618,
+    "renderCpuShare": 0.459,
+    "mainMsPerTick": 29.9,
+    "renderMsPerTick": 22.2
+   },
+   {
+    "label": "rta0-run2",
+    "runSeconds": 331,
+    "peakResidentMB": 1210,
+    "ticksPerSecond": 20.45,
+    "busySeconds": 218.57,
+    "bodies": 1800,
+    "completeMsPerTick": 22.5,
+    "menuMsPerStep": 1.45,
+    "menuStepsPerTick": 4.12,
+    "mainCpuShare": 0.62,
+    "renderCpuShare": 0.449,
+    "mainMsPerTick": 30.3,
+    "renderMsPerTick": 21.9
+   }
+  ],
+  "result": "message-loop iteration 1.51 -> 1.44/1.45 ms; main thread 30.4/30.6 -> 29.9/30.3 ms per tick (about -0.4 ms, as estimated)"
+ },
+ "gates": {
+  "headless": "vs equal, 1,832 frames identical (frozen-rta0, rt-a0)",
+  "scenarios": "all 10 equal, frames identical (rt-a0-all on frozen-rta0-b)",
+  "AppKit": "vs and playback equal, 3,960 frames identical to the 4g AppKit run (rt-a0-appkit vs rt-4g-appkit)",
+  "emulator": "vs equal, 1,832 frames identical (APK from native diff 8caa2422)",
+  "tests": "bundle A (native diff 6919dd90 against e4b89f0 via a temporary index): 48 of the 49 suites that use the menu session, bootstrap, Host session, observed iteration or the runtime menu/loading pass, incl. OriginalMacLoadingAudioTests (3,149 s); the new testCommitWithoutObserverEqualsObservedCommit failed there on its own setup (the counter alias word did not match the loop's counter, which Session.init checks), so OriginalApplicationMenuInputTests showed 1 failure; with the setup fixed (the committed tree, 1db2f2fc) bundle C ran OriginalApplicationMenuInputTests: 5 tests pass, including the on/off comparison of idle, message and quit iterations, the counter reset and a failing hook"
+ },
+ "review": "independent read-only review: correct, no counterexample (checkMergeAliases throws exactly when mergeAliases would, same errors and order; requireConsumed still runs in the same order; the committed state is merged later as before; no production path reads the state given to beforeCommit; every new parameter defaults to true and is forwarded). Acted on: the on/off test and doc comments on every new parameter. Not done: making the flag structural (an optional observer)."
+}
