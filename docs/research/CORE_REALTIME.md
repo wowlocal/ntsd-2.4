@@ -163,7 +163,8 @@ while measuring; restore `svc power stayon false` when the loop pauses or stops.
 | 2026-10-07 | B2 P2c: local input in place | `beginLocalInput` and `localInput` copied the entry's candidate twice more (the actors array, an actor record and the globals); their bodies now run on the entry's own copy, and the AI/object children receive it. Main 20.0/20.0 ms per tick (no measurable change). All 10 scenarios, AppKit and the emulator equal, frames identical; 74 suites; review OK | [evidence](../evidence/rt-b2p2c-local-input-20261007.json) | ba69395 |
 | 2026-10-07 | B2 P2d: entry and local-input rollback test | Test only (the P2 and P2c reviews): the loaded entry, run directly, throws at each checkpoint, replay and round event and from an AI child after its writes, leaving the caller's model, commands and context unchanged, with a retry equal to the uninjected run; the transactional local-input forms keep their caller's values. Sources as P2c; the menu-startup and application-input suites pass | [evidence](../evidence/rt-b2p2d-entry-rollback-test-20261007.json) | 96661df |
 | 2026-10-07 | B2 P3: the AI and object-input children in place | The character-AI and object-input passes copied the match's world, actors and globals while the caller held them, so each call copied the actors array, an actor record and the globals; `applyInPlace` moves them into the pass and writes them back in a `defer`, and the production child (whose callers all drop the match on a throw) uses it. Both reference corpora run through both forms. Main 20.0/20.0 → 19.8/19.6 ms per tick. All 10 scenarios, AppKit and the emulator equal, frames identical; 74 suites; review OK | [evidence](../evidence/rt-b2p3-ai-children-in-place-20261007.json) | e7dedda |
-| 2026-10-07 | B2 P3b: AI and object-input rollback checks through both forms | Test only (the P3 review): an observer throwing at the first and last event leaves the all-or-nothing caller unchanged and the in-place records whole; a corrupted Object binding gives the same error from both forms. Sources as P3; both suites pass | [evidence](../evidence/rt-b2p3b-ai-rollback-checks-20261007.json) | this commit |
+| 2026-10-07 | B2 P3b: AI and object-input rollback checks through both forms | Test only (the P3 review): an observer throwing at the first and last event leaves the all-or-nothing caller unchanged and the in-place records whole; a corrupted Object binding gives the same error from both forms. Sources as P3; both suites pass | [evidence](../evidence/rt-b2p3b-ai-rollback-checks-20261007.json) | 67f4083 |
+| 2026-10-07 | A3 P0: idle iterations measured apart | The runtime and the speed harness split the message loop: on the A12 an idle iteration costs 0.66 ms in its step and 0.81 ms in all, 3.12 per tick (~2.5 ms per tick); the tick's own step 1.38 ms; the loaded cycle 14.5 ms. Telemetry only; all 10 scenarios, AppKit and the emulator equal, frames identical; the runtime suites pass | [evidence](../evidence/rt-a3p0-idle-split-20261007.json) | this commit |
 
 ## Next task
 
@@ -195,8 +196,10 @@ main thread; message-loop iterations 4.12 × 1.14 ms; render thread 18.7 ms,
   transactional copy; P1–P3 done (post-draw passes, the loaded entry chain,
   local input, the AI/object children): main 19.8/19.6 ms per tick. P4 (the
   gameplay body's passes family by family, by a fresh profile) remains.
-- **Idle iterations** ([A3 design](CORE_REALTIME_A3.md)): ~1 ms each, three per
-  tick under the virtual clock; target ≤0.2 ms in five pieces.
+- **Idle iterations** ([A3 design](CORE_REALTIME_A3.md)): measured (P0) at
+  0.81 ms each on the A12 (0.66 ms in the step), 3.12 per tick; target ≤0.2 ms.
+  L3 (no State copies in the idle loop) is in its gates; then L4 (the idle
+  lane without the Driver and exchange) and L5/L6.
 - Then B1 3c (world pair cache), B2 (R5/M3 in-place nested
   candidates), B3 (one loaded attempt per tick), the replay check, R3 stage
   2; then the gameplay body and the render thread.

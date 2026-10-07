@@ -108,7 +108,11 @@ public enum OriginalRuntimeSessionBoundary: Error, Equatable {
     private var networkTrace: FileHandle?
     private var networkStateCycles: Set<Int> = []
     private var committed = 0, steps = 0, gameplayClock: (steps: Int,committed: Int)?,
-        busy = 0.0, waited = 0, menuBusy = 0.0, menuSteps = 0
+        busy = 0.0, waited = 0, menuBusy = 0.0, menuSteps = 0,
+        // Committed iterations (in a match nearly all idle: no message, the
+        // timer not due): their step's time and their whole `iterate`, which
+        // adds the runtime's own work (CORE_REALTIME A3 P0).
+        committedBusy = 0.0, committedIterationBusy = 0.0, committedSteps = 0
     public private(set) var stopped = false
     private var music: OriginalMacMusicOutput?
     /// DirectSound buffer voices (APPLICATION_SOUND_EFFECTS_PLAN.md) and their
@@ -300,9 +304,11 @@ public enum OriginalRuntimeSessionBoundary: Error, Equatable {
             // (the loaded cycle's) so a tick's cost splits by iteration kind.
             let stepBegin = Date()
             let stepped = try menu.step()
-            menuBusy += Date().timeIntervalSince(stepBegin); menuSteps += 1
+            let stepSeconds = Date().timeIntervalSince(stepBegin)
+            menuBusy += stepSeconds; menuSteps += 1
             switch stepped {
             case .committed(_,let result):
+                defer { committedBusy += stepSeconds; committedSteps += 1; committedIterationBusy += Date().timeIntervalSince(stepBegin) }
                 if case .quit(let code) = result {
                     // The loop returned WM_QUIT's wParam: WinMain ends.
                     Self.emit(["event":"quit","code":code,"iterations":committed,"uptime":ProcessInfo.processInfo.systemUptime])
@@ -398,7 +404,8 @@ public enum OriginalRuntimeSessionBoundary: Error, Equatable {
                     if gameplayBodies % 300 == 0 {
                         var event: [String:Any] = ["event":"progress","gameplayBodies":gameplayBodies,"cycles":cycles,"iterations":committed,
                             "characterAI":loading.counts.characterAI,"objectInputs":loading.counts.objectInputs,"uptime":ProcessInfo.processInfo.systemUptime,
-                            "busySeconds":busy,"menuBusySeconds":menuBusy,"menuSteps":menuSteps,"partAssemblies":OriginalStateRecord.partAssemblies,"waitedMilliseconds":waited,"lastSleeps":Array(loading.sleeps.suffix(6)),"music":musicReport(),
+                            "busySeconds":busy,"menuBusySeconds":menuBusy,"menuSteps":menuSteps,
+                            "committedBusySeconds":committedBusy,"committedIterationSeconds":committedIterationBusy,"committedSteps":committedSteps,"partAssemblies":OriginalStateRecord.partAssemblies,"waitedMilliseconds":waited,"lastSleeps":Array(loading.sleeps.suffix(6)),"music":musicReport(),
                             "sounds":soundReport()]
                         if gameplayBodies % every == 0,let i = arguments.firstIndex(of:"--body-captures"),i+1 < arguments.count {
                             let path = "\(arguments[i+1])/b\(String(format:"%06d",gameplayBodies)).png"

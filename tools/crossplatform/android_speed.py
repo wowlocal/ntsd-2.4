@@ -254,6 +254,18 @@ def main():
             steps = last["menuSteps"] - first["menuSteps"]
             row["menuMsPerStep"] = round(1000 * (last["menuBusySeconds"] - first["menuBusySeconds"]) / steps, 2)
             row["menuStepsPerTick"] = round(steps / ticks, 2)
+        if ticks > 0 and "committedSteps" in first and last["committedSteps"] > first["committedSteps"]:
+            # Committed iterations (in a match nearly all idle) against the
+            # tick's own step (CORE_REALTIME A3 P0): each idle step, the whole
+            # idle iteration with the runtime's own work, and the tick step.
+            idle = last["committedSteps"] - first["committedSteps"]
+            idle_busy = last["committedBusySeconds"] - first["committedBusySeconds"]
+            row["idleMsPerStep"] = round(1000 * idle_busy / idle, 3)
+            row["idleIterationMs"] = round(1000 * (last["committedIterationSeconds"] - first["committedIterationSeconds"]) / idle, 3)
+            row["idleStepsPerTick"] = round(idle / ticks, 2)
+            other = last["menuSteps"] - first["menuSteps"] - idle
+            if other > 0:
+                row["tickStepMs"] = round(1000 * (last["menuBusySeconds"] - first["menuBusySeconds"] - idle_busy) / other, 3)
         if cpu_a and cpu_b and cpu_b[0] > cpu_a[0]:
             wall = cpu_b[0] - cpu_a[0]
             share = {name: (cpu_b[1][name] - cpu_a[1][name]) / 1e9 / wall for name in cpu_b[1]}
