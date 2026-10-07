@@ -302,9 +302,8 @@ public enum OriginalPostDrawLifecycle {
                     header: headers, frame: frames, observe: converted, inPlace: true)
                 if !active { return }
             }
-            let headers = header, frames = frame, current = slot, precision = precision, sse2 = sse2, objectCount = objectCount
-            let continuation = try OriginalPostDrawOpoint.apply(world: &world, actors: &actors, slot: current,
-                requestSlot: &scratch.requestSlot, precision: precision, sse2: sse2, objectCount: objectCount, header: headers, frame: frames,
+            let continuation = try OriginalPostDrawOpoint.apply(world: &world, actors: &actors, slot: slot,
+                requestSlot: &scratch.requestSlot, precision: precision, sse2: sse2, objectCount: objectCount, header: header, frame: frame,
                 observe: converted, inPlace: true)
             if continuation == .nextSlot { return }
             let parent = try index(slot)

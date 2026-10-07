@@ -80,7 +80,8 @@ final class OriginalPostDrawOpointTests: XCTestCase {
         try globalsBase.write(Int32(1), at: 0x44d034-0x44d000)
         for i in 0..<3000 { try globalsBase.write(UInt8(1+i%255), at: 0x44ff90-0x44d000+i) }
         var totalEvents = 0
-        for item in c.cases {
+        // Every case all-or-nothing and in place (CORE_REALTIME B2).
+        for (item, inPlace) in c.cases.flatMap({ [($0, false), ($0, true)] }) {
             let template = try OriginalStateRecord.actor(over: (0..<0x420).map { item.fill == "a5" ? 0xa5 : UInt8(truncatingIfNeeded: $0) })
             var actors = [OriginalStateRecord](repeating: template, count: 400)
             var world = try OriginalStateRecord.worldPrefix(over: (0..<0x7d8).map { item.fill == "a5" ? 0xa5 : UInt8(truncatingIfNeeded: $0) })
@@ -97,7 +98,8 @@ final class OriginalPostDrawOpointTests: XCTestCase {
             for p in item.frames ?? [] { try patch(&ownFrames[p.object][p.index], p.offset, p.bytes) }
             for p in item.globals ?? [] { try patch(&globals, p.offset-0x44d000, p.bytes) }
             do {
-                let continuation = try OriginalPostDrawOpoint.apply(world: &world, actors: &actors, slot: item.slot,
+                var requestSlot: OriginalRequestSlotWord?
+                let continuation = try OriginalPostDrawOpoint.apply(world: &world, actors: &actors, slot: item.slot, requestSlot: &requestSlot,
                     precision: .bits53, sse2: item.sse2 == 1, objectCount: item.count ?? 4,
                     header: { ownHeaders[$0] }, frame: { ownFrames[$0][Int($1)] }, observe: { event in
                         switch event {
@@ -108,7 +110,7 @@ final class OriginalPostDrawOpointTests: XCTestCase {
                         case let .catalogSound(slot, x, index):
                             events.append(.init(slot: slot, kind: "catalogSound", arguments: [x, index].map(UInt32.init(bitPattern:))))
                         }
-                    })
+                    }, inPlace: inPlace)
                 XCTAssertEqual(continuation.rawValue, item.endPC, item.label + " exit")
             } catch { XCTFail("\(item.label): \(error)"); return }
             let records = [world]+actors
@@ -120,7 +122,7 @@ final class OriginalPostDrawOpointTests: XCTestCase {
                 XCTFail("\(item.label): pool=\(pool == item.poolSHA256) masks=\(masks == item.maskSHA256) globals=\(globalSHA == item.globalsSHA256) events=\(events == item.events)")
                 return
             }
-            totalEvents += events.count
+            if !inPlace { totalEvents += events.count }
         }
         XCTAssertEqual(totalEvents, 2291)
         print("POSTDRAW OPOINT", c.cases.count, "full pools and", totalEvents, "ordered events compared")

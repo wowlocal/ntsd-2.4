@@ -85,27 +85,28 @@ public enum OriginalPostDrawSlotPrefix {
                       header: (Int) throws -> OriginalStateRecord, frame: (Int, Int32) throws -> OriginalStateRecord,
                       observe: (OriginalPostDrawSlotEvent) throws -> Void = { _ in }, inPlace: Bool = false) throws -> Bool {
         guard (0..<400).contains(slot) else { throw error("Slot extent") }
+        guard inPlace else {
+            // All or nothing: the pass runs in place on copies, assigned only
+            // when it completes.
+            var w = world, a = actors, g = globals, r = retainedObjectIndex, q = requestSlot, l = library
+            let active = try apply(world: &w, actors: &a, globals: &g, slot: slot, retainedObjectIndex: &r, requestSlot: &q,
+                                   objectCount: objectCount, library: &l, header: header, frame: frame, observe: observe, inPlace: true)
+            world = w; actors = a; globals = g; retainedObjectIndex = r; requestSlot = q; library = l
+            return active
+        }
         return try withoutActuallyEscaping(header) { headers in
             try withoutActuallyEscaping(frame) { frames in
                 try withoutActuallyEscaping(observe) { observer in
-                    if inPlace {
-                        // The caller's records moved in and written back on every
-                        // path (CORE_REALTIME B2; callers that drop them on throw).
-                        var body = Body(world: inPlaceTake(&world, leaving: .vacant), actors: inPlaceTake(&actors, leaving: []),
-                                        globals: inPlaceTake(&globals, leaving: .vacant), retained: retainedObjectIndex, requestSlot: requestSlot,
-                                        slot: slot, objectCount: objectCount, library: library, header: headers, frame: frames, observe: observer)
-                        defer {
-                            world = body.world; actors = body.actors; globals = body.globals; retainedObjectIndex = body.retained
-                            library = body.library; requestSlot = body.requestSlot
-                        }
-                        return try body.run()
-                    }
-                    var body = Body(world: world, actors: actors, globals: globals, retained: retainedObjectIndex, requestSlot: requestSlot,
+                    // The caller's records moved in and written back on every
+                    // path (CORE_REALTIME B2; callers that drop them on throw).
+                    var body = Body(world: inPlaceTake(&world, leaving: .vacant), actors: inPlaceTake(&actors, leaving: []),
+                                    globals: inPlaceTake(&globals, leaving: .vacant), retained: retainedObjectIndex, requestSlot: requestSlot,
                                     slot: slot, objectCount: objectCount, library: library, header: headers, frame: frames, observe: observer)
-                    let active = try body.run()
-                    world = body.world; actors = body.actors; globals = body.globals; retainedObjectIndex = body.retained; library = body.library
-                    requestSlot = body.requestSlot
-                    return active
+                    defer {
+                        world = body.world; actors = body.actors; globals = body.globals; retainedObjectIndex = body.retained
+                        library = body.library; requestSlot = body.requestSlot
+                    }
+                    return try body.run()
                 }
             }
         }

@@ -80,8 +80,10 @@ final class OriginalPostDrawSlotPrefixTests: XCTestCase {
         var globalsBase = try zero(OriginalMatchPreparation.globalSize)
         try globalsBase.write(Int32(1), at: 0x44d034-0x44d000)
         for i in 0..<3000 { try globalsBase.write(UInt8(1+i%255), at: 0x44ff90-0x44d000+i) }
-        var totalEvents = 0
-        for item in c.cases {
+        var totalEvents = 0, schedulerThrows = 0
+        // Every case through the all-or-nothing form and through the in-place
+        // form (CORE_REALTIME B2): the same pools, masks, globals and events.
+        for (item, inPlace) in c.cases.flatMap({ [($0, false), ($0, true)] }) {
             let template = try OriginalStateRecord.actor(over: (0..<0x420).map { item.fill == "a5" ? 0xa5 : UInt8(truncatingIfNeeded: $0) })
             var actors = [OriginalStateRecord](repeating: template, count: 400)
             var world = try OriginalStateRecord.worldPrefix(over: (0..<0x7d8).map { item.fill == "a5" ? 0xa5 : UInt8(truncatingIfNeeded: $0) })
@@ -98,9 +100,11 @@ final class OriginalPostDrawSlotPrefixTests: XCTestCase {
             for p in item.frames ?? [] { try patch(&ownFrames[p.object][p.index], p.offset, p.bytes) }
             for p in item.globals ?? [] { try patch(&globals, p.offset-0x44d000, p.bytes) }
             var retained: Int32? = Int32(bitPattern: item.retainedBefore)
+            var requestSlot: OriginalRequestSlotWord?, library: OriginalLibTransformBacking?
+            let start = (world, actors, globals, retained)
             do {
                 let scheduled = try OriginalPostDrawSlotPrefix.apply(world: &world, actors: &actors, globals: &globals,
-                    slot: item.slot, retainedObjectIndex: &retained, objectCount: item.count ?? 4,
+                    slot: item.slot, retainedObjectIndex: &retained, requestSlot: &requestSlot, objectCount: item.count ?? 4, library: &library,
                     header: { ownHeaders[$0] }, frame: { ownFrames[$0][Int($1)] }, observe: { event in
                         switch event {
                         case let .random(slot, stream, range, result):
@@ -110,7 +114,7 @@ final class OriginalPostDrawSlotPrefixTests: XCTestCase {
                         case let .catalogSound(slot, x, index):
                             events.append(.init(slot: slot, kind: "catalogSound", arguments: [x, index].map(UInt32.init(bitPattern:))))
                         }
-                    })
+                    }, inPlace: inPlace)
                 XCTAssertEqual(scheduled ? 0x41fb0b : 0x4214c6, item.endPC, item.label + " exit")
             } catch { XCTFail("\(item.label): \(error)"); return }
             let records = [world]+actors
@@ -123,8 +127,25 @@ final class OriginalPostDrawSlotPrefixTests: XCTestCase {
                 XCTFail("\(item.label): pool=\(pool == item.poolSHA256) masks=\(masks == item.maskSHA256) globals=\(globalSHA == item.globalsSHA256) events=\(events == item.events) retained=\(String(describing: retained)) expected=\(item.retainedAfter)")
                 return
             }
-            totalEvents += events.count
+            if !inPlace { totalEvents += events.count }
+            // The scheduler (called in place by the prefix) throwing at its
+            // sound request: the all-or-nothing prefix leaves every record and
+            // the retained index as they were (B2 review). No corpus case has
+            // two sound requests (the first version waited for a second one
+            // and never ran), so the throw is at the first.
+            if !inPlace && schedulerThrows < 20 && events.contains(where: { $0.kind == "catalogSound" }) {
+                schedulerThrows += 1
+                var (w, a, g, r) = start, q: OriginalRequestSlotWord?, l: OriginalLibTransformBacking?
+                XCTAssertThrowsError(try OriginalPostDrawSlotPrefix.apply(world: &w, actors: &a, globals: &g, slot: item.slot,
+                    retainedObjectIndex: &r, requestSlot: &q, objectCount: item.count ?? 4, library: &l,
+                    header: { ownHeaders[$0] }, frame: { ownFrames[$0][Int($1)] }, observe: { event in
+                        if case .catalogSound = event { throw OriginalStateError.invalidStorage("Scheduler sound") }
+                    }), item.label)
+                XCTAssertEqual(w, start.0, item.label); XCTAssertEqual(a, start.1, item.label); XCTAssertEqual(g, start.2, item.label)
+                XCTAssertEqual(r, start.3, item.label)
+            }
         }
+        XCTAssertGreaterThan(schedulerThrows, 0, "a case with a scheduler sound")
         XCTAssertEqual(totalEvents, 2334)
         print("POSTDRAW SLOT PREFIX", c.cases.count, "full pools and", totalEvents, "ordered events compared")
     }

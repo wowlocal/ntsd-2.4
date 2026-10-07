@@ -27,27 +27,22 @@ public enum OriginalActorScheduler {
                       globals: inout OriginalStateRecord, mode: Int32, slot: Int32,
                       frame: (Int32) throws -> OriginalStateRecord,
                       observe: (OriginalActorScheduleEvent) throws -> Void = { _ in }, inPlace: Bool = false) throws {
-        if inPlace {
-            try withoutActuallyEscaping(frame) { frames in
-                try withoutActuallyEscaping(observe) { observer in
-                    var body = Body(actor: inPlaceTake(&actor, leaving: .vacant), globals: inPlaceTake(&globals, leaving: .vacant),
-                                    header: header, mode: mode, slot: slot, frame: frames, observe: observer)
-                    defer { actor = body.actor; globals = body.globals }
-                    try body.run()
-                }
-            }
+        guard inPlace else {
+            // All or nothing: the pass runs in place on copies, assigned only
+            // when it completes.
+            var candidate = actor, owned = globals
+            try apply(actor: &candidate, header: header, globals: &owned, mode: mode, slot: slot, frame: frame, observe: observe, inPlace: true)
+            actor = candidate; globals = owned
             return
         }
-        var candidate = actor, owned = globals
         try withoutActuallyEscaping(frame) { frames in
             try withoutActuallyEscaping(observe) { observer in
-                var body = Body(actor: candidate, globals: owned, header: header, mode: mode, slot: slot,
-                                frame: frames, observe: observer)
+                var body = Body(actor: inPlaceTake(&actor, leaving: .vacant), globals: inPlaceTake(&globals, leaving: .vacant),
+                                header: header, mode: mode, slot: slot, frame: frames, observe: observer)
+                defer { actor = body.actor; globals = body.globals }
                 try body.run()
-                candidate = body.actor; owned = body.globals
             }
         }
-        actor = candidate; globals = owned
     }
 
     private struct Body {
