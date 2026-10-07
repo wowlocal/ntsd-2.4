@@ -9,8 +9,10 @@ public enum ObjectInputReference {
         public let initial: InitialLoadingReference.Result
         public let cases: Int, records: Int, bytes: Int, random: Int, constructors: Int, blocks: Int
         public let hitFa: [Int32: Int]
-        /// Cases rerun with an observer that throws at the first event: the
-        /// all-or-nothing form leaves the state unchanged (CORE_REALTIME B2).
+        /// Cases rerun with an observer that throws at the first and the last
+        /// event (the all-or-nothing form leaves the state unchanged, the
+        /// in-place form writes every record back) and with a corrupted Object
+        /// binding (the same error from both forms) (CORE_REALTIME B2).
         public let rollbacks: Int
     }
     private struct Blob: Decodable { let count: Int, deflate: String }
@@ -112,12 +114,55 @@ public enum ObjectInputReference {
                 }
                 guard built == item.constructors else { throw error(item.label+" constructors \(built) vs \(item.constructors)") }
                 random += draws.count; constructors += built.count
-                if !inPlace, !events.isEmpty, rollbacks < 20 {
+                if !events.isEmpty, rollbacks < 20 {
+                    // An observer throwing at the first and at the last event: the
+                    // all-or-nothing form leaves the state unchanged and the
+                    // in-place form writes every record back (CORE_REALTIME B2).
                     struct Interrupt: Error {}
-                    var copy = before
-                    do { try OriginalObjectInput.apply(slot: item.slot,state: &copy,observe: { _ in throw Interrupt() }); throw error(item.label+" observer stop") } catch is Interrupt {}
-                    guard copy.world == before.world, copy.actors == before.actors, copy.globals == before.globals else {
-                        throw error(item.label+" state after an observer throw")
+                    for stop in Set([0,events.count-1]).sorted() {
+                        var copy = before, seen = 0
+                        let observer: (OriginalObjectInputEvent) throws -> Void = { _ in
+                            defer { seen += 1 }
+                            if seen == stop { throw Interrupt() }
+                        }
+                        do {
+                            if inPlace { try OriginalObjectInput.applyInPlace(slot: item.slot,state: &copy,observe: observer) }
+                            else { try OriginalObjectInput.apply(slot: item.slot,state: &copy,observe: observer) }
+                            throw error(item.label+" observer stop")
+                        } catch is Interrupt {}
+                        if inPlace {
+                            guard copy.world.byteCount == OriginalStateRecord.worldPrefixSize, copy.actors.count == 400,
+                                  copy.actors.allSatisfy({ $0.byteCount == OriginalStateRecord.actorSize }),
+                                  copy.globals.byteCount == before.globals.byteCount else {
+                                throw error(item.label+" records after an in-place observer throw")
+                            }
+                        } else {
+                            guard copy.world == before.world, copy.actors == before.actors, copy.globals == before.globals else {
+                                throw error(item.label+" state after an observer throw")
+                            }
+                        }
+                    }
+                    // A corrupted Object binding of the called slot: the same
+                    // error from both forms, the all-or-nothing caller unchanged.
+                    var wrapped = before, placed = before
+                    let bound = Int(try before.world.integer(at: 0x194+item.slot*4,as: UInt32.self))
+                    guard (0..<400).contains(bound) else { throw error("Called slot binding") }
+                    try wrapped.actors[bound].write(UInt32.max,at: 0x368); try placed.actors[bound].write(UInt32.max,at: 0x368)
+                    let corrupted = wrapped
+                    var wrappedError: String?, placedError: String?
+                    do { try OriginalObjectInput.apply(slot: item.slot,state: &wrapped,observe: { _ in }) } catch let e { wrappedError = "\(e)" }
+                    do { try OriginalObjectInput.applyInPlace(slot: item.slot,state: &placed,observe: { _ in }) } catch let e { placedError = "\(e)" }
+                    guard wrappedError == placedError, placed.actors.count == 400 else {
+                        throw error(item.label+" corrupted binding \(String(describing: wrappedError)) vs \(String(describing: placedError))")
+                    }
+                    if wrappedError != nil {
+                        guard wrapped.world == corrupted.world, wrapped.actors == corrupted.actors, wrapped.globals == corrupted.globals else {
+                            throw error(item.label+" state after a corrupted binding")
+                        }
+                    } else {
+                        guard wrapped.world == placed.world, wrapped.actors == placed.actors, wrapped.globals == placed.globals else {
+                            throw error(item.label+" forms after a corrupted binding")
+                        }
                     }
                     rollbacks += 1
                 }

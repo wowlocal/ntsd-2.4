@@ -15,7 +15,7 @@ final class OriginalCharacterAITests: XCTestCase {
             XCTAssertEqual(r.initial.catalog.catalog.objects,137)
             XCTAssertGreaterThan(r.owners[33] ?? 0,0)
             XCTAssertGreaterThan(r.random,0)
-            if inPlace { XCTAssertEqual(r.rollbacks,0) } else { XCTAssertGreaterThan(r.rollbacks,0) }
+            XCTAssertGreaterThan(r.rollbacks,0)
         }
     }
     func testCharacterAIAtStartupPrecision() throws { try compare("") }

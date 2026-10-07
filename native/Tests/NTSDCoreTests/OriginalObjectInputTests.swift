@@ -16,7 +16,7 @@ final class OriginalObjectInputTests: XCTestCase {
             XCTAssertEqual(Set(r.hitFa.keys),[1,3,4,5,7,8,10,12,14])
             XCTAssertGreaterThan(r.random,0)
             XCTAssertGreaterThan(r.constructors,0)
-            if inPlace { XCTAssertEqual(r.rollbacks,0) } else { XCTAssertGreaterThan(r.rollbacks,0) }
+            XCTAssertGreaterThan(r.rollbacks,0)
         }
     }
     func testObjectInputAtStartupPrecision() throws { try compare("") }
