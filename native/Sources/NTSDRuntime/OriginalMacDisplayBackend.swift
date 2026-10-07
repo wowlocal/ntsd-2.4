@@ -414,12 +414,33 @@ import NTSDCore
     /// The region's presentation words; unknown pixels are black only when
     /// `presentUnknownAsBlack` allows it.
     private func framebuffer(_ data: Storage,_ region: (Int,Int,Int,Int,UInt32?)) throws -> OriginalFramebuffer {
-        try Self.crop(data,region,black:presentUnknownAsBlack)
+        try Self.crop(data,region,black:presentUnknownAsBlack,pool:framePool)
     }
     /// The region as a framebuffer; unknown pixels are black or a boundary.
-    private nonisolated static func crop(_ data: Storage,_ region: (Int,Int,Int,Int,UInt32?),black presentUnknownAsBlack: Bool) throws -> OriginalFramebuffer {
+    /// The buffers of the last few presented crops, reused once nothing else
+    /// holds them (CORE_REALTIME 1i): a fresh 1.75 MB buffer per present cost
+    /// an allocation, page faults and zero-filling, and returning the pages
+    /// on free. A reused buffer still referenced elsewhere is copied on write;
+    /// crop overwrites every byte, so the frame is the same either way.
+    final class FramePool: @unchecked Sendable {
+        private let lock = NSLock()
+        private var buffers: [Data] = []
+        /// The oldest of the last three buffers, when it has this size.
+        func take(_ count: Int) -> Data? {
+            lock.lock(); defer { lock.unlock() }
+            guard buffers.count >= 3,buffers[0].count == count else { return nil }
+            return buffers.removeFirst()
+        }
+        func keep(_ buffer: Data) {
+            lock.lock(); defer { lock.unlock() }
+            buffers.append(buffer); if buffers.count > 3 { buffers.removeFirst() }
+        }
+    }
+    private let framePool = FramePool()
+    private nonisolated static func crop(_ data: Storage,_ region: (Int,Int,Int,Int,UInt32?),black presentUnknownAsBlack: Bool,
+                                         pool: FramePool) throws -> OriginalFramebuffer {
         let (x,y,w,h,_) = region
-        var bytes = Data(count:w*h*4)
+        var bytes = pool.take(w*h*4) ?? Data(count:w*h*4)
         let values = data.values,known = data.known   // once per frame (MOBILE_PERFORMANCE step 2)
         try bytes.withUnsafeMutableBytes { destination in
             for row in 0..<h {
@@ -433,6 +454,7 @@ import NTSDCore
                 }
             }
         }
+        pool.keep(bytes)
         return OriginalFramebuffer(width:w,height:h,pixels:bytes)
     }
     /// The surface's presentation rectangle as a framebuffer.
@@ -870,7 +892,8 @@ extension OriginalMacDisplayBackend {
         do { target = try frontTarget(s,r) } catch { try renderer.flush(); Self.textPixels(plan); throw error }
         let rect = target.delivery
         if let present = try pipeline(rect,pixels:{ Self.textPixels(plan) }) {
-            renderer.submit { Self.textPixels(plan); if let present { present.deliver(try Self.crop(data,rect,black:true)) } }
+            let pool = framePool
+            renderer.submit { Self.textPixels(plan); if let present { present.deliver(try Self.crop(data,rect,black:true,pool:pool)) } }
         } else {
             Self.textPixels(plan)
             if let window = rect.4 { try windows.present(framebuffer(data,rect),in:window) }
@@ -1131,7 +1154,8 @@ extension OriginalMacDisplayBackend {
         case let .fill(target,color):
             let data = target.surface.storage!,region = target.region,rect = target.delivery
             if let present = try pipeline(rect,pixels:{ Self.fillPixels(data,region,color) }) {
-                renderer.submit { Self.fillPixels(data,region,color); if let present { present.deliver(try Self.crop(data,rect,black:true)) } }
+                let pool = framePool
+                renderer.submit { Self.fillPixels(data,region,color); if let present { present.deliver(try Self.crop(data,rect,black:true,pool:pool)) } }
             } else {
                 Self.fillPixels(data,region,color)
                 if let window = rect.4 { try windows.present(framebuffer(data,rect),in:window) }
@@ -1140,7 +1164,8 @@ extension OriginalMacDisplayBackend {
         case .copy(let copy):
             let input = copy.source.storage!,output = copy.target.surface.storage!,rect = copy.target.delivery,plan = CopyPlan(copy)
             if let present = try pipeline(rect,pixels:{ Self.copyPixels(plan,input,output) }) {
-                renderer.submit { Self.copyPixels(plan,input,output); if let present { present.deliver(try Self.crop(output,rect,black:true)) } }
+                let pool = framePool
+                renderer.submit { Self.copyPixels(plan,input,output); if let present { present.deliver(try Self.crop(output,rect,black:true,pool:pool)) } }
             } else {
                 Self.copyPixels(plan,input,output)
                 if let window = rect.4 { try windows.present(framebuffer(output,rect),in:window) }
@@ -1158,7 +1183,8 @@ extension OriginalMacDisplayBackend {
             let data = primary.storage!,window = primary.draw.window!.token
             let rect: (Int,Int,Int,Int,UInt32?) = (0,0,data.width,data.height,window)
             if let present = try pipeline(rect,pixels:{}) {
-                renderer.submit { if let present { present.deliver(try Self.crop(data,rect,black:true)) } }
+                let pool = framePool
+                renderer.submit { if let present { present.deliver(try Self.crop(data,rect,black:true,pool:pool)) } }
             } else {
                 try windows.present(framebuffer(data,rect),in:window)
             }

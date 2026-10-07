@@ -345,6 +345,49 @@ import XCTest
         XCTAssertEqual(pixelsOnce.defined,pixelsTwice.defined);XCTAssertEqual(countOnce,countTwice)
         XCTAssertTrue(twice.contains { $0.hasPrefix("error") } && twice.contains { $0.hasPrefix("ok") },"both outcomes covered")
     }
+    /// CORE_REALTIME 1h: the four-pixel copy path gives the pixels and known
+    /// bits of a per-pixel model for keyed, unkeyed and mirrored copies of a
+    /// wide sprite, each row starting at chosen bit positions of the target's
+    /// mask words (both sides of a word boundary), over a patterned background
+    /// laid by the row copy (values) and over unknown pixels (known bits).
+    func testWideSpriteCopiesMatchAPerPixelModel() throws {
+        let r = try D().run(late:false);defer { try? D().close(r) };let b = r.setup.display,(device,_,back,_) = try D().ids(r)
+        let width = 37,height = 1,noiseWidth = 64
+        var x: UInt32 = 0x9e3779b9
+        func next() -> UInt32 { x ^= x << 13;x ^= x >> 17;x ^= x << 5;return x }
+        let colors = (0..<width*height).map { _ in next() % 3 == 0 ? 0 : next() & 0xffffff }
+        let noise = (0..<noiseWidth).map { _ in next() & 0xffffff | 1 }
+        let service = OriginalMacBitmapService(backend:b,inputs:.init(resources:["wide":try bitmap(colors,width:width,height:height),
+            "noise":try bitmap(noise,width:noiseWidth,height:1)],files:["wide":.missing,"noise":.missing]))
+        let (_,e1) = try M().construct(service,"wide",device),source = try M().surface(e1)
+        let (_,e2) = try M().construct(service,"noise",device),background = try M().surface(e2)
+        let stride = try b.pixels(back).width
+        var values = try b.pixels(back).values,defined = try b.pixels(back).defined
+        let sx0 = 2,span = width-5   // a source span that does not start at column 0
+        var dy = 10
+        for patterned in [true,false] { for mirror in [false,true] { for key in [true,false] {
+            for startBit in [0,1,2,3,4,56,57,58,59,60,61,62,63] {
+                // The column whose mask bit is startBit in row dy.
+                let offset = ((startBit-(dy*stride) % 64) % 64+64) % 64
+                if patterned {
+                    // The row copy (unkeyed, forward, known) lays a pattern under the sprite.
+                    _ = try perform(b,blt(background,back,[0,0,Int32(span),1],[Int32(offset),Int32(dy),Int32(offset+span),Int32(dy+1)],key:false))
+                    for xx in 0..<span { values[dy*stride+offset+xx] = noise[xx];defined[dy*stride+offset+xx] = true }
+                }
+                _ = try perform(b,blt(source,back,[Int32(sx0),0,Int32(sx0+span),1],[Int32(offset),Int32(dy),Int32(offset+span),Int32(dy+1)],
+                                      key:key,mirror:mirror))
+                for xx in 0..<span {
+                    let v = colors[mirror ? sx0+span-1-xx : sx0+xx]
+                    if !key || v != 0 { values[dy*stride+offset+xx] = v;defined[dy*stride+offset+xx] = true }
+                }
+                dy += 2
+            }
+        } } }
+        let p = try b.pixels(back)
+        XCTAssertEqual(p.values,values);XCTAssertEqual(p.defined,defined)
+        XCTAssertTrue(p.defined.contains(false),"some target pixels stayed unknown")
+        withExtendedLifetime((e1,e2)) {}
+    }
     func testKnownFramePresentationClipsToOwnedWindowAndUnknownPreflightIsAtomic() throws {
         let r = try D().run(late:false);defer { try? D().close(r) };let b = r.setup.display,(_,primary,back,_) = try D().ids(r)
         let rect = try W().rectangle(W().window(r)),base: UInt32 = 0x336699
