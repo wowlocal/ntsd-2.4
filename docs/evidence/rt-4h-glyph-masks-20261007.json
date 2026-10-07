@@ -1,0 +1,82 @@
+{
+ "study": "docs/research/CORE_REALTIME.md",
+ "phase": "4h (TextOut glyph masks remembered by string)",
+ "date": "2026-10-07",
+ "profile_before": "phone main thread: OriginalFreeTypeFace.mask 2.5% (exclusive): the display backend asked the host for the glyph mask of every TextOut, on the main thread (text plans are made there, phase 1e), and the game draws the same strings every frame",
+ "change": "OriginalMacDisplayBackend.mask(_:) remembers the host provider's TextMask by the string's bytes (bounded at 256 entries, cleared when full; main thread only: the backend is @MainActor). Every host's provider is a fixed function of the bytes for the run: Android's FreeType face (Roboto 700 or Droid Sans Bold), the Mac's and iOS's static providers, SDL's glyph set, headless's constant empty mask.",
+ "phone": {
+  "before": [
+   {
+    "label": "rt1i-run1",
+    "runSeconds": 326,
+    "peakResidentMB": 1203,
+    "ticksPerSecond": 20.97,
+    "busySeconds": 218.39,
+    "bodies": 1800,
+    "completeMsPerTick": 22.2,
+    "menuMsPerStep": 1.21,
+    "menuStepsPerTick": 4.12,
+    "mainCpuShare": 0.608,
+    "renderCpuShare": 0.429,
+    "mainMsPerTick": 29.0,
+    "renderMsPerTick": 20.4
+   },
+   {
+    "label": "rt1i-run2",
+    "runSeconds": 326,
+    "peakResidentMB": 1372,
+    "ticksPerSecond": 20.97,
+    "busySeconds": 219.76,
+    "bodies": 1800,
+    "completeMsPerTick": 22.3,
+    "menuMsPerStep": 1.2,
+    "menuStepsPerTick": 4.12,
+    "mainCpuShare": 0.607,
+    "renderCpuShare": 0.424,
+    "mainMsPerTick": 29.0,
+    "renderMsPerTick": 20.2
+   }
+  ],
+  "after": [
+   {
+    "label": "rt4h-run1",
+    "runSeconds": 320,
+    "peakResidentMB": 1383,
+    "ticksPerSecond": 21.33,
+    "busySeconds": 213.93,
+    "bodies": 1800,
+    "completeMsPerTick": 21.4,
+    "menuMsPerStep": 1.21,
+    "menuStepsPerTick": 4.12,
+    "mainCpuShare": 0.604,
+    "renderCpuShare": 0.407,
+    "mainMsPerTick": 28.3,
+    "renderMsPerTick": 19.1
+   },
+   {
+    "label": "rt4h-run2",
+    "runSeconds": 326,
+    "peakResidentMB": 1009,
+    "ticksPerSecond": 21.41,
+    "busySeconds": 215.29,
+    "bodies": 1800,
+    "completeMsPerTick": 21.3,
+    "menuMsPerStep": 1.2,
+    "menuStepsPerTick": 4.12,
+    "mainCpuShare": 0.603,
+    "renderCpuShare": 0.408,
+    "mainMsPerTick": 28.2,
+    "renderMsPerTick": 19.0
+   }
+  ],
+  "result": "main thread 29.0 -> 28.3/28.2 ms per tick, complete 22.2 -> 21.4/21.3 ms; render 20.4/20.2 -> 19.1/19.0 ms (not expected from this change; likely run variation)"
+ },
+ "gates": {
+  "headless": "vs equal, 1,832 frames identical (headless draws text with an empty mask, so these frames do not exercise the memo)",
+  "scenarios": "all 10 equal, frames identical (rt-4h-all)",
+  "AppKit": "vs and playback equal, 3,960 frames identical to the 1i AppKit run (rt-4h-appkit vs rt-1i-appkit; real Mac text)",
+  "emulator": "vs equal, 1,832 frames identical (real FreeType text on Android)",
+  "tests": "bundle B (native diff 1da51c38 against 3b3d7f5 via a temporary index): OriginalMacFrontRasterTests (10, incl. the declared-font text test), OriginalMacDisplayBackendTests, OriginalMacBitmapBackendTests, OriginalMacDisplayColorTests, OriginalApplicationObservedGraphicsTests, OriginalApplicationObservedBitmapTests, OriginalMacRuntimeLoadingTests, OriginalMacRuntimeMenuTests, OriginalMacWindowGeometryTests pass; OriginalMacLoadingAudioTests not run for this change (it does not reach text masks)"
+ },
+ "review": "not required (no storage-model or architecture change: a memo of a pure function, main thread only)"
+}

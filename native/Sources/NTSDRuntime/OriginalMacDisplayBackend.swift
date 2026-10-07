@@ -182,6 +182,8 @@ import NTSDCore
     public let windows: any OriginalRuntimeWindowing
     /// Glyph masks for TextOutA; the Mac rasterises with CoreText.
     private let textMask: ([UInt8]) -> TextMask
+    /// `textMask`'s results by string (CORE_REALTIME 4h; see `mask`).
+    private var textMasks: [[UInt8]: TextMask] = [:]
     private var bitmapModule: Resource?
     /// Served operations in order, kept only with `keepsOperationLogs`; the
     /// counts are always kept.
@@ -851,8 +853,18 @@ extension OriginalMacDisplayBackend {
             return left < right && top < bottom ? .init(left:left,top:top,right:right,bottom:bottom) : nil
         }
     }
+    /// TextOut glyph masks by string (CORE_REALTIME 4h): every host's provider
+    /// is a fixed function of the bytes (one font for the run) and the game
+    /// draws the same strings every frame. Bounded; main thread only.
+    private func mask(_ bytes: [UInt8]) -> TextMask {
+        if let known = textMasks[bytes] { return known }
+        let made = textMask(bytes)
+        if textMasks.count >= 256 { textMasks.removeAll(keepingCapacity:true) }
+        textMasks[bytes] = made
+        return made
+    }
     private func textPlan(_ bytes: [UInt8],x: Int,y: Int,_ dc: TextDC,_ data: Storage) -> TextPlan {
-        .init(data:data,mask:textMask(bytes),x:x,y:y,opaque:dc.opaque,background:Self.xrgb(dc.background),color:Self.xrgb(dc.color))
+        .init(data:data,mask:mask(bytes),x:x,y:y,opaque:dc.opaque,background:Self.xrgb(dc.background),color:Self.xrgb(dc.color))
     }
     private nonisolated static func textPixels(_ p: TextPlan) {
         let data = p.data,mask = p.mask,values = data.values,known = data.known

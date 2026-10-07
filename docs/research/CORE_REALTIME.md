@@ -140,7 +140,8 @@ while measuring; restore `svc power stayon false` when the loop pauses or stops.
 | 2026-10-07 | Phase 4g: each replayed draw validated once; menu-step timing | `prepareFront` validated every draw and discarded the result before `performFront` validated it again; the committed-batch replay now uses `prepareAndPerformFront` (one validation). The progress events also time the message-loop iteration, and the harness reports the tick split. Phone: complete 22.5 → 22.3/22.4 ms, main 30.7 → 30.4/30.6 ms per tick (within variation; committed as strictly less work). Split: loaded cycle 22.3 ms + 4.12 iterations × 1.51 ms + ~2 ms. All 10 scenarios and AppKit equal, frames identical; 13 suites incl. a side-by-side test of both paths; review OK | [evidence](../evidence/rt-4g-single-validation-20261007.json) | 97df2ec |
 | 2026-10-07 | A0: no merged copy for an absent observer | Each message-loop iteration and each tick copied the ~100 KB `full` record only to give a `beforeCommit` observer a merged state; production attaches none, so the runtime passes `observesCommit: false` and the menu session runs the merge's checks without the copy ([design](CORE_REALTIME_TIER2.md)). Iteration 1.51 → 1.44 ms, main 30.4/30.6 → 29.9/30.3 ms per tick. All 10 scenarios and AppKit equal, frames identical; 48 suites and an on/off test (its first setup was wrong and was fixed); review OK | [evidence](../evidence/rt-a0-lazy-merge-20261007.json) | 0ae8cbf |
 | 2026-10-07 | A1 + A2: idle iterations through a Host kernel | An idle message-loop iteration (no message, the timer not due) runs the step's own loop code on a copy and commits in place (`HostSession.stepIdle`, `ObservedIteration.resumeIdleFirst`); anything else falls back to the whole step over a fresh cursor that replays the served requests; the iteration delivery's cursor is updated in place ([design](CORE_REALTIME_TIER2.md)). Iteration 1.44 → 1.22 ms, main 29.9/30.3 → 29.2/29.0 ms per tick (−1 ms; the design estimated ~3: a kernel iteration still costs ~1.05 ms on the phone); real clock 30.24 ticks per second, main 25.5 ms. All 10 scenarios and AppKit equal, frames identical; 50 suites and a side-by-side test (menus, a key press, request bounds, a clock leap past the 100 ms catch-up, clock failures); review OK (gap: the design's Core-level two-Host oracle) | [evidence](../evidence/rt-a1-idle-kernel-20261007.json) | 3b3d7f5 |
-| 2026-10-07 | Phase 1i: crop buffers reused (1h tried and reverted) | Every present allocated and zero-filled a fresh 1.75 MB crop buffer and freed it (page faults, zeroing, returning the pages); the display backend now reuses the oldest of the last three (copy-on-write if anything still holds it; every byte overwritten). **Render thread 22.0/22.3 → 20.4/20.2 ms per tick** (−8.5%). 1h (keyed and mirrored copies four pixels at a time) gave no measurable gain (the render thread is bound by memory traffic) and was reverted; its strengthened copy-model test is kept. All 10 scenarios and AppKit equal, frames identical; 13 suites | [evidence](../evidence/rt-1i-crop-buffers-20261007.json) | this commit |
+| 2026-10-07 | Phase 1i: crop buffers reused (1h tried and reverted) | Every present allocated and zero-filled a fresh 1.75 MB crop buffer and freed it (page faults, zeroing, returning the pages); the display backend now reuses the oldest of the last three (copy-on-write if anything still holds it; every byte overwritten). **Render thread 22.0/22.3 → 20.4/20.2 ms per tick** (−8.5%). 1h (keyed and mirrored copies four pixels at a time) gave no measurable gain (the render thread is bound by memory traffic) and was reverted; its strengthened copy-model test is kept. All 10 scenarios and AppKit equal, frames identical; 13 suites | [evidence](../evidence/rt-1i-crop-buffers-20261007.json) | 8d02926 |
+| 2026-10-07 | Phase 4h: glyph masks remembered by string | The display backend asked the host's font for every TextOut's glyph mask (FreeType 2.5% of the phone's main thread); it now remembers masks by the string's bytes (bounded), every host's provider being a fixed function of the bytes. Main 29.0 → 28.3/28.2 ms per tick. All 10 scenarios and AppKit (real Mac text) equal, frames identical; emulator frames (FreeType text) identical; 9 suites | [evidence](../evidence/rt-4h-glyph-masks-20261007.json) | this commit |
 
 ## Next task
 
@@ -159,15 +160,10 @@ time becomes compute per tick (to be rewritten with the first measurements).
 Tier 2 ([design](CORE_REALTIME_TIER2.md), 16 ms per thread; main 30.4 ms
 and render 22.0 ms per tick under the virtual clock after 4g), in order:
 
-- **1h** (tried, reverted): colour-keyed and mirrored copies four pixels at
-  a time (SIMD); review OK and a per-pixel model test passed, but the phone's
-  render thread stayed at 21.9 ms per tick (copy loop 34% → 32% of its
-  samples): the render thread is bound by memory traffic (a 1.75 MB back
-  buffer streamed several times per tick), not arithmetic. The model test is
-  kept as a regression test.
-- **1i** (in flight): the crop buffer of each present reused instead of a
-  fresh zero-filled 1.75 MB allocation (page faults, zeroing, returning the
-  pages); headless vs equal, frames identical.
+- **B1 3a** (in flight, [plan](CORE_REALTIME_B1.md)): the parts
+  representation inside `OriginalStateRecord` with a model test, and the hot
+  `full.bytes` call sites switched to `byteCount` and range accessors; no
+  production record is split yet.
 - Then B1 (R3 stages 3–4: `full` in parts), B2 (R5/M3 in-place nested
   candidates), B3 (one loaded attempt per tick), the replay check, R3 stage
   2; then the gameplay body and the render thread.
