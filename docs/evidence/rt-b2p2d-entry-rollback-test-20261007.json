@@ -1,0 +1,13 @@
+{
+ "study": "docs/research/CORE_REALTIME.md",
+ "phase": "B2 P2d (entry and local-input rollback test)",
+ "date": "2026-10-07",
+ "design": "the B2 P2 and P2c reviews' test findings",
+ "change": "test only: OriginalApplicationInputTests.checkEntryRollback, run by both MENU_STARTUP comparators before their saved-entry comparison, calls OriginalLoadedMatchEntry.run directly: an uninjected run; a throw at each of its checkpoints, at each replay and round event, and (on a copy with slot 10 made a live character) from an AI child that writes the globals and its actor and then throws; each leaves the caller's model, commands and context equal to before, the checkpoint prefix matches the uninjected run, and a retry equals it. The transactional local-input forms keep their caller's values when a child writes then throws, when the before-dispatch observer throws after the template and button writes, and on the 10-byte storage check (same error).",
+ "nonvacuity": "both fixtures are unpaused (the saved-entry comparison asserts the localBeforeDispatch checkpoint), so the entry child case runs and asserts one child call; the uninjected run's six checkpoints are each injected",
+ "gates": {
+  "sources": "identical to B2 P2c's (ba69395); vs, scenarios, AppKit, emulator and phone as recorded there",
+  "tests": "bundle A (native tree a4556474, the same as this commit's): OriginalMenuStartupTests (2 tests) and OriginalApplicationInputTests (4 tests) pass"
+ },
+ "review": "answers the P2 and P2c reviews' test findings; test only, not separately reviewed"
+}
