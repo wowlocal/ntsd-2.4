@@ -179,6 +179,15 @@ public struct OriginalStateRecord: Equatable, Sendable {
         let all = readOnce()
         return try! Self(bytes: all.bytes, defined: all.defined)
     }
+    /// The addresses of a non-empty flat record's byte and definedness
+    /// buffers (nil for an empty, paged or parted record). Two flat records
+    /// with the same identity share both buffers and are equal, provided the
+    /// caller keeps a record holding them alive (CORE_REALTIME 4j).
+    var storageIdentity: (UInt, UInt)? {
+        guard large == nil, !flatBytes.isEmpty else { return nil }
+        let bytes = flatBytes.withUnsafeBufferPointer { UInt(bitPattern: $0.baseAddress) }
+        return (bytes, flatDefined.withUnsafeBufferPointer { UInt(bitPattern: $0.baseAddress) })
+    }
     /// Whether both are flat and share their byte and definedness buffers.
     func sharesStorage(with other: OriginalStateRecord) -> Bool {
         guard pages == nil, parts == nil, other.pages == nil, other.parts == nil, flatBytes.count == other.flatBytes.count else { return false }

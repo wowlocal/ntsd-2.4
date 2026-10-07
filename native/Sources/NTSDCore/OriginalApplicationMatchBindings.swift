@@ -26,6 +26,8 @@ public struct OriginalApplicationMatchBindings {
         private let lock = NSLock()
         private var stored = [OriginalStateRecord?](repeating:nil,count:400)
         private var model = [OriginalStateRecord?](repeating:nil,count:400)
+        /// `model[i]`'s buffer identity (kept alive by `model[i]`).
+        private var modelIdentity = [(UInt,UInt)?](repeating:nil,count:400)
         /// The model form of `record` when it equals the stored side of pair `i`.
         func model(_ i: Int,for record: OriginalStateRecord) -> OriginalStateRecord? {
             lock.lock(); defer { lock.unlock() }
@@ -40,7 +42,18 @@ public struct OriginalApplicationMatchBindings {
         }
         func set(_ i: Int,stored s: OriginalStateRecord,model m: OriginalStateRecord) {
             lock.lock(); defer { lock.unlock() }
-            stored[i] = s; model[i] = m
+            stored[i] = s; model[i] = m; modelIdentity[i] = m.storageIdentity
+        }
+        /// For each record, whether it shares both buffers with pair i's model
+        /// side: unchanged since the pair was set, so `stored(i,for:)` would
+        /// return the stored side. One lock and no record copies for all 400
+        /// (CORE_REALTIME 4j); false means "ask `stored(i,for:)`".
+        func unchanged(_ records: [OriginalStateRecord]) -> [Bool] {
+            lock.lock(); defer { lock.unlock() }
+            return records.indices.map { i in
+                guard i < modelIdentity.count,let kept = modelIdentity[i],let identity = records[i].storageIdentity else { return false }
+                return kept == identity
+            }
         }
     }
 
@@ -129,7 +142,7 @@ public struct OriginalApplicationMatchBindings {
         guard context.savedPlayback.bytes.count == 0x320 else { throw Boundary.savedPlayback }
         guard match.loadedObjects.count == objectTokens.count,
               match.world.bytes.count == 0x7d8,match.actors.count == 400,
-              match.actors.allSatisfy({ $0.bytes.count == OriginalStateRecord.actorSize }),
+              match.actors.allSatisfy({ $0.byteCount == OriginalStateRecord.actorSize }),
               match.globals.bytes.count == OriginalMatchPreparation.globalSize,
               try match.world.integer(at:0x7d4,as:UInt32.self) == 0 else { throw Boundary.catalog }
         var next = state,world = match.world,memory = context.memory
@@ -147,10 +160,12 @@ public struct OriginalApplicationMatchBindings {
         // (R3 stage 1); the logical entries are the converted records, live.
         let stateHolds = state.memory.allocations.actorRecords(shape) != nil
         let sameActors = memory.allocations.sameActors(shape,as:state.memory.allocations)
+        // Actors still holding their pair's model buffers need no lookup (4j).
+        let unchanged = pairs.unchanged(match.actors)
         for (i,token) in actorTokens.enumerated() {
             if !stateHolds { _ = try actor(token,in:state.memory) }
             if !sameActors { guard memory.allocations[token] == state.memory.allocations[token] else { throw Boundary.conflictingActor(token) } }
-            if pairs.stored(i,for:match.actors[i]) == nil {
+            if !unchanged[i],pairs.stored(i,for:match.actors[i]) == nil {
                 var converted = match.actors[i]
                 let ordinal = try converted.integer(at:0x368,as:UInt32.self)
                 guard ordinal < objectTokens.count else { throw Boundary.ordinal(ordinal) }

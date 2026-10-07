@@ -1,0 +1,86 @@
+{
+ "study": "docs/research/CORE_REALTIME.md",
+ "phase": "4j (the bindings store's actor-pair checks in one pass)",
+ "date": "2026-10-07",
+ "profile_before": "phone profile rtb1b2-profile: OriginalApplicationMatchBindings.store 4.9% of the main thread inclusive: copies of optional records out of ActorPairs 1.55% (pairs.stored(i,for:) per actor: a lock, two optional copies and a compare, 400 times per store), swift_beginAccess 0.44% and thread-local lookups 0.24% (exclusivity checks on the pair arrays), retains 1.66%",
+ "change": "ActorPairs keeps each model record's buffer identity (OriginalStateRecord.storageIdentity: the addresses of a non-empty flat record's byte and mask buffers) and answers, for all 400 actors in one lock, whether each record still shares both buffers with its pair's model side; those actors skip the lookup (it would return the stored side), the rest take it unchanged. The per-actor checks before it and the errors and their order are unchanged; the actor size check uses byteCount.",
+ "phone": {
+  "before": [
+   {
+    "label": "rt4i-run1",
+    "runSeconds": 316,
+    "peakResidentMB": 1483,
+    "ticksPerSecond": 22.08,
+    "busySeconds": 211.26,
+    "bodies": 1800,
+    "completeMsPerTick": 20.3,
+    "partAssembliesPerTick": 0.0,
+    "menuMsPerStep": 1.12,
+    "menuStepsPerTick": 4.12,
+    "mainCpuShare": 0.594,
+    "renderCpuShare": 0.411,
+    "mainMsPerTick": 26.9,
+    "renderMsPerTick": 18.6
+   },
+   {
+    "label": "rt4i-run2",
+    "runSeconds": 321,
+    "peakResidentMB": 1221,
+    "ticksPerSecond": 21.94,
+    "busySeconds": 214.24,
+    "bodies": 1800,
+    "completeMsPerTick": 20.5,
+    "partAssembliesPerTick": 0.0,
+    "menuMsPerStep": 1.14,
+    "menuStepsPerTick": 4.12,
+    "mainCpuShare": 0.594,
+    "renderCpuShare": 0.413,
+    "mainMsPerTick": 27.1,
+    "renderMsPerTick": 18.8
+   }
+  ],
+  "after": [
+   {
+    "label": "rt4j-run1",
+    "runSeconds": 316,
+    "peakResidentMB": 1284,
+    "ticksPerSecond": 22.5,
+    "busySeconds": 210.87,
+    "bodies": 1800,
+    "completeMsPerTick": 19.5,
+    "partAssembliesPerTick": 0.0,
+    "menuMsPerStep": 1.13,
+    "menuStepsPerTick": 4.12,
+    "mainCpuShare": 0.584,
+    "renderCpuShare": 0.417,
+    "mainMsPerTick": 25.9,
+    "renderMsPerTick": 18.5
+   },
+   {
+    "label": "rt4j-run2",
+    "runSeconds": 321,
+    "peakResidentMB": 1342,
+    "ticksPerSecond": 22.67,
+    "busySeconds": 212.02,
+    "bodies": 1800,
+    "completeMsPerTick": 19.0,
+    "partAssembliesPerTick": 0.0,
+    "menuMsPerStep": 1.14,
+    "menuStepsPerTick": 4.12,
+    "mainCpuShare": 0.58,
+    "renderCpuShare": 0.421,
+    "mainMsPerTick": 25.6,
+    "renderMsPerTick": 18.6
+   }
+  ],
+  "result": "main 26.9/27.1 -> 25.9/25.6 ms per tick, complete 20.3/20.5 -> 19.5/19.0 ms (about twice the profile's estimate)"
+ },
+ "gates": {
+  "headless": "vs equal, 1,832 frames identical (frozen-rt4j)",
+  "scenarios": "all 10 equal, frames identical (rt-4j-all)",
+  "AppKit": "vs and playback equal, 3,960 frames identical to the 4i AppKit run",
+  "emulator": "vs equal, 1,832 frames identical",
+  "tests": "bundle C (native tree 16e8cea5, the same as this commit's): 55 suites, 135 tests, pass: the new OriginalMatchBindingsPairsTests (the batched answer agrees with the lookup over shared, equal, written and empty records), OriginalAllocationTableTests (the store against the per-entry algorithm under single and multiple faults, the read oracle) and every gameplay, loaded, active, pause, match, mission, war, tournament, replay, runtime-loading, pool, catalog, Host and bootstrap suite; the 4k bundle (this tree plus Package.swift) also passed all 172 suites"
+ },
+ "review": "not required (a shortcut whose positive answer implies the existing lookup's answer: shared buffers kept alive by the pair compare equal; no storage-model change); covered by a unit test that every 'unchanged' answer agrees with the lookup and by the store oracle tests"
+}
