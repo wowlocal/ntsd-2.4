@@ -301,7 +301,10 @@ public struct OriginalStateRecord: Equatable, Sendable {
         guard let pages else { return flatDefined }
         return pages.whole.defined(pages.defined, pages.count)
     }
-    public var byteCount: Int { parts?.count ?? pages?.count ?? flatBytes.count }
+    public var byteCount: Int {
+        if large == nil { return flatBytes.count }
+        return parts?.count ?? pages?.count ?? flatBytes.count
+    }
 
     public init(bytes: [UInt8], defined: [Bool]) throws {
         guard bytes.count == defined.count else {
@@ -344,8 +347,45 @@ public struct OriginalStateRecord: Equatable, Sendable {
         return offset..<(offset + count)
     }
 
+    /// Whether `count` mask bytes from `offset` are all `true`: one load
+    /// against 0x01 bytes for the widths integers use (a Bool is stored as
+    /// one byte, 0 or 1), the general check otherwise (CORE_REALTIME 4w).
+    @inline(__always) private static func allDefined(_ mask: UnsafeRawBufferPointer, _ offset: Int, _ count: Int) -> Bool {
+        switch count {
+        case 1: return mask.load(fromByteOffset: offset, as: UInt8.self) == 1
+        case 2: return mask.loadUnaligned(fromByteOffset: offset, as: UInt16.self) == 0x0101
+        case 4: return mask.loadUnaligned(fromByteOffset: offset, as: UInt32.self) == 0x0101_0101
+        case 8: return mask.loadUnaligned(fromByteOffset: offset, as: UInt64.self) == 0x0101_0101_0101_0101
+        default: return !mask[offset..<(offset + count)].contains(0)
+        }
+    }
+    /// Marks `count` mask bytes from `offset` defined (the widths integers use
+    /// in one store).
+    @inline(__always) private static func setDefined(_ mask: UnsafeMutableRawBufferPointer, _ offset: Int, _ count: Int) {
+        switch count {
+        case 1: mask.storeBytes(of: UInt8(1), toByteOffset: offset, as: UInt8.self)
+        case 2: mask.storeBytes(of: UInt16(0x0101), toByteOffset: offset, as: UInt16.self)
+        case 4: mask.storeBytes(of: UInt32(0x0101_0101), toByteOffset: offset, as: UInt32.self)
+        case 8: mask.storeBytes(of: UInt64(0x0101_0101_0101_0101), toByteOffset: offset, as: UInt64.self)
+        default: for i in offset..<(offset + count) { mask[i] = 1 }
+        }
+    }
+
     /// A typed read cannot silently promote allocator contents to a game default.
     public func integer<T: FixedWidthInteger>(at offset: Int, as type: T.Type) throws -> T {
+        if large == nil {
+            // A flat record (nearly every one): the range check, definedness
+            // and value with one load each, the same errors in the same order
+            // as below (CORE_REALTIME 4w).
+            let count = T.bitWidth / 8, total = flatBytes.count
+            guard offset >= 0, count <= total, offset <= total - count else {
+                throw OriginalStateError.outOfBounds(offset: offset, count: count)
+            }
+            guard flatDefined.withUnsafeBytes({ Self.allDefined($0, offset, count) }) else {
+                throw OriginalStateError.undefinedBytes(offset: offset, count: count)
+            }
+            return flatBytes.withUnsafeBytes { T(littleEndian: $0.loadUnaligned(fromByteOffset: offset, as: T.self)) }
+        }
         let region = try checkedRange(offset, T.bitWidth / 8)
         if let parts {
             // Within one part, as the flat read below at the part's offset;
@@ -419,6 +459,21 @@ public struct OriginalStateRecord: Equatable, Sendable {
 
     /// Writes preserve exact integer/floating-point bit patterns; no host-width pointer conversion.
     public mutating func write<T: FixedWidthInteger>(_ value: T, at offset: Int) throws {
+        if large == nil {
+            // A flat record: the same check and no-op return as below, then
+            // one store each for the bytes and their definedness (at most one
+            // copy of each array if shared, as the per-byte stores made;
+            // CORE_REALTIME 4w).
+            let count = T.bitWidth / 8, total = flatBytes.count
+            guard offset >= 0, count <= total, offset <= total - count else {
+                throw OriginalStateError.outOfBounds(offset: offset, count: count)
+            }
+            if flatBytes.withUnsafeBytes({ T(littleEndian: $0.loadUnaligned(fromByteOffset: offset, as: T.self)) }) == value,
+               flatDefined.withUnsafeBytes({ Self.allDefined($0, offset, count) }) { return }
+            flatBytes.withUnsafeMutableBytes { $0.storeBytes(of: value.littleEndian, toByteOffset: offset, as: T.self) }
+            flatDefined.withUnsafeMutableBytes { Self.setDefined($0, offset, count) }
+            return
+        }
         let region = try checkedRange(offset, T.bitWidth / 8)
         if parts != nil {
             // Within one part as the flat write (the same no-op return keeps

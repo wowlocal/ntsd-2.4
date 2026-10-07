@@ -79,6 +79,14 @@ final class OriginalStateRecordPartsTests: XCTestCase {
                 XCTAssertEqual(outcome { try parted.write(v16, at: at) }, outcome { try flat.write(v16, at: at) }, label)
                 XCTAssertEqual(outcome { try parted.write(value, at: at) }, outcome { try flat.write(value, at: at) }, label)
                 XCTAssertEqual(outcome { try parted.writeBinary64(Double(bitPattern: value), at: at) }, outcome { try flat.writeBinary64(Double(bitPattern: value), at: at) }, label)
+                // Signed widths, negative values among them (CORE_REALTIME 4w's
+                // flat fast path against the parted one).
+                XCTAssertEqual(outcome { try parted.write(Int8(truncatingIfNeeded: value), at: at) }, outcome { try flat.write(Int8(truncatingIfNeeded: value), at: at) }, label)
+                XCTAssertEqual(outcome { try parted.write(Int16(truncatingIfNeeded: value >> 8), at: at) }, outcome { try flat.write(Int16(truncatingIfNeeded: value >> 8), at: at) }, label)
+                XCTAssertEqual(outcome { try parted.write(Int32(truncatingIfNeeded: value >> 16), at: at) }, outcome { try flat.write(Int32(truncatingIfNeeded: value >> 16), at: at) }, label)
+                XCTAssertEqual(outcome { try parted.write(Int64(bitPattern: value ^ 0x8000_0000_0000_0000), at: at) }, outcome { try flat.write(Int64(bitPattern: value ^ 0x8000_0000_0000_0000), at: at) }, label)
+                XCTAssertEqual(outcome { try parted.integer(at: at, as: Int16.self) }, outcome { try flat.integer(at: at, as: Int16.self) }, label)
+                XCTAssertEqual(outcome { try parted.integer(at: at, as: Int64.self) }, outcome { try flat.integer(at: at, as: Int64.self) }, label)
                 XCTAssertEqual(parted.bytes, flat.bytes, label); XCTAssertEqual(parted.defined, flat.defined, label)
             case 9:
                 // A parted source, onto the parted record, onto the flat twin, and a
@@ -269,6 +277,40 @@ final class OriginalStateRecordPartsTests: XCTestCase {
     /// The parts share the paged field (one optional enum), so a flat record,
     /// copied many times per tick, is no larger than before the parts (a
     /// separate field made it 48 bytes and cost the phone ~1 ms per tick).
+    /// CORE_REALTIME 4w: on a flat record a write of the bytes already there,
+    /// all defined, keeps both buffers shared with a copy; any other write
+    /// (a new value, or the same byte while it is undefined) gives the written
+    /// record its own buffers and leaves the copy's unchanged.
+    func testFlatWritesShareUntilTheyChange() throws {
+        var defined = [Bool](repeating: true, count: 64); defined[40] = false
+        let base = try OriginalStateRecord(bytes: [UInt8](repeating: 0, count: 64), defined: defined)
+        var copy = base
+        XCTAssertTrue(copy.sharesStorage(with: base))
+        for (offset, width) in [(8, 4), (0, 1), (62, 2), (16, 8)] {
+            switch width {
+            case 1: try copy.write(UInt8(0), at: offset)
+            case 2: try copy.write(Int16(0), at: offset)
+            case 4: try copy.write(UInt32(0), at: offset)
+            default: try copy.write(Int64(0), at: offset)
+            }
+            XCTAssertTrue(copy.sharesStorage(with: base), "no-op write at \(offset)")
+        }
+        try copy.write(UInt8(0), at: 40)
+        XCTAssertFalse(copy.sharesStorage(with: base), "the same byte while undefined")
+        XCTAssertEqual(base.defined[40], false); XCTAssertEqual(copy.defined[40], true)
+        var other = base
+        try other.write(Int16(-2), at: 3)
+        XCTAssertFalse(other.sharesStorage(with: base))
+        XCTAssertEqual(try base.integer(at: 3, as: Int16.self), 0)
+        XCTAssertEqual(try other.integer(at: 3, as: Int16.self), -2)
+        XCTAssertEqual(Array(other.bytes[3..<5]), [0xfe, 0xff])
+        // A second write to the now-unique record keeps its buffers.
+        let identity = try XCTUnwrap(other.storageIdentity)
+        try other.write(UInt32(0xdeadbeef), at: 20)
+        XCTAssertEqual(other.storageIdentity?.0, identity.0); XCTAssertEqual(other.storageIdentity?.1, identity.1)
+        XCTAssertEqual(try other.integer(at: 20, as: UInt32.self), 0xdeadbeef)
+    }
+
     func testRecordLayoutStaysFortyBytes() {
         XCTAssertEqual(MemoryLayout<OriginalStateRecord>.size, 40)
         XCTAssertEqual(MemoryLayout<OriginalStateRecord>.stride, 40)

@@ -182,6 +182,7 @@ while measuring; restore `svc power stayon false` when the loop pauses or stops.
 | 2026-10-07 | A3 L4a: the idle attempt's queue requests without permits | Each idle request went through the iteration exchange's claim, permit, service record and answer (with their locks and a permit object); with a direct server the idle attempt answers them into a log that the exchange receives in one call before anything reads it, leaving its receipts, status and failure as before. Idle step 0.62 → 0.60 ms on the A12; main 18.5 ms per tick. Clean builds: all 10 scenarios, AppKit and the emulator equal, frames identical; the suites pass (the new exchange-state test after fixing its own path expectations); review OK | [evidence](../evidence/rt-a3l4a-direct-idle-queue-20261007.json) | 54bb195 |
 | 2026-10-07 | Phase 1k: one render dispatch per replayed batch | The display backend dispatched every pipelined draw to the render thread separately (a block, a closure allocation and a wake each, ~130 per gameplay body); work submitted during the runtime's replay of a batch now goes as one block when the replay ends or anything flushes first, in the same order. Main 18.5/18.5 → 18.3/18.2 ms per tick. Clean builds: all 10 scenarios, AppKit and the emulator equal, frames identical; the display and runtime suites pass; review OK | [evidence](../evidence/rt-1k-render-batch-20261007.json) | 3314f10 |
 | 2026-10-08 | B2 P4a: three world passes in place — reverted | World control, links and impulses ran in place under the gameplay body, cpoints and the post-draw impulses: main 18.1/17.9 → 17.7/18.0 ms per tick, no change beyond variation (behaviour equal; review OK). Each transactional level copies the actor array and every record it writes, so one level in place saves nothing while a level above still holds the buffers; the passes need one sweep (or the body in place). Not committed | [evidence](../evidence/rt-b2p4a-world-passes-reverted-20261008.json) | — |
+| 2026-10-08 | 4w: flat-record fast paths | Integer reads and writes on flat records: one range check, the defined mask checked as one load for 1–8 bytes, an unaligned load or store; a write that changes nothing leaves shared storage shared. Main 18.3/18.2 → 18.1/17.9 ms, render 14.4 → 13.6/13.7 ms per tick; behaviour equal; review OK (its test gaps added) | [evidence](../evidence/rt-4w-flat-fast-paths-20261008.json) | this commit |
 
 ## Next task
 
@@ -209,8 +210,8 @@ main thread; message-loop iterations 4.12 × 1.14 ms; render thread 18.7 ms,
   per tick after 1j; each full-frame pass costs ~1.7 ms on the A12. P1 (the
   present's back-buffer copy and crop fused) next, then P2 (the back buffer
   lent as the frame).
-- **Status (2026-10-07 evening, 1k):** main 18.3/18.2 ms and render ~14.4 ms
-  per tick on the A12; tier 2 needs ~2.2 ms more on the main thread. Gate
+- **Status (2026-10-08, 4w):** main 18.1/17.9 ms and render 13.6/13.7 ms
+  per tick on the A12; tier 2 needs ~2 ms more on the main thread. Gate
   binaries come from clean builds (4u).
 - **B2** ([plan](CORE_REALTIME_B2.md)): in-place nested passes under the first
   transactional copy; P1–P3 done. P4 (the gameplay body's passes family by
