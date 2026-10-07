@@ -138,12 +138,47 @@ import NTSDCore
         /// in a match (MEMORY_FOOTPRINT step 3). Every access goes through
         /// `values`/`known`, which apply the recorded writes first.
         private var pending: [(UnsafeMutablePointer<UInt32>,KnownMask) -> Void] = []
-        var values: UnsafeMutablePointer<UInt32> { if !pending.isEmpty { applyPending() }; return valuesStorage }
-        var known: KnownMask { if !pending.isEmpty { applyPending() }; return knownStorage }
-        func record(_ write: @escaping (UnsafeMutablePointer<UInt32>,KnownMask) -> Void) { pending.append(write) }
+        /// A present's whole-frame copy into this surface, recorded instead of
+        /// written (CORE_REALTIME R1): `frame`'s rows (every pixel known: the
+        /// exact bytes and bits the copy writes) at (left, top). Written by the
+        /// first access after the writes recorded before it, like `pending`.
+        private var deferredCopy: (left: Int,top: Int,frame: OriginalFramebuffer)?
+        var values: UnsafeMutablePointer<UInt32> { if !pending.isEmpty || deferredCopy != nil { applyPending() }; return valuesStorage }
+        var known: KnownMask { if !pending.isEmpty || deferredCopy != nil { applyPending() }; return knownStorage }
+        func record(_ write: @escaping (UnsafeMutablePointer<UInt32>,KnownMask) -> Void) {
+            if let copy = deferredCopy { deferredCopy = nil; pending.append(written(copy)) }
+            pending.append(write)
+        }
+        /// Records a present's copy. A newer copy whose rectangle contains the
+        /// recorded one replaces it: nothing read or wrote the surface in
+        /// between (every access writes the recorded one first) and the newer
+        /// one writes every byte and bit the older one would. Otherwise (a
+        /// moved rectangle) the older one is written now, after the writes
+        /// recorded before it, so recorded frames never pile up.
+        func deferCopy(left: Int,top: Int,frame: OriginalFramebuffer) {
+            if let old = deferredCopy,!(left <= old.left && top <= old.top && left+frame.width >= old.left+old.frame.width
+                                        && top+frame.height >= old.top+old.frame.height) {
+                applyPending()
+            }
+            deferredCopy = (left,top,frame)
+        }
+        private func written(_ copy: (left: Int,top: Int,frame: OriginalFramebuffer)) -> (UnsafeMutablePointer<UInt32>,KnownMask) -> Void {
+            let width = self.width
+            return { values,known in
+                let w = copy.frame.width
+                copy.frame.pixels.withUnsafeBytes { raw in
+                    for row in 0..<copy.frame.height {
+                        let start = (copy.top+row)*width+copy.left
+                        (values+start).update(from:raw.baseAddress!.advanced(by:row*w*4).assumingMemoryBound(to:UInt32.self),count:w)
+                        known.setRange(start,w)
+                    }
+                }
+            }
+        }
         private func applyPending() {
             let writes = pending; pending = []
             for write in writes { write(valuesStorage,knownStorage) }
+            if let copy = deferredCopy { deferredCopy = nil; written(copy)(valuesStorage,knownStorage) }
             knownStorage.refreshFull()
         }
         init(_ width: Int,_ height: Int,_ budget: Budget) throws {
@@ -1105,6 +1140,18 @@ extension OriginalMacDisplayBackend {
             return (sourceRect.top+y-destination.top)*sourceWidth+column
         }
     }
+    /// Whether this copy writes the whole source, unkeyed and not mirrored,
+    /// onto exactly the presented rectangle, every source pixel known: then
+    /// the presented crop equals the source's bytes (R1).
+    private nonisolated static func presentsWholeSource(_ copy: CopyPlan,_ input: Storage,_ rect: (Int,Int,Int,Int,UInt32?)) -> Bool {
+        guard copy.key == nil,!copy.mirrored,let region = copy.region,region.left == copy.destination.left,region.top == copy.destination.top,
+              region.right == copy.destination.right,region.bottom == copy.destination.bottom,
+              copy.sourceRect.left == 0,copy.sourceRect.top == 0,
+              copy.sourceRect.right == input.width,copy.sourceRect.bottom == input.height,
+              region.left == rect.0,region.top == rect.1,region.right-region.left == rect.2,region.bottom-region.top == rect.3,
+              rect.2 == input.width,rect.3 == input.height else { return false }
+        return input.known.isFull
+    }
     private nonisolated static func copyPixels(_ copy: CopyPlan,_ input: Storage,_ output: Storage) {
         if let rect = copy.region {
             let inputValues = input.values,inputKnown = input.known,outputValues = output.values,outputKnown = output.known
@@ -1195,7 +1242,21 @@ extension OriginalMacDisplayBackend {
             let input = copy.source.storage!,output = copy.target.surface.storage!,rect = copy.target.delivery,plan = CopyPlan(copy)
             if let present = try pipeline(rect,pixels:{ Self.copyPixels(plan,input,output) }) {
                 let pool = framePool
-                renderer.submit { Self.copyPixels(plan,input,output); if let present { present.deliver(try Self.crop(output,rect,black:true,pool:pool)) } }
+                renderer.submit {
+                    if let present,Self.presentsWholeSource(plan,input,rect) {
+                        // A whole known source copied unkeyed onto exactly the
+                        // presented rectangle: the crop would read back exactly
+                        // the source's bytes, so the frame is cropped from the
+                        // source and the target's copy is recorded, written at
+                        // its next access (one full-frame pass fewer;
+                        // CORE_REALTIME R1, CORE_REALTIME_RENDER_PASSES P1).
+                        let frame = try Self.crop(input,(0,0,input.width,input.height,rect.4),black:true,pool:pool)
+                        output.deferCopy(left:rect.0,top:rect.1,frame:frame)
+                        present.deliver(frame)
+                    } else {
+                        Self.copyPixels(plan,input,output); if let present { present.deliver(try Self.crop(output,rect,black:true,pool:pool)) }
+                    }
+                }
             } else {
                 Self.copyPixels(plan,input,output)
                 if let window = rect.4 { try windows.present(framebuffer(output,rect),in:window) }
