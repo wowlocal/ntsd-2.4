@@ -18,13 +18,13 @@ public enum OriginalLoadedMatchEntry {
                            roundEvent: (OriginalMatchRoundEvent) throws -> Void = { _ in },
                            checkpoint: (Checkpoint, OriginalMatchPreparation, OriginalInputControlContext, [UInt8]) throws -> Void = { _,_,_,_ in }) throws -> OriginalMatchRoundResult {
         var candidate = state, output = commands, owned = context
-        try candidate.beginLocalInput(paused: paused,commands: &output,beforeDispatch: { value,buffer in
+        // The sub-steps run in place on this entry's own candidate, which is
+        // dropped when anything throws (CORE_REALTIME B2): no second copy of
+        // the globals, actors or context per sub-step.
+        try candidate.beginLocalInputInPlace(paused: paused,commands: &output,beforeDispatch: { value,buffer in
             try checkpoint(.localBeforeDispatch,value,owned,buffer)
         },dispatch: dispatch)
         try checkpoint(.local,candidate,owned,output)
-        // The later sub-steps run in place on this entry's own candidate, which
-        // is dropped when anything throws (CORE_REALTIME B2): no second copy
-        // of the globals, actors or context per sub-step.
         _ = try candidate.controlInputInPlace(commands: &output,playbackCommands: playbackCommands,context: &owned,boundary: controlBoundary)
         try checkpoint(.control,candidate,owned,output)
         let next = try candidate.receiveInputInPlace(paused: paused,commands: &output,playbackCommands: playbackCommands)
