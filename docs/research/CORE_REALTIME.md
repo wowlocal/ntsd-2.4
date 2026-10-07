@@ -143,7 +143,8 @@ while measuring; restore `svc power stayon false` when the loop pauses or stops.
 | 2026-10-07 | Phase 1i: crop buffers reused (1h tried and reverted) | Every present allocated and zero-filled a fresh 1.75 MB crop buffer and freed it (page faults, zeroing, returning the pages); the display backend now reuses the oldest of the last three (copy-on-write if anything still holds it; every byte overwritten). **Render thread 22.0/22.3 → 20.4/20.2 ms per tick** (−8.5%). 1h (keyed and mirrored copies four pixels at a time) gave no measurable gain (the render thread is bound by memory traffic) and was reverted; its strengthened copy-model test is kept. All 10 scenarios and AppKit equal, frames identical; 13 suites | [evidence](../evidence/rt-1i-crop-buffers-20261007.json) | 8d02926 |
 | 2026-10-07 | Phase 4h: glyph masks remembered by string | The display backend asked the host's font for every TextOut's glyph mask (FreeType 2.5% of the phone's main thread); it now remembers masks by the string's bytes (bounded), every host's provider being a fixed function of the bytes. Main 29.0 → 28.3/28.2 ms per tick. All 10 scenarios and AppKit (real Mac text) equal, frames identical; emulator frames (FreeType text) identical; 9 suites | [evidence](../evidence/rt-4h-glyph-masks-20261007.json) | d8a1a21 |
 | 2026-10-07 | B1 3a: a record in parts (no production record split) | `OriginalStateRecord` gains fixed flat parts next to flat and paged storage: a slice or overwrite at one part's exact extent shares or installs its buffers, everything else runs over logical offsets with the flat record's values and errors, whole reads are assembled on demand, cached and counted; the hot `full.bytes` sites use `byteCount` and range accessors ([plan](CORE_REALTIME_B1.md)). A first version with `parts` as a second optional field made every flat record 48 bytes instead of 40 and cost main 28.2/28.3 → 29.3/29.2 ms per tick; paged and parted storage now share one field (40 bytes), main 28.5/28.4 ms (within variation). All 10 scenarios and AppKit equal, frames identical; 170 suites (496 tests) incl. a model test against flat records; review OK (the fold reviewed with 3b) | [evidence](../evidence/rt-b1a-parts-20261007.json) | 74a3583 |
-| 2026-10-07 | B1 3b: the menu state's `full` record in parts | `MenuSession.State.init` holds `full` in parts at globals, outer local, loop counter, saved playback, replay alias, rest of the outer block, World and the tail; every production slice and replace is one part or inside one, so bindings read/store, the iteration's counter write and alias merge and `validateAliases` share or install buffers instead of copying ~100 KB; whole reads are counted (`partAssemblies`, 0 per tick on the phone and through a headless vs run). Main 28.5/28.4 → 27.9/27.6 ms per tick, complete 21.5 → 21.1/21.0 ms, iteration 1.23 → 1.14 ms (the plan estimated 1.2–2.2 ms). All 10 scenarios and AppKit equal, frames identical; 170 suites (500 tests) incl. flat-twin tests at the record, state and step level and byte checks after failed attempts; review OK after test and probe fixes | [evidence](../evidence/rt-b1b-parts-live-20261007.json) | this commit |
+| 2026-10-07 | B1 3b: the menu state's `full` record in parts | `MenuSession.State.init` holds `full` in parts at globals, outer local, loop counter, saved playback, replay alias, rest of the outer block, World and the tail; every production slice and replace is one part or inside one, so bindings read/store, the iteration's counter write and alias merge and `validateAliases` share or install buffers instead of copying ~100 KB; whole reads are counted (`partAssemblies`, 0 per tick on the phone and through a headless vs run). Main 28.5/28.4 → 27.9/27.6 ms per tick, complete 21.5 → 21.1/21.0 ms, iteration 1.23 → 1.14 ms (the plan estimated 1.2–2.2 ms). All 10 scenarios and AppKit equal, frames identical; 170 suites (500 tests) incl. flat-twin tests at the record, state and step level and byte checks after failed attempts; review OK after test and probe fixes | [evidence](../evidence/rt-b1b-parts-live-20261007.json) | b62edc7 |
+| 2026-10-07 | Phase 4i: bitmap owner checks and sound tokens per loaded session | Every bitmap draw compared the kept resource record and the model's bitmap record (0x1f50 bytes and mask, equal but in different buffers; 2.8% of the main thread) and every tick rebuilt the sound-buffer token set; the loaded session's cache keeps the token set and, per token, the last pair found equal, which is equal again while both buffers are the same. Main 27.9/27.6 → 26.9/27.1 ms per tick. All 10 scenarios and AppKit equal, frames identical; 54 suites incl. a seeded test against `==` | [evidence](../evidence/rt-4i-session-memos-20261007.json) | this commit |
 
 ## Next task
 
@@ -167,13 +168,15 @@ still ~19 ms around a ~8.5 ms gameplay body; reference counting ~13% of the
 main thread; message-loop iterations 4.12 × 1.14 ms; render thread 18.7 ms,
 ~85% blitting (`copyPixels` and its row copies). In flight:
 
-- **4i**: gameplay's bitmap owner check (an 8 KB compare per draw, 2.8% of
-  the main thread) and the sound token set kept per loaded session; phone
-  main 26.9/27.1 ms.
 - **4j**: the bindings store's 400 actor-pair lookups (copies of optional
   records, a lock each, 1.5%+) replaced by one buffer-identity pass.
-- **Idle iterations** (design by a read-only planner in progress): ~1.1 ms
-  each, three per tick under the virtual clock; target ≤0.2 ms.
+- **4k**: cross-module optimization of NTSDCore and NTSDRuntime in release
+  builds (the generic Host and session code ran unspecialized); phone main
+  24.9/25.0 ms, message-loop step 0.97 ms.
+- **4l**: the pending loading's values in one shared object (its copies and
+  destroys were 2.5% of the main thread in the 4k profile).
+- **Idle iterations** ([A3 design](CORE_REALTIME_A3.md)): ~1 ms each, three per
+  tick under the virtual clock; target ≤0.2 ms in five pieces.
 - Then B1 3c (world pair cache), B2 (R5/M3 in-place nested
   candidates), B3 (one loaded attempt per tick), the replay check, R3 stage
   2; then the gameplay body and the render thread.

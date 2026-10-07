@@ -66,17 +66,19 @@ public struct OriginalApplicationGameplaySession {
             { _,_ in throw Menu.Boundary.dependency("Unexpected gameplay music selection") },
             { _ in throw Menu.Boundary.dependency("Unexpected gameplay menu clock") },observe,{ _,_,_ in })
         a.outputPhase = true
-        let catalog = entry.entry.entry
+        let catalog = entry.entry.entry,derived = entry.entry.derived
         // The same set as concatenating the three load lists and mapping
         // `output`, without copying every load result each cycle
-        // (MOBILE_PERFORMANCE step 6b).
-        var tokens = Set<UInt32>()
-        for loads in [catalog.startup.owner.loads,catalog.entry.common.sounds] {
-            for i in loads.indices where loads[i].output != 0 { tokens.insert(loads[i].output) }
+        // (MOBILE_PERFORMANCE step 6b), built once per loaded session (4i).
+        let soundBuffers = derived.soundTokens {
+            var tokens = Set<UInt32>()
+            for loads in [catalog.startup.owner.loads,catalog.entry.common.sounds] {
+                for i in loads.indices where loads[i].output != 0 { tokens.insert(loads[i].output) }
+            }
+            let registered = catalog.snapshot.sounds.buffers
+            for i in registered.indices where registered[i].value.output != 0 { tokens.insert(registered[i].value.output) }
+            return tokens
         }
-        let registered = catalog.snapshot.sounds.buffers
-        for i in registered.indices where registered[i].value.output != 0 { tokens.insert(registered[i].value.output) }
-        let soundBuffers = tokens
         var drainingSound = false
         var model = entry.match,context = entry.inputContext,random = entry.state.random,local = caller
         // A state without destinations for lib.dll's Actor+7b4 write takes the
@@ -84,7 +86,6 @@ public struct OriginalApplicationGameplaySession {
         var transforms = entry.state.libraryTransforms
         if transforms.destinations.isEmpty,let transformBacking { transforms = try transformBacking(a.bindings) }
         let library = OriginalGameplayBody.Library(text:entry.state.libraryText,hits:entry.state.libraryHits,transforms:transforms)
-        let derived = entry.entry.derived
         func resource(_ token: UInt32) throws -> (OriginalStateRecord,UInt32) {
             var record: OriginalStateRecord
             let surface: UInt32,allocated: Bool
@@ -112,7 +113,7 @@ public struct OriginalApplicationGameplaySession {
                 guard !a.model.releasedBitmaps.contains(ordinal),let token = a.model.bitmapOwners[ordinal],
                       a.model.bitmaps.indices.contains(ordinal) else { throw Menu.Boundary.dependency("Gameplay bitmap ordinal") }
                 let (record,surface) = try resource(token)
-                guard record == a.model.bitmaps[ordinal].storage else { throw Menu.Boundary.owner(token) }
+                guard derived.bitmapMatches(token,record,a.model.bitmaps[ordinal].storage) else { throw Menu.Boundary.owner(token) }
                 return surface
         }
         func sound(_ request: OriginalQueuedSound.Event) throws -> Int32 {

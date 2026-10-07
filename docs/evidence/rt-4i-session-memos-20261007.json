@@ -1,0 +1,86 @@
+{
+ "study": "docs/research/CORE_REALTIME.md",
+ "phase": "4i (bitmap owner checks and sound tokens kept per loaded session)",
+ "date": "2026-10-07",
+ "profile_before": "phone profile rtb1b2-profile (main thread): OriginalApplicationGameplaySession.advance's surface helper 2.84% inclusive, 2.08% of it Array == (the kept resource record and the model's bitmap record, 0x1f50 bytes plus mask, equal in value but in different buffers, compared element by element on every bitmap draw); the sound-buffer token set rebuilt every tick from the loaded session's constant lists (Set insert 0.30%; Mac: 22 of 1,614 game-loop samples)",
+ "change": "PendingInput.Derived (built once per loaded session) keeps the sound token set (soundTokens) and, per token, the last pair of kept resource record and model bitmap record found equal (bitmapMatches): a pair holding both of its buffers is equal again without comparing; any other pair is compared with == and kept only when equal. Kept records hold their buffers, so an address cannot be reused while kept.",
+ "phone": {
+  "before": [
+   {
+    "label": "rtb1b2-run1",
+    "runSeconds": 320,
+    "peakResidentMB": 1386,
+    "ticksPerSecond": 21.58,
+    "busySeconds": 213.69,
+    "bodies": 1800,
+    "completeMsPerTick": 21.1,
+    "partAssembliesPerTick": 0.0,
+    "menuMsPerStep": 1.14,
+    "menuStepsPerTick": 4.12,
+    "mainCpuShare": 0.601,
+    "renderCpuShare": 0.413,
+    "mainMsPerTick": 27.9,
+    "renderMsPerTick": 19.1
+   },
+   {
+    "label": "rtb1b2-run2",
+    "runSeconds": 320,
+    "peakResidentMB": 1229,
+    "ticksPerSecond": 21.67,
+    "busySeconds": 214.56,
+    "bodies": 1800,
+    "completeMsPerTick": 21.0,
+    "partAssembliesPerTick": 0.0,
+    "menuMsPerStep": 1.14,
+    "menuStepsPerTick": 4.12,
+    "mainCpuShare": 0.599,
+    "renderCpuShare": 0.409,
+    "mainMsPerTick": 27.6,
+    "renderMsPerTick": 18.9
+   }
+  ],
+  "after": [
+   {
+    "label": "rt4i-run1",
+    "runSeconds": 316,
+    "peakResidentMB": 1483,
+    "ticksPerSecond": 22.08,
+    "busySeconds": 211.26,
+    "bodies": 1800,
+    "completeMsPerTick": 20.3,
+    "partAssembliesPerTick": 0.0,
+    "menuMsPerStep": 1.12,
+    "menuStepsPerTick": 4.12,
+    "mainCpuShare": 0.594,
+    "renderCpuShare": 0.411,
+    "mainMsPerTick": 26.9,
+    "renderMsPerTick": 18.6
+   },
+   {
+    "label": "rt4i-run2",
+    "runSeconds": 321,
+    "peakResidentMB": 1221,
+    "ticksPerSecond": 21.94,
+    "busySeconds": 214.24,
+    "bodies": 1800,
+    "completeMsPerTick": 20.5,
+    "partAssembliesPerTick": 0.0,
+    "menuMsPerStep": 1.14,
+    "menuStepsPerTick": 4.12,
+    "mainCpuShare": 0.594,
+    "renderCpuShare": 0.413,
+    "mainMsPerTick": 27.1,
+    "renderMsPerTick": 18.8
+   }
+  ],
+  "result": "main 27.9/27.6 -> 26.9/27.1 ms per tick, complete 21.1/21.0 -> 20.3/20.5 ms, render 18.6/18.8 ms"
+ },
+ "gates": {
+  "headless": "vs equal, 1,832 frames identical (frozen-rt4i)",
+  "scenarios": "all 10 equal, frames identical (rt-4i-all)",
+  "AppKit": "vs and playback equal, 3,960 frames identical to the 3b AppKit run",
+  "emulator": "vs equal, 1,832 frames identical",
+  "tests": "bundle A (native tree 67ee6780, the same as this commit's): 54 suites, 133 tests, pass: the new OriginalPoolDerivedTests (the bitmap check against == over shared, equal and different records under several tokens, 2,000 seeded steps; the token set built once) and every gameplay, loaded, active, pause, match, mission, war, tournament, replay, runtime-loading, pool, catalog, Host and bootstrap suite"
+ },
+ "review": "not required (a memo of a pure comparison keyed on buffer identity inside the existing per-session cache; no storage-model change); covered by a seeded test against =="
+}

@@ -96,6 +96,29 @@ public struct OriginalApplicationPoolSession {
                 if ranges == nil { ranges = Result { try make() } }
                 return try ranges!.get()
             }
+            /// Gameplay's current WAV buffer owners: the outputs of the
+            /// catalog's load lists and registered sound buffers, all fixed for
+            /// the loaded session (CORE_REALTIME phase 4i; built per tick before).
+            private var soundTokens: Set<UInt32>?
+            func soundTokens(_ make: () -> Set<UInt32>) -> Set<UInt32> {
+                lock.lock(); defer { lock.unlock() }
+                if soundTokens == nil { soundTokens = make() }
+                return soundTokens!
+            }
+            /// Gameplay's bitmap owner check (`surface`): whether the kept
+            /// resource record equals the model's bitmap record. The last pair
+            /// found equal is kept per token; a pair holding both of its
+            /// buffers is equal again without comparing 0x1f50 bytes and mask
+            /// (CORE_REALTIME phase 4i). Kept records hold their buffers, so a
+            /// buffer's address cannot be reused while it is kept.
+            private var equalBitmaps: [UInt32:(record: OriginalStateRecord,model: OriginalStateRecord)] = [:]
+            func bitmapMatches(_ token: UInt32,_ record: OriginalStateRecord,_ model: OriginalStateRecord) -> Bool {
+                lock.lock(); defer { lock.unlock() }
+                if let kept = equalBitmaps[token],kept.record.sharesStorage(with:record),kept.model.sharesStorage(with:model) { return true }
+                guard record == model else { return false }
+                equalBitmaps[token] = (record,model)
+                return true
+            }
             /// Gameplay's resource bitmap records with `value` written at offset
             /// 0 (OriginalApplicationGameplaySession's `resource`), per
             /// allocation token: the result for an equal source and value is
