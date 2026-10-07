@@ -176,10 +176,15 @@ public struct OriginalApplicationMenuSession {
     /// Errors of `queue` itself propagate unchanged (CORE_REALTIME A1).
     func idleIteration(queue: (Loop.Request) throws -> Loop.Response) throws -> IdleIteration? {
         guard (try? state.validateAliases()) != nil,revision < UInt64.max else { return nil }
-        var loop = self.loop,staged = state,effects: [Effect] = []
+        // On this path the loop reads only the speed flag of `full` and writes
+        // nothing into its context (its requests leave the state alone), so it
+        // runs on an empty context instead of two copies of the State
+        // (CORE_REALTIME A3 L3); the speed is read from the state at the same
+        // point.
+        var loop = self.loop,unit: Void = (),effects: [Effect] = []
         do {
-            let result = try loop.step(context:&staged,
-                speed:{ try $0.full.integer(at:0x2c,as:Int32.self) },
+            let result = try loop.step(context:&unit,
+                speed:{ _ in try state.full.integer(at:0x2c,as:Int32.self) },
                 target:{ _ in throw NotIdle() },
                 perform:{ request,_ in
                     switch request.kind {
@@ -192,7 +197,7 @@ public struct OriginalApplicationMenuSession {
                     return response
                 })
             guard result == .continued else { return nil }
-            try staged.checkMergeAliases()
+            try state.checkMergeAliases()
         } catch let failure as ProviderFailure { throw failure.error }
         catch { return nil }
         return .init(loop:loop,effects:effects)
