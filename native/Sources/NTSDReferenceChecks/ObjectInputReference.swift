@@ -9,6 +9,9 @@ public enum ObjectInputReference {
         public let initial: InitialLoadingReference.Result
         public let cases: Int, records: Int, bytes: Int, random: Int, constructors: Int, blocks: Int
         public let hitFa: [Int32: Int]
+        /// Cases rerun with an observer that throws at the first event: the
+        /// all-or-nothing form leaves the state unchanged (CORE_REALTIME B2).
+        public let rollbacks: Int
     }
     private struct Blob: Decodable { let count: Int, deflate: String }
     private struct Record: Decodable { let bytes: String, defined: String }
@@ -35,7 +38,9 @@ public enum ObjectInputReference {
         }
         return try stride(from: 0,to: utf8.count,by: 2).map { try value(utf8[$0])*16+value(utf8[$0+1]) }
     }
-    public static func compare(input: Data, loading: Data, catalog: Data, sounds: Data) throws -> Result {
+    /// `inPlace` runs every case through the in-place form (CORE_REALTIME B2)
+    /// against the same recorded expectations.
+    public static func compare(input: Data, loading: Data, catalog: Data, sounds: Data, inPlace: Bool = false) throws -> Result {
         let c = try JSONDecoder().decode(Corpus.self,from: MatchPreparationReference.unpack(input))
         guard c.exeSHA256 == "3f7ac67c5890ef979ee24a6dae5528056e7f631725c292cf9cb0a928ebeff71c",
               c.objectAddresses.count == 137, Set(c.objectAddresses).count == 137,
@@ -46,7 +51,7 @@ public enum ObjectInputReference {
         }
         let precision: OriginalArithmeticPrecision = c.controlWord == 0x27f ? .bits53 : .bits64
         var blobs: [String:[UInt8]] = [:], stored: [String:OriginalStateRecord] = [:]
-        var bytes = 0, records = 0, random = 0, constructors = 0, hitFa: [Int32:Int] = [:]
+        var bytes = 0, records = 0, random = 0, constructors = 0, hitFa: [Int32:Int] = [:], rollbacks = 0
         let objects = Dictionary(uniqueKeysWithValues: c.objectAddresses.enumerated().map { ($0.element,UInt32($0.offset)) })
         func blob(_ key: String) throws -> [UInt8] {
             if let raw = blobs[key] { return raw }
@@ -95,7 +100,8 @@ public enum ObjectInputReference {
                 hitFa[hit,default: 0] += 1
                 let before = state
                 var events: [OriginalObjectInputEvent] = []
-                try OriginalObjectInput.apply(slot: item.slot,state: &state,observe: { events.append($0) })
+                if inPlace { try OriginalObjectInput.applyInPlace(slot: item.slot,state: &state,observe: { events.append($0) }) }
+                else { try OriginalObjectInput.apply(slot: item.slot,state: &state,observe: { events.append($0) }) }
                 let draws = events.compactMap { e -> [UInt32]? in
                     if case let .random(stream,range,result) = e { return [UInt32(bitPattern: stream),UInt32(bitPattern: range),UInt32(bitPattern: result)] }
                     return nil
@@ -106,6 +112,15 @@ public enum ObjectInputReference {
                 }
                 guard built == item.constructors else { throw error(item.label+" constructors \(built) vs \(item.constructors)") }
                 random += draws.count; constructors += built.count
+                if !inPlace, !events.isEmpty, rollbacks < 20 {
+                    struct Interrupt: Error {}
+                    var copy = before
+                    do { try OriginalObjectInput.apply(slot: item.slot,state: &copy,observe: { _ in throw Interrupt() }); throw error(item.label+" observer stop") } catch is Interrupt {}
+                    guard copy.world == before.world, copy.actors == before.actors, copy.globals == before.globals else {
+                        throw error(item.label+" state after an observer throw")
+                    }
+                    rollbacks += 1
+                }
                 guard item.rng.count == 2 else { throw error("RNG words") }
                 var globals = before.globals
                 try globals.write(item.rng[0],at: 0x450bcc-OriginalMatchPreparation.globalBase)
@@ -130,6 +145,6 @@ public enum ObjectInputReference {
             }
         })
         return .init(initial: initial,cases: c.cases.count,records: records,bytes: bytes,random: random,constructors: constructors,
-                     blocks: c.blocks.count,hitFa: hitFa)
+                     blocks: c.blocks.count,hitFa: hitFa,rollbacks: rollbacks)
     }
 }

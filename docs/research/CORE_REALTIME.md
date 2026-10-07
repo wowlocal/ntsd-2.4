@@ -161,7 +161,8 @@ while measuring; restore `svc power stayon false` when the loop pauses or stops.
 | 2026-10-07 | B2 P2: the loaded match entry's sub-steps in place | The entry copies its state, commands and context once and drops them on any throw; its control, received-input, replay and round sub-steps now run their existing bodies on that copy instead of copying again ([plan](CORE_REALTIME_B2.md)). Main 20.5/20.3 → 20.1 ms per tick (four runs). All 10 scenarios, AppKit and the emulator equal, frames identical; all 173 suites (504 tests); review OK | [evidence](../evidence/rt-b2p2-entry-in-place-20261007.json) | b189ee9 |
 | 2026-10-07 | B2 P2b: one received-input core | The B2 P2 review's follow-up: `receiveInput` runs the in-place core (with its observer), sharing one command-extent check with the remote and playback steps; the initial entry's rollback test also throws right after the in-place control, received and replay sub-steps. Main 20.0/20.0 ms per tick (unchanged). All 10 scenarios, AppKit and the emulator equal, frames identical; 73 suites | [evidence](../evidence/rt-b2p2b-receive-core-20261007.json) | c761435 |
 | 2026-10-07 | B2 P2c: local input in place | `beginLocalInput` and `localInput` copied the entry's candidate twice more (the actors array, an actor record and the globals); their bodies now run on the entry's own copy, and the AI/object children receive it. Main 20.0/20.0 ms per tick (no measurable change). All 10 scenarios, AppKit and the emulator equal, frames identical; 74 suites; review OK | [evidence](../evidence/rt-b2p2c-local-input-20261007.json) | ba69395 |
-| 2026-10-07 | B2 P2d: entry and local-input rollback test | Test only (the P2 and P2c reviews): the loaded entry, run directly, throws at each checkpoint, replay and round event and from an AI child after its writes, leaving the caller's model, commands and context unchanged, with a retry equal to the uninjected run; the transactional local-input forms keep their caller's values. Sources as P2c; the menu-startup and application-input suites pass | [evidence](../evidence/rt-b2p2d-entry-rollback-test-20261007.json) | this commit |
+| 2026-10-07 | B2 P2d: entry and local-input rollback test | Test only (the P2 and P2c reviews): the loaded entry, run directly, throws at each checkpoint, replay and round event and from an AI child after its writes, leaving the caller's model, commands and context unchanged, with a retry equal to the uninjected run; the transactional local-input forms keep their caller's values. Sources as P2c; the menu-startup and application-input suites pass | [evidence](../evidence/rt-b2p2d-entry-rollback-test-20261007.json) | 96661df |
+| 2026-10-07 | B2 P3: the AI and object-input children in place | The character-AI and object-input passes copied the match's world, actors and globals while the caller held them, so each call copied the actors array, an actor record and the globals; `applyInPlace` moves them into the pass and writes them back in a `defer`, and the production child (whose callers all drop the match on a throw) uses it. Both reference corpora run through both forms. Main 20.0/20.0 → 19.8/19.6 ms per tick. All 10 scenarios, AppKit and the emulator equal, frames identical; 74 suites; review OK | [evidence](../evidence/rt-b2p3-ai-children-in-place-20261007.json) | this commit |
 
 ## Next task
 
@@ -190,7 +191,9 @@ main thread; message-loop iterations 4.12 × 1.14 ms; render thread 18.7 ms,
   present's back-buffer copy and crop fused) next, then P2 (the back buffer
   lent as the frame).
 - **B2** ([plan](CORE_REALTIME_B2.md)): in-place nested passes under the first
-  transactional copy; P1 (post-draw prefix, opoint, scheduler) main 20.9 ms.
+  transactional copy; P1–P3 done (post-draw passes, the loaded entry chain,
+  local input, the AI/object children): main 19.8/19.6 ms per tick. P4 (the
+  gameplay body's passes family by family, by a fresh profile) remains.
 - **Idle iterations** ([A3 design](CORE_REALTIME_A3.md)): ~1 ms each, three per
   tick under the virtual clock; target ≤0.2 ms in five pieces.
 - Then B1 3c (world pair cache), B2 (R5/M3 in-place nested

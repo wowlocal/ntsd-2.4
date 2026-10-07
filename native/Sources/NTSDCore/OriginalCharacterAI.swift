@@ -11,14 +11,27 @@ public enum OriginalCharacterAIEvent: Equatable {
 public enum OriginalCharacterAI {
     public static func apply(slot: Int,mode: Int32,state: inout OriginalMatchPreparation,sse2: Bool = false,
                              observe: (OriginalCharacterAIEvent) throws -> Void = { _ in }) throws {
+        // All or nothing: the pass runs in place on a copy, whose records are
+        // assigned only when it completes.
+        var copy = state
+        try applyInPlace(slot: slot,mode: mode,state: &copy,sse2: sse2,observe: observe)
+        state.world = copy.world; state.actors = copy.actors; state.globals = copy.globals
+    }
+    /// `apply` with the caller's world, actors and globals moved into the pass
+    /// and written back on every path (CORE_REALTIME B2): for callers that drop
+    /// the state when this throws.
+    package static func applyInPlace(slot: Int,mode: Int32,state: inout OriginalMatchPreparation,sse2: Bool = false,
+                                     observe: (OriginalCharacterAIEvent) throws -> Void = { _ in }) throws {
         let catalog = state.catalog
         guard try state.world.integer(at: 0x7d4,as: UInt32.self) == 0,
               let registry = catalog.registry.records[0x4d82380] else { throw OriginalStateError.invalidStorage("Character-AI catalog binding") }
-        var pass = OriginalCharacterAIPass(world: state.world,actors: state.actors,globals: state.globals,objects: catalog.objects,
-                                           objectCount: try registry.integer(at: 0,as: Int32.self),backgrounds: state.backgrounds,sse2: sse2)
+        let objectCount = try registry.integer(at: 0,as: Int32.self),backgrounds = state.backgrounds
+        var pass = OriginalCharacterAIPass(world: inPlaceTake(&state.world,leaving: .vacant),actors: inPlaceTake(&state.actors,leaving: []),
+                                           globals: inPlaceTake(&state.globals,leaving: .vacant),objects: catalog.objects,
+                                           objectCount: objectCount,backgrounds: backgrounds,sse2: sse2)
+        defer { state.world = pass.world; state.actors = pass.actors; state.globals = pass.globals }
         try pass.run(slot,mode: mode)
         for event in pass.events { try observe(event) }
-        state.world = pass.world; state.actors = pass.actors; state.globals = pass.globals
     }
 }
 

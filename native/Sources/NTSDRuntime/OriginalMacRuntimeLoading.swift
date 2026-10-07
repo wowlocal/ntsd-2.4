@@ -327,9 +327,11 @@ import NTSDCore
             var unit: Void = ()
             let ready = try cycle.advance(environment:&unit,dispatch:{ d,match,_ in
                 let slot = Int(d.arguments[0])
-                if d.kind == .objectInput { try OriginalObjectInput.apply(slot:slot,state:&match); self.counts.objectInputs += 1; return }
+                // In place: every level above drops this match when a child
+                // throws (CORE_REALTIME B2).
+                if d.kind == .objectInput { try OriginalObjectInput.applyInPlace(slot:slot,state:&match); self.counts.objectInputs += 1; return }
                 if d.kind == .characterAI {
-                    do { try OriginalCharacterAI.apply(slot:slot,mode:Int32(bitPattern:d.arguments[1]),state:&match); self.counts.characterAI += 1; return }
+                    do { try OriginalCharacterAI.applyInPlace(slot:slot,mode:Int32(bitPattern:d.arguments[1]),state:&match); self.counts.characterAI += 1; return }
                     catch OriginalLoaderError.outsideVerifiedDomain(let reason) { throw Boundary.unexpected("character AI slot \(slot): \(reason)") }
                 }
                 // Unreachable for the two recovered kinds: report the object.

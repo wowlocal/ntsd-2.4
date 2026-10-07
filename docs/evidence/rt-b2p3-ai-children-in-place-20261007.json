@@ -1,0 +1,88 @@
+{
+ "study": "docs/research/CORE_REALTIME.md",
+ "phase": "B2 P3 (the AI and object-input children in place)",
+ "date": "2026-10-07",
+ "design": "docs/research/CORE_REALTIME_B2.md (P3)",
+ "profile_before": "phone DWARF profile rtb2p2b-dwarf: the AI/object child (closure #3 in InputSession.advance, the production child in OriginalMacRuntimeLoading.runCycle) 3.52% of the main thread; OriginalCharacterAI.apply and OriginalObjectInput.apply copied the match's world, actors and globals into a pass while the caller still held them, so the pass's writes copied the 400-entry actors array, an actor record and the 92 KB globals on every call",
+ "change": "package static applyInPlace moves the caller's world, actors and globals into the pass (inPlaceTake, leaving OriginalStateRecord.vacant or []) and writes them back in a defer; the objectCount, backgrounds and precision reads come first, so nothing throws between the takes and the defer; the public apply copies the state, runs applyInPlace and assigns the same three records; the production child calls applyInPlace (every level above drops the match on a throw); the AI and object-input reference checks take inPlace and both suites run every case through both forms, and the all-or-nothing form is rerun with an observer that throws at the first event (state unchanged)",
+ "phone": {
+  "before": [
+   {
+    "label": "rtb2p2c-run1",
+    "runSeconds": 300,
+    "peakResidentMB": 1298,
+    "ticksPerSecond": 25.89,
+    "busySeconds": 198.63,
+    "bodies": 1800,
+    "completeMsPerTick": 14.7,
+    "partAssembliesPerTick": 0.0,
+    "menuMsPerStep": 0.83,
+    "menuStepsPerTick": 4.12,
+    "mainCpuShare": 0.519,
+    "renderCpuShare": 0.403,
+    "mainMsPerTick": 20.0,
+    "renderMsPerTick": 15.5
+   },
+   {
+    "label": "rtb2p2c-run2",
+    "runSeconds": 300,
+    "peakResidentMB": 1092,
+    "ticksPerSecond": 25.89,
+    "busySeconds": 199.2,
+    "bodies": 1800,
+    "completeMsPerTick": 14.7,
+    "partAssembliesPerTick": 0.0,
+    "menuMsPerStep": 0.83,
+    "menuStepsPerTick": 4.12,
+    "mainCpuShare": 0.518,
+    "renderCpuShare": 0.405,
+    "mainMsPerTick": 20.0,
+    "renderMsPerTick": 15.7
+   }
+  ],
+  "after": [
+   {
+    "label": "rtb2p3-run1",
+    "runSeconds": 300,
+    "peakResidentMB": 1481,
+    "ticksPerSecond": 25.94,
+    "busySeconds": 199.07,
+    "bodies": 1800,
+    "completeMsPerTick": 14.6,
+    "partAssembliesPerTick": 0.0,
+    "menuMsPerStep": 0.83,
+    "menuStepsPerTick": 4.12,
+    "mainCpuShare": 0.514,
+    "renderCpuShare": 0.405,
+    "mainMsPerTick": 19.8,
+    "renderMsPerTick": 15.6
+   },
+   {
+    "label": "rtb2p3-run2",
+    "runSeconds": 300,
+    "peakResidentMB": 1567,
+    "ticksPerSecond": 26.25,
+    "busySeconds": 199.31,
+    "bodies": 1800,
+    "completeMsPerTick": 14.6,
+    "partAssembliesPerTick": 0.0,
+    "menuMsPerStep": 0.81,
+    "menuStepsPerTick": 4.12,
+    "mainCpuShare": 0.515,
+    "renderCpuShare": 0.431,
+    "mainMsPerTick": 19.6,
+    "renderMsPerTick": 16.4
+   }
+  ],
+  "result": "main 20.0/20.0 -> 19.8/19.6 ms per tick, complete 14.7 -> 14.6 ms"
+ },
+ "gates": {
+  "headless": "vs equal, 1,832 frames identical (frozen B2 P3 binary)",
+  "scenarios": "all 10 equal, frames identical (rt-b2p3-all)",
+  "AppKit": "vs and playback equal, 3,960 frames identical to the P2c AppKit run",
+  "emulator": "vs equal, 1,832 frames identical",
+  "android": "the APK build (swiftbuild) compiles the first package-access declarations",
+  "tests": "bundle A (native tree 15439554, the same as this commit's): 74 suites, 205 tests, pass, incl. the character-AI and object-input suites through both forms"
+ },
+ "review": "independent read-only review: approve. Equivalence holds (the objectCount read moved before the record copies changes no error or order; the wrappers assign exactly the three records after success; observer order unchanged); discard proof holds from the production child to OriginalRuntimeSession (no try?, catch-and-continue or retry; the AI do/catch rethrows); no throw between the takes and the defer; no closure reads taken storage; static exclusivity only; package access works across all SwiftPM builds (nothing compiles NTSDCore outside SwiftPM). Findings: the Android/Linux swiftbuild compile of package access unverified (the Android APK built it in this gate; Linux not run), the in-place throw path and a corrupted run untested (addressed in P3b), no copy probe, no runtime count assertion."
+}
