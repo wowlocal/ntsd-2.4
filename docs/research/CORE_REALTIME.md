@@ -95,6 +95,14 @@ and after.
 4. AppKit vs and playback equal, frames identical to the previous AppKit run.
 5. The affected Core suites in a release test build (`build/swiftpm-test-release`;
    no source edits while a bundle compiles).
+
+Gate binaries come from clean builds (4u): remove the scratch folder (and on
+X5 `build-android-aarch64`) before building the headless and AppKit binaries,
+the release test bundle and the APK. Release builds compile each module whole,
+and with cross-module optimization (4k) an unchanged client module keeps the
+inlined code and class sizes of an older dependency: an incremental AppKit app
+allocated `OriginalRuntimeSession` 24 bytes short and corrupted its heap at
+startup. A clean build takes ~2 minutes per binary and ~6 for the test bundle.
 6. Phone speed with `android_speed.py`; a profile when the result needs explaining.
 7. An independent read-only review for storage-model or architecture changes.
 8. At each phase end: the full nine-host matrix (`matrix.py`).
@@ -167,7 +175,8 @@ while measuring; restore `svc power stayon false` when the loop pauses or stops.
 | 2026-10-07 | A3 P0: idle iterations measured apart | The runtime and the speed harness split the message loop: on the A12 an idle iteration costs 0.66 ms in its step and 0.81 ms in all, 3.12 per tick (~2.5 ms per tick); the tick's own step 1.38 ms; the loaded cycle 14.5 ms. Telemetry only; all 10 scenarios, AppKit and the emulator equal, frames identical; the runtime suites pass | [evidence](../evidence/rt-a3p0-idle-split-20261007.json) | 3f7e9cb |
 | 2026-10-07 | A3 L3: the idle loop on an empty context | The idle iteration copied the whole State twice as the loop's context, which on that path only reads the speed flag; it now runs on an empty context. Idle step 0.66 → 0.63 ms on the A12 (0.033 → 0.019 ms on the Mac); main 19.8/19.9 ms per tick. All 10 scenarios and the emulator equal, frames identical; AppKit equal on a clean build (the incremental app had a stale inlined class size, see 4u); all 173 suites; review OK | [evidence](../evidence/rt-a3l3-idle-context-20261007.json) | 4e13691 |
 | 2026-10-07 | A3 P5a: the Android host's iteration timer | Each iteration's `asyncAfter` woke libdispatch's manager thread with a write syscall (1.55% of the main thread); the runtime asks its host to schedule the next iteration (default: the same `asyncAfter`), and the Android host arms one timerfd on the main looper. Main 19.8/19.9 → 19.0/19.2 ms per tick, render 15.7/16.6 → 13.7/14.4 ms. All 10 scenarios, AppKit and the emulator equal, frames identical; the runtime suites pass; review OK | [evidence](../evidence/rt-a3p5a-android-timer-20261007.json) | bf85e22 |
-| 2026-10-07 | A3 P5b: the Android iteration timer hardened | The P5a review's follow-up: the iteration runs only on a full 8-byte expiration read, a failed timer setup is tried once and reported, and the timer uses the app's main looper. Main 19.2/19.2 ms per tick; the emulator equal, frames identical | [evidence](../evidence/rt-a3p5b-timer-hardening-20261007.json) | this commit |
+| 2026-10-07 | A3 P5b: the Android iteration timer hardened | The P5a review's follow-up: the iteration runs only on a full 8-byte expiration read, a failed timer setup is tried once and reported, and the timer uses the app's main looper. Main 19.2/19.2 ms per tick; the emulator equal, frames identical | [evidence](../evidence/rt-a3p5b-timer-hardening-20261007.json) | 8ac7969 |
+| 2026-10-07 | 4u: gate binaries from clean builds | The L3 AppKit gate's incrementally built app crashed at startup: its unchanged NTSDApp module had `OriginalRuntimeSession`'s allocating init inlined with the size from before A3 P0 (448 of 472 bytes), so `init` wrote past the object (Guard Malloc). `-disable-incremental-imports` did not help (probe reverted). Gate binaries now come from clean builds, and HEAD was regated so: all 10 scenarios, AppKit and the emulator equal, frames identical; 173 suites; 20 of 20 launches clean; main 19.3/19.2 ms per tick | [evidence](../evidence/rt-4u-clean-gate-builds-20261007.json) | this commit |
 
 ## Next task
 

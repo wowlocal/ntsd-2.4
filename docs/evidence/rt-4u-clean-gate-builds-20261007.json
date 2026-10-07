@@ -1,0 +1,65 @@
+{
+ "study": "docs/research/CORE_REALTIME.md",
+ "phase": "4u (gate binaries from clean builds; a clean regate of HEAD)",
+ "date": "2026-10-07",
+ "incident": {
+  "symptom": "the L3 AppKit gate's app crashed at startup (vs SIGKILL after 0.9 s, playback milestones differing, rt-a3l3-appkit 17:32; a rerun's playback SIGKILL); 10 of 20 short launches of that binary crashed, 1 of 20 of the A3 P0 app, 0 of 120 of six earlier apps",
+  "diagnosis": "crash reports: _os_unfair_lock_unowned_abort inside malloc (or CoreGraphics) 0.1-0.9 s after launch, on the main thread reading startup files; Guard Malloc faulted every launch at a store one byte past the object in OriginalRuntimeSession.init; disassembly: the class's own allocating init asks 472 bytes (448 before A3 P0 added three stored properties) while the NTSDApp delegate's inlined copy asked 448 in the A3 P0 and L3 apps (472 in P5a's, whose protocol change recompiled NTSDApp); the headless binaries and the Android libraries asked 472",
+  "cause": "release builds compile each module whole (-whole-module-optimization -num-threads) and an unchanged client module is not recompiled when a dependency's layout or serialized bodies change; with cross-module optimization (4k) the client keeps inlined code and sizes from the older dependency",
+  "attempted_fix": "-disable-incremental-imports on every target (manifest checked with dump-package): ineffective; a probe adding one private stored property gave the class 480 bytes and the delegate still 472; reverted, not committed",
+  "scope": "since 4k (563f1d9) incremental gate binaries could mix stale cross-module code; the committed sources are unaffected; the L3 AppKit gate passed on a clean build (4e13691's evidence); this increment regates HEAD from clean builds"
+ },
+ "change": "docs only: gate binaries (the headless and AppKit builds, the release test bundle, the Android APK) come from clean builds (the scratch folders and X5 build-android-aarch64 removed first); a clean build takes ~2 minutes per binary and ~6 for the test bundle",
+ "regate": {
+  "tree": "HEAD 8ac7969 (native a8b05b87)",
+  "builds": "all from empty scratch folders: headless 106 s, AppKit 108 s (session allocation 472 in the class and the delegate), test bundle 372 s, APK 142 s",
+  "launches": "20 of 20 short AppKit launches clean",
+  "headless": "all 10 scenarios equal, frames identical (rt-4u-all)",
+  "AppKit": "vs and playback equal, 3,960 frames identical to L3's clean-build AppKit run",
+  "emulator": "vs equal, 1,832 frames identical",
+  "tests": "bundle A, clean: 173 suites, 504 tests, pass",
+  "phone": [
+   {
+    "label": "rt4u-run1",
+    "runSeconds": 300,
+    "peakResidentMB": 1371,
+    "ticksPerSecond": 26.69,
+    "busySeconds": 199.9,
+    "bodies": 1800,
+    "completeMsPerTick": 14.8,
+    "partAssembliesPerTick": 0.0,
+    "menuMsPerStep": 0.77,
+    "menuStepsPerTick": 4.12,
+    "idleMsPerStep": 0.622,
+    "idleIterationMs": 0.698,
+    "idleStepsPerTick": 3.12,
+    "tickStepMs": 1.215,
+    "mainCpuShare": 0.514,
+    "renderCpuShare": 0.388,
+    "mainMsPerTick": 19.3,
+    "renderMsPerTick": 14.6
+   },
+   {
+    "label": "rt4u-run2",
+    "runSeconds": 299,
+    "peakResidentMB": 1558,
+    "ticksPerSecond": 26.76,
+    "busySeconds": 198.72,
+    "bodies": 1800,
+    "completeMsPerTick": 14.7,
+    "partAssembliesPerTick": 0.0,
+    "menuMsPerStep": 0.76,
+    "menuStepsPerTick": 4.12,
+    "idleMsPerStep": 0.621,
+    "idleIterationMs": 0.696,
+    "idleStepsPerTick": 3.12,
+    "tickStepMs": 1.209,
+    "mainCpuShare": 0.513,
+    "renderCpuShare": 0.391,
+    "mainMsPerTick": 19.2,
+    "renderMsPerTick": 14.6
+   }
+  ]
+ },
+ "review": "not required (procedure); the diagnosis is recorded above with its reproductions"
+}
