@@ -244,7 +244,11 @@ import NTSDCore
     /// queued back-buffer fill (`pipelinesBackFill`) first waits for that work
     /// (CORE_REALTIME phases 1c, 1e, 1f). Needs presentUnknownAsBlack, so
     /// validation never reads pixels.
-    public var pipelinesFront = false
+    public var pipelinesFront = false {
+        // The replay's pixel work goes to the render thread as one block when
+        // the replay ends (or anything waits for it first; CORE_REALTIME 1k).
+        didSet { renderer.batching = pipelinesFront; if !pipelinesFront { renderer.dispatch() } }
+    }
     /// Queue back-buffer colour fills on the render thread (CORE_REALTIME 1f);
     /// set by the runtime on hosts that present concurrently.
     public var pipelinesBackFill = false
@@ -258,11 +262,27 @@ import NTSDCore
         private let queue = DispatchQueue(label:"ntsd.render")
         private let lock = NSLock()
         private var failure: Error?, queued = false
+        /// While set (a replay of one committed batch), submitted work is kept
+        /// and dispatched in order as one block by `dispatch` or `flush`: one
+        /// dispatch, closure block and render-thread wake per batch instead of
+        /// per draw (CORE_REALTIME 1k). Main thread only, as `submit`.
+        var batching = false
+        private var pending: [@Sendable () throws -> Void] = []
         func submit(_ work: @escaping @Sendable () throws -> Void) {
             queued = true
-            queue.async { do { try work() } catch { self.lock.lock(); if self.failure == nil { self.failure = error }; self.lock.unlock() } }
+            if batching { pending.append(work); return }
+            queue.async { self.run(work) }
+        }
+        private func run(_ work: () throws -> Void) {
+            do { try work() } catch { lock.lock(); if failure == nil { failure = error }; lock.unlock() }
+        }
+        func dispatch() {
+            guard !pending.isEmpty else { return }
+            let batch = pending; pending.removeAll(keepingCapacity:true)
+            queue.async { for work in batch { self.run(work) } }
         }
         func flush() throws {
+            dispatch()
             guard queued else { return }
             queue.sync {}; queued = false
             lock.lock(); let held = failure; failure = nil; lock.unlock()
