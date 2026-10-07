@@ -38,17 +38,9 @@ public struct OriginalStateRecord: Equatable, Sendable {
     /// tick in copies).
     private var large: Large?
     private enum Large { case pages(Pages), parts(Parts) }
-    /// `_modify` moves the payload out while it is changed, so its buffers
-    /// stay uniquely referenced (no copy of the pages on write).
-    private var pages: Pages? {
-        get { if case .pages(let value)? = large { return value }; return nil }
-        _modify {
-            var value: Pages? = nil, was = false
-            if case .pages(let current)? = large { value = current; large = nil; was = true }
-            defer { if let value { large = .pages(value) } else if was { large = nil } }
-            yield &value
-        }
-    }
+    /// Read-only: paged writes go through `withPages`, which moves the pages
+    /// out so their buffers stay uniquely referenced.
+    private var pages: Pages? { if case .pages(let value)? = large { return value }; return nil }
     /// The menu state's `full` record in fixed flat parts (CORE_REALTIME B1,
     /// docs/research/CORE_REALTIME_B1.md): a slice or overwrite at one part's
     /// exact extent shares or installs that part's buffers; every other
@@ -69,7 +61,9 @@ public struct OriginalStateRecord: Equatable, Sendable {
         /// Flat records; `starts[i]` is part i's first byte, `starts.last` the total.
         var records: [OriginalStateRecord]
         let starts: [Int]
-        private let lock = NSLock()
+        /// The assembled contents for whole reads (tests and diagnostics),
+        /// guarded by `OriginalStateRecord.assemblyLock`: one lock for every
+        /// parts object, so copying one before a write allocates no lock.
         private var bytes: [UInt8]?, defined: [Bool]?
         init(records: [OriginalStateRecord], starts: [Int]) { self.records = records; self.starts = starts }
         var count: Int { starts[starts.count - 1] }
@@ -83,17 +77,19 @@ public struct OriginalStateRecord: Equatable, Sendable {
         func isDefined(_ index: Int) -> Bool { let k = self.index(of: index); return records[k].flatDefined[index - starts[k]] }
         /// The same parts and an empty cache (for a copy about to be written).
         func copy() -> Parts { Parts(records: records, starts: starts) }
-        func clearCache() { lock.lock(); bytes = nil; defined = nil; lock.unlock() }
+        func clearCache() {
+            OriginalStateRecord.assemblyLock.lock(); bytes = nil; defined = nil; OriginalStateRecord.assemblyLock.unlock()
+        }
         func wholeBytes() -> [UInt8] {
-            lock.lock(); defer { lock.unlock() }
+            OriginalStateRecord.assemblyLock.lock(); defer { OriginalStateRecord.assemblyLock.unlock() }
             if let bytes { return bytes }
-            OriginalStateRecord.countAssembly()
+            OriginalStateRecord.assemblies += 1
             let made = records.flatMap(\.flatBytes); bytes = made; return made
         }
         func wholeDefined() -> [Bool] {
-            lock.lock(); defer { lock.unlock() }
+            OriginalStateRecord.assemblyLock.lock(); defer { OriginalStateRecord.assemblyLock.unlock() }
             if let defined { return defined }
-            OriginalStateRecord.countAssembly()
+            OriginalStateRecord.assemblies += 1
             let made = records.flatMap(\.flatDefined); defined = made; return made
         }
         /// Calls `body(part, local range)` for each run of `range`, in order.
@@ -123,8 +119,11 @@ public struct OriginalStateRecord: Equatable, Sendable {
             for (k, part) in records.enumerated() where !part.flatHolds(record, from: starts[k]) { return false }
             return true
         }
-        /// The bytes and definedness over `range`, run by run, without the cache.
+        /// The bytes and definedness over `range`, run by run, without the
+        /// cache. Reading the whole record this way (`readOnce`, `flattened`,
+        /// `==` across layouts) counts as an assembly too.
         func runs(_ range: Range<Int>) -> (bytes: [UInt8], defined: [Bool]) {
+            if range == 0..<count { OriginalStateRecord.countAssembly() }
             var bytes = [UInt8](), defined = [Bool]()
             bytes.reserveCapacity(range.count); defined.reserveCapacity(range.count)
             var index = range.lowerBound
@@ -138,12 +137,12 @@ public struct OriginalStateRecord: Equatable, Sendable {
             return (bytes, defined)
         }
     }
-    private static let assemblyLock = NSLock()
-    nonisolated(unsafe) private static var assemblies = 0
+    fileprivate static let assemblyLock = NSLock()
+    nonisolated(unsafe) fileprivate static var assemblies = 0
     fileprivate static func countAssembly() { assemblyLock.lock(); assemblies += 1; assemblyLock.unlock() }
-    /// Whole-record assemblies of parted records (a probe: production ticks
-    /// should never assemble the menu state's `full`).
-    static var partAssemblies: Int { assemblyLock.lock(); defer { assemblyLock.unlock() }; return assemblies }
+    /// Whole-record reads of parted records, cached or not (a probe:
+    /// production ticks should never read the menu state's `full` whole).
+    public static var partAssemblies: Int { assemblyLock.lock(); defer { assemblyLock.unlock() }; return assemblies }
 
     /// Runs `body` on the pages moved out of `large` (so they are uniquely
     /// referenced and written in place), then puts them back.
@@ -173,7 +172,8 @@ public struct OriginalStateRecord: Equatable, Sendable {
         return made
     }
     var isPartitioned: Bool { parts != nil }
-    /// The same contents as one flat record.
+    /// A parted record as one flat record with the same contents; any other
+    /// record unchanged.
     func flattened() -> OriginalStateRecord {
         guard parts != nil else { return self }
         let all = readOnce()
@@ -199,13 +199,19 @@ public struct OriginalStateRecord: Equatable, Sendable {
         return try! Self(bytes: Array(bytes[range]), defined: Array(defined[range]))
     }
     /// `Array(bytes[range])` without assembling a parted record.
-    func bytes(in range: Range<Int>) -> [UInt8] {
-        if let parts { return parts.runBytes(range) }
+    public func bytes(in range: Range<Int>) -> [UInt8] {
+        if let parts {
+            precondition(range.lowerBound >= 0 && range.upperBound <= parts.count, "Range out of bounds")
+            return parts.runBytes(range)
+        }
         return Array(bytes[range])
     }
     /// Whether every byte in `range` is defined (`!defined[range].contains(false)`).
-    func allDefined(in range: Range<Int>) -> Bool {
-        if let parts { return parts.runAllDefined(range) }
+    public func allDefined(in range: Range<Int>) -> Bool {
+        if let parts {
+            precondition(range.lowerBound >= 0 && range.upperBound <= parts.count, "Range out of bounds")
+            return parts.runAllDefined(range)
+        }
         return !defined[range].contains(false)
     }
 

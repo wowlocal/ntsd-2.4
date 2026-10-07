@@ -281,6 +281,28 @@ import XCTest
         XCTAssertTrue(a.steps.last?.hasPrefix("failed") == true)
     }
 
+    /// CORE_REALTIME B1: the runtime's menu iterations (the idle kernel, whole
+    /// steps and a key press, no observers) never read the parted `full` whole.
+    func testMenuIterationsNeverReadTheWholeState() throws {
+        let root = FileManager.default.temporaryDirectory.appendingPathComponent("ntsd-parts-\(UUID().uuidString)",isDirectory:true)
+        defer { try? FileManager.default.removeItem(at:root) }
+        let (started,package) = try startup(root)
+        while try started.host.takeCommitted() != nil {}
+        var now: UInt32 = 5_000_000
+        let menu = try OriginalMacRuntimeMenu(started,inputs:package,clock:{ now &+= 7; return now })
+        menu.capsLock = { 0 }
+        XCTAssertTrue(try XCTUnwrap(started.host.snapshot.session).state.full.isPartitioned)
+        let before = OriginalStateRecord.partAssemblies
+        func step() throws -> Bool { if case .committed = try menu.step() { return true }; return false }
+        for _ in 0..<400 where try XCTUnwrap(started.host.snapshot.session).state.settings == nil { guard try step() else { throw Stop.limit } }
+        for _ in 0..<40 { guard try step() else { throw Stop.limit } }
+        let key = try XCTUnwrap(OriginalMacRuntimeKey.table[0x00])
+        menu.messages.key(key,down:true,characters:"a"); menu.messages.key(key,down:false)
+        for _ in 0..<40 { if !(try step()) { break } }
+        XCTAssertGreaterThan(started.host.idleCommitCount,0)
+        XCTAssertEqual(OriginalStateRecord.partAssemblies,before,"no whole read of full")
+    }
+
     /// Idle iterations through the Host's kernel (CORE_REALTIME A1) give the
     /// same counters, delivered messages, sleeps, clock calls, committed globals,
     /// commits, frames, request bounds and failures as the whole step for every

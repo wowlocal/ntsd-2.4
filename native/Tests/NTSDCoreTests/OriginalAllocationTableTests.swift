@@ -56,7 +56,11 @@ final class OriginalAllocationTableTests: XCTestCase {
     /// the state unchanged.
     private func compareStores(_ b: B,_ model: OriginalMatchPreparation,_ context: OriginalInputControlContext,
                                _ state: State,_ label: String,file: StaticString = #filePath,line: UInt = #line) {
-        var a = state,o = state
+        // The oracle runs on the flat twin of `full` (B1: the session holds it
+        // in parts); the input's bytes are taken first, so a shared parts
+        // object written in place would show.
+        let before = state.full.readOnce()
+        var a = state,o = state.flatFullForTesting()
         let errorA = error { try b.store(model,context:context,in:&a) }
         let errorO = error { try Self.oracleStore(b,model,context:context,in:&o) }
         XCTAssertEqual(errorA,errorO,label,file:file,line:line)
@@ -64,7 +68,18 @@ final class OriginalAllocationTableTests: XCTestCase {
         XCTAssertEqual(a.memory.allocations,o.memory.allocations,label,file:file,line:line)
         XCTAssertEqual(a.memory.allocations.dictionary,o.memory.allocations.dictionary,label,file:file,line:line)
         XCTAssertEqual(a.memory.replayPointers,o.memory.replayPointers,label,file:file,line:line)
-        if errorA != nil { OriginalApplicationCatalogSessionTests.retained(a,state) }
+        XCTAssertEqual(a.full.bytes,o.full.bytes,label,file:file,line:line);XCTAssertEqual(a.full.defined,o.full.defined,label,file:file,line:line)
+        XCTAssertTrue(a.full.isPartitioned,label,file:file,line:line)
+        let input = state.full.readOnce()
+        XCTAssertEqual(input.bytes,before.bytes,label,file:file,line:line);XCTAssertEqual(input.defined,before.defined,label,file:file,line:line)
+        if errorA != nil {
+            OriginalApplicationCatalogSessionTests.retained(a,state)
+            let kept = a.full.readOnce()
+            XCTAssertEqual(kept.bytes,before.bytes,label,file:file,line:line);XCTAssertEqual(kept.defined,before.defined,label,file:file,line:line)
+        } else {
+            // The stored globals are the match model's own buffers (part 0).
+            XCTAssertTrue(try OriginalApplicationMenuSession.State.slice(a.full,0,OriginalMatchPreparation.globalSize).sharesStorage(with:model.globals),label,file:file,line:line)
+        }
     }
 
     func testStoreMatchesThePerEntryAlgorithmUnderFaults() throws {
@@ -83,6 +98,11 @@ final class OriginalAllocationTableTests: XCTestCase {
             var changed = model
             try changed.actors[7].write(UInt8(0x5a),at:0x10)
             compareStores(b,changed,context,base,"\(name) changed actor")
+            // Changed globals: part 0 becomes the model's new buffer (an install,
+            // not the no-op of an already shared part).
+            var globals = model
+            try globals.globals.write(UInt8(0x5b),at:0x20)
+            compareStores(b,globals,context,base,"\(name) changed globals")
             // Faults at one index and at several: the first failing index and
             // check must be the same.
             let t = b.actorTokens
@@ -130,6 +150,9 @@ final class OriginalAllocationTableTests: XCTestCase {
         plain.memory.allocations = OriginalAllocationTable(tiered.memory.allocations.dictionary)
         XCTAssertNil(plain.memory.allocations.actors)
         let fromPlain = try read(plain)
+        // Reading the flat twin of `full` gives the same model (B1).
+        let fromFlat = try read(tiered.flatFullForTesting())
+        XCTAssertEqual(fromTier.actors,fromFlat.actors);XCTAssertEqual(fromTier.world,fromFlat.world);XCTAssertEqual(fromTier.globals,fromFlat.globals)
         XCTAssertEqual(fromTier.actors,fromPlain.actors)
         XCTAssertEqual(fromTier.actors,model.actors)
         XCTAssertEqual(fromTier.world,fromPlain.world); XCTAssertEqual(fromTier.globals,fromPlain.globals)

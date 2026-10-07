@@ -398,7 +398,7 @@ public enum OriginalRuntimeSessionBoundary: Error, Equatable {
                     if gameplayBodies % 300 == 0 {
                         var event: [String:Any] = ["event":"progress","gameplayBodies":gameplayBodies,"cycles":cycles,"iterations":committed,
                             "characterAI":loading.counts.characterAI,"objectInputs":loading.counts.objectInputs,"uptime":ProcessInfo.processInfo.systemUptime,
-                            "busySeconds":busy,"menuBusySeconds":menuBusy,"menuSteps":menuSteps,"waitedMilliseconds":waited,"lastSleeps":Array(loading.sleeps.suffix(6)),"music":musicReport(),
+                            "busySeconds":busy,"menuBusySeconds":menuBusy,"menuSteps":menuSteps,"partAssemblies":OriginalStateRecord.partAssemblies,"waitedMilliseconds":waited,"lastSleeps":Array(loading.sleeps.suffix(6)),"music":musicReport(),
                             "sounds":soundReport()]
                         if gameplayBodies % every == 0,let i = arguments.firstIndex(of:"--body-captures"),i+1 < arguments.count {
                             let path = "\(arguments[i+1])/b\(String(format:"%06d",gameplayBodies)).png"
@@ -458,8 +458,8 @@ public enum OriginalRuntimeSessionBoundary: Error, Equatable {
         guard role == 1 || role == 2 else { return false }
         func bytes(_ address: Int,_ count: Int) throws -> [UInt8] {
             let range = (address-base)..<(address-base+count)
-            guard state.full.defined[range].allSatisfy({ $0 }) else { throw OriginalStateError.invalidStorage("Network ready diagnostic: undefined bytes") }
-            return Array(state.full.bytes[range])
+            guard state.full.allDefined(in:range) else { throw OriginalStateError.invalidStorage("Network ready diagnostic: undefined bytes") }
+            return state.full.bytes(in:range)
         }
         let value: [String:Any] = ["role":role,"iterations":committed,
             "world":try state.full.integer(at:0x458b00-base,as:UInt32.self),

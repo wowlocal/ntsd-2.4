@@ -1,0 +1,135 @@
+{
+ "study": "docs/research/CORE_REALTIME.md",
+ "phase": "B1 stage 3b (the menu state's full record held in parts)",
+ "date": "2026-10-07",
+ "design": "docs/research/CORE_REALTIME_B1.md",
+ "change": "OriginalApplicationMenuSession.State.init holds the 0xc3a8-byte full record in parts at partStarts [0, 0xb440, 0xb580, 0xb588, 0xb8a8, 0xb8b0, 0xbb00, 0xc2d8] (globals, outer local, loop counter, saved playback, replay alias, rest of the outer block, World, tail). Every production slice and replace of full is one part or lies inside one, so the per-tick and per-iteration slices and replaces (bindings read/store: globals, World, saved playback, replay alias; the menu iteration's counter write and alias merge; validateAliases) share or install buffers instead of copying ~100 KB; store installs match.globals as part 0 and read slices it back shared. Whole reads of a parted record (bytes, defined, readOnce, flattened, == across layouts) are counted by OriginalStateRecord.partAssemblies, reported in the runtime's progress events and by android_speed.py (partAssembliesPerTick). Review fixes: the part caches share one lock (a copy allocates none), the range accessors trap like a flat record, the paged accessor is read-only.",
+ "phone": {
+  "before": [
+   {
+    "label": "rtb1a2-run1",
+    "runSeconds": 321,
+    "peakResidentMB": 1058,
+    "ticksPerSecond": 21.28,
+    "busySeconds": 214.0,
+    "bodies": 1800,
+    "completeMsPerTick": 21.5,
+    "menuMsPerStep": 1.23,
+    "menuStepsPerTick": 4.12,
+    "mainCpuShare": 0.606,
+    "renderCpuShare": 0.406,
+    "mainMsPerTick": 28.5,
+    "renderMsPerTick": 19.1
+   },
+   {
+    "label": "rtb1a2-run2",
+    "runSeconds": 325,
+    "peakResidentMB": 1391,
+    "ticksPerSecond": 21.29,
+    "busySeconds": 218.08,
+    "bodies": 1800,
+    "completeMsPerTick": 21.4,
+    "menuMsPerStep": 1.24,
+    "menuStepsPerTick": 4.12,
+    "mainCpuShare": 0.604,
+    "renderCpuShare": 0.404,
+    "mainMsPerTick": 28.4,
+    "renderMsPerTick": 19.0
+   }
+  ],
+  "after_before_review_fixes": [
+   {
+    "label": "rtb1b-run1",
+    "runSeconds": 320,
+    "peakResidentMB": 1497,
+    "ticksPerSecond": 21.67,
+    "busySeconds": 213.01,
+    "bodies": 1800,
+    "completeMsPerTick": 21.0,
+    "partAssembliesPerTick": 0.0,
+    "menuMsPerStep": 1.13,
+    "menuStepsPerTick": 4.12,
+    "mainCpuShare": 0.598,
+    "renderCpuShare": 0.407,
+    "mainMsPerTick": 27.6,
+    "renderMsPerTick": 18.8
+   },
+   {
+    "label": "rtb1b-run2",
+    "runSeconds": 320,
+    "peakResidentMB": 1264,
+    "ticksPerSecond": 21.62,
+    "busySeconds": 216.07,
+    "bodies": 1800,
+    "completeMsPerTick": 21.2,
+    "partAssembliesPerTick": 0.0,
+    "menuMsPerStep": 1.13,
+    "menuStepsPerTick": 4.12,
+    "mainCpuShare": 0.599,
+    "renderCpuShare": 0.411,
+    "mainMsPerTick": 27.7,
+    "renderMsPerTick": 19.0
+   }
+  ],
+  "after": [
+   {
+    "label": "rtb1b2-run1",
+    "runSeconds": 320,
+    "peakResidentMB": 1386,
+    "ticksPerSecond": 21.58,
+    "busySeconds": 213.69,
+    "bodies": 1800,
+    "completeMsPerTick": 21.1,
+    "partAssembliesPerTick": 0.0,
+    "menuMsPerStep": 1.14,
+    "menuStepsPerTick": 4.12,
+    "mainCpuShare": 0.601,
+    "renderCpuShare": 0.413,
+    "mainMsPerTick": 27.9,
+    "renderMsPerTick": 19.1
+   },
+   {
+    "label": "rtb1b2-run2",
+    "runSeconds": 320,
+    "peakResidentMB": 1229,
+    "ticksPerSecond": 21.67,
+    "busySeconds": 214.56,
+    "bodies": 1800,
+    "completeMsPerTick": 21.0,
+    "partAssembliesPerTick": 0.0,
+    "menuMsPerStep": 1.14,
+    "menuStepsPerTick": 4.12,
+    "mainCpuShare": 0.599,
+    "renderCpuShare": 0.409,
+    "mainMsPerTick": 27.6,
+    "renderMsPerTick": 18.9
+   }
+  ],
+  "profile": [
+   {
+    "label": "rtb1b2-profile",
+    "runSeconds": 323,
+    "peakResidentMB": 1550,
+    "ticksPerSecond": 21.3,
+    "busySeconds": 217.15,
+    "bodies": 1800,
+    "completeMsPerTick": 21.6,
+    "partAssembliesPerTick": 0.0,
+    "menuMsPerStep": 1.18,
+    "menuStepsPerTick": 4.12,
+    "profile": "rt-speed/rtb1b2-profile-profile/profile.json (60 s simpleperf, fp call graphs; the profiler costs time, so these timings are not compared)"
+   }
+  ],
+  "result": "main 28.5/28.4 -> 27.9/27.6 ms per tick (before the review fixes 27.6/27.7), complete 21.5/21.4 -> 21.1/21.0 ms, message-loop step 1.23 -> 1.14 ms; render unchanged (19.1/18.9); partAssembliesPerTick 0.0. Below the plan's 1.2-2.2 ms estimate (~0.8 ms)."
+ },
+ "probe": "headless vs (frozen-rtb1b2): partAssemblies 0 at every progress event through menus and 1800 gameplay ticks; phone 0.0 per tick",
+ "gates": {
+  "headless": "vs equal, 1,832 frames identical (frozen-rtb1b2)",
+  "scenarios": "all 10 equal, frames identical (rt-b1b2-all); the pre-fix tree also all equal (rt-b1b-all)",
+  "AppKit": "vs and playback equal, 3,960 frames identical to the 3a AppKit run (rt-b1b2-appkit vs rt-b1a-appkit)",
+  "emulator": "vs equal, 1,832 frames identical",
+  "tests": "bundle B (native diff 0de6c52c against d8a1a21 via a temporary index; the same tree as this commit's native and tools changes over 74a3583): all 170 suites, 500 tests, pass, incl. OriginalStateRecordPartsTests (8: model tests, the menu state against its flat twin over every production extent, the menu steps on a parted and a flat full, the 40-byte layout, the assembly probe), OriginalAllocationTableTests (the store and read oracles on the flat twin, a changed-globals install, byte checks after failed stores), OriginalApplicationHostSessionTests (byte checks after failed attempts) and OriginalMacRuntimeMenuTests (a runtime menu run with no whole read)"
+ },
+ "review": "independent read-only review of 3b and of 3a's one-field fold: correct; no production code reads full whole; every mutation of the parts makes them unique first; the fold keeps paged values and unique buffers; thread safety sufficient; every production State is built by init. Applied: the store test's sharing check could not fail (a changed-globals case now installs a new part 0); rollback checks compared parted records by identity (bytes and masks are now compared after failed attempts in the store oracle and the Host retry test); the probe now counts every whole read, and a runtime menu test without observers asserts none; a flat-twin test runs the menu steps (counter writes, alias merges, a failing hook) on a parted and a flat full; the record size is pinned at 40 bytes; per-copy lock allocation removed; comment and edge-case nits fixed.",
+ "process": "the first final-tree gate job failed to compile its test bundle (two test files without @testable used internal helpers; fixed by public accessors and moving the flat-twin step test); its five targeted suites then ran as one name under zsh word splitting (0 tests) and were rerun separately; its full-suite wait matched its own command line and was replaced by a separate suite job"
+}

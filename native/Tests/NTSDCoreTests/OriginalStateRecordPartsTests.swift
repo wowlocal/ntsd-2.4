@@ -5,7 +5,7 @@ import XCTest
 /// error of the same flat record, shares a part's buffers at its exact extent,
 /// and keeps earlier copies unchanged.
 final class OriginalStateRecordPartsTests: XCTestCase {
-    struct Random {
+    struct Random: RandomNumberGenerator {
         var state: UInt64
         mutating func next() -> UInt64 { state = state &* 6364136223846793005 &+ 1442695040888963407; return state >> 11 }
         mutating func below(_ n: Int) -> Int { Int(next() % UInt64(max(1, n))) }
@@ -164,6 +164,115 @@ final class OriginalStateRecordPartsTests: XCTestCase {
         XCTAssertNotEqual(parted, try OriginalStateRecord(bytes: flat.bytes, defined: mask))
         XCTAssertEqual(parted.partitioned(at: starts), parted)
     }
+    /// CORE_REALTIME B1 3b: the menu state holds `full` in parts; slices,
+    /// replaces and the alias check give the flat twin's results and errors
+    /// over every production extent, random ones and invalid ones.
+    func testMenuStateMatchesItsFlatTwin() throws {
+        typealias State = OriginalApplicationMenuSession.State
+        var random = Random(state: 15)
+        var bytes = (0..<0xc3a8).map { _ in UInt8(truncatingIfNeeded: random.next()) }
+        var defined = (0..<0xc3a8).map { _ in random.below(12) != 0 }
+        for i in 0xb8a8..<0xb8b0 { bytes[i] = UInt8(i & 0xff); defined[i] = true }
+        let full = try OriginalStateRecord(bytes: bytes, defined: defined)
+        let pointers = try OriginalStateRecord(bytes: Array(bytes[0xb8a8..<0xb8b0]), defined: Array(defined[0xb8a8..<0xb8b0]))
+        var state = try State(full: full, memory: .init(replayPointers: pointers), front: .init(), frontSurfaces: [:],
+                              earlyScreen: .init(), libraryText: .init(), random: .init(), screenBody: nil)
+        XCTAssertTrue(state.full.isPartitioned); XCTAssertEqual(state.full, full)
+        var twin = state.flatFullForTesting()
+        XCTAssertFalse(twin.full.isPartitioned)
+        let production = [(0, 0xb440), (0xb440, 0x140), (0xb580, 8), (0xb588, 0x320), (0xb8a8, 8), (0xbb00, 0x7d8), (0xc2d8, 51), (0xc2d8, 0xd0)]
+        var extents = production
+        for _ in 0..<40 { let s = random.below(0xc3a8 + 1); extents.append((s, random.below(0xc3a8 - s + 1))) }
+        extents += [(-1, 4), (0xc3a8, 1), (0xc3a6, 4), (0, -1), (Int.max, 1)]
+        func compareSlices(_ start: Int, _ count: Int) {
+            let label = "slice \(start) \(count)"
+            switch (Result { try State.slice(state.full, start, count) }, Result { try State.slice(twin.full, start, count) }) {
+            case (.success(let a), .success(let b)):
+                XCTAssertEqual(a, b, label); XCTAssertEqual(a.bytes, b.bytes, label); XCTAssertEqual(a.defined, b.defined, label)
+                XCTAssertFalse(a.isPartitioned, label)
+            case (.failure(let a), .failure(let b)): XCTAssertEqual("\(a)", "\(b)", label)
+            default: XCTFail(label)
+            }
+        }
+        for (start, count) in extents { compareSlices(start, count) }
+        // An install at each part's exact extent shares the source; a copy of
+        // the state taken before keeps its bytes.
+        let earlier = state, earlierBytes = state.full.readOnce()
+        var installed = state
+        for (start, count) in production where count != 51 && count != 0xd0 {
+            let source = try record(count, &random)
+            try installed.replace(start, source)
+            XCTAssertTrue(try State.slice(installed.full, start, count).sharesStorage(with: source), "installed \(start)")
+        }
+        XCTAssertEqual(earlier.full.readOnce().bytes, earlierBytes.bytes); XCTAssertEqual(earlier.full.readOnce().defined, earlierBytes.defined)
+        XCTAssertEqual(state.full.readOnce().bytes, earlierBytes.bytes)
+        for (start, count) in extents.shuffled(using: &random) where count >= 0 && count < 0x10000 {
+            let source = try record(count, &random)
+            XCTAssertEqual(outcome { try state.replace(start, source) }, outcome { try twin.replace(start, source) }, "replace \(start) \(count)")
+            XCTAssertEqual(state.full, twin.full); XCTAssertEqual(outcome { try state.validateAliases() }, outcome { try twin.validateAliases() })
+            compareSlices(start, max(0, count))
+        }
+        XCTAssertTrue(state.full.isPartitioned)
+        XCTAssertEqual(state.full.bytes, twin.full.bytes); XCTAssertEqual(state.full.defined, twin.full.defined)
+    }
+    /// The menu session's steps on a parted `full` and on its flat twin (idle,
+    /// message and quit iterations: counter writes at 0xb580 and replay alias
+    /// merges at 0xb8a8, the counter's reset, a failing hook) give the same
+    /// log, bytes and masks after every iteration (the setup of
+    /// OriginalApplicationMenuInputTests' A0 test).
+    func testMenuStepsMatchOnTheFlatTwin() throws {
+        typealias Session = OriginalApplicationMenuSession
+        typealias Loop = OriginalApplicationMessageLoop
+        enum Stop: Error { case late }
+        var bytes = [UInt8](repeating: 0, count: 0xc3a8)
+        for i in 0..<8 { bytes[0xb8a8 + i] = UInt8(0xb0 + i) }
+        bytes[0xb580] = 58
+        let mask = [Bool](repeating: true, count: 0xc3a8), full = try OriginalStateRecord(bytes: bytes, defined: mask)
+        let pointers = try OriginalStateRecord(bytes: Array(bytes[0xb8a8..<0xb8b0]), defined: Array(mask[0xb8a8..<0xb8b0]))
+        let state = try Session.State(full: full, memory: .init(replayPointers: pointers), front: .init(), frontSurfaces: [:],
+                                      earlyScreen: .init(), libraryText: .init(), random: .init(), screenBody: nil)
+        XCTAssertTrue(state.full.isPartitioned)
+        let replies = Session.Responses(draw: 0, presentation: 0, sound: 0, release: 0, dcResult: 0, dc: 9)
+        var message = try OriginalStateRecord(bytes: [UInt8](repeating: 0, count: 28), defined: [Bool](repeating: true, count: 28))
+        try message.write(UInt32(0x200), at: 4); try message.write(UInt32(230 << 16 | 350), at: 12)
+        func run(_ start: Session.State) throws -> ([String], [OriginalStateRecord]) {
+            var session = try Session(state: start, loop: .init(baseline: 123, counter: 58))
+            var log: [String] = [], states: [OriginalStateRecord] = []
+            for (i, kind) in [0, 0, 1, 0, 0, 0, 2, 0, 0, 0].enumerated() {
+                func queue(_ q: Loop.Request) throws -> Loop.Response {
+                    switch q.kind {
+                    case .peek: return kind == 0 ? .init(result: 0) : .init(result: 1, writes: [.init(offset: 0, bytes: message.bytes)])
+                    case .get: return .init(result: kind == 2 ? 0 : 1, writes: [.init(offset: 0, bytes: message.bytes)])
+                    case .translate, .dispatchMessage, .sleep: return .init()
+                    case .time: return .init(result: 124)
+                    default: throw Stop.late
+                    }
+                }
+                do {
+                    let outcome = try session.step(responses: replies, queue: queue, windowDefault: { _ in -123 }, surface: { _ in throw Stop.late },
+                        beforeCommit: { _, _ in if i == 4 { throw Stop.late } }, observesCommit: false)
+                    guard case .committed(let batch) = outcome else { log.append("not committed"); continue }
+                    log.append("committed \(batch.result) \(batch.effects)")
+                } catch { log.append("error \(error)") }
+                log.append("loop \(session.loop.counter) \(session.loop.timer.baseline) \(session.loop.message.bytes)")
+                states.append(session.state.full)
+            }
+            return (log, states)
+        }
+        let (partedLog, partedStates) = try run(state), (flatLog, flatStates) = try run(state.flatFullForTesting())
+        XCTAssertEqual(partedLog, flatLog)
+        XCTAssertEqual(partedStates.map(\.bytes), flatStates.map(\.bytes)); XCTAssertEqual(partedStates.map(\.defined), flatStates.map(\.defined))
+        XCTAssertTrue(partedStates.allSatisfy(\.isPartitioned), "parted run"); XCTAssertFalse(flatStates.contains(where: \.isPartitioned), "flat run")
+        XCTAssertTrue(partedLog.contains { $0.hasPrefix("error") } && partedLog.contains { $0.contains("quit") }, "failure and quit covered")
+        XCTAssertEqual(Set(partedStates.map { $0.bytes[0xb580] }).count > 1, true, "the counter moved")
+    }
+    /// The parts share the paged field (one optional enum), so a flat record,
+    /// copied many times per tick, is no larger than before the parts (a
+    /// separate field made it 48 bytes and cost the phone ~1 ms per tick).
+    func testRecordLayoutStaysFortyBytes() {
+        XCTAssertEqual(MemoryLayout<OriginalStateRecord>.size, 40)
+        XCTAssertEqual(MemoryLayout<OriginalStateRecord>.stride, 40)
+    }
     func testOnlyWholeReadsAssemble() throws {
         var random = Random(state: 13)
         var parted = try record(0xc3a8, &random).partitioned(at: [0, 0xb440, 0xb580])
@@ -172,19 +281,26 @@ final class OriginalStateRecordPartsTests: XCTestCase {
         try parted.write(UInt32(9), at: 0xb43e)
         _ = parted.extract(0..<0xb440); _ = parted.bytes(in: 0..<20); _ = parted.byteCount
         XCTAssertEqual(OriginalStateRecord.partAssemblies, before, "no whole assembly")
-        let flat = parted.flattened()
-        _ = parted.readOnce(); _ = parted.leadingBytes(40); _ = parted.definedBytes(0xb43c, 8)
-        _ = parted.allDefined(in: 0..<0xc000); _ = parted == flat; _ = parted.extract(5..<5)
+        _ = parted.leadingBytes(40); _ = parted.definedBytes(0xb43c, 8)
+        _ = parted.allDefined(in: 0..<0xc000); _ = parted.extract(5..<5)
         XCTAssertEqual(OriginalStateRecord.partAssemblies, before, "no whole assembly")
+        // Whole reads count, cached or not: `readOnce`, `flattened`.
+        let flat = parted.flattened()
+        XCTAssertEqual(OriginalStateRecord.partAssemblies, before + 1, "flattened reads the whole record")
+        _ = parted.readOnce()
+        XCTAssertEqual(OriginalStateRecord.partAssemblies, before + 2, "readOnce reads the whole record")
+        _ = parted == flat
+        XCTAssertEqual(OriginalStateRecord.partAssemblies, before + 2, "equality with a flat record goes part by part")
+        let base = OriginalStateRecord.partAssemblies
         _ = parted.bytes; _ = parted.bytes
-        XCTAssertEqual(OriginalStateRecord.partAssemblies, before + 1, "one assembly, then cached")
+        XCTAssertEqual(OriginalStateRecord.partAssemblies, base + 1, "one assembly, then cached")
         // An install of the part already there changes nothing and keeps the cache.
         parted.overwrite(at: 0, with: parted.extract(0..<0xb440))
         _ = parted.bytes
-        XCTAssertEqual(OriginalStateRecord.partAssemblies, before + 1, "a no-op install keeps the cache")
+        XCTAssertEqual(OriginalStateRecord.partAssemblies, base + 1, "a no-op install keeps the cache")
         var plain = flat
         try parted.write(UInt32(10), at: 0xb43e); try plain.write(UInt32(10), at: 0xb43e)
         XCTAssertEqual(parted.bytes, plain.bytes, "the write is seen")
-        XCTAssertEqual(OriginalStateRecord.partAssemblies, before + 2, "a write drops the cache")
+        XCTAssertEqual(OriginalStateRecord.partAssemblies, base + 2, "a write drops the cache")
     }
 }

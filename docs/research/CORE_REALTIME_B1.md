@@ -104,3 +104,9 @@ semantics; the Host retry tests).
   the record is 40 bytes again and the main thread 28.5/28.4 ms. Paged writes
   move the pages out of the field (`withPages`) so their buffers stay
   uniquely referenced. [Evidence](../evidence/rt-b1a-parts-20261007.json).
+- **3b** (2026-10-07): as planned. Main 28.5/28.4 → 27.9/27.6 ms per tick
+  (~0.8 ms, under the 1.2–2.2 ms estimate), no whole read per tick. The
+  review's fixes: every whole read counts (`readOnce` included), one lock for
+  all part caches, range accessors trap like a flat record, the paged
+  accessor is read-only; tests compare bytes (not parts identity) after
+  failed attempts. [Evidence](../evidence/rt-b1b-parts-live-20261007.json).

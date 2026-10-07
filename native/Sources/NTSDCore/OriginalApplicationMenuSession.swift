@@ -7,6 +7,12 @@ public struct OriginalApplicationMenuSession {
     public typealias Loop = OriginalApplicationMessageLoop
     private static let globalCount = 0xb440, outerStart = 0xb440
     private static let worldStart = 0xbb00, replayStart = 0xb8a8, counterOffset = 0xb580
+    /// The parts `State.full` is held in (CORE_REALTIME B1): globals, the
+    /// outer local, the loop counter, the saved playback, the replay alias, the
+    /// rest of the outer block, World, the tail (key-scan words, host name).
+    /// Production slices and replaces of `full` are exactly one part or lie
+    /// inside one (the network host name at 0xc2d8, catalog global stores).
+    static let partStarts = [0, 0xb440, 0xb580, 0xb588, 0xb8a8, 0xb8b0, 0xbb00, 0xc2d8]
 
     public enum Boundary: Error, Equatable {
         case dependency(String)
@@ -39,7 +45,11 @@ public struct OriginalApplicationMenuSession {
                     front: OriginalFrontMenuResources, frontSurfaces: [UInt32:UInt32],
                     earlyScreen: OriginalFrontScreenPrelude, libraryText: OriginalLibSurfaceText,
                     random: OriginalCRTRandom, screenBody: OriginalFrontScreenBody.StartupResult?) throws {
-            self.full = full; self.memory = memory; self.front = front
+            // Held in parts (B1): the same contents; slices and replaces at a
+            // part's extent then share that part's buffers.
+            self.full = full.byteCount == OriginalApplicationDispatchEntry.globalSize
+                ? full.partitioned(at: OriginalApplicationMenuSession.partStarts) : full
+            self.memory = memory; self.front = front
             self.earlyScreen = earlyScreen; self.libraryText = libraryText
             self.random = random; self.screenBody = screenBody
             try validateAliases()
@@ -61,6 +71,8 @@ public struct OriginalApplicationMenuSession {
             }
         }
 
+        /// The same state with `full` as one flat record (the reference for tests).
+        func flatFullForTesting() -> State { var state = self; state.full = full.flattened(); return state }
         func validateAliases() throws {
             guard full.byteCount == OriginalApplicationDispatchEntry.globalSize,
                   memory.replayPointers.byteCount == 8,

@@ -246,6 +246,10 @@ def main():
             # Wall time inside the loaded cycle (the gameplay body) and inside
             # message-loop iterations, from the game's own progress events.
             row["completeMsPerTick"] = round(1000 * (last["busySeconds"] - first["busySeconds"]) / ticks, 1)
+        if ticks > 0 and "partAssemblies" in first:
+            # Whole assemblies of a parted record (CORE_REALTIME B1); 0 on a
+            # production gameplay tick.
+            row["partAssembliesPerTick"] = round((last["partAssemblies"] - first["partAssemblies"]) / ticks, 3)
         if ticks > 0 and "menuSteps" in first and last["menuSteps"] > first["menuSteps"]:
             steps = last["menuSteps"] - first["menuSteps"]
             row["menuMsPerStep"] = round(1000 * (last["menuBusySeconds"] - first["menuBusySeconds"]) / steps, 2)
