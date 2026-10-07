@@ -170,16 +170,25 @@ final class NTSDAndroidCursor {}
     /// (CORE_REALTIME A3 P5): arming it is one syscall on this thread, where
     /// the main dispatch queue's asyncAfter woke libdispatch's manager thread
     /// for every iteration. The same monotonic deadline; a timerfd that cannot
-    /// be made, or a second outstanding iteration, takes the asyncAfter path.
+    /// be made (tried once, reported once), or a second outstanding iteration,
+    /// takes the asyncAfter path; a wake without a full expiration count runs
+    /// nothing.
     private var iterationTimer: Int32 = -1, nextIteration: (@MainActor () -> Void)?
     func scheduleIteration(after milliseconds: UInt32,_ body: @escaping @MainActor () -> Void) {
-        if iterationTimer < 0 {
+        if iterationTimer == -1 {
+            iterationTimer = -2
             let fd = timerfd_create(CLOCK_MONOTONIC,Int32(TFD_NONBLOCK|TFD_CLOEXEC))
-            if fd >= 0,ALooper_addFd(ALooper_forThread(),fd,Int32(ALOOPER_POLL_CALLBACK),Int32(ALOOPER_EVENT_INPUT),{ fd,_,_ in
-                var expirations: UInt64 = 0; _ = read(fd,&expirations,8)
+            if fd >= 0,let looper = NTSDAndroidApp.shared?.looper,
+               ALooper_addFd(looper,fd,Int32(ALOOPER_POLL_CALLBACK),Int32(ALOOPER_EVENT_INPUT),{ fd,_,_ in
+                var expirations: UInt64 = 0
+                guard read(fd,&expirations,8) == 8 else { return 1 }
                 MainActor.assumeIsolated { NTSDAndroidApp.shared?.host?.fireIteration() }
                 return 1
-            },nil) == 1 { iterationTimer = fd } else if fd >= 0 { close(fd) }
+            },nil) == 1 { iterationTimer = fd }
+            else {
+                if fd >= 0 { close(fd) }
+                Self.report(["event":"androidIterationTimer","fallback":"asyncAfter"])
+            }
         }
         guard iterationTimer >= 0,nextIteration == nil else {
             DispatchQueue.main.asyncAfter(deadline:.now() + .milliseconds(Int(milliseconds))) { MainActor.assumeIsolated { body() } }

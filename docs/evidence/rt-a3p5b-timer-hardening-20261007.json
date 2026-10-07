@@ -1,0 +1,100 @@
+{
+ "study": "docs/research/CORE_REALTIME.md",
+ "phase": "A3 P5b (the Android iteration timer hardened)",
+ "date": "2026-10-07",
+ "design": "the A3 P5a review's findings",
+ "change": "Android only: the timer callback runs the pending iteration only when read returns the 8-byte expiration count; the timerfd setup is tried once (a failure is reported once as androidIterationTimer fallback asyncAfter and later iterations take asyncAfter); the timerfd goes on the app's stored main looper (now readable) instead of ALooper_forThread()",
+ "phone": {
+  "before": [
+   {
+    "label": "rta3p5a-run1",
+    "runSeconds": 300,
+    "peakResidentMB": 1465,
+    "ticksPerSecond": 26.94,
+    "busySeconds": 198.05,
+    "bodies": 1800,
+    "completeMsPerTick": 14.8,
+    "partAssembliesPerTick": 0.0,
+    "menuMsPerStep": 0.74,
+    "menuStepsPerTick": 4.12,
+    "idleMsPerStep": 0.585,
+    "idleIterationMs": 0.66,
+    "idleStepsPerTick": 3.12,
+    "tickStepMs": 1.215,
+    "mainCpuShare": 0.512,
+    "renderCpuShare": 0.369,
+    "mainMsPerTick": 19.0,
+    "renderMsPerTick": 13.7
+   },
+   {
+    "label": "rta3p5a-run2",
+    "runSeconds": 299,
+    "peakResidentMB": 1134,
+    "ticksPerSecond": 26.79,
+    "busySeconds": 197.45,
+    "bodies": 1800,
+    "completeMsPerTick": 14.7,
+    "partAssembliesPerTick": 0.0,
+    "menuMsPerStep": 0.77,
+    "menuStepsPerTick": 4.12,
+    "idleMsPerStep": 0.618,
+    "idleIterationMs": 0.695,
+    "idleStepsPerTick": 3.12,
+    "tickStepMs": 1.232,
+    "mainCpuShare": 0.513,
+    "renderCpuShare": 0.386,
+    "mainMsPerTick": 19.2,
+    "renderMsPerTick": 14.4
+   }
+  ],
+  "after": [
+   {
+    "label": "rta3p5b-run1",
+    "runSeconds": 299,
+    "peakResidentMB": 1480,
+    "ticksPerSecond": 26.71,
+    "busySeconds": 198.5,
+    "bodies": 1800,
+    "completeMsPerTick": 14.8,
+    "partAssembliesPerTick": 0.0,
+    "menuMsPerStep": 0.77,
+    "menuStepsPerTick": 4.12,
+    "idleMsPerStep": 0.621,
+    "idleIterationMs": 0.697,
+    "idleStepsPerTick": 3.12,
+    "tickStepMs": 1.222,
+    "mainCpuShare": 0.514,
+    "renderCpuShare": 0.388,
+    "mainMsPerTick": 19.2,
+    "renderMsPerTick": 14.5
+   },
+   {
+    "label": "rta3p5b-run2",
+    "runSeconds": 299,
+    "peakResidentMB": 1544,
+    "ticksPerSecond": 26.71,
+    "busySeconds": 196.39,
+    "bodies": 1800,
+    "completeMsPerTick": 14.8,
+    "partAssembliesPerTick": 0.0,
+    "menuMsPerStep": 0.77,
+    "menuStepsPerTick": 4.12,
+    "idleMsPerStep": 0.62,
+    "idleIterationMs": 0.695,
+    "idleStepsPerTick": 3.12,
+    "tickStepMs": 1.237,
+    "mainCpuShare": 0.512,
+    "renderCpuShare": 0.404,
+    "mainMsPerTick": 19.2,
+    "renderMsPerTick": 15.1
+   }
+  ],
+  "result": "main 19.0/19.2 -> 19.2/19.2 ms per tick (unchanged within run variation)"
+ },
+ "gates": {
+  "emulator": "vs equal, 1,832 frames identical",
+  "android": "APK builds",
+  "other": "no Mac, headless or Core source changes: the P5a headless, scenario, AppKit and suite results apply"
+ },
+ "review": "answers the P5a review's findings; not separately reviewed"
+}

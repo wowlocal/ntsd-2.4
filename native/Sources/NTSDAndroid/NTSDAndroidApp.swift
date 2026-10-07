@@ -25,7 +25,8 @@ func ntsdAndroidOnCreate(_ activity: UnsafeMutablePointer<ANativeActivity>) {
     static var shared: NTSDAndroidApp?
     let activity: UnsafeMutablePointer<ANativeActivity>, files: URL, data: URL
     private(set) var surface: OpaquePointer?
-    private var input: OpaquePointer?, looper: OpaquePointer?
+    private var input: OpaquePointer?
+    private(set) var looper: OpaquePointer?
     private var dataReady = false, session: OriginalRuntimeSession?
     private(set) var host: NTSDAndroidSessionHost?
 
