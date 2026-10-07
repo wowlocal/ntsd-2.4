@@ -351,7 +351,15 @@ import XCTest
     /// mask words (both sides of a word boundary), over a patterned background
     /// laid by the row copy (values) and over unknown pixels (known bits).
     func testWideSpriteCopiesMatchAPerPixelModel() throws {
-        let r = try D().run(late:false);defer { try? D().close(r) };let b = r.setup.display,(device,_,back,_) = try D().ids(r)
+        try wideSpriteCopies(fullTarget:false)
+        // CORE_REALTIME 1j: over a fully known target (the live app's) the
+        // known source rows take the path without known-bit work; an unknown
+        // source pixel then clears the flag and the bit-gathering path resumes.
+        try wideSpriteCopies(fullTarget:true)
+    }
+    func wideSpriteCopies(fullTarget: Bool) throws {
+        let r = try D().run(late:false,freshSurfacesKnownBlack:fullTarget);defer { try? D().close(r) }
+        let b = r.setup.display,(device,_,back,_) = try D().ids(r)
         let width = 37,height = 1,noiseWidth = 64
         var x: UInt32 = 0x9e3779b9
         func next() -> UInt32 { x ^= x << 13;x ^= x >> 17;x ^= x << 5;return x }
@@ -383,9 +391,24 @@ import XCTest
                 dy += 2
             }
         } } }
-        let p = try b.pixels(back)
+        var p = try b.pixels(back)
         XCTAssertEqual(p.values,values);XCTAssertEqual(p.defined,defined)
-        XCTAssertTrue(p.defined.contains(false),"some target pixels stayed unknown")
+        if fullTarget {
+            XCTAssertFalse(p.defined.contains(false),"every target pixel stays known")
+            XCTAssertEqual(try b.observation(back).knownPixels,p.width*p.height)
+            // An unknown source pixel over the full target clears its bit.
+            let service2 = OriginalMacBitmapService(backend:b,inputs:.init(resources:["unknown":try unknownBitmap()],files:["unknown":.missing]))
+            let (_,e3) = try M().construct(service2,"unknown",device),unknown = try M().surface(e3)
+            _ = try perform(b,blt(unknown,back,[0,0,2,1],[3,Int32(dy),5,Int32(dy+1)]))
+            _ = try perform(b,blt(source,back,[Int32(sx0),0,Int32(sx0+span),1],[0,Int32(dy+2),Int32(span),Int32(dy+3)],key:true,mirror:true))
+            for xx in 0..<span { let v = colors[sx0+span-1-xx]; if v != 0 { values[(dy+2)*stride+xx] = v } }
+            p = try b.pixels(back)
+            XCTAssertEqual(p.defined.filter { !$0 }.count,1,"the unknown pixel's bit is cleared")
+            XCTAssertEqual(p.values[(dy+2)*stride..<(dy+2)*stride+span],values[(dy+2)*stride..<(dy+2)*stride+span])
+            withExtendedLifetime(e3) {}
+        } else {
+            XCTAssertTrue(p.defined.contains(false),"some target pixels stayed unknown")
+        }
         withExtendedLifetime((e1,e2)) {}
     }
     func testKnownFramePresentationClipsToOwnedWindowAndUnknownPreflightIsAtomic() throws {

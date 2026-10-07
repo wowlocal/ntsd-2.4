@@ -148,7 +148,8 @@ while measuring; restore `svc power stayon false` when the loop pauses or stops.
 | 2026-10-07 | Phase 4j: the store's actor-pair checks in one pass | `bindings.store` looked up each of the 400 actors' pairs (a lock, two optional record copies and a compare each; with exclusivity checks 1.5%+ of the main thread); the pairs now keep each model record's buffer identity and answer for all 400 in one lock whether the record still shares the model's buffers, and only the others take the lookup. Main 26.9/27.1 → 25.9/25.6 ms per tick. All 10 scenarios and AppKit equal, frames identical; 55 suites and a unit test that every shortcut answer agrees with the lookup | [evidence](../evidence/rt-4j-pair-identity-20261007.json) | 693348e |
 | 2026-10-07 | Phase 4k: cross-module optimization in release builds | NTSDCore and NTSDRuntime build with `-cross-module-optimization` in release configurations (no semantic flag), so the generic Host, iteration and session code that the runtime uses with one platform type is specialized instead of running through value witnesses (`takeCommitted`: 0 → 4 specialized symbols; binary +5.5%; Mac CPU −2%). Main 25.9/25.6 → 24.9/25.0 ms per tick, message-loop step 1.13 → 0.97 ms. All 10 scenarios and AppKit equal, frames identical; all 172 suites (503 tests) | [evidence](../evidence/rt-4k-cross-module-20261007.json) | 563f1d9 |
 | 2026-10-07 | Phase 4l: the pending loading's values in one shared object | `MenuSession.PendingLoading` (a whole State plus staged lists) is copied and dropped many times per tick (Host attempts, retained stages, the runtime's loaded cycle); its destroys alone were 2.5% of the main thread (DWARF profile `rt4k-dwarf`). Its fixed values now live in one private final class read through `_read` (as 4a), so a copy retains one object. Main 24.9/25.0 → 24.6/24.5 ms per tick, iteration 0.97 → 0.94 ms. All 10 scenarios and AppKit equal, frames identical; all 172 suites (503 tests); review OK | [evidence](../evidence/rt-4l-pending-loading-20261007.json) | 8840eb3 |
-| 2026-10-07 | Phase 4m: the loaded cycle's continuation, pending return and match prelude in shared objects | `Input.PendingContinuation` (~380 references per copy) and `PendingReturn` / `PendingMatchPrelude` (a continuation plus a Snapshot, ~460) are copied in the Host's pending and prepared stages, `LoadedCommit.menu` and every loaded batch; their fixed values now live in one private final class each (as 4a, 4l). Main 24.6/24.5 → 23.8/23.9 ms per tick, iteration 0.94 → 0.89 ms. All 10 scenarios and AppKit equal, frames identical; all 172 suites (503 tests); review OK | [evidence](../evidence/rt-4m-loaded-continuation-20261007.json) | this commit |
+| 2026-10-07 | Phase 4m: the loaded cycle's continuation, pending return and match prelude in shared objects | `Input.PendingContinuation` (~380 references per copy) and `PendingReturn` / `PendingMatchPrelude` (a continuation plus a Snapshot, ~460) are copied in the Host's pending and prepared stages, `LoadedCommit.menu` and every loaded batch; their fixed values now live in one private final class each (as 4a, 4l). Main 24.6/24.5 → 23.8/23.9 ms per tick, iteration 0.94 → 0.89 ms. All 10 scenarios and AppKit equal, frames identical; all 172 suites (503 tests); review OK | [evidence](../evidence/rt-4m-loaded-continuation-20261007.json) | bf5628e |
+| 2026-10-07 | Phase 1j: keyed copies without known-bit work over a full target (render thread) | A row whose source span is fully known over a target whose mask is full (always in the live app) takes only the key test and the store; the bits it would gather are already set and none is cleared. A12 benchmark of 300 keyed 80×80 blits: 18.6 → 11.3 ms per frame (branchless 21.5 and SIMD 19.6 ms: the phone is bound by memory traffic, which explains 1h); present passes cost ~1.7 ms per frame whatever the per-pixel work. Render thread 18.1 → 17.5 ms per tick. All 10 scenarios and AppKit equal, frames identical; 12 suites incl. the per-pixel model over a full target | [evidence](../evidence/rt-1j-keyed-full-target-20261007.json) | this commit |
 
 ## Next task
 
@@ -172,11 +173,10 @@ still ~19 ms around a ~8.5 ms gameplay body; reference counting ~13% of the
 main thread; message-loop iterations 4.12 × 1.14 ms; render thread 18.7 ms,
 ~85% blitting (`copyPixels` and its row copies). In flight:
 
-- **1j** (render thread): keyed copies without per-pixel known-bit work when
-  the source span and the whole target are known (always in the live app).
-  A12 benchmark of 300 keyed 80×80 blits per frame: 18.6 → 11.3 ms (same
-  pixels); branchless and SIMD variants were slower (21.5, 19.6 ms: the phone
-  is bound by memory traffic, which explains 1h).
+- **Render passes** ([plan](CORE_REALTIME_RENDER_PASSES.md)): render 17.5 ms
+  per tick after 1j; each full-frame pass costs ~1.7 ms on the A12. P1 (the
+  present's back-buffer copy and crop fused) next, then P2 (the back buffer
+  lent as the frame).
 - Next boxing candidates (4m review): `MenuSession.LoadedOwners`,
   `LoadedMenuSession.Snapshot`, the Host's `DeliveryContext`.
 - **Idle iterations** ([A3 design](CORE_REALTIME_A3.md)): ~1 ms each, three per
