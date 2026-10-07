@@ -49,6 +49,16 @@ import NTSDCore
     func terminate()
     /// WinMain's return or a scripted boundary: the process exits now.
     func exit(_ code: Int32) -> Never
+    /// Runs `body` once on the main thread after `milliseconds`: the next
+    /// message-loop iteration, which each iteration schedules (one at a time).
+    /// The default is the main dispatch queue's `asyncAfter`.
+    func scheduleIteration(after milliseconds: UInt32,_ body: @escaping @MainActor () -> Void)
+}
+
+public extension OriginalRuntimeSessionHost {
+    func scheduleIteration(after milliseconds: UInt32,_ body: @escaping @MainActor () -> Void) {
+        DispatchQueue.main.asyncAfter(deadline:.now() + .milliseconds(Int(milliseconds))) { MainActor.assumeIsolated { body() } }
+    }
 }
 
 /// `--original`: run the recovered WinMain on the host's services and runtime
@@ -292,9 +302,7 @@ public enum OriginalRuntimeSessionBoundary: Error, Equatable {
         } catch { stop(error) }
     }
     private func schedule(_ milliseconds: UInt32) {
-        DispatchQueue.main.asyncAfter(deadline:.now() + .milliseconds(Int(milliseconds))) { [weak self] in
-            MainActor.assumeIsolated { self?.iterate() }
-        }
+        host.scheduleIteration(after:milliseconds) { [weak self] in self?.iterate() }
     }
     private func iterate() {
         guard let menu,let started,!stopped else { return }

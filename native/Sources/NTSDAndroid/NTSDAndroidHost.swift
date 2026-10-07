@@ -166,6 +166,39 @@ final class NTSDAndroidCursor {}
         self.musicDirectory = musicDirectory; self.files = files; self.density = density
     }
     static func report(_ value: [String:Any]) { OriginalRuntimeSession.emit(value) }
+    /// The next message-loop iteration on a timerfd on the main looper
+    /// (CORE_REALTIME A3 P5): arming it is one syscall on this thread, where
+    /// the main dispatch queue's asyncAfter woke libdispatch's manager thread
+    /// for every iteration. The same monotonic deadline; a timerfd that cannot
+    /// be made, or a second outstanding iteration, takes the asyncAfter path.
+    private var iterationTimer: Int32 = -1, nextIteration: (@MainActor () -> Void)?
+    func scheduleIteration(after milliseconds: UInt32,_ body: @escaping @MainActor () -> Void) {
+        if iterationTimer < 0 {
+            let fd = timerfd_create(CLOCK_MONOTONIC,Int32(TFD_NONBLOCK|TFD_CLOEXEC))
+            if fd >= 0,ALooper_addFd(ALooper_forThread(),fd,Int32(ALOOPER_POLL_CALLBACK),Int32(ALOOPER_EVENT_INPUT),{ fd,_,_ in
+                var expirations: UInt64 = 0; _ = read(fd,&expirations,8)
+                MainActor.assumeIsolated { NTSDAndroidApp.shared?.host?.fireIteration() }
+                return 1
+            },nil) == 1 { iterationTimer = fd } else if fd >= 0 { close(fd) }
+        }
+        guard iterationTimer >= 0,nextIteration == nil else {
+            DispatchQueue.main.asyncAfter(deadline:.now() + .milliseconds(Int(milliseconds))) { MainActor.assumeIsolated { body() } }
+            return
+        }
+        // A zero it_value disarms the timer: 0 ms is armed as 1 ns.
+        let nanoseconds = max(1,Int(milliseconds)*1_000_000)
+        var spec = itimerspec()
+        spec.it_value.tv_sec = nanoseconds/1_000_000_000; spec.it_value.tv_nsec = nanoseconds%1_000_000_000
+        nextIteration = body
+        if timerfd_settime(iterationTimer,0,&spec,nil) != 0 {
+            nextIteration = nil
+            DispatchQueue.main.asyncAfter(deadline:.now() + .milliseconds(Int(milliseconds))) { MainActor.assumeIsolated { body() } }
+        }
+    }
+    fileprivate func fireIteration() {
+        guard let body = nextIteration else { return }
+        nextIteration = nil; body()
+    }
     func mouse(_ message: UInt32,x: Int32,y: Int32,buttons: UInt32) {
         if let w = windows.shown { cursor = (Int32(w.origin.x)+x,Int32(w.origin.y)+y) }
         guard let session,let messages = session.messages,!session.stopped,!session.scripted else { return }

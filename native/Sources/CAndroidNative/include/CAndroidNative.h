@@ -10,6 +10,8 @@
 #include <android/native_activity.h>
 #include <android/native_window.h>
 #include <sys/eventfd.h>
+#include <sys/timerfd.h>
+#include <unistd.h>
 
 // libdispatch's main-queue hooks, the ones CoreFoundation's run loop uses: the
 // host puts the main queue's eventfd on the main thread's ALooper and drains it.
