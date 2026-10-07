@@ -1,0 +1,86 @@
+{
+ "study": "docs/research/CORE_REALTIME.md",
+ "phase": "B2 P2b (one received-input core; the entry rollback test throws inside the chain)",
+ "date": "2026-10-07",
+ "design": "the B2 P2 review's findings",
+ "change": "receiveInput copies and runs receiveInputInPlace, which now takes the afterRemote observer and uses private in-place remote and playback steps shared with remoteInput and playbackInput (one copy of the command-extent check and its error text); the rollback test of the initial match entry also throws at the control, received and replay checkpoints, right after the in-place sub-steps wrote the entry's candidate",
+ "phone": {
+  "before": [
+   {
+    "label": "rtb2p2-run3",
+    "runSeconds": 299,
+    "peakResidentMB": 1064,
+    "ticksPerSecond": 25.9,
+    "busySeconds": 196.46,
+    "bodies": 1800,
+    "completeMsPerTick": 14.6,
+    "partAssembliesPerTick": 0.0,
+    "menuMsPerStep": 0.84,
+    "menuStepsPerTick": 4.12,
+    "mainCpuShare": 0.52,
+    "renderCpuShare": 0.406,
+    "mainMsPerTick": 20.1,
+    "renderMsPerTick": 15.7
+   },
+   {
+    "label": "rtb2p2-run4",
+    "runSeconds": 305,
+    "peakResidentMB": 1503,
+    "ticksPerSecond": 25.82,
+    "busySeconds": 199.66,
+    "bodies": 1800,
+    "completeMsPerTick": 14.8,
+    "partAssembliesPerTick": 0.0,
+    "menuMsPerStep": 0.84,
+    "menuStepsPerTick": 4.12,
+    "mainCpuShare": 0.518,
+    "renderCpuShare": 0.403,
+    "mainMsPerTick": 20.1,
+    "renderMsPerTick": 15.6
+   }
+  ],
+  "after": [
+   {
+    "label": "rtb2p2b-run1",
+    "runSeconds": 300,
+    "peakResidentMB": 1496,
+    "ticksPerSecond": 25.82,
+    "busySeconds": 198.79,
+    "bodies": 1800,
+    "completeMsPerTick": 14.8,
+    "partAssembliesPerTick": 0.0,
+    "menuMsPerStep": 0.83,
+    "menuStepsPerTick": 4.12,
+    "mainCpuShare": 0.517,
+    "renderCpuShare": 0.423,
+    "mainMsPerTick": 20.0,
+    "renderMsPerTick": 16.4
+   },
+   {
+    "label": "rtb2p2b-run2",
+    "runSeconds": 305,
+    "peakResidentMB": 1313,
+    "ticksPerSecond": 25.88,
+    "busySeconds": 198.62,
+    "bodies": 1800,
+    "completeMsPerTick": 14.7,
+    "partAssembliesPerTick": 0.0,
+    "menuMsPerStep": 0.82,
+    "menuStepsPerTick": 4.12,
+    "mainCpuShare": 0.517,
+    "renderCpuShare": 0.403,
+    "mainMsPerTick": 20.0,
+    "renderMsPerTick": 15.6
+   }
+  ],
+  "result": "main 20.1/20.1 -> 20.0/20.0 ms per tick (no change beyond run variation)"
+ },
+ "gates": {
+  "headless": "vs equal, 1,832 frames identical",
+  "scenarios": "all 10 equal, frames identical (rt-b2p2b-all)",
+  "AppKit": "vs and playback equal, 3,960 frames identical to the B2 P2 AppKit run",
+  "emulator": "vs equal, 1,832 frames identical",
+  "tests": "bundle A (native tree db5eb904, the same as this commit's): 73 suites, 203 tests, pass, incl. menu startup, every input, replay and round suite, and every gameplay, post-draw and lifecycle suite"
+ },
+ "review": "follows the B2 P2 review's findings (doc comment, duplicated receive logic); not separately reviewed (no new mechanism)"
+}
