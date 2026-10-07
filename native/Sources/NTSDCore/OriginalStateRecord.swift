@@ -188,6 +188,9 @@ public struct OriginalStateRecord: Equatable, Sendable {
         let bytes = flatBytes.withUnsafeBufferPointer { UInt(bitPattern: $0.baseAddress) }
         return (bytes, flatDefined.withUnsafeBufferPointer { UInt(bitPattern: $0.baseAddress) })
     }
+    /// An empty record that allocates nothing: what an in-place pass leaves in
+    /// a caller's field while it holds the value (CORE_REALTIME B2).
+    static let vacant = try! OriginalStateRecord(bytes: [], defined: [])
     /// Whether both are flat and share their byte and definedness buffers.
     func sharesStorage(with other: OriginalStateRecord) -> Bool {
         guard pages == nil, parts == nil, other.pages == nil, other.parts == nil, flatBytes.count == other.flatBytes.count else { return false }
@@ -619,4 +622,12 @@ public struct OriginalStateRecord: Equatable, Sendable {
         record.zero(0..<0x194)
         return record
     }
+}
+
+/// Moves `value` out, leaving `placeholder` (CORE_REALTIME B2): an in-place
+/// pass then holds the only reference, so its writes change no shared buffer.
+@inline(__always) func inPlaceTake<T>(_ value: inout T, leaving placeholder: T) -> T {
+    var taken = placeholder
+    swap(&taken, &value)
+    return taken
 }

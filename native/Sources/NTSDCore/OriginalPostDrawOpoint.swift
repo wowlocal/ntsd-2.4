@@ -41,11 +41,20 @@ public enum OriginalPostDrawOpoint {
                       requestSlot: inout OriginalRequestSlotWord?,
                       precision: OriginalArithmeticPrecision, sse2: Bool, objectCount: Int32,
                       header: (Int) throws -> OriginalStateRecord, frame: (Int, Int32) throws -> OriginalStateRecord,
-                      observe: (OriginalPostDrawSlotEvent) throws -> Void = { _ in }) throws -> OriginalPostDrawOpointContinuation {
+                      observe: (OriginalPostDrawSlotEvent) throws -> Void = { _ in }, inPlace: Bool = false) throws -> OriginalPostDrawOpointContinuation {
         guard (0..<400).contains(slot) else { throw error("Slot extent") }
         return try withoutActuallyEscaping(header) { headers in
             try withoutActuallyEscaping(frame) { frames in
                 try withoutActuallyEscaping(observe) { observer in
+                    if inPlace {
+                        // The caller's records moved in and written back on every
+                        // path (CORE_REALTIME B2; callers that drop them on throw).
+                        var body = Body(world: inPlaceTake(&world, leaving: .vacant), actors: inPlaceTake(&actors, leaving: []),
+                                        requestSlot: requestSlot, slot: slot, precision: precision, sse2: sse2,
+                                        objectCount: objectCount, header: headers, frame: frames, observe: observer)
+                        defer { world = body.world; actors = body.actors; requestSlot = body.requestSlot }
+                        return try body.run()
+                    }
                     var body = Body(world: world, actors: actors, requestSlot: requestSlot, slot: slot, precision: precision, sse2: sse2,
                                     objectCount: objectCount, header: headers, frame: frames, observe: observer)
                     let result = try body.run()

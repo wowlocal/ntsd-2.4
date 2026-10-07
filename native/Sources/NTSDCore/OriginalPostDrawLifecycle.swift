@@ -293,12 +293,19 @@ public enum OriginalPostDrawLifecycle {
         mutating func run(prefix: Bool) throws {
             let converted = self.converted
             if prefix {
-                let active = try OriginalPostDrawSlotPrefix.apply(world: &world, actors: &actors, globals: &globals, slot: slot,
-                    retainedObjectIndex: &scratch.particleObject, requestSlot: &scratch.requestSlot, objectCount: objectCount, library: &library, header: header, frame: frame, observe: converted)
+                // Per slot in place: this body is dropped when a slot throws
+                // (CORE_REALTIME B2), so the slot passes write its records
+                // without copying them.
+                let headers = header, frames = frame, current = slot
+                let active = try OriginalPostDrawSlotPrefix.apply(world: &world, actors: &actors, globals: &globals, slot: current,
+                    retainedObjectIndex: &scratch.particleObject, requestSlot: &scratch.requestSlot, objectCount: objectCount, library: &library,
+                    header: headers, frame: frames, observe: converted, inPlace: true)
                 if !active { return }
             }
-            let continuation = try OriginalPostDrawOpoint.apply(world: &world, actors: &actors, slot: slot,
-                requestSlot: &scratch.requestSlot, precision: precision, sse2: sse2, objectCount: objectCount, header: header, frame: frame, observe: converted)
+            let headers = header, frames = frame, current = slot, precision = precision, sse2 = sse2, objectCount = objectCount
+            let continuation = try OriginalPostDrawOpoint.apply(world: &world, actors: &actors, slot: current,
+                requestSlot: &scratch.requestSlot, precision: precision, sse2: sse2, objectCount: objectCount, header: headers, frame: frames,
+                observe: converted, inPlace: true)
             if continuation == .nextSlot { return }
             let parent = try index(slot)
             if try continuation == .weaponCreation && !weapon(parent) { try command(parent) }

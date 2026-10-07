@@ -19,10 +19,25 @@ public enum OriginalActorScheduler {
         }, observe: observe)
     }
 
+    /// `inPlace` (CORE_REALTIME B2): the caller's actor and globals are moved
+    /// into the pass and written back on every path, so a throw leaves the
+    /// pass's partial writes in them; only for callers that drop their values
+    /// when this throws. Otherwise all or nothing, as before.
     static func apply(actor: inout OriginalStateRecord, header: OriginalStateRecord,
                       globals: inout OriginalStateRecord, mode: Int32, slot: Int32,
                       frame: (Int32) throws -> OriginalStateRecord,
-                      observe: (OriginalActorScheduleEvent) throws -> Void = { _ in }) throws {
+                      observe: (OriginalActorScheduleEvent) throws -> Void = { _ in }, inPlace: Bool = false) throws {
+        if inPlace {
+            try withoutActuallyEscaping(frame) { frames in
+                try withoutActuallyEscaping(observe) { observer in
+                    var body = Body(actor: inPlaceTake(&actor, leaving: .vacant), globals: inPlaceTake(&globals, leaving: .vacant),
+                                    header: header, mode: mode, slot: slot, frame: frames, observe: observer)
+                    defer { actor = body.actor; globals = body.globals }
+                    try body.run()
+                }
+            }
+            return
+        }
         var candidate = actor, owned = globals
         try withoutActuallyEscaping(frame) { frames in
             try withoutActuallyEscaping(observe) { observer in

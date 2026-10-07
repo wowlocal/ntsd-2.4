@@ -1,0 +1,72 @@
+{
+ "study": "docs/research/CORE_REALTIME.md",
+ "phase": "B2 P1 (post-draw slot passes and the actor scheduler in place)",
+ "date": "2026-10-07",
+ "design": "docs/research/CORE_REALTIME_B2.md (P0+P1)",
+ "profile_before": "phone DWARF profile rtr1b-dwarf: OriginalPostDrawLifecycle.Body.run 10.3% of the main thread inclusive; per slot (400 per tick) the slot prefix and opoint copied world, actors and globals into a private Body and assigned back, so a write inside made the caller's still-referenced buffers copy on write (the 400-entry actors array, the world record, the 92 KB globals), and the prefix's scheduler call copied the actor and globals again",
+ "change": "OriginalStateRecord.vacant and inPlaceTake(_:leaving:) (P0); the actor scheduler, the slot prefix and the opoint gain an inPlace mode (default false = all or nothing as before) that moves the caller's records into the pass and writes them back in a defer; the post-draw lifecycle's Body.run calls the prefix and opoint in place (the lifecycle's world-level apply still copies once and assigns back only after the loop) and the prefix calls the scheduler in place on its own actor and globals",
+ "phone": {
+  "before": [
+   {
+    "label": "rt4q-run1",
+    "bodies": 1800,
+    "completeMsPerTick": 16.4,
+    "partAssembliesPerTick": 0.0,
+    "menuMsPerStep": 0.83,
+    "menuStepsPerTick": 4.12,
+    "mainCpuShare": 0.542,
+    "renderCpuShare": 0.407,
+    "mainMsPerTick": 21.9,
+    "renderMsPerTick": 16.4
+   },
+   {
+    "label": "rt4q-run2",
+    "bodies": 1800,
+    "completeMsPerTick": 16.3,
+    "partAssembliesPerTick": 0.0,
+    "menuMsPerStep": 0.82,
+    "menuStepsPerTick": 4.12,
+    "mainCpuShare": 0.54,
+    "renderCpuShare": 0.394,
+    "mainMsPerTick": 21.7,
+    "renderMsPerTick": 15.8
+   }
+  ],
+  "after": [
+   {
+    "label": "rtb2p1-run1",
+    "bodies": 1800,
+    "completeMsPerTick": 15.6,
+    "partAssembliesPerTick": 0.0,
+    "menuMsPerStep": 0.82,
+    "menuStepsPerTick": 4.12,
+    "mainCpuShare": 0.529,
+    "renderCpuShare": 0.399,
+    "mainMsPerTick": 20.9,
+    "renderMsPerTick": 15.8
+   },
+   {
+    "label": "rtb2p1-run2",
+    "bodies": 1800,
+    "completeMsPerTick": 15.7,
+    "partAssembliesPerTick": 0.0,
+    "menuMsPerStep": 0.83,
+    "menuStepsPerTick": 4.12,
+    "mainCpuShare": 0.529,
+    "renderCpuShare": 0.418,
+    "mainMsPerTick": 20.9,
+    "renderMsPerTick": 16.5
+   }
+  ],
+  "result": "main 21.9/21.7 -> 20.9/20.9 ms per tick, complete 16.4/16.3 -> 15.6/15.7 ms",
+  "note": "the rows keep the fields recorded in the session; the rest were only in terminal output deleted by the Mac's restart at about 12:50"
+ },
+ "gates": {
+  "headless": "vs equal, 1,832 frames identical (frozen B2 P1 binary)",
+  "scenarios": "all 10 equal (before the restart); frames identical, recompared after it (rt-b2p1-all)",
+  "AppKit": "vs and playback equal; 3,960 frames identical to the 4q AppKit run (recompared after the restart)",
+  "emulator": "vs equal, 1,832 frames identical (before the restart)",
+  "tests": "bundle A (native tree 3408c368, the same as this commit's): all 173 suites, 504 tests, pass: 50 before the restart, the 2 interrupted and the 121 not yet run rerun on the same bundle after it (logs rtb2p1-* and rtb2p1r-*); the transactional default is pinned by the existing prefix, opoint, scheduler and lifecycle rollback tests"
+ },
+ "review": "independent read-only review: approve; discard proof holds (the lifecycle's Body is a copy assigned back only after the 400-slot loop; the prefix's Body is a copy in its default mode; no try?, catch or retry in the chain); write-back complete on every path; no closure reads moved-out storage (closures capture locals); no exclusivity violation; success path identical (the scheduler's header is read before the inout accesses, which changes no order). Test gaps and the duplicated Body construction are addressed in the follow-up (B2 P1b)."
+}
