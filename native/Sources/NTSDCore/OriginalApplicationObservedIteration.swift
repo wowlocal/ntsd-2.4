@@ -90,9 +90,20 @@ public final class OriginalApplicationObservedIteration<Platform: OriginalApplic
     public struct Inline {
         public let accepts: (Exchange.Request) -> Bool
         public let serve: (Exchange.Permit, Exchange) throws -> Void
-        public init(accepts: @escaping (Exchange.Request) -> Bool,serve: @escaping (Exchange.Permit, Exchange) throws -> Void) {
-            self.accepts = accepts;self.serve = serve
+        /// The message-queue reply for `resumeIdleFirst`'s idle attempt, served
+        /// without a permit (CORE_REALTIME A3 L4a): the same bound, counting
+        /// and answer as `accepts` and `serve` give a queue request, or nil to
+        /// decline (the request then takes the permit path).
+        public let direct: ((OriginalApplicationMessageLoop.Request) throws -> OriginalApplicationMessageLoop.Response?)?
+        public init(accepts: @escaping (Exchange.Request) -> Bool,serve: @escaping (Exchange.Permit, Exchange) throws -> Void,
+                    direct: ((OriginalApplicationMessageLoop.Request) throws -> OriginalApplicationMessageLoop.Response?)? = nil) {
+            self.accepts = accepts;self.serve = serve;self.direct = direct
         }
+    }
+    /// The replies (and a failure) the idle attempt's direct cursor served,
+    /// added to the exchange once, before anything reads it (A3 L4a).
+    private final class DirectLog {
+        var replies: [Exchange.Receipt] = [],failure: (Exchange.Request,String)?,recorded = false
     }
     /// The cursor stays in the committed or pending platform after the attempt;
     /// the attempt disarms this on exit so a stored cursor suspends and does not
@@ -151,7 +162,31 @@ public final class OriginalApplicationObservedIteration<Platform: OriginalApplic
         try attempt {
             let gate = inline.map(Gate.init)
             defer { gate?.inline = nil }
-            let idle = try makeCursor(gate)
+            // Queue requests with a direct server are answered without a claim,
+            // permit or service record and added to the exchange in one call
+            // before it is read: at publication, before the whole step's
+            // cursor, before a claim, or on a failure (CORE_REALTIME A3 L4a).
+            let log = DirectLog()
+            func flush() throws {
+                guard !log.recorded else { return }
+                try exchange.record(log.replies)
+                if let failure = log.failure { try exchange.recordFailure(failure.0,diagnostic:failure.1) }
+                // The stored cursor keeps the log; it no longer needs the replies.
+                log.recorded = true;log.replies = []
+            }
+            let idle: Exchange.Cursor
+            if inline?.direct != nil {
+                idle = try exchange.directCursor { [gate] request in
+                    guard case .queue(let q) = request,let direct = gate?.inline?.direct else { return nil }
+                    do {
+                        guard let reply = try direct(q) else { return nil }
+                        let response = Exchange.Response.queue(reply)
+                        guard request.accepts(response) else { throw Exchange.Boundary.responseMismatch }
+                        log.replies.append(.init(request:request,response:response,resources:[]))
+                        return response
+                    } catch { log.failure = (request,String(reflecting:error)); throw error }
+                }
+            } else { idle = try makeCursor(gate); log.recorded = true }
             var inputs: Host.Inputs?
             func prepared(_ p: Platform,_ state: Host.Session.State,_ cursor: Exchange.Cursor) throws -> Host.Inputs {
                 p.iterationDelivery.begin(cursor)
@@ -162,15 +197,17 @@ public final class OriginalApplicationObservedIteration<Platform: OriginalApplic
                 if let outcome = try host.stepIdle(prepare:{ p,state in try prepared(p,state,idle) },queue:{ q,p in
                     guard case .queue(let r) = try p.iterationDelivery.response(for:.queue(q)) else { throw Boundary.invalidResponse }
                     return r
-                },beforePublication:{ p in try self.finishPublication(p,beforePublication) },expectedSequence:sequence) {
+                },beforePublication:{ p in try flush(); try self.finishPublication(p,beforePublication) },expectedSequence:sequence) {
                     return .advanced(outcome)
                 }
+                try flush()
                 let full = try makeCursor(gate)
                 return .advanced(try fullStep(prepare:{ p,state in try prepared(p,state,full) },observesCommit:false,
                                               beforePublication:beforePublication,network:network))
             } catch let needed as Exchange.RequestNeeded {
+                try flush()
                 return .request(try exchange.claim(needed))
-            }
+            } catch { try? flush(); throw error }
         }
     }
     private func makeCursor(_ gate: Gate?) throws -> Exchange.Cursor {

@@ -376,6 +376,97 @@ import XCTest
         XCTAssertGreaterThan(failures,0,"some clock failures reached a step")
     }
 
+    /// CORE_REALTIME A3 L4a: the idle attempt's direct queue server leaves the
+    /// iteration driver's exchange as the permit-served path does (receipts,
+    /// status, outstanding request, service flag, failure) with the same
+    /// outcome, committed sequence and idle commits, for a committed idle
+    /// iteration, one with a queued message (the whole step after the idle
+    /// attempt's replies), a bound decline, a failing answer and a refused reply.
+    /// Each runs right after the timer's whole step, so the attempt starts idle.
+    func testDirectIdleAttemptKeepsTheExchangeState() throws {
+        typealias Driver = OriginalApplicationObservedIteration<OriginalApplicationPreparedStartupPlatform>
+        typealias Loop = OriginalApplicationMessageLoop
+        struct Fail: Error {}
+        enum Case: String, CaseIterable { case idle,message,bound,failure,mismatch }
+        func run(direct: Bool,_ kind: Case) throws -> (log: [String],directCalls: Int) {
+            let root = FileManager.default.temporaryDirectory.appendingPathComponent("ntsd-direct-\(UUID().uuidString)",isDirectory:true)
+            defer { try? FileManager.default.removeItem(at:root) }
+            let (started,package) = try startup(root)
+            while try started.host.takeCommitted() != nil {}
+            var now: UInt32 = 5_000_000
+            let menu = try OriginalMacRuntimeMenu(started,inputs:package,clock:{ now &+= 7; return now })
+            for _ in 0..<400 where try XCTUnwrap(started.host.snapshot.session).state.settings == nil {
+                guard case .committed = try menu.step() else { throw Stop.limit }
+            }
+            for _ in 0..<40 { guard case .committed = try menu.step() else { throw Stop.limit } }
+            // Up to the timer's whole step (no idle commit): the next
+            // iteration's timer is not due yet.
+            for _ in 0..<20 {
+                let before = started.host.idleCommitCount
+                guard case .committed = try menu.step() else { throw Stop.limit }
+                if started.host.idleCommitCount == before { break }
+            }
+            let idleCommits = started.host.idleCommitCount
+            if kind == .message {
+                let key = try XCTUnwrap(Key.table[0x00]); menu.messages.key(key,down:true,characters:"a")
+            }
+            var served = 0,directCalls = 0
+            let bound = kind == .bound ? 1 : 100
+            func answer(_ q: Loop.Request) throws -> Loop.Response {
+                if kind == .failure && served == 2 { throw Fail() }
+                let r = try menu.messages.answer(q)
+                // Output writes on a time reply: `accepts` refuses it.
+                return kind == .mismatch && q.kind == .time ? .init(result:r.result,writes:[.init(offset:0,bytes:[1])]) : r
+            }
+            // The runtime's inline service: queue requests within the bound and
+            // the window Blt (CORE_REALTIME M2b) through the front service.
+            let inline = Driver.Inline(accepts:{ q in
+                switch q {
+                case .queue: return served < bound
+                case .graphics(.window(let w)) where w.kind == "blt": return served < bound
+                default: return false
+                }
+            },serve:{ permit,exchange in
+                if case .graphics = permit.request { served += 1; try menu.front.serve(permit,on:exchange); return }
+                guard case .queue(let q) = permit.request else { throw Fail() }
+                served += 1
+                try exchange.beginService(permit)
+                do { try exchange.answer(permit,response:.queue(try answer(q))) }
+                catch { try exchange.fail(permit,diagnostic:String(reflecting:error)); throw error }
+            },direct:direct ? { q in
+                guard served < bound else { return nil }
+                served += 1; directCalls += 1
+                return try answer(q)
+            } : nil)
+            let driver = Driver(host:started.host),outcome: String
+            do {
+                switch try driver.resumeIdleFirst(prepare:{ _,state in try menu.inputs(state) },network:false,inline:inline) {
+                case .request(let permit): outcome = "request \(permit.ordinal) \(permit.request)"
+                case .advanced(let o): outcome = "advanced \(o)"
+                }
+            } catch { outcome = "error \(error)" }
+            let s = driver.exchangeSnapshot
+            return (["\(kind.rawValue) \(outcome)","status \(s.status)","outstanding \(String(describing:s.outstandingRequest))",
+                     "service \(s.serviceStarted)","failure \(String(describing:s.failure?.request)) \(s.failure?.diagnostic ?? "-") \(String(describing:s.failure?.afterCancellation))",
+                     "receipts \(s.receipts.map { "\($0.request) \($0.response) \($0.resources.count)" })","served \(served)",
+                     "sequence \(started.host.committedSequence)","pending \(started.host.pendingBatchCount)",
+                     "idle commits \(started.host.idleCommitCount - idleCommits)"],directCalls)
+        }
+        for kind in Case.allCases {
+            let lane = try run(direct:true,kind),permits = try run(direct:false,kind)
+            XCTAssertEqual(lane.log,permits.log,kind.rawValue)
+            XCTAssertGreaterThan(lane.directCalls,0,"\(kind.rawValue) went through the direct server")
+            XCTAssertEqual(permits.directCalls,0)
+            let outcome = lane.log[0],idle = lane.log.last!
+            switch kind {
+            case .idle: XCTAssertTrue(outcome.contains("advanced") && idle == "idle commits 1",outcome+" "+idle)
+            case .message: XCTAssertTrue(idle == "idle commits 0" && !outcome.contains("error"),outcome+" "+idle)
+            case .bound: XCTAssertTrue(outcome.contains("request 1"),outcome)
+            case .failure,.mismatch: XCTAssertTrue(outcome.contains("error"),outcome)
+            }
+        }
+    }
+
     /// The end of the menu track: EC_COMPLETE and the registered 0x400 go through
     /// PeekMessage/DispatchMessage into the recovered WndProc graph callback.
     func testGraphNotificationRestartsTheMenuTrack() throws {

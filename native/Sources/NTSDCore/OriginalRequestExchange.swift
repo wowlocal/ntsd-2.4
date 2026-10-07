@@ -134,6 +134,37 @@ public final class OriginalRequestExchange<Input: OriginalExchangeRequest, Resou
         }
         return cursor
     }
+    /// Cursor over all current receipts whose missing requests `serve` answers
+    /// directly, without a claim, permit or service record (CORE_REALTIME A3
+    /// L4a); nil from `serve` suspends the cursor as a permit cursor does. Its
+    /// replies stay in the cursor until `record` adds them here.
+    public func directCursor(_ serve: @escaping (Request) throws -> Response?) throws -> Cursor {
+        var cursor = try snapshot.cursor()
+        cursor.inline = { ticket in
+            guard let response = try serve(ticket.request) else { return nil }
+            return Receipt(request: ticket.request, response: response, resources: [])
+        }
+        return cursor
+    }
+    /// Adds replies a direct cursor served, in order, as their claims and
+    /// answers would have (CORE_REALTIME A3 L4a).
+    public func record(_ replies: [Receipt]) throws {
+        try locked {
+            guard status == .open else { throw Boundary.closed(status) }
+            guard active == nil else { throw Boundary.requestInFlight }
+            receipts.append(contentsOf: replies)
+        }
+    }
+    /// A direct server's failure, as `fail` records it after a claim
+    /// (CORE_REALTIME A3 L4a).
+    public func recordFailure(_ request: Request, diagnostic: String) throws {
+        try locked {
+            guard status == .open else { throw Boundary.closed(status) }
+            guard active == nil else { throw Boundary.requestInFlight }
+            failure = .init(request: request, diagnostic: diagnostic, afterCancellation: false, resources: [])
+            serviceStarted = false; status = .indeterminate
+        }
+    }
     /// Call after the Core attempt has unwound, before performing the operation.
     /// A claim is not success and supplies no numeric response to Core.
     public func claim(_ ticket: RequestNeeded) throws -> Permit {

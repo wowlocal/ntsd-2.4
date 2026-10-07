@@ -155,6 +155,12 @@ import NTSDCore
             served += 1; requests += 1; lastRequest = permit.request
             if case .graphics = permit.request { try front.serve(permit,on:exchange) }
             else { try messages.serve(permit,on:exchange) }
+        },direct:{ [unowned self] q in
+            // The idle attempt's queue requests without a permit (CORE_REALTIME
+            // A3 L4a): the bound, counters and answer of the two closures above.
+            guard served+1 < maximumRequests else { return nil }
+            served += 1; requests += 1; lastRequest = .queue(q)
+            return try messages.answer(q)
         }) : nil
         while served < maximumRequests {
             // No beforeCommit observer here: the menu session skips the merged

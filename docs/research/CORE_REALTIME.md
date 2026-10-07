@@ -178,7 +178,8 @@ while measuring; restore `svc power stayon false` when the loop pauses or stops.
 | 2026-10-07 | A3 P5b: the Android iteration timer hardened | The P5a review's follow-up: the iteration runs only on a full 8-byte expiration read, a failed timer setup is tried once and reported, and the timer uses the app's main looper. Main 19.2/19.2 ms per tick; the emulator equal, frames identical | [evidence](../evidence/rt-a3p5b-timer-hardening-20261007.json) | 8ac7969 |
 | 2026-10-07 | 4u: gate binaries from clean builds | The L3 AppKit gate's incrementally built app crashed at startup: its unchanged NTSDApp module had `OriginalRuntimeSession`'s allocating init inlined with the size from before A3 P0 (448 of 472 bytes), so `init` wrote past the object (Guard Malloc). `-disable-incremental-imports` did not help (probe reverted). Gate binaries now come from clean builds, and HEAD was regated so: all 10 scenarios, AppKit and the emulator equal, frames identical; 173 suites; 20 of 20 launches clean; main 19.3/19.2 ms per tick | [evidence](../evidence/rt-4u-clean-gate-builds-20261007.json) | 180d845 |
 | 2026-10-07 | Phase 4s: bitmap draws read their words in place | `OriginalBitmapDrawing.word` read the computed `bytes` array up to six times per word, retaining and releasing it each time (3.1% of the main thread); it reads the raw little-endian word in place (`rawWord(at:)`, defined or not, as before). Main 19.3/19.2 → 18.9/18.8 ms per tick. Clean builds: all 10 scenarios, AppKit and the emulator equal, frames identical; all 174 suites; review OK | [evidence](../evidence/rt-4s-bitmap-raw-words-20261007.json) | cbb15b5 |
-| 2026-10-07 | Phase 4t: the loaded cycle's finish without copies | The runtime's `finish` copied the frame's graphics commands before replaying them and wrapped every operation in single-element arrays for the music and sound helpers; it replays the slice and passes operations one at a time. Main 18.9/18.8 → 18.6/18.5 ms per tick. Clean builds: all 10 scenarios, AppKit and the emulator equal, frames identical; the runtime suites pass; review OK | [evidence](../evidence/rt-4t-finish-copies-20261007.json) | this commit |
+| 2026-10-07 | Phase 4t: the loaded cycle's finish without copies | The runtime's `finish` copied the frame's graphics commands before replaying them and wrapped every operation in single-element arrays for the music and sound helpers; it replays the slice and passes operations one at a time. Main 18.9/18.8 → 18.6/18.5 ms per tick. Clean builds: all 10 scenarios, AppKit and the emulator equal, frames identical; the runtime suites pass; review OK | [evidence](../evidence/rt-4t-finish-copies-20261007.json) | 8d888a3 |
+| 2026-10-07 | A3 L4a: the idle attempt's queue requests without permits | Each idle request went through the iteration exchange's claim, permit, service record and answer (with their locks and a permit object); with a direct server the idle attempt answers them into a log that the exchange receives in one call before anything reads it, leaving its receipts, status and failure as before. Idle step 0.62 → 0.60 ms on the A12; main 18.5 ms per tick. Clean builds: all 10 scenarios, AppKit and the emulator equal, frames identical; the suites pass (the new exchange-state test after fixing its own path expectations); review OK | [evidence](../evidence/rt-a3l4a-direct-idle-queue-20261007.json) | this commit |
 
 ## Next task
 
@@ -206,14 +207,25 @@ main thread; message-loop iterations 4.12 × 1.14 ms; render thread 18.7 ms,
   per tick after 1j; each full-frame pass costs ~1.7 ms on the A12. P1 (the
   present's back-buffer copy and crop fused) next, then P2 (the back buffer
   lent as the frame).
+- **Status (2026-10-07 evening, A3 L4a):** main 18.5 ms and render ~14.4 ms
+  per tick on the A12; tier 2 needs ~2.5 ms more on the main thread. Gate
+  binaries come from clean builds (4u).
 - **B2** ([plan](CORE_REALTIME_B2.md)): in-place nested passes under the first
-  transactional copy; P1–P3 done (post-draw passes, the loaded entry chain,
-  local input, the AI/object children): main 19.8/19.6 ms per tick. P4 (the
-  gameplay body's passes family by family, by a fresh profile) remains.
-- **Idle iterations** ([A3 design](CORE_REALTIME_A3.md)): measured (P0) at
-  0.81 ms each on the A12 (0.66 ms in the step), 3.12 per tick; target ≤0.2 ms.
-  L3 (no State copies in the idle loop) is in its gates; then L4 (the idle
-  lane without the Driver and exchange) and L5/L6.
+  transactional copy; P1–P3 done. P4 (the gameplay body's passes family by
+  family, by a fresh profile) remains.
+- **Idle iterations** ([A3 design](CORE_REALTIME_A3.md)): 3.12 per tick at
+  0.60 ms in the step (0.68 ms in all) after L3, P5a/P5b (the Android
+  iteration timer) and L4a. Next: L4b, the idle attempt without a per-step
+  Driver and exchange (Driver creation, cursor views, the exchange's own
+  copies), then L5 (the two platform copies per idle commit, ~0.66% of the
+  main thread in `rt4t-dwarf`) and L6.
+- **Other measured targets** (`rt4t-dwarf`, share of the main thread):
+  `LoadedMenuSession.Attempt.emit` 7.3% inclusive (graphics `consume` 3.8%
+  with its whole-owner copy for rollback, the attempt's `graphics` array
+  copied from the entry on its first append 0.96%); `MatchBindings.store`
+  3.3% (the 400-entry world table and actor loops each tick); the display
+  backend's `serveFront` 3.2%; the menu session's step closure 1.4% and its
+  State destroy 1.0%, with an `__openat` 0.6% per tick to explain.
 - Then B1 3c (world pair cache), B2 (R5/M3 in-place nested
   candidates), B3 (one loaded attempt per tick), the replay check, R3 stage
   2; then the gameplay body and the render thread.
