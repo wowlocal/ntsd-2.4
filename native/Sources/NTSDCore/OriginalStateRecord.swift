@@ -383,6 +383,19 @@ public struct OriginalStateRecord: Equatable, Sendable {
         }
     }
 
+    /// The little-endian word at `offset`, defined or not (`bytes[offset..<offset+4]`
+    /// as a value), read in place: the caller checks the range. Bitmap draws
+    /// read allocator words this way many times per frame, and each `bytes`
+    /// read retained and released the whole array (CORE_REALTIME 4s).
+    func rawWord(at offset: Int) -> UInt32 {
+        precondition(offset >= 0 && offset <= byteCount - 4, "Range out of bounds")
+        if let parts { return (0..<4).reduce(UInt32(0)) { $0 | UInt32(parts.byte(offset + $1)) << ($1 * 8) } }
+        if let pages {
+            return (0..<4).reduce(UInt32(0)) { $0 | UInt32(pages.bytes[(offset + $1) >> Self.pageShift][(offset + $1) & Self.pageMask]) << ($1 * 8) }
+        }
+        return flatBytes.withUnsafeBytes { UInt32(littleEndian: $0.loadUnaligned(fromByteOffset: offset, as: UInt32.self)) }
+    }
+
     /// The bytes start..<start+count when all are in range and defined, else
     /// nil (the caller then reads them one by one for the exact error).
     func definedBytes(_ start: Int, _ count: Int) -> [UInt8]? {

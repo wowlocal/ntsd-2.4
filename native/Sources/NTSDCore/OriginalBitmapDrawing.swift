@@ -40,15 +40,16 @@ public enum OriginalBitmapDrawing {
     /// and `observe` is not called (CORE_REALTIME 4d; value and errors unchanged).
     static func word(_ offset: UInt32,bitmap: OriginalStateRecord,surface: UInt32,detail: Bool = true,
                      observe: (OriginalBitmapDrawRead) throws -> Void) throws -> Int32 {
-        guard bitmap.bytes.count == 0x1f50 else { throw OriginalStateError.invalidStorage("Bitmap draw extent") }
+        // The raw word in place, without the whole byte array (CORE_REALTIME 4s).
+        guard bitmap.byteCount == 0x1f50 else { throw OriginalStateError.invalidStorage("Bitmap draw extent") }
         let i = Int(offset)
-        guard i <= bitmap.bytes.count-4 else { throw OriginalStateError.outOfBounds(offset: i,count: 4) }
-        var value = (0..<4).reduce(UInt32(0)) { $0 | UInt32(bitmap.bytes[i+$1]) << ($1*8) }
+        guard i <= bitmap.byteCount-4 else { throw OriginalStateError.outOfBounds(offset: i,count: 4) }
+        var value = bitmap.rawWord(at: i)
         if offset == 0 {
             guard value == (surface == 0 ? 0 : 1) else { throw OriginalStateError.invalidStorage("Bitmap surface binding") }
             value = surface
         }
-        if detail { try observe(.init(offset: i,value: value,defined: bitmap.defined[i..<i+4].allSatisfy { $0 })) }
+        if detail { try observe(.init(offset: i,value: value,defined: bitmap.allDefined(in: i..<i+4))) }
         return Int32(bitPattern: value)
     }
     /// Bitmap backing is an explicit input. This helper really reads untouched
@@ -63,7 +64,7 @@ public enum OriginalBitmapDrawing {
                             observeRead: (OriginalBitmapDrawRead) throws -> Void = { _ in },
                             observeClip: (OriginalBitmapClip) throws -> Void = { _ in },
                             perform: (OriginalBitmapBlit) throws -> Int32) throws -> Int32 {
-        guard bitmap.bytes.count == 0x1f50 else { throw OriginalStateError.invalidStorage("Bitmap draw extent") }
+        guard bitmap.byteCount == 0x1f50 else { throw OriginalStateError.invalidStorage("Bitmap draw extent") }
         func word(_ offset: UInt32) throws -> Int32 {
             try Self.word(offset,bitmap: bitmap,surface: input.sourceSurface,detail: detail,observe: observeRead)
         }
