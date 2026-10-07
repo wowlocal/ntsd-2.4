@@ -10,6 +10,13 @@ let portable = Context.environment["NTSD_PORTABLE"] == "1"
 let portable = true
 #endif
 
+// Release builds of the shared libraries serialize their bodies for callers in
+// other modules, so the generic Host, iteration and session code is
+// specialized for the one platform type the runtime uses instead of running
+// through value witnesses (CORE_REALTIME 4k). An optimization only: no
+// floating-point or other semantic flag.
+let crossModule: [SwiftSetting] = [.unsafeFlags(["-cross-module-optimization"], .when(configuration: .release))]
+
 let macProducts: [Product] = portable ? [] : [.executable(name: "NTSDNative", targets: ["NTSDApp"])]
 let macTargets: [Target] = portable ? [] : [
     .target(name: "NTSDMacPlatform", dependencies: ["NTSDCore", "NTSDRuntime"], resources: [.copy("Resources/OriginalMusic")],
@@ -80,9 +87,10 @@ let package = Package(
     targets: macTargets + sdlTargets + iosTargets + androidTargets + freetypeTargets + [
         .target(name: "NTSDReplayCodec", exclude: ["README.md", "upstream.json"],
                 publicHeadersPath: "include", cSettings: [.unsafeFlags(["-Wno-deprecated-non-prototype"])]),
-        .target(name: "NTSDCore", dependencies: ["NTSDReplayCodec"], resources: [.copy("Resources/OriginalStartup"), .copy("Resources/OriginalCommonSounds"), .copy("Resources/OriginalLoadingInterface"), .copy("Resources/OriginalCharacterMenu"), .copy("Resources/OriginalWarMenu"), .copy("Resources/OriginalMatchArenas"), .copy("Resources/OriginalCatalog")]),
+        .target(name: "NTSDCore", dependencies: ["NTSDReplayCodec"], resources: [.copy("Resources/OriginalStartup"), .copy("Resources/OriginalCommonSounds"), .copy("Resources/OriginalLoadingInterface"), .copy("Resources/OriginalCharacterMenu"), .copy("Resources/OriginalWarMenu"), .copy("Resources/OriginalMatchArenas"), .copy("Resources/OriginalCatalog")],
+                swiftSettings: crossModule),
         .systemLibrary(name: "CZlib", path: "Sources/CZlib"),
-        .target(name: "NTSDRuntime", dependencies: ["NTSDCore"]),
+        .target(name: "NTSDRuntime", dependencies: ["NTSDCore"], swiftSettings: crossModule),
         // The vendored decoder learns the byte order from TargetConditionals.h
         // on Apple platforms and only for x86 elsewhere; every non-Apple target
         // built here (aarch64, x86_64) is little-endian.
