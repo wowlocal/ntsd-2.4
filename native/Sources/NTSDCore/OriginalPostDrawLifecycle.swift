@@ -76,8 +76,19 @@ public enum OriginalPostDrawLifecycle {
         return try withoutActuallyEscaping(header) { headers in
             return try withoutActuallyEscaping(frame) { frames in
                 return try withoutActuallyEscaping(observe) { observer in
+                    // The slot passes' events as lifecycle events, made once per
+                    // pass instead of once per slot (400 closure allocations a
+                    // tick; CORE_REALTIME 4q).
+                    let converted: (OriginalPostDrawSlotEvent) throws -> Void = { event in
+                        switch event {
+                        case let .reconstruct(slot, created): try observer(.reconstruct(slot: slot, created: created))
+                        case let .random(slot, stream, range, result): try observer(.random(slot: slot, stream: stream, range: range, result: result))
+                        case let .catalogSound(slot, x, index): try observer(.catalogSound(slot: slot, x: x, index: index))
+                        }
+                    }
                     var body = Body(world: world, actors: actors, globals: globals, scratch: scratch, slot: slot, library: library,
-                                    precision: precision, sse2: sse2, objectCount: objectCount, header: headers, frame: frames, observe: observer)
+                                    precision: precision, sse2: sse2, objectCount: objectCount, header: headers, frame: frames, observe: observer,
+                                    converted: converted)
                     for selected in wholeLoop ? 0..<400 : slot..<slot+1 {
                         body.slot = selected
                         try body.run(prefix: wholeLoop)
@@ -95,6 +106,7 @@ public enum OriginalPostDrawLifecycle {
         let precision: OriginalArithmeticPrecision, sse2: Bool, objectCount: Int32
         let header: (Int) throws -> OriginalStateRecord, frame: (Int, Int32) throws -> OriginalStateRecord
         let observe: (OriginalPostDrawLifecycleEvent) throws -> Void
+        let converted: (OriginalPostDrawSlotEvent) throws -> Void
         func index(_ slot: Int) throws -> Int {
             guard (0..<400).contains(slot) else { throw error("Actor slot extent") }
             let n = Int(try world.integer(at: 0x194+4*slot, as: UInt32.self))
@@ -279,14 +291,7 @@ public enum OriginalPostDrawLifecycle {
             try put(parent, 0x78, i(parent, 0x70))
         }
         mutating func run(prefix: Bool) throws {
-            let observer = observe
-            let converted: (OriginalPostDrawSlotEvent) throws -> Void = { event in
-                switch event {
-                case let .reconstruct(slot, created): try observer(.reconstruct(slot: slot, created: created))
-                case let .random(slot, stream, range, result): try observer(.random(slot: slot, stream: stream, range: range, result: result))
-                case let .catalogSound(slot, x, index): try observer(.catalogSound(slot: slot, x: x, index: index))
-                }
-            }
+            let converted = self.converted
             if prefix {
                 let active = try OriginalPostDrawSlotPrefix.apply(world: &world, actors: &actors, globals: &globals, slot: slot,
                     retainedObjectIndex: &scratch.particleObject, requestSlot: &scratch.requestSlot, objectCount: objectCount, library: &library, header: header, frame: frame, observe: converted)

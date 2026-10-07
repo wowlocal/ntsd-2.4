@@ -1,0 +1,71 @@
+{
+ "study": "docs/research/CORE_REALTIME.md",
+ "phase": "4q (the post-draw slot event adapter made once per pass)",
+ "date": "2026-10-07",
+ "profile_before": "phone DWARF profile rtr1b-dwarf: OriginalPostDrawLifecycle.Body.run 10.3% of the main thread inclusive, 0.8% of it allocation directly from Body.run and 1.1% deallocation: it built a fresh escaping closure converting slot events to lifecycle events for each of the 400 slots per tick",
+ "change": "the adapter is built once in OriginalPostDrawLifecycle.apply and stored in the pass body; Body.run uses it",
+ "phone": {
+  "before": [
+   {
+    "label": "rt4p2-run1",
+    "bodies": 1800,
+    "completeMsPerTick": 16.5,
+    "partAssembliesPerTick": 0.0,
+    "menuMsPerStep": 0.82,
+    "menuStepsPerTick": 4.12,
+    "mainCpuShare": 0.54,
+    "renderCpuShare": 0.391,
+    "mainMsPerTick": 21.8,
+    "renderMsPerTick": 15.8
+   },
+   {
+    "label": "rt4p2-run2",
+    "bodies": 1800,
+    "completeMsPerTick": 16.5,
+    "partAssembliesPerTick": 0.0,
+    "menuMsPerStep": 0.82,
+    "menuStepsPerTick": 4.12,
+    "mainCpuShare": 0.541,
+    "renderCpuShare": 0.388,
+    "mainMsPerTick": 21.9,
+    "renderMsPerTick": 15.7
+   }
+  ],
+  "after": [
+   {
+    "label": "rt4q-run1",
+    "bodies": 1800,
+    "completeMsPerTick": 16.4,
+    "partAssembliesPerTick": 0.0,
+    "menuMsPerStep": 0.83,
+    "menuStepsPerTick": 4.12,
+    "mainCpuShare": 0.542,
+    "renderCpuShare": 0.407,
+    "mainMsPerTick": 21.9,
+    "renderMsPerTick": 16.4
+   },
+   {
+    "label": "rt4q-run2",
+    "bodies": 1800,
+    "completeMsPerTick": 16.3,
+    "partAssembliesPerTick": 0.0,
+    "menuMsPerStep": 0.82,
+    "menuStepsPerTick": 4.12,
+    "mainCpuShare": 0.54,
+    "renderCpuShare": 0.394,
+    "mainMsPerTick": 21.7,
+    "renderMsPerTick": 15.8
+   }
+  ],
+  "result": "main 21.8/21.9 -> 21.9/21.7 ms per tick (no measurable change; committed as strictly less work: 400 closure allocations per tick fewer)",
+  "note": "the rows keep the fields recorded in the session; the rest were only in terminal output deleted by the Mac's restart"
+ },
+ "gates": {
+  "headless": "vs equal, 1,832 frames identical (frozen 4q binary)",
+  "scenarios": "all 10 equal (before the restart); frames identical, recompared after it (rt-4q-all)",
+  "AppKit": "vs and playback equal; 3,960 frames identical to the 4p AppKit run (recompared after the restart)",
+  "emulator": "vs equal, 1,832 frames identical (before the restart)",
+  "tests": "bundle C (native tree 15937e5a, the same as this commit's): 59 suites, 153 tests, pass: every gameplay, loaded, active, pause, match, mission, war, tournament, replay, runtime-loading, pool, catalog, Host and bootstrap suite and every post-draw, lifecycle, scheduler, opoint and slot-prefix suite (all before the restart)"
+ },
+ "review": "not required (the same closure built once instead of per slot; no storage-model change)"
+}
