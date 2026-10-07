@@ -33,20 +33,28 @@ public final class OriginalApplicationHostSession<Platform: OriginalApplicationS
     /// later Host commits and the Host itself; it never consults latest state.
     /// This retains computed data, not an actual device lease or IO acknowledgement.
     public struct DeliveryContext {
-        public let application: Application
-        private let retainedPlatform: Platform
+        /// The application and the retained platform copy in one shared,
+        /// immutable object: a batch carries its context through publication
+        /// and every drain (CORE_REALTIME phase 4n).
+        private final class Storage {
+            let application: Application, retainedPlatform: Platform
+            init(application: Application, retainedPlatform: Platform) {
+                self.application = application; self.retainedPlatform = retainedPlatform
+            }
+        }
+        private let storage: Storage
+        public var application: Application { _read { yield storage.application } }
         fileprivate init(application: Application, platform: Platform) throws {
-            self.application = application
-            retainedPlatform = try OriginalApplicationHostSession<Platform>.copy(platform)
+            storage = Storage(application: application, retainedPlatform: try OriginalApplicationHostSession<Platform>.copy(platform))
         }
         /// With the platform copy already made (CORE_REALTIME A1).
         fileprivate init(application: Application, retainedPlatform: Platform) {
-            self.application = application; self.retainedPlatform = retainedPlatform
+            storage = Storage(application: application, retainedPlatform: retainedPlatform)
         }
         /// A caller may mutate this independent inspection copy without changing
         /// the batch or Host. stagedCopy retains its existing value-state contract.
         public func platformSnapshot() throws -> Platform {
-            try OriginalApplicationHostSession<Platform>.copy(retainedPlatform)
+            try OriginalApplicationHostSession<Platform>.copy(storage.retainedPlatform)
         }
     }
 

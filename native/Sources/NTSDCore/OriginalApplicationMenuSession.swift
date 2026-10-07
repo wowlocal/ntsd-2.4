@@ -255,9 +255,28 @@ public struct OriginalApplicationMenuSession {
     private let ownerID = UUID()
     private var revision: UInt64 = 0
     public struct LoadedOwners {
-        public let entry: OriginalApplicationPoolSession.PendingInput
-        public let match: OriginalMatchPreparation,music: OriginalMusicMemory
-        public let resources: OriginalMenuResourceLoading,backgrounds: [UInt32:OriginalLoadedBitmap]
+        /// Fixed values in one shared object: copied with every menu session
+        /// copy (each Host attempt and message-loop iteration) and with the
+        /// loaded cycle's owners (CORE_REALTIME phase 4n, as 4a, 4l and 4m).
+        private final class Storage {
+            let entry: OriginalApplicationPoolSession.PendingInput
+            let match: OriginalMatchPreparation,music: OriginalMusicMemory
+            let resources: OriginalMenuResourceLoading,backgrounds: [UInt32:OriginalLoadedBitmap]
+            init(entry: OriginalApplicationPoolSession.PendingInput,match: OriginalMatchPreparation,music: OriginalMusicMemory,
+                 resources: OriginalMenuResourceLoading,backgrounds: [UInt32:OriginalLoadedBitmap]) {
+                self.entry = entry;self.match = match;self.music = music;self.resources = resources;self.backgrounds = backgrounds
+            }
+        }
+        private let storage: Storage
+        public var entry: OriginalApplicationPoolSession.PendingInput { _read { yield storage.entry } }
+        public var match: OriginalMatchPreparation { _read { yield storage.match } }
+        public var music: OriginalMusicMemory { _read { yield storage.music } }
+        public var resources: OriginalMenuResourceLoading { _read { yield storage.resources } }
+        public var backgrounds: [UInt32:OriginalLoadedBitmap] { _read { yield storage.backgrounds } }
+        init(entry: OriginalApplicationPoolSession.PendingInput,match: OriginalMatchPreparation,music: OriginalMusicMemory,
+             resources: OriginalMenuResourceLoading,backgrounds: [UInt32:OriginalLoadedBitmap]) {
+            storage = Storage(entry:entry,match:match,music:music,resources:resources,backgrounds:backgrounds)
+        }
     }
     public private(set) var loadedOwners: LoadedOwners?
     public private(set) var state: State

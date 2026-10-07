@@ -1,0 +1,86 @@
+{
+ "study": "docs/research/CORE_REALTIME.md",
+ "phase": "4n (the loaded owners and the batch delivery context in shared objects)",
+ "date": "2026-10-07",
+ "profile_before": "the 4m review: MenuSession.LoadedOwners (the match model ~35 references, music, resources, backgrounds) is copied with every menu session copy (each Host attempt and message-loop iteration) and with the loaded cycle's owners; Host.DeliveryContext (a whole Bootstrap value plus the retained platform) travels in every Batch from publication through every drain",
+ "change": "LoadedOwners and DeliveryContext keep their fixed values in one private final class each, read through _read; LoadedOwners gets an explicit internal init with the memberwise labels; DeliveryContext keeps its two fileprivate inits (the throwing platform copy still runs before anything is stored) and platformSnapshot() still copies the retained platform on every call",
+ "phone": {
+  "before": [
+   {
+    "label": "rt1j-run1",
+    "runSeconds": 310,
+    "peakResidentMB": 1376,
+    "ticksPerSecond": 23.38,
+    "busySeconds": 206.44,
+    "bodies": 1800,
+    "completeMsPerTick": 18.4,
+    "partAssembliesPerTick": 0.0,
+    "menuMsPerStep": 0.9,
+    "menuStepsPerTick": 4.12,
+    "mainCpuShare": 0.563,
+    "renderCpuShare": 0.409,
+    "mainMsPerTick": 24.1,
+    "renderMsPerTick": 17.5
+   },
+   {
+    "label": "rt1j-run2",
+    "runSeconds": 310,
+    "peakResidentMB": 1075,
+    "ticksPerSecond": 23.43,
+    "busySeconds": 203.71,
+    "bodies": 1800,
+    "completeMsPerTick": 18.4,
+    "partAssembliesPerTick": 0.0,
+    "menuMsPerStep": 0.9,
+    "menuStepsPerTick": 4.12,
+    "mainCpuShare": 0.561,
+    "renderCpuShare": 0.411,
+    "mainMsPerTick": 24.0,
+    "renderMsPerTick": 17.5
+   }
+  ],
+  "after": [
+   {
+    "label": "rt4n-run1",
+    "runSeconds": 310,
+    "peakResidentMB": 1376,
+    "ticksPerSecond": 23.81,
+    "busySeconds": 204.83,
+    "bodies": 1800,
+    "completeMsPerTick": 18.5,
+    "partAssembliesPerTick": 0.0,
+    "menuMsPerStep": 0.8,
+    "menuStepsPerTick": 4.12,
+    "mainCpuShare": 0.56,
+    "renderCpuShare": 0.382,
+    "mainMsPerTick": 23.5,
+    "renderMsPerTick": 16.0
+   },
+   {
+    "label": "rt4n-run2",
+    "runSeconds": 310,
+    "peakResidentMB": 1377,
+    "ticksPerSecond": 23.58,
+    "busySeconds": 206.24,
+    "bodies": 1800,
+    "completeMsPerTick": 18.5,
+    "partAssembliesPerTick": 0.0,
+    "menuMsPerStep": 0.83,
+    "menuStepsPerTick": 4.12,
+    "mainCpuShare": 0.561,
+    "renderCpuShare": 0.432,
+    "mainMsPerTick": 23.8,
+    "renderMsPerTick": 18.3
+   }
+  ],
+  "result": "main 24.1/24.0 -> 23.5/23.8 ms per tick, message-loop step 0.90 -> 0.80/0.83 ms; render 16.0/18.3 ms (run variation; no render change)"
+ },
+ "gates": {
+  "headless": "vs equal, 1,832 frames identical (frozen-rt4n)",
+  "scenarios": "all 10 equal, frames identical (rt-4n-all)",
+  "AppKit": "vs and playback equal, 3,960 frames identical to the 1j AppKit run",
+  "emulator": "vs equal, 1,832 frames identical",
+  "tests": "bundle B (native tree 5100d4cd, the same as this commit's): all 172 suites, 503 tests, pass"
+ },
+ "review": "independent read-only review: approved; every field let, no conformances, reflection or identity use on these types or their containers; the platform is a class, so struct copies already shared it, and platformSnapshot() still makes a staged copy per call with the same errors; one LoadedOwners construction site and the four DeliveryContext sites unchanged; the generic nested storage adds one allocation per published batch (cheaper than the Bootstrap copy it replaces); production never reads batch.context. It named the next source of reference counting: read-only copies of the whole session or Bootstrap in Host attempts (phase 4o)."
+}
