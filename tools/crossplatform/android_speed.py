@@ -97,6 +97,13 @@ def sha256(path):
     return h.hexdigest()
 
 
+def no_space(result):
+    """A failed install for lack of room: the package manager's status, or the
+    streamed session's IOException when it cannot even create the session."""
+    text = result.stdout + result.stderr
+    return "INSUFFICIENT_STORAGE" in text or "not enough space" in text
+
+
 def installed_sha256(serial):
     """SHA-256 of the installed base.apk, or None when the package is not installed."""
     path = shell(serial, f"pm path {PACKAGE}").strip().removeprefix("package:")
@@ -178,18 +185,25 @@ def main():
     if o.apk:
         # -d: builds from older commits have lower version codes (debuggable build).
         r = adb(s, "install", "-r", "-d", o.apk)
-        if r.returncode != 0 and "INSUFFICIENT_STORAGE" in r.stdout + r.stderr:
+        if r.returncode != 0 and no_space(r):
             # The test phone's storage is nearly full and install -r keeps the
             # old code until the new one is in place (two 222 MB APKs plus
             # libraries). First let the system trim app caches (disposable by
             # contract; it does the same under storage pressure) and retry.
             adb(s, "shell", "pm trim-caches 4G")
             r = adb(s, "install", "-r", "-d", o.apk)
-        if r.returncode != 0 and "INSUFFICIENT_STORAGE" in r.stdout + r.stderr:
+        if r.returncode != 0 and no_space(r):
             # Then remove the old code but keep the app's data (-k: files/ntsd-data
             # is not extracted again for the same assets).
             adb(s, "shell", f"pm uninstall -k {PACKAGE}")
             r = adb(s, "install", "-d", o.apk)
+            if r.returncode != 0 and no_space(r):
+                # Last, drop files/ntsd-data: only the copy of the APK's assets,
+                # extracted again at the first launch when its marker does not
+                # match files.txt (NTSDAndroidApp.prepareData). The game's own
+                # files (files/NTSD Native) stay.
+                shell(s, f"run-as {PACKAGE} rm -rf files/ntsd-data")
+                r = adb(s, "install", "-d", o.apk)
             if r.returncode != 0:
                 raise SystemExit(f"install failed after `pm uninstall -k` ({PACKAGE} is uninstalled, its data kept): "
                                  + (r.stdout + r.stderr).strip()[-300:])
