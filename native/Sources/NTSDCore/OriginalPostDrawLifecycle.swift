@@ -292,6 +292,11 @@ public enum OriginalPostDrawLifecycle {
         }
         mutating func run(prefix: Bool) throws {
             let converted = self.converted
+            // An inactive slot: the prefix would read this byte (with the same
+            // error if it is undefined), return false and change nothing, so
+            // the slot ends here without building its passes (~350 of 400
+            // slots a tick; CORE_REALTIME 4r).
+            if prefix, try world.integer(at: 4 + slot, as: UInt8.self) == 0 { return }
             if prefix {
                 // Per slot in place: this body is dropped when a slot throws
                 // (CORE_REALTIME B2), so the slot passes write its records

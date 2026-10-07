@@ -1,0 +1,78 @@
+{
+ "study": "docs/research/CORE_REALTIME.md",
+ "phase": "4r (inactive post-draw slots end before their passes)",
+ "date": "2026-10-07",
+ "profile_before": "phone DWARF profile rtb2p1c-dwarf (B2 P1b tree): OriginalPostDrawSlotPrefix 5.1% of the main thread, mostly the per-slot setup (static apply 3.3%, destroying its Body 1.0%, malloc/free): the prefix runs for all 400 slots per tick and returns at once for the ~350 inactive ones",
+ "change": "the post-draw lifecycle's Body.run reads the slot's activity byte (world+4+slot) before building the prefix and opoint; for 0 it ends the slot. The prefix reads that byte first and, for 0, returns false having changed nothing (its in-place write-back restores the same values); an undefined byte throws the same error from the same read",
+ "phone": {
+  "before": [
+   {
+    "label": "rtb2p1c-run1",
+    "bodies": 1800,
+    "completeMsPerTick": 15.6,
+    "partAssembliesPerTick": 0.0,
+    "menuMsPerStep": 0.83,
+    "menuStepsPerTick": 4.12,
+    "mainCpuShare": 0.532,
+    "renderCpuShare": 0.402,
+    "mainMsPerTick": 21.1,
+    "renderMsPerTick": 15.9
+   },
+   {
+    "label": "rtb2p1c-run2",
+    "bodies": 1800,
+    "completeMsPerTick": 15.6,
+    "partAssembliesPerTick": 0.0,
+    "menuMsPerStep": 0.83,
+    "menuStepsPerTick": 4.12,
+    "mainCpuShare": 0.532,
+    "renderCpuShare": 0.401,
+    "mainMsPerTick": 21.0,
+    "renderMsPerTick": 15.8
+   }
+  ],
+  "after": [
+   {
+    "label": "rt4r-run1",
+    "runSeconds": 300,
+    "peakResidentMB": 1024,
+    "ticksPerSecond": 25.6,
+    "busySeconds": 196.54,
+    "bodies": 1800,
+    "completeMsPerTick": 15.1,
+    "partAssembliesPerTick": 0.0,
+    "menuMsPerStep": 0.84,
+    "menuStepsPerTick": 4.12,
+    "mainCpuShare": 0.524,
+    "renderCpuShare": 0.425,
+    "mainMsPerTick": 20.5,
+    "renderMsPerTick": 16.6
+   },
+   {
+    "label": "rt4r-run2",
+    "runSeconds": 300,
+    "peakResidentMB": 1169,
+    "ticksPerSecond": 25.68,
+    "busySeconds": 198.05,
+    "bodies": 1800,
+    "completeMsPerTick": 15.0,
+    "partAssembliesPerTick": 0.0,
+    "menuMsPerStep": 0.83,
+    "menuStepsPerTick": 4.12,
+    "mainCpuShare": 0.522,
+    "renderCpuShare": 0.411,
+    "mainMsPerTick": 20.3,
+    "renderMsPerTick": 16.0
+   }
+  ],
+  "result": "main 21.1/21.0 -> 20.5/20.3 ms per tick, complete 15.6 -> 15.1/15.0 ms; render 16.6/16.0 ms (not touched by this change; run variation)"
+ },
+ "gates": {
+  "headless": "vs equal, 1,832 frames identical (frozen 4r binary)",
+  "scenarios": "all 10 equal, frames identical (rt-4r-all)",
+  "AppKit": "vs and playback equal, 3,960 frames identical to the B2 P1b AppKit run",
+  "emulator": "vs equal, 1,832 frames identical",
+  "tests": "bundle C (native tree 7fff7d19, the same as this commit's): 65 suites, 178 tests, pass (every gameplay, post-draw, lifecycle, scheduler, opoint, slot-prefix, request-slot and library-transform suite)"
+ },
+ "review": "not required (an early exit equal to the prefix's own first check; no storage-model change)"
+}
