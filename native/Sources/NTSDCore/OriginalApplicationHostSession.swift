@@ -183,6 +183,9 @@ public final class OriginalApplicationHostSession<Platform: OriginalApplicationS
     /// A value snapshot of the last committed Core owner. Observers during an
     /// attempt see this same committed state, never the tentative child state.
     public var snapshot: Application { locked { application } }
+    /// The committed application's startup, without copying the whole
+    /// application (CORE_REALTIME 4o; the runtime reads it every loaded run).
+    public var committedStartup: OriginalWinMainStartup? { locked { application.startup } }
     public var committedSequence: UInt64 { locked { sequence } }
     public var pendingLoading: Session.PendingLoading? { locked { pending?.loading } }
     public var preparedLoadedMenu: LoadedMenu.PendingReturn? { locked { prepared?.returned } }
@@ -259,9 +262,11 @@ public final class OriginalApplicationHostSession<Platform: OriginalApplicationS
         try attempt {
             try requirePublication()
             guard expectedSequence == nil || expectedSequence == sequence else { throw Boundary.staleSequence }
-            guard let session = application.session else { throw Application.Boundary.notStarted }
+            // Checked and read in place: a bound copy of the whole session
+            // retained and released every owner it holds (CORE_REALTIME 4o).
+            guard application.session != nil else { throw Application.Boundary.notStarted }
             let candidate = try Self.copy(platform)
-            let inputs = try prepare(candidate, session.state)
+            let inputs = try prepare(candidate, application.session!.state)
             var next = application
             let result = try next.step(inputs: inputs.initialization, responses: inputs.responses,
                 queue: inputs.queue, windowDefault: inputs.windowDefault, surface: inputs.surface,
@@ -352,9 +357,9 @@ public final class OriginalApplicationHostSession<Platform: OriginalApplicationS
     ) throws -> LoadedOutcome {
         guard let pending else { throw Boundary.noPendingLoading }
         guard prepared == nil else { throw Boundary.alreadyPreparedLoading }
-        guard let startup = application.startup, let session = application.session else { throw Application.Boundary.notStarted }
+        guard let startup = application.startup, application.session != nil else { throw Application.Boundary.notStarted }
         let candidate = try Self.copy(pending.platform)
-        let cycle = try session.loadedOwners.map { _ in try application.makeLoadedCycle(pending:pending.loading) }
+        let cycle = application.session!.loadedOwners == nil ? nil : try application.makeLoadedCycle(pending:pending.loading)
         let outcome = try prepare(.init(entry:pending.loading,startup:startup,cycle:cycle),candidate)
         let next: Prepared
         switch outcome {

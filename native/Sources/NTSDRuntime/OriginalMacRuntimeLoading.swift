@@ -167,7 +167,7 @@ import NTSDCore
     /// tail; returns the Host outcome of the tail or the pending match prelude.
     public func run() throws -> Host.LoadedOutcome {
         let host = started.host,heap = started.runtime.heap
-        guard let pending = host.pendingLoading,let startup = host.snapshot.startup,let sounds = startup.input?.sounds else { throw Boundary.missing("pending loading") }
+        guard let pending = host.pendingLoading,let startup = host.committedStartup,let sounds = startup.input?.sounds else { throw Boundary.missing("pending loading") }
         let device = try pending.state.full.integer(at:0x44eecc-0x44d000,as:UInt32.self)
         let owners = try sounds.loads.enumerated().map { i,result in
             try started.audio.ownership(.init(i,OriginalMenuSoundStartup.paths[i],UInt32(0x45560c+i*4),device),result:result)

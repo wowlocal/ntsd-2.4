@@ -172,8 +172,8 @@ public struct OriginalApplicationBootstrap {
 
 extension OriginalApplicationBootstrap {
     public func makeLoadedCycle(pending: Session.PendingLoading) throws -> OriginalApplicationLoadedCycleSession {
-        guard let session,startup != nil else { throw Boundary.notStarted }
-        return try session.makeLoadedCycle(pending:pending)
+        guard session != nil,startup != nil else { throw Boundary.notStarted }
+        return try session!.makeLoadedCycle(pending:pending)
     }
     /// Install an idle iteration computed by the session's `idleIteration`
     /// (CORE_REALTIME A1).
