@@ -207,22 +207,43 @@ public struct OriginalApplicationMenuSession {
     /// Child-entry evidence only. The tentative timer work in the caller has
     /// not returned. These operations must not be dispatched as committed IO.
     public struct PendingLoading {
-        fileprivate let ownerID: UUID,revision: UInt64
-        // Transfer identity only. Distinguishes separate attempts made from
-        // copies of one committed Session; never enters original game state.
-        private let attemptID = UUID()
-        func isSameAttempt(as other: Self) -> Bool {
-            ownerID == other.ownerID && revision == other.revision && attemptID == other.attemptID
+        /// The values, fixed at creation, in one shared object: a pending
+        /// loading is copied and dropped many times per gameplay tick (Host
+        /// attempts, retained stages, the runtime's loaded cycle), and each
+        /// copy retained and released every reference of its State and staged
+        /// lists (CORE_REALTIME phase 4l, as 4a for PendingInput). Reads borrow
+        /// through `_read`.
+        private final class Storage {
+            let ownerID: UUID,revision: UInt64
+            // Transfer identity only. Distinguishes separate attempts made from
+            // copies of one committed Session; never enters original game state.
+            let attemptID = UUID()
+            let state: State,target: UInt32
+            let loopContinuation: Loop.PendingDispatch
+            let stagedEffects: [Effect]
+            let stagedGraphics: [OriginalApplicationGraphics.Command]
+            init(ownerID: UUID,revision: UInt64,state: State,target: UInt32,loopContinuation: Loop.PendingDispatch,
+                 stagedEffects: [Effect],stagedGraphics: [OriginalApplicationGraphics.Command]) {
+                self.ownerID = ownerID;self.revision = revision;self.state = state;self.target = target
+                self.loopContinuation = loopContinuation;self.stagedEffects = stagedEffects;self.stagedGraphics = stagedGraphics
+            }
         }
-        public let state: State, target: UInt32
-        public let loopContinuation: Loop.PendingDispatch
-        public let stagedEffects: [Effect]
-        public let stagedGraphics: [OriginalApplicationGraphics.Command]
+        private let storage: Storage
+        fileprivate var ownerID: UUID { storage.ownerID }
+        fileprivate var revision: UInt64 { storage.revision }
+        func isSameAttempt(as other: Self) -> Bool {
+            ownerID == other.ownerID && revision == other.revision && storage.attemptID == other.storage.attemptID
+        }
+        public var state: State { _read { yield storage.state } }
+        public var target: UInt32 { storage.target }
+        public var loopContinuation: Loop.PendingDispatch { _read { yield storage.loopContinuation } }
+        public var stagedEffects: [Effect] { _read { yield storage.stagedEffects } }
+        public var stagedGraphics: [OriginalApplicationGraphics.Command] { _read { yield storage.stagedGraphics } }
         fileprivate init(ownerID: UUID,revision: UInt64,state: State,target: UInt32,
             loopContinuation: Loop.PendingDispatch,stagedEffects: [Effect],
             stagedGraphics: [OriginalApplicationGraphics.Command]) {
-            self.ownerID = ownerID;self.revision = revision;self.state = state;self.target = target
-            self.loopContinuation = loopContinuation;self.stagedEffects = stagedEffects;self.stagedGraphics = stagedGraphics
+            storage = Storage(ownerID:ownerID,revision:revision,state:state,target:target,loopContinuation:loopContinuation,
+                              stagedEffects:stagedEffects,stagedGraphics:stagedGraphics)
         }
         public func makeLoadingSession() throws -> OriginalApplicationLoadingSession {
             try .init(pending:self)
