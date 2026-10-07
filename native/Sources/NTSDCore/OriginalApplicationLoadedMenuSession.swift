@@ -39,19 +39,54 @@ public struct OriginalApplicationLoadedMenuSession {
         public let local: OriginalStateRecord,operations: [Operation]
     }
     public struct PendingReturn {
-        public let entry: Input.PendingContinuation, snapshot: Snapshot
-        public let exit: OriginalModeScreenExit,dispatcherResult: Int32?
-        public let graphics: [OriginalApplicationGraphics.Command]
+        /// Fixed values in one shared object: copied with every Host stage and
+        /// loaded batch of a tick (CORE_REALTIME phase 4m).
+        private final class Storage {
+            let entry: Input.PendingContinuation, snapshot: Snapshot
+            let exit: OriginalModeScreenExit,dispatcherResult: Int32?
+            let graphics: [OriginalApplicationGraphics.Command]
+            init(entry: Input.PendingContinuation,snapshot: Snapshot,exit: OriginalModeScreenExit,dispatcherResult: Int32?,
+                 graphics: [OriginalApplicationGraphics.Command]) {
+                self.entry = entry;self.snapshot = snapshot;self.exit = exit;self.dispatcherResult = dispatcherResult;self.graphics = graphics
+            }
+        }
+        private let storage: Storage
+        public var entry: Input.PendingContinuation { _read { yield storage.entry } }
+        public var snapshot: Snapshot { _read { yield storage.snapshot } }
+        public var exit: OriginalModeScreenExit { _read { yield storage.exit } }
+        public var dispatcherResult: Int32? { storage.dispatcherResult }
+        public var graphics: [OriginalApplicationGraphics.Command] { _read { yield storage.graphics } }
         public var loading: Session.PendingLoading { entry.loading }
+        init(entry: Input.PendingContinuation,snapshot: Snapshot,exit: OriginalModeScreenExit,dispatcherResult: Int32?,
+             graphics: [OriginalApplicationGraphics.Command]) {
+            storage = Storage(entry:entry,snapshot:snapshot,exit:exit,dispatcherResult:dispatcherResult,graphics:graphics)
+        }
     }
     /// Start has been selected, but preparation and the enclosing return have
     /// not run. Retain current owners and the original suspended loop ticket.
     public struct PendingMatchPrelude {
-        public let entry: Input.PendingContinuation, snapshot: Snapshot
-        public let confirmation: Int32
-        public let locals: [Int:Int32]
-        public let graphics: [OriginalApplicationGraphics.Command]
+        /// Fixed values in one shared object (CORE_REALTIME phase 4m).
+        private final class Storage {
+            let entry: Input.PendingContinuation, snapshot: Snapshot
+            let confirmation: Int32
+            let locals: [Int:Int32]
+            let graphics: [OriginalApplicationGraphics.Command]
+            init(entry: Input.PendingContinuation,snapshot: Snapshot,confirmation: Int32,locals: [Int:Int32],
+                 graphics: [OriginalApplicationGraphics.Command]) {
+                self.entry = entry;self.snapshot = snapshot;self.confirmation = confirmation;self.locals = locals;self.graphics = graphics
+            }
+        }
+        private let storage: Storage
+        public var entry: Input.PendingContinuation { _read { yield storage.entry } }
+        public var snapshot: Snapshot { _read { yield storage.snapshot } }
+        public var confirmation: Int32 { storage.confirmation }
+        public var locals: [Int:Int32] { _read { yield storage.locals } }
+        public var graphics: [OriginalApplicationGraphics.Command] { _read { yield storage.graphics } }
         public var loading: Session.PendingLoading { entry.loading }
+        init(entry: Input.PendingContinuation,snapshot: Snapshot,confirmation: Int32,locals: [Int:Int32],
+             graphics: [OriginalApplicationGraphics.Command]) {
+            storage = Storage(entry:entry,snapshot:snapshot,confirmation:confirmation,locals:locals,graphics:graphics)
+        }
     }
     public enum Outcome {
         case returned(PendingReturn), matchPrelude(PendingMatchPrelude)
