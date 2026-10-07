@@ -23,6 +23,24 @@ extension OriginalMatchPreparation {
         return playback ? .playbackChecksum : .recording
     }
 
+    /// `receiveInput` in place (CORE_REALTIME B2; callers that drop this state
+    /// and the commands when it throws): the same reads, checks, writes and
+    /// observer call in the same order, without the copies of `receiveInput`,
+    /// `remoteInput` and `playbackInput`.
+    mutating func receiveInputInPlace(paused: Bool, commands: inout [UInt8], playbackCommands: [UInt8]) throws -> OriginalReceivedInputContinuation {
+        if paused { return .recording }
+        let phase = try globals.integer(at: 0x450b90-Self.globalBase,as: Int32.self)
+        let packet = try (0..<10).map { try globals.integer(at: 0x44f198-Self.globalBase+$0,as: UInt8.self) }
+        guard commands.count == 10 else { throw OriginalStateError.invalidStorage("Remote command extent") }
+        try applyReceivedInput(packet: packet,phase: phase,remote: true,commands: &commands)
+        let playback = try globals.integer(at: 0x450b84-Self.globalBase,as: Int32.self) != 0
+        if playback {
+            var unused: [UInt8] = []
+            try applyReceivedInput(packet: playbackCommands,phase: phase,remote: false,commands: &unused)
+        }
+        return playback ? .playbackChecksum : .recording
+    }
+
     /// 4198f0/ret12. Only status==-1 seats receive network input. Recording
     /// replaces the entire packet byte, including bit0; it does not OR buttons.
     public mutating func remoteInput(packet: [UInt8], phase: Int32, commands: inout [UInt8]) throws {

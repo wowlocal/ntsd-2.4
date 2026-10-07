@@ -62,6 +62,12 @@ extension OriginalMatchPreparation {
         let menu = try state.runInputControl(commands: &output,playbackCommands: playbackCommands,context: &resources,boundary: boundary)
         self = state; commands = output; context = resources; return menu
     }
+    /// `controlInput` in place (CORE_REALTIME B2; callers that drop this
+    /// state, the commands and `context` when it throws).
+    mutating func controlInputInPlace(commands: inout [UInt8], playbackCommands: [UInt8],
+                                      context: inout OriginalInputControlContext, boundary: InputControlBoundary) throws -> Int32 {
+        try runInputControl(commands: &commands,playbackCommands: playbackCommands,context: &context,boundary: boundary)
+    }
 
     private mutating func runInputControl(commands: inout [UInt8], playbackCommands: [UInt8],
                                           context: inout OriginalInputControlContext, boundary: InputControlBoundary) throws -> Int32 {

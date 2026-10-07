@@ -1,0 +1,121 @@
+{
+ "study": "docs/research/CORE_REALTIME.md",
+ "phase": "B2 P2 (the loaded match entry's sub-steps in place)",
+ "date": "2026-10-07",
+ "design": "docs/research/CORE_REALTIME_B2.md (P2)",
+ "profile_before": "phone DWARF profile rtb2p1c-dwarf: OriginalMatchPreparation 6.61% of the main thread (finishReplayInput 3.15%, localInput 1.28%, runMatchRound 0.87%); OriginalLoadedMatchEntry.run copies the state, commands and context once and each sub-step (control, received, replay, round) copied them again around its private in-place body",
+ "change": "internal controlInputInPlace, receiveInputInPlace, finishReplayInputInPlace and beginMatchRoundInPlace run the existing bodies (runInputControl, the receive/remote/playback steps, runReplayInput, runMatchRound) on the caller's values; OriginalLoadedMatchEntry.run, which drops its candidate on any throw and commits only after the round, calls them on its candidate; the public transactional forms are unchanged for the reference checks, InputSession, InitialMatchEntry and LoadedMatchCycle",
+ "phone": {
+  "before": [
+   {
+    "label": "rt4r-run1",
+    "runSeconds": 300,
+    "peakResidentMB": 1024,
+    "ticksPerSecond": 25.6,
+    "busySeconds": 196.54,
+    "bodies": 1800,
+    "completeMsPerTick": 15.1,
+    "partAssembliesPerTick": 0.0,
+    "menuMsPerStep": 0.84,
+    "menuStepsPerTick": 4.12,
+    "mainCpuShare": 0.524,
+    "renderCpuShare": 0.425,
+    "mainMsPerTick": 20.5,
+    "renderMsPerTick": 16.6
+   },
+   {
+    "label": "rt4r-run2",
+    "runSeconds": 300,
+    "peakResidentMB": 1169,
+    "ticksPerSecond": 25.68,
+    "busySeconds": 198.05,
+    "bodies": 1800,
+    "completeMsPerTick": 15.0,
+    "partAssembliesPerTick": 0.0,
+    "menuMsPerStep": 0.83,
+    "menuStepsPerTick": 4.12,
+    "mainCpuShare": 0.522,
+    "renderCpuShare": 0.411,
+    "mainMsPerTick": 20.3,
+    "renderMsPerTick": 16.0
+   }
+  ],
+  "after": [
+   {
+    "label": "rtb2p2-run1",
+    "runSeconds": 300,
+    "peakResidentMB": 1394,
+    "ticksPerSecond": 26.04,
+    "busySeconds": 198.81,
+    "bodies": 1800,
+    "completeMsPerTick": 14.8,
+    "partAssembliesPerTick": 0.0,
+    "menuMsPerStep": 0.81,
+    "menuStepsPerTick": 4.12,
+    "mainCpuShare": 0.524,
+    "renderCpuShare": 0.401,
+    "mainMsPerTick": 20.1,
+    "renderMsPerTick": 15.4
+   },
+   {
+    "label": "rtb2p2-run2",
+    "runSeconds": 305,
+    "peakResidentMB": 1471,
+    "ticksPerSecond": 25.74,
+    "busySeconds": 199.66,
+    "bodies": 1800,
+    "completeMsPerTick": 14.9,
+    "partAssembliesPerTick": 0.0,
+    "menuMsPerStep": 0.84,
+    "menuStepsPerTick": 4.12,
+    "mainCpuShare": 0.519,
+    "renderCpuShare": 0.424,
+    "mainMsPerTick": 20.2,
+    "renderMsPerTick": 16.5
+   },
+   {
+    "label": "rtb2p2-run3",
+    "runSeconds": 299,
+    "peakResidentMB": 1064,
+    "ticksPerSecond": 25.9,
+    "busySeconds": 196.46,
+    "bodies": 1800,
+    "completeMsPerTick": 14.6,
+    "partAssembliesPerTick": 0.0,
+    "menuMsPerStep": 0.84,
+    "menuStepsPerTick": 4.12,
+    "mainCpuShare": 0.52,
+    "renderCpuShare": 0.406,
+    "mainMsPerTick": 20.1,
+    "renderMsPerTick": 15.7
+   },
+   {
+    "label": "rtb2p2-run4",
+    "runSeconds": 305,
+    "peakResidentMB": 1503,
+    "ticksPerSecond": 25.82,
+    "busySeconds": 199.66,
+    "bodies": 1800,
+    "completeMsPerTick": 14.8,
+    "partAssembliesPerTick": 0.0,
+    "menuMsPerStep": 0.84,
+    "menuStepsPerTick": 4.12,
+    "mainCpuShare": 0.518,
+    "renderCpuShare": 0.403,
+    "mainMsPerTick": 20.1,
+    "renderMsPerTick": 15.6
+   }
+  ],
+  "result": "main 20.5/20.3 -> 20.1/20.2/20.1/20.1 ms per tick; complete 15.1/15.0 -> 14.6-14.9 ms",
+  "note": "runs 1 and 2 overlapped the user using the phone (brightness raised to 217, restored to 0 at 14:51); runs 3 and 4 are clean and equal run 1"
+ },
+ "profile_after": "rtb2p2b-dwarf (P2+P2b tree): OriginalMatchPreparation 2.68% (localInput 1.31%, init 0.48%, runMatchRound 0.43%)",
+ "gates": {
+  "headless": "vs equal, 1,832 frames identical (frozen B2 P2 binary)",
+  "scenarios": "all 10 equal, frames identical (rt-b2p2-all)",
+  "AppKit": "vs and playback equal, 3,960 frames identical to the 4r AppKit run",
+  "emulator": "vs equal, 1,832 frames identical",
+  "tests": "bundle B (native tree 19161164, the same as this commit's): all 173 suites, 504 tests, pass"
+ },
+ "review": "independent read-only review: approve. Discard proof holds (no try?, catch, defer or retry in run or its sub-steps; run assigns back only on its last line); receiveInputInPlace equivalent (same reads, guard, error text, order and returns; the default afterRemote is a no-op); the private bodies rely on no fresh copy; other callers unchanged; no exclusivity problem. Findings: missing injected-throw tests (addressed in P2d), an inaccurate doc comment and duplicated receive logic (addressed in P2b)."
+}

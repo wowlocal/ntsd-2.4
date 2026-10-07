@@ -31,6 +31,12 @@ extension OriginalMatchPreparation {
         let result = try state.runMatchRound(paused: paused,context: &owned,observe: observe)
         self = state; context = owned; return result
     }
+    /// `beginMatchRound` in place (CORE_REALTIME B2; callers that drop this
+    /// state and `context` when it throws).
+    mutating func beginMatchRoundInPlace(paused: Bool, context: inout OriginalInputControlContext,
+                                         observe: (OriginalMatchRoundEvent) throws -> Void) throws -> OriginalMatchRoundResult {
+        try runMatchRound(paused: paused,context: &context,observe: observe)
+    }
 
     private func roundActor(_ seat: Int) throws -> Int {
         guard (0..<400).contains(seat) else { throw Self.error("Round Actor seat") }

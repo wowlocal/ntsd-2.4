@@ -98,6 +98,15 @@ extension OriginalMatchPreparation {
         self = state; context = owned
     }
 
+    /// `finishReplayInput` on this state and `context` in place (CORE_REALTIME
+    /// B2): a throw leaves partial writes, so only for callers that drop both
+    /// when it throws (the loaded match entry's candidate).
+    mutating func finishReplayInputInPlace(entry: OriginalReplayTickEntry, paused: Bool, commands: [UInt8], playbackCommands: [UInt8],
+                                           context: inout OriginalInputControlContext,
+                                           observe: (OriginalReplayTickEvent) throws -> Void) throws {
+        try runReplayInput(entry: entry,paused: paused,commands: commands,playbackCommands: playbackCommands,context: &context,observe: observe)
+    }
+
     private func replayHitPointSum() throws -> Int32 {
         var sum: Int32 = 0
         for seat in 0..<20 where try world.integer(at: 4+seat,as: UInt8.self) == 1 {
