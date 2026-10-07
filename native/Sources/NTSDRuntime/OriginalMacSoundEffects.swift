@@ -172,7 +172,12 @@ extension OriginalMacSoundEffects {
     }
     /// A committed iteration's effects (menus before START).
     public static func calls(_ effects: [Effect]) throws -> [Call] {
-        try effects.compactMap { if case .soundMethod(let e,_) = $0 { return try call(e.arguments) }; return nil }
+        try effects.compactMap { try call(for:$0) }
+    }
+    /// One effect's call, if it is a sound method (`calls([effect])` without
+    /// the arrays; CORE_REALTIME 4t).
+    static func call(for effect: Effect) throws -> Call? {
+        if case .soundMethod(let e,_) = effect { return try call(e.arguments) }; return nil
     }
     /// A committed loaded batch: its own effects (menus, the gameplay queue)
     /// and the input phase it carries — hotkey controls, round methods and
@@ -181,25 +186,28 @@ extension OriginalMacSoundEffects {
     /// music runtime's interface tokens, which are not sound buffers.
     public static func calls(_ operations: [OriginalApplicationLoadedMenuSession.Operation],
                              music: (UInt32) -> Bool) throws -> [Call] {
-        try operations.flatMap { op -> [Call] in
-            switch op {
-            case .menu(let e): return try calls([e])
-            case .preceding(let input): return try calls(input,music:music)
-            default: return []
-            }
+        try operations.flatMap { try calls($0,music:music) }
+    }
+    /// One committed loaded operation's calls (`calls([operation],music:)`
+    /// without wrapping it in an array; CORE_REALTIME 4t).
+    public static func calls(_ op: OriginalApplicationLoadedMenuSession.Operation,music: (UInt32) -> Bool) throws -> [Call] {
+        switch op {
+        case .menu(let e): return try call(for:e).map { [$0] } ?? []
+        case .preceding(let input): return try calls(input,music:music)
+        default: return []
         }
     }
     public static func calls(_ op: OriginalApplicationInputSession.Operation,music: (UInt32) -> Bool) throws -> [Call] {
         switch op {
-        case .menu(let e): return try calls([e])
+        case .menu(let e): return try call(for:e).map { [$0] } ?? []
         case .control(let q,_) where q.kind == .method:
             let c = try call(q.arguments);return music(c.buffer) ? [] : [c]
         case .roundMethod(let e) where e.kind == .method:
             let c = try call(e.arguments);return music(c.buffer) ? [] : [c]
-        case .preceding(.menu(let e)): return try calls([e])
+        case .preceding(.menu(let e)): return try call(for:e).map { [$0] } ?? []
         case .preceding(.preceding(let catalog)):
             switch catalog {
-            case .menu(let e),.preceding(.menu(let e)): return try calls([e])
+            case .menu(let e),.preceding(.menu(let e)): return try call(for:e).map { [$0] } ?? []
             default: return []
             }
         default: return []

@@ -495,7 +495,8 @@ import NTSDCore
             }
             pendingDocuments = []
             counts.skippedDraws += min(continuationGraphics,commit.graphics.count)
-            try replay(Array(commit.graphics.dropFirst(continuationGraphics)))
+            // The slice itself, not a copy of the frame's commands (CORE_REALTIME 4t).
+            try replay(commit.graphics.dropFirst(continuationGraphics))
             // Preserve the recorded order across sound/music releases and the
             // final close post, as well as ordinary round and hotkey methods.
             for operation in commit.operations {
@@ -503,10 +504,11 @@ import NTSDCore
                 // including before a later dialog or a failed Core attempt.
                 if controlEffectsDelivered,case .preceding(.control(let q,_)) = operation,
                    q.kind == .method || q.kind == .postMessage { continue }
-                try answerRoundMusic([operation])
+                // One operation at a time, without single-element arrays (4t).
+                try answerRoundMusic(operation)
                 if let sounds {
                     let music = started.runtime.music
-                    for call in try OriginalMacSoundEffects.calls([operation],music:{ music.interface($0) != nil }) {
+                    for call in try OriginalMacSoundEffects.calls(operation,music:{ music.interface($0) != nil }) {
                         try performSound(call,on:sounds)
                     }
                 }
@@ -539,21 +541,19 @@ import NTSDCore
     /// i.e. IMediaControl::Stop and put_CurrentPosition — reach the music
     /// runtime when their batch commits, in operation order. Core already
     /// declared their results (0, ignored as by the original).
-    func answerRoundMusic(_ operations: [LoadedMenu.Operation]) throws {
-        let music = started.runtime.music
-        for operation in operations {
-            let words: [UInt32]
-            switch operation {
-            case .preceding(.roundMethod(let e)) where e.kind == .method: words = e.arguments
-            case .preceding(.control(let q,_)) where q.kind == .method: words = q.arguments
-            case .front(let e,_,_) where e.kind == "musicMethod": words = e.arguments
-            default: continue
-            }
-            guard let token = words.first,music.interface(token) != nil else { continue }
-            _ = try music.answer(.init(.method,words)); counts.music += 1
+    func answerRoundMusic(_ operation: LoadedMenu.Operation) throws {
+        let words: [UInt32]
+        switch operation {
+        case .preceding(.roundMethod(let e)) where e.kind == .method: words = e.arguments
+        case .preceding(.control(let q,_)) where q.kind == .method: words = q.arguments
+        case .front(let e,_,_) where e.kind == "musicMethod": words = e.arguments
+        default: return
         }
+        let music = started.runtime.music
+        guard let token = words.first,music.interface(token) != nil else { return }
+        _ = try music.answer(.init(.method,words)); counts.music += 1
     }
-    func replay(_ commands: [OriginalApplicationGraphics.Command]) throws {
+    func replay(_ commands: ArraySlice<OriginalApplicationGraphics.Command>) throws {
         let display = started.display
         // Pixels of the committed batch run on the render thread while the next
         // tick is computed; at most one batch is in flight (CORE_REALTIME 1c).
