@@ -25,6 +25,9 @@ public struct OriginalLoadedCatalog {
     public let stages: [OriginalStateRecord]
     public let bitmaps: [OriginalLoadedBitmap]
     public let frameAllocations: [OriginalFrameAllocation]
+    /// The allocations' indices in address order, for contact and hit frame
+    /// memory (CORE_REALTIME 4p): made once at load instead of per tick.
+    let frameAllocationOrder: [Int]
     public let checksum: UInt32, soundCount: Int
     public let soundBytes: [UInt8]
 
@@ -241,6 +244,8 @@ public struct OriginalLoadedCatalog {
         backgrounds[100] = registry.records[0x4d819f0]!
         self.registry = registry; self.objects = objects; self.backgrounds = backgrounds; self.stages = stageLoader.records
         self.bitmaps = resources.bitmaps; self.frameAllocations = resources.frameHeap.allocations
+        let allocations = resources.frameHeap.allocations
+        frameAllocationOrder = allocations.indices.sorted { allocations[$0].address < allocations[$1].address }
         self.resources = resources
         self.checksum = registry.checksum; self.soundCount = resources.sounds.count; self.soundBytes = resources.sounds.bytes
     }

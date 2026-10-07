@@ -16,7 +16,7 @@ public enum OriginalWorldContacts {
         let catalog = state.catalog
         guard try state.world.integer(at: 0x7d4,as: UInt32.self) == 0,
               let registry = catalog.registry.records[0x4d82380] else { throw OriginalStateError.invalidStorage("Contact catalog binding") }
-        let memory = OriginalContactFrameMemory(state.frameAllocations)
+        let memory = OriginalContactFrameMemory(state.frameAllocations,order: state.catalog.frameAllocationOrder)
         try apply(world: &state.world,actors: &state.actors,globals: &state.globals,
             objectCount: try registry.integer(at: 0,as: Int32.self),header: { n in
                 guard catalog.objects.indices.contains(n) else { throw OriginalStateError.invalidStorage("Contact Object binding") }
@@ -48,6 +48,16 @@ struct OriginalContactFrameMemory {
     init(_ allocations: [OriginalFrameAllocation]) {
         self.allocations = allocations
         ordered = allocations.indices.sorted { allocations[$0].address < allocations[$1].address }
+    }
+    /// With the address order made once for the loaded catalog
+    /// (`OriginalLoadedCatalog.frameAllocationOrder`): a match's allocations
+    /// keep the catalog's addresses in its order (only their contents change),
+    /// so this is the same order without sorting twice per tick (4.5% of the
+    /// A12's main thread; CORE_REALTIME 4p).
+    init(_ allocations: [OriginalFrameAllocation],order: [Int]) {
+        precondition(order.count == allocations.count,"frame allocation order")
+        self.allocations = allocations
+        ordered = order
     }
     private func allocation(_ address: UInt32) throws -> Int {
         var low = 0,high = ordered.count

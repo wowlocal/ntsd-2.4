@@ -1,0 +1,101 @@
+{
+ "study": "docs/research/CORE_REALTIME.md",
+ "phase": "4p (frame allocation order made once per loaded catalog)",
+ "date": "2026-10-07",
+ "profile_before": "phone DWARF profile rtr1b-dwarf: OriginalContactFrameMemory.init 4.5% of the main thread (its sort comparator): world contacts and actor hits each build the contact frame memory every gameplay tick, sorting the indices of ~14,600 frame allocations by address",
+ "rejected_first_version": {
+  "what": "skip the sort when the allocations are already in strictly increasing address order (one pass)",
+  "phone": [
+   {
+    "label": "rt4p-run1",
+    "bodies": 1800,
+    "completeMsPerTick": 18.2,
+    "partAssembliesPerTick": 0.0,
+    "menuMsPerStep": 0.82,
+    "menuStepsPerTick": 4.12,
+    "mainCpuShare": 0.557,
+    "renderCpuShare": 0.376,
+    "mainMsPerTick": 23.4,
+    "renderMsPerTick": 15.8
+   },
+   {
+    "label": "rt4p-run2",
+    "bodies": 1800,
+    "completeMsPerTick": 18.2,
+    "partAssembliesPerTick": 0.0,
+    "menuMsPerStep": 0.8,
+    "menuStepsPerTick": 4.12,
+    "mainCpuShare": 0.561,
+    "renderCpuShare": 0.368,
+    "mainMsPerTick": 23.4,
+    "renderMsPerTick": 15.4
+   }
+  ],
+  "result": "main 23.4/23.4 ms (within variation); a DWARF profile (rt4p-dwarf) showed OriginalContactFrameMemory.init at 6.0%: the allocations are not in increasing address order, so the sort still ran plus the extra pass; stopped before its suites finished and not committed"
+ },
+ "change": "OriginalLoadedCatalog keeps frameAllocationOrder (the indices of frameAllocations sorted by address with the same comparator, made once at load); OriginalContactFrameMemory gains init(_:order:) (a count precondition); world contacts and actor hits pass state.catalog.frameAllocationOrder. A match's frame allocations are the catalog's with the same addresses in the same order (addresses are let; only actor hits write them back, after storage writes); the sorting init stays for callers with arbitrary allocations",
+ "phone": {
+  "before": [
+   {
+    "label": "rtr1b-run1",
+    "bodies": 1800,
+    "completeMsPerTick": 18.4,
+    "partAssembliesPerTick": 0.0,
+    "menuMsPerStep": 0.82,
+    "menuStepsPerTick": 4.12,
+    "mainCpuShare": 0.56,
+    "renderCpuShare": 0.375,
+    "mainMsPerTick": 23.6,
+    "renderMsPerTick": 15.8
+   },
+   {
+    "label": "rtr1b-run2",
+    "bodies": 1800,
+    "completeMsPerTick": 18.4,
+    "partAssembliesPerTick": 0.0,
+    "menuMsPerStep": 0.79,
+    "menuStepsPerTick": 4.12,
+    "mainCpuShare": 0.556,
+    "renderCpuShare": 0.339,
+    "mainMsPerTick": 23.3,
+    "renderMsPerTick": 14.2
+   }
+  ],
+  "after": [
+   {
+    "label": "rt4p2-run1",
+    "bodies": 1800,
+    "completeMsPerTick": 16.5,
+    "partAssembliesPerTick": 0.0,
+    "menuMsPerStep": 0.82,
+    "menuStepsPerTick": 4.12,
+    "mainCpuShare": 0.54,
+    "renderCpuShare": 0.391,
+    "mainMsPerTick": 21.8,
+    "renderMsPerTick": 15.8
+   },
+   {
+    "label": "rt4p2-run2",
+    "bodies": 1800,
+    "completeMsPerTick": 16.5,
+    "partAssembliesPerTick": 0.0,
+    "menuMsPerStep": 0.82,
+    "menuStepsPerTick": 4.12,
+    "mainCpuShare": 0.541,
+    "renderCpuShare": 0.388,
+    "mainMsPerTick": 21.9,
+    "renderMsPerTick": 15.7
+   }
+  ],
+  "result": "main 23.6/23.3 -> 21.8/21.9 ms per tick, complete 18.4 -> 16.5 ms (more than the profile's share suggested)",
+  "note": "the rows keep the fields recorded in the session; their remaining fields (run seconds, peak memory, ticks per second, busy seconds) were only in the jobs' terminal output, which the Mac's restart at about 12:50 deleted with the scratchpad"
+ },
+ "gates": {
+  "headless": "vs equal, 1,832 frames identical (frozen 4p binary)",
+  "scenarios": "all 10 equal (counted before the restart); frames identical, recompared after it (rt-4p2-all: 1,832 frames)",
+  "AppKit": "vs and playback equal; 3,960 frames identical to the R1 AppKit run (recompared after the restart)",
+  "emulator": "vs equal, 1,832 frames identical (before the restart)",
+  "tests": "bundle B (native tree 99428728, the same as this commit's): all 173 suites (the 172 plus OriginalContactFrameMemoryTests), 504 tests, pass: 134 before the restart, the interrupted one and the 38 not yet run rerun on the same bundle after it (logs rt4p2-* and rt4p2r-*)"
+ },
+ "review": "independent read-only review: approve; the invariant holds (addresses let, catalog let, two production assignments of frameAllocations, neither reorders; read(_:retaining:) keeps catalog and frames together; nothing appends or reorders during a match); the precomputed order is the same permutation (same comparator; production addresses are unique, OriginalFrameHeap rejects overlaps); each construction site uses the right init; ~114 KiB per catalog, shared by copies. Not applied (optional): a debug-only sortedness assertion, a write test, a real-catalog invariant check."
+}

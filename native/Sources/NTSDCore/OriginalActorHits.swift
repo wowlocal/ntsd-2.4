@@ -20,7 +20,7 @@ public enum OriginalActorHits {
         guard try state.world.integer(at: 0x7d4,as: UInt32.self) == 0,
               let registry = catalog.registry.records[0x4d82380] else { throw OriginalStateError.invalidStorage("Hit catalog binding") }
         return OriginalHitPass(world: state.world,actors: state.actors,globals: state.globals,
-            memory: OriginalContactFrameMemory(state.frameAllocations),crt: crt,
+            memory: OriginalContactFrameMemory(state.frameAllocations,order: state.catalog.frameAllocationOrder),crt: crt,
             objectCount: try registry.integer(at: 0,as: Int32.self),header: { n in
                 guard catalog.objects.indices.contains(n) else { throw OriginalStateError.invalidStorage("Hit Object binding") }
                 return catalog.objects[n].header
