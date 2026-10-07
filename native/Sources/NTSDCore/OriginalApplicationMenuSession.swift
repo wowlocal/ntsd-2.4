@@ -62,20 +62,22 @@ public struct OriginalApplicationMenuSession {
         }
 
         func validateAliases() throws {
-            guard full.bytes.count == OriginalApplicationDispatchEntry.globalSize,
-                  memory.replayPointers.bytes.count == 8,
+            guard full.byteCount == OriginalApplicationDispatchEntry.globalSize,
+                  memory.replayPointers.byteCount == 8,
                   try Self.slice(full,OriginalApplicationMenuSession.replayStart,8) == memory.replayPointers else {
                 throw OriginalStateError.invalidStorage("Menu replay alias bytes or masks")
             }
         }
         static func slice(_ record: OriginalStateRecord,_ start: Int,_ count: Int) throws -> OriginalStateRecord {
-            guard start >= 0, count >= 0, start <= record.bytes.count-count else {
+            guard start >= 0, count >= 0, start <= record.byteCount-count else {
                 throw OriginalStateError.invalidStorage("Menu record extent")
             }
-            return try .init(bytes:Array(record.bytes[start..<start+count]),defined:Array(record.defined[start..<start+count]))
+            // The same record as copying the arrays, sharing a part's buffers
+            // when the extent is exactly that part (CORE_REALTIME B1).
+            return record.extract(start..<start+count)
         }
         mutating func replace(_ start: Int,_ record: OriginalStateRecord) throws {
-            guard start >= 0, start <= full.bytes.count-record.bytes.count else {
+            guard start >= 0, start <= full.byteCount-record.byteCount else {
                 throw OriginalStateError.invalidStorage("Menu replacement extent")
             }
             full.overwrite(at:start,with:record)
@@ -88,7 +90,7 @@ public struct OriginalApplicationMenuSession {
         /// without writing (CORE_REALTIME A0).
         fileprivate func checkMergeAliases() throws {
             let start = OriginalApplicationMenuSession.replayStart
-            guard start >= 0, start <= full.bytes.count-memory.replayPointers.bytes.count else {
+            guard start >= 0, start <= full.byteCount-memory.replayPointers.byteCount else {
                 throw OriginalStateError.invalidStorage("Menu replacement extent")
             }
             let offset = OriginalApplicationMenuSession.counterOffset,total = full.byteCount

@@ -164,7 +164,7 @@ public struct OriginalApplicationPoolSession {
             try images.addResources(inputs.bitmaps);state.bitmapInputs = images
             // The canonical globals/outer/World record is also live owned
             // storage; a logical heap identity cannot overlap that interval.
-            reserve(0x44d000,state.full.bytes.count)
+            reserve(0x44d000,state.full.byteCount)
             for (token,a) in state.memory.allocations where a.live { reserve(token,a.storage.byteCount) }
             for a in entry.snapshot.allocations { reserve(a.token,a.count) }
             for stream in entry.files.streams.values { reserve(stream.allocation.buffer,stream.allocation.capacity) }

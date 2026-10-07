@@ -182,7 +182,7 @@ public struct OriginalApplicationLoadedMenuSession {
             // The starting ranges, in the order they were always reserved: the
             // globals, live allocations, the session's static ranges (built once
             // per session; a wave-owner failure throws here as before), audio.
-            let fullCount = state.full.bytes.count,allocations = state.memory.allocations
+            let fullCount = state.full.byteCount,allocations = state.memory.allocations
             let staticRanges = try entry.entry.staticRanges(),audioAllocations = audio.allocations
             collectRanges = {
                 var spans: [(UInt64,UInt64)] = []

@@ -13,7 +13,7 @@ public enum OriginalApplicationDispatchEntry {
     /// establish EBP1/EDI2 before the call. The original rereads the live mode;
     /// mode2 requires414b70, while the other values return the retained1.
     public static func finishWorldCall(globals: OriginalStateRecord) throws -> Int32 {
-        guard globals.bytes.count == globalSize else {
+        guard globals.byteCount == globalSize else {
             throw OriginalStateError.invalidStorage("Application dispatcher globals extent")
         }
         let mode = try globals.integer(at:0x4593a0-0x44d000,as:UInt32.self)
@@ -24,7 +24,7 @@ public enum OriginalApplicationDispatchEntry {
         perform: (OriginalWindowInitialization.Request,OriginalStateRecord) throws -> OriginalWindowInitialization.Response,
         store: OriginalWindowInput.Store = { _,_ in },
         beforeCommit: (GameEntry,OriginalStateRecord) throws -> Void = { _,_ in }) throws -> GameEntry {
-        guard globals.bytes.count == globalSize else {
+        guard globals.byteCount == globalSize else {
             throw OriginalStateError.invalidStorage("Application dispatcher globals extent")
         }
         var state = globals
@@ -34,8 +34,8 @@ public enum OriginalApplicationDispatchEntry {
             try store(address,(0..<4).map { UInt8(truncatingIfNeeded: value >> ($0*8)) })
         }
         var keys = try OriginalApplicationKeyScan(sequence: word(0x4593a4),diagnostics: word(0x450bec),mode: word(0x4593a0))
-        let keyboard = Array(state.bytes[0x455378-0x44d000..<0x455378-0x44d000+300])
-        guard state.defined[0x455378-0x44d000..<0x455378-0x44d000+250].allSatisfy({ $0 }) else {
+        let keyboard = state.bytes(in:0x455378-0x44d000..<0x455378-0x44d000+300)
+        guard state.allDefined(in:0x455378-0x44d000..<0x455378-0x44d000+250) else {
             throw OriginalStateError.invalidStorage("Application keyboard backing is unknown")
         }
         try keys.apply(keyboard: keyboard) { try put(Int($0),$1) }

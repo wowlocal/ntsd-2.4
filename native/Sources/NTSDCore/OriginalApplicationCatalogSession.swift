@@ -155,7 +155,7 @@ public struct OriginalApplicationCatalogSession {
             self.entry = entry; self.inputs = inputs; self.controls = controls; self.observe = observe; self.afterChild = afterChild
             guard let first = startup.waveOwners.first else { throw Boundary.missingOwners }
             audioDomain = first.domain
-            state = entry.state; observedGlobalWrites = [Bool](repeating:false,count:state.full.bytes.count)
+            state = entry.state; observedGlobalWrites = [Bool](repeating:false,count:state.full.byteCount)
             operations = entry.stagedOperations.map(Operation.preceding); graphics = entry.stagedGraphics
             guard inputs.presentation.targetSurface == entry.target else { throw Boundary.input("Catalog presentation target") }
             guard var images = state.bitmapInputs else { throw Boundary.missingOwners }
@@ -201,7 +201,7 @@ public struct OriginalApplicationCatalogSession {
         func word(_ address: Int) throws -> UInt32 { try state.full.integer(at:address-0x44d000,as:UInt32.self) }
         func store(_ address: Int,_ bytes: [UInt8]) throws {
             let offset = address-0x44d000
-            guard offset >= 0,offset <= state.full.bytes.count-bytes.count else { throw Boundary.input("Catalog global extent") }
+            guard offset >= 0,offset <= state.full.byteCount-bytes.count else { throw Boundary.input("Catalog global extent") }
             try state.replace(offset,.init(bytes:bytes,defined:[Bool](repeating:true,count:bytes.count)))
             observedGlobalWrites.replaceSubrange(offset..<offset+bytes.count,with:repeatElement(true,count:bytes.count))
             let write = GlobalStore(address:address,bytes:bytes); globalStores.append(write); try emit(.globalStore(write))
@@ -336,7 +336,7 @@ public struct OriginalApplicationCatalogSession {
         }
         func sound(_ request: OriginalSoundRegistration) throws {
             guard pendingSound == nil,UInt32(request.index) == (try word(0x458438)),
-                  request.cacheBefore == Array(state.full.bytes[(0x455638-0x44d000)..<(0x458438-0x44d000)]) else {
+                  request.cacheBefore == state.full.bytes(in:(0x455638-0x44d000)..<(0x458438-0x44d000)) else {
                 throw Boundary.input("Registered sound cache provenance")
             }
             pendingSound = request
@@ -361,7 +361,7 @@ public struct OriginalApplicationCatalogSession {
             guard let request = pendingSound,request.index+1 == count else { throw Boundary.input("Sound commit order") }
             let incoming = request.path.unicodeScalars.map { UInt8($0.value) }+[0]
             try store(0x455638+request.index*20,incoming); try put(0x458438,UInt32(count))
-            guard bytes == Array(state.full.bytes[(0x455638-0x44d000)..<(0x458438-0x44d000)]) else {
+            guard bytes == state.full.bytes(in:(0x455638-0x44d000)..<(0x458438-0x44d000)) else {
                 throw Boundary.input("Whole sound cache differs from its own stores")
             }
             pendingSound = nil
@@ -371,7 +371,7 @@ public struct OriginalApplicationCatalogSession {
             try emit(.catalogEntry(token,name,entry.target))
             let bg = try backing(OriginalBackgroundLoader.recordSize),stage = try backing(OriginalStageLoader.stageSize)
             let result = try OriginalLoadedCatalog.loadWithFiles(files:.init(translation:.text,scanfLookahead:inputs.scanfLookahead),fileName:name,
-                initialChecksum:word(0x44f620),initialSoundBytes:Array(state.full.bytes[(0x455638-0x44d000)..<(0x458438-0x44d000)]),
+                initialChecksum:word(0x44f620),initialSoundBytes:state.full.bytes(in:(0x455638-0x44d000)..<(0x458438-0x44d000)),
                 fill:inputs.allocationFill,parentBacking:parent,backgroundBacking:Array(repeating:bg,count:101),stageBacking:Array(repeating:stage,count:60),
                 fileSource:file,fileAllocation:{ path,mode in
                     let a = try self.controls.file(path,mode)

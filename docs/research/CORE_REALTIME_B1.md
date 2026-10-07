@@ -93,3 +93,14 @@ errors, copy-on-write aliasing of the parts object, a flat-path regression
 from the extra field (measure; fall back to one optional enum), the assembly
 cache's thread safety (a lock, as `Whole`), rollback and retry (value
 semantics; the Host retry tests).
+
+## As built
+
+- **3a** (2026-10-07): as planned, plus paged and parted storage in one
+  optional enum field (`large`). The first version kept `parts` as a second
+  optional field: every flat record grew from 40 to 48 bytes and the phone's
+  main thread went from 28.2/28.3 to 29.3/29.2 ms per tick with no record
+  split (flat records are copied very many times per tick); with one field
+  the record is 40 bytes again and the main thread 28.5/28.4 ms. Paged writes
+  move the pages out of the field (`withPages`) so their buffers stay
+  uniquely referenced. [Evidence](../evidence/rt-b1a-parts-20261007.json).
