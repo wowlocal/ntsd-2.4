@@ -203,7 +203,8 @@ while measuring; restore `svc power stayon false` when the loop pauses or stops.
 | 2026-10-08 | B3a: loaded cycle in one transactional level — reverted | The loaded match cycle and entry ran in place on the loaded-cycle session's own model (one globals copy fewer per tick by construction; behaviour equal; review OK). Phone unchanged (16.95 vs 4x's 16.93) and the Mac about 1% slower in three alternating pairs (0.889 vs 0.879 ms); cause not established. Not committed | [evidence](../evidence/rt-b3a-loaded-cycle-in-place-20261008.json) | — |
 | 2026-10-08 | B2 P4g: gameplay output and mode label in place | The mode label rewrote its NUL and suffix every tick on a globals buffer three staging levels shared, so it copied the 92 KB globals every tick; the output and the label now run in place on the body's copy (copy probe: storage kept). A12 main 16.85 → 16.97 ms per tick against 4x in the same session: within variation (expected ~0.1 ms). Behaviour equal; review OK (its test findings fixed) | [evidence](../evidence/rt-b2p4g-output-mode-label-20261008.json) | 7b60f50 |
 | 2026-10-08 | 4z: the font resolves each glyph bitmap once per draw | The Demo profile (eight fighters) put a tenth of the main thread in the bitmap font's per-glyph bitmap lookup; the font now looks each pointer up once per call. A12 Demo main 17.54 -> 16.68 ms per tick, vs 16.91 -> 16.85 ms per tick. Behaviour equal; review OK | [evidence](../evidence/rt-4z-font-bitmap-once-20261008.json) | 241ed04 |
-| 2026-10-08 | 4aa: shipping builds without dynamic exclusivity checks — **60 fps** | The user's decision: release builds of the app and APK drop Swift's dynamic exclusivity checks (~3.5–4% of the main thread); test bundles keep them, with a guard test. A12, means of three runs: Demo main 16.13 ms, render 11.99; vs main 16.25, render 13.82 (4z in the same session: 16.54 / 16.77). Both threads ≤ 16.67 ms in both scenarios: tagged `rt-60fps-a12`. Behaviour equal; review OK | [evidence](../evidence/rt-4aa-unchecked-exclusivity-60fps-20261008.json) | this commit |
+| 2026-10-08 | 4aa: shipping builds without dynamic exclusivity checks — **60 fps** | The user's decision: release builds of the app and APK drop Swift's dynamic exclusivity checks (~3.5–4% of the main thread); test bundles keep them, with a guard test. A12, means of three runs: Demo main 16.13 ms, render 11.99; vs main 16.25, render 13.82 (4z in the same session: 16.54 / 16.77). Both threads ≤ 16.67 ms in both scenarios: tagged `rt-60fps-a12`. Behaviour equal; review OK | [evidence](../evidence/rt-4aa-unchecked-exclusivity-60fps-20261008.json) | 3d8935d, 7c02b7f |
+| 2026-10-08 | 4ab: the switch for FreeType text, SDL and iOS | 4aa's review: NTSDFreeTypeText (in the APK) kept its checks; it and the SDL and iOS targets now take the same opt-in. The APK library has no exclusivity call sites left in our modules (the remaining 2,164 are the toolchain's Foundation). Phone unchanged (Demo 16.24 -> 16.11, vs 16.36 -> 16.43); emulator frames identical | [evidence](../evidence/rt-4ab-exclusivity-freetype-sdl-ios-20261008.json) | this commit |
 
 ## Next task
 
@@ -233,9 +234,8 @@ main thread; message-loop iterations 4.12 × 1.14 ms; render thread 18.7 ms,
   lent as the frame).
 - **Status (2026-10-08, 4aa): 60 fps reached** (tag `rt-60fps-a12`). Main
   thread per tick on the A12: vs 16.25 ms, Demo 16.13 ms; render 13.82 and 11.99 ms
-  (means of three runs). Next tier: 8 ms. Follow-ups from 4aa's review: the
-  setting for NTSDFreeTypeText (in the APK), NTSDSDL and NTSDiOS; the other
-  packagers' opt-in.
+  (means of three runs). Next tier: 8 ms. Left from 4aa's review: the other
+  packagers' opt-in (the macOS app build, Linux, Windows, iOS).
 - **B2** ([plan](CORE_REALTIME_B2.md)): in-place nested passes under the first
   transactional copy; P1–P4 done (P4b–P4f: every gameplay-body pass that
   copied per tick); P4g the output and mode label. Left: the HUD, the

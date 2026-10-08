@@ -52,7 +52,7 @@ let sdlTargets: [Target] = sdl ? [
     .executableTarget(name: "NTSDSDL", dependencies: ["NTSDCore", "NTSDRuntime", "NTSDMusicDecoder", "CSDL3"] + (portable ? [] : ["NTSDMacPlatform"])
                           + (freetypePrefix == nil ? [] : ["NTSDFreeTypeText"]),
                       swiftSettings: [.unsafeFlags(["-Xcc", "-I\(sdlPrefix)/include"]
-                                                   + (freetypePrefix.map { ["-Xcc", "-I\($0)/include/freetype2"] } ?? []))],
+                                                   + (freetypePrefix.map { ["-Xcc", "-I\($0)/include/freetype2"] } ?? []))] + exclusivity,
                       linkerSettings: [.unsafeFlags(["-L\(sdlPrefix)/lib"] + (freetypePrefix.map { ["-L\($0)/lib"] } ?? [])),
                                        // lld-link (Windows) has no rpath; SDL3.dll sits beside the exe there.
                                        .unsafeFlags(["-Xlinker", "-rpath", "-Xlinker", "\(sdlPrefix)/lib"], .when(platforms: [.macOS, .linux]))])] : []
@@ -62,7 +62,7 @@ let sdlTargets: [Target] = sdl ? [
 let ios = Context.environment["NTSD_IOS"] == "1"
 let iosProducts: [Product] = ios ? [.executable(name: "NTSDiOS", targets: ["NTSDiOS"])] : []
 let iosTargets: [Target] = ios ? [
-    .executableTarget(name: "NTSDiOS", dependencies: ["NTSDCore", "NTSDRuntime"],
+    .executableTarget(name: "NTSDiOS", dependencies: ["NTSDCore", "NTSDRuntime"], swiftSettings: exclusivity,
                       linkerSettings: [.linkedFramework("UIKit"), .linkedFramework("AVFoundation"), .linkedFramework("CoreText")])] : []
 
 // NTSD_ANDROID=1 (with NTSD_PORTABLE=1) adds the Android host (P8): a
@@ -80,7 +80,7 @@ let androidTargets: [Target] = android ? [
 let freetypeTargets: [Target] = (sdl || android) && freetypePrefix != nil ? [
     .systemLibrary(name: "CFreeType", path: "Sources/CFreeType"),
     .target(name: "NTSDFreeTypeText", dependencies: ["NTSDRuntime", "CFreeType"],
-            swiftSettings: [.unsafeFlags(["-Xcc", "-I\(freetypePrefix!)/include/freetype2"])],
+            swiftSettings: [.unsafeFlags(["-Xcc", "-I\(freetypePrefix!)/include/freetype2"])] + exclusivity,
             linkerSettings: [.unsafeFlags(["-L\(freetypePrefix!)/lib"])])] : []
 
 let package = Package(

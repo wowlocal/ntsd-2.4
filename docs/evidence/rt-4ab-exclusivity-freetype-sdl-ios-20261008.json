@@ -1,0 +1,156 @@
+{
+ "study": "docs/research/CORE_REALTIME.md",
+ "phase": "4ab: the exclusivity switch for the FreeType text, SDL and iOS targets (4aa's review)",
+ "date": "2026-10-08",
+ "change": "native/Package.swift: NTSDFreeTypeText (part of the APK), NTSDSDL and NTSDiOS get the same opt-in `exclusivity` settings as the other shipping targets; unset, nothing changes",
+ "apk_library": "swift_beginAccess call sites in libNTSDAndroid.so, split by owning function: 4aa's APK 3 in our modules (all NTSDFreeTypeText) + 2,164 in the statically linked toolchain libraries (Foundation, FoundationEssentials), which this setting does not reach; 4ab's APK 0 in our modules + the same 2,164",
+ "phone": {
+  "demo": {
+   "4aa_same_session": [
+    {
+     "label": "rt4aa-demo4",
+     "scenario": "demo",
+     "runSeconds": 268,
+     "peakResidentMB": 1358,
+     "ticksPerSecond": 29.37,
+     "busySeconds": 175.89,
+     "bodies": 900,
+     "completeMsPerTick": 12.0,
+     "partAssembliesPerTick": 0.0,
+     "menuMsPerStep": 0.75,
+     "menuStepsPerTick": 4.13,
+     "idleMsPerStep": 0.626,
+     "idleIterationMs": 0.703,
+     "idleStepsPerTick": 3.13,
+     "tickStepMs": 1.122,
+     "mainCpuShare": 0.477,
+     "renderCpuShare": 0.355,
+     "mainMsPerTick": 16.24,
+     "renderMsPerTick": 12.1
+    }
+   ],
+   "after": [
+    {
+     "label": "rt4ab-demo1",
+     "scenario": "demo",
+     "runSeconds": 267,
+     "peakResidentMB": 1437,
+     "ticksPerSecond": 29.58,
+     "busySeconds": 174.54,
+     "bodies": 900,
+     "completeMsPerTick": 11.8,
+     "partAssembliesPerTick": 0.0,
+     "menuMsPerStep": 0.75,
+     "menuStepsPerTick": 4.13,
+     "idleMsPerStep": 0.636,
+     "idleIterationMs": 0.711,
+     "idleStepsPerTick": 3.13,
+     "tickStepMs": 1.124,
+     "mainCpuShare": 0.475,
+     "renderCpuShare": 0.353,
+     "mainMsPerTick": 16.07,
+     "renderMsPerTick": 11.94
+    },
+    {
+     "label": "rt4ab-demo2",
+     "scenario": "demo",
+     "runSeconds": 267,
+     "peakResidentMB": 1451,
+     "ticksPerSecond": 29.31,
+     "busySeconds": 174.75,
+     "bodies": 900,
+     "completeMsPerTick": 12.0,
+     "partAssembliesPerTick": 0.0,
+     "menuMsPerStep": 0.75,
+     "menuStepsPerTick": 4.13,
+     "idleMsPerStep": 0.626,
+     "idleIterationMs": 0.703,
+     "idleStepsPerTick": 3.13,
+     "tickStepMs": 1.144,
+     "mainCpuShare": 0.473,
+     "renderCpuShare": 0.351,
+     "mainMsPerTick": 16.15,
+     "renderMsPerTick": 11.97
+    }
+   ],
+   "result": "main 16.24 -> 16.11"
+  },
+  "vs": {
+   "4aa_same_session": [
+    {
+     "label": "rt4aa-vs4",
+     "scenario": "vs",
+     "runSeconds": 291,
+     "peakResidentMB": 1427,
+     "ticksPerSecond": 29.0,
+     "busySeconds": 192.75,
+     "bodies": 1800,
+     "completeMsPerTick": 12.2,
+     "partAssembliesPerTick": 0.0,
+     "menuMsPerStep": 0.73,
+     "menuStepsPerTick": 4.12,
+     "idleMsPerStep": 0.606,
+     "idleIterationMs": 0.683,
+     "idleStepsPerTick": 3.12,
+     "tickStepMs": 1.106,
+     "mainCpuShare": 0.474,
+     "renderCpuShare": 0.402,
+     "mainMsPerTick": 16.36,
+     "renderMsPerTick": 13.86
+    }
+   ],
+   "after": [
+    {
+     "label": "rt4ab-vs1",
+     "scenario": "vs",
+     "runSeconds": 296,
+     "peakResidentMB": 1397,
+     "ticksPerSecond": 28.98,
+     "busySeconds": 193.66,
+     "bodies": 1800,
+     "completeMsPerTick": 12.2,
+     "partAssembliesPerTick": 0.0,
+     "menuMsPerStep": 0.74,
+     "menuStepsPerTick": 4.12,
+     "idleMsPerStep": 0.613,
+     "idleIterationMs": 0.69,
+     "idleStepsPerTick": 3.12,
+     "tickStepMs": 1.126,
+     "mainCpuShare": 0.475,
+     "renderCpuShare": 0.404,
+     "mainMsPerTick": 16.39,
+     "renderMsPerTick": 13.93
+    },
+    {
+     "label": "rt4ab-vs2",
+     "scenario": "vs",
+     "runSeconds": 291,
+     "peakResidentMB": 1383,
+     "ticksPerSecond": 29.04,
+     "busySeconds": 191.86,
+     "bodies": 1800,
+     "completeMsPerTick": 12.1,
+     "partAssembliesPerTick": 0.0,
+     "menuMsPerStep": 0.74,
+     "menuStepsPerTick": 4.12,
+     "idleMsPerStep": 0.612,
+     "idleIterationMs": 0.689,
+     "idleStepsPerTick": 3.12,
+     "tickStepMs": 1.122,
+     "mainCpuShare": 0.478,
+     "renderCpuShare": 0.404,
+     "mainMsPerTick": 16.47,
+     "renderMsPerTick": 13.92
+    }
+   ],
+   "result": "main 16.36 -> 16.43"
+  },
+  "result": "no regression (within run variation); still at 60 fps in both scenarios"
+ },
+ "gates": {
+  "builds": "clean APK (4u)",
+  "emulator": "vs equal, 1,832 frames identical",
+  "macOS": "the headless and AppKit binaries and the test bundle do not contain these targets (unchanged)"
+ },
+ "review": "follow-up of 4aa's independent review (its finding); no new mechanism"
+}
