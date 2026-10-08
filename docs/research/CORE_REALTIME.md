@@ -44,12 +44,14 @@ setup, allocation tables and record storage; the display backend's drawing and
 present path; the Android host's drawing.
 **Out of scope:** game rules, numeric semantics, error boundaries and their
 order, fixtures, references and expected values; dropping runtime safety checks
-(e.g. `-enforce-exclusivity=unchecked`) without the user.
+without the user. (The user decided on 2026-10-08: shipping builds without
+Swift's dynamic exclusivity checks, test bundles with them; 4aa.)
 **Executor / independent reviewer:** Claude / a separate read-only reviewer agent
 for every storage-model or architecture change; a missing review is stated.
 **Allowed paths:** `native/Sources/NTSDCore`, `native/Sources/NTSDRuntime`,
-`native/Sources/NTSDAndroid`, `native/Sources/CAndroidNative`, test helpers and
-new tests in `native/Tests`, `tools/crossplatform`, this card and its evidence.
+`native/Sources/NTSDAndroid`, `native/Sources/CAndroidNative`, build settings in
+`native/Package.swift` (4k, 4aa), test helpers and new tests in `native/Tests`,
+`tools/crossplatform`, this card and its evidence.
 
 ## Starting point (2026-10-06, 9df1054)
 
@@ -103,7 +105,17 @@ and with cross-module optimization (4k) an unchanged client module keeps the
 inlined code and class sizes of an older dependency: an incremental AppKit app
 allocated `OriginalRuntimeSession` 24 bytes short and corrupted its heap at
 startup. A clean build takes ~2 minutes per binary and ~6 for the test bundle.
-6. Phone speed with `android_speed.py`; a profile when the result needs explaining.
+Exclusivity (4aa): build the test bundle and the headless and AppKit gate
+binaries without `NTSD_UNCHECKED_EXCLUSIVITY`, so Swift's dynamic checks trap
+an overlapping access on every gated path (`OriginalExclusivityChecksTests`
+fails if a test bundle was built with it); add one unchecked headless vs and
+Demo run for the shipping configuration. The macOS app build, `package_linux.py`,
+`package_windows.py` and `ios_app.py` have not opted in yet.
+6. Phone speed with `android_speed.py` in both scenarios, vs and the Demo
+   (`--scenario demo`, eight computer fighters; the user asked for it),
+   interleaved with the previous build in one session (the phone drifts between
+   sessions); a profile when the result needs explaining. The APK is a shipping
+   build: `android_app.py` sets `NTSD_UNCHECKED_EXCLUSIVITY=1` (4aa).
 7. An independent read-only review for storage-model or architecture changes.
 8. At each phase end: the full nine-host matrix (`matrix.py`).
 
@@ -190,7 +202,8 @@ while measuring; restore `svc power stayon false` when the loop pauses or stops.
 | 2026-10-08 | 4x: attempt identity without a random UUID | Each loading attempt made a random UUID, and Foundation on Android read /dev/urandom for each (0.88% of the main thread in __openat); isSameAttempt now compares the attempt's shared storage object. A12 main 16.9 -> 16.93 ms per tick, menu step 0.77 -> 0.73 ms against P4f in the same session (within variation; ~0.15 ms by the profile); Mac vs 0.753 → 0.704 ms. Behaviour equal; full suite list passes; review: equivalent | [evidence](../evidence/rt-4x-attempt-identity-20261008.json) | 2d56169 |
 | 2026-10-08 | B3a: loaded cycle in one transactional level — reverted | The loaded match cycle and entry ran in place on the loaded-cycle session's own model (one globals copy fewer per tick by construction; behaviour equal; review OK). Phone unchanged (16.95 vs 4x's 16.93) and the Mac about 1% slower in three alternating pairs (0.889 vs 0.879 ms); cause not established. Not committed | [evidence](../evidence/rt-b3a-loaded-cycle-in-place-20261008.json) | — |
 | 2026-10-08 | B2 P4g: gameplay output and mode label in place | The mode label rewrote its NUL and suffix every tick on a globals buffer three staging levels shared, so it copied the 92 KB globals every tick; the output and the label now run in place on the body's copy (copy probe: storage kept). A12 main 16.85 → 16.97 ms per tick against 4x in the same session: within variation (expected ~0.1 ms). Behaviour equal; review OK (its test findings fixed) | [evidence](../evidence/rt-b2p4g-output-mode-label-20261008.json) | 7b60f50 |
-| 2026-10-08 | 4z: the font resolves each glyph bitmap once per draw | The Demo profile (eight fighters) put a tenth of the main thread in the bitmap font's per-glyph bitmap lookup; the font now looks each pointer up once per call. A12 Demo main 17.54 -> 16.68 ms per tick, vs 16.91 -> 16.85 ms per tick. Behaviour equal; review OK | [evidence](../evidence/rt-4z-font-bitmap-once-20261008.json) | this commit |
+| 2026-10-08 | 4z: the font resolves each glyph bitmap once per draw | The Demo profile (eight fighters) put a tenth of the main thread in the bitmap font's per-glyph bitmap lookup; the font now looks each pointer up once per call. A12 Demo main 17.54 -> 16.68 ms per tick, vs 16.91 -> 16.85 ms per tick. Behaviour equal; review OK | [evidence](../evidence/rt-4z-font-bitmap-once-20261008.json) | 241ed04 |
+| 2026-10-08 | 4aa: shipping builds without dynamic exclusivity checks — **60 fps** | The user's decision: release builds of the app and APK drop Swift's dynamic exclusivity checks (~3.5–4% of the main thread); test bundles keep them, with a guard test. A12, means of three runs: Demo main 16.13 ms, render 11.99; vs main 16.25, render 13.82 (4z in the same session: 16.54 / 16.77). Both threads ≤ 16.67 ms in both scenarios: tagged `rt-60fps-a12`. Behaviour equal; review OK | [evidence](../evidence/rt-4aa-unchecked-exclusivity-60fps-20261008.json) | this commit |
 
 ## Next task
 
@@ -218,15 +231,11 @@ main thread; message-loop iterations 4.12 × 1.14 ms; render thread 18.7 ms,
   per tick after 1j; each full-frame pass costs ~1.7 ms on the A12. P1 (the
   present's back-buffer copy and crop fused) next, then P2 (the back buffer
   lent as the frame).
-- **Status (2026-10-08, 4z):** the phone speed run now has two scenarios,
-  vs (two fighters) and the Demo (eight computer fighters, `--scenario demo`;
-  the user asked for it). Main thread per tick: vs 16.85 ms, Demo 16.68 ms;
-  render ~14.1 (vs) and ~12.0 (Demo). The user asked for a tag (`rt-60fps-a12`)
-  when both threads are at or under 16.67 ms in both scenarios (mean of at
-  least three runs). The phone's render thread drifts by up to 1.5 ms between
-  sessions, so compare against a baseline APK re-run in the same session
-  (`rt4w.apk` is archived on T7, crossplatform-scratch-20261008a). Gate
-  binaries come from clean builds (4u).
+- **Status (2026-10-08, 4aa): 60 fps reached** (tag `rt-60fps-a12`). Main
+  thread per tick on the A12: vs 16.25 ms, Demo 16.13 ms; render 13.82 and 11.99 ms
+  (means of three runs). Next tier: 8 ms. Follow-ups from 4aa's review: the
+  setting for NTSDFreeTypeText (in the APK), NTSDSDL and NTSDiOS; the other
+  packagers' opt-in.
 - **B2** ([plan](CORE_REALTIME_B2.md)): in-place nested passes under the first
   transactional copy; P1–P4 done (P4b–P4f: every gameplay-body pass that
   copied per tick); P4g the output and mode label. Left: the HUD, the

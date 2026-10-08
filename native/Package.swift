@@ -17,11 +17,24 @@ let portable = true
 // floating-point or other semantic flag.
 let crossModule: [SwiftSetting] = [.unsafeFlags(["-cross-module-optimization"], .when(configuration: .release))]
 
+// Shipping builds drop Swift's dynamic exclusivity checks (CORE_REALTIME 4aa;
+// the user's decision, 2026-10-08): about 3.5-4% of the A12's main thread.
+// Opt-in with NTSD_UNCHECKED_EXCLUSIVITY=1, which the APK builder sets; every
+// other build, the test bundles in particular, keeps the checks, and the
+// define lets a test fail when its bundle was built without them. Behaviour
+// of correct code is the same either way.
+let uncheckedExclusivity = Context.environment["NTSD_UNCHECKED_EXCLUSIVITY"] == "1"
+let exclusivity: [SwiftSetting] = uncheckedExclusivity
+    ? [.unsafeFlags(["-enforce-exclusivity=unchecked"], .when(configuration: .release)),
+       .define("NTSD_UNCHECKED_EXCLUSIVITY", .when(configuration: .release))]
+    : []
+
 let macProducts: [Product] = portable ? [] : [.executable(name: "NTSDNative", targets: ["NTSDApp"])]
 let macTargets: [Target] = portable ? [] : [
     .target(name: "NTSDMacPlatform", dependencies: ["NTSDCore", "NTSDRuntime"], resources: [.copy("Resources/OriginalMusic")],
+            swiftSettings: exclusivity,
             linkerSettings: [.linkedFramework("AppKit"), .linkedFramework("AVFoundation")]),
-    .executableTarget(name: "NTSDApp", dependencies: ["NTSDCore", "NTSDMacPlatform"],
+    .executableTarget(name: "NTSDApp", dependencies: ["NTSDCore", "NTSDMacPlatform"], swiftSettings: exclusivity,
                       linkerSettings: [.linkedFramework("AppKit"), .linkedFramework("SpriteKit"),
                                        .linkedFramework("AVFoundation")])]
 let macTestDependencies: [Target.Dependency] = portable ? [] : ["NTSDMacPlatform"]
@@ -60,7 +73,7 @@ let androidProducts: [Product] = android ? [.library(name: "NTSDAndroid", type: 
 let androidTargets: [Target] = android ? [
     .target(name: "CAndroidNative", linkerSettings: [.linkedLibrary("android"), .linkedLibrary("log"), .linkedLibrary("aaudio")]),
     .target(name: "NTSDAndroid", dependencies: ["NTSDCore", "NTSDRuntime", "NTSDMusicDecoder", "CAndroidNative"] + (freetypePrefix == nil ? [] : ["NTSDFreeTypeText"]),
-            swiftSettings: [.unsafeFlags(freetypePrefix.map { ["-Xcc", "-I\($0)/include/freetype2"] } ?? [])])] : []
+            swiftSettings: [.unsafeFlags(freetypePrefix.map { ["-Xcc", "-I\($0)/include/freetype2"] } ?? [])] + exclusivity)] : []
 
 // FreeType glyph masks for the SDL host off Apple platforms and the Android
 // host, from the static FreeType at NTSD_FREETYPE_PREFIX.
@@ -88,17 +101,17 @@ let package = Package(
         .target(name: "NTSDReplayCodec", exclude: ["README.md", "upstream.json"],
                 publicHeadersPath: "include", cSettings: [.unsafeFlags(["-Wno-deprecated-non-prototype"])]),
         .target(name: "NTSDCore", dependencies: ["NTSDReplayCodec"], resources: [.copy("Resources/OriginalStartup"), .copy("Resources/OriginalCommonSounds"), .copy("Resources/OriginalLoadingInterface"), .copy("Resources/OriginalCharacterMenu"), .copy("Resources/OriginalWarMenu"), .copy("Resources/OriginalMatchArenas"), .copy("Resources/OriginalCatalog")],
-                swiftSettings: crossModule),
+                swiftSettings: crossModule + exclusivity),
         .systemLibrary(name: "CZlib", path: "Sources/CZlib"),
-        .target(name: "NTSDRuntime", dependencies: ["NTSDCore"], swiftSettings: crossModule),
+        .target(name: "NTSDRuntime", dependencies: ["NTSDCore"], swiftSettings: crossModule + exclusivity),
         // The vendored decoder learns the byte order from TargetConditionals.h
         // on Apple platforms and only for x86 elsewhere; every non-Apple target
         // built here (aarch64, x86_64) is little-endian.
         .target(name: "CALAC", exclude: ["README.md", "upstream.json", "vendor/LICENSE"],
                 cSettings: [.define("TARGET_RT_LITTLE_ENDIAN", to: "1", .when(platforms: [.linux, .android, .windows]))],
                 cxxSettings: [.define("TARGET_RT_LITTLE_ENDIAN", to: "1", .when(platforms: [.linux, .android, .windows]))]),
-        .target(name: "NTSDMusicDecoder", dependencies: ["CALAC"]),
-        .executableTarget(name: "NTSDHeadless", dependencies: ["NTSDCore", "NTSDRuntime"]),
+        .target(name: "NTSDMusicDecoder", dependencies: ["CALAC"], swiftSettings: exclusivity),
+        .executableTarget(name: "NTSDHeadless", dependencies: ["NTSDCore", "NTSDRuntime"], swiftSettings: exclusivity),
         .target(name: "NTSDReferenceChecks", dependencies: ["NTSDCore", "CZlib"]),
         .executableTarget(name: "NTSDBootstrapCheck", dependencies: ["NTSDReferenceChecks"]),
         .executableTarget(name: "NTSDCatalogCheck", dependencies: ["NTSDReferenceChecks"]),
@@ -110,7 +123,7 @@ let package = Package(
         .executableTarget(name: "NTSDCombatCheck", dependencies: ["NTSDCore"]),
         .executableTarget(name: "NTSDStateCheck", dependencies: ["NTSDCore"]),
         .testTarget(name: "NTSDCoreTests", dependencies: ["NTSDCore", "NTSDReferenceChecks", "NTSDRuntime", "NTSDMusicDecoder", "CZlib"] + macTestDependencies,
-                    exclude: portable ? ["Mac"] : [], resources: [.copy("Fixtures")])
+                    exclude: portable ? ["Mac"] : [], resources: [.copy("Fixtures")], swiftSettings: exclusivity)
     ],
     swiftLanguageModes: [.v5]
 )
