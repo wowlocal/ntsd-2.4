@@ -80,7 +80,9 @@ def icon(res):
 
 
 def build(out, release=False):
-    env = {**os.environ, "NTSD_PORTABLE": "1", "NTSD_ANDROID": "1", "ANDROID_HOME": str(SDK), "ANDROID_NDK_ROOT": str(NDK),
+    # A shipping build: without Swift's dynamic exclusivity checks
+    # (CORE_REALTIME 4aa; the test bundles keep them).
+    env = {**os.environ, "NTSD_PORTABLE": "1", "NTSD_ANDROID": "1", "NTSD_UNCHECKED_EXCLUSIVITY": "1", "ANDROID_HOME": str(SDK), "ANDROID_NDK_ROOT": str(NDK),
            "NTSD_FREETYPE_PREFIX": str(X5 / "android-deps/freetype/install-aarch64")}   # build_android_deps.sh
     common = [SWIFT, "build", "--package-path", ROOT / "native", "--scratch-path", X5 / "build-android-aarch64",
               "--swift-sdk", "aarch64-unknown-linux-android28", "-c", "release", "--static-swift-stdlib", "--product", "NTSDAndroid"]
