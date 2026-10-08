@@ -3,12 +3,12 @@
 own progress events (CORE_REALTIME phase 0; a test harness).
 
 Usage: android_speed.py OUT_DIR [--serial S] [--apk PATH] [--label L]
-                        [--profile SECONDS] [--lib DIR] [--call-graph fp|dwarf,N]
-                        [--frequency HZ] [--offcpu] [--real-clock]
+                        [--scenario vs|demo] [--profile SECONDS] [--lib DIR]
+                        [--call-graph fp|dwarf,N] [--frequency HZ] [--offcpu] [--real-clock]
 
 Runs the debuggable build (local.ntsd.port; the release build cannot be
-scripted) with app_e2e's computer-vs script, music, sounds and network off and
-no frame capture, and reports ticks per second: gameplay bodies 300 -> 1800
+scripted) with app_e2e's computer-vs script (or, with --scenario demo, its
+Demo: many fighters at once), music, sounds and network off and no frame capture, and reports ticks per second: gameplay bodies 300 -> 1800
 over the app's uptime. Also the busy seconds (the game thread's busy time: the
 measure where the game reaches its own paced rate, as on the emulator), the run time and the peak
 resident memory (VmHWM). Appends a JSON line to OUT_DIR/speed.jsonl.
@@ -28,7 +28,7 @@ screen); --restore-stayon restores `svc power stayon false` afterwards. A
 swipe lock screen is dismissed (wm dismiss-keyguard); a device still showing its
 lock screen (a PIN) is refused at once.
 """
-import argparse, collections, json, os, subprocess, sys, time
+import argparse, collections, importlib.util, json, os, subprocess, sys, time
 from pathlib import Path
 
 ROOT = Path(__file__).resolve().parents[2]
@@ -64,8 +64,20 @@ def shell(serial, command, input=None):
     return adb(serial, "shell", command, input=input).stdout
 
 
-def arguments(real_clock=False):
-    script = (ROOT / "tools/app_e2e_computer_vs.script").read_text().strip() + "; 9200 exit"
+def scenario_script(name):
+    """The scenario's app_e2e script without its frame captures."""
+    if name == "vs":
+        return (ROOT / "tools/app_e2e_computer_vs.script").read_text().strip() + "; 9200 exit"
+    if name == "demo":   # app_e2e's Demo: the menu's Demo, kept going until 7300, then exit
+        spec = importlib.util.spec_from_file_location("app_e2e", ROOT / "tools/app_e2e.py")
+        e2e = importlib.util.module_from_spec(spec); spec.loader.exec_module(e2e)
+        steps = [step for step in e2e.DEMO.split("; ") if " capture " not in step]
+        return "; ".join(steps)
+    raise SystemExit(f"unknown scenario {name}")
+
+
+def arguments(real_clock=False, scenario="vs"):
+    script = scenario_script(scenario)
     # The virtual clock advances 8 ms per message-loop iteration, so the game's
     # 33 ms timer takes about four iterations per tick and the three idle ones
     # each sleep 5 ms for real: ~16 ms of every tick is the game's own pacing,
@@ -169,6 +181,7 @@ def main():
     a = argparse.ArgumentParser()
     a.add_argument("out"); a.add_argument("--serial", default=os.environ.get("ANDROID_SERIAL", "R58R36F7VFD"))
     a.add_argument("--apk"); a.add_argument("--label", default=time.strftime("%Y%m%d-%H%M%S"))
+    a.add_argument("--scenario", choices=["vs", "demo"], default="vs")
     a.add_argument("--profile", type=int, default=0); a.add_argument("--lib", type=Path, default=DEFAULT_LIB)
     a.add_argument("--timeout", type=int, default=1800)
     # dwarf,16384 at -f 200 gives whole stacks where frame pointers stop
@@ -233,32 +246,36 @@ def main():
     try:
         shell(s, f"am force-stop {PACKAGE}")
         shell(s, f"run-as {PACKAGE} sh -c 'rm -rf files/speed && mkdir -p files/speed/overlay && cat > files/args.txt'",
-              input="\n".join(arguments(o.real_clock)) + "\n")
+              input="\n".join(arguments(o.real_clock, o.scenario)) + "\n")
         start = time.time()
         shell(s, f"am start -n {PACKAGE}/android.app.NativeActivity")
         time.sleep(5)
         peak, profiled, cpu_a, cpu_b = 0, None, None, None
+        window = (300, 900) if o.scenario == "demo" else (600, 1500)
         while (pid := shell(s, f"pidof {PACKAGE}").strip()):
             hwm = shell(s, f"grep VmHWM /proc/{pid}/status 2>/dev/null").split()
             if len(hwm) > 1 and hwm[1].isdigit():
                 peak = max(peak, int(hwm[1]))
             bodies = max((e.get("gameplayBodies", 0) for e in progress(s) if e.get("event") == "progress"), default=0)
-            # Thread CPU between bodies 600 and 1500: each thread's share of the
-            # wall time, times the wall time per tick, is its compute per tick.
-            if cpu_a is None and bodies >= 600: cpu_a = thread_cpu(s, pid)
-            if cpu_b is None and bodies >= 1500: cpu_b = thread_cpu(s, pid)
+            # Thread CPU between bodies 600 and 1500 (the Demo's single match is
+            # ~945 bodies long: 300 and 900): each thread's share of the wall
+            # time, times the wall time per tick, is its compute per tick.
+            if cpu_a is None and bodies >= window[0]: cpu_a = thread_cpu(s, pid)
+            if cpu_b is None and bodies >= window[1]: cpu_b = thread_cpu(s, pid)
             if o.profile and profiled is None and bodies >= 300:
                 profiled = record_profile(s, o.profile, out, o.label, o.lib, o.call_graph, o.frequency, o.offcpu)
             if time.time() - start > o.timeout:
                 shell(s, f"am force-stop {PACKAGE}"); break
-            time.sleep(5)
+            # The Demo's 900 arrives ~45 bodies before its match ends: poll each
+            # second there; vs keeps its 5 s (comparable with earlier runs).
+            time.sleep(1 if o.scenario == "demo" else 5)
         events = progress(s)
     finally:
         shell(s, f"run-as {PACKAGE} rm -f files/args.txt")
         if o.restore_stayon:
             shell(s, "svc power stayon false")
     marks = [e for e in events if e.get("event") == "progress"]
-    row = {"label": o.label, "serial": s, "runSeconds": round(time.time() - start), "peakResidentMB": peak // 1024}
+    row = {"label": o.label, "serial": s, "scenario": o.scenario, "runSeconds": round(time.time() - start), "peakResidentMB": peak // 1024}
     if len(marks) > 1:
         first, last = marks[0], marks[-1]
         row.update(ticksPerSecond=round((last["gameplayBodies"] - first["gameplayBodies"]) / (last["uptime"] - first["uptime"]), 2),
