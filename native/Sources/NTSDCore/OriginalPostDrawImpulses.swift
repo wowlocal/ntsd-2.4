@@ -16,6 +16,23 @@ public enum OriginalPostDrawImpulses {
                              observe: (OriginalMenuPresentationEvent) throws -> Void = { _ in }) throws {
         let mode = try state.globals.integer(at: 0x451160-0x44d000,as: Int32.self)
         var owned = state
+        try run(mode: mode,state: &owned,dcResult: dcResult,dc: dc,textRenderer: textRenderer,mission: mission,war: war,observe: observe,inPlace: false)
+        state = owned
+    }
+    /// `apply` run on the caller's state, its impulses in place too
+    /// (CORE_REALTIME B2 P4): for callers that drop the state when this throws.
+    package static func applyInPlace(state: inout OriginalMatchPreparation,dcResult: Int32,dc: UInt32,
+                                     textRenderer: OriginalSurfaceText.Renderer? = nil,
+                                     mission: (inout OriginalMatchPreparation) throws -> Bool = { _ in false },
+                                     war: (inout OriginalMatchPreparation) throws -> Bool = { _ in false },
+                                     observe: (OriginalMenuPresentationEvent) throws -> Void = { _ in }) throws {
+        let mode = try state.globals.integer(at: 0x451160-0x44d000,as: Int32.self)
+        try run(mode: mode,state: &state,dcResult: dcResult,dc: dc,textRenderer: textRenderer,mission: mission,war: war,observe: observe,inPlace: true)
+    }
+    private static func run(mode: Int32,state owned: inout OriginalMatchPreparation,dcResult: Int32,dc: UInt32,
+                            textRenderer: OriginalSurfaceText.Renderer?,mission: (inout OriginalMatchPreparation) throws -> Bool,
+                            war: (inout OriginalMatchPreparation) throws -> Bool,observe: (OriginalMenuPresentationEvent) throws -> Void,
+                            inPlace: Bool) throws {
         // A caller without the Mission/War composition returns false: explicit boundary.
         if mode == 1,try !mission(&owned) { throw OriginalStateError.invalidStorage("Post-draw: original mode1 child is not recovered") }
         if mode == 4,try !war(&owned) { throw OriginalStateError.invalidStorage("Post-draw: original mode4 child is not recovered") }
@@ -23,7 +40,6 @@ public enum OriginalPostDrawImpulses {
         try observe(.init(.format,[UInt32(bytes.count)],[format,bytes]))
         try OriginalSurfaceText.draw(bytes,target: owned.globals.integer(at: 0x455608-0x44d000,as: UInt32.self),
             background: 0,color: 0xffffff,x: 0,y: 30,dcResult: dcResult,dc: dc,renderer: textRenderer,observe: observe)
-        try OriginalWorldImpulses.apply(state: &owned)
-        state = owned
+        if inPlace { try OriginalWorldImpulses.applyInPlace(state: &owned) } else { try OriginalWorldImpulses.apply(state: &owned) }
     }
 }

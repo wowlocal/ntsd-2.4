@@ -11,6 +11,18 @@ public enum OriginalWorldDrawing {
         detail: Bool = true,
         observe: (OriginalFrontScreenEvent) throws -> Void = { _ in }) throws {
         var next = state
+        try applyInPlace(state: &next,target: target,phase: phase,surface: surface,resourceBitmap: resourceBitmap,
+                         performBlit: performBlit,detail: detail,observe: observe)
+        state = next
+    }
+    /// `apply` run on the caller's state (CORE_REALTIME B2 P4): for callers
+    /// that drop the state when this throws.
+    package static func applyInPlace(state next: inout OriginalMatchPreparation,target: UInt32,phase: Int32,
+        surface: (Int) throws -> UInt32,
+        resourceBitmap: (UInt32) throws -> (OriginalStateRecord,UInt32),
+        performBlit: (OriginalBitmapBlit) throws -> Int32,
+        detail: Bool = true,
+        observe: (OriginalFrontScreenEvent) throws -> Void = { _ in }) throws {
         let catalog = next.catalog,bitmaps = next.bitmaps,released = next.releasedBitmaps
         guard try next.world.integer(at: 0x7d4,as: UInt32.self) == 0 else { throw error("Catalog binding") }
         try draw(world: next.world,actors: &next.actors,globals: next.globals,backgrounds: next.backgrounds,
@@ -24,7 +36,6 @@ public enum OriginalWorldDrawing {
                 guard token != 0,Int(token)-1 < bitmaps.count,!released.contains(Int(token)-1) else { throw error("Bitmap binding") }
                 return try (bitmaps[Int(token)-1].storage,surface(Int(token)-1))
             },resourceBitmap: resourceBitmap,performBlit: performBlit,detail: detail,observe: observe)
-        state = next
     }
     private static func error(_ detail: String) -> OriginalStateError { .invalidStorage("World drawing: "+detail) }
     static func draw(world: OriginalStateRecord,actors: inout [OriginalStateRecord],globals: OriginalStateRecord,

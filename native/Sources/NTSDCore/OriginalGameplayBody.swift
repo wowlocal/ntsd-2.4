@@ -93,9 +93,9 @@ public enum OriginalGameplayBody {
             try checkpoint(stage,match,input,crt)
             try ownedCheckpoint(stage,match,input,crt,installed)
         }
-        // Control, physics and the post-draw lifecycle run in place on this
-        // body's own copy, which it drops when anything throws (CORE_REALTIME
-        // B2 P4).
+        // Control, physics, links, contacts, camera, drawing, the post-draw
+        // impulses and lifecycle run in place on this body's own copy, which it
+        // drops when anything throws (CORE_REALTIME B2 P4).
         try OriginalWorldControl.applyInPlace(state: &next, bundledLibrary: library != nil, observe: { try observe(.control(slot: $0, $1)) })
         try emitCheckpoint(.control, next, owned, random)
         // The hit pass's item word [esp+4c]: only a reserve respawn writes it
@@ -104,9 +104,9 @@ public enum OriginalGameplayBody {
         try OriginalWorldPhysics.applyInPlace(state: &next, observe: { try observe(.physics($0)) },
             respawned: { itemSlot = .respawn() })
         try emitCheckpoint(.physics, next, owned, random)
-        try OriginalWorldLinks.apply(state: &next, sse2Conversion: sse2, observe: { try observe(.links(.links, $0)) })
+        try OriginalWorldLinks.applyInPlace(state: &next, sse2Conversion: sse2, observe: { try observe(.links(.links, $0)) })
         try emitCheckpoint(.links, next, owned, random)
-        try OriginalWorldContacts.apply(state: &next, bundledLibrary: library != nil, observe: { try observe(.contacts($0)) })
+        try OriginalWorldContacts.apply(state: &next, bundledLibrary: library != nil, observe: { try observe(.contacts($0)) }, inPlace: true)
         try emitCheckpoint(.contacts, next, owned, random)
         // The full-pool item's root4c has one producer in this call, a reserve
         // respawn (above); otherwise it and the incoming cpoint partner have no
@@ -130,12 +130,12 @@ public enum OriginalGameplayBody {
                 try emitCheckpoint(point, value, owned, random)
             })
         let mode = try next.globals.integer(at: 0x451160-0x44d000, as: Int32.self)
-        try OriginalWorldCamera.apply(state: &next, mode: mode, target: target,
+        try OriginalWorldCamera.applyInPlace(state: &next, mode: mode, target: target,
             sse2Conversion: sse2, surface: surface, fillBacking: fillBacking,
             performFill: performFill, performBlit: performBlit, detail: detail, observe: { try observe(.drawing(.camera, $0)) })
         try emitCheckpoint(.camera, next, owned, random)
         let phase = try next.globals.integer(at: 0x450bd8-0x44d000, as: Int32.self)
-        try OriginalWorldDrawing.apply(state: &next, target: target, phase: phase,
+        try OriginalWorldDrawing.applyInPlace(state: &next, target: target, phase: phase,
             surface: surface, resourceBitmap: resourceBitmap, performBlit: performBlit,
             detail: detail, observe: { try observe(.drawing(.drawing, $0)) })
         try emitCheckpoint(.drawing, next, owned, random)
@@ -204,7 +204,7 @@ public enum OriginalGameplayBody {
             })
             return true
         }
-        try OriginalPostDrawImpulses.apply(state: &next, dcResult: presentation.dcResult, dc: presentation.dc, textRenderer: textRenderer, mission: { try mission(&$0) }, war: { try war(&$0) }, observe: { event in
+        try OriginalPostDrawImpulses.applyInPlace(state: &next, dcResult: presentation.dcResult, dc: presentation.dc, textRenderer: textRenderer, mission: { try mission(&$0) }, war: { try war(&$0) }, observe: { event in
             // This original diagnostic sprintf writes root48c. If full backing
             // is known, retain its own output for the later overlapping users.
             // A nil backing remains unavailable, never filled from a fixture.

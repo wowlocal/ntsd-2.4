@@ -75,20 +75,25 @@ final class OriginalWorldLinksTests: XCTestCase {
                 try world.write(UInt32(aliases[i] ?? i),at: 0x194+i*4);try world.write(UInt8(active[i] ?? 0),at: 4+i);try actors[i].write(UInt32(0),at: 0x368)
             };try world.write(UInt32(0),at: 0x7d4)
             for a in item.actors ?? [] { for p in a.patches { try patch(&actors[a.index],p.offset,p.bytes) } }
-            var ownFrames = frames,ownHeaders = headers,globals = globalsBase,events: [Event] = [],bg = try defined(0x990)
+            var ownFrames = frames,ownHeaders = headers,startGlobals = globalsBase,bg = try defined(0x990)
             let bounds = item.bounds ?? [0,600];try bg.write(bounds[0],at: 4);try bg.write(bounds[1],at: 8)
             for p in item.frames ?? [] { try patch(&ownFrames[p.object][p.index],p.offset,p.bytes) }
             for p in item.headers ?? [] { try patch(&ownHeaders[p.object],p.offset,p.bytes) }
-            for p in item.globals ?? [] { try patch(&globals,p.offset-0x44d000,p.bytes) }
+            for p in item.globals ?? [] { try patch(&startGlobals,p.offset-0x44d000,p.bytes) }
+            // Both forms against the same recorded results (CORE_REALTIME B2 P4).
+            let startActors = actors
+            for inPlace in [false,true] {
+            var actors = startActors,globals = startGlobals,events: [Event] = []
             try OriginalWorldLinks.apply(world: world,actors: &actors,globals: &globals,sse2Conversion: item.sse2 == 1,precision: OriginalArithmeticPrecision(controlWord: UInt16(c.fpcw)),
                 header: { ownHeaders[$0] },frame: { ownFrames[$0][Int($1)] },background: { _ in bg },observe: { event in
                     if case let .random(slot,stream,range,result) = event { events.append(.init(slot: slot,kind: "random",arguments: [stream,range,result].map(UInt32.init(bitPattern:)))) }
-                })
+                },inPlace: inPlace)
             let records = [world]+actors
             XCTAssertEqual(MatchPreparationReference.digest(Data(records.flatMap(\.bytes))),item.poolSHA256,item.label+" pool")
             XCTAssertEqual(MatchPreparationReference.digest(Data(records.flatMap { $0.defined.map { $0 ? UInt8(1) : UInt8(0) } })),item.maskSHA256,item.label+" masks")
             XCTAssertEqual(MatchPreparationReference.digest(Data(globals.bytes)),item.globalsSHA256,item.label+" globals")
             XCTAssertTrue(globals.defined.allSatisfy { $0 });XCTAssertEqual(events,item.events,item.label+" events")
+            }
         }
         print("WORLD LINKS",c.cases.count,"whole pools compared")
     }
@@ -110,5 +115,14 @@ final class OriginalWorldLinksTests: XCTestCase {
         },afterDepth: { slot,actor in depths.append(slot);XCTAssertEqual(try actor.integer(at: 0x18,as: Int32.self),600) }))
         XCTAssertEqual(depths,[0]);XCTAssertEqual(draws,[.random(slot: 1,stream: 138,range: 16,result: 2)])
         XCTAssertEqual(actors,beforeActors);XCTAssertEqual(globals,beforeGlobals)
+        // In place (CORE_REALTIME B2 P4): the same error after the same draw,
+        // slot 0's depth and the draw kept, nothing left vacant.
+        depths = [];draws = []
+        XCTAssertThrowsError(try OriginalWorldLinks.apply(world: world,actors: &actors,globals: &globals,header: { $0 == 0 ? header : weapon },frame: { _,_ in frame },background: { _ in bg },observe: { event in
+            draws.append(event);throw OriginalStateError.invalidStorage("Stop after original RNG")
+        },afterDepth: { slot,_ in depths.append(slot) },inPlace: true)) { XCTAssertEqual("\($0)","\(OriginalStateError.invalidStorage("Stop after original RNG"))") }
+        XCTAssertEqual(depths,[0]);XCTAssertEqual(draws,[.random(slot: 1,stream: 138,range: 16,result: 2)])
+        XCTAssertEqual(actors.count,400);XCTAssertTrue(actors.allSatisfy { $0.byteCount == 0x420 });XCTAssertEqual(globals.byteCount,0xb440)
+        XCTAssertEqual(try actors[0].integer(at: 0x18,as: Int32.self),600);XCTAssertNotEqual(globals,beforeGlobals)
     }
 }

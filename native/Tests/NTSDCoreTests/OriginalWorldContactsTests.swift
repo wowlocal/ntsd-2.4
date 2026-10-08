@@ -55,6 +55,7 @@ final class OriginalWorldContactsTests: XCTestCase {
         var globalsBase = try defined(OriginalMatchPreparation.globalSize)
         try globalsBase.write(Int32(1),at: 0x44d034-0x44d000)
         for i in 0..<3000 { try globalsBase.write(UInt8(1+i%255),at: 0x44ff90-0x44d000+i) }
+        var callers = 0
         for item in c.cases {
             var template = try OriginalStateRecord.actor(over: (0..<0x420).map { item.fill == "a5" ? 0xa5 : UInt8(truncatingIfNeeded: $0) })
             for p in c.baseActor { try patch(&template,p.offset,p.bytes) }
@@ -96,6 +97,26 @@ final class OriginalWorldContactsTests: XCTestCase {
                 case let .reconstruct(slot,created): events.append(.init(kind: "reconstruct",arguments: [UInt32(slot),UInt32(created)]))
                 }
             }
+            if (item.entry ?? 0x419380) == 0x41eed8 {
+                // The whole caller through both record-level forms against the
+                // same recorded results (CORE_REALTIME B2 P4).
+                for inPlace in [false,true] {
+                    var placedWorld = world,placedActors = actors,placedGlobals = globals,seen: [Event] = []
+                    try OriginalWorldContacts.apply(world: &placedWorld,actors: &placedActors,globals: &placedGlobals,objectCount: item.count ?? 4,
+                        header: { ownHeaders[$0] },frame: { ownFrames[$0][Int($1)] },heapWord: { try memory.word($0) },observe: { event in
+                            switch event {
+                            case let .random(attacker,defender,stream,range,result): seen.append(.init(kind: "random",arguments: [UInt32(attacker),UInt32(defender)]+[stream,range,result].map(UInt32.init(bitPattern:))))
+                            case let .reconstruct(slot,created): seen.append(.init(kind: "reconstruct",arguments: [UInt32(slot),UInt32(created)]))
+                            }
+                        },inPlace: inPlace)
+                    let placed = [placedWorld]+placedActors,form = inPlace ? " in place" : " default form"
+                    XCTAssertEqual(MatchPreparationReference.digest(Data(placed.flatMap(\.bytes))),item.poolSHA256,item.label+form+" pool")
+                    XCTAssertEqual(MatchPreparationReference.digest(Data(placed.flatMap { $0.defined.map { $0 ? UInt8(1) : UInt8(0) } })),item.maskSHA256,item.label+form+" masks")
+                    XCTAssertEqual(MatchPreparationReference.digest(Data(placedGlobals.bytes)),item.globalsSHA256,item.label+form+" globals")
+                    XCTAssertEqual(seen,item.events,item.label+form+" events")
+                }
+                callers += 1
+            }
             do {
                 switch item.entry ?? 0x419380 {
                 case 0x41eed8: try pass.advance(observe: observe)
@@ -113,7 +134,8 @@ final class OriginalWorldContactsTests: XCTestCase {
             XCTAssertEqual(MatchPreparationReference.digest(Data(globals.bytes)),item.globalsSHA256,item.label+" globals")
             XCTAssertTrue(globals.defined.allSatisfy { $0 });XCTAssertEqual(events,item.events,item.label+" events")
         }
-        print("WORLD CONTACTS",c.cases.count,"whole pools compared")
+        XCTAssertGreaterThan(callers,0,"whole-caller cases through both forms")
+        print("WORLD CONTACTS",c.cases.count,"whole pools compared,",callers,"whole callers in both forms")
     }
     func testWholeCallerRollsBackAfterPrefixAndActualTieRandom() throws {
         let bootstrap = try OriginalWorldBootstrap(worldBacking: [UInt8](repeating: 0xa5,count: 0x7d8),actorBacking: [[UInt8]](repeating: [UInt8](repeating: 0xa5,count: 0x420),count: 400),selector: 2)
@@ -139,6 +161,17 @@ final class OriginalWorldContactsTests: XCTestCase {
         }))
         XCTAssertEqual(seen,[.random(attacker: 0,defender: 1,stream: 133,range: 2,result: 0)])
         XCTAssertEqual(world,beforeWorld);XCTAssertEqual(actors,beforeActors);XCTAssertEqual(globals,beforeGlobals)
+        // In place (CORE_REALTIME B2 P4): the same error after the same draw,
+        // the prefix's writes and the draw kept, nothing left vacant.
+        seen = []
+        XCTAssertThrowsError(try OriginalWorldContacts.apply(world: &world,actors: &actors,globals: &globals,objectCount: 1,header: { _ in header },frame: { _,_ in frame },heapWord: { try memory.word($0) },observe: { event in
+            seen.append(event);throw OriginalStateError.invalidStorage("Stop after tie RNG")
+        },inPlace: true)) { XCTAssertEqual("\($0)","\(OriginalStateError.invalidStorage("Stop after tie RNG"))") }
+        XCTAssertEqual(seen,[.random(attacker: 0,defender: 1,stream: 133,range: 2,result: 0)])
+        XCTAssertEqual(world.byteCount,beforeWorld.byteCount);XCTAssertEqual(actors.count,400);XCTAssertEqual(globals.byteCount,0xb440)
+        XCTAssertTrue(actors.allSatisfy { $0.byteCount == 0x420 })
+        XCTAssertEqual(try actors[0].integer(at: 0x7c,as: Int32.self),try actors[0].integer(at: 0x70,as: Int32.self),"the prefix's 0x7c store kept")
+        XCTAssertNotEqual(globals,beforeGlobals)
     }
     func testRawBoxReferencesPreserveInteriorOffsetsAndDefinedMasks() throws {
         var raw = try OriginalStateRecord(bytes: [UInt8](repeating: 0xa5,count: 80),defined: [Bool](repeating: false,count: 80))

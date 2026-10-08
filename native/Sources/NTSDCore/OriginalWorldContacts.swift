@@ -11,8 +11,11 @@ public enum OriginalWorldContacts {
                              observe: (OriginalWorldContactsEvent) throws -> Void = { _ in }) throws {
         try apply(state: &state,bundledLibrary: false,observe: observe)
     }
+    /// `inPlace`: the caller's world, actors and globals are moved into the
+    /// pass and written back on every path (CORE_REALTIME B2 P4); only for
+    /// callers that drop the state when this throws.
     static func apply(state: inout OriginalMatchPreparation,bundledLibrary: Bool,
-                      observe: (OriginalWorldContactsEvent) throws -> Void) throws {
+                      observe: (OriginalWorldContactsEvent) throws -> Void,inPlace: Bool = false) throws {
         let catalog = state.catalog
         guard try state.world.integer(at: 0x7d4,as: UInt32.self) == 0,
               let registry = catalog.registry.records[0x4d82380] else { throw OriginalStateError.invalidStorage("Contact catalog binding") }
@@ -27,16 +30,27 @@ public enum OriginalWorldContacts {
                 //419380 reads Object+7a4+f·178 unchecked, like the cpoints: a Frame
                 //wholly outside the Object reads as absent (APPLICATION_OUT_OF_OBJECT_FRAMES.md).
                 return try OriginalCPointPass.headerFrame(f,header: catalog.objects[n].header,object: n,site: "contacts")
-            },heapWord: { try memory.word($0) },bundledLibrary: bundledLibrary,observe: observe)
+            },heapWord: { try memory.word($0) },bundledLibrary: bundledLibrary,observe: observe,inPlace: inPlace)
     }
     static func apply(world: inout OriginalStateRecord,actors: inout [OriginalStateRecord],globals: inout OriginalStateRecord,
                       objectCount: Int32,header: @escaping (Int) throws -> OriginalStateRecord,
                       frame: @escaping (Int,Int32) throws -> OriginalStateRecord,heapWord: @escaping (UInt32) throws -> Int32,
                       bundledLibrary: Bool = false,
-                      observe: (OriginalWorldContactsEvent) throws -> Void = { _ in }) throws {
-        var pass = OriginalContactPass(world: world,actors: actors,globals: globals,objectCount: objectCount,header: header,frame: frame,heapWord: heapWord,bundledLibrary: bundledLibrary)
+                      observe: (OriginalWorldContactsEvent) throws -> Void = { _ in },inPlace: Bool = false) throws {
+        guard inPlace else {
+            // All or nothing: the pass runs on copies, assigned when it completes.
+            var pass = OriginalContactPass(world: world,actors: actors,globals: globals,objectCount: objectCount,header: header,frame: frame,heapWord: heapWord,bundledLibrary: bundledLibrary)
+            try pass.advance(observe: observe)
+            world = pass.world;actors = pass.actors;globals = pass.globals
+            return
+        }
+        // The caller's records, moved into the pass and written back on every
+        // path (CORE_REALTIME B2 P4).
+        var pass = OriginalContactPass(world: inPlaceTake(&world,leaving: .vacant),actors: inPlaceTake(&actors,leaving: []),
+                                       globals: inPlaceTake(&globals,leaving: .vacant),objectCount: objectCount,header: header,frame: frame,
+                                       heapWord: heapWord,bundledLibrary: bundledLibrary)
+        defer { world = pass.world;actors = pass.actors;globals = pass.globals }
         try pass.advance(observe: observe)
-        world = pass.world;actors = pass.actors;globals = pass.globals
     }
 }
 

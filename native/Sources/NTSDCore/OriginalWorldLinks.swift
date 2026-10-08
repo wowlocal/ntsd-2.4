@@ -8,6 +8,18 @@ public enum OriginalWorldLinks {
     public static func apply(state: inout OriginalMatchPreparation,sse2Conversion: Bool = false,
                              observe: (OriginalWorldLinksEvent) throws -> Void = { _ in },
                              afterDepth: (Int,OriginalStateRecord) throws -> Void = { _,_ in }) throws {
+        try run(state: &state,sse2Conversion: sse2Conversion,observe: observe,afterDepth: afterDepth,inPlace: false)
+    }
+    /// `apply` with the caller's actors and globals moved into the pass and
+    /// written back on every path (CORE_REALTIME B2 P4): for callers that drop
+    /// the state when this throws.
+    package static func applyInPlace(state: inout OriginalMatchPreparation,sse2Conversion: Bool = false,
+                                     observe: (OriginalWorldLinksEvent) throws -> Void = { _ in },
+                                     afterDepth: (Int,OriginalStateRecord) throws -> Void = { _,_ in }) throws {
+        try run(state: &state,sse2Conversion: sse2Conversion,observe: observe,afterDepth: afterDepth,inPlace: true)
+    }
+    private static func run(state: inout OriginalMatchPreparation,sse2Conversion: Bool,observe: (OriginalWorldLinksEvent) throws -> Void,
+                            afterDepth: (Int,OriginalStateRecord) throws -> Void,inPlace: Bool) throws {
         let catalog = state.catalog,backgrounds = state.backgrounds
         guard try state.world.integer(at: 0x7d4,as: UInt32.self) == 0 else { throw error("Catalog binding") }
         try apply(world: state.world,actors: &state.actors,globals: &state.globals,sse2Conversion: sse2Conversion,precision: state.arithmeticPrecision,
@@ -21,15 +33,24 @@ public enum OriginalWorldLinks {
                 return catalog.objects[index].frameStorage[Int(number)]
             },background: { index in
                 guard backgrounds.indices.contains(Int(index)) else { throw error("Background binding") };return backgrounds[Int(index)]
-            },observe: observe,afterDepth: afterDepth)
+            },observe: observe,afterDepth: afterDepth,inPlace: inPlace)
     }
     private static func error(_ text: String) -> OriginalStateError { .invalidStorage("World links: "+text) }
     static func apply(world: OriginalStateRecord,actors: inout [OriginalStateRecord],globals: inout OriginalStateRecord,
                       sse2Conversion: Bool = false,precision: OriginalArithmeticPrecision = .bits64,header: (Int) throws -> OriginalStateRecord,
                       frame: (Int,Int32) throws -> OriginalStateRecord,background: (Int32) throws -> OriginalStateRecord,
                       observe: (OriginalWorldLinksEvent) throws -> Void = { _ in },
-                      afterDepth: (Int,OriginalStateRecord) throws -> Void = { _,_ in }) throws {
-        var pool = actors,owned = globals
+                      afterDepth: (Int,OriginalStateRecord) throws -> Void = { _,_ in },inPlace: Bool = false) throws {
+        guard inPlace else {
+            // All or nothing: in place on copies, assigned when it completes.
+            var copies = actors,copiedGlobals = globals
+            try apply(world: world,actors: &copies,globals: &copiedGlobals,sse2Conversion: sse2Conversion,precision: precision,header: header,
+                      frame: frame,background: background,observe: observe,afterDepth: afterDepth,inPlace: true)
+            actors = copies;globals = copiedGlobals
+            return
+        }
+        var pool = inPlaceTake(&actors,leaving: []),owned = inPlaceTake(&globals,leaving: .vacant)
+        defer { actors = pool;globals = owned }
         func active(_ slot: Int) throws -> UInt8 { try world.integer(at: 4+slot,as: UInt8.self) }
         func index(_ slot: Int) throws -> Int {
             let n = Int(try world.integer(at: 0x194+slot*4,as: UInt32.self))
@@ -141,6 +162,5 @@ public enum OriginalWorldLinks {
                 try store(a,0x50,(constant(Double(draw(slot,143,5) &- 2))/constant(5)).double)
             }
         }
-        actors = pool;globals = owned
     }
 }

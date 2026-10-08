@@ -324,9 +324,10 @@ public enum OriginalPostDrawLifecycle {
             // slots a tick; CORE_REALTIME 4r).
             if prefix, try world.integer(at: 4 + slot, as: UInt8.self) == 0 { return }
             if prefix {
-                // Per slot in place: this body is dropped when a slot throws
-                // (CORE_REALTIME B2), so the slot passes write its records
-                // without copying them.
+                // Per slot in place: when a slot throws, this body's records
+                // are dropped (the default form's copies) or written back to a
+                // caller that drops them (CORE_REALTIME B2), so the slot passes
+                // write its records without copying them.
                 let headers = header, frames = frame, current = slot
                 let active = try OriginalPostDrawSlotPrefix.apply(world: &world, actors: &actors, globals: &globals, slot: current,
                     retainedObjectIndex: &scratch.particleObject, requestSlot: &scratch.requestSlot, objectCount: objectCount, library: &library,
