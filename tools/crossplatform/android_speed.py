@@ -293,8 +293,9 @@ def main():
             share = {name: (cpu_b[1][name] - cpu_a[1][name]) / 1e9 / wall for name in cpu_b[1]}
             main = share.get(PACKAGE[:15], 0.0); render = share.get("DispatchWorker", 0.0)
             row.update(mainCpuShare=round(main, 3), renderCpuShare=round(render, 3),
-                       mainMsPerTick=round(1000 * main / row["ticksPerSecond"], 1),
-                       renderMsPerTick=round(1000 * render / row["ticksPerSecond"], 1))
+                       # Two decimals: the 60 fps milestone is <= 16.67 ms per tick.
+                       mainMsPerTick=round(1000 * main / row["ticksPerSecond"], 2),
+                       renderMsPerTick=round(1000 * render / row["ticksPerSecond"], 2))
     else:
         row["error"] = "no progress events: " + ", ".join(str(e.get("event")) for e in events[:6])
     if profiled:
