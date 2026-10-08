@@ -94,9 +94,9 @@ public enum OriginalGameplayBody {
             try ownedCheckpoint(stage,match,input,crt,installed)
         }
         // Control, physics, links, contacts, hits, cpoints, camera, drawing,
-        // the post-draw impulses, lifecycle and commands and the result
-        // recording run in place on this body's own copy, which it drops when
-        // anything throws (CORE_REALTIME B2 P4).
+        // the post-draw impulses, lifecycle and commands, the result recording
+        // and the output run in place on this body's own copy (and its own
+        // context), which it drops when anything throws (CORE_REALTIME B2 P4).
         try OriginalWorldControl.applyInPlace(state: &next, bundledLibrary: library != nil, observe: { try observe(.control(slot: $0, $1)) })
         try emitCheckpoint(.control, next, owned, random)
         // The hit pass's item word [esp+4c]: only a reserve respawn writes it
@@ -258,7 +258,7 @@ public enum OriginalGameplayBody {
             dcResult: presentation.dcResult, dc: presentation.dc, surface: surface, resourceBitmap: resourceBitmap,
             performBlit: performBlit, textRenderer: textRenderer, detail: detail, observe: { try observe(.drawing(.layout, $0)) })
         try emitCheckpoint(.layout, next, owned, random)
-        try OriginalGameplayOutput.returnFromDispatcher(world: &next.world, globals: &next.globals,
+        try OriginalGameplayOutput.returnFromDispatcherInPlace(world: &next.world, globals: &next.globals,
             memory: &owned.memory, input: presentation, resourceBitmap: resourceBitmap,
             performBlit: performBlit, soundRequest: soundRequest, textRenderer: textRenderer, detail: detail, observe: { try observe(.drawing(.output, $0)) })
         try emitCheckpoint(.output, next, owned, random)

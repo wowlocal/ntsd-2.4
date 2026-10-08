@@ -6,7 +6,21 @@ public enum OriginalModeLabel {
         performBlit: (OriginalBitmapBlit) throws -> Int32,
         detail: Bool = true,
         observe: (OriginalFrontScreenEvent) throws -> Void = { _ in }) throws {
+        // All or nothing: in place on a copy, assigned when it completes.
         var staged = globals
+        try drawInPlace(mode: mode, alternateLine: alternateLine, globals: &staged, resourceBitmap: resourceBitmap,
+                        performBlit: performBlit, detail: detail, observe: observe)
+        globals = staged
+    }
+    /// `draw` on the caller's globals (CORE_REALTIME B2 P4g): the label's
+    /// literal stores rewrite its NUL and suffix every tick, so on a shared
+    /// buffer each call copied the 92 KB globals. For callers that drop the
+    /// globals when this throws.
+    package static func drawInPlace(mode: Int32, alternateLine: UInt32, globals staged: inout OriginalStateRecord,
+        resourceBitmap: (UInt32) throws -> (OriginalStateRecord, UInt32),
+        performBlit: (OriginalBitmapBlit) throws -> Int32,
+        detail: Bool = true,
+        observe: (OriginalFrontScreenEvent) throws -> Void = { _ in }) throws {
         let base = 0x450c38-0x44d000
         func length() throws -> Int {
             var count = 0
@@ -53,6 +67,5 @@ public enum OriginalModeLabel {
         try OriginalBitmapFont.draw(.fourPass, text: &staged, offset: base, x: x, y: y,
             columns: 64, lines: 4, style: 0, cursor: 0, globals: fontGlobals,
             resourceBitmap: resourceBitmap, performBlit: performBlit, detail: detail, observe: observe)
-        globals = staged
     }
 }

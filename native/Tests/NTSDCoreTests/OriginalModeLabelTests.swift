@@ -93,6 +93,43 @@ final class OriginalModeLabelTests: XCTestCase {
                     }
                 XCTAssertEqual(passes, 3); XCTAssertEqual(writes, 2); XCTAssertEqual(labelWrites, 6)
                 XCTAssertEqual(trial, initial); rollbackTrials += 1
+                // In place (CORE_REALTIME B2 P4g): the same events up to the same
+                // error; the label's stores stay in the caller's globals.
+                var placed = initial; passes = 0; writes = 0; labelWrites = 0
+                XCTAssertThrowsError(try OriginalModeLabel.drawInPlace(mode: 0, alternateLine: 0, globals: &placed,
+                    resourceBitmap: resource, performBlit: { _ in 0 }, observe: { event in
+                        if event.kind == "labelWrite" { labelWrites += 1 }
+                        if event.kind == "stringWrite" { writes += 1 }
+                        if event.kind == "fontPass" {
+                            passes += 1
+                            if passes == 3 { throw OriginalStateError.invalidStorage("Mode label late pass observer") }
+                        }
+                    })) { error in
+                        guard case OriginalStateError.invalidStorage("Mode label late pass observer") = error else { return XCTFail("Unexpected mode label error: \(error)") }
+                    }
+                XCTAssertEqual(passes, 3); XCTAssertEqual(writes, 2); XCTAssertEqual(labelWrites, 6)
+                XCTAssertEqual(placed.byteCount, initial.byteCount)
+                // All six label stores precede the third pass: the caller's label
+                // region equals the completed call's.
+                let label = (0x450c38-0x44d000)..<(0x450c38-0x44d000+32)
+                XCTAssertEqual(Array(placed.bytes[label]), Array(globals.bytes[label]), "the label stores kept")
+                // Copy probe (CORE_REALTIME B2 P4g): on uniquely held globals the
+                // in-place label keeps the caller's storage although its stores
+                // rewrite the NUL and suffix; the default form copies.
+                func identity(_ record: OriginalStateRecord) -> [UInt] { record.storageIdentity.map { [$0.0,$0.1] } ?? [] }
+                for inPlace in [true, false] {
+                    // Fresh buffers: Array(initial.bytes) would share the fixture
+                    // cache's storage (the review's finding).
+                    var unique = try OriginalStateRecord(bytes: initial.bytes.map { $0 }, defined: initial.defined.map { $0 })
+                    let before = identity(unique)
+                    if inPlace {
+                        try OriginalModeLabel.drawInPlace(mode: 0, alternateLine: 0, globals: &unique, resourceBitmap: resource, performBlit: { _ in 0 })
+                    } else {
+                        try OriginalModeLabel.draw(mode: 0, alternateLine: 0, globals: &unique, resourceBitmap: resource, performBlit: { _ in 0 })
+                    }
+                    XCTAssertEqual(Array(unique.bytes[label]), Array(globals.bytes[label]))
+                    XCTAssertEqual(identity(unique) == before, inPlace, inPlace ? "in place: the caller's storage kept" : "default form: a copy")
+                }
             }
         }
         if corpus.cases.count > 25 { XCTAssertEqual(rollbackTrials, 1) }

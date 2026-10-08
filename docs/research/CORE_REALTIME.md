@@ -189,6 +189,7 @@ while measuring; restore `svc power stayon false` when the loop pauses or stops.
 | 2026-10-08 | B2 P4f: post-draw commands in place | The commands pass took copies of the world, actors and globals into its body and its recovery step writes actor fields every tick; it now takes the caller's records and writes them back with the slot word on every path. A12 main 18.14 -> 16.86 ms per tick, complete 13.66 -> 12.4 (interleaved with 4w and P4e). Behaviour equal; affected suites pass, full list on the 4x tree; review OK (two extra twin checks added) | [evidence](../evidence/rt-b2p4f-commands-20261008.json) | 0805251 |
 | 2026-10-08 | 4x: attempt identity without a random UUID | Each loading attempt made a random UUID, and Foundation on Android read /dev/urandom for each (0.88% of the main thread in __openat); isSameAttempt now compares the attempt's shared storage object. A12 main 16.9 -> 16.93 ms per tick, menu step 0.77 -> 0.73 ms against P4f in the same session (within variation; ~0.15 ms by the profile); Mac vs 0.753 → 0.704 ms. Behaviour equal; full suite list passes; review: equivalent | [evidence](../evidence/rt-4x-attempt-identity-20261008.json) | 2d56169 |
 | 2026-10-08 | B3a: loaded cycle in one transactional level — reverted | The loaded match cycle and entry ran in place on the loaded-cycle session's own model (one globals copy fewer per tick by construction; behaviour equal; review OK). Phone unchanged (16.95 vs 4x's 16.93) and the Mac about 1% slower in three alternating pairs (0.889 vs 0.879 ms); cause not established. Not committed | [evidence](../evidence/rt-b3a-loaded-cycle-in-place-20261008.json) | — |
+| 2026-10-08 | B2 P4g: gameplay output and mode label in place | The mode label rewrote its NUL and suffix every tick on a globals buffer three staging levels shared, so it copied the 92 KB globals every tick; the output and the label now run in place on the body's copy (copy probe: storage kept). A12 main 16.85 → 16.97 ms per tick against 4x in the same session: within variation (expected ~0.1 ms). Behaviour equal; review OK (its test findings fixed) | [evidence](../evidence/rt-b2p4g-output-mode-label-20261008.json) | this commit |
 
 ## Next task
 
@@ -225,8 +226,11 @@ main thread; message-loop iterations 4.12 × 1.14 ms; render thread 18.7 ms,
   binaries come from clean builds (4u).
 - **B2** ([plan](CORE_REALTIME_B2.md)): in-place nested passes under the first
   transactional copy; P1–P4 done (P4b–P4f: every gameplay-body pass that
-  copied per tick). Left: HUD, result layout and output still copy the globals
-  under the body's copy when they write (P4g, ~0.1–0.3 ms on paper).
+  copied per tick); P4g the output and mode label. Left: the HUD, the
+  overlay's Execution and the sound drain still stage copies on ticks where
+  they write. Single steps of ~0.1 ms are now below what the phone resolves
+  (±0.25 ms per run): judge them by copy probes plus "no regression", and
+  measure the phone across several steps.
 - **B3** (one transactional copy per tick): a read-only map (2026-10-08) found
   the loaded cycle copying twice (the cycle's candidate, then the entry's):
   B3a put both in place on the loaded-cycle session's own model (no behaviour

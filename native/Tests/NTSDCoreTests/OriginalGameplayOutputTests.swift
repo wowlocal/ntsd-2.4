@@ -91,6 +91,32 @@ final class OriginalGameplayOutputTests: XCTestCase {
                 XCTAssertEqual(stages, [0x41b130,0x4028a0,0x43e940,0x419e60]); XCTAssertEqual(trial, initial)
                 XCTAssertEqual(world, beforeWorld); XCTAssertEqual(memory.replayPointers, pointers); XCTAssertTrue(memory.allocations.isEmpty)
                 rollbackTrials += 1
+                // In place (CORE_REALTIME B2 P4g): the same stages and writes up to
+                // the same error; the caller's globals keep the mode label's stores,
+                // while the sound queue's own staging rolls its writes back.
+                var placedWorld = world, placedMemory = memory; trial = initial; writes = 0; stages = []; soundMethods = 0
+                XCTAssertThrowsError(try OriginalGameplayOutput.applyInPlace(world: &placedWorld, globals: &trial, memory: &placedMemory,
+                    input: c.input, resourceBitmap: resource, performBlit: { _ in 0 }, soundRequest: { event in
+                        if event.kind == .method {
+                            soundMethods += 1
+                            if soundMethods == 8 { throw OriginalStateError.invalidStorage("Late output sound request") }
+                        }
+                        return 0
+                    }, observe: { event in
+                        if event.kind == "stage" { stages.append(event.arguments[0]) }
+                        if event.kind == "queueWrite" { writes += 1 }
+                    })) { error in
+                        guard case OriginalStateError.invalidStorage("Late output sound request") = error else { return XCTFail("Unexpected output error: \(error)") }
+                    }
+                XCTAssertEqual(soundMethods, 8); XCTAssertEqual(writes, 2)
+                XCTAssertEqual(stages, [0x41b130,0x4028a0,0x43e940,0x419e60])
+                XCTAssertEqual(trial.byteCount, initial.byteCount)
+                let label = (0x450c38-0x44d000)..<(0x450c38-0x44d000+32)
+                XCTAssertEqual(Array(trial.bytes[label]), Array(globals.bytes[label]), "the label stores kept")
+                for word in [0x453e18, 0x4575a0] {
+                    let at = word-0x44d000
+                    XCTAssertEqual(Array(trial.bytes[at..<at+4]), Array(initial.bytes[at..<at+4]), "queue word \(String(word, radix: 16)) rolled back")
+                }
             }
         }
         if corpus.cases.count >= 3 { XCTAssertEqual(rollbackTrials, 1) }
