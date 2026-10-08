@@ -204,6 +204,14 @@ def main():
                 # files (files/NTSD Native) stay.
                 shell(s, f"run-as {PACKAGE} rm -rf files/ntsd-data")
                 r = adb(s, "install", "-d", o.apk)
+                # Free space on the full phone swings by a few hundred MB while
+                # the system cleans up (0.6-1.0 GB seen); try a few more times.
+                for _ in range(5):
+                    if r.returncode == 0 or not no_space(r):
+                        break
+                    time.sleep(20)
+                    adb(s, "shell", "pm trim-caches 4G")
+                    r = adb(s, "install", "-d", o.apk)
             if r.returncode != 0:
                 raise SystemExit(f"install failed after `pm uninstall -k` ({PACKAGE} is uninstalled, its data kept): "
                                  + (r.stdout + r.stderr).strip()[-300:])
