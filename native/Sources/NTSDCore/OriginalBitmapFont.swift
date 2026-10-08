@@ -14,7 +14,17 @@ public enum OriginalBitmapFont {
         detail: Bool = true,
         observe: (OriginalFrontScreenEvent) throws -> Void = { _ in }) throws {
         var storage = text
-        func word(_ address: Int) throws -> UInt32 { try globals.integer(at: address-0x44d000, as: UInt32.self) }
+        // The globals are an independent input that no glyph changes, so each
+        // word reads the same value, or fails the same way, every time: read
+        // once, where it is first used (CORE_REALTIME tier 3 G1; the original
+        // reads the style, target and viewport words per glyph).
+        var words: [(Int, UInt32)] = []
+        words.reserveCapacity(6)
+        func word(_ address: Int) throws -> UInt32 {
+            if let known = words.first(where: { $0.0 == address }) { return known.1 }
+            let value = try globals.integer(at: address-0x44d000, as: UInt32.self)
+            words.append((address, value)); return value
+        }
         // Each glyph's bitmap resolved once per call (CORE_REALTIME 4z): the
         // style's word comes from these independent globals, which no glyph
         // changes, so a pointer names the same bitmap for the whole call (the

@@ -65,6 +65,7 @@ public enum OriginalBitmapDrawing {
                             observeClip: (OriginalBitmapClip) throws -> Void = { _ in },
                             perform: (OriginalBitmapBlit) throws -> Int32) throws -> Int32 {
         guard bitmap.byteCount == 0x1f50 else { throw OriginalStateError.invalidStorage("Bitmap draw extent") }
+        if !detail { return try drawUnobserved(input, bitmap: bitmap, perform: perform) }
         func word(_ offset: UInt32) throws -> Int32 {
             try Self.word(offset,bitmap: bitmap,surface: input.sourceSurface,detail: detail,observe: observeRead)
         }
@@ -121,6 +122,70 @@ public enum OriginalBitmapDrawing {
             let clippedLeft = source[0] &- originalX
             source[0] = originalX &+ originalX &- source[2] &+ originalWidth
             source[2] = originalWidth &- clippedLeft &+ originalX
+        }
+        return try blit(destination,source)
+    }
+
+    /// One rectangle as left, top, right, bottom on the stack.
+    private struct Rectangle { var left, top, right, bottom: Int32 }
+
+    /// `draw` with `detail` false: the same words read in the same order, the
+    /// same clip, Blt, result and errors, with the rectangles on the stack;
+    /// they become arrays only for a Blt that is performed (CORE_REALTIME
+    /// tier 3 G1: each glyph's rectangle arrays, their copies in the clip and
+    /// the effects array were ~7% of the A12's main thread in the Demo,
+    /// visible or not).
+    private static func drawUnobserved(_ input: OriginalBitmapDrawInput, bitmap: OriginalStateRecord,
+                                       perform: (OriginalBitmapBlit) throws -> Int32) throws -> Int32 {
+        func word(_ offset: UInt32) throws -> Int32 {
+            try Self.word(offset,bitmap: bitmap,surface: input.sourceSurface,detail: false,observe: { _ in })
+        }
+        let viewportWidth = input.viewportWidth, viewportHeight = input.viewportHeight
+        func clip(_ destination: inout Rectangle, _ source: inout Rectangle) -> Bool {
+            // Strict comparisons: touching an edge can produce a zero-area Blt.
+            if destination.left < 0 && destination.right < 0 { return false }
+            if destination.left > viewportWidth && destination.right > viewportWidth { return false }
+            if destination.top < 0 && destination.bottom < 0 { return false }
+            if destination.top > viewportHeight && destination.bottom > viewportHeight { return false }
+            if destination.left < 0 { source.left = source.left &- destination.left; destination.left = 0 }
+            if destination.top < 0 { source.top = source.top &- destination.top; destination.top = 0 }
+            if destination.right > viewportWidth { source.right = source.right &+ (viewportWidth &- destination.right); destination.right = viewportWidth }
+            if destination.bottom > viewportHeight { source.bottom = source.bottom &+ (viewportHeight &- destination.bottom); destination.bottom = viewportHeight }
+            return true
+        }
+        let flags: UInt32 = 0x1000000 | (input.colorKey != 0 ? 0x8000 : 0) | (input.mirrored != 0 ? 0x800 : 0)
+        func blit(_ destination: Rectangle, _ source: Rectangle, whole: Bool = false) throws -> Int32 {
+            if whole && input.targetSurface == 0 { throw OriginalStateError.invalidStorage("Null bitmap target surface") }
+            _ = try word(0)
+            guard input.targetSurface != 0 else { throw OriginalStateError.invalidStorage("Null bitmap target surface") }
+            let effects: [UInt8]?
+            if input.mirrored != 0 {
+                var bytes = [UInt8](repeating: 0,count: 100); bytes[0] = 100; bytes[4] = 2; effects = bytes
+            } else { effects = nil }
+            return try perform(.init(sourceSurface: input.sourceSurface,targetSurface: input.targetSurface,
+                                     source: [source.left,source.top,source.right,source.bottom],
+                                     destination: [destination.left,destination.top,destination.right,destination.bottom],
+                                     flags: flags,effects: effects))
+        }
+        if try word(0x0c) == 0 || input.frame < 0 {
+            let width = try word(4), height = try word(8)
+            var destination = Rectangle(left: input.x,top: input.y,right: input.x &+ width,bottom: input.y &+ height)
+            var source = Rectangle(left: 0,top: 0,right: width,bottom: height)
+            if clip(&destination,&source) { _ = try blit(destination,source,whole: true) }
+            // Deliberate fallthrough: negative frames may draw AGAIN below.
+        }
+        guard try input.frame < word(0x0c) else { return input.frame }
+        let offset = UInt32(bitPattern: input.frame) &* 4
+        let x = try word(offset &+ 0x10), width = try word(offset &+ 0xfb0)
+        let y = try word(offset &+ 0x7e0), height = try word(offset &+ 0x1780)
+        var destination = Rectangle(left: input.x,top: input.y,right: input.x &+ width,bottom: input.y &+ height)
+        var source = Rectangle(left: x,top: y,right: x &+ width,bottom: y &+ height)
+        guard clip(&destination,&source) else { return 0 }
+        if input.mirrored != 0 {
+            let originalX = try word(offset &+ 0x10), originalWidth = try word(offset &+ 0xfb0)
+            let clippedLeft = source.left &- originalX
+            source.left = originalX &+ originalX &- source.right &+ originalWidth
+            source.right = originalWidth &- clippedLeft &+ originalX
         }
         return try blit(destination,source)
     }
