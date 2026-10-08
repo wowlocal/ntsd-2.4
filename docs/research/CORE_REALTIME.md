@@ -186,7 +186,8 @@ while measuring; restore `svc power stayon false` when the loop pauses or stops.
 | 2026-10-08 | B2 P4b+c: control, physics and lifecycle chains in place | Actor input, actor control, world control, actor physics, world physics and the post-draw lifecycle run in place under the gameplay body's single copy (default forms: copy, in place, assign). A12 main 18.15 → 17.90 ms per tick against 4w re-measured interleaved the same night (P4b alone was not separable). Behaviour equal; reviews OK, their test gaps added (copy probe, nested and input-stage throws, an actor-physics throw) | [evidence](../evidence/rt-b2p4bc-control-physics-lifecycle-20261008.json) | 1ff5775 |
 | 2026-10-08 | B2 P4d: links, contacts, camera, drawing and impulses in place | The passes that copied the actor array every tick (a mutating pool[i] access copies it while shared) run in place on the gameplay body's copy. A12 main 18.15 → 17.75 ms, complete 13.68 → 13.25 ms per tick (interleaved with 4w); Mac vs 0.771 → 0.742 ms. Behaviour equal; full suite list passes; review OK (contacts corpus through both forms added) | [evidence](../evidence/rt-b2p4d-links-contacts-camera-drawing-impulses-20261008.json) | bdaf40f |
 | 2026-10-08 | B2 P4e: hits, cpoints and recording in place | Hits take their records after the guards and publish them back on every path (public forms run it on copies); cpoints hands its records to the state around each stage observer, then links in place; the recording writes its globals in place. A12 main 18.14 -> 17.43 ms per tick, complete 13.66 -> 12.9 (interleaved with 4w). Behaviour equal; full suite list passes; review OK, in-place twins added beside the launch reference's rollback trials (comparator change reviewed separately) | [evidence](../evidence/rt-b2p4e-hits-cpoints-recording-20261008.json) | 89f4b52 |
-| 2026-10-08 | B2 P4f: post-draw commands in place | The commands pass took copies of the world, actors and globals into its body and its recovery step writes actor fields every tick; it now takes the caller's records and writes them back with the slot word on every path. A12 main 18.14 -> 16.86 ms per tick, complete 13.66 -> 12.4 (interleaved with 4w and P4e). Behaviour equal; affected suites pass, full list on the 4x tree; review OK (two extra twin checks added) | [evidence](../evidence/rt-b2p4f-commands-20261008.json) | this commit |
+| 2026-10-08 | B2 P4f: post-draw commands in place | The commands pass took copies of the world, actors and globals into its body and its recovery step writes actor fields every tick; it now takes the caller's records and writes them back with the slot word on every path. A12 main 18.14 -> 16.86 ms per tick, complete 13.66 -> 12.4 (interleaved with 4w and P4e). Behaviour equal; affected suites pass, full list on the 4x tree; review OK (two extra twin checks added) | [evidence](../evidence/rt-b2p4f-commands-20261008.json) | 0805251 |
+| 2026-10-08 | 4x: attempt identity without a random UUID | Each loading attempt made a random UUID, and Foundation on Android read /dev/urandom for each (0.88% of the main thread in __openat); isSameAttempt now compares the attempt's shared storage object. A12 main 16.9 -> 16.93 ms per tick, menu step 0.77 -> 0.73 ms against P4f in the same session (within variation; ~0.15 ms by the profile); Mac vs 0.753 → 0.704 ms. Behaviour equal; full suite list passes; review: equivalent | [evidence](../evidence/rt-4x-attempt-identity-20261008.json) | this commit |
 
 ## Next task
 
@@ -214,12 +215,27 @@ main thread; message-loop iterations 4.12 × 1.14 ms; render thread 18.7 ms,
   per tick after 1j; each full-frame pass costs ~1.7 ms on the A12. P1 (the
   present's back-buffer copy and crop fused) next, then P2 (the back buffer
   lent as the frame).
-- **Status (2026-10-08, 4w):** main 18.1/17.9 ms and render 13.6/13.7 ms
-  per tick on the A12; tier 2 needs ~2 ms more on the main thread. Gate
+- **Status (2026-10-08, B2 P4f and 4x):** main ~16.8 ms per tick on the A12
+  (P4f 17.2/16.4/16.6/17.0/17.1, 4x 16.6/17.0) against 4w's 18.15 measured
+  interleaved the same night; complete ~12.4 ms. Tier 2 needs ~0.8 ms more on
+  the main thread. The phone's render thread drifts by up to 1.5 ms between
+  sessions, so compare against a baseline APK re-run in the same session
+  (`rt4w.apk` is archived on T7, crossplatform-scratch-20261008a). Gate
   binaries come from clean builds (4u).
 - **B2** ([plan](CORE_REALTIME_B2.md)): in-place nested passes under the first
-  transactional copy; P1–P3 done. P4 (the gameplay body's passes family by
-  family, by a fresh profile) remains.
+  transactional copy; P1–P4 done (P4b–P4f: every gameplay-body pass that
+  copied per tick). Left: HUD, result layout and output still copy the globals
+  under the body's copy when they write (P4g, ~0.1–0.3 ms on paper).
+- **B3** (one transactional copy per tick): a read-only map (2026-10-08) found
+  the loaded cycle copying twice (the cycle's candidate, then the entry's):
+  B3a puts both in place on the loaded-cycle session's own model (no behaviour
+  change, ~0.1–0.25 ms). Removing the gameplay body's copy as well (one copy
+  serving the entry and the body, ~0.4–0.8 ms on paper) would change what the
+  Host keeps after a failed body: today it keeps the post-entry Ready (tests
+  `OriginalApplicationHostGameplayTests` check it; production never reads it).
+  **Needs the user's decision**: may a failed loaded tick leave the Host with
+  only its pre-tick pending input, or should an undo journal (TIER2 R6) keep
+  the Ready instead?
 - **Idle iterations** ([A3 design](CORE_REALTIME_A3.md)): 3.12 per tick at
   0.60 ms in the step (0.68 ms in all) after L3, P5a/P5b (the Android
   iteration timer) and L4a. Next: L4b, the idle attempt without a per-step

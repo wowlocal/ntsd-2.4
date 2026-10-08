@@ -220,9 +220,11 @@ public struct OriginalApplicationMenuSession {
         /// through `_read`.
         private final class Storage {
             let ownerID: UUID,revision: UInt64
-            // Transfer identity only. Distinguishes separate attempts made from
-            // copies of one committed Session; never enters original game state.
-            let attemptID = UUID()
+            // This object is the attempt's transfer identity: every attempt
+            // makes one and copies share it, so it distinguishes separate
+            // attempts made from copies of one committed Session without a
+            // random UUID per attempt (which opened /dev/urandom each step on
+            // Android; CORE_REALTIME 4x). Never enters original game state.
             let state: State,target: UInt32
             let loopContinuation: Loop.PendingDispatch
             let stagedEffects: [Effect]
@@ -237,7 +239,7 @@ public struct OriginalApplicationMenuSession {
         fileprivate var ownerID: UUID { storage.ownerID }
         fileprivate var revision: UInt64 { storage.revision }
         func isSameAttempt(as other: Self) -> Bool {
-            ownerID == other.ownerID && revision == other.revision && storage.attemptID == other.storage.attemptID
+            ownerID == other.ownerID && revision == other.revision && storage === other.storage
         }
         public var state: State { _read { yield storage.state } }
         public var target: UInt32 { storage.target }
