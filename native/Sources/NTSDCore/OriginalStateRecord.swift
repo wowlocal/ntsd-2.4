@@ -28,7 +28,12 @@ public struct OriginalStateRecord: Equatable, Sendable {
     /// writes its replay packet into a rollback copy (MOBILE_PERFORMANCE step 3).
     /// Contents, errors and equality are those of the flat representation.
     static let pagedThreshold = 0x400000
+    /// Pages of 16 KiB in groups of 16 pages (CORE_REALTIME tier 3 S1): a
+    /// copy that is then written duplicates the group table (~25 references
+    /// per array), one group (16) and one page, not the whole page table
+    /// (~400 references per array).
     private static let pageShift = 14, pageMask = (1 << 14) - 1
+    private static let groupShift = 18, groupPageMask = (1 << (18 - 14)) - 1
 
     private var flatBytes: [UInt8]
     private var flatDefined: [Bool]
@@ -188,6 +193,36 @@ public struct OriginalStateRecord: Equatable, Sendable {
         let bytes = flatBytes.withUnsafeBufferPointer { UInt(bitPattern: $0.baseAddress) }
         return (bytes, flatDefined.withUnsafeBufferPointer { UInt(bitPattern: $0.baseAddress) })
     }
+    /// For two paged records of the same size: how many groups and pages share
+    /// both their byte and definedness buffers (a probe, CORE_REALTIME tier 3
+    /// S1: a copy that is then written once keeps all but one of each).
+    func sharedPages(with other: OriginalStateRecord) -> (groups: Int, pages: Int)? {
+        guard let a = pages, let b = other.pages, a.count == b.count else { return nil }
+        func base<Element>(_ array: [Element]) -> UnsafeRawPointer? { array.withUnsafeBufferPointer { UnsafeRawPointer($0.baseAddress) } }
+        var groups = 0, shared = 0
+        for g in a.bytes.indices {
+            if base(a.bytes[g]) == base(b.bytes[g]) && base(a.defined[g]) == base(b.defined[g]) { groups += 1 }
+            for p in a.bytes[g].indices where base(a.bytes[g][p]) == base(b.bytes[g][p]) && base(a.defined[g][p]) == base(b.defined[g][p]) {
+                shared += 1
+            }
+        }
+        return (groups, shared)
+    }
+    /// The addresses of the group table, the group and the byte page holding
+    /// `index` in a paged record (a probe: a write that finds them unique
+    /// leaves them where they were).
+    func pageAddresses(at index: Int) -> [UnsafeRawPointer?]? {
+        guard let pages else { return nil }
+        func base<Element>(_ array: [Element]) -> UnsafeRawPointer? { array.withUnsafeBufferPointer { UnsafeRawPointer($0.baseAddress) } }
+        let group = index >> Self.groupShift, page = (index >> Self.pageShift) & Self.groupPageMask
+        return [base(pages.bytes), base(pages.bytes[group]), base(pages.bytes[group][page]),
+                base(pages.defined), base(pages.defined[group]), base(pages.defined[group][page])]
+    }
+    /// The number of groups and pages of a paged record (nil otherwise).
+    var pageLayout: (groups: Int, pages: Int)? {
+        guard let pages else { return nil }
+        return (pages.bytes.count, pages.bytes.reduce(0) { $0 + $1.count })
+    }
     /// An empty record that allocates nothing: what an in-place pass leaves in
     /// a caller's field while it holds the value (CORE_REALTIME B2).
     static let vacant = try! OriginalStateRecord(bytes: [], defined: [])
@@ -228,13 +263,43 @@ public struct OriginalStateRecord: Equatable, Sendable {
     }
 
     private struct Pages: Equatable, Sendable {
-        var bytes: [[UInt8]]
-        var defined: [[Bool]]
+        /// Groups of pages: `bytes[group][page][offset]`.
+        var bytes: [[[UInt8]]]
+        var defined: [[[Bool]]]
         /// The assembled contents, built on first read and shared by copies
         /// with the same contents; every write starts a new one.
         var whole = Whole()
-        var count: Int { bytes.isEmpty ? 0 : ((bytes.count - 1) << OriginalStateRecord.pageShift) + bytes[bytes.count - 1].count }
+        init(bytes: [UInt8], defined: [Bool]) {
+            self.bytes = Self.split(bytes)
+            self.defined = Self.split(defined)
+        }
+        /// Computed, not stored: `Large` sits inline in every record, and a
+        /// fourth word in `Pages` would grow every record past 40 bytes
+        /// (CORE_REALTIME B1: that cost the phone ~1 ms per tick).
+        var count: Int {
+            guard let last = bytes.last, let page = last.last else { return 0 }
+            return ((bytes.count - 1) << OriginalStateRecord.groupShift) + ((last.count - 1) << OriginalStateRecord.pageShift) + page.count
+        }
+        private static func split<Element>(_ all: [Element]) -> [[[Element]]] {
+            let page = 1 << OriginalStateRecord.pageShift, group = 1 << OriginalStateRecord.groupShift
+            return stride(from: 0, to: all.count, by: group).map { first in
+                stride(from: first, to: min(first + group, all.count), by: page).map { Array(all[$0..<min($0 + page, all.count)]) }
+            }
+        }
         static func == (lhs: Pages, rhs: Pages) -> Bool { lhs.bytes == rhs.bytes && lhs.defined == rhs.defined }
+        func byte(_ index: Int) -> UInt8 {
+            bytes[index >> OriginalStateRecord.groupShift][(index >> OriginalStateRecord.pageShift) & OriginalStateRecord.groupPageMask][index & OriginalStateRecord.pageMask]
+        }
+        func isDefined(_ index: Int) -> Bool {
+            defined[index >> OriginalStateRecord.groupShift][(index >> OriginalStateRecord.pageShift) & OriginalStateRecord.groupPageMask][index & OriginalStateRecord.pageMask]
+        }
+        mutating func set(_ index: Int, _ byte: UInt8, defined isDefined: Bool = true) {
+            let group = index >> OriginalStateRecord.groupShift
+            let page = (index >> OriginalStateRecord.pageShift) & OriginalStateRecord.groupPageMask
+            let offset = index & OriginalStateRecord.pageMask
+            bytes[group][page][offset] = byte
+            defined[group][page][offset] = isDefined
+        }
         mutating func willWrite() {
             if isKnownUniquelyReferenced(&whole) { whole.clear() } else { whole = Whole() }
         }
@@ -243,14 +308,14 @@ public struct OriginalStateRecord: Equatable, Sendable {
     private final class Whole: @unchecked Sendable {
         private let lock = NSLock()
         private var bytes: [UInt8]?, defined: [Bool]?
-        func bytes(_ pages: [[UInt8]], _ count: Int) -> [UInt8] {
+        func bytes(_ pages: [[[UInt8]]], _ count: Int) -> [UInt8] {
             lock.lock(); defer { lock.unlock() }
             if let bytes { return bytes }
             let made = assemble(pages, count)
             bytes = made
             return made
         }
-        func defined(_ pages: [[Bool]], _ count: Int) -> [Bool] {
+        func defined(_ pages: [[[Bool]]], _ count: Int) -> [Bool] {
             lock.lock(); defer { lock.unlock() }
             if let defined { return defined }
             let made = assemble(pages, count)
@@ -260,9 +325,9 @@ public struct OriginalStateRecord: Equatable, Sendable {
         func clear() { lock.lock(); bytes = nil; defined = nil; lock.unlock() }
     }
 
-    private static func assemble<Element>(_ pages: [[Element]], _ count: Int) -> [Element] {
+    private static func assemble<Element>(_ groups: [[[Element]]], _ count: Int) -> [Element] {
         var made = [Element](); made.reserveCapacity(count)
-        for page in pages { made.append(contentsOf: page) }
+        for group in groups { for page in group { made.append(contentsOf: page) } }
         return made
     }
 
@@ -284,7 +349,7 @@ public struct OriginalStateRecord: Equatable, Sendable {
         guard let pages else { return Array(flatBytes.prefix(count)) }
         precondition(count >= 0, "Can't take a prefix of negative length from a collection")
         var made = [UInt8](); made.reserveCapacity(min(count, pages.count))
-        for page in pages.bytes where made.count < count { made.append(contentsOf: page.prefix(count - made.count)) }
+        for group in pages.bytes { for page in group where made.count < count { made.append(contentsOf: page.prefix(count - made.count)) } }
         return made
     }
 
@@ -311,9 +376,7 @@ public struct OriginalStateRecord: Equatable, Sendable {
             throw OriginalStateError.invalidStorage("byte and initialization-mask lengths differ")
         }
         if bytes.count >= Self.pagedThreshold {
-            let starts = stride(from: 0, to: bytes.count, by: 1 << Self.pageShift)
-            large = .pages(Pages(bytes: starts.map { Array(bytes[$0..<min($0 + (1 << Self.pageShift), bytes.count)]) },
-                          defined: starts.map { Array(defined[$0..<min($0 + (1 << Self.pageShift), defined.count)]) }))
+            large = .pages(Pages(bytes: bytes, defined: defined))
             flatBytes = []
             flatDefined = []
         } else {
@@ -415,12 +478,10 @@ public struct OriginalStateRecord: Equatable, Sendable {
             guard defined else { throw OriginalStateError.undefinedBytes(offset: offset, count: count) }
             return flatBytes.withUnsafeBytes { T(littleEndian: $0.loadUnaligned(fromByteOffset: offset, as: T.self)) }
         }
-        guard region.allSatisfy({ pages.defined[$0 >> Self.pageShift][$0 & Self.pageMask] }) else {
+        guard region.allSatisfy({ pages.isDefined($0) }) else {
             throw OriginalStateError.undefinedBytes(offset: offset, count: region.count)
         }
-        return region.enumerated().reduce(T.zero) {
-            $0 | (T(truncatingIfNeeded: pages.bytes[$1.element >> Self.pageShift][$1.element & Self.pageMask]) << ($1.offset * 8))
-        }
+        return region.enumerated().reduce(T.zero) { $0 | (T(truncatingIfNeeded: pages.byte($1.element)) << ($1.offset * 8)) }
     }
 
     /// The little-endian word at `offset`, defined or not (`bytes[offset..<offset+4]`
@@ -431,7 +492,7 @@ public struct OriginalStateRecord: Equatable, Sendable {
         precondition(offset >= 0 && offset <= byteCount - 4, "Range out of bounds")
         if let parts { return (0..<4).reduce(UInt32(0)) { $0 | UInt32(parts.byte(offset + $1)) << ($1 * 8) } }
         if let pages {
-            return (0..<4).reduce(UInt32(0)) { $0 | UInt32(pages.bytes[(offset + $1) >> Self.pageShift][(offset + $1) & Self.pageMask]) << ($1 * 8) }
+            return (0..<4).reduce(UInt32(0)) { $0 | UInt32(pages.byte(offset + $1)) << ($1 * 8) }
         }
         return flatBytes.withUnsafeBytes { UInt32(littleEndian: $0.loadUnaligned(fromByteOffset: offset, as: UInt32.self)) }
     }
@@ -446,8 +507,7 @@ public struct OriginalStateRecord: Equatable, Sendable {
             return runs.defined.contains(false) ? nil : runs.bytes
         }
         if let pages {
-            return range.allSatisfy({ pages.defined[$0 >> Self.pageShift][$0 & Self.pageMask] })
-                ? range.map { pages.bytes[$0 >> Self.pageShift][$0 & Self.pageMask] } : nil
+            return range.allSatisfy({ pages.isDefined($0) }) ? range.map { pages.byte($0) } : nil
         }
         let all = flatDefined.withUnsafeBufferPointer { d in !d[range].contains(false) }
         return all ? Array(flatBytes[range]) : nil
@@ -509,10 +569,7 @@ public struct OriginalStateRecord: Equatable, Sendable {
         } else {
             withPages { pages in
                 pages.willWrite()
-                for (shift, index) in region.enumerated() {
-                    pages.bytes[index >> Self.pageShift][index & Self.pageMask] = UInt8(truncatingIfNeeded: value >> (shift * 8))
-                    pages.defined[index >> Self.pageShift][index & Self.pageMask] = true
-                }
+                for (shift, index) in region.enumerated() { pages.set(index, UInt8(truncatingIfNeeded: value >> (shift * 8))) }
             }
         }
     }
@@ -576,9 +633,7 @@ public struct OriginalStateRecord: Equatable, Sendable {
         withPages { pages in
             pages.willWrite()
             for k in 0..<count {
-                let index = start + k
-                pages.bytes[index >> Self.pageShift][index & Self.pageMask] = bytes[k]
-                pages.defined[index >> Self.pageShift][index & Self.pageMask] = defined[k]
+                pages.set(start + k, bytes[k], defined: defined[k])
             }
         }
     }
@@ -636,10 +691,7 @@ public struct OriginalStateRecord: Equatable, Sendable {
         } else {
             withPages { pages in
                 pages.willWrite()
-                for index in region {
-                    pages.bytes[index >> Self.pageShift][index & Self.pageMask] = 0
-                    pages.defined[index >> Self.pageShift][index & Self.pageMask] = true
-                }
+                for index in region { pages.set(index, 0) }
             }
         }
     }

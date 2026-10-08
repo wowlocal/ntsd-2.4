@@ -262,4 +262,73 @@ final class OriginalStateRecordPagingTests: XCTestCase {
         XCTAssertEqual(record.bytes, bytes)
         XCTAssertEqual(record.defined, defined)
     }
+
+    /// Pages sit in groups of 16 (CORE_REALTIME tier 3 S1): reads and writes
+    /// across group boundaries match the arrays, and a copy written once keeps
+    /// sharing every other group and page with the original.
+    func testPageGroupsShareAllButTheWrittenOne() throws {
+        let count = OriginalReplayRecording.byteCount
+        var (bytes, defined) = contents(count, seed: 41)
+        let original = try OriginalStateRecord(bytes: bytes, defined: defined)
+        let layout = try XCTUnwrap(original.pageLayout)
+        XCTAssertEqual(layout.pages, (count + 0x3fff) >> 14)
+        XCTAssertEqual(layout.groups, (layout.pages + 15) >> 4)
+        XCTAssertEqual(original.sharedPages(with: original)?.groups, layout.groups)
+        XCTAssertEqual(original.sharedPages(with: original)?.pages, layout.pages)
+
+        XCTAssertEqual(original.byteCount, count)
+        for offset in [0x3fffe, 0x3ffff, 0x40000, 0x7fffd, 0x80000 - 4, 0x5c0000 - 3, count - 8] {
+            for size in [2, 4, 8] {
+                let read = error {
+                    let value: UInt64
+                    switch size {
+                    case 2: value = UInt64(try original.integer(at: offset, as: UInt16.self))
+                    case 4: value = UInt64(try original.integer(at: offset, as: UInt32.self))
+                    default: value = try original.integer(at: offset, as: UInt64.self)
+                    }
+                    var expected: UInt64 = 0
+                    for i in 0..<size { expected |= UInt64(bytes[offset + i]) << (8 * i) }
+                    XCTAssertEqual(value, expected, "read \(size) at \(offset)")
+                }
+                if defined[offset..<offset + size].allSatisfy({ $0 }) {
+                    XCTAssertNil(read, "read \(size) at \(offset)")
+                } else {
+                    XCTAssertEqual(read, String(describing: OriginalStateError.undefinedBytes(offset: offset, count: size)))
+                }
+            }
+            var expected: UInt32 = 0
+            for i in 0..<4 { expected |= UInt32(bytes[offset + i]) << (8 * i) }
+            XCTAssertEqual(original.rawWord(at: offset), expected)
+        }
+
+        var copy = original
+        try copy.write(UInt32(0x01020304), at: 0x3fffe)
+        let shared = try XCTUnwrap(copy.sharedPages(with: original))
+        XCTAssertEqual(shared.groups, layout.groups - 2, "a write across a group boundary unshares two groups")
+        XCTAssertEqual(shared.pages, layout.pages - 2)
+        var single = original
+        try single.write(UInt8(9), at: 0x123456)
+        XCTAssertEqual(single.sharedPages(with: original)?.groups, layout.groups - 1)
+        XCTAssertEqual(single.sharedPages(with: original)?.pages, layout.pages - 1)
+        let before = try XCTUnwrap(single.pageAddresses(at: 0x123457))
+        try single.write(UInt8(10), at: 0x123457)
+        XCTAssertEqual(single.pageAddresses(at: 0x123457), before, "the same page again is written in place")
+        XCTAssertEqual(single.sharedPages(with: original)?.pages, layout.pages - 1)
+        XCTAssertNotEqual(original.pageAddresses(at: 0x123457), before)
+
+        for (i, b) in [0x04, 0x03, 0x02, 0x01].enumerated() { bytes[0x3fffe + i] = UInt8(b); defined[0x3fffe + i] = true }
+        XCTAssertEqual(copy.bytes, bytes)
+        XCTAssertEqual(copy.defined, defined)
+        XCTAssertEqual(original.bytes, contents(count, seed: 41).0)
+        XCTAssertEqual(original.defined, contents(count, seed: 41).1)
+        XCTAssertEqual(copy, try OriginalStateRecord(bytes: bytes, defined: defined))
+        XCTAssertNotEqual(copy, original)
+        var overwritten = copy
+        let piece = try OriginalStateRecord(bytes: (0..<0x20).map { UInt8($0) }, defined: (0..<0x20).map { $0 % 3 != 0 })
+        overwritten.overwrite(at: 0x3fff0, with: piece)
+        for i in 0..<0x20 { bytes[0x3fff0 + i] = UInt8(i); defined[0x3fff0 + i] = i % 3 != 0 }
+        XCTAssertEqual(overwritten.bytes, bytes)
+        XCTAssertEqual(overwritten.defined, defined)
+        XCTAssertEqual(overwritten.sharedPages(with: copy)?.groups, layout.groups - 2)
+    }
 }
