@@ -25,17 +25,26 @@ public enum OriginalActorControl {
                       globals: inout OriginalStateRecord, frame: (Int32) throws -> OriginalStateRecord,
                       precision: OriginalArithmeticPrecision = .bits64,
                       bundledLibrary: Bool = false,
-                      observe: (OriginalActorControlEvent) throws -> Void = { _ in }) throws {
-        var candidate = actor, owned = globals
-        try OriginalActorInput.apply(actor: &candidate, sourceID: header.integer(at: 0x6f4, as: Int32.self), globals: owned, frame: frame)
+                      observe: (OriginalActorControlEvent) throws -> Void = { _ in }, inPlace: Bool = false) throws {
+        guard inPlace else {
+            // All or nothing: in place on copies, assigned when it completes.
+            var candidate = actor, owned = globals
+            try apply(actor: &candidate, header: header, globals: &owned, frame: frame, precision: precision,
+                      bundledLibrary: bundledLibrary, observe: observe, inPlace: true)
+            actor = candidate; globals = owned
+            return
+        }
+        // The caller's actor and globals: input on the actor, then moved into
+        // the body and written back on every path (CORE_REALTIME B2 P4).
+        try OriginalActorInput.apply(actor: &actor, sourceID: header.integer(at: 0x6f4, as: Int32.self), globals: globals, frame: frame, inPlace: true)
         try withoutActuallyEscaping(frame) { frames in
             try withoutActuallyEscaping(observe) { observer in
-                var body = Body(actor: candidate, globals: owned, header: header, precision: precision, bundledLibrary: bundledLibrary, frame: frames, observe: observer)
+                var body = Body(actor: inPlaceTake(&actor, leaving: .vacant), globals: inPlaceTake(&globals, leaving: .vacant), header: header,
+                                precision: precision, bundledLibrary: bundledLibrary, frame: frames, observe: observer)
+                defer { actor = body.actor; globals = body.globals }
                 try body.run()
-                candidate = body.actor; owned = body.globals
             }
         }
-        actor = candidate; globals = owned
     }
 
     private struct Body {

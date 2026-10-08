@@ -93,11 +93,16 @@ final class OriginalPostDrawLifecycleTests: XCTestCase {
             }
             try world.write(UInt32(0), at: 0x7d4)
             for a in item.actors ?? [] { for p in a.patches { try patch(&actors[a.index], p.offset, p.bytes) } }
-            var ownHeaders = headers, ownFrames = frames, globals = globalsBase, events: [Event] = []
+            var ownHeaders = headers, ownFrames = frames, startGlobals = globalsBase
             for p in item.headers ?? [] { try patch(&ownHeaders[p.object], p.offset, p.bytes) }
             for p in item.frames ?? [] { try patch(&ownFrames[p.object][p.index], p.offset, p.bytes) }
-            for p in item.globals ?? [] { try patch(&globals, p.offset-0x44d000, p.bytes) }
+            for p in item.globals ?? [] { try patch(&startGlobals, p.offset-0x44d000, p.bytes) }
             let words = item.scratchBefore.map(Int32.init(bitPattern:))
+            // Both forms against the same recorded results; events are counted
+            // once (CORE_REALTIME B2 P4).
+            let startWorld = world, startActors = actors
+            for inPlace in [false, true] {
+            var world = startWorld, actors = startActors, globals = startGlobals, events: [Event] = []
             var scratch = OriginalPostDrawScratch(fireSlot: words[0], fireObject: words[1], deathSlot: words[2],
                                                   weaponSlot: words[3], weaponObject: words[4], particleObject: words[5])
             do {
@@ -114,7 +119,7 @@ final class OriginalPostDrawLifecycleTests: XCTestCase {
                         case let .catalogSound(slot, x, index):
                             events.append(.init(slot: slot, kind: "catalogSound", arguments: [x, index].map(UInt32.init(bitPattern:))))
                         }
-                    })
+                    }, inPlace: inPlace)
                 XCTAssertEqual(item.whole == true ? 0x4214d5 : 0x4214c6, item.endPC, item.label + " exit")
             } catch { XCTFail("\(item.label): \(error)"); return }
             let afterWords = [scratch.fireSlot, scratch.fireObject, scratch.deathSlot, scratch.weaponSlot, scratch.weaponObject, scratch.particleObject].map { $0.map(UInt32.init(bitPattern:)) }
@@ -131,7 +136,8 @@ final class OriginalPostDrawLifecycleTests: XCTestCase {
                 }
                 return
             }
-            totalEvents += events.count
+            if !inPlace { totalEvents += events.count }
+            }
         }
         XCTAssertEqual(totalEvents, 25638)
         print("POSTDRAW LIFECYCLE", c.cases.count, "full pools and", totalEvents, "ordered events compared")
@@ -166,6 +172,21 @@ final class OriginalPostDrawLifecycleTests: XCTestCase {
         XCTAssertEqual(events.filter { if case .random = $0 { return true }; return false }.count, 4)
         XCTAssertEqual(world, beforeWorld); XCTAssertEqual(actors, beforeActors); XCTAssertEqual(globals, beforeGlobals)
         XCTAssertEqual(scratch, beforeScratch)
+        // In place (CORE_REALTIME B2 P4): the same events up to the same error,
+        // the first effect and the draws kept, nothing left vacant.
+        let placedEvents = events
+        events = []; constructions = 0
+        XCTAssertThrowsError(try OriginalPostDrawLifecycle.apply(world: &world, actors: &actors, globals: &globals, scratch: &scratch,
+            wholeLoop: true, slot: 0, precision: .bits53, sse2: false, objectCount: 1, header: { _ in header }, frame: { _, number in frames[Int(number)] }, observe: { event in
+                events.append(event)
+                if case .reconstruct = event { constructions += 1 }
+                if constructions == 2 { throw OriginalStateError.invalidStorage("Second effect constructor") }
+            }, inPlace: true)) { XCTAssertEqual("\($0)", "\(OriginalStateError.invalidStorage("Second effect constructor"))") }
+        XCTAssertEqual(events, placedEvents)
+        XCTAssertEqual(world.byteCount, beforeWorld.byteCount); XCTAssertEqual(actors.count, 400); XCTAssertEqual(globals.byteCount, 0xb440)
+        XCTAssertTrue(actors.allSatisfy { $0.byteCount == 0x420 })
+        XCTAssertEqual(try world.integer(at: 4+50, as: UInt8.self), 1, "the first effect's slot activated")
+        XCTAssertNotEqual(globals, beforeGlobals)
     }
     func testUnknownFireObjectFailsOnlyWhenDereferenced() throws {
         var (world, actors, globals, header, frames) = try prepared()

@@ -84,3 +84,55 @@ tests, the scenarios, a phone profile, a ledger row; an independent review
 of the discard proof per switched site, the `defer` write-back, closures not
 reading taken storage, exclusivity at the scheduler call, wrapper error
 order and `package` visibility.
+
+## P4 plan (2026-10-08, after P4a)
+
+P4a (world control, links and impulses in place on their own) measured no
+change ([evidence](../evidence/rt-b2p4a-world-passes-reverted-20261008.json)).
+A read-only inventory of every transactional level under the gameplay body's
+`next` (`OriginalGameplayBody.swift:87`, committed only at its end) explains why
+and gives the plan:
+
+- **Any mutating access through `pool[i]` copies the 400-record array** while
+  another holder shares its buffer, even when the record write itself is a
+  no-op. Links (`put(a,0x18)` on every type-0 actor), contacts (`put(a,0x7c)`),
+  camera and impulses (`put(…,0)`) therefore copy the array every tick.
+- **Every pass is a direct child of `next`.** After the first writer
+  (control), `next` is the only holder of its actors and globals buffers;
+  an unconverted pass assigns back a fresh array, so `next` stays the only
+  holder. A pass whose *whole* chain runs in place saves its copies
+  whatever its siblings do. P4a's control and impulses sites still had a
+  copy level below them (ActorControl's candidate and Body, ActorInput's
+  candidate; PostDrawImpulses' owned copy), so they saved nothing.
+- **Nested per-actor levels:** WorldControl's `var actor = pool[i]`, then
+  ActorControl's candidate/owned and Body, then ActorInput's candidate: one
+  or two record copies per active actor, and a copy of the 92 KB globals for
+  every actor that draws a random number or queues a sound. Physics has the
+  same shape (WorldPhysics, ActorPhysics' Body).
+- **Not worth doing:** the body in place on its caller (P5). Nothing writes
+  the gameplay session's `model` before the body, and `entry.match`/`a.model`
+  keep the same buffers alive, so the body's first write copies either way.
+
+Pieces (each saves on its own, by the argument above):
+
+- **P4b** world control's chain: ActorInput, ActorControl (input on the
+  actor, then the actor and globals moved into `Body` and written back in a
+  `defer`), WorldControl (per actor `&pool[i]`), switched at the body.
+- **P4c** physics (WorldPhysics, ActorPhysics) and the post-draw lifecycle's
+  Body (its children went in place in P1).
+- **P4d** the remaining passes: links, contacts, both hits passes (a
+  `makePass(taking:)`), cpoints (its pass takes actors and globals, swaps them
+  into `state` around each `afterStage`, then links in place), camera,
+  drawing, impulses (PostDrawImpulses and WorldImpulses), commands, HUD,
+  recording, output.
+
+Rules for every piece: the default form copies, calls the in-place form and
+assigns, so errors and order are unchanged; the in-place form's `defer` sits
+before its first `try`; state-level entries are `package`; reference trials
+that catch on purpose (`MatchLaunchReference` rollback trials) stay on the
+default form; corpora run each case through both forms; in-place rollback
+twins check the same error, the partial writes kept and no vacant field. A
+copy probe (the actors buffer's base address and `globals.storageIdentity`
+constant from `.control` through every converted stage) should land with P4d.
+With `--stage-checkpoints` the copies return: values stay correct, there's
+just no saving.

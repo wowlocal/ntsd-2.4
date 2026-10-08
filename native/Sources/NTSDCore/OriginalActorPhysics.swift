@@ -14,11 +14,21 @@ public enum OriginalActorPhysics {
     }
     static func apply(actor: inout OriginalStateRecord,header: OriginalStateRecord,globals: inout OriginalStateRecord,
                       sse2Conversion: Bool = false,precision: OriginalArithmeticPrecision = .bits64,frame: (Int32) throws -> OriginalStateRecord,
-                      observe: (OriginalActorPhysicsEvent) throws -> Void = { _ in }) throws {
+                      observe: (OriginalActorPhysicsEvent) throws -> Void = { _ in },inPlace: Bool = false) throws {
         try withoutActuallyEscaping(frame) { frames in
             try withoutActuallyEscaping(observe) { observer in
-                var body = Body(actor: actor,globals: globals,precision: precision,header: header,frame: frames,observe: observer)
-                try body.run(sse2Conversion: sse2Conversion);actor = body.actor;globals = body.globals
+                guard inPlace else {
+                    // All or nothing: the body runs on copies, assigned when it completes.
+                    var body = Body(actor: actor,globals: globals,precision: precision,header: header,frame: frames,observe: observer)
+                    try body.run(sse2Conversion: sse2Conversion);actor = body.actor;globals = body.globals
+                    return
+                }
+                // The caller's actor and globals, moved into the body and written
+                // back on every path (CORE_REALTIME B2 P4).
+                var body = Body(actor: inPlaceTake(&actor,leaving: .vacant),globals: inPlaceTake(&globals,leaving: .vacant),
+                                precision: precision,header: header,frame: frames,observe: observer)
+                defer { actor = body.actor;globals = body.globals }
+                try body.run(sse2Conversion: sse2Conversion)
             }
         }
     }

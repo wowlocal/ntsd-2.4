@@ -24,6 +24,77 @@ final class OriginalWorldControlTests: XCTestCase {
         },afterActorControl: { slot,_ in if slot == 0 { firstReturned = true } }))
         XCTAssertTrue(drew);XCTAssertTrue(firstReturned)
         XCTAssertEqual(actors,beforeActors);XCTAssertEqual(globals,beforeGlobals)
+        // In place (CORE_REALTIME B2 P4): the same error at the second Actor,
+        // the first Actor's writes and the draw kept, nothing left vacant.
+        XCTAssertThrowsError(try OriginalWorldControl.apply(world: world,actors: &actors,globals: &globals,objectCount: 1,header: { index in
+            guard index == 0 else { throw OriginalStateError.invalidStorage("Missing second Actor Object") };return header
+        },frame: { _,_ in frame },inPlace: true)) { XCTAssertEqual("\($0)","\(OriginalStateError.invalidStorage("Missing second Actor Object"))") }
+        XCTAssertEqual(actors.count,400);XCTAssertEqual(globals.byteCount,0xb440)
+        XCTAssertTrue(actors.allSatisfy { $0.byteCount == 0x420 })
+        XCTAssertNotEqual(actors[0],beforeActors[0]);XCTAssertNotEqual(globals,beforeGlobals)
+    }
+    /// CORE_REALTIME B2 P4: a throw inside the second Actor's control, after its
+    /// draw, leaves the nested in-place writes in the caller's records (both
+    /// draws' index and counter, no vacant record); the default form keeps none.
+    func testInPlaceFailureInsideAnActorKeepsItsWrites() throws {
+        let bootstrap = try OriginalWorldBootstrap(worldBacking: [UInt8](repeating: 0xa5,count: 0x7d8),
+            actorBacking: [[UInt8]](repeating: [UInt8](repeating: 0xa5,count: 0x420),count: 400),selector: 2)
+        var world = bootstrap.world,actors = bootstrap.actors
+        try world.write(UInt8(1),at: 4);try world.write(UInt8(1),at: 5)
+        try actors[0].write(UInt8(1),at: 0xd1);try actors[1].write(UInt8(1),at: 0xd1)
+        var globals = try OriginalStateRecord(bytes: [UInt8](repeating: 0,count: 0xb440),defined: [Bool](repeating: true,count: 0xb440))
+        for i in 0..<3000 { try globals.write(UInt8(1+i%255),at: 0x44ff90-0x44d000+i) }
+        let header = try OriginalStateRecord(bytes: [UInt8](repeating: 0,count: 0x7a4),defined: [Bool](repeating: true,count: 0x7a4))
+        var frame = try OriginalStateRecord(bytes: [UInt8](repeating: 0,count: 0x178),defined: [Bool](repeating: true,count: 0x178))
+        try frame.write(UInt8(1),at: 0)
+        let beforeActors = actors,beforeGlobals = globals,failure = OriginalStateError.invalidStorage("Second Actor draw")
+        for inPlace in [false,true] {
+            var draws: [Int] = []
+            XCTAssertThrowsError(try OriginalWorldControl.apply(world: world,actors: &actors,globals: &globals,objectCount: 1,header: { _ in header },
+                frame: { _,_ in frame },observe: { slot,event in
+                    guard case .random = event else { return }
+                    draws.append(slot);if slot == 1 { throw failure }
+                },inPlace: inPlace)) { XCTAssertEqual("\($0)","\(failure)") }
+            XCTAssertEqual(draws.first,0);XCTAssertEqual(draws.last,1)
+            if !inPlace { XCTAssertEqual(actors,beforeActors);XCTAssertEqual(globals,beforeGlobals);continue }
+            // Every draw (Actor control draws only from range 2) written back.
+            var expected = OriginalRandom(table: try OriginalRandom.table(beforeGlobals,at: 0x44ff90-0x44d000),index: 0,counter: 0,source: "test",sourceSHA256: "")
+            for _ in draws { _ = expected.next(2) }
+            XCTAssertEqual(actors.count,400);XCTAssertTrue(actors.allSatisfy { $0.byteCount == 0x420 });XCTAssertEqual(globals.byteCount,0xb440)
+            XCTAssertNotEqual(actors[0],beforeActors[0]);XCTAssertNotEqual(actors[1],beforeActors[1])
+            XCTAssertEqual(try globals.integer(at: 0x450bcc-0x44d000,as: Int32.self),Int32(expected.index))
+            XCTAssertEqual(try globals.integer(at: 0x450c34-0x44d000,as: Int32.self),Int32(expected.counter))
+        }
+    }
+    /// CORE_REALTIME B2 P4 copy probe: on uniquely held inputs the in-place pass
+    /// keeps the caller's actor array buffer, the globals' storage and every
+    /// Actor record it writes (no hidden copy level); the default form copies.
+    func testInPlaceControlKeepsTheCallersStorage() throws {
+        let bootstrap = try OriginalWorldBootstrap(worldBacking: [UInt8](repeating: 0xa5,count: 0x7d8),
+            actorBacking: [[UInt8]](repeating: [UInt8](repeating: 0xa5,count: 0x420),count: 400),selector: 2)
+        let world: OriginalStateRecord
+        do { var w = bootstrap.world;try w.write(UInt8(1),at: 4);try w.write(UInt8(1),at: 5);world = w }
+        let header = try OriginalStateRecord(bytes: [UInt8](repeating: 0,count: 0x7a4),defined: [Bool](repeating: true,count: 0x7a4))
+        var frame = try OriginalStateRecord(bytes: [UInt8](repeating: 0,count: 0x178),defined: [Bool](repeating: true,count: 0x178))
+        try frame.write(UInt8(1),at: 0)
+        func identity(_ record: OriginalStateRecord) -> [UInt] { record.storageIdentity.map { [$0.0,$0.1] } ?? [] }
+        for inPlace in [true,false] {
+            // Fresh, uniquely held records (the bootstrap's array shares them);
+            // nothing else may hold them, so the first Actor is kept as a digest.
+            var actors = try (0..<400).map { _ in try OriginalStateRecord.actor(over: [UInt8](repeating: 0xa5,count: 0x420)) }
+            for a in 0..<2 { try actors[a].write(UInt8(1),at: 0xd1);try actors[a].write(UInt32(0),at: 0x368) }
+            var globals = try OriginalStateRecord(bytes: [UInt8](repeating: 0,count: 0xb440),defined: [Bool](repeating: true,count: 0xb440))
+            for i in 0..<3000 { try globals.write(UInt8(1+i%255),at: 0x44ff90-0x44d000+i) }
+            let buffer = actors.withUnsafeBufferPointer { $0.baseAddress },globalsStorage = identity(globals)
+            let records = actors.prefix(2).map(identity),beforeFirst = MatchPreparationReference.digest(Data(actors[0].bytes))
+            var draws = 0
+            try OriginalWorldControl.apply(world: world,actors: &actors,globals: &globals,objectCount: 1,header: { _ in header },
+                frame: { _,_ in frame },observe: { _,event in if case .random = event { draws += 1 } },inPlace: inPlace)
+            XCTAssertGreaterThan(draws,0);XCTAssertNotEqual(MatchPreparationReference.digest(Data(actors[0].bytes)),beforeFirst)
+            let same = actors.withUnsafeBufferPointer { $0.baseAddress } == buffer && identity(globals) == globalsStorage
+                && actors.prefix(2).map(identity) == records
+            XCTAssertEqual(same,inPlace,inPlace ? "in place: the caller's storage kept" : "default form: copies")
+        }
     }
     private struct Patch: Decodable {
         let offset: Int,bytes: String
@@ -112,9 +183,13 @@ final class OriginalWorldControlTests: XCTestCase {
                 try actors[i].write(UInt32(0),at: 0x368)
             };try world.write(UInt32(0),at: 0x7d4)
             for a in item.actors ?? [] { for p in a.patches { try patch(&actors[a.index],p.offset,p.bytes) } }
-            var ownFrames = frames,globals = globalsBase,events: [Event] = []
+            var ownFrames = frames,startGlobals = globalsBase
             for p in item.frames ?? [] { try patch(&ownFrames[p.object][p.index],p.offset,p.bytes) }
-            for p in item.globals ?? [] { try patch(&globals,p.offset-0x44d000,p.bytes) }
+            for p in item.globals ?? [] { try patch(&startGlobals,p.offset-0x44d000,p.bytes) }
+            // Both forms against the same recorded results (CORE_REALTIME B2 P4).
+            let startActors = actors
+            for inPlace in [false,true] {
+            var actors = startActors,globals = startGlobals,events: [Event] = []
             try OriginalWorldControl.apply(world: world,actors: &actors,globals: &globals,objectCount: item.count ?? 4,
                 header: { headers[$0] },frame: { ownFrames[$0][Int($1)] },
                 precision: try (item.fpcw ?? c.fpcw).map { try OriginalArithmeticPrecision(controlWord: $0) } ?? .bits64,observe: { slot,event in
@@ -122,12 +197,13 @@ final class OriginalWorldControlTests: XCTestCase {
                     case let .random(stream,range,result):events.append(.init(slot: slot,kind: "random",arguments: [stream,range,result].map(UInt32.init(bitPattern:))))
                     case let .sound(x,index):events.append(.init(slot: slot,kind: "sound",arguments: [x,index].map(UInt32.init(bitPattern:))))
                     }
-                })
+                },inPlace: inPlace)
             let records = [world]+actors
             XCTAssertEqual(MatchPreparationReference.digest(Data(records.flatMap(\.bytes))),item.poolSHA256,item.label+" pool")
             XCTAssertEqual(MatchPreparationReference.digest(Data(records.flatMap { $0.defined.map { $0 ? UInt8(1) : UInt8(0) } })),item.maskSHA256,item.label+" masks")
             XCTAssertEqual(MatchPreparationReference.digest(Data(globals.bytes)),item.globalsSHA256,item.label+" globals")
             XCTAssertTrue(globals.defined.allSatisfy { $0 });XCTAssertEqual(events,item.events,item.label+" events")
+            }
         }
     }
 }

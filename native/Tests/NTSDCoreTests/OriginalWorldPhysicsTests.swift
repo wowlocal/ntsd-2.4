@@ -22,6 +22,49 @@ final class OriginalWorldPhysicsTests: XCTestCase {
         }))
         XCTAssertEqual(draws,[.random(slot: 0,stream: 144,range: 51,result: 2)])
         XCTAssertEqual(actors,beforeActors);XCTAssertEqual(globals,beforeGlobals);XCTAssertEqual(world,beforeWorld)
+        // In place (CORE_REALTIME B2 P4): the same error after the same draw,
+        // the revival writes and the draw kept, nothing left vacant.
+        draws = []
+        XCTAssertThrowsError(try OriginalWorldPhysics.apply(world: &world,actors: &actors,globals: &globals,objectCount: 1,header: { _ in header },frame: { _,_ in frame },observe: { event in
+            if case .random = event { draws.append(event) }
+        },inPlace: true)) { XCTAssertEqual("\($0)","\(OriginalStateError.invalidStorage("World physics: Original respawn idiv by zero after RNG"))") }
+        XCTAssertEqual(draws,[.random(slot: 0,stream: 144,range: 51,result: 2)])
+        XCTAssertEqual(world.byteCount,beforeWorld.byteCount);XCTAssertEqual(actors.count,400);XCTAssertEqual(globals.byteCount,0xb440)
+        XCTAssertTrue(actors.allSatisfy { $0.byteCount == 0x420 })
+        XCTAssertNotEqual(actors[0],beforeActors[0]);XCTAssertNotEqual(globals,beforeGlobals)
+    }
+    /// CORE_REALTIME B2 P4: a throw inside the second Actor's physics, after its
+    /// movement writes (a type-3 Object's second Frame read), leaves both
+    /// Actors' writes in the caller's records with nothing vacant; the default
+    /// form keeps none.
+    func testInPlaceFailureInsideAnActorKeepsItsWrites() throws {
+        let bootstrap = try OriginalWorldBootstrap(worldBacking: [UInt8](repeating: 0xa5,count: 0x7d8),
+            actorBacking: [[UInt8]](repeating: [UInt8](repeating: 0xa5,count: 0x420),count: 400),selector: 2)
+        var world = bootstrap.world,actors = bootstrap.actors
+        try world.write(UInt8(1),at: 4);try world.write(UInt8(1),at: 5)
+        // Slot 0 thaws one step (frozen for 5); slot 1 moves, then reads its
+        // second Frame.
+        try actors[0].write(Int32(5),at: 0xb4)
+        for (offset,value): (Int,Int32) in [(0xb4,0),(0x98,0),(0x368,1)] { try actors[1].write(value,at: offset) }
+        var globals = try OriginalStateRecord(bytes: [UInt8](repeating: 0,count: 0xb440),defined: [Bool](repeating: true,count: 0xb440))
+        for i in 0..<3000 { try globals.write(UInt8(1),at: 0x44ff90-0x44d000+i) }
+        var header = try OriginalStateRecord(bytes: [UInt8](repeating: 0,count: 0x7a4),defined: [Bool](repeating: true,count: 0x7a4))
+        try header.write(Int32(3),at: 0x6f8)
+        let frame = try OriginalStateRecord(bytes: [UInt8](repeating: 0,count: 0x178),defined: [Bool](repeating: true,count: 0x178))
+        let beforeWorld = world,beforeActors = actors,beforeGlobals = globals,failure = OriginalStateError.invalidStorage("Second Frame of the second Actor")
+        for inPlace in [false,true] {
+            var reads = 0
+            XCTAssertThrowsError(try OriginalWorldPhysics.apply(world: &world,actors: &actors,globals: &globals,objectCount: 1,header: { _ in header },frame: { object,_ in
+                if object == 1 { reads += 1;if reads == 2 { throw failure } }
+                return frame
+            },inPlace: inPlace)) { XCTAssertEqual("\($0)","\(failure)") }
+            XCTAssertEqual(reads,2)
+            if !inPlace { XCTAssertEqual(world,beforeWorld);XCTAssertEqual(actors,beforeActors);XCTAssertEqual(globals,beforeGlobals);continue }
+            XCTAssertEqual(world.byteCount,beforeWorld.byteCount);XCTAssertEqual(globals.byteCount,0xb440)
+            XCTAssertEqual(actors.count,400);XCTAssertTrue(actors.allSatisfy { $0.byteCount == 0x420 })
+            XCTAssertEqual(try actors[0].integer(at: 0xb4,as: Int32.self),4,"slot 0 thawed one step")
+            XCTAssertEqual(try actors[1].integer(at: 0x3ec,as: Int32.self),0,"slot 1's wall flags cleared before the throw")
+        }
     }
     /// APPLICATION_HIT_ITEM_SLOT_PLAN.md: a completed reserve respawn (one ally)
     /// reports 41e99b, which leaves −3 − World in the hit pass's word.
@@ -115,9 +158,13 @@ final class OriginalWorldPhysicsTests: XCTestCase {
                 try actors[i].write(UInt32(0),at: 0x368)
             };try world.write(UInt32(0),at: 0x7d4)
             for a in item.actors ?? [] { for p in a.patches { try patch(&actors[a.index],p.offset,p.bytes) } }
-            var ownFrames = frames,globals = globalsBase,events: [Event] = []
+            var ownFrames = frames,startGlobals = globalsBase
             for p in item.frames ?? [] { try patch(&ownFrames[p.object][p.index],p.offset,p.bytes) }
-            for p in item.globals ?? [] { try patch(&globals,p.offset-0x44d000,p.bytes) }
+            for p in item.globals ?? [] { try patch(&startGlobals,p.offset-0x44d000,p.bytes) }
+            // Both forms against the same recorded results (CORE_REALTIME B2 P4).
+            let startWorld = world,startActors = actors
+            for inPlace in [false,true] {
+            var world = startWorld,actors = startActors,globals = startGlobals,events: [Event] = []
             try OriginalWorldPhysics.apply(world: &world,actors: &actors,globals: &globals,precision: OriginalArithmeticPrecision(controlWord: UInt16(c.fpcw ?? 0x37f)),objectCount: item.count ?? 4,
                 header: { headers[$0] },frame: { ownFrames[$0][Int($1)] },observe: { event in
                     switch event {
@@ -129,12 +176,13 @@ final class OriginalWorldPhysicsTests: XCTestCase {
                         case let .catalogSound(x,index):events.append(.init(slot: slot,kind: "catalogSound",arguments: [x,index].map(UInt32.init(bitPattern:))))
                         }
                     }
-                })
+                },inPlace: inPlace)
             let records = [world]+actors
             XCTAssertEqual(MatchPreparationReference.digest(Data(records.flatMap(\.bytes))),item.poolSHA256,item.label+" pool")
             XCTAssertEqual(MatchPreparationReference.digest(Data(records.flatMap { $0.defined.map { $0 ? UInt8(1) : UInt8(0) } })),item.maskSHA256,item.label+" masks")
             XCTAssertEqual(MatchPreparationReference.digest(Data(globals.bytes)),item.globalsSHA256,item.label+" globals")
             XCTAssertTrue(globals.defined.allSatisfy { $0 });XCTAssertEqual(events,item.events,item.label+" events")
+            }
         }
     }
 }

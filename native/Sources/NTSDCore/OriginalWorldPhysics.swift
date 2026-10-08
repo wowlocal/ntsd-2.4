@@ -11,6 +11,19 @@ public enum OriginalWorldPhysics {
                              observe: (OriginalWorldPhysicsEvent) throws -> Void = { _ in },
                              afterActorPhysics: (Int,OriginalStateRecord) throws -> Void = { _,_ in },
                              respawned: () throws -> Void = {}) throws {
+        try run(state: &state,observe: observe,afterActorPhysics: afterActorPhysics,respawned: respawned,inPlace: false)
+    }
+    /// `apply` with the caller's world, actors and globals moved into the pass
+    /// and written back on every path (CORE_REALTIME B2 P4): for callers that
+    /// drop the state when this throws.
+    package static func applyInPlace(state: inout OriginalMatchPreparation,
+                                     observe: (OriginalWorldPhysicsEvent) throws -> Void = { _ in },
+                                     afterActorPhysics: (Int,OriginalStateRecord) throws -> Void = { _,_ in },
+                                     respawned: () throws -> Void = {}) throws {
+        try run(state: &state,observe: observe,afterActorPhysics: afterActorPhysics,respawned: respawned,inPlace: true)
+    }
+    private static func run(state: inout OriginalMatchPreparation,observe: (OriginalWorldPhysicsEvent) throws -> Void,
+                            afterActorPhysics: (Int,OriginalStateRecord) throws -> Void,respawned: () throws -> Void,inPlace: Bool) throws {
         let catalog = state.catalog
         guard try state.world.integer(at: 0x7d4,as: UInt32.self) == 0,let registry = catalog.registry.records[0x4d82380] else { throw error("Catalog binding") }
         try apply(world: &state.world,actors: &state.actors,globals: &state.globals,precision: state.arithmeticPrecision,objectCount: registry.integer(at: 0,as: Int32.self),header: { index in
@@ -18,15 +31,24 @@ public enum OriginalWorldPhysics {
         },frame: { index,number in
             guard catalog.objects.indices.contains(index),catalog.objects[index].frameStorage.indices.contains(Int(number)) else { throw error("Frame binding") }
             return catalog.objects[index].frameStorage[Int(number)]
-        },observe: observe,afterActorPhysics: afterActorPhysics,respawned: respawned)
+        },observe: observe,afterActorPhysics: afterActorPhysics,respawned: respawned,inPlace: inPlace)
     }
     private static func error(_ text: String) -> OriginalStateError { .invalidStorage("World physics: "+text) }
     static func apply(world: inout OriginalStateRecord,actors: inout [OriginalStateRecord],globals: inout OriginalStateRecord,
                       precision: OriginalArithmeticPrecision = .bits64,objectCount: Int32,header: (Int) throws -> OriginalStateRecord,frame: (Int,Int32) throws -> OriginalStateRecord,
                       observe: (OriginalWorldPhysicsEvent) throws -> Void = { _ in },
                       afterActorPhysics: (Int,OriginalStateRecord) throws -> Void = { _,_ in },
-                      respawned: () throws -> Void = {}) throws {
-        var ownedWorld = world,pool = actors,owned = globals
+                      respawned: () throws -> Void = {},inPlace: Bool = false) throws {
+        guard inPlace else {
+            // All or nothing: in place on copies, assigned when it completes.
+            var copiedWorld = world,copies = actors,copiedGlobals = globals
+            try apply(world: &copiedWorld,actors: &copies,globals: &copiedGlobals,precision: precision,objectCount: objectCount,header: header,frame: frame,
+                      observe: observe,afterActorPhysics: afterActorPhysics,respawned: respawned,inPlace: true)
+            world = copiedWorld;actors = copies;globals = copiedGlobals
+            return
+        }
+        var ownedWorld = inPlaceTake(&world,leaving: .vacant),pool = inPlaceTake(&actors,leaving: []),owned = inPlaceTake(&globals,leaving: .vacant)
+        defer { world = ownedWorld;actors = pool;globals = owned }
         func active(_ slot: Int) throws -> UInt8 { try ownedWorld.integer(at: 4+slot,as: UInt8.self) }
         func index(_ slot: Int) throws -> Int {
             let i = Int(try ownedWorld.integer(at: 0x194+slot*4,as: UInt32.self))
@@ -49,9 +71,11 @@ public enum OriginalWorldPhysics {
         }
         for slot in 0..<400 where try active(slot) != 0 {
             let a = try index(slot),o = try object(a)
-            var actor = pool[a]
-            try OriginalActorPhysics.apply(actor: &actor,header: header(o),globals: &owned,precision: precision,frame: { try frame(o,$0) },observe: { try observe(.sound(slot: slot,event: $0)) })
-            pool[a] = actor;try afterActorPhysics(slot,actor)
+            // The helper runs on this pass's own Actor and globals (dropped with
+            // the pass on a throw; CORE_REALTIME B2 P4).
+            let actorHeader = try header(o)
+            try OriginalActorPhysics.apply(actor: &pool[a],header: actorHeader,globals: &owned,precision: precision,frame: { try frame(o,$0) },observe: { try observe(.sound(slot: slot,event: $0)) },inPlace: true)
+            try afterActorPhysics(slot,pool[a])
             if try state(a) == 9998 { try ownedWorld.write(UInt8(0),at: 4+slot) }
             if try state(a) == 14 && i(a,0x2fc) <= 0 && (i(a,0x2f4) >= 0 || i(a,0x364) == 5 || slot >= 20) && i(a,8) > 0 && i(a,8) < 5 {
                 if try i(a,0x314) > 0 {
@@ -109,6 +133,5 @@ public enum OriginalWorldPhysics {
                 }
             }
         }
-        world = ownedWorld;actors = pool;globals = owned
     }
 }

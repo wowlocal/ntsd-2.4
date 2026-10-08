@@ -71,7 +71,12 @@ final class OriginalActorInputTests: XCTestCase {
             case "edges": try OriginalActorInput.captureEdges(actor: &actor)
             case "combos": try OriginalActorInput.recognizeCombos(actor: &actor, sourceID: item.sourceID ?? 2, globals: globals, frame: frame)
             case "actions": try OriginalActorInput.applyFrameInput(actor: &actor, globals: globals, frame: frame)
-            case "prefix": try OriginalActorInput.apply(actor: &actor, sourceID: item.sourceID ?? 2, globals: globals, frame: frame)
+            case "prefix":
+                // Both forms against the same recorded result (CORE_REALTIME B2 P4).
+                var placed = actor
+                try OriginalActorInput.apply(actor: &placed, sourceID: item.sourceID ?? 2, globals: globals, frame: frame, inPlace: true)
+                try OriginalActorInput.apply(actor: &actor, sourceID: item.sourceID ?? 2, globals: globals, frame: frame)
+                XCTAssertEqual(placed, actor, item.label)
             case "transfer": try OriginalActorInput.transfer(actor: &actor, target: XCTUnwrap(item.target), globals: globals, frame: frame)
             case "invalidates":
                 let result = try OriginalActorInput.invalidates(actor: actor, key: XCTUnwrap(item.key), advanced: XCTUnwrap(item.advanced))
@@ -100,5 +105,12 @@ final class OriginalActorInputTests: XCTestCase {
             return current
         }))
         XCTAssertEqual(actor, before)
+        // In place (CORE_REALTIME B2 P4): the same error, the edges and history
+        // written before the transfer kept.
+        XCTAssertThrowsError(try OriginalActorInput.apply(actor: &actor, sourceID: 2, globals: globals, frame: { index in
+            guard index == 0 else { throw OriginalStateError.invalidStorage("Unresolved frame") }
+            return current
+        }, inPlace: true)) { XCTAssertEqual("\($0)", "\(OriginalStateError.invalidStorage("Unresolved frame"))") }
+        XCTAssertNotEqual(actor, before); XCTAssertEqual(actor.byteCount, OriginalStateRecord.actorSize)
     }
 }

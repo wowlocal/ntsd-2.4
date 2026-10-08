@@ -16,13 +16,20 @@ public enum OriginalActorInput {
     }
 
     static let buffers = [0xbe, 0xbf, 0xc0, 0xc3, 0xc4, 0xc5, 0xc2]
+    /// `inPlace`: the steps run on the caller's actor (CORE_REALTIME B2 P4;
+    /// only for callers that drop it when this throws); otherwise on a copy
+    /// assigned only when all three complete.
     static func apply(actor: inout OriginalStateRecord, sourceID: Int32,
-                      globals: OriginalStateRecord, frame: (Int32) throws -> OriginalStateRecord) throws {
-        var candidate = actor
-        try captureEdges(actor: &candidate)
-        try recognizeCombos(actor: &candidate, sourceID: sourceID, globals: globals, frame: frame)
-        try applyFrameInput(actor: &candidate, globals: globals, frame: frame)
-        actor = candidate
+                      globals: OriginalStateRecord, frame: (Int32) throws -> OriginalStateRecord, inPlace: Bool = false) throws {
+        guard inPlace else {
+            var candidate = actor
+            try apply(actor: &candidate, sourceID: sourceID, globals: globals, frame: frame, inPlace: true)
+            actor = candidate
+            return
+        }
+        try captureEdges(actor: &actor)
+        try recognizeCombos(actor: &actor, sourceID: sourceID, globals: globals, frame: frame)
+        try applyFrameInput(actor: &actor, globals: globals, frame: frame)
     }
 
     /// Positive SIGNED bytes decay. Edges require previous==0/current==1,

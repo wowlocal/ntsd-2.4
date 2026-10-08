@@ -93,12 +93,15 @@ public enum OriginalGameplayBody {
             try checkpoint(stage,match,input,crt)
             try ownedCheckpoint(stage,match,input,crt,installed)
         }
-        try OriginalWorldControl.apply(state: &next, bundledLibrary: library != nil, observe: { try observe(.control(slot: $0, $1)) })
+        // Control, physics and the post-draw lifecycle run in place on this
+        // body's own copy, which it drops when anything throws (CORE_REALTIME
+        // B2 P4).
+        try OriginalWorldControl.applyInPlace(state: &next, bundledLibrary: library != nil, observe: { try observe(.control(slot: $0, $1)) })
         try emitCheckpoint(.control, next, owned, random)
         // The hit pass's item word [esp+4c]: only a reserve respawn writes it
         // earlier in this call (APPLICATION_HIT_ITEM_SLOT_PLAN.md).
         var itemSlot: OriginalRequestSlotWord?
-        try OriginalWorldPhysics.apply(state: &next, observe: { try observe(.physics($0)) },
+        try OriginalWorldPhysics.applyInPlace(state: &next, observe: { try observe(.physics($0)) },
             respawned: { itemSlot = .respawn() })
         try emitCheckpoint(.physics, next, owned, random)
         try OriginalWorldLinks.apply(state: &next, sse2Conversion: sse2, observe: { try observe(.links(.links, $0)) })
@@ -220,7 +223,7 @@ public enum OriginalGameplayBody {
         // nil; these are not seeded or carried between separate match calls.
         // SP+34 is known: 41f2c7 stores −4 − World on every call.
         var scratch = OriginalPostDrawScratch(requestSlot: .initial())
-        let transforms = try OriginalPostDrawLifecycle.apply(state: &next, scratch: &scratch, sse2: sse2, library: installed?.transforms,
+        let transforms = try OriginalPostDrawLifecycle.applyInPlace(state: &next, scratch: &scratch, sse2: sse2, library: installed?.transforms,
             observe: { try observe(.lifecycle($0)) })
         if let transforms { installed!.transforms = transforms }
         try emitCheckpoint(.lifecycle, next, owned, random)
