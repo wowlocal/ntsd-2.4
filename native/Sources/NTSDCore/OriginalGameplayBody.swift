@@ -93,9 +93,10 @@ public enum OriginalGameplayBody {
             try checkpoint(stage,match,input,crt)
             try ownedCheckpoint(stage,match,input,crt,installed)
         }
-        // Control, physics, links, contacts, camera, drawing, the post-draw
-        // impulses and lifecycle run in place on this body's own copy, which it
-        // drops when anything throws (CORE_REALTIME B2 P4).
+        // Control, physics, links, contacts, hits, cpoints, camera, drawing,
+        // the post-draw impulses and lifecycle and the result recording run in
+        // place on this body's own copy, which it drops when anything throws
+        // (CORE_REALTIME B2 P4).
         try OriginalWorldControl.applyInPlace(state: &next, bundledLibrary: library != nil, observe: { try observe(.control(slot: $0, $1)) })
         try emitCheckpoint(.control, next, owned, random)
         // The hit pass's item word [esp+4c]: only a reserve respawn writes it
@@ -112,13 +113,13 @@ public enum OriginalGameplayBody {
         // respawn (above); otherwise it and the incoming cpoint partner have no
         // whole-body native producer, and children retain nil until used.
         if installed != nil {
-            try OriginalLibWorldHits.apply(state:&next,crt:&random,library:&installed!.hits,itemSlot:itemSlot,sse2:sse2,
+            try OriginalLibWorldHits.applyInPlace(state:&next,crt:&random,library:&installed!.hits,itemSlot:itemSlot,sse2:sse2,
                                           observe:{ try observe(.hits($0)) })
         } else {
-            try OriginalWorldHits.apply(state: &next, crt: &random, itemSlot: itemSlot, sse2: sse2, observe: { try observe(.hits($0)) })
+            try OriginalWorldHits.applyInPlace(state: &next, crt: &random, itemSlot: itemSlot, sse2: sse2, observe: { try observe(.hits($0)) })
         }
         try emitCheckpoint(.hits, next, owned, random)
-        try OriginalWorldCPoints.apply(state: &next, sse2Conversion: sse2,
+        try OriginalWorldCPoints.applyInPlace(state: &next, sse2Conversion: sse2,
             observe: { try observe(.links(.attachments, $0)) }, afterStage: { stage, value in
                 let point: Stage
                 switch stage {
@@ -248,7 +249,7 @@ public enum OriginalGameplayBody {
                 defined: Array(original.defined[..<0x20])+notice.defined)
         }
         try emitCheckpoint(.notices, next, owned, random)
-        let result = try OriginalResultRecording.apply(state: &next, context: &owned,
+        let result = try OriginalResultRecording.applyInPlace(state: &next, context: &owned,
             stageDefeated: round.stageDefeated, allocate: allocate, processorSignature: processorSignature,
             open: open, write: write, close: close, observe: { try observe(.recording($0)) })
         try emitCheckpoint(.recording, next, owned, random)

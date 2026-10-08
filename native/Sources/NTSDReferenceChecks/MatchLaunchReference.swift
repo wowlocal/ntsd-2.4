@@ -580,6 +580,23 @@ public enum MatchLaunchReference {
                                 } catch { if !stopped { throw error } }
                                 guard stopped,trialCRT == crt else { throw error("Hit rollback CRT/stop") }
                                 try snapshot(trial,section.before,"own hits rollback after RNG")
+                                // In place (CORE_REALTIME B2 P4): the same stop; the records
+                                // are published back whole, the item RNG's globals write kept.
+                                var placed = state,placedCRT = crt;stopped = false
+                                do {
+                                    try OriginalWorldHits.applyInPlace(state: &placed,crt: &placedCRT,observe: { event in
+                                        guard case .random = event else { throw error("Unexpected in-place rollback event") }
+                                        stopped = true;throw error("Injected stop after item RNG")
+                                    })
+                                } catch { if !stopped { throw error } }
+                                guard stopped,placed.world.byteCount == state.world.byteCount,placed.actors.count == state.actors.count,
+                                      placed.actors.allSatisfy({ $0.byteCount == OriginalStateRecord.actorSize }),
+                                      placed.globals.byteCount == state.globals.byteCount,placed.frameAllocations.count == state.frameAllocations.count
+                                else { throw error("Hit in-place write-back") }
+                                // The item draw's index and counter, compared after the own
+                                // run below (whose only draw is this one).
+                                let g0 = OriginalMatchPreparation.globalBase
+                                let placedDraw = (try placed.globals.integer(at: 0x450bcc-g0,as: Int32.self),try placed.globals.integer(at: 0x450c34-g0,as: Int32.self))
                                 try OriginalWorldHits.apply(state: &state,crt: &crt,observe: { event in
                                     guard case let .random(stream,range,result) = event,randomSeen == 0,stream == 146,range == 200,
                                           UInt32(bitPattern: result) == rng.result else { throw error("Own first item RNG") }
@@ -593,6 +610,9 @@ public enum MatchLaunchReference {
                                     try check(actor,r,"own hit Actor\(slot)");seen += 1
                                 })
                                 guard seen == 2,randomSeen == 1 else { throw error("Missing own hit return/RNG") };hitSlots = seen
+                                guard try placedDraw == (state.globals.integer(at: 0x450bcc-g0,as: Int32.self),state.globals.integer(at: 0x450c34-g0,as: Int32.self)) else {
+                                    throw error("Hit in-place draw write-back")
+                                }
                                 try snapshot(state,section.after,"own hits after")
                                 if let cpoints {
                                     let stops: [UInt32] = [0x41f2b3,0x41f2b8,0x41f47d,0x41f484]
@@ -626,6 +646,24 @@ public enum MatchLaunchReference {
                                         })
                                     } catch { if !stopped { throw error } }
                                     guard stopped,trial.actors == beforeTrial,trial.globals == beforeGlobals else { throw error("Cpoint public rollback") }
+                                    // In place (CORE_REALTIME B2 P4): the same stop in the cleanup
+                                    // observer leaves the cleaned records in the state; a stop in
+                                    // the second links pass leaves them there too.
+                                    for site in ["cleanup","depth"] {
+                                        var placed = state;stopped = false
+                                        try placed.actors[actor].write(Int32(1),at: 0x98);try placed.actors[actor].write(Int32(399),at: 0x9c)
+                                        do {
+                                            try OriginalWorldCPoints.applyInPlace(state: &placed,afterStage: { stage,_ in
+                                                if site == "cleanup",stage == .cleanup { stopped = true;throw error("Injected stop after held cleanup") }
+                                            },afterDepth: { _,_ in
+                                                if site == "depth" { stopped = true;throw error("Injected stop in the second links pass") }
+                                            })
+                                        } catch { if !stopped { throw error } }
+                                        guard stopped,placed.actors.count == state.actors.count,
+                                              placed.actors.allSatisfy({ $0.byteCount == OriginalStateRecord.actorSize }),
+                                              placed.globals.byteCount == state.globals.byteCount,
+                                              try placed.actors[actor].integer(at: 0x98,as: Int32.self) == 0 else { throw error("Cpoint in-place write-back (\(site))") }
+                                    }
                                     var stages = 0,depths = 0
                                     try OriginalWorldCPoints.apply(state: &state,observe: { _ in throw error("Unexpected own cpoint RNG") },afterStage: { stage,value in
                                         guard stages < 4,stage.rawValue == String(cpoints.cases[stages].label.dropFirst(7)) else { throw error("Cpoint stage order") }

@@ -196,6 +196,34 @@ final class OriginalResultRecordingTests: XCTestCase {
                 XCTAssertEqual(trialGlobals, oldGlobals); XCTAssertEqual(trialContext.memory.allocations, oldContext.memory.allocations)
                 XCTAssertEqual(trialContext.memory.replayPointers, oldContext.memory.replayPointers)
                 XCTAssertEqual(trialContext.savedPlayback, oldContext.savedPlayback)
+                // In place (CORE_REALTIME B2 P4): the same error; the globals are
+                // written back (whole, possibly partly advanced) and the context
+                // still commits only when the call completes.
+                var placedReached = false
+                XCTAssertThrowsError(try OriginalResultRecording.apply(world: world, actors: actors, globals: &trialGlobals,
+                    context: &trialContext, stageDefeated: missingStage ? nil : 0, header: { headers[$0] },
+                    allocate: { 0x25000000 }, processorSignature: { 0x306c4 }, open: { _ in true },
+                    write: { Int32($0.count) }, close: { 0 }, observe: {
+                        if case .writer(.streamReturn("destroy", _)) = $0 {
+                            placedReached = true; throw OriginalStateError.invalidStorage("Result late observer")
+                        }
+                    }, inPlace: true)) { error in
+                        guard case OriginalStateError.invalidStorage(let detail) = error else { return XCTFail("Unexpected result failure: \(error)") }
+                        XCTAssertEqual(detail, missingStage ? "Result recording: Retained stage result unavailable" : "Result late observer")
+                    }
+                XCTAssertEqual(placedReached, !missingStage)
+                XCTAssertEqual(trialGlobals.byteCount, oldGlobals.byteCount); XCTAssertEqual(trialGlobals.defined, oldGlobals.defined)
+                // The playback restore's globals writes, made before the late
+                // observer stops the writer, are the ones written back: a word
+                // only the restore writes matches the verified completed run.
+                if !missingStage {
+                    let word = 0x450c30-0x44d000
+                    XCTAssertNotEqual(Array(oldGlobals.bytes[word..<word+4]), Array(globals.bytes[word..<word+4]), "the restore changes 0x450c30")
+                    XCTAssertEqual(Array(trialGlobals.bytes[word..<word+4]), Array(globals.bytes[word..<word+4]), "restored playback globals kept")
+                }
+                XCTAssertEqual(trialContext.memory.allocations, oldContext.memory.allocations)
+                XCTAssertEqual(trialContext.memory.replayPointers, oldContext.memory.replayPointers)
+                XCTAssertEqual(trialContext.savedPlayback, oldContext.savedPlayback)
             }
         }
         print("Whole result recording: \(corpus.cases.count) callers, \(writerCalls) writers, \(restores) playback restores, \(writes) writes/\(writtenBytes) bytes")
