@@ -240,12 +240,9 @@ public struct OriginalApplicationLoadedMenuSession {
             reserve(token,count)
         }
         func emit(_ effect: Session.Effect) throws {
-            guard state.graphics != nil else { throw Boundary.dependency("Graphics") }
-            // consume works on its own copy and assigns it only on success, so
-            // updating the owner in place leaves it unchanged on a throw, as the
-            // copy taken here did (CORE_REALTIME phase 4b).
-            let inputs = state.bitmapInputs
-            if let command = try state.graphics!.consume(effect,inputs:inputs) { graphics.append(command) }
+            // One in-place access to the state, without copying the graphics
+            // owner or the bitmap inputs (CORE_REALTIME phase 4b, tier 3 G3a).
+            if let command = try state.loadedCommand(for:effect) { graphics.append(command) }
             operations.append(.menu(effect))
         }
         func allocate(_ kind: AllocationKind) throws -> OriginalInterfaceAllocation {
@@ -718,6 +715,22 @@ public struct OriginalApplicationLoadedMenuSession {
             let final = try snapshot(globals,audio,resources)
             if end == .returned { dispatcher = try OriginalApplicationDispatchEntry.finishWorldCall(globals:final.state.full) }
             return .returned(.init(entry:entry,snapshot:final,exit:end,dispatcherResult:dispatcher,graphics:graphics))
+        }
+    }
+}
+
+extension OriginalApplicationMenuSession.State {
+    /// The graphics command for one loaded attempt's effect (CORE_REALTIME
+    /// tier 3 G3a). `mutating` so the attempt's `state` is accessed once, in
+    /// place: a Blt only reads the owner and the inputs (`blitCommand`), a
+    /// fill only the owner (`fillCommand`); other effects go through `consume`, which assigns the
+    /// owner only on success, so a throw leaves it unchanged as before.
+    mutating func loadedCommand(for effect: OriginalApplicationMenuSession.Effect) throws -> OriginalApplicationGraphics.Command? {
+        guard graphics != nil else { throw OriginalApplicationLoadedMenuSession.Boundary.dependency("Graphics") }
+        switch effect {
+        case let .blit(b,r):return try graphics!.blitCommand(b,result:r,inputs:bitmapInputs)
+        case let .fill(f,r):return try graphics!.fillCommand(f,result:r)
+        default:return try graphics!.consume(effect,inputs:bitmapInputs)
         }
     }
 }

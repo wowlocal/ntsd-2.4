@@ -206,7 +206,8 @@ while measuring; restore `svc power stayon false` when the loop pauses or stops.
 | 2026-10-08 | 4aa: shipping builds without dynamic exclusivity checks — **60 fps** | The user's decision: release builds of the app and APK drop Swift's dynamic exclusivity checks (~3.5–4% of the main thread); test bundles keep them, with a guard test. A12, means of three runs: Demo main 16.13 ms, render 11.99; vs main 16.25, render 13.82 (4z in the same session: 16.54 / 16.77). Both threads ≤ 16.67 ms in both scenarios: tagged `rt-60fps-a12`. Behaviour equal; review OK | [evidence](../evidence/rt-4aa-unchecked-exclusivity-60fps-20261008.json) | 3d8935d, 7c02b7f |
 | 2026-10-08 | 4ab: the switch for FreeType text, SDL and iOS | 4aa's review: NTSDFreeTypeText (in the APK) kept its checks; it and the SDL and iOS targets now take the same opt-in. The APK library has no exclusivity call sites left in our modules (the remaining 2,164 are the toolchain's Foundation). Phone unchanged (Demo 16.24 -> 16.11, vs 16.36 -> 16.43); emulator frames identical | [evidence](../evidence/rt-4ab-exclusivity-freetype-sdl-ios-20261008.json) | 0dd7740 |
 | 2026-10-08 | S1 (tier 3): two-level page tables | The replay buffer's pages sit in groups of 16, so each tick's packet write under the transactional copy duplicates ~41 page references per array instead of 397 (the record stays 40 bytes; the review caught a first version that grew it to 48). A12 vs main 16.43 → 15.73 ms per tick (three runs against two of 4ab, interleaved); Demo 16.14 → 16.03 (no recording there). Behaviour equal; review OK after the fix | [evidence](../evidence/rt-s1-two-level-pages-20261008.json) | e6c4c00 (its message's 16.44 is 16.435; the evidence rounds to 16.43) |
-| 2026-10-08 | G1 (tier 3): unobserved draws on the stack | Sprite and glyph draws without observers clip on stack values and build the Blt's arrays only when it is performed; the font reads its global words once per call. A12 Demo main 16.06 → 15.46 ms per tick (three runs against two of S1, interleaved); vs 15.79 → 15.67 (few glyphs). Behaviour equal; a twin test compares both paths over 6,000 random draws; review OK after a test fix | [evidence](../evidence/rt-g1-unobserved-draw-20261008.json) | this commit |
+| 2026-10-08 | G1 (tier 3): unobserved draws on the stack | Sprite and glyph draws without observers clip on stack values and build the Blt's arrays only when it is performed; the font reads its global words once per call. A12 Demo main 16.06 → 15.46 ms per tick (three runs against two of S1, interleaved); vs 15.79 → 15.67 (few glyphs). Behaviour equal; a twin test compares both paths over 6,000 random draws; review OK after a test fix | [evidence](../evidence/rt-g1-unobserved-draw-20261008.json) | 55dbf94 (its message's 16.07 is 16.065; the evidence rounds to 16.06) |
+| 2026-10-09 | G3a (tier 3): direct Blt and fill commands | Blt and fill commands are built without the graphics owner's rollback copy (those branches only read it), without copying the bitmap inputs and with one event; the attempt's state is accessed once in place. Profile: emit 7.70 → 7.00% of the main thread. A12 vs main 15.83 → 15.65 ms, Demo 15.54 → 15.52 (below run resolution; committed as less work, no regression). A twin test compares 400 cases with consume; review OK | [evidence](../evidence/rt-g3a-direct-blit-fill-20261009.json) | this commit |
 
 ## Next task
 
@@ -239,8 +240,11 @@ main thread; message-loop iterations 4.12 × 1.14 ms; render thread 18.7 ms,
   (means of three runs). Next tier: 8 ms — [tier-3 plan](CORE_REALTIME_TIER3.md).
   S1 done (vs main 15.73 ms), G1 done (Demo main 15.46 ms; the profile answered the
   probe's glyph question: only 3.2 of the draw's 15.3% was the performed Blt).
-  Next: G2/G3 (the graphics command pipeline: Attempt.emit 7.7% in vs, of it
-  the graphics consumer 4.7% and command building 2.4%),
+  G3a done (emit 7.7 → 7.0%). Next, the pipeline design's order: G3b = the
+  optional owner copy and the event copy left in `loadedCommand`/`blitCommand`
+  (~1.4%), observations nobody receives (f) and reserved command/operation
+  capacity (d1); then the Host tail without its operations copy (d2), the
+  display replay's second surface lookups (g), compact commands (e),
   the idle lane, record storage v2; ~11 ms without the user's decisions (Q1–Q4
   in the plan), ~9–10 with them. Left from 4aa's review: the other packagers'
   opt-in (the macOS app build, Linux, Windows, iOS).
