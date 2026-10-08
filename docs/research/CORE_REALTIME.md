@@ -189,7 +189,8 @@ while measuring; restore `svc power stayon false` when the loop pauses or stops.
 | 2026-10-08 | B2 P4f: post-draw commands in place | The commands pass took copies of the world, actors and globals into its body and its recovery step writes actor fields every tick; it now takes the caller's records and writes them back with the slot word on every path. A12 main 18.14 -> 16.86 ms per tick, complete 13.66 -> 12.4 (interleaved with 4w and P4e). Behaviour equal; affected suites pass, full list on the 4x tree; review OK (two extra twin checks added) | [evidence](../evidence/rt-b2p4f-commands-20261008.json) | 0805251 |
 | 2026-10-08 | 4x: attempt identity without a random UUID | Each loading attempt made a random UUID, and Foundation on Android read /dev/urandom for each (0.88% of the main thread in __openat); isSameAttempt now compares the attempt's shared storage object. A12 main 16.9 -> 16.93 ms per tick, menu step 0.77 -> 0.73 ms against P4f in the same session (within variation; ~0.15 ms by the profile); Mac vs 0.753 → 0.704 ms. Behaviour equal; full suite list passes; review: equivalent | [evidence](../evidence/rt-4x-attempt-identity-20261008.json) | 2d56169 |
 | 2026-10-08 | B3a: loaded cycle in one transactional level — reverted | The loaded match cycle and entry ran in place on the loaded-cycle session's own model (one globals copy fewer per tick by construction; behaviour equal; review OK). Phone unchanged (16.95 vs 4x's 16.93) and the Mac about 1% slower in three alternating pairs (0.889 vs 0.879 ms); cause not established. Not committed | [evidence](../evidence/rt-b3a-loaded-cycle-in-place-20261008.json) | — |
-| 2026-10-08 | B2 P4g: gameplay output and mode label in place | The mode label rewrote its NUL and suffix every tick on a globals buffer three staging levels shared, so it copied the 92 KB globals every tick; the output and the label now run in place on the body's copy (copy probe: storage kept). A12 main 16.85 → 16.97 ms per tick against 4x in the same session: within variation (expected ~0.1 ms). Behaviour equal; review OK (its test findings fixed) | [evidence](../evidence/rt-b2p4g-output-mode-label-20261008.json) | this commit |
+| 2026-10-08 | B2 P4g: gameplay output and mode label in place | The mode label rewrote its NUL and suffix every tick on a globals buffer three staging levels shared, so it copied the 92 KB globals every tick; the output and the label now run in place on the body's copy (copy probe: storage kept). A12 main 16.85 → 16.97 ms per tick against 4x in the same session: within variation (expected ~0.1 ms). Behaviour equal; review OK (its test findings fixed) | [evidence](../evidence/rt-b2p4g-output-mode-label-20261008.json) | 7b60f50 |
+| 2026-10-08 | 4z: the font resolves each glyph bitmap once per draw | The Demo profile (eight fighters) put a tenth of the main thread in the bitmap font's per-glyph bitmap lookup; the font now looks each pointer up once per call. A12 Demo main 17.54 -> 16.68 ms per tick, vs 16.91 -> 16.85 ms per tick. Behaviour equal; review OK | [evidence](../evidence/rt-4z-font-bitmap-once-20261008.json) | this commit |
 
 ## Next task
 
@@ -217,10 +218,12 @@ main thread; message-loop iterations 4.12 × 1.14 ms; render thread 18.7 ms,
   per tick after 1j; each full-frame pass costs ~1.7 ms on the A12. P1 (the
   present's back-buffer copy and crop fused) next, then P2 (the back buffer
   lent as the frame).
-- **Status (2026-10-08, B2 P4f and 4x):** main ~16.8 ms per tick on the A12
-  (P4f 17.2/16.4/16.6/17.0/17.1, 4x 16.6/17.0) against 4w's 18.15 measured
-  interleaved the same night; complete ~12.4 ms. Tier 2 needs ~0.8 ms more on
-  the main thread. The phone's render thread drifts by up to 1.5 ms between
+- **Status (2026-10-08, 4z):** the phone speed run now has two scenarios,
+  vs (two fighters) and the Demo (eight computer fighters, `--scenario demo`;
+  the user asked for it). Main thread per tick: vs 16.85 ms, Demo 16.68 ms;
+  render ~14.1 (vs) and ~12.0 (Demo). The user asked for a tag (`rt-60fps-a12`)
+  when both threads are at or under 16.67 ms in both scenarios (mean of at
+  least three runs). The phone's render thread drifts by up to 1.5 ms between
   sessions, so compare against a baseline APK re-run in the same session
   (`rt4w.apk` is archived on T7, crossplatform-scratch-20261008a). Gate
   binaries come from clean builds (4u).

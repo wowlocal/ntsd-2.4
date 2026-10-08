@@ -53,7 +53,9 @@ final class OriginalBitmapFontTests: XCTestCase {
                 for i in 0..<4 { normalized[i] = i == 0 && surface != 0 ? 1 : 0 }
                 bitmaps.append(try .init(bytes: normalized, defined: flags.map { $0 != 0 })); surfaces.append(surface)
             }
+            var lookups: [UInt32] = []
             func resource(_ pointer: UInt32) throws -> (OriginalStateRecord, UInt32) {
+                lookups.append(pointer)
                 guard pointer >= corpus.bitmapBase, (pointer-corpus.bitmapBase)%0x2000 == 0 else {
                     throw OriginalStateError.invalidStorage("Font fixture bitmap binding")
                 }
@@ -79,6 +81,14 @@ final class OriginalBitmapFontTests: XCTestCase {
             XCTAssertEqual(text, try record(c.textAfter, c.maskAfter), s.label)
             XCTAssertEqual(written, try blob(c.written), s.label)
             XCTAssertEqual(blits, c.blits, s.label)
+            // Each bitmap pointer resolved once per call, at its first use: the
+            // lookups are the "draw" events' pointers in order without repeats
+            // (CORE_REALTIME 4z); the draws themselves are compared above.
+            var firstUses: [UInt32] = []
+            for event in events where event.kind == "draw" && event.arguments.first.map({ $0 != 0 }) == true {
+                if !firstUses.contains(event.arguments[0]) { firstUses.append(event.arguments[0]) }
+            }
+            XCTAssertEqual(lookups, firstUses, s.label+" one lookup per pointer, at its first use")
             guard events == c.events else {
                 let index = zip(events,c.events).enumerated().first(where: { $0.element.0 != $0.element.1 })?.offset
                 throw OriginalStateError.invalidStorage("Font events differ in \(s.label), index \(index.map(String.init) ?? "count"), native \(events.count), source \(c.events.count)")
