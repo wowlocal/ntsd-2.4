@@ -94,9 +94,9 @@ public enum OriginalGameplayBody {
             try ownedCheckpoint(stage,match,input,crt,installed)
         }
         // Control, physics, links, contacts, hits, cpoints, camera, drawing,
-        // the post-draw impulses and lifecycle and the result recording run in
-        // place on this body's own copy, which it drops when anything throws
-        // (CORE_REALTIME B2 P4).
+        // the post-draw impulses, lifecycle and commands and the result
+        // recording run in place on this body's own copy, which it drops when
+        // anything throws (CORE_REALTIME B2 P4).
         try OriginalWorldControl.applyInPlace(state: &next, bundledLibrary: library != nil, observe: { try observe(.control(slot: $0, $1)) })
         try emitCheckpoint(.control, next, owned, random)
         // The hit pass's item word [esp+4c]: only a reserve respawn writes it
@@ -230,7 +230,7 @@ public enum OriginalGameplayBody {
         try emitCheckpoint(.lifecycle, next, owned, random)
         // SP+34 as the loop left it: 41f2c7's −4 − World or the loop's last writer.
         var spawn = scratch.requestSlot
-        try OriginalPostDrawCommands.apply(state: &next, requestSlot: &spawn, sse2: sse2,
+        try OriginalPostDrawCommands.applyInPlace(state: &next, requestSlot: &spawn, sse2: sse2,
             observe: { try observe(.commands($0)) })
         try emitCheckpoint(.commands, next, owned, random)
         try OriginalWorldHUD.apply(state: &next, surface: surface, resourceBitmap: resourceBitmap,

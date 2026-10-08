@@ -59,6 +59,8 @@ public enum OriginalLibWorldHits {
                                      library: inout OriginalLibHitState,retainedSpawnSlot: Int32? = nil,itemSlot: OriginalRequestSlotWord? = nil,sse2: Bool = false,
                                      observe: (OriginalHitEvent) throws -> Void = { _ in },
                                      afterHit: (Int,OriginalStateRecord) throws -> Void = { _,_ in }) throws {
+        // makePass(taking:) throws only before it takes anything, so the
+        // write-back is armed as soon as the records are in the pass.
         var pass = try OriginalActorHits.makePass(taking: &state,crt: crt,sse2: sse2,library: library)
         defer { OriginalActorHits.publish(pass,state: &state,crt: &crt);library = pass.library! }
         let backgrounds = state.backgrounds
