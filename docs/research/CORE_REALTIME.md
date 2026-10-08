@@ -234,8 +234,12 @@ main thread; message-loop iterations 4.12 × 1.14 ms; render thread 18.7 ms,
   lent as the frame).
 - **Status (2026-10-08, 4aa): 60 fps reached** (tag `rt-60fps-a12`). Main
   thread per tick on the A12: vs 16.25 ms, Demo 16.13 ms; render 13.82 and 11.99 ms
-  (means of three runs). Next tier: 8 ms. Left from 4aa's review: the other
-  packagers' opt-in (the macOS app build, Linux, Windows, iOS).
+  (means of three runs). Next tier: 8 ms — [tier-3 plan](CORE_REALTIME_TIER3.md):
+  the order is a probe, then S1 (two-level page tables) and G1 (font and sprite
+  drawing without per-glyph allocation), G2/G3 (the graphics command pipeline),
+  the idle lane, record storage v2; ~11 ms without the user's decisions (Q1–Q4
+  in the plan), ~9–10 with them. Left from 4aa's review: the other packagers'
+  opt-in (the macOS app build, Linux, Windows, iOS).
 - **B2** ([plan](CORE_REALTIME_B2.md)): in-place nested passes under the first
   transactional copy; P1–P4 done (P4b–P4f: every gameplay-body pass that
   copied per tick); P4g the output and mode label. Left: the HUD, the
