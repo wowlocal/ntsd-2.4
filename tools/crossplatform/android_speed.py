@@ -313,6 +313,17 @@ def main():
                        # Two decimals: the 60 fps milestone is <= 16.67 ms per tick.
                        mainMsPerTick=round(1000 * main / row["ticksPerSecond"], 2),
                        renderMsPerTick=round(1000 * render / row["ticksPerSecond"], 2))
+            # The Android presenter thread (CORE_REALTIME tier 3 R2), when present.
+            if "NTSD.present" in share:
+                row["presentMsPerTick"] = round(1000 * share["NTSD.present"] / row["ticksPerSecond"], 2)
+        presents = [e for e in events if e.get("event") == "androidPresent"]
+        if presents:
+            # Whole-run totals, sampled every 300 drawn frames.
+            row["presentCounts"] = {k: presents[-1][k] for k in ("submitted", "drawn", "waits")}
+            if "presentMsPerTick" not in row:
+                # The presenter ran but its thread was not found by name: its
+                # time would be counted under another thread (e.g. main).
+                row["presentThreadMissing"] = True
     else:
         row["error"] = "no progress events: " + ", ".join(str(e.get("event")) for e in events[:6])
     if profiled:

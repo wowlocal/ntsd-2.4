@@ -1,0 +1,288 @@
+{
+ "study": "docs/research/CORE_REALTIME.md",
+ "plan": "docs/research/CORE_REALTIME_TIER3.md (render thread: the Android present on its own thread)",
+ "phase": "R2: the Android surface draw on a presenter thread — measured, not committed (parked)",
+ "date": "2026-10-09",
+ "change": "NTSDAndroidHost: a Presenter with a dedicated thread (NTSD.present) and a one-slot hand-off; the render thread waits only while the previous frame is untaken; a synchronous present waits until the presenter has drawn every frame handed to it (the review's ordering fix). android_speed.py reports presentMsPerTick, the presenter's counts, and flags a presenter thread it cannot find by name (kept: it only adds fields when the thread exists)",
+ "phone": {
+  "demo": {
+   "rtd1_same_session": [
+    {
+     "label": "rtd1-for-rtr2-demo1",
+     "scenario": "demo",
+     "runSeconds": 270,
+     "peakResidentMB": 1281,
+     "ticksPerSecond": 30.38,
+     "busySeconds": 177.57,
+     "bodies": 900,
+     "completeMsPerTick": 11.0,
+     "partAssembliesPerTick": 0.0,
+     "menuMsPerStep": 0.76,
+     "menuStepsPerTick": 4.13,
+     "idleMsPerStep": 0.64,
+     "idleIterationMs": 0.717,
+     "idleStepsPerTick": 3.13,
+     "tickStepMs": 1.148,
+     "mainCpuShare": 0.465,
+     "renderCpuShare": 0.366,
+     "mainMsPerTick": 15.3,
+     "renderMsPerTick": 12.04
+    },
+    {
+     "label": "rtd1-for-rtr2-demo2",
+     "scenario": "demo",
+     "runSeconds": 269,
+     "peakResidentMB": 1425,
+     "ticksPerSecond": 30.34,
+     "busySeconds": 177.31,
+     "bodies": 900,
+     "completeMsPerTick": 11.0,
+     "partAssembliesPerTick": 0.0,
+     "menuMsPerStep": 0.77,
+     "menuStepsPerTick": 4.13,
+     "idleMsPerStep": 0.643,
+     "idleIterationMs": 0.719,
+     "idleStepsPerTick": 3.13,
+     "tickStepMs": 1.157,
+     "mainCpuShare": 0.464,
+     "renderCpuShare": 0.365,
+     "mainMsPerTick": 15.3,
+     "renderMsPerTick": 12.03
+    }
+   ],
+   "after": [
+    {
+     "label": "rtr2-demo1",
+     "scenario": "demo",
+     "runSeconds": 268,
+     "peakResidentMB": 1491,
+     "ticksPerSecond": 30.05,
+     "busySeconds": 176.32,
+     "bodies": 900,
+     "completeMsPerTick": 11.1,
+     "partAssembliesPerTick": 0.0,
+     "menuMsPerStep": 0.83,
+     "menuStepsPerTick": 4.13,
+     "idleMsPerStep": 0.69,
+     "idleIterationMs": 0.775,
+     "idleStepsPerTick": 3.13,
+     "tickStepMs": 1.261,
+     "mainCpuShare": 0.472,
+     "renderCpuShare": 0.235,
+     "mainMsPerTick": 15.71,
+     "renderMsPerTick": 7.83,
+     "presentMsPerTick": 4.96,
+     "presentCounts": {
+      "submitted": 1500,
+      "drawn": 1500,
+      "waits": 0
+     }
+    },
+    {
+     "label": "rtr2-demo2",
+     "scenario": "demo",
+     "runSeconds": 269,
+     "peakResidentMB": 1461,
+     "ticksPerSecond": 30.12,
+     "busySeconds": 176.98,
+     "bodies": 900,
+     "completeMsPerTick": 11.1,
+     "partAssembliesPerTick": 0.0,
+     "menuMsPerStep": 0.81,
+     "menuStepsPerTick": 4.13,
+     "idleMsPerStep": 0.679,
+     "idleIterationMs": 0.763,
+     "idleStepsPerTick": 3.13,
+     "tickStepMs": 1.239,
+     "mainCpuShare": 0.472,
+     "renderCpuShare": 0.233,
+     "mainMsPerTick": 15.67,
+     "renderMsPerTick": 7.73,
+     "presentMsPerTick": 4.92,
+     "presentCounts": {
+      "submitted": 1500,
+      "drawn": 1500,
+      "waits": 0
+     }
+    },
+    {
+     "label": "rtr2-demo3",
+     "scenario": "demo",
+     "runSeconds": 291,
+     "peakResidentMB": 1239,
+     "ticksPerSecond": 30.17,
+     "busySeconds": 179.05,
+     "bodies": 900,
+     "completeMsPerTick": 11.1,
+     "partAssembliesPerTick": 0.0,
+     "menuMsPerStep": 0.79,
+     "menuStepsPerTick": 4.13,
+     "idleMsPerStep": 0.661,
+     "idleIterationMs": 0.746,
+     "idleStepsPerTick": 3.13,
+     "tickStepMs": 1.211,
+     "mainCpuShare": 0.471,
+     "renderCpuShare": 0.236,
+     "mainMsPerTick": 15.61,
+     "renderMsPerTick": 7.83,
+     "presentMsPerTick": 4.92,
+     "presentCounts": {
+      "submitted": 1500,
+      "drawn": 1500,
+      "waits": 0
+     }
+    }
+   ],
+   "summary": {
+    "mainMsPerTick": "15.3 -> 15.66",
+    "renderMsPerTick": "12.04 -> 7.8",
+    "idleMsPerStep": "0.64 -> 0.68",
+    "tickStepMs": "1.15 -> 1.24",
+    "presentMsPerTick": 4.93
+   }
+  },
+  "vs": {
+   "rtd1_same_session": [
+    {
+     "label": "rtd1-for-rtr2-vs1",
+     "scenario": "vs",
+     "runSeconds": 317,
+     "peakResidentMB": 1452,
+     "ticksPerSecond": 30.15,
+     "busySeconds": 194.08,
+     "bodies": 1800,
+     "completeMsPerTick": 10.9,
+     "partAssembliesPerTick": 0.0,
+     "menuMsPerStep": 0.75,
+     "menuStepsPerTick": 4.12,
+     "idleMsPerStep": 0.619,
+     "idleIterationMs": 0.697,
+     "idleStepsPerTick": 3.12,
+     "tickStepMs": 1.156,
+     "mainCpuShare": 0.458,
+     "renderCpuShare": 0.422,
+     "mainMsPerTick": 15.2,
+     "renderMsPerTick": 14.01
+    },
+    {
+     "label": "rtd1-for-rtr2-vs2",
+     "scenario": "vs",
+     "runSeconds": 333,
+     "peakResidentMB": 1292,
+     "ticksPerSecond": 30.03,
+     "busySeconds": 193.93,
+     "bodies": 1800,
+     "completeMsPerTick": 11.1,
+     "partAssembliesPerTick": 0.0,
+     "menuMsPerStep": 0.75,
+     "menuStepsPerTick": 4.12,
+     "idleMsPerStep": 0.623,
+     "idleIterationMs": 0.701,
+     "idleStepsPerTick": 3.12,
+     "tickStepMs": 1.163,
+     "mainCpuShare": 0.461,
+     "renderCpuShare": 0.415,
+     "mainMsPerTick": 15.34,
+     "renderMsPerTick": 13.83
+    }
+   ],
+   "after": [
+    {
+     "label": "rtr2-vs1",
+     "scenario": "vs",
+     "runSeconds": 291,
+     "peakResidentMB": 1461,
+     "ticksPerSecond": 29.87,
+     "busySeconds": 193.17,
+     "bodies": 1800,
+     "completeMsPerTick": 11.1,
+     "partAssembliesPerTick": 0.0,
+     "menuMsPerStep": 0.8,
+     "menuStepsPerTick": 4.12,
+     "idleMsPerStep": 0.648,
+     "idleIterationMs": 0.732,
+     "idleStepsPerTick": 3.12,
+     "tickStepMs": 1.264,
+     "mainCpuShare": 0.462,
+     "renderCpuShare": 0.298,
+     "mainMsPerTick": 15.48,
+     "renderMsPerTick": 9.96,
+     "presentMsPerTick": 5.05,
+     "presentCounts": {
+      "submitted": 2100,
+      "drawn": 2100,
+      "waits": 0
+     }
+    },
+    {
+     "label": "rtr2-vs2",
+     "scenario": "vs",
+     "runSeconds": 322,
+     "peakResidentMB": 1313,
+     "ticksPerSecond": 30.2,
+     "busySeconds": 194.89,
+     "bodies": 1800,
+     "completeMsPerTick": 10.8,
+     "partAssembliesPerTick": 0.0,
+     "menuMsPerStep": 0.78,
+     "menuStepsPerTick": 4.12,
+     "idleMsPerStep": 0.634,
+     "idleIterationMs": 0.717,
+     "idleStepsPerTick": 3.12,
+     "tickStepMs": 1.229,
+     "mainCpuShare": 0.466,
+     "renderCpuShare": 0.302,
+     "mainMsPerTick": 15.43,
+     "renderMsPerTick": 10.0,
+     "presentMsPerTick": 5.06,
+     "presentCounts": {
+      "submitted": 2100,
+      "drawn": 2100,
+      "waits": 0
+     }
+    }
+   ],
+   "summary": {
+    "mainMsPerTick": "15.27 -> 15.46",
+    "renderMsPerTick": "13.92 -> 9.98",
+    "idleMsPerStep": "0.62 -> 0.64",
+    "tickStepMs": "1.16 -> 1.25",
+    "presentMsPerTick": 5.05
+   }
+  },
+  "frames": "every run: submitted == drawn (1,500 Demo, 2,100 vs), waits 0",
+  "failed_run": "rtr2-vs3 did not run: the install failed with INSTALL_FAILED_INSUFFICIENT_STORAGE (861 MB free of 22 GB on the phone); the test app was then fully uninstalled (its data included; run outputs were already pulled), leaving 1.0 GB free — the rest of the phone's storage is not this work's"
+ },
+ "result": "the render thread falls by ~4 ms (Demo 12.0 -> 7.8, vs 13.9 -> 10.0) and the presenter costs ~5.0 ms (more than the ~3.4 ms the draw cost inline: hand-off and colder caches); but the main thread rises by 0.3-0.4 ms on every step (tick step and idle step ~+5-8%), which points to memory contention with the concurrent channel swap. The frame is bound by the slowest thread, which is main. Not committed (card: record and revert); the patch is parked at X5 logs/rtr2-presenter-parked.patch for when the main thread is below the render thread",
+ "gates": {
+  "tested_trees": "native 554a4f5aa4efee959610ef070de88230f9dd3afc, tools 141b56031607c8fd27699d571c7b8a2df2bf8cdc",
+  "scenarios": [
+   "{\"scenario\": \"vs\", \"exit\": 0, \"seconds\": 71.9, \"result\": \"equal\", \"differs\": []}",
+   "{\"scenario\": \"mission\", \"exit\": 0, \"seconds\": 70.1, \"result\": \"equal\", \"differs\": []}",
+   "{\"scenario\": \"demo\", \"exit\": 0, \"seconds\": 51.4, \"result\": \"equal\", \"differs\": []}",
+   "{\"scenario\": \"war\", \"exit\": 0, \"seconds\": 111.9, \"result\": \"equal\", \"differs\": []}",
+   "{\"scenario\": \"playback\", \"exit\": 0, \"seconds\": 80.1, \"result\": \"equal\", \"differs\": []}",
+   "{\"scenario\": \"tournament\", \"exit\": 0, \"seconds\": 104.1, \"result\": \"equal\", \"differs\": []}",
+   "{\"scenario\": \"altenter\", \"exit\": 0, \"seconds\": 75.6, \"result\": \"equal\", \"differs\": []}",
+   "{\"scenario\": \"tournament-win\", \"exit\": 0, \"seconds\": 111.9, \"result\": \"equal\", \"differs\": []}",
+   "{\"scenario\": \"team-tournament\", \"exit\": 0, \"seconds\": 85.8, \"result\": \"equal\", \"differs\": []}",
+   "{\"scenario\": \"joystick\", \"exit\": 0, \"seconds\": 26.6, \"result\": \"equal\", \"differs\": []}",
+   "{\"frames\": 1832, \"mismatched\": 0, \"result\": \"identical\"}"
+  ],
+  "appkit": [
+   "{\"scenario\": \"vs\", \"exit\": 0, \"seconds\": 74.3, \"result\": \"equal\", \"differs\": []}",
+   "{\"scenario\": \"playback\", \"exit\": 0, \"seconds\": 79.6, \"result\": \"equal\", \"differs\": []}",
+   "{\"frames\": 3960, \"mismatched\": 0, \"result\": \"identical\"}"
+  ],
+  "unchecked_headless": [
+   "{\"scenario\": \"vs\", \"exit\": 0, \"seconds\": 75.2, \"result\": \"equal\", \"differs\": []}",
+   "{\"scenario\": \"demo\", \"exit\": 0, \"seconds\": 54.6, \"result\": \"equal\", \"differs\": []}",
+   "{\"frames\": 1832, \"mismatched\": 0, \"result\": \"identical\"}"
+  ],
+  "launches": "20 of 20 clean",
+  "emulator": "{\"frames\": 1832, \"mismatched\": 0, \"result\": \"identical\"}",
+  "tests": "ExclusivityChecks 1, MacRuntimeLoading 7 (the Mac binaries do not contain the Android host)"
+ },
+ "review": "independent read-only review: changes needed — a synchronous present could overtake frames still waiting in the presenter at a gameplay-to-menu switch (fixed before this run: present waits until idle; the thread is made only on the pipelined path); nits: thread naming unverified on the device (it worked: NTSD.present was found), the latency comment overclaimed (corrected), the speed tool should flag a missing presenter thread (added)",
+ "failed": "rtr2a: the first gate run, stopped during the APK build when the review found the ordering bug (logs archived)"
+}
