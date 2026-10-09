@@ -35,14 +35,180 @@ public struct OriginalStateRecord: Equatable, Sendable {
     private static let pageShift = 14, pageMask = (1 << 14) - 1
     private static let groupShift = 18, groupPageMask = (1 << (18 - 14)) - 1
 
-    private var flatBytes: [UInt8]
-    private var flatDefined: [Bool]
+    /// A flat record's bytes and definedness (nil when it is empty, paged or
+    /// parted) and its byte count (0 then): one allocation with a bit mask
+    /// instead of a byte array and a Bool array per record, so a copy that is
+    /// written duplicates one buffer of count + count/8 bytes (CORE_REALTIME
+    /// tier 3 S2b). The count sits inline: byteCount is read everywhere, and
+    /// the record stays 40 bytes.
+    private var flat: Flat?
+    private var flatCount: Int
     /// Paged or parted storage, nil for a flat record: one field, so a flat
     /// record (nearly every record) copies as before the parts existed
     /// (CORE_REALTIME B1: a separate optional field cost the phone ~1 ms per
     /// tick in copies).
     private var large: Large?
     private enum Large { case pages(Pages), parts(Parts) }
+
+    /// A flat record's storage: the bytes, then the definedness bit mask
+    /// (bit i&7 of mask byte i>>3 is byte i's; bits at and past the count stay
+    /// zero), then 8 zero bytes so a two-byte mask load and the widest
+    /// unaligned load stay inside. Never empty: an empty record has none.
+    /// Written only while uniquely referenced (as an Array's buffer).
+    private struct FlatHeader { var count: Int; var whole: FlatWhole? }
+    /// A flat record's whole arrays, built on the first whole read of a
+    /// written version and dropped by the next in-place write, so code that
+    /// indexes `bytes[i]` in a loop stays linear as with the old arrays
+    /// (guarded by `flatWholeLock`; S2b).
+    private final class FlatWhole: @unchecked Sendable { var bytes: [UInt8]?, defined: [Bool]? }
+    fileprivate static let flatWholeLock = NSLock()
+    private final class Flat: ManagedBuffer<FlatHeader, UInt8>, @unchecked Sendable {
+        static func make(count n: Int) -> Flat {
+            let size = n + (n + 7) / 8 + 8
+            let made = unsafeDowncast(Flat.create(minimumCapacity: size) { _ in FlatHeader(count: n, whole: nil) }, to: Flat.self)
+            made.withUnsafeMutablePointers { _, elements in elements.initialize(repeating: 0, count: size) }
+            return made
+        }
+        static func make(bytes: [UInt8], defined: [Bool]) -> Flat? {
+            guard !bytes.isEmpty else { return nil }
+            let made = make(count: bytes.count)
+            made.with { n, b, m in
+                bytes.withUnsafeBufferPointer { b.update(from: $0.baseAddress!, count: n) }
+                defined.withUnsafeBufferPointer { d in
+                    var i = 0
+                    while i < n {
+                        var v: UInt8 = 0
+                        for k in 0..<min(8, n - i) where d[i + k] { v |= 1 << UInt8(k) }
+                        m[i >> 3] = v; i += 8
+                    }
+                }
+            }
+            return made
+        }
+        /// The count, the bytes and the mask.
+        @inline(__always) func with<R>(_ body: (Int, UnsafeMutablePointer<UInt8>, UnsafeMutablePointer<UInt8>) throws -> R) rethrows -> R {
+            try withUnsafeMutablePointers { header, elements in try body(header.pointee.count, elements, elements + header.pointee.count) }
+        }
+        /// A copy: the bytes and mask (its padding bits zero) copied once, the
+        /// 8 pad bytes zeroed, nothing written twice.
+        func copy() -> Flat {
+            with { n, bytes, _ in
+                let used = n + (n + 7) / 8
+                let made = unsafeDowncast(Flat.create(minimumCapacity: used + 8) { _ in FlatHeader(count: n, whole: nil) }, to: Flat.self)
+                made.withUnsafeMutablePointers { _, elements in
+                    elements.initialize(from: bytes, count: used)
+                    (elements + used).initialize(repeating: 0, count: 8)
+                }
+                return made
+            }
+        }
+        func bytesArray(_ range: Range<Int>) -> [UInt8] {
+            with { _, b, _ in Array(UnsafeBufferPointer(start: b + range.lowerBound, count: range.count)) }
+        }
+        func definedArray(_ range: Range<Int>) -> [Bool] { with { _, _, m in range.map { Flat.bit(m, $0) } } }
+        /// The whole bytes and definedness, cached per written version.
+        func wholeBytes() -> [UInt8] {
+            OriginalStateRecord.flatWholeLock.lock(); defer { OriginalStateRecord.flatWholeLock.unlock() }
+            return withUnsafeMutablePointers { header, elements in
+                if let made = header.pointee.whole?.bytes { return made }
+                let made = Array(UnsafeBufferPointer(start: elements, count: header.pointee.count))
+                if header.pointee.whole == nil { header.pointee.whole = FlatWhole() }
+                header.pointee.whole!.bytes = made
+                return made
+            }
+        }
+        func wholeDefined() -> [Bool] {
+            OriginalStateRecord.flatWholeLock.lock(); defer { OriginalStateRecord.flatWholeLock.unlock() }
+            return withUnsafeMutablePointers { header, elements in
+                if let made = header.pointee.whole?.defined { return made }
+                let n = header.pointee.count, mask = elements + n
+                let made = (0..<n).map { Flat.bit(mask, $0) }
+                if header.pointee.whole == nil { header.pointee.whole = FlatWhole() }
+                header.pointee.whole!.defined = made
+                return made
+            }
+        }
+        /// Drops the cached whole arrays: called only while uniquely
+        /// referenced, before an in-place write.
+        func clearWhole() { withUnsafeMutablePointers { header, _ in if header.pointee.whole != nil { header.pointee.whole = nil } } }
+        static func equal(_ a: Flat?, _ b: Flat?) -> Bool {
+            if a === b { return true }
+            guard let a, let b else { return false }
+            return a.with { n, ab, _ in b.with { bn, bb, _ in n == bn && memcmp(ab, bb, n + (n + 7) / 8) == 0 } }
+        }
+        @inline(__always) static func bit(_ m: UnsafeMutablePointer<UInt8>, _ i: Int) -> Bool { m[i >> 3] & (1 << UInt8(i & 7)) != 0 }
+        @inline(__always) static func set(_ m: UnsafeMutablePointer<UInt8>, _ i: Int) { m[i >> 3] |= 1 << UInt8(i & 7) }
+        @inline(__always) static func put(_ m: UnsafeMutablePointer<UInt8>, _ i: Int, _ on: Bool) {
+            if on { m[i >> 3] |= 1 << UInt8(i & 7) } else { m[i >> 3] &= ~(1 << UInt8(i & 7)) }
+        }
+        /// Whether bits offset..<offset+count are all set: one two-byte load for
+        /// the widths integers use (1...8 bytes), the range check otherwise.
+        @inline(__always) static func allSet(_ m: UnsafeMutablePointer<UInt8>, _ offset: Int, small count: Int) -> Bool {
+            guard count <= 8 else { return allSet(m, offset..<offset + count) }
+            let want = UInt16(truncatingIfNeeded: (1 << count) - 1) << UInt16(offset & 7)
+            return UInt16(littleEndian: UnsafeRawPointer(m + (offset >> 3)).loadUnaligned(as: UInt16.self)) & want == want
+        }
+        @inline(__always) static func setAll(_ m: UnsafeMutablePointer<UInt8>, _ offset: Int, small count: Int) {
+            guard count <= 8 else { setAll(m, offset..<offset + count); return }
+            let want = UInt16(truncatingIfNeeded: (1 << count) - 1) << UInt16(offset & 7)
+            let p = UnsafeMutableRawPointer(m + (offset >> 3))
+            p.storeBytes(of: (UInt16(littleEndian: p.loadUnaligned(as: UInt16.self)) | want).littleEndian, as: UInt16.self)
+        }
+        static func allSet(_ m: UnsafeMutablePointer<UInt8>, _ range: Range<Int>) -> Bool {
+            var i = range.lowerBound
+            while i < range.upperBound && i & 7 != 0 { if !bit(m, i) { return false }; i += 1 }
+            while i + 8 <= range.upperBound { if m[i >> 3] != 0xff { return false }; i += 8 }
+            while i < range.upperBound { if !bit(m, i) { return false }; i += 1 }
+            return true
+        }
+        static func setAll(_ m: UnsafeMutablePointer<UInt8>, _ range: Range<Int>) {
+            var i = range.lowerBound
+            while i < range.upperBound && i & 7 != 0 { set(m, i); i += 1 }
+            while i + 8 <= range.upperBound { m[i >> 3] = 0xff; i += 8 }
+            while i < range.upperBound { set(m, i); i += 1 }
+        }
+        /// Copies `count` bits from `source` at `from` to `target` at `to`.
+        static func copyBits(_ source: UnsafeMutablePointer<UInt8>, _ from: Int, _ target: UnsafeMutablePointer<UInt8>, _ to: Int, _ count: Int) {
+            var k = 0
+            if from & 7 == 0 && to & 7 == 0 {
+                let whole = count >> 3
+                if whole > 0 { (target + (to >> 3)).update(from: source + (from >> 3), count: whole) }
+                k = whole << 3
+            }
+            while k < count { put(target, to + k, bit(source, from + k)); k += 1 }
+        }
+        /// Whether `count` bits of `a` at `from` equal those of `b` at `to`.
+        static func sameBits(_ a: UnsafeMutablePointer<UInt8>, _ from: Int, _ b: UnsafeMutablePointer<UInt8>, _ to: Int, _ count: Int) -> Bool {
+            var k = 0
+            if from & 7 == 0 && to & 7 == 0 {
+                let whole = count >> 3
+                if whole > 0 && memcmp(a + (from >> 3), b + (to >> 3), whole) != 0 { return false }
+                k = whole << 3
+            }
+            while k < count { if bit(a, from + k) != bit(b, to + k) { return false }; k += 1 }
+            return true
+        }
+    }
+    private init(flat: Flat?, count: Int) { self.flat = flat; flatCount = count; large = nil }
+    /// Before writing flat storage: a shared buffer is copied (the copy has no
+    /// cached whole arrays), a unique one drops its cached whole arrays.
+    private mutating func makeFlatUnique() {
+        if isKnownUniquelyReferenced(&flat) { flat!.clearWhole() } else { flat = flat!.copy() }
+    }
+    /// One flat byte stored and marked defined (the parted paths' per-byte stores).
+    private mutating func setFlatByte(_ index: Int, _ value: UInt8) {
+        precondition(index >= 0 && index < flatCount, "Index out of range")
+        makeFlatUnique()
+        flat!.with { _, b, m in b[index] = value; Flat.set(m, index) }
+    }
+    /// A flat record's bytes and definedness over `range` as a new flat record.
+    private func flatSlice(_ range: Range<Int>) -> OriginalStateRecord {
+        guard let flat, !range.isEmpty else { return Self(flat: nil, count: 0) }
+        let made = Flat.make(count: range.count)
+        flat.with { _, b, m in made.with { n, mb, mm in mb.update(from: b + range.lowerBound, count: n); Flat.copyBits(m, range.lowerBound, mm, 0, n) } }
+        return Self(flat: made, count: range.count)
+    }
+    private func flatDefinedArray(_ range: Range<Int>) -> [Bool] { flat?.definedArray(range) ?? [] }
     /// Read-only: paged writes go through `withPages`, which moves the pages
     /// out so their buffers stay uniquely referenced.
     private var pages: Pages? { if case .pages(let value)? = large { return value }; return nil }
@@ -78,8 +244,8 @@ public struct OriginalStateRecord: Equatable, Sendable {
             while starts[k + 1] <= offset { k += 1 }
             return k
         }
-        func byte(_ index: Int) -> UInt8 { let k = self.index(of: index); return records[k].flatBytes[index - starts[k]] }
-        func isDefined(_ index: Int) -> Bool { let k = self.index(of: index); return records[k].flatDefined[index - starts[k]] }
+        func byte(_ index: Int) -> UInt8 { let k = self.index(of: index); return records[k].byte(at: index - starts[k]) }
+        func isDefined(_ index: Int) -> Bool { let k = self.index(of: index); return records[k].isDefined(at: index - starts[k]) }
         /// The same parts and an empty cache (for a copy about to be written).
         func copy() -> Parts { Parts(records: records, starts: starts) }
         func clearCache() {
@@ -89,38 +255,38 @@ public struct OriginalStateRecord: Equatable, Sendable {
             OriginalStateRecord.assemblyLock.lock(); defer { OriginalStateRecord.assemblyLock.unlock() }
             if let bytes { return bytes }
             OriginalStateRecord.assemblies += 1
-            let made = records.flatMap(\.flatBytes); bytes = made; return made
+            let made = records.flatMap(\.bytes); bytes = made; return made
         }
         func wholeDefined() -> [Bool] {
             OriginalStateRecord.assemblyLock.lock(); defer { OriginalStateRecord.assemblyLock.unlock() }
             if let defined { return defined }
             OriginalStateRecord.assemblies += 1
-            let made = records.flatMap(\.flatDefined); defined = made; return made
+            let made = records.flatMap(\.defined); defined = made; return made
         }
         /// Calls `body(part, local range)` for each run of `range`, in order.
         func forEachRun(_ range: Range<Int>, _ body: (OriginalStateRecord, Range<Int>) -> Void) {
             var index = range.lowerBound
             while index < range.upperBound {
                 let k = self.index(of: index), local = index - starts[k]
-                let n = min(range.upperBound - index, records[k].flatBytes.count - local)
+                let n = min(range.upperBound - index, records[k].flatCount - local)
                 body(records[k], local..<local + n)
                 index += n
             }
         }
         func runBytes(_ range: Range<Int>) -> [UInt8] {
             var bytes = [UInt8](); bytes.reserveCapacity(range.count)
-            forEachRun(range) { part, local in bytes.append(contentsOf: part.flatBytes[local]) }
+            forEachRun(range) { part, local in bytes.append(contentsOf: part.bytes(in: local)) }
             return bytes
         }
         func runAllDefined(_ range: Range<Int>) -> Bool {
             var all = true
-            forEachRun(range) { part, local in if all && part.flatDefined[local].contains(false) { all = false } }
+            forEachRun(range) { part, local in if all && !part.allDefined(in: local) { all = false } }
             return all
         }
         /// Whether these parts hold flat `record`'s bytes and definedness, part
         /// by part without assembling.
         func equalsFlat(_ record: OriginalStateRecord) -> Bool {
-            guard record.flatBytes.count == count else { return false }
+            guard record.flatCount == count else { return false }
             for (k, part) in records.enumerated() where !part.flatHolds(record, from: starts[k]) { return false }
             return true
         }
@@ -134,9 +300,9 @@ public struct OriginalStateRecord: Equatable, Sendable {
             var index = range.lowerBound
             while index < range.upperBound {
                 let k = self.index(of: index), local = index - starts[k]
-                let n = min(range.upperBound - index, records[k].flatBytes.count - local)
-                bytes.append(contentsOf: records[k].flatBytes[local..<local + n])
-                defined.append(contentsOf: records[k].flatDefined[local..<local + n])
+                let n = min(range.upperBound - index, records[k].flatCount - local)
+                bytes.append(contentsOf: records[k].bytes(in: local..<local + n))
+                defined.append(contentsOf: records[k].flatDefinedArray(local..<local + n))
                 index += n
             }
             return (bytes, defined)
@@ -173,7 +339,7 @@ public struct OriginalStateRecord: Equatable, Sendable {
         made.large = .parts(Parts(records: (0..<starts.count).map { i in
             try! Self(bytes: Array(all.bytes[bounds[i]..<bounds[i + 1]]), defined: Array(all.defined[bounds[i]..<bounds[i + 1]]))
         }, starts: bounds))
-        made.flatBytes = []; made.flatDefined = []
+        made.flat = nil; made.flatCount = 0
         return made
     }
     var isPartitioned: Bool { parts != nil }
@@ -184,14 +350,15 @@ public struct OriginalStateRecord: Equatable, Sendable {
         let all = readOnce()
         return try! Self(bytes: all.bytes, defined: all.defined)
     }
-    /// The addresses of a non-empty flat record's byte and definedness
-    /// buffers (nil for an empty, paged or parted record). Two flat records
-    /// with the same identity share both buffers and are equal, provided the
-    /// caller keeps a record holding them alive (CORE_REALTIME 4j).
+    /// The address of a non-empty flat record's storage, twice (the bytes and
+    /// definedness share one buffer since S2b; nil for an empty, paged or
+    /// parted record). Two flat records with the same identity share it and
+    /// are equal, provided the caller keeps a record holding it alive
+    /// (CORE_REALTIME 4j).
     var storageIdentity: (UInt, UInt)? {
-        guard large == nil, !flatBytes.isEmpty else { return nil }
-        let bytes = flatBytes.withUnsafeBufferPointer { UInt(bitPattern: $0.baseAddress) }
-        return (bytes, flatDefined.withUnsafeBufferPointer { UInt(bitPattern: $0.baseAddress) })
+        guard large == nil, let flat else { return nil }
+        let address = UInt(bitPattern: Unmanaged.passUnretained(flat).toOpaque())
+        return (address, address)
     }
     /// For two paged records of the same size: how many groups and pages share
     /// both their byte and definedness buffers (a probe, CORE_REALTIME tier 3
@@ -226,11 +393,10 @@ public struct OriginalStateRecord: Equatable, Sendable {
     /// An empty record that allocates nothing: what an in-place pass leaves in
     /// a caller's field while it holds the value (CORE_REALTIME B2).
     static let vacant = try! OriginalStateRecord(bytes: [], defined: [])
-    /// Whether both are flat and share their byte and definedness buffers.
+    /// Whether both are flat and share their storage (two empty records do).
     func sharesStorage(with other: OriginalStateRecord) -> Bool {
-        guard pages == nil, parts == nil, other.pages == nil, other.parts == nil, flatBytes.count == other.flatBytes.count else { return false }
-        let bytes = flatBytes.withUnsafeBufferPointer { a in other.flatBytes.withUnsafeBufferPointer { b in a.baseAddress == b.baseAddress } }
-        return bytes && flatDefined.withUnsafeBufferPointer { a in other.flatDefined.withUnsafeBufferPointer { b in a.baseAddress == b.baseAddress } }
+        guard pages == nil, parts == nil, other.pages == nil, other.parts == nil, flatCount == other.flatCount else { return false }
+        return flat === other.flat
     }
     /// `try! Self(bytes: Array(bytes[range]), defined: Array(defined[range]))`
     /// (the caller has checked `range`), sharing a part's buffers when
@@ -239,9 +405,13 @@ public struct OriginalStateRecord: Equatable, Sendable {
         if parts != nil && range.isEmpty { return try! Self(bytes: [], defined: []) }
         if let parts {
             let k = parts.index(of: range.lowerBound), local = range.lowerBound - parts.starts[k]
-            if local == 0 && range.count == parts.records[k].flatBytes.count { return parts.records[k] }
+            if local == 0 && range.count == parts.records[k].flatCount { return parts.records[k] }
             let runs = parts.runs(range)
             return try! Self(bytes: runs.bytes, defined: runs.defined)
+        }
+        if large == nil {
+            precondition(range.lowerBound >= 0 && range.upperBound <= flatCount, "Range out of bounds")
+            return flatSlice(range)
         }
         return try! Self(bytes: Array(bytes[range]), defined: Array(defined[range]))
     }
@@ -251,25 +421,36 @@ public struct OriginalStateRecord: Equatable, Sendable {
             precondition(range.lowerBound >= 0 && range.upperBound <= parts.count, "Range out of bounds")
             return parts.runBytes(range)
         }
+        if large == nil {
+            precondition(range.lowerBound >= 0 && range.upperBound <= flatCount, "Range out of bounds")
+            return flat?.bytesArray(range) ?? []
+        }
         return Array(bytes[range])
     }
     /// `bytes[index]` without the whole contents (CORE_REALTIME tier 3 S2a).
     public func byte(at index: Int) -> UInt8 {
         if let parts { precondition(index >= 0 && index < parts.count, "Index out of range"); return parts.byte(index) }
         if let pages { precondition(index >= 0 && index < pages.count, "Index out of range"); return pages.byte(index) }
-        return flatBytes[index]
+        precondition(index >= 0 && index < flatCount, "Index out of range")
+        return flat!.with { _, b, _ in b[index] }
     }
     /// `defined[index]` without the whole mask (S2a).
     public func isDefined(at index: Int) -> Bool {
         if let parts { precondition(index >= 0 && index < parts.count, "Index out of range"); return parts.isDefined(index) }
         if let pages { precondition(index >= 0 && index < pages.count, "Index out of range"); return pages.isDefined(index) }
-        return flatDefined[index]
+        precondition(index >= 0 && index < flatCount, "Index out of range")
+        return flat!.with { _, _, m in Flat.bit(m, index) }
     }
     /// Whether every byte in `range` is defined (`!defined[range].contains(false)`).
     public func allDefined(in range: Range<Int>) -> Bool {
         if let parts {
             precondition(range.lowerBound >= 0 && range.upperBound <= parts.count, "Range out of bounds")
             return parts.runAllDefined(range)
+        }
+        if large == nil {
+            precondition(range.lowerBound >= 0 && range.upperBound <= flatCount, "Range out of bounds")
+            guard let flat else { return true }
+            return flat.with { _, _, m in Flat.allSet(m, range) }
         }
         return !defined[range].contains(false)
     }
@@ -348,7 +529,7 @@ public struct OriginalStateRecord: Equatable, Sendable {
     /// and a freed allocation keeps its storage.
     func readOnce() -> (bytes: [UInt8], defined: [Bool]) {
         if let parts { return parts.runs(0..<parts.count) }
-        guard let pages else { return (flatBytes, flatDefined) }
+        guard let pages else { return (flat?.bytesArray(0..<flatCount) ?? [], flatDefinedArray(0..<flatCount)) }
         return (Self.assemble(pages.bytes, pages.count), Self.assemble(pages.defined, pages.count))
     }
 
@@ -358,7 +539,10 @@ public struct OriginalStateRecord: Equatable, Sendable {
             precondition(count >= 0, "Can't take a prefix of negative length from a collection")
             return parts.runs(0..<min(count, parts.count)).bytes
         }
-        guard let pages else { return Array(flatBytes.prefix(count)) }
+        guard let pages else {
+            precondition(count >= 0, "Can't take a prefix of negative length from a collection")
+            return flat?.bytesArray(0..<min(count, flatCount)) ?? []
+        }
         precondition(count >= 0, "Can't take a prefix of negative length from a collection")
         var made = [UInt8](); made.reserveCapacity(min(count, pages.count))
         for group in pages.bytes { for page in group where made.count < count { made.append(contentsOf: page.prefix(count - made.count)) } }
@@ -370,17 +554,17 @@ public struct OriginalStateRecord: Equatable, Sendable {
     /// `byteCount` and the typed accessors.
     public var bytes: [UInt8] {
         if let parts { return parts.wholeBytes() }
-        guard let pages else { return flatBytes }
+        guard let pages else { return flat?.wholeBytes() ?? [] }
         return pages.whole.bytes(pages.bytes, pages.count)
     }
     public var defined: [Bool] {
         if let parts { return parts.wholeDefined() }
-        guard let pages else { return flatDefined }
+        guard let pages else { return flat?.wholeDefined() ?? [] }
         return pages.whole.defined(pages.defined, pages.count)
     }
     public var byteCount: Int {
-        if large == nil { return flatBytes.count }
-        return parts?.count ?? pages?.count ?? flatBytes.count
+        if large == nil { return flatCount }
+        return parts?.count ?? pages?.count ?? flatCount
     }
 
     public init(bytes: [UInt8], defined: [Bool]) throws {
@@ -389,11 +573,11 @@ public struct OriginalStateRecord: Equatable, Sendable {
         }
         if bytes.count >= Self.pagedThreshold {
             large = .pages(Pages(bytes: bytes, defined: defined))
-            flatBytes = []
-            flatDefined = []
+            flat = nil
+            flatCount = 0
         } else {
-            flatBytes = bytes
-            flatDefined = defined
+            flat = Flat.make(bytes: bytes, defined: defined)
+            flatCount = bytes.count
             large = nil
         }
     }
@@ -408,7 +592,7 @@ public struct OriginalStateRecord: Equatable, Sendable {
             return l.bytes == r.bytes && l.defined == r.defined
         }
         switch (lhs.pages, rhs.pages) {
-        case (nil, nil): return lhs.flatBytes == rhs.flatBytes && lhs.flatDefined == rhs.flatDefined
+        case (nil, nil): return lhs.flatCount == rhs.flatCount && Flat.equal(lhs.flat, rhs.flat)
         case let (l?, r?): return l == r
         default: return lhs.byteCount == rhs.byteCount && lhs.bytes == rhs.bytes && lhs.defined == rhs.defined
         }
@@ -422,44 +606,22 @@ public struct OriginalStateRecord: Equatable, Sendable {
         return offset..<(offset + count)
     }
 
-    /// Whether `count` mask bytes from `offset` are all `true`: one load
-    /// against 0x01 bytes for the widths integers use (a Bool is stored as
-    /// one byte, 0 or 1), the general check otherwise (CORE_REALTIME 4w).
-    @inline(__always) private static func allDefined(_ mask: UnsafeRawBufferPointer, _ offset: Int, _ count: Int) -> Bool {
-        switch count {
-        case 1: return mask.load(fromByteOffset: offset, as: UInt8.self) == 1
-        case 2: return mask.loadUnaligned(fromByteOffset: offset, as: UInt16.self) == 0x0101
-        case 4: return mask.loadUnaligned(fromByteOffset: offset, as: UInt32.self) == 0x0101_0101
-        case 8: return mask.loadUnaligned(fromByteOffset: offset, as: UInt64.self) == 0x0101_0101_0101_0101
-        default: return !mask[offset..<(offset + count)].contains(0)
-        }
-    }
-    /// Marks `count` mask bytes from `offset` defined (the widths integers use
-    /// in one store).
-    @inline(__always) private static func setDefined(_ mask: UnsafeMutableRawBufferPointer, _ offset: Int, _ count: Int) {
-        switch count {
-        case 1: mask.storeBytes(of: UInt8(1), toByteOffset: offset, as: UInt8.self)
-        case 2: mask.storeBytes(of: UInt16(0x0101), toByteOffset: offset, as: UInt16.self)
-        case 4: mask.storeBytes(of: UInt32(0x0101_0101), toByteOffset: offset, as: UInt32.self)
-        case 8: mask.storeBytes(of: UInt64(0x0101_0101_0101_0101), toByteOffset: offset, as: UInt64.self)
-        default: for i in offset..<(offset + count) { mask[i] = 1 }
-        }
-    }
-
     /// A typed read cannot silently promote allocator contents to a game default.
     public func integer<T: FixedWidthInteger>(at offset: Int, as type: T.Type) throws -> T {
         if large == nil {
             // A flat record (nearly every one): the range check, definedness
             // and value with one load each, the same errors in the same order
             // as below (CORE_REALTIME 4w).
-            let count = T.bitWidth / 8, total = flatBytes.count
+            let count = T.bitWidth / 8, total = flatCount
             guard offset >= 0, count <= total, offset <= total - count else {
                 throw OriginalStateError.outOfBounds(offset: offset, count: count)
             }
-            guard flatDefined.withUnsafeBytes({ Self.allDefined($0, offset, count) }) else {
-                throw OriginalStateError.undefinedBytes(offset: offset, count: count)
+            return try flat!.with { _, b, m in
+                guard Flat.allSet(m, offset, small: count) else {
+                    throw OriginalStateError.undefinedBytes(offset: offset, count: count)
+                }
+                return T(littleEndian: UnsafeRawPointer(b).loadUnaligned(fromByteOffset: offset, as: T.self))
             }
-            return flatBytes.withUnsafeBytes { T(littleEndian: $0.loadUnaligned(fromByteOffset: offset, as: T.self)) }
         }
         let region = try checkedRange(offset, T.bitWidth / 8)
         if let parts {
@@ -467,29 +629,18 @@ public struct OriginalStateRecord: Equatable, Sendable {
             // across a boundary, every byte checked, then assembled. Errors
             // carry the logical offset.
             let count = region.count, k = parts.index(of: offset), local = offset - parts.starts[k]
-            if local + count <= parts.records[k].flatBytes.count {
+            if local + count <= parts.records[k].flatCount {
                 let part = parts.records[k]
-                let defined = part.flatDefined.withUnsafeBufferPointer { d in !d[local..<local + count].contains(false) }
-                guard defined else { throw OriginalStateError.undefinedBytes(offset: offset, count: count) }
-                return part.flatBytes.withUnsafeBytes { T(littleEndian: $0.loadUnaligned(fromByteOffset: local, as: T.self)) }
+                guard part.flat!.with({ _, _, m in Flat.allSet(m, local..<local + count) }) else {
+                    throw OriginalStateError.undefinedBytes(offset: offset, count: count)
+                }
+                return part.flat!.with { _, b, _ in T(littleEndian: UnsafeRawPointer(b).loadUnaligned(fromByteOffset: local, as: T.self)) }
             }
             guard region.allSatisfy({ parts.isDefined($0) }) else { throw OriginalStateError.undefinedBytes(offset: offset, count: count) }
             return region.enumerated().reduce(T.zero) { $0 | (T(truncatingIfNeeded: parts.byte($1.element)) << ($1.offset * 8)) }
         }
-        guard let pages else {
-            // The checks and value of the slice and reduce this replaced, read
-            // through the buffers: every byte defined, then the little-endian
-            // value (CORE_REALTIME phase 4c; reads are most of the Core's record
-            // traffic).
-            let count = region.count
-            let defined = flatDefined.withUnsafeBufferPointer { d in
-                var all = true
-                for i in region where !d[i] { all = false; break }
-                return all
-            }
-            guard defined else { throw OriginalStateError.undefinedBytes(offset: offset, count: count) }
-            return flatBytes.withUnsafeBytes { T(littleEndian: $0.loadUnaligned(fromByteOffset: offset, as: T.self)) }
-        }
+        // Paged (a flat record took the first branch).
+        let pages = self.pages!
         guard region.allSatisfy({ pages.isDefined($0) }) else {
             throw OriginalStateError.undefinedBytes(offset: offset, count: region.count)
         }
@@ -506,7 +657,7 @@ public struct OriginalStateRecord: Equatable, Sendable {
         if let pages {
             return (0..<4).reduce(UInt32(0)) { $0 | UInt32(pages.byte(offset + $1)) << ($1 * 8) }
         }
-        return flatBytes.withUnsafeBytes { UInt32(littleEndian: $0.loadUnaligned(fromByteOffset: offset, as: UInt32.self)) }
+        return flat!.with { _, b, _ in UInt32(littleEndian: UnsafeRawPointer(b).loadUnaligned(fromByteOffset: offset, as: UInt32.self)) }
     }
 
     /// The bytes start..<start+count when all are in range and defined, else
@@ -521,8 +672,8 @@ public struct OriginalStateRecord: Equatable, Sendable {
         if let pages {
             return range.allSatisfy({ pages.isDefined($0) }) ? range.map { pages.byte($0) } : nil
         }
-        let all = flatDefined.withUnsafeBufferPointer { d in !d[range].contains(false) }
-        return all ? Array(flatBytes[range]) : nil
+        guard let flat else { return [] }
+        return flat.with({ _, _, m in Flat.allSet(m, range) }) ? flat.bytesArray(range) : nil
     }
 
     public func binary64(at offset: Int) throws -> Double {
@@ -536,14 +687,18 @@ public struct OriginalStateRecord: Equatable, Sendable {
             // one store each for the bytes and their definedness (at most one
             // copy of each array if shared, as the per-byte stores made;
             // CORE_REALTIME 4w).
-            let count = T.bitWidth / 8, total = flatBytes.count
+            let count = T.bitWidth / 8, total = flatCount
             guard offset >= 0, count <= total, offset <= total - count else {
                 throw OriginalStateError.outOfBounds(offset: offset, count: count)
             }
-            if flatBytes.withUnsafeBytes({ T(littleEndian: $0.loadUnaligned(fromByteOffset: offset, as: T.self)) }) == value,
-               flatDefined.withUnsafeBytes({ Self.allDefined($0, offset, count) }) { return }
-            flatBytes.withUnsafeMutableBytes { $0.storeBytes(of: value.littleEndian, toByteOffset: offset, as: T.self) }
-            flatDefined.withUnsafeMutableBytes { Self.setDefined($0, offset, count) }
+            if flat!.with({ _, b, m in
+                T(littleEndian: UnsafeRawPointer(b).loadUnaligned(fromByteOffset: offset, as: T.self)) == value && Flat.allSet(m, offset, small: count)
+            }) { return }
+            makeFlatUnique()
+            flat!.with { _, b, m in
+                UnsafeMutableRawPointer(b).storeBytes(of: value.littleEndian, toByteOffset: offset, as: T.self)
+                Flat.setAll(m, offset, small: count)
+            }
             return
         }
         let region = try checkedRange(offset, T.bitWidth / 8)
@@ -551,12 +706,11 @@ public struct OriginalStateRecord: Equatable, Sendable {
             // Within one part as the flat write (the same no-op return keeps
             // the part shared); across a boundary byte by byte.
             let count = region.count, k = parts!.index(of: offset), local = offset - parts!.starts[k]
-            if local + count <= parts!.records[k].flatBytes.count {
+            if local + count <= parts!.records[k].flatCount {
                 if parts!.records[k].flatHolds(value, local..<local + count) { return }
                 makePartsUnique()
                 for (shift, index) in (local..<local + count).enumerated() {
-                    parts!.records[k].flatBytes[index] = UInt8(truncatingIfNeeded: value >> (shift * 8))
-                    parts!.records[k].flatDefined[index] = true
+                    parts!.records[k].setFlatByte(index, UInt8(truncatingIfNeeded: value >> (shift * 8)))
                 }
                 return
             }
@@ -564,8 +718,7 @@ public struct OriginalStateRecord: Equatable, Sendable {
             makePartsUnique()
             for (shift, index) in region.enumerated() {
                 let k = parts!.index(of: index), local = index - parts!.starts[k]
-                parts!.records[k].flatBytes[local] = UInt8(truncatingIfNeeded: value >> (shift * 8))
-                parts!.records[k].flatDefined[local] = true
+                parts!.records[k].setFlatByte(local, UInt8(truncatingIfNeeded: value >> (shift * 8)))
             }
             return
         }
@@ -574,10 +727,7 @@ public struct OriginalStateRecord: Equatable, Sendable {
             // returning leaves a buffer that a rollback copy shares untouched
             // instead of copying the whole record (CORE_REALTIME phase 2d).
             if flatHolds(value, region) { return }
-            for (shift, index) in region.enumerated() {
-                flatBytes[index] = UInt8(truncatingIfNeeded: value >> (shift * 8))
-                flatDefined[index] = true
-            }
+            for (shift, index) in region.enumerated() { setFlatByte(index, UInt8(truncatingIfNeeded: value >> (shift * 8))) }
         } else {
             withPages { pages in
                 pages.willWrite()
@@ -599,7 +749,7 @@ public struct OriginalStateRecord: Equatable, Sendable {
             // part as the flat overwrite; across parts part by part.
             guard count > 0 else { return }
             let source = record.pages == nil && record.parts == nil ? record : record.flattened()
-            let k = parts!.index(of: start), local = start - parts!.starts[k], partCount = parts!.records[k].flatBytes.count
+            let k = parts!.index(of: start), local = start - parts!.starts[k], partCount = parts!.records[k].flatCount
             if local == 0 && count == partCount {
                 if parts!.records[k].sharesStorage(with: source) { return }
                 makePartsUnique(); parts!.records[k] = source; return
@@ -612,7 +762,7 @@ public struct OriginalStateRecord: Equatable, Sendable {
             var offset = 0
             while offset < count {
                 let index = start + offset, k = parts!.index(of: index), local = index - parts!.starts[k]
-                let n = min(count - offset, parts!.records[k].flatBytes.count - local)
+                let n = min(count - offset, parts!.records[k].flatCount - local)
                 parts!.records[k].overwrite(at: local, with: source.extract(offset..<offset + n))
                 offset += n
             }
@@ -622,24 +772,32 @@ public struct OriginalStateRecord: Equatable, Sendable {
             // An overwrite with the bytes and definedness already there changes
             // nothing (phase 2d, as in write).
             if flatHolds(record, at: start) { return }
-            flatBytes.replaceSubrange(start..<start + count, with: record.flatBytes)
-            flatDefined.replaceSubrange(start..<start + count, with: record.flatDefined)
+            makeFlatUnique()
+            record.flat!.with { _, sb, sm in flat!.with { _, b, m in
+                (b + start).update(from: sb, count: count); Flat.copyBits(sm, 0, m, start, count)
+            } }
             return
         }
         if pages == nil, let source = record.parts {
             // A parted source onto a flat target, run by run without assembling.
             var index = start
             source.forEachRun(0..<count) { part, local in
-                flatBytes.replaceSubrange(index..<index + local.count, with: part.flatBytes[local])
-                flatDefined.replaceSubrange(index..<index + local.count, with: part.flatDefined[local])
+                makeFlatUnique()
+                part.flat!.with { _, sb, sm in flat!.with { _, b, m in
+                    (b + index).update(from: sb + local.lowerBound, count: local.count)
+                    Flat.copyBits(sm, local.lowerBound, m, index, local.count)
+                } }
                 index += local.count
             }
             return
         }
         let bytes = record.bytes, defined = record.defined
         if pages == nil {
-            flatBytes.replaceSubrange(start..<start + count, with: bytes)
-            flatDefined.replaceSubrange(start..<start + count, with: defined)
+            makeFlatUnique()
+            flat!.with { _, b, m in
+                bytes.withUnsafeBufferPointer { (b + start).update(from: $0.baseAddress!, count: count) }
+                for k in 0..<count { Flat.put(m, start + k, defined[k]) }
+            }
             return
         }
         withPages { pages in
@@ -653,34 +811,31 @@ public struct OriginalStateRecord: Equatable, Sendable {
     /// Whether the flat bytes over `region` are `value`'s little-endian bytes,
     /// all defined.
     private func flatHolds<T: FixedWidthInteger>(_ value: T, _ region: Range<Int>) -> Bool {
-        for (shift, index) in region.enumerated() {
-            if !flatDefined[index] || flatBytes[index] != UInt8(truncatingIfNeeded: value >> (shift * 8)) { return false }
+        guard let flat else { return region.isEmpty }
+        return flat.with { _, b, m in
+            for (shift, index) in region.enumerated() {
+                if !Flat.bit(m, index) || b[index] != UInt8(truncatingIfNeeded: value >> (shift * 8)) { return false }
+            }
+            return true
         }
-        return true
     }
     /// Whether this flat record equals flat `record`'s window starting at
     /// `start` (same length as this record).
     private func flatHolds(_ record: OriginalStateRecord, from start: Int) -> Bool {
-        let count = flatBytes.count
+        let count = flatCount
         guard count > 0 else { return true }
-        func same<E>(_ a: [E], _ b: [E]) -> Bool {
-            a.withUnsafeBytes { a in b.withUnsafeBytes { b in
-                memcmp(a.baseAddress!, b.baseAddress! + start * MemoryLayout<E>.stride, count * MemoryLayout<E>.stride) == 0
-            } }
-        }
-        return same(flatBytes, record.flatBytes) && same(flatDefined, record.flatDefined)
+        return flat!.with { _, b, m in record.flat!.with { _, rb, rm in
+            memcmp(b, rb + start, count) == 0 && Flat.sameBits(m, 0, rm, start, count)
+        } }
     }
     /// Whether this flat record already holds flat `record`'s bytes and
     /// definedness at `start` (the caller checked the extent).
     private func flatHolds(_ record: OriginalStateRecord, at start: Int) -> Bool {
-        let count = record.flatBytes.count
+        let count = record.flatCount
         guard count > 0 else { return true }
-        func same<E>(_ a: [E], _ b: [E]) -> Bool {
-            a.withUnsafeBytes { a in b.withUnsafeBytes { b in
-                memcmp(a.baseAddress! + start * MemoryLayout<E>.stride, b.baseAddress!, count * MemoryLayout<E>.stride) == 0
-            } }
-        }
-        return same(flatBytes, record.flatBytes) && same(flatDefined, record.flatDefined)
+        return flat!.with { _, b, m in record.flat!.with { _, rb, rm in
+            memcmp(b + start, rb, count) == 0 && Flat.sameBits(m, start, rm, 0, count)
+        } }
     }
 
     public mutating func writeBinary64(_ value: Double, at offset: Int) throws {
@@ -693,13 +848,15 @@ public struct OriginalStateRecord: Equatable, Sendable {
             makePartsUnique()
             for index in region {
                 let k = parts!.index(of: index)
-                parts!.records[k].flatBytes[index - parts!.starts[k]] = 0
-                parts!.records[k].flatDefined[index - parts!.starts[k]] = true
+                parts!.records[k].setFlatByte(index - parts!.starts[k], 0)
             }
             return
         }
         if pages == nil {
-            for index in region { flatBytes[index] = 0; flatDefined[index] = true }
+            guard !region.isEmpty else { return }
+            precondition(region.lowerBound >= 0 && region.upperBound <= flatCount, "Index out of range")
+            makeFlatUnique()
+            flat!.with { _, b, m in (b + region.lowerBound).update(repeating: 0, count: region.count); Flat.setAll(m, region) }
         } else {
             withPages { pages in
                 pages.willWrite()

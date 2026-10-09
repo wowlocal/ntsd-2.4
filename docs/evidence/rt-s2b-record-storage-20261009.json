@@ -1,0 +1,297 @@
+{
+ "study": "docs/research/CORE_REALTIME.md",
+ "plan": "docs/research/CORE_REALTIME_S2.md (S2b)",
+ "phase": "S2b: one buffer per flat record: the bytes, then a definedness bit mask",
+ "date": "2026-10-09",
+ "profile_before": "rtd1-vs-dwarf: _ContiguousArrayBuffer._consumeAndCreateNew 9.40% of the main thread, most of it record copy-on-write (each copied record duplicated a byte array and a Bool array)",
+ "change": "OriginalStateRecord's flat storage is one ManagedBuffer per record (Flat: the bytes, then one definedness bit per byte, then 8 zero pad bytes; header {count, whole-array cache}); the record stays 40 bytes (flat: Flat?, flatCount, large: Large?). Reads check range, mask and value with one load each in the same order as before; writes and overwrites copy a shared buffer once (or clear the cache of a unique one) and return early when the bytes and definedness are already there; copies copy the bytes and mask once without zero-filling first; the mask is packed byte-wise; `bytes`/`defined` whole reads are built once per written version (FlatWhole, under flatWholeLock) so loops indexing them stay linear; storageIdentity returns the buffer address twice; sharesStorage compares buffers",
+ "profile_after": "rts2b-vs-dwarf (6,195 main-thread samples): _consumeAndCreateNew 4.96%",
+ "phone": {
+  "vs": {
+   "rts2a_same_session": [
+    {
+     "label": "rts2a-for-rts2b-vs1",
+     "scenario": "vs",
+     "runSeconds": 273,
+     "peakResidentMB": 1375,
+     "ticksPerSecond": 30.13,
+     "busySeconds": 173.21,
+     "bodies": 1800,
+     "completeMsPerTick": 11.0,
+     "partAssembliesPerTick": 0.0,
+     "menuMsPerStep": 0.76,
+     "menuStepsPerTick": 4.12,
+     "idleMsPerStep": 0.632,
+     "idleIterationMs": 0.709,
+     "idleStepsPerTick": 3.12,
+     "tickStepMs": 1.143,
+     "mainCpuShare": 0.459,
+     "renderCpuShare": 0.422,
+     "mainMsPerTick": 15.25,
+     "renderMsPerTick": 13.99
+    },
+    {
+     "label": "rts2a-for-rts2b-vs2",
+     "scenario": "vs",
+     "runSeconds": 273,
+     "peakResidentMB": 1275,
+     "ticksPerSecond": 30.19,
+     "busySeconds": 173.14,
+     "bodies": 1800,
+     "completeMsPerTick": 10.9,
+     "partAssembliesPerTick": 0.0,
+     "menuMsPerStep": 0.75,
+     "menuStepsPerTick": 4.12,
+     "idleMsPerStep": 0.625,
+     "idleIterationMs": 0.702,
+     "idleStepsPerTick": 3.12,
+     "tickStepMs": 1.157,
+     "mainCpuShare": 0.463,
+     "renderCpuShare": 0.419,
+     "mainMsPerTick": 15.33,
+     "renderMsPerTick": 13.87
+    }
+   ],
+   "after": [
+    {
+     "label": "rts2b-vs1",
+     "scenario": "vs",
+     "runSeconds": 216,
+     "peakResidentMB": 1364,
+     "ticksPerSecond": 31.12,
+     "busySeconds": 109.52,
+     "bodies": 1800,
+     "completeMsPerTick": 9.9,
+     "partAssembliesPerTick": 0.0,
+     "menuMsPerStep": 0.78,
+     "menuStepsPerTick": 4.12,
+     "idleMsPerStep": 0.637,
+     "idleIterationMs": 0.718,
+     "idleStepsPerTick": 3.12,
+     "tickStepMs": 1.245,
+     "mainCpuShare": 0.447,
+     "renderCpuShare": 0.441,
+     "mainMsPerTick": 14.35,
+     "renderMsPerTick": 14.19
+    },
+    {
+     "label": "rts2b-vs2",
+     "scenario": "vs",
+     "runSeconds": 216,
+     "peakResidentMB": 1361,
+     "ticksPerSecond": 31.14,
+     "busySeconds": 110.8,
+     "bodies": 1800,
+     "completeMsPerTick": 10.1,
+     "partAssembliesPerTick": 0.0,
+     "menuMsPerStep": 0.77,
+     "menuStepsPerTick": 4.12,
+     "idleMsPerStep": 0.63,
+     "idleIterationMs": 0.708,
+     "idleStepsPerTick": 3.12,
+     "tickStepMs": 1.2,
+     "mainCpuShare": 0.447,
+     "renderCpuShare": 0.438,
+     "mainMsPerTick": 14.34,
+     "renderMsPerTick": 14.07
+    },
+    {
+     "label": "rts2b-vs3",
+     "scenario": "vs",
+     "runSeconds": 237,
+     "peakResidentMB": 1370,
+     "ticksPerSecond": 31.18,
+     "busySeconds": 110.43,
+     "bodies": 1800,
+     "completeMsPerTick": 10.0,
+     "partAssembliesPerTick": 0.0,
+     "menuMsPerStep": 0.77,
+     "menuStepsPerTick": 4.12,
+     "idleMsPerStep": 0.638,
+     "idleIterationMs": 0.716,
+     "idleStepsPerTick": 3.12,
+     "tickStepMs": 1.182,
+     "mainCpuShare": 0.449,
+     "renderCpuShare": 0.44,
+     "mainMsPerTick": 14.38,
+     "renderMsPerTick": 14.12
+    }
+   ],
+   "result": "main 15.29 -> 14.36 ms per tick; render 13.93 -> 14.13"
+  },
+  "demo": {
+   "rts2a_same_session": [
+    {
+     "label": "rts2a-for-rts2b-demo1",
+     "scenario": "demo",
+     "runSeconds": 250,
+     "peakResidentMB": 1325,
+     "ticksPerSecond": 30.27,
+     "busySeconds": 157.45,
+     "bodies": 900,
+     "completeMsPerTick": 11.1,
+     "partAssembliesPerTick": 0.0,
+     "menuMsPerStep": 0.77,
+     "menuStepsPerTick": 4.13,
+     "idleMsPerStep": 0.646,
+     "idleIterationMs": 0.723,
+     "idleStepsPerTick": 3.13,
+     "tickStepMs": 1.14,
+     "mainCpuShare": 0.462,
+     "renderCpuShare": 0.362,
+     "mainMsPerTick": 15.26,
+     "renderMsPerTick": 11.95
+    },
+    {
+     "label": "rts2a-for-rts2b-demo2",
+     "scenario": "demo",
+     "runSeconds": 248,
+     "peakResidentMB": 1402,
+     "ticksPerSecond": 30.31,
+     "busySeconds": 155.76,
+     "bodies": 900,
+     "completeMsPerTick": 11.0,
+     "partAssembliesPerTick": 0.0,
+     "menuMsPerStep": 0.77,
+     "menuStepsPerTick": 4.13,
+     "idleMsPerStep": 0.645,
+     "idleIterationMs": 0.722,
+     "idleStepsPerTick": 3.13,
+     "tickStepMs": 1.153,
+     "mainCpuShare": 0.462,
+     "renderCpuShare": 0.361,
+     "mainMsPerTick": 15.25,
+     "renderMsPerTick": 11.9
+    }
+   ],
+   "after": [
+    {
+     "label": "rts2b-demo1",
+     "scenario": "demo",
+     "runSeconds": 193,
+     "peakResidentMB": 1375,
+     "ticksPerSecond": 31.66,
+     "busySeconds": 96.16,
+     "bodies": 900,
+     "completeMsPerTick": 9.8,
+     "partAssembliesPerTick": 0.0,
+     "menuMsPerStep": 0.77,
+     "menuStepsPerTick": 4.13,
+     "idleMsPerStep": 0.643,
+     "idleIterationMs": 0.721,
+     "idleStepsPerTick": 3.13,
+     "tickStepMs": 1.152,
+     "mainCpuShare": 0.443,
+     "renderCpuShare": 0.377,
+     "mainMsPerTick": 13.99,
+     "renderMsPerTick": 11.89
+    },
+    {
+     "label": "rts2b-demo2",
+     "scenario": "demo",
+     "runSeconds": 193,
+     "peakResidentMB": 1304,
+     "ticksPerSecond": 31.6,
+     "busySeconds": 96.17,
+     "bodies": 900,
+     "completeMsPerTick": 9.8,
+     "partAssembliesPerTick": 0.0,
+     "menuMsPerStep": 0.77,
+     "menuStepsPerTick": 4.13,
+     "idleMsPerStep": 0.638,
+     "idleIterationMs": 0.717,
+     "idleStepsPerTick": 3.13,
+     "tickStepMs": 1.181,
+     "mainCpuShare": 0.446,
+     "renderCpuShare": 0.377,
+     "mainMsPerTick": 14.1,
+     "renderMsPerTick": 11.92
+    },
+    {
+     "label": "rts2b-demo3",
+     "scenario": "demo",
+     "runSeconds": 194,
+     "peakResidentMB": 1310,
+     "ticksPerSecond": 31.61,
+     "busySeconds": 97.32,
+     "bodies": 900,
+     "completeMsPerTick": 9.8,
+     "partAssembliesPerTick": 0.0,
+     "menuMsPerStep": 0.78,
+     "menuStepsPerTick": 4.13,
+     "idleMsPerStep": 0.647,
+     "idleIterationMs": 0.725,
+     "idleStepsPerTick": 3.13,
+     "tickStepMs": 1.174,
+     "mainCpuShare": 0.444,
+     "renderCpuShare": 0.38,
+     "mainMsPerTick": 14.03,
+     "renderMsPerTick": 12.02
+    }
+   ],
+   "result": "main 15.25 -> 14.04 ms per tick; render 11.93 -> 11.94"
+  }
+ },
+ "gates": {
+  "tested_trees": "native 837118ae08814401c16667fa9cc1d2a82a2cd1a3, tools 141b56031607c8fd27699d571c7b8a2df2bf8cdc",
+  "builds": "clean (4u); checked headless, AppKit and test bundle; unchecked headless and APK (shipping)",
+  "scenarios": [
+   "{\"scenario\": \"vs\", \"exit\": 0, \"seconds\": 72.4, \"result\": \"equal\", \"differs\": []}",
+   "{\"scenario\": \"mission\", \"exit\": 0, \"seconds\": 69.8, \"result\": \"equal\", \"differs\": []}",
+   "{\"scenario\": \"demo\", \"exit\": 0, \"seconds\": 51.1, \"result\": \"equal\", \"differs\": []}",
+   "{\"scenario\": \"war\", \"exit\": 0, \"seconds\": 111.0, \"result\": \"equal\", \"differs\": []}",
+   "{\"scenario\": \"playback\", \"exit\": 0, \"seconds\": 78.7, \"result\": \"equal\", \"differs\": []}",
+   "{\"scenario\": \"tournament\", \"exit\": 0, \"seconds\": 99.3, \"result\": \"equal\", \"differs\": []}",
+   "{\"scenario\": \"altenter\", \"exit\": 0, \"seconds\": 74.6, \"result\": \"equal\", \"differs\": []}",
+   "{\"scenario\": \"tournament-win\", \"exit\": 0, \"seconds\": 104.4, \"result\": \"equal\", \"differs\": []}",
+   "{\"scenario\": \"team-tournament\", \"exit\": 0, \"seconds\": 84.1, \"result\": \"equal\", \"differs\": []}",
+   "{\"scenario\": \"joystick\", \"exit\": 0, \"seconds\": 25.4, \"result\": \"equal\", \"differs\": []}",
+   "{\"frames\": 1832, \"mismatched\": 0, \"result\": \"identical\"}"
+  ],
+  "appkit": [
+   "{\"scenario\": \"vs\", \"exit\": 0, \"seconds\": 69.6, \"result\": \"equal\", \"differs\": []}",
+   "{\"scenario\": \"playback\", \"exit\": 0, \"seconds\": 74.4, \"result\": \"equal\", \"differs\": []}",
+   "{\"frames\": 3960, \"mismatched\": 0, \"result\": \"identical\"}"
+  ],
+  "unchecked_headless": [
+   "{\"scenario\": \"vs\", \"exit\": 0, \"seconds\": 70.4, \"result\": \"equal\", \"differs\": []}",
+   "{\"scenario\": \"demo\", \"exit\": 0, \"seconds\": 51.4, \"result\": \"equal\", \"differs\": []}",
+   "{\"frames\": 1832, \"mismatched\": 0, \"result\": \"identical\"}"
+  ],
+  "launches": "20 of 20 clean",
+  "emulator": "{\"frames\": 1832, \"mismatched\": 0, \"result\": \"identical\"}",
+  "tests": {
+   "scope": "the whole release test bundle (checked), suite by suite (logs/rts2b-all-suites.log)",
+   "suites_passed": 287,
+   "suites_failed": 0,
+   "tests_run": {
+    "tests": 755,
+    "failures": 0
+   },
+   "new_tests": "OriginalStateRecordStorageTests: a byte-array/Bool-array model as oracle for random reads, writes, overwrites and slices over sizes of every alignment; copy-on-write sharing; constructors; edge cases (the empty record, whole and large unaligned overwrites, slices of itself); whole reads follow writes",
+   "test_time_cost": {
+    "note": "test-only: the checked test bundle's longest tests ran slower than under S2a (whole reads rebuild arrays after each write; the run also shared the Mac with two other gates for part of its time). The phone's shipping build is faster",
+    "seconds": {
+     "testActiveKeyboardOnOwnGameplay": {
+      "rts2a": 789.678,
+      "rts2b": 1411.198
+     },
+     "testActiveKeyboardOnOwnGameplayWithControlBacking": {
+      "rts2a": 786.13,
+      "rts2b": 1473.607
+     },
+     "testPrimaryOwnedActiveInputAndBodyPreflight": {
+      "rts2a": 16.909,
+      "rts2b": 25.686
+     }
+    }
+   }
+  }
+ },
+ "earlier_runs": [
+  "rts2ba (stopped, archived on T7): tests and reference checks that index `bytes`/`defined` in loops became quadratic (ActiveGameplay stalled ~2 h); fixed by the per-version whole-array cache",
+  "rts2b2-early (logs/rts2b2-early-*): five suites on the fixed tree before the gate, incl. ActiveGameplay's first test at 1,381 s; a first storage-test count threshold (8500, the exact count is 9000) failed and was corrected"
+ ],
+ "warnings": "the S2b build adds two compiler warnings (Swift 5 mode): Flat (a ManagedBuffer) declares @unchecked Sendable over an unavailable conformance, and OriginalStateRecord's `flat` is not Sendable in Swift 6 terms; Flat is written only while uniquely referenced and its cache is under a lock",
+ "review": "independent read-only review: approve with nits — no difference in values, definedness, errors or their order, equality, copy independence or which record is written; padding stays zero so the memcmp equality is sound; still 40 bytes. Findings addressed before the gate: wide integers in the small-mask helpers (now fall back to the range helpers above 8 bytes), copies zero-filled before copying (now copy once), the mask packed bit by bit (now byte-wise), whole reads rebuilt per call (now cached per version), test gaps (edge-case and whole-read tests added). Left: a dead flat branch in `write`, some stale comments, no assertion of the flat/flatCount invariant"
+}
