@@ -562,6 +562,19 @@ import NTSDCore
         display.pipelinesFront = pipelinesRendering && started.windows.presentsConcurrently
         defer { display.pipelinesFront = false }
         for command in commands {
+            // Blt and fill records reach the display without an event, as the
+            // "blit" and "fill" cases below (tier 3 e).
+            if let b = command.replayBlit {
+                if OriginalMacRuntimeMenu.empty(b) { counts.skippedDraws += 1; continue }
+                let response = try display.replayBlit(b); counts.replayedDraws += 1
+                if response.result == OriginalMacDisplayBackend.invalidRect { counts.rejectedDraws += 1 }
+                continue
+            }
+            if let f = command.replayFill {
+                let response = try display.replayFill(f); counts.replayedDraws += 1
+                if response.result == OriginalMacDisplayBackend.invalidRect { counts.rejectedDraws += 1 }
+                continue
+            }
             guard let e = command.event else { continue }
             switch e.kind {
             case "blit":

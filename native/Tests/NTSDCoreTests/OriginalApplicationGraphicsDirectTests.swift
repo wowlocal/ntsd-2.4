@@ -34,7 +34,7 @@ final class OriginalApplicationGraphicsDirectTests: XCTestCase {
         try call("createDC", [0], 30); try call("selectObject", [30, 20], 1); try call("getDC", [10], output: 31)
         try call("stretch", [31, 0, 0, 2, 2, 30, 0, 0, 2, 2, 0xcc0020], 1)
 
-        var compared = 0, commands = 0, errors = 0, colored = 0
+        var compared = 0, commands = 0, errors = 0, colored = 0, records: [G.Command] = []
         let rectangles: [[Int32]] = [[0, 0, 2, 2], [-5, 3, 700, 9], [0, 0, 2], [0, 0, 2, 2, 7], []]
         for source: UInt32 in [0, 2, 3, 10, 999] {
             for target: UInt32 in [0, 2, 3, 10, 999] {
@@ -53,6 +53,7 @@ final class OriginalApplicationGraphicsDirectTests: XCTestCase {
                         compared += 1
                         if expected.failed { errors += 1 } else { commands += 1 }
                         if case .command(let c?) = expected, c.sourceColors != nil { colored += 1 }
+                        if case .command(let c?) = actual { records.append(c) }
                     }
                 }
                 let fill = OriginalSurfaceFillRequest(target: target, rectangle: rectangles[Int(source % 5)],
@@ -60,7 +61,9 @@ final class OriginalApplicationGraphicsDirectTests: XCTestCase {
                 var old = g
                 let before = g
                 let expected = outcome { try old.consume(.fill(fill, result: 3), inputs: inputs) }
-                XCTAssertEqual(outcome { try g.fillCommand(fill, result: 3) }, expected, "fill \(target) \(fill.rectangle)")
+                let actual = outcome { try g.fillCommand(fill, result: 3) }
+                XCTAssertEqual(actual, expected, "fill \(target) \(fill.rectangle)")
+                if case .command(let c?) = actual { records.append(c) }
                 XCTAssertEqual(g, before)
                 XCTAssertEqual(old, before)
                 compared += 1
@@ -73,6 +76,31 @@ final class OriginalApplicationGraphicsDirectTests: XCTestCase {
         XCTAssertEqual(commands, 66)
         XCTAssertEqual(errors, 334)
         XCTAssertEqual(colored, 6)
+        // Tier 3 e: the builders' records expand to the fields `consume`
+        // stored (the comparisons above cross representations), the runtime's
+        // replay accessors return the record's Blt or fill, and records
+        // compare among themselves exactly as their boxed expansions do.
+        XCTAssertEqual(records.count, 66)
+        func boxed(_ c: G.Command) -> G.Command {
+            G.Command(family: c.family, request: c.request, windowResponse: c.windowResponse, bitmapResponse: c.bitmapResponse,
+                      event: c.event, result: c.result, output: c.output, bindings: c.bindings, dependencies: c.dependencies,
+                      opaqueReferences: c.opaqueReferences, sourceRectangle: c.sourceRectangle,
+                      destinationRectangle: c.destinationRectangle, sourceColors: c.sourceColors)
+        }
+        var equalPairs = 0
+        for a in records {
+            XCTAssertEqual(a.replayBlit, a.event?.kind == "blit" ? a.event?.blit : nil)
+            XCTAssertEqual(a.replayFill, a.event?.kind == "fill" ? a.event?.fill : nil)
+            XCTAssertNil(boxed(a).replayBlit); XCTAssertNil(boxed(a).replayFill)
+            XCTAssertTrue(a == boxed(a) && boxed(a) == a)
+            XCTAssertEqual(a.description, boxed(a).description)
+            for b in records {
+                XCTAssertEqual(a == b, boxed(a) == boxed(b))
+                XCTAssertEqual(a == b, a == boxed(b)); XCTAssertEqual(a == b, boxed(a) == b)
+                if a == b { equalPairs += 1 }
+            }
+        }
+        XCTAssertGreaterThan(equalPairs, records.count, "some distinct builds compare equal")
     }
 
     /// Without a graphics owner, a loaded attempt's Blt, fill and other

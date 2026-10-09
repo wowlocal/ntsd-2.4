@@ -1044,28 +1044,36 @@ extension OriginalMacDisplayBackend {
         }
         return copy
     }
+    /// `validateFront`'s fill branch after its event checks (tier 3 e).
+    private func validateFill(_ f: OriginalSurfaceFillRequest) throws -> FrontAction {
+        guard f.flags == 0x1000400,f.effects.count == 100,f.defined.count == 100 else { throw Boundary.arguments("front fill") }
+        let r = try OriginalStateRecord(bytes:f.effects,defined:f.defined)
+        guard try r.integer(at:0,as:UInt32.self) == 100 else { throw Boundary.arguments("front fill size") }
+        let color = try r.integer(at:80,as:UInt32.self),s = try frontSurface(f.target)
+        if try s.kind != .primary && !frontRectInside(f.rectangle,s) { return .rejected([s]) }
+        let target = try frontTarget(s,frontRect(f.rectangle,s))
+        try frontKnown(target) { _,_ in true };return .fill(target,color)
+    }
+    /// `validateFront`'s Blt branch after its event checks (tier 3 e).
+    private func validateBlit(_ b: OriginalBitmapBlit) throws -> FrontAction {
+        guard b.flags & 0x1000000 != 0,b.flags & ~UInt32(0x1008800) == 0 else { throw Boundary.unsupported("front Blt flags") }
+        let target = try frontSurface(b.targetSurface),src = try frontSurface(b.sourceSurface)
+        if try target.kind != .primary && src.kind != .primary && (!frontRectInside(b.destination,target) || !frontRectInside(b.source,src)) {
+            return .rejected([target,src])
+        }
+        // The surfaces just resolved: only pure range checks ran since, so
+        // a second lookup would find the same ones (CORE_REALTIME tier 3 g).
+        return .copy(try frontCopy(target,src,destination:b.destination,source:b.source,flags:b.flags,effects:b.effects))
+    }
     private func validateFront(_ q: OriginalFrontScreenEvent) throws -> FrontAction {
         guard q.read == nil,q.clip == nil else { throw Boundary.arguments("front internal observation") }
         switch q.kind {
         case "fill":
-            guard q.arguments.isEmpty,q.strings.isEmpty,q.blit == nil,let f = q.fill,
-                f.flags == 0x1000400,f.effects.count == 100,f.defined.count == 100 else { throw Boundary.arguments("front fill") }
-            let r = try OriginalStateRecord(bytes:f.effects,defined:f.defined)
-            guard try r.integer(at:0,as:UInt32.self) == 100 else { throw Boundary.arguments("front fill size") }
-            let color = try r.integer(at:80,as:UInt32.self),s = try frontSurface(f.target)
-            if try s.kind != .primary && !frontRectInside(f.rectangle,s) { return .rejected([s]) }
-            let target = try frontTarget(s,frontRect(f.rectangle,s))
-            try frontKnown(target) { _,_ in true };return .fill(target,color)
+            guard q.arguments.isEmpty,q.strings.isEmpty,q.blit == nil,let f = q.fill else { throw Boundary.arguments("front fill") }
+            return try validateFill(f)
         case "blit":
             guard q.arguments.isEmpty,q.strings.isEmpty,q.fill == nil,let b = q.blit else { throw Boundary.arguments("front bitmap Blt") }
-            guard b.flags & 0x1000000 != 0,b.flags & ~UInt32(0x1008800) == 0 else { throw Boundary.unsupported("front Blt flags") }
-            let target = try frontSurface(b.targetSurface),src = try frontSurface(b.sourceSurface)
-            if try target.kind != .primary && src.kind != .primary && (!frontRectInside(b.destination,target) || !frontRectInside(b.source,src)) {
-                return .rejected([target,src])
-            }
-            // The surfaces just resolved: only pure range checks ran since, so
-            // a second lookup would find the same ones (CORE_REALTIME tier 3 g).
-            return .copy(try frontCopy(target,src,destination:b.destination,source:b.source,flags:b.flags,effects:b.effects))
+            return try validateBlit(b)
         case "method":
             guard q.arguments.count >= 2,q.fill == nil,q.blit == nil else { throw Boundary.arguments("front method") }
             let a = q.arguments
@@ -1258,9 +1266,20 @@ extension OriginalMacDisplayBackend {
     public func replayFront(_ q: OriginalFrontScreenEvent) throws -> OriginalLibSurfaceText.Response {
         try serveFront(validateFront(q),request:q,owned:false).response
     }
+    /// `replayFront(OriginalFrontScreenEvent(blit: b))`: that event passes
+    /// the Blt branch's event checks, and it is built only for the operation
+    /// log (tier 3 e).
+    public func replayBlit(_ b: OriginalBitmapBlit) throws -> OriginalLibSurfaceText.Response {
+        try serveFront(validateBlit(b),request:OriginalFrontScreenEvent(blit:b),owned:false).response
+    }
+    /// `replayFront(OriginalFrontScreenEvent(fill: f))` the same way.
+    public func replayFill(_ f: OriginalSurfaceFillRequest) throws -> OriginalLibSurfaceText.Response {
+        try serveFront(validateFill(f),request:OriginalFrontScreenEvent(fill:f),owned:false).response
+    }
     /// `owned` false: no resources are returned (the caller reads only the
     /// response), so no owner array is built per draw.
-    private func serveFront(_ action: FrontAction,request: OriginalFrontScreenEvent,owned: Bool = true) throws -> FrontServed {
+    /// `request` is evaluated only for the operation log (tier 3 e).
+    private func serveFront(_ action: FrontAction,request: @autoclosure () -> OriginalFrontScreenEvent,owned: Bool = true) throws -> FrontServed {
         let owners: [any OriginalApplicationStartupResource],response: OriginalLibSurfaceText.Response
         switch action {
         case let .fill(target,color):
@@ -1338,7 +1357,7 @@ extension OriginalMacDisplayBackend {
                 textDC = nil;owners = [dc.surface];response = .init(result:0)
             }
         }
-        frontOperationCount += 1; if keepsOperationLogs { frontOperations.append(.init(request:request,response:response)) }
+        frontOperationCount += 1; if keepsOperationLogs { frontOperations.append(.init(request:request(),response:response)) }
         return .init(response:response,resources:owners)
     }
 }

@@ -345,6 +345,68 @@ import XCTest
         XCTAssertEqual(pixelsOnce.defined,pixelsTwice.defined);XCTAssertEqual(countOnce,countTwice)
         XCTAssertTrue(twice.contains { $0.hasPrefix("error") } && twice.contains { $0.hasPrefix("ok") },"both outcomes covered")
     }
+    /// CORE_REALTIME tier 3 e: replaying a Blt or fill record (`replayBlit`,
+    /// `replayFill`, no event) equals replaying its event (`replayFront`) for
+    /// draws, rejected rectangles and validation errors, with the same pixels
+    /// and operation count.
+    func testRecordReplayEqualsEventReplay() throws {
+        func run(_ records: Bool) throws -> ([String],B.Pixels,[B.FrontOperation]) {
+            let r = try D().run(late:false);defer { try? D().close(r) };let b = r.setup.display,(device,_,back,_) = try D().ids(r)
+            let colors: [UInt32] = [0,0xff0000,0xff00,0xff,0x110022,0,0x334455,0]
+            let service = OriginalMacBitmapService(backend:b,inputs:.init(resources:["pattern":try bitmap(colors,width:4,height:2),
+                "unknown":try unknownBitmap()],files:["pattern":.missing,"unknown":.missing]))
+            let (_,e1) = try M().construct(service,"pattern",device),source = try M().surface(e1)
+            let (_,e2) = try M().construct(service,"unknown",device),unknown = try M().surface(e2)
+            let logged = b.frontOperations.count
+            func rawFill(_ effects: [UInt8],_ defined: [Bool]) -> Event {
+                var e = Event("fill")
+                e.fill = OriginalSurfaceFillRequest(target:back,rectangle:[2,2,4,4],flags:0x1000400,effects:effects,defined:defined)
+                return e
+            }
+            var sized = [UInt8](repeating:0,count:100);sized[0] = 100
+            var wrongSize = sized;wrongSize[0] = 99
+            var undefinedColor = [Bool](repeating:true,count:100);undefinedColor[81] = false
+            var shortFill = Event("fill")
+            shortFill.fill = OriginalSurfaceFillRequest(target:back,rectangle:[0,0,1,1],flags:0x1000400,
+                effects:[UInt8](repeating:0,count:99),defined:[Bool](repeating:true,count:99))
+            var badFlags = try blt(source,back,[0,0,4,2],[1,1,5,3])
+            if let x = badFlags.blit {
+                badFlags.blit = OriginalBitmapBlit(sourceSurface:x.sourceSurface,targetSurface:x.targetSurface,source:x.source,
+                    destination:x.destination,flags:x.flags | 0x10,effects:x.effects)
+            }
+            let events: [Event] = [
+                try fill(back,0xabcdef,[0,0,794,550]),try fill(back,0x10206c,[7,9,9,11]),
+                try blt(source,back,[0,0,4,2],[1,1,5,3]),try blt(source,back,[0,0,4,2],[10,1,14,3],mirror:true),
+                try blt(source,back,[1,0,3,2],[20,1,22,3],key:false),try blt(unknown,back,[0,0,2,1],[30,1,32,2]),
+                try blt(source,back,[0,0,4,2],[-5,-5,-1,-3]),   // outside: rejected
+                try blt(source,back,[0,0,4,2],[790,548,794,550]),
+                try blt(source,source,[0,0,1,1],[1,1,2,2]),     // the same surface: a validation error
+                shortFill,badFlags,                             // fill effects extent, Blt flags: errors
+                rawFill(wrongSize,[Bool](repeating:true,count:100)),rawFill(sized,undefinedColor),   // fill size, undefined colour
+                try fill(back,0x123456,[3,3,5,5]),
+            ]
+            var log: [String] = []
+            for q in events {
+                do {
+                    let response: OriginalLibSurfaceText.Response
+                    if records, q.kind == "blit", let blit = q.blit { response = try b.replayBlit(blit) }
+                    else if records, q.kind == "fill", let fill = q.fill { response = try b.replayFill(fill) }
+                    else { response = try b.replayFront(q) }
+                    log.append("ok \(response.result)")
+                } catch { log.append("error \(error)") }
+            }
+            withExtendedLifetime((e1,e2)) {}
+            return (log,try b.pixels(back),Array(b.frontOperations.dropFirst(logged)))
+        }
+        let (events,pixelsEvents,logEvents) = try run(false),(records,pixelsRecords,logRecords) = try run(true)
+        XCTAssertEqual(records,events);XCTAssertEqual(pixelsRecords.values,pixelsEvents.values)
+        XCTAssertEqual(pixelsRecords.defined,pixelsEvents.defined)
+        XCTAssertEqual(logRecords,logEvents,"the operation log, its events built only for it")
+        XCTAssertEqual(logEvents.count,events.filter { $0.hasPrefix("ok") }.count)
+        XCTAssertEqual(events.filter { $0.hasPrefix("error") }.count,5,"\(events)")
+        XCTAssertTrue(events[11].contains("front fill size") && events[12].hasPrefix("error State bytes"),"\(events)")
+        XCTAssertTrue(events.contains("ok 0") && events.contains("ok \(OriginalMacDisplayBackend.invalidRect)"),"draws and a rejection: \(events)")
+    }
     /// CORE_REALTIME 1h: the four-pixel copy path gives the pixels and known
     /// bits of a per-pixel model for keyed, unkeyed and mirrored copies of a
     /// wide sprite, each row starting at chosen bit positions of the target's

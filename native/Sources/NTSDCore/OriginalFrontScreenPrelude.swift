@@ -22,9 +22,9 @@ public struct OriginalFrontScreenEvent: Codable, Equatable, Sendable {
     public init(_ kind: String, _ arguments: [UInt32] = [], _ strings: [[UInt8]] = []) { self.kind = kind;self.arguments = arguments;self.strings = strings }
     /// `OriginalFrontScreenEvent("blit")` with `blit` set, built in place
     /// (CORE_REALTIME tier 3 G3c: the Blt is stored once, not copied twice).
-    init(blit: OriginalBitmapBlit) { kind = "blit";self.blit = blit }
+    public init(blit: OriginalBitmapBlit) { kind = "blit";self.blit = blit }
     /// `OriginalFrontScreenEvent("fill")` with `fill` set, built in place.
-    init(fill: OriginalSurfaceFillRequest) { kind = "fill";self.fill = fill }
+    public init(fill: OriginalSurfaceFillRequest) { kind = "fill";self.fill = fill }
 }
 
 public struct OriginalFrontScreenInput: Codable, Sendable {

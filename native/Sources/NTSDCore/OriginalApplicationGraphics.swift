@@ -39,13 +39,136 @@ public struct OriginalApplicationGraphics: Equatable {
     /// Immutable resolved view of one terminal operation, not a second effect
     /// to deliver alongside the original operation. Unknown request bytes keep
     /// their masks. NULL rectangles are distinct from four explicit zero words.
-    public struct Command: Equatable {
-        public let family: String, request: Window.Request?
-        public let windowResponse: Window.Response?, bitmapResponse: Bitmap.Response?
-        public let event: OriginalFrontScreenEvent?, result: Int32, output: UInt32?
-        public let bindings: [Binding], dependencies: [String], opaqueReferences: [OpaqueReference]
-        public let sourceRectangle: [Int32]?, destinationRectangle: [Int32]?
-        public let sourceColors: OriginalSurfaceSourceColors?
+    ///
+    /// A Blt or fill is stored as one record and any other command boxed; the
+    /// public fields are computed and equal what the builders stored
+    /// (CORE_REALTIME tier 3 e, docs/research/CORE_REALTIME_E.md).
+    public struct Command: Equatable, CustomStringConvertible {
+        /// `blitCommand`'s fields: bindings target and source, the event
+        /// `OriginalFrontScreenEvent(blit:)`, "nullSource" without a source.
+        struct BlitRecord: Equatable {
+            let target: Reference, source: Reference?, blit: OriginalBitmapBlit, result: Int32
+            let colors: OriginalSurfaceSourceColors?
+        }
+        /// `fillCommand`'s fields: binding target, `OriginalFrontScreenEvent(fill:)`.
+        struct FillRecord: Equatable {
+            let target: Reference, fill: OriginalSurfaceFillRequest, result: Int32
+        }
+        private final class Full {
+            let family: String, request: Window.Request?
+            let windowResponse: Window.Response?, bitmapResponse: Bitmap.Response?
+            let event: OriginalFrontScreenEvent?, result: Int32, output: UInt32?
+            let bindings: [Binding], dependencies: [String], opaqueReferences: [OpaqueReference]
+            let sourceRectangle: [Int32]?, destinationRectangle: [Int32]?
+            let sourceColors: OriginalSurfaceSourceColors?
+            init(family: String, request: Window.Request?, windowResponse: Window.Response?, bitmapResponse: Bitmap.Response?,
+                 event: OriginalFrontScreenEvent?, result: Int32, output: UInt32?, bindings: [Binding], dependencies: [String],
+                 opaqueReferences: [OpaqueReference], sourceRectangle: [Int32]?, destinationRectangle: [Int32]?,
+                 sourceColors: OriginalSurfaceSourceColors?) {
+                self.family = family;self.request = request;self.windowResponse = windowResponse;self.bitmapResponse = bitmapResponse
+                self.event = event;self.result = result;self.output = output;self.bindings = bindings;self.dependencies = dependencies
+                self.opaqueReferences = opaqueReferences;self.sourceRectangle = sourceRectangle
+                self.destinationRectangle = destinationRectangle;self.sourceColors = sourceColors
+            }
+        }
+        private enum Storage { case blit(BlitRecord), fill(FillRecord), full(Full) }
+        private let storage: Storage
+
+        init(family: String, request: Window.Request?, windowResponse: Window.Response?, bitmapResponse: Bitmap.Response?,
+             event: OriginalFrontScreenEvent?, result: Int32, output: UInt32?, bindings: [Binding], dependencies: [String],
+             opaqueReferences: [OpaqueReference], sourceRectangle: [Int32]?, destinationRectangle: [Int32]?,
+             sourceColors: OriginalSurfaceSourceColors?) {
+            storage = .full(.init(family:family,request:request,windowResponse:windowResponse,bitmapResponse:bitmapResponse,
+                event:event,result:result,output:output,bindings:bindings,dependencies:dependencies,
+                opaqueReferences:opaqueReferences,sourceRectangle:sourceRectangle,destinationRectangle:destinationRectangle,
+                sourceColors:sourceColors))
+        }
+        init(_ record: BlitRecord) { storage = .blit(record) }
+        init(_ record: FillRecord) { storage = .fill(record) }
+
+        public var family: String { if case .full(let f) = storage { return f.family }; return "front" }
+        public var request: Window.Request? { if case .full(let f) = storage { return f.request }; return nil }
+        public var windowResponse: Window.Response? { if case .full(let f) = storage { return f.windowResponse }; return nil }
+        public var bitmapResponse: Bitmap.Response? { if case .full(let f) = storage { return f.bitmapResponse }; return nil }
+        public var event: OriginalFrontScreenEvent? {
+            switch storage {
+            case .blit(let r): return .init(blit:r.blit)
+            case .fill(let r): return .init(fill:r.fill)
+            case .full(let f): return f.event
+            }
+        }
+        public var result: Int32 {
+            switch storage {
+            case .blit(let r): return r.result
+            case .fill(let r): return r.result
+            case .full(let f): return f.result
+            }
+        }
+        public var output: UInt32? { if case .full(let f) = storage { return f.output }; return nil }
+        public var bindings: [Binding] {
+            switch storage {
+            case .blit(let r): return [.init(role:"target",ref:r.target),.init(role:"source",ref:r.source)]
+            case .fill(let r): return [.init(role:"target",ref:r.target)]
+            case .full(let f): return f.bindings
+            }
+        }
+        public var dependencies: [String] {
+            switch storage {
+            case .blit(let r): return r.source == nil ? ["nullSource"] : []
+            case .fill: return []
+            case .full(let f): return f.dependencies
+            }
+        }
+        public var opaqueReferences: [OpaqueReference] { if case .full(let f) = storage { return f.opaqueReferences }; return [] }
+        public var sourceRectangle: [Int32]? {
+            switch storage {
+            case .blit(let r): return r.blit.source
+            case .fill: return nil
+            case .full(let f): return f.sourceRectangle
+            }
+        }
+        public var destinationRectangle: [Int32]? {
+            switch storage {
+            case .blit(let r): return r.blit.destination
+            case .fill(let r): return r.fill.rectangle
+            case .full(let f): return f.destinationRectangle
+            }
+        }
+        public var sourceColors: OriginalSurfaceSourceColors? {
+            switch storage {
+            case .blit(let r): return r.colors
+            case .fill: return nil
+            case .full(let f): return f.sourceColors
+            }
+        }
+        /// A Blt record's Blt, for the runtime's replay without an event.
+        public var replayBlit: OriginalBitmapBlit? { if case .blit(let r) = storage { return r.blit }; return nil }
+        /// A fill record's request, the same way.
+        public var replayFill: OriginalSurfaceFillRequest? { if case .fill(let r) = storage { return r.fill }; return nil }
+
+        /// The public fields, as the stored struct printed them (test failure
+        /// messages; e's review).
+        public var description: String {
+            "Command(family: \(String(reflecting:family)), request: \(String(reflecting:request)), windowResponse: \(String(reflecting:windowResponse)), "
+            + "bitmapResponse: \(String(reflecting:bitmapResponse)), event: \(String(reflecting:event)), result: \(result), output: \(String(reflecting:output)), "
+            + "bindings: \(String(reflecting:bindings)), dependencies: \(String(reflecting:dependencies)), opaqueReferences: \(String(reflecting:opaqueReferences)), "
+            + "sourceRectangle: \(String(reflecting:sourceRectangle)), destinationRectangle: \(String(reflecting:destinationRectangle)), "
+            + "sourceColors: \(String(reflecting:sourceColors)))"
+        }
+        /// Records of one kind compare their fields; any other pair compares
+        /// every public field (exact: a record's expansion is one-to-one).
+        public static func == (lhs: Command, rhs: Command) -> Bool {
+            switch (lhs.storage, rhs.storage) {
+            case let (.blit(a), .blit(b)): return a == b
+            case let (.fill(a), .fill(b)): return a == b
+            default:
+                return lhs.family == rhs.family && lhs.request == rhs.request && lhs.windowResponse == rhs.windowResponse
+                    && lhs.bitmapResponse == rhs.bitmapResponse && lhs.event == rhs.event && lhs.result == rhs.result
+                    && lhs.output == rhs.output && lhs.bindings == rhs.bindings && lhs.dependencies == rhs.dependencies
+                    && lhs.opaqueReferences == rhs.opaqueReferences && lhs.sourceRectangle == rhs.sourceRectangle
+                    && lhs.destinationRectangle == rhs.destinationRectangle && lhs.sourceColors == rhs.sourceColors
+            }
+        }
     }
     public static let rasterDependencies = [
         "primary/offscreen actual format", "palette entries/realization",
@@ -293,22 +416,21 @@ public struct OriginalApplicationGraphics: Equatable {
     mutating func blitCommand(_ b: OriginalBitmapBlit, result: Int32, inputs: OriginalApplicationBitmapInputs?) throws -> Command {
         guard b.source.count == 4, b.destination.count == 4 else { throw Boundary.request("blit") }
         let source = try b.sourceSurface == 0 ? nil : surface(b.sourceSurface)
-        let bindings = [Binding(role:"target",ref:try surface(b.targetSurface)),Binding(role:"source",ref:source)]
-        var dependencies: [String] = [],colors: OriginalSurfaceSourceColors?
+        let target = try surface(b.targetSurface)
+        var colors: OriginalSurfaceSourceColors?
         if let source,source.kind == "bitmapSurface" {
             guard let inputs else { throw Boundary.owner(source.token) }
             colors = try inputs.sourceColors(forSurface:source.token)
-        } else if source == nil { dependencies.append("nullSource") }
-        return .init(family:"front",request:nil,windowResponse:nil,bitmapResponse:nil,event:OriginalFrontScreenEvent(blit:b),result:result,output:nil,
-            bindings:bindings,dependencies:dependencies,opaqueReferences:[],sourceRectangle:b.source,destinationRectangle:b.destination,sourceColors:colors)
+        }
+        // One record (tier 3 e): bindings target and source, "nullSource"
+        // without a source, the event and rectangles from the Blt.
+        return .init(Command.BlitRecord(target:target,source:source,blit:b,result:result,colors:colors))
     }
     /// `consume(.fill(f, r), inputs:)` the same way (G3a): the rectangle
     /// count, then the target owner.
     mutating func fillCommand(_ f: OriginalSurfaceFillRequest, result: Int32) throws -> Command {
         guard f.rectangle.count == 4 else { throw Boundary.request("fill") }
-        let bindings = [Binding(role:"target",ref:try surface(f.target))]
-        return .init(family:"front",request:nil,windowResponse:nil,bitmapResponse:nil,event:OriginalFrontScreenEvent(fill:f),result:result,output:nil,
-            bindings:bindings,dependencies:[],opaqueReferences:[],sourceRectangle:nil,destinationRectangle:f.rectangle,sourceColors:nil)
+        return .init(Command.FillRecord(target:try surface(f.target),fill:f,result:result))
     }
 
     /// Resolve once at the actual effect boundary. Other terminal effects keep
