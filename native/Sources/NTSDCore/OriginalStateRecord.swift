@@ -607,7 +607,23 @@ public struct OriginalStateRecord: Equatable, Sendable {
     }
 
     /// A typed read cannot silently promote allocator contents to a game default.
+    /// The flat, in-range, defined case runs inline at the call site; every
+    /// other case and every error is `checkedInteger`'s, unchanged (CORE_REALTIME
+    /// tier 3 L1: the game passes read records through here, and the call
+    /// itself was 6% of the A12's main thread).
+    @inline(__always)
     public func integer<T: FixedWidthInteger>(at offset: Int, as type: T.Type) throws -> T {
+        let count = T.bitWidth / 8
+        if large == nil, offset >= 0, count <= flatCount, offset <= flatCount - count, let flat,
+           let value = flat.with({ _, b, m -> T? in
+               Flat.allSet(m, offset, small: count) ? T(littleEndian: UnsafeRawPointer(b).loadUnaligned(fromByteOffset: offset, as: T.self)) : nil
+           }) {
+            return value
+        }
+        return try checkedInteger(at: offset, as: type)
+    }
+    @inline(never)
+    func checkedInteger<T: FixedWidthInteger>(at offset: Int, as type: T.Type) throws -> T {
         if large == nil {
             // A flat record (nearly every one): the range check, definedness
             // and value with one load each, the same errors in the same order
