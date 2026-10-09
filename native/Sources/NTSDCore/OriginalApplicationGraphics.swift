@@ -287,8 +287,10 @@ public struct OriginalApplicationGraphics: Equatable {
     /// branch only reads the owner, so it leaves the owner unchanged whether
     /// it returns or throws. The same checks and errors in the same order: the
     /// rectangle counts, the source owner, the target owner, then the inputs
-    /// and colours of a bitmap source.
-    func blitCommand(_ b: OriginalBitmapBlit, result: Int32, inputs: OriginalApplicationBitmapInputs?) throws -> Command {
+    /// and colours of a bitmap source. `mutating` only so a caller reaches an
+    /// optional owner in place (a non-mutating call on `graphics!` copies it;
+    /// G3b); neither builder changes the owner.
+    mutating func blitCommand(_ b: OriginalBitmapBlit, result: Int32, inputs: OriginalApplicationBitmapInputs?) throws -> Command {
         guard b.source.count == 4, b.destination.count == 4 else { throw Boundary.request("blit") }
         let source = try b.sourceSurface == 0 ? nil : surface(b.sourceSurface)
         let bindings = [Binding(role:"target",ref:try surface(b.targetSurface)),Binding(role:"source",ref:source)]
@@ -297,18 +299,22 @@ public struct OriginalApplicationGraphics: Equatable {
             guard let inputs else { throw Boundary.owner(source.token) }
             colors = try inputs.sourceColors(forSurface:source.token)
         } else if source == nil { dependencies.append("nullSource") }
-        var e = OriginalFrontScreenEvent("blit");e.blit = b
-        return .init(family:"front",request:nil,windowResponse:nil,bitmapResponse:nil,event:e,result:result,output:nil,
+        return .init(family:"front",request:nil,windowResponse:nil,bitmapResponse:nil,event:Self.event("blit",blit:b),result:result,output:nil,
             bindings:bindings,dependencies:dependencies,opaqueReferences:[],sourceRectangle:b.source,destinationRectangle:b.destination,sourceColors:colors)
     }
     /// `consume(.fill(f, r), inputs:)` the same way (G3a): the rectangle
     /// count, then the target owner.
-    func fillCommand(_ f: OriginalSurfaceFillRequest, result: Int32) throws -> Command {
+    mutating func fillCommand(_ f: OriginalSurfaceFillRequest, result: Int32) throws -> Command {
         guard f.rectangle.count == 4 else { throw Boundary.request("fill") }
         let bindings = [Binding(role:"target",ref:try surface(f.target))]
-        var e = OriginalFrontScreenEvent("fill");e.fill = f
-        return .init(family:"front",request:nil,windowResponse:nil,bitmapResponse:nil,event:e,result:result,output:nil,
+        return .init(family:"front",request:nil,windowResponse:nil,bitmapResponse:nil,event:Self.event("fill",fill:f),result:result,output:nil,
             bindings:bindings,dependencies:[],opaqueReferences:[],sourceRectangle:nil,destinationRectangle:f.rectangle,sourceColors:nil)
+    }
+
+    /// `OriginalFrontScreenEvent(kind)` with its Blt or fill set, returned so
+    /// the builders move it into the command instead of copying a local (G3b).
+    private static func event(_ kind: String, blit: OriginalBitmapBlit? = nil, fill: OriginalSurfaceFillRequest? = nil) -> OriginalFrontScreenEvent {
+        var e = OriginalFrontScreenEvent(kind);e.blit = blit;e.fill = fill;return e
     }
 
     /// Resolve once at the actual effect boundary. Other terminal effects keep

@@ -48,7 +48,10 @@ public struct OriginalApplicationGameplaySession {
         music: @escaping (OriginalMusicEvent,inout Environment) throws -> OriginalMusicResponse = { _,_ in
             throw Menu.Boundary.dependency("Gameplay music request")
         },
-        observe: @escaping (Menu.Observation,inout Environment) throws -> Void = { _,_ in },
+        /// nil (production): nobody observes, so the session builds no
+        /// `.front`, `.gameplay` or checkpoint observations (CORE_REALTIME
+        /// tier 3 G3b); the checkpoint snapshots themselves are still taken.
+        observe: ((Menu.Observation,inout Environment) throws -> Void)? = nil,
         pausedObserve: @escaping (OriginalPausedGameplay.Stage,OriginalFrontScreenEvent,inout Environment) throws -> Void = { _,_,_ in },
         pausedCheckpoint: @escaping (OriginalPausedGameplay.Stage,Menu.Snapshot,inout Environment) throws -> Void = { _,_,_ in },
         checkpoints: Bool = true,
@@ -64,8 +67,8 @@ public struct OriginalApplicationGameplaySession {
             { _,_,_ in throw Menu.Boundary.dependency("Unexpected gameplay bitmap allocation") },
             { _,_ in throw Menu.Boundary.dependency("Unexpected gameplay bitmap construction") },
             { _,_ in throw Menu.Boundary.dependency("Unexpected gameplay music selection") },
-            { _ in throw Menu.Boundary.dependency("Unexpected gameplay menu clock") },observe,{ _,_,_ in })
-        a.outputPhase = true
+            { _ in throw Menu.Boundary.dependency("Unexpected gameplay menu clock") },observe ?? { _,_ in },{ _,_,_ in })
+        a.outputPhase = true;a.observesFront = observe != nil
         let catalog = entry.entry.entry,derived = entry.entry.derived
         // The same set as concatenating the three load lists and mapping
         // `output`, without copying every load result each cycle
@@ -129,7 +132,7 @@ public struct OriginalApplicationGameplaySession {
             if output,event.kind == "stage",event.arguments == [0x419e60] { drainingSound = true }
             if drainingSound,event.kind == "method" {
                 // sound() stages this method exactly once after checking its owner.
-                try observe(.front(event),&a.environment)
+                try observe?(.front(event),&a.environment)
             } else { try a.front(event) }
         }
         func checkpoint(_ match: OriginalMatchPreparation,_ input: OriginalInputControlContext,
@@ -186,10 +189,11 @@ public struct OriginalApplicationGameplaySession {
                     a.operations.append(.gameplayResume(control,value))
                 default:break
                 }
-                try observe(.gameplay(event),&a.environment)
+                try observe?(.gameplay(event),&a.environment)
             },ownedCheckpoint:{ stage,match,input,crt,library in
                 guard checkpoints else { return }
-                try observe(.gameplayCheckpoint(stage,checkpoint(match,input,crt,library)),&a.environment)
+                let snapshot = try checkpoint(match,input,crt,library)
+                try observe?(.gameplayCheckpoint(stage,snapshot),&a.environment)
             })
         }
         guard let installed else { throw Menu.Boundary.dependency("Lost gameplay library owners") }

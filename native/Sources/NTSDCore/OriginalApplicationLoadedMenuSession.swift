@@ -178,6 +178,10 @@ public struct OriginalApplicationLoadedMenuSession {
         var backgrounds: [UInt32:OriginalLoadedBitmap] = [:]
         var local: OriginalStateRecord,operations: [Operation],graphics: [OriginalApplicationGraphics.Command]
         var surfaces: [UInt32:UInt32] = [:],current: UInt32?,outputPhase = false
+        /// false: nobody receives the `.front` observations (the gameplay
+        /// session without an observer), so they are not built (CORE_REALTIME
+        /// tier 3 G3b; `observe` is then the no-op it was).
+        var observesFront = true
         /// The address ranges reserved at the attempt's start, then claims. Only
         /// claim/reserve use them (allocation events), so the starting ranges
         /// are collected on first use from values captured in init
@@ -333,7 +337,7 @@ public struct OriginalApplicationLoadedMenuSession {
             case "width","rectangle","labelWrite","fontPass","stringWrite","localWrite","formatWrite","infoWrite","infoText","stage","queueWrite","play","dispatcherWrite","write","read","clip","draw","text","stringLength","soundRequest","format","panel","keyName","timer","call","return","allocate","construct","candidates","random","musicConfiguration","stopMusic","warFrame":break
             default:throw Boundary.dependency("Front operation "+e.kind)
             }
-            try observe(.front(e),&environment)
+            if observesFront { try observe(.front(e),&environment) }
         }
         func draw(_ args: [UInt32],_ globals: OriginalStateRecord,_ memory: OriginalMenuPresentationMemory) throws {
             guard args.count == 7,let a = memory.allocations[args[0]],a.live,a.storage.bytes.count == 0x1f50 else { throw Boundary.dependency("Draw bitmap owner") }
