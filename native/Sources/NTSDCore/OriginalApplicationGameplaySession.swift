@@ -70,7 +70,7 @@ public struct OriginalApplicationGameplaySession {
             { _,_ in throw Menu.Boundary.dependency("Unexpected gameplay music selection") },
             { _ in throw Menu.Boundary.dependency("Unexpected gameplay menu clock") },observe ?? { _,_ in },{ _,_,_ in })
         a.outputPhase = true;a.observesFront = observe != nil
-        let catalog = entry.entry.entry,derived = entry.entry.derived
+        let derived = entry.entry.derived
         // Room for what the last tick appended (CORE_REALTIME tier 3 d1).
         let hint = derived.appendedCounts(),startGraphics = a.graphics.count,startOperations = a.operations.count
         a.graphics.reserveCapacity(startGraphics+hint.graphics);a.operations.reserveCapacity(startOperations+hint.operations)
@@ -78,6 +78,9 @@ public struct OriginalApplicationGameplaySession {
         // `output`, without copying every load result each cycle
         // (MOBILE_PERFORMANCE step 6b), built once per loaded session (4i).
         let soundBuffers = derived.soundTokens {
+            // Read here, once per loaded session: binding it each tick copied
+            // the whole pending pool (CORE_REALTIME tier 3 L3).
+            let catalog = entry.entry.entry
             var tokens = Set<UInt32>()
             for loads in [catalog.startup.owner.loads,catalog.entry.common.sounds] {
                 for i in loads.indices where loads[i].output != 0 { tokens.insert(loads[i].output) }
