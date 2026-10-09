@@ -730,13 +730,14 @@ extension OriginalApplicationMenuSession.State {
     /// fill only the owner (`fillCommand`); other effects go through `consume`, which assigns the
     /// owner only on success, so a throw leaves it unchanged as before.
     mutating func loadedCommand(for effect: OriginalApplicationMenuSession.Effect) throws -> OriginalApplicationGraphics.Command? {
-        // Optional chaining reaches the owner in place and evaluates nothing
-        // without one; the `graphics != nil` check copied it (G3c).
+        // Blt and fill: optional chaining reaches the owner in place and
+        // evaluates nothing without one (G3c: the nil check copied the owner
+        // on this path, 0.44% of the phone's main thread). Other effects are
+        // rare and keep the check, since consume may return no command.
         switch effect {
         case let .blit(b,r):if let command = try graphics?.blitCommand(b,result:r,inputs:bitmapInputs) { return command }
         case let .fill(f,r):if let command = try graphics?.fillCommand(f,result:r) { return command }
         default:
-            // consume may return no command, so the owner is checked first.
             guard graphics != nil else { break }
             return try graphics!.consume(effect,inputs:bitmapInputs)
         }

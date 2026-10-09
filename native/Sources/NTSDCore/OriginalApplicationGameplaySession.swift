@@ -71,6 +71,9 @@ public struct OriginalApplicationGameplaySession {
             { _ in throw Menu.Boundary.dependency("Unexpected gameplay menu clock") },observe ?? { _,_ in },{ _,_,_ in })
         a.outputPhase = true;a.observesFront = observe != nil
         let catalog = entry.entry.entry,derived = entry.entry.derived
+        // Room for what the last tick appended (CORE_REALTIME tier 3 d1).
+        let hint = derived.appendedCounts(),startGraphics = a.graphics.count,startOperations = a.operations.count
+        a.graphics.reserveCapacity(startGraphics+hint.graphics);a.operations.reserveCapacity(startOperations+hint.operations)
         // The same set as concatenating the three load lists and mapping
         // `output`, without copying every load result each cycle
         // (MOBILE_PERFORMANCE step 6b), built once per loaded session (4i).
@@ -206,6 +209,7 @@ public struct OriginalApplicationGameplaySession {
             backgrounds:a.backgrounds,local:a.local,operations:a.operations)
         let result = try OriginalApplicationDispatchEntry.finishWorldCall(globals:state.full)
         let pending = Menu.PendingReturn(entry:entry,snapshot:snapshot,exit:.returned,dispatcherResult:result,graphics:a.graphics)
+        derived.recordAppended(graphics:a.graphics.count-startGraphics,operations:a.operations.count-startOperations)
         try beforeCommit(pending,&a.environment)
         pendingReturn = pending;environment = a.environment;return pending
     }

@@ -96,6 +96,18 @@ public struct OriginalApplicationPoolSession {
                 if ranges == nil { ranges = Result { try make() } }
                 return try ranges!.get()
             }
+            /// The number of graphics commands and operations the last
+            /// gameplay tick appended: the next tick reserves that much
+            /// before its body runs, so the lists do not grow step by step
+            /// (CORE_REALTIME tier 3 d1). Capacity is not observable.
+            private var appended = (graphics: 0, operations: 0)
+            func appendedCounts() -> (graphics: Int, operations: Int) {
+                lock.lock(); defer { lock.unlock() }
+                return appended
+            }
+            func recordAppended(graphics: Int, operations: Int) {
+                lock.lock(); appended = (graphics, operations); lock.unlock()
+            }
             /// Gameplay's current WAV buffer owners: the outputs of the
             /// catalog's load lists and registered sound buffers, all fixed for
             /// the loaded session (CORE_REALTIME phase 4i; built per tick before).

@@ -209,7 +209,8 @@ while measuring; restore `svc power stayon false` when the loop pauses or stops.
 | 2026-10-08 | G1 (tier 3): unobserved draws on the stack | Sprite and glyph draws without observers clip on stack values and build the Blt's arrays only when it is performed; the font reads its global words once per call. A12 Demo main 16.06 → 15.46 ms per tick (three runs against two of S1, interleaved); vs 15.79 → 15.67 (few glyphs). Behaviour equal; a twin test compares both paths over 6,000 random draws; review OK after a test fix | [evidence](../evidence/rt-g1-unobserved-draw-20261008.json) | 55dbf94 (its message's 16.07 is 16.065; the evidence rounds to 16.06) |
 | 2026-10-09 | G3a (tier 3): direct Blt and fill commands | Blt and fill commands are built without the graphics owner's rollback copy (those branches only read it), without copying the bitmap inputs and with one event; the attempt's state is accessed once in place. Profile: emit 7.70 → 7.00% of the main thread. A12 vs main 15.83 → 15.65 ms, Demo 15.54 → 15.52 (below run resolution; committed as less work, no regression). A twin test compares 400 cases with consume; review OK | [evidence](../evidence/rt-g3a-direct-blit-fill-20261009.json) | 5e01e67 |
 | 2026-10-09 | G3b (tier 3): no observations nobody receives | The production gameplay session has no observer, so it no longer builds `.front`, `.gameplay` and checkpoint observations for a no-op (checkpoint snapshots are still taken). Profile: Attempt.front 7.87 → 7.31%, observations 0.16 → 0%. The Blt builder's event helper copies the Blt twice (+0.4%) and the optional owner copy remains: G3c. A12 vs 15.62 -> 15.55 ms per tick, Demo 15.27 -> 15.4 ms per tick (below run resolution; one baseline outlier kept). Behaviour equal; review OK | [evidence](../evidence/rt-g3b-unobserved-observations-20261009.json) | 5db3e6a |
-| 2026-10-09 | G3c (tier 3): the Blt event in place | Blt and fill events are built by initializers that store the field in place (G3b's helper copied the Blt twice), and the optional owner is reached by optional chaining instead of a copying nil check. Profile: emit 6.82 → 6.07%, the owner copy 0.44 → 0.03%. A12 vs main 15.57 → 15.42 ms, Demo 15.3 → 15.22 (three runs against two of G3b). Behaviour equal; review OK | [evidence](../evidence/rt-g3c-in-place-blit-event-20261009.json) | this commit |
+| 2026-10-09 | G3c (tier 3): the Blt event in place | Blt and fill events are built by initializers that store the field in place (G3b's helper copied the Blt twice), and the optional owner is reached by optional chaining instead of a copying nil check. Profile: emit 6.82 → 6.07%, the owner copy 0.44 → 0.03%. A12 vs main 15.57 → 15.42 ms, Demo 15.3 → 15.22 (three runs against two of G3b). Behaviour equal; review OK | [evidence](../evidence/rt-g3c-in-place-blit-event-20261009.json) | 887490c |
+| 2026-10-09 | d1 (tier 3): reserved command and operation lists | Each gameplay tick reserves room for what the last one appended (a per-session count; capacity is not observable), so the lists no longer grow step by step; plus a nil-owner test. Profile: emit 6.07 → 5.17%. A12 vs main 15.47 → 15.38 ms, Demo 15.37 → 15.33 (below run resolution). Behaviour equal | [evidence](../evidence/rt-d1-reserved-lists-20261009.json) | this commit |
 
 ## Next task
 
@@ -242,10 +243,11 @@ main thread; message-loop iterations 4.12 × 1.14 ms; render thread 18.7 ms,
   (means of three runs). Next tier: 8 ms — [tier-3 plan](CORE_REALTIME_TIER3.md).
   S1 done (vs main 15.73 ms), G1 done (Demo main 15.46 ms; the profile answered the
   probe's glyph question: only 3.2 of the draw's 15.3% was the performed Blt).
-  G3a–G3c done (emit 7.7 → 6.1%, Attempt.front 7.9 → 7.3%; vs main about
-  15.4 ms, Demo about 15.2). Next: reserved command/operation capacity (d1,
-  array growth 0.9% under emit) with G3c's review nits (a nil-owner test, the
-  comment); then the Host tail without its operations copy (d2), the
+  G3a–G3c and d1 done (emit 7.7 → 5.2%; vs main about 15.4 ms, Demo about
+  15.3). Next: R2, the Android present (bars, channel swap, post: ~3.4 ms of
+  the render thread) on its own thread; then array growth and copies
+  (`_consumeAndCreateNew` 9.4% of the main thread, other callers), the idle
+  lane (L4b planned at 0.11–0.17 ms; L4c/L5a first), the Host tail without its operations copy (d2), the
   display replay's second surface lookups (g), compact commands (e),
   the idle lane, record storage v2; ~11 ms without the user's decisions (Q1–Q4
   in the plan), ~9–10 with them. Left from 4aa's review: the other packagers'

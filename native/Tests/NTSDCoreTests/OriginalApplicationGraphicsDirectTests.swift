@@ -74,4 +74,26 @@ final class OriginalApplicationGraphicsDirectTests: XCTestCase {
         XCTAssertEqual(errors, 334)
         XCTAssertEqual(colored, 6)
     }
+
+    /// Without a graphics owner, a loaded attempt's Blt, fill and other
+    /// effects all throw the Graphics dependency (G3c's review).
+    func testLoadedCommandWithoutOwnerThrows() throws {
+        typealias Session = OriginalApplicationMenuSession
+        var bytes = [UInt8](repeating: 0, count: 0xc3a8)
+        bytes[0xb580] = 58
+        let mask = [Bool](repeating: true, count: 0xc3a8), full = try OriginalStateRecord(bytes: bytes, defined: mask)
+        let pointers = try OriginalStateRecord(bytes: Array(bytes[0xb8a8..<0xb8b0]), defined: Array(mask[0xb8a8..<0xb8b0]))
+        var state = try Session.State(full: full, memory: .init(replayPointers: pointers), front: .init(), frontSurfaces: [:],
+                                      earlyScreen: .init(), libraryText: .init(), random: .init(), screenBody: nil)
+        XCTAssertNil(state.graphics)
+        let blit = OriginalBitmapBlit(sourceSurface: 0, targetSurface: 3, source: [0, 0, 2, 2], destination: [0, 0, 2, 2],
+                                      flags: 0x1008000, effects: nil)
+        let fill = OriginalSurfaceFillRequest(target: 3, rectangle: [0, 0, 2, 2], flags: 0x1000400,
+                                              effects: [UInt8](repeating: 0, count: 100), defined: [Bool](repeating: true, count: 100))
+        for effect: Session.Effect in [.blit(blit, result: 0), .fill(fill, result: 0), .free(5)] {
+            XCTAssertThrowsError(try state.loadedCommand(for: effect)) { error in
+                XCTAssertEqual(error as? OriginalApplicationLoadedMenuSession.Boundary, .dependency("Graphics"))
+            }
+        }
+    }
 }
