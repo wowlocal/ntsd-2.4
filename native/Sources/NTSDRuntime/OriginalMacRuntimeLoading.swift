@@ -472,7 +472,7 @@ import NTSDCore
         while let batch = try started.host.takeCommitted() {
             guard case .loaded(let commit) = batch.contents else { continue }
             var slept: UInt32 = 0
-            for case .front(let e,_,_) in commit.operations {
+            for case .front(let e,_,_) in commit.orderedOperations {
                 switch e.kind {
                 case "postQuit": quitCodes.append(e.arguments[0])
                 // The screen's own Sleep (300 before a link or a mode) blocks the original's thread.
@@ -499,7 +499,7 @@ import NTSDCore
             try replay(commit.graphics.dropFirst(continuationGraphics))
             // Preserve the recorded order across sound/music releases and the
             // final close post, as well as ordinary round and hotkey methods.
-            for operation in commit.operations {
+            for operation in commit.orderedOperations {
                 // These effects already ran in source order in their receipts,
                 // including before a later dialog or a failed Core attempt.
                 if controlEffectsDelivered,case .preceding(.control(let q,_)) = operation,

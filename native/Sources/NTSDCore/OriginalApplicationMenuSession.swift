@@ -896,8 +896,17 @@ extension OriginalApplicationMenuSession {
     public struct LoadedCommit {
         public let result: Loop.Result
         public let menu: OriginalApplicationLoadedMenuSession.PendingReturn
-        public let operations: [OriginalApplicationLoadedMenuSession.Operation]
+        /// The menu's operations and the loop tail's after them, kept apart so
+        /// committing does not copy the menu's list (CORE_REALTIME tier 3 d2).
+        let menuOperations: [OriginalApplicationLoadedMenuSession.Operation]
+        let tailOperations: [OriginalApplicationLoadedMenuSession.Operation]
         public let graphics: [OriginalApplicationGraphics.Command]
+        /// Every operation in order (the menu's, then the tail's).
+        public var operations: [OriginalApplicationLoadedMenuSession.Operation] { menuOperations + tailOperations }
+        /// The same order without building the list.
+        public var orderedOperations: FlattenSequence<[[OriginalApplicationLoadedMenuSession.Operation]]> {
+            [menuOperations, tailOperations].joined()
+        }
     }
     /// Complete the exact suspended iteration once. A different session or any
     /// intervening committed iteration invalidates this child before platform
@@ -917,11 +926,11 @@ extension OriginalApplicationMenuSession {
         }
         guard pending.exit == .returned,let result = pending.dispatcherResult else { throw Boundary.dependency("Unreturned loaded menu") }
         try pending.snapshot.state.validateAliases()
-        var candidate = environment,staged = pending.snapshot.state,operations = pending.snapshot.operations
+        var candidate = environment,staged = pending.snapshot.state,tail: [OriginalApplicationLoadedMenuSession.Operation] = []
         let complete = try origin.loopContinuation.resume(dispatchResult:result,context:&staged,perform:{ request,_ in
             guard request.kind == .time || request.kind == .sleep else { throw Boundary.dependency("Loaded outer surface recovery") }
             let response = try perform(request,&candidate)
-            operations.append(.loop(request,response));return response
+            tail.append(.loop(request,response));return response
         },beforeCommit:{ timer,context,_ in
             if observesCommit {
                 var coherent = context;try coherent.mergeAliases(counter:timer.counter)
@@ -932,7 +941,7 @@ extension OriginalApplicationMenuSession {
         state = staged;loop = complete.loop;revision += 1;environment = candidate
         loadedOwners = .init(entry:pending.entry.entry,match:pending.snapshot.match,music:pending.snapshot.music,
                              resources:pending.snapshot.resources,backgrounds:pending.snapshot.backgrounds)
-        return .init(result:complete.result,menu:pending,operations:operations,graphics:pending.graphics)
+        return .init(result:complete.result,menu:pending,menuOperations:pending.snapshot.operations,tailOperations:tail,graphics:pending.graphics)
     }
 }
 
