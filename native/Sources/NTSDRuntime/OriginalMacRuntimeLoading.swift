@@ -472,7 +472,8 @@ import NTSDCore
         while let batch = try started.host.takeCommitted() {
             guard case .loaded(let commit) = batch.contents else { continue }
             var slept: UInt32 = 0
-            for case .front(let e,_,_) in commit.orderedOperations {
+            let ordered = commit.orderedOperations
+            for case .front(let e,_,_) in ordered {
                 switch e.kind {
                 case "postQuit": quitCodes.append(e.arguments[0])
                 // The screen's own Sleep (300 before a link or a mode) blocks the original's thread.
@@ -499,7 +500,7 @@ import NTSDCore
             try replay(commit.graphics.dropFirst(continuationGraphics))
             // Preserve the recorded order across sound/music releases and the
             // final close post, as well as ordinary round and hotkey methods.
-            for operation in commit.orderedOperations {
+            for operation in ordered {
                 // These effects already ran in source order in their receipts,
                 // including before a later dialog or a failed Core attempt.
                 if controlEffectsDelivered,case .preceding(.control(let q,_)) = operation,
@@ -570,15 +571,15 @@ import NTSDCore
             // GDI text: the Core declared GetDC success with the display's DC
             // handle; each call replays in order (APPLICATION_GDI_TEXT_PLAN.md).
             case "getDC","setBackgroundMode","setBackgroundColor","setTextColor","textOut","releaseDC":
-                let served = try display.prepareAndPerformFront(e)
-                if e.kind == "getDC",served.response.output != OriginalMacDisplayBackend.textDCHandle { throw Boundary.unexpected("text DC") }
+                let response = try display.replayFront(e)
+                if e.kind == "getDC",response.output != OriginalMacDisplayBackend.textDCHandle { throw Boundary.unexpected("text DC") }
                 counts.replayedText += 1; continue
             default: continue
             }
             // Core recorded declared success; the recovered callers ignore the
             // result, so a DDERR_INVALIDRECT Blt only leaves the pixels unchanged.
-            let served = try display.prepareAndPerformFront(e); counts.replayedDraws += 1
-            if served.response.result == OriginalMacDisplayBackend.invalidRect { counts.rejectedDraws += 1 }
+            let response = try display.replayFront(e); counts.replayedDraws += 1
+            if response.result == OriginalMacDisplayBackend.invalidRect { counts.rejectedDraws += 1 }
         }
     }
 }

@@ -896,16 +896,17 @@ extension OriginalApplicationMenuSession {
     public struct LoadedCommit {
         public let result: Loop.Result
         public let menu: OriginalApplicationLoadedMenuSession.PendingReturn
-        /// The menu's operations and the loop tail's after them, kept apart so
-        /// committing does not copy the menu's list (CORE_REALTIME tier 3 d2).
-        let menuOperations: [OriginalApplicationLoadedMenuSession.Operation]
+        /// The loop tail's operations, kept apart from the menu's (`menu`'s
+        /// snapshot) so committing does not copy the menu's list
+        /// (CORE_REALTIME tier 3 d2).
         let tailOperations: [OriginalApplicationLoadedMenuSession.Operation]
         public let graphics: [OriginalApplicationGraphics.Command]
-        /// Every operation in order (the menu's, then the tail's).
-        public var operations: [OriginalApplicationLoadedMenuSession.Operation] { menuOperations + tailOperations }
+        /// Every operation in order (the menu's, then the tail's), built anew
+        /// on each read: per-commit readers walk `orderedOperations`.
+        public var operations: [OriginalApplicationLoadedMenuSession.Operation] { menu.snapshot.operations + tailOperations }
         /// The same order without building the list.
         public var orderedOperations: FlattenSequence<[[OriginalApplicationLoadedMenuSession.Operation]]> {
-            [menuOperations, tailOperations].joined()
+            [menu.snapshot.operations, tailOperations].joined()
         }
     }
     /// Complete the exact suspended iteration once. A different session or any
@@ -941,7 +942,7 @@ extension OriginalApplicationMenuSession {
         state = staged;loop = complete.loop;revision += 1;environment = candidate
         loadedOwners = .init(entry:pending.entry.entry,match:pending.snapshot.match,music:pending.snapshot.music,
                              resources:pending.snapshot.resources,backgrounds:pending.snapshot.backgrounds)
-        return .init(result:complete.result,menu:pending,menuOperations:pending.snapshot.operations,tailOperations:tail,graphics:pending.graphics)
+        return .init(result:complete.result,menu:pending,tailOperations:tail,graphics:pending.graphics)
     }
 }
 

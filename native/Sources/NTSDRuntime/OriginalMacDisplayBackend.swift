@@ -1009,7 +1009,12 @@ extension OriginalMacDisplayBackend {
     private func frontCopy(_ destinationToken: UInt32,_ sourceToken: UInt32,
         destination: [Int32]?,source: [Int32]?,flags: UInt32,effects: [UInt8]?) throws -> FrontCopy {
         guard flags & 0x1000000 != 0,flags & ~UInt32(0x1008800) == 0 else { throw Boundary.unsupported("front Blt flags") }
-        let target = try frontSurface(destinationToken),src = try frontSurface(sourceToken)
+        return try frontCopy(frontSurface(destinationToken),frontSurface(sourceToken),destination:destination,source:source,flags:flags,effects:effects)
+    }
+    /// The same over surfaces already resolved by `frontSurface`.
+    private func frontCopy(_ target: Surface,_ src: Surface,
+        destination: [Int32]?,source: [Int32]?,flags: UInt32,effects: [UInt8]?) throws -> FrontCopy {
+        guard flags & 0x1000000 != 0,flags & ~UInt32(0x1008800) == 0 else { throw Boundary.unsupported("front Blt flags") }
         guard target !== src else { throw Boundary.unsupported("same-surface Blt") }
         // Sprites of the DirectDraw object Alt+Enter released keep their own
         // references and are drawn to the new target (declared, FULL_SCREEN_PLAN 2).
@@ -1058,7 +1063,9 @@ extension OriginalMacDisplayBackend {
             if try target.kind != .primary && src.kind != .primary && (!frontRectInside(b.destination,target) || !frontRectInside(b.source,src)) {
                 return .rejected([target,src])
             }
-            return .copy(try frontCopy(b.targetSurface,b.sourceSurface,destination:b.destination,source:b.source,flags:b.flags,effects:b.effects))
+            // The surfaces just resolved: only pure range checks ran since, so
+            // a second lookup would find the same ones (CORE_REALTIME tier 3 g).
+            return .copy(try frontCopy(target,src,destination:b.destination,source:b.source,flags:b.flags,effects:b.effects))
         case "method":
             guard q.arguments.count >= 2,q.fill == nil,q.blit == nil else { throw Boundary.arguments("front method") }
             let a = q.arguments
@@ -1245,7 +1252,15 @@ extension OriginalMacDisplayBackend {
     public func prepareAndPerformFront(_ q: OriginalFrontScreenEvent) throws -> FrontServed {
         try serveFront(validateFront(q),request:q)
     }
-    private func serveFront(_ action: FrontAction,request: OriginalFrontScreenEvent) throws -> FrontServed {
+    /// `prepareAndPerformFront(q).response` without building the served
+    /// resources (the committed-batch replay reads only the response;
+    /// CORE_REALTIME tier 3 g).
+    public func replayFront(_ q: OriginalFrontScreenEvent) throws -> OriginalLibSurfaceText.Response {
+        try serveFront(validateFront(q),request:q,owned:false).response
+    }
+    /// `owned` false: no resources are returned (the caller reads only the
+    /// response), so no owner array is built per draw.
+    private func serveFront(_ action: FrontAction,request: OriginalFrontScreenEvent,owned: Bool = true) throws -> FrontServed {
         let owners: [any OriginalApplicationStartupResource],response: OriginalLibSurfaceText.Response
         switch action {
         case let .fill(target,color):
@@ -1257,7 +1272,7 @@ extension OriginalMacDisplayBackend {
                 Self.fillPixels(data,region,color)
                 if let window = rect.4 { try windows.present(framebuffer(data,rect),in:window) }
             }
-            owners = [target.surface];response = .init(result:0)
+            owners = owned ? [target.surface] : [];response = .init(result:0)
         case .copy(let copy):
             let input = copy.source.storage!,output = copy.target.surface.storage!,rect = copy.target.delivery,plan = CopyPlan(copy)
             if let present = try pipeline(rect,pixels:{ Self.copyPixels(plan,input,output) }) {
@@ -1281,7 +1296,7 @@ extension OriginalMacDisplayBackend {
                 Self.copyPixels(plan,input,output)
                 if let window = rect.4 { try windows.present(framebuffer(output,rect),in:window) }
             }
-            owners = [copy.target.surface,copy.source];response = .init(result:0)
+            owners = owned ? [copy.target.surface,copy.source] : [];response = .init(result:0)
         case .release(let s):
             release(s);owners = [s];response = .init(result:Int32(bitPattern:s.references))
         case .rejected(let surfaces):
