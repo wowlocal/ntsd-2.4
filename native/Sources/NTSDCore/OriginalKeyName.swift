@@ -6,7 +6,7 @@ public enum OriginalKeyName {
     public static func write(_ key: Int32, into storage: inout OriginalStateRecord,
                              stringAt: Int, adjustmentAt: Int) throws {
         guard stringAt >= 0, adjustmentAt >= 0,
-              stringAt+10 <= storage.bytes.count, adjustmentAt+4 <= storage.bytes.count,
+              stringAt+10 <= storage.byteCount, adjustmentAt+4 <= storage.byteCount,
               stringAt+10 <= adjustmentAt || adjustmentAt+4 <= stringAt else {
             throw OriginalStateError.invalidStorage("Key-name caller storage")
         }

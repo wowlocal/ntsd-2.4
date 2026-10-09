@@ -47,8 +47,8 @@ public enum OriginalReplayWriter {
                     open: (OriginalReplayFileOutput.OpenRequest) throws -> Bool,
                     write: ([UInt8]) throws -> Int32, close: () throws -> Int32,
                     observe: (Event) throws -> Void = { _ in }) throws -> Result {
-        guard globals.bytes.count == OriginalMatchPreparation.globalSize,
-              memory.replayPointers.bytes.count == 8 else {
+        guard globals.byteCount == OriginalMatchPreparation.globalSize,
+              memory.replayPointers.byteCount == 8 else {
             throw OriginalStateError.invalidStorage("Replay writer globals/pointers extent")
         }
         var state = globals, owned = memory

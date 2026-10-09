@@ -15,14 +15,14 @@ public enum OriginalSettingsWriting {
     public static func run(globals: inout OriginalStateRecord,output: inout OriginalBufferedTextOutput,available: Bool,
         write: ([UInt8]) throws -> Int32,close: () throws -> Int32,
         observe: (OriginalMenuInfoWriteEvent,OriginalStateRecord,OriginalBufferedTextOutput) throws -> Void = { _,_,_ in }) throws -> Result {
-        guard globals.bytes.count == OriginalMatchPreparation.globalSize else { throw OriginalStateError.invalidStorage("Settings writer globals extent") }
+        guard globals.byteCount == OriginalMatchPreparation.globalSize else { throw OriginalStateError.invalidStorage("Settings writer globals extent") }
         var state = globals,stream = output
         let base = OriginalMatchPreparation.globalBase
         func byte(_ address: Int) throws -> UInt8 { try state.integer(at: address-base,as: UInt8.self) }
         func word(_ address: Int) throws -> Int32 { try state.integer(at: address-base,as: Int32.self) }
         func string(_ address: Int,namePC: UInt32? = nil) throws -> [UInt8] {
             let offset = address-base
-            guard offset >= 0,offset < state.bytes.count else { throw OriginalStateError.invalidStorage("Settings string address") }
+            guard offset >= 0,offset < state.byteCount else { throw OriginalStateError.invalidStorage("Settings string address") }
             guard let end = state.bytes[offset...].firstIndex(of: 0) else {
                 if let pc = namePC { throw Stop(result: .unterminatedName(pc)) }
                 throw OriginalStateError.invalidStorage("Settings printf string extent")

@@ -60,9 +60,9 @@ public struct OriginalMatchPreparation {
     public init(catalog: OriginalLoadedCatalog, world: OriginalStateRecord, actors: [OriginalStateRecord],
                 globals: OriginalStateRecord, interface: OriginalInitialInterfaceLoading,
                 arithmeticPrecision: OriginalArithmeticPrecision) throws {
-        guard globals.bytes.count == Self.globalSize,
-              world.bytes.count == OriginalStateRecord.worldPrefixSize, actors.count == 400,
-              actors.allSatisfy({ $0.bytes.count == OriginalStateRecord.actorSize }) else {
+        guard globals.byteCount == Self.globalSize,
+              world.byteCount == OriginalStateRecord.worldPrefixSize, actors.count == 400,
+              actors.allSatisfy({ $0.byteCount == OriginalStateRecord.actorSize }) else {
             throw Self.error("Current match record extents")
         }
         self.arithmeticPrecision = arithmeticPrecision
@@ -145,8 +145,8 @@ public struct OriginalMatchPreparation {
                                   releaseBitmap: ((Int,OriginalLoadedBitmap) throws -> Void)? = nil,
                                   music: (inout OriginalMatchPreparation) throws -> Void,
                                   observe: (OriginalMatchPreparationEvent) throws -> Void) throws {
-        guard world.bytes.count == OriginalStateRecord.worldPrefixSize, actors.count == 400,
-              actors.allSatisfy({ $0.bytes.count == OriginalStateRecord.actorSize }),
+        guard world.byteCount == OriginalStateRecord.worldPrefixSize, actors.count == 400,
+              actors.allSatisfy({ $0.byteCount == OriginalStateRecord.actorSize }),
               try world.integer(at: 0x7d4, as: UInt32.self) == 0 else { throw Self.error("World/catalog binding") }
         for slot in 0..<400 {
             guard try world.integer(at: 0x194+slot*4, as: UInt32.self) == slot else { throw Self.error("Actor table binding") }

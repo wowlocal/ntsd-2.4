@@ -78,8 +78,8 @@ struct OriginalCPointPass {
     static func headerFrame(_ number: Int32,header: OriginalStateRecord,object: Int,site: String) throws -> OriginalStateRecord {
         if outsideAllocation(number) { return beyondAllocation }
         let offset = Int(UInt32(bitPattern: Int32(0x7a4) &+ number &* 0x178))
-        guard offset <= header.bytes.count-0x178 else {
-            throw OriginalStateError.invalidStorage("Cpoint Frame outside known Object storage (\(site): Object \(object), frame \(number), header \(header.bytes.count) bytes)")
+        guard offset <= header.byteCount-0x178 else {
+            throw OriginalStateError.invalidStorage("Cpoint Frame outside known Object storage (\(site): Object \(object), frame \(number), header \(header.byteCount) bytes)")
         }
         return try OriginalStateRecord(bytes: Array(header.bytes[offset..<offset+0x178]),defined: Array(header.defined[offset..<offset+0x178]))
     }

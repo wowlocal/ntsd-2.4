@@ -70,7 +70,7 @@ public enum OriginalFrontScreenBody {
         textPerform: ((OriginalMenuPresentationEvent) throws -> OriginalLibSurfaceText.Response)? = nil,
         textDidRespond: (OriginalMenuPresentationEvent, OriginalLibSurfaceText.Response) throws -> Void = { _,_ in },
         observe: (OriginalFrontScreenEvent) throws -> Void) throws -> Continuation {
-        guard globals.bytes.count == OriginalMatchPreparation.globalSize,local.bytes.count == 0xc0 else { throw OriginalStateError.invalidStorage("Front screen body extent") }
+        guard globals.byteCount == OriginalMatchPreparation.globalSize,local.byteCount == 0xc0 else { throw OriginalStateError.invalidStorage("Front screen body extent") }
         var state = globals, scratch = local,ownText = libraryText
         let base = OriginalMatchPreparation.globalBase
         func bits(_ value: Int32) -> UInt32 { UInt32(bitPattern: value) }
@@ -90,13 +90,13 @@ public enum OriginalFrontScreenBody {
             else if bytes.count == 29 { try localWrite(offset+28,[bytes[28]]) }
         }
         func string(_ offset: Int) throws -> [UInt8] {
-            guard offset >= 0,offset < scratch.bytes.count,let end = scratch.bytes[offset...].firstIndex(of: 0) else { throw OriginalStateError.invalidStorage("Screen stack string extent") }
+            guard offset >= 0,offset < scratch.byteCount,let end = scratch.bytes[offset...].firstIndex(of: 0) else { throw OriginalStateError.invalidStorage("Screen stack string extent") }
             return Array(scratch.bytes[offset..<end])
         }
         func decode(_ offset: Int) throws {
             var i = 0
             while i < (try string(offset).count) {
-                try localWrite(offset+i,[scratch.bytes[offset+i] &- UInt8(i & 3)]);i += 1
+                try localWrite(offset+i,[scratch.byte(at: offset+i) &- UInt8(i & 3)]);i += 1
             }
         }
         func text(_ offset: Int,_ x: Int32,_ y: Int32,_ color: UInt32 = 0xd07750) throws {

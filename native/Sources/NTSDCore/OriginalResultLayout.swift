@@ -41,7 +41,7 @@ public enum OriginalResultLayout {
         textRenderer: OriginalSurfaceText.Renderer? = nil,
         detail: Bool = true,
         observe: (OriginalFrontScreenEvent) throws -> Void = { _ in }) throws {
-        guard local == nil || local?.bytes.count == localSize else { throw error("Caller string extent") }
+        guard local == nil || local?.byteCount == localSize else { throw error("Caller string extent") }
         var next = globals, scratch = local
         func g(_ address: Int) throws -> Int32 { try next.integer(at: address-0x44d000, as: Int32.self) }
         func token(_ address: Int) throws -> UInt32 { UInt32(bitPattern: try g(address)) }

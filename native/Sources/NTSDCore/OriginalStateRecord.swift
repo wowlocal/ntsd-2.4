@@ -253,6 +253,18 @@ public struct OriginalStateRecord: Equatable, Sendable {
         }
         return Array(bytes[range])
     }
+    /// `bytes[index]` without the whole contents (CORE_REALTIME tier 3 S2a).
+    public func byte(at index: Int) -> UInt8 {
+        if let parts { precondition(index >= 0 && index < parts.count, "Index out of range"); return parts.byte(index) }
+        if let pages { precondition(index >= 0 && index < pages.count, "Index out of range"); return pages.byte(index) }
+        return flatBytes[index]
+    }
+    /// `defined[index]` without the whole mask (S2a).
+    public func isDefined(at index: Int) -> Bool {
+        if let parts { precondition(index >= 0 && index < parts.count, "Index out of range"); return parts.isDefined(index) }
+        if let pages { precondition(index >= 0 && index < pages.count, "Index out of range"); return pages.isDefined(index) }
+        return flatDefined[index]
+    }
     /// Whether every byte in `range` is defined (`!defined[range].contains(false)`).
     public func allDefined(in range: Range<Int>) -> Bool {
         if let parts {

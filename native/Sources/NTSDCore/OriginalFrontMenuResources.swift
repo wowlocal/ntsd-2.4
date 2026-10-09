@@ -33,7 +33,7 @@ public struct OriginalFrontMenuResources {
                               constructBitmap: ((Int,OriginalInterfaceAllocation,UInt32,String) throws -> OriginalLoadedBitmap)? = nil,
                               observe: (OriginalFrontMenuEvent) throws -> Void = { _ in }) throws -> OriginalFrontMenuResourceResult {
         let base = OriginalMatchPreparation.globalBase
-        guard globals.bytes.count == OriginalMatchPreparation.globalSize else { throw OriginalStateError.invalidStorage("Front menu globals extent") }
+        guard globals.byteCount == OriginalMatchPreparation.globalSize else { throw OriginalStateError.invalidStorage("Front menu globals extent") }
         let selector = try world.integer(at: 0,as: Int32.self)
         guard selector != 1 && selector != 2 else { throw OriginalStateError.invalidStorage("Front menu World dispatch requires its other branch") }
         var state = globals, candidate = self
@@ -62,7 +62,7 @@ public struct OriginalFrontMenuResources {
                 try observe(.init(.construct,[allocation.address,0x40,0],[Array(path.utf8)]))
                 if let constructBitmap {
                     let bitmap = try constructBitmap(index,allocation,device,path)
-                    guard bitmap.input.path == path,bitmap.storage.bytes.count == 0x1f50 else {
+                    guard bitmap.input.path == path,bitmap.storage.byteCount == 0x1f50 else {
                         throw OriginalStateError.invalidStorage("Front menu constructed bitmap binding")
                     }
                     loaded.append(bitmap)

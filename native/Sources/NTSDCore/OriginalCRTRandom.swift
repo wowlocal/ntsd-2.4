@@ -40,7 +40,7 @@ public struct OriginalCRTRandom: Codable, Equatable, Sendable {
     }
 
     private static func check(_ globals: OriginalStateRecord) throws {
-        guard globals.bytes.count == OriginalMatchPreparation.globalSize else {
+        guard globals.byteCount == OriginalMatchPreparation.globalSize else {
             throw OriginalStateError.invalidStorage("CRT RNG global storage size")
         }
     }

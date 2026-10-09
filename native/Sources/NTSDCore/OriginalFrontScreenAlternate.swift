@@ -21,7 +21,7 @@ public enum OriginalFrontScreenAlternate {
         draw: ([UInt32]) throws -> Void,fill: ([UInt32]) throws -> Void,
         writeSettings: (inout OriginalStateRecord) throws -> OriginalSettingsWriting.Result,
         observe: (OriginalFrontScreenEvent) throws -> Void = { _ in }) throws -> Continuation {
-        guard globals.bytes.count == OriginalMatchPreparation.globalSize else { throw OriginalStateError.invalidStorage("Alternate globals extent") }
+        guard globals.byteCount == OriginalMatchPreparation.globalSize else { throw OriginalStateError.invalidStorage("Alternate globals extent") }
         var state = globals,timerIndex = 0
         let base = OriginalMatchPreparation.globalBase
         func bits(_ n: Int32) -> UInt32 { UInt32(bitPattern: n) }

@@ -36,7 +36,7 @@ public struct OriginalBackgroundLoader {
                                   source: (String) throws -> OriginalBitmapInput,
                                   constructBitmap: OriginalLoadedBitmap.Constructor?,
                                   onRead: ((Int) throws -> Void)?, onChecksum: (UInt32) throws -> Void) throws -> OriginalStateRecord {
-        guard backing.bytes.count == Self.recordSize else { throw Self.error("BG storage size") }
+        guard backing.byteCount == Self.recordSize else { throw Self.error("BG storage size") }
         guard !decoded.unicodeScalars.contains(where: { $0.value == 0 || $0.value == 0x1a }) else { throw Self.error("NUL/DOS EOF in decoded source") }
         var input = try OriginalFrameScanner(decoded, observeRead: onRead), record = backing
         for offset in [0x1c, 0xc, 0x10] { try record.write(Int32(0), at: offset) }
@@ -123,7 +123,7 @@ public struct OriginalBackgroundLoader {
     /// Repeated release uses that first pointer sentinel and produces no requests.
     @discardableResult
     public mutating func releaseLayers(in record: inout OriginalStateRecord) throws -> [Int] {
-        guard record.bytes.count == Self.recordSize else { throw Self.error("BG storage size") }
+        guard record.byteCount == Self.recordSize else { throw Self.error("BG storage size") }
         var released: [Int] = []
         if try record.integer(at: 0x914, as: UInt32.self) != 0 {
             let count = try Self.layerCount(record)
@@ -178,7 +178,7 @@ public struct OriginalBackgroundLoader {
         throw error("Unterminated layer filename")
     }
     private static func layerCount(_ record: OriginalStateRecord) throws -> Int {
-        guard record.bytes.count == Self.recordSize else { throw error("BG storage size") }
+        guard record.byteCount == Self.recordSize else { throw error("BG storage size") }
         let count = try record.integer(at: 0x1c, as: Int32.self)
         guard (0...30).contains(count) else { throw error("Unverified layer count") }
         return Int(count)

@@ -38,7 +38,7 @@ public enum OriginalSettingsLoading {
         requireDefinedStrings: Bool = false,
         observe: (OriginalSettingsEvent,OriginalStateRecord,OriginalStateRecord) throws -> Void = { _,_,_ in }) throws -> Continuation {
         let base = OriginalMatchPreparation.globalBase
-        guard globals.bytes.count == OriginalMatchPreparation.globalSize, scratch.bytes.count == 0x1f4 else { throw error("Storage extent") }
+        guard globals.byteCount == OriginalMatchPreparation.globalSize, scratch.byteCount == 0x1f4 else { throw error("Storage extent") }
         var state = globals, temporary = scratch, input = try OriginalFrameScanner(String(String.UnicodeScalarView(translatedBytes.map { UnicodeScalar($0) })))
         var endOfFile = false
         func emit(_ event: OriginalSettingsEvent) throws { try observe(event,state,temporary) }
@@ -58,7 +58,7 @@ public enum OriginalSettingsLoading {
         // Raw backing remains explicit. Reading a C string does not mark its
         // bytes initialized; reject a read beyond the supplied storage extent.
         func string(_ record: OriginalStateRecord, _ offset: Int) throws -> [UInt8] {
-            guard offset >= 0, offset < record.bytes.count,
+            guard offset >= 0, offset < record.byteCount,
                   let end = record.bytes[offset...].firstIndex(of: 0) else { throw error("Unterminated string outside supplied storage") }
             if requireDefinedStrings && !record.defined[offset...end].allSatisfy({ $0 }) {
                 throw error("String reads unknown private storage")

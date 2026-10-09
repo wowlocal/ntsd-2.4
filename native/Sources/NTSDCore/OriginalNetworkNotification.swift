@@ -21,12 +21,12 @@ public enum OriginalNetworkNotification {
         local: inout OriginalStateRecord,request: (Request) throws -> Response,
         store: (Region,Int,[UInt8]) throws -> Void = { _,_,_ in }) throws -> Int32 {
         let base = OriginalMatchPreparation.globalBase
-        guard input.message == 0x401,globals.bytes.count == OriginalMatchPreparation.globalSize,
-              local.bytes.count == 160 else { throw error("Message/global/local extent") }
+        guard input.message == 0x401,globals.byteCount == OriginalMatchPreparation.globalSize,
+              local.byteCount == 160 else { throw error("Message/global/local extent") }
         var state = globals,temporary = local
         func word(_ address: Int) throws -> UInt32 { try state.integer(at: address-base,as: UInt32.self) }
         func put(_ region: Region,_ offset: Int,_ bytes: [UInt8]) throws {
-            let count = region == .globals ? state.bytes.count : temporary.bytes.count
+            let count = region == .globals ? state.byteCount : temporary.byteCount
             guard offset >= 0,offset <= count,bytes.count <= count-offset else { throw error("Required storage extends beyond recovered backing") }
             for (i,b) in bytes.enumerated() {
                 if region == .globals { try state.write(b,at: offset+i) } else { try temporary.write(b,at: offset+i) }

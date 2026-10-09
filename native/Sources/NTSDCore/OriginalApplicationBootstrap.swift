@@ -136,7 +136,7 @@ public struct OriginalApplicationBootstrap {
         beforeCommit: (OriginalWinMainStartup,Session,P) throws -> Void = { _,_,_ in },
         failedAttempt: (P,Error) -> Void = { _,_ in }) throws -> Started {
         guard startup == nil,session == nil else { throw Boundary.alreadyStarted }
-        guard initial.bytes.count == OriginalApplicationDispatchEntry.globalSize else {
+        guard initial.byteCount == OriginalApplicationDispatchEntry.globalSize else {
             throw OriginalStateError.invalidStorage("Bootstrap full initial extent")
         }
         let staged = try platform.stagedCopy()
@@ -151,8 +151,8 @@ public struct OriginalApplicationBootstrap {
             try owner.run(instance:instance,show:show,globals:&globals,platform:bridge,
                           store:{ try store(staged,$0,$1) })
             var bytes = initial.bytes,mask = initial.defined
-            bytes.replaceSubrange(0..<globals.bytes.count,with:globals.bytes)
-            mask.replaceSubrange(0..<globals.bytes.count,with:globals.defined)
+            bytes.replaceSubrange(0..<globals.byteCount,with:globals.bytes)
+            mask.replaceSubrange(0..<globals.byteCount,with:globals.defined)
             let full = try OriginalStateRecord(bytes:bytes,defined:mask)
             let memory = OriginalMenuPresentationMemory(replayPointers:try Session.State.slice(full,0xb8a8,8))
             var state = try Session.State(full:full,memory:memory,front:.init(),frontSurfaces:[:],

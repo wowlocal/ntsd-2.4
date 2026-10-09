@@ -42,10 +42,10 @@ public enum OriginalWindowInitialization {
     private static func run(wrapperInstance: UInt32?,globals: inout OriginalStateRecord,
         backing: (String, Int) throws -> [UInt8],perform: (Request) throws -> Response,
         store: OriginalWindowInput.Store) throws -> Result {
-        guard globals.bytes.count == OriginalMatchPreparation.globalSize else {
+        guard globals.byteCount == OriginalMatchPreparation.globalSize else {
             throw OriginalStateError.invalidStorage("Window initialization globals extent")
         }
-        var state = globals, written = [Bool](repeating: false, count: globals.bytes.count)
+        var state = globals, written = [Bool](repeating: false, count: globals.byteCount)
         let instance = try wrapperInstance ?? state.integer(at: 0x4554c0-0x44d000,as: UInt32.self)
         func word(_ address: Int) throws -> UInt32 {
             try state.integer(at: address-0x44d000, as: UInt32.self)

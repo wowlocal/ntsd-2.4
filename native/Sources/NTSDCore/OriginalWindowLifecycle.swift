@@ -18,7 +18,7 @@ public enum OriginalWindowLifecycle {
         backing: (String, Int) throws -> [UInt8], perform: (Request) throws -> Response,
         store: OriginalWindowInput.Store = { _,_ in },
         deliver: (OriginalWindowInput.Message, inout OriginalStateRecord, inout OriginalMenuPresentationMemory) throws -> Int32 = { _,_,_ in 0 }) throws -> Int32 {
-        guard globals.bytes.count == OriginalMatchPreparation.globalSize else { throw error("Globals extent") }
+        guard globals.byteCount == OriginalMatchPreparation.globalSize else { throw error("Globals extent") }
         var state = globals, owned = memory
         func word(_ address: Int) throws -> UInt32 { try state.integer(at: address-base,as: UInt32.self) }
         func put(_ address: Int, _ value: UInt32) throws {

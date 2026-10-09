@@ -78,7 +78,7 @@ public enum OriginalGameplayBody {
         guard round.continuation == .gameplay else {
             throw OriginalStateError.invalidStorage("Gameplay body requires the own gameplay continuation")
         }
-        guard caller.formatter == nil || caller.formatter?.bytes.count == OriginalResultLayout.localSize else {
+        guard caller.formatter == nil || caller.formatter?.byteCount == OriginalResultLayout.localSize else {
             throw OriginalStateError.invalidStorage("Gameplay body caller formatter extent")
         }
         guard (library != nil) == (state.libraryCommands != nil) else {
@@ -210,7 +210,7 @@ public enum OriginalGameplayBody {
             // is known, retain its own output for the later overlapping users.
             // A nil backing remains unavailable, never filled from a fixture.
             if event.kind == .format, var storage = retained.formatter {
-                guard event.strings.count == 2, event.strings[1].count+1 <= storage.bytes.count-0x40 else {
+                guard event.strings.count == 2, event.strings[1].count+1 <= storage.byteCount-0x40 else {
                     throw OriginalStateError.invalidStorage("Gameplay diagnostic formatter extent")
                 }
                 for (offset, byte) in (event.strings[1]+[0]).enumerated() { try storage.write(byte, at: 0x40+offset) }

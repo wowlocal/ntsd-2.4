@@ -53,7 +53,7 @@ public struct OriginalFrontScreenPrelude {
     public init(bitmaps: [UInt32:OriginalLoadedBitmap],surfaces: [UInt32:UInt32]) throws {
         guard Set(bitmaps.keys) == Set(surfaces.keys),!bitmaps.keys.contains(0) else { throw OriginalStateError.invalidStorage("Background ownership inputs") }
         for (address,bitmap) in bitmaps {
-            guard bitmap.storage.bytes.count == 0x1f50,try bitmap.storage.integer(at: 0,as: UInt32.self) == (surfaces[address] == 0 ? 0 : 1) else { throw OriginalStateError.invalidStorage("Background surface binding") }
+            guard bitmap.storage.byteCount == 0x1f50,try bitmap.storage.integer(at: 0,as: UInt32.self) == (surfaces[address] == 0 ? 0 : 1) else { throw OriginalStateError.invalidStorage("Background surface binding") }
         }
         self.bitmaps = bitmaps;self.surfaces = surfaces
     }
@@ -64,7 +64,7 @@ public struct OriginalFrontScreenPrelude {
         constructBitmap: ((OriginalInterfaceAllocation,UInt32,String) throws -> (OriginalLoadedBitmap,UInt32))? = nil,
         observe: (OriginalFrontScreenEvent) throws -> Void = { _ in }) throws -> Continuation {
         let base = OriginalMatchPreparation.globalBase
-        guard globals.bytes.count == OriginalMatchPreparation.globalSize, !input.drawResults.isEmpty else { throw OriginalStateError.invalidStorage("Front screen inputs") }
+        guard globals.byteCount == OriginalMatchPreparation.globalSize, !input.drawResults.isEmpty else { throw OriginalStateError.invalidStorage("Front screen inputs") }
         var state = globals, candidate = self
         candidate.retainedOperation = nil
         func word(_ address: Int) throws -> UInt32 { try state.integer(at: address-base,as: UInt32.self) }

@@ -29,7 +29,7 @@ public struct OriginalInputControlContext {
 
     /// Real43df00 plus the caller's saved sound flags in the playback buffer.
     mutating func restorePlayback(globals: inout OriginalStateRecord) throws {
-        guard savedPlayback.bytes.count == 0x320 else { throw OriginalStateError.invalidStorage("Playback saved-settings extent") }
+        guard savedPlayback.byteCount == 0x320 else { throw OriginalStateError.invalidStorage("Playback saved-settings extent") }
         let base = OriginalMatchPreparation.globalBase
         try globals.write(Int32(savedPlayback.integer(at: 0x45877c-0x458588,as: Int8.self)),at: 0x450c30-base)
         for (source,destination) in (0..<8).map({ (0x458850+$0*11,0x44fcc0+$0*11) })

@@ -18,7 +18,7 @@ public enum OriginalMenuContent {
         fileSource: ((String) throws -> [UInt8]?)? = nil,
         written: (Int,Int,[UInt8]) throws -> Void = { _,_,_ in },
         observe: (OriginalMenuContentEvent,OriginalStateRecord,OriginalStateRecord) throws -> Void = { _,_,_ in }) throws -> Result {
-        guard globals.bytes.count == OriginalMatchPreparation.globalSize, local.bytes.count == 0x450 else { throw error("Storage extent") }
+        guard globals.byteCount == OriginalMatchPreparation.globalSize, local.byteCount == 0x450 else { throw error("Storage extent") }
         let base = OriginalMatchPreparation.globalBase
         var state = globals, scratch = local, position = 0, eof = false
         var bytes = translatedBytes ?? [], available = translatedBytes != nil
@@ -83,7 +83,7 @@ public enum OriginalMenuContent {
             return true
         }
         func link(_ address: Int) throws -> Bool {
-            let byte: UInt8 = try requireDefinedLocals ? state.integer(at:address-base,as:UInt8.self) : state.bytes[address-base]
+            let byte: UInt8 = try requireDefinedLocals ? state.integer(at:address-base,as:UInt8.self) : state.byte(at: address-base)
             return [UInt8(63),104,72].contains(byte)
         }
         let index = try word(0x44d784), name = "data\\ad\(index).txt"

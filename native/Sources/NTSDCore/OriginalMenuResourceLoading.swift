@@ -32,7 +32,7 @@ public struct OriginalMenuResourceLoading {
                               checkpoint: (OriginalMenuResourceCheckpoint, OriginalStateRecord, [UInt32:OriginalLoadedBitmap]) throws -> Void = { _,_,_ in },
                               observe: (OriginalInterfaceEvent) throws -> Void = { _ in }) throws -> OriginalMenuResourceResult {
         let base = OriginalMatchPreparation.globalBase
-        guard globals.bytes.count == OriginalMatchPreparation.globalSize else { throw OriginalStateError.invalidStorage("Menu resource globals extent") }
+        guard globals.byteCount == OriginalMatchPreparation.globalSize else { throw OriginalStateError.invalidStorage("Menu resource globals extent") }
         var state = globals, candidate = self
         let current = try state.integer(at: 0x44d020-base,as: UInt32.self)
         let selection = try state.integer(at: 0x4512c8-base,as: UInt32.self)

@@ -26,7 +26,7 @@ public enum OriginalFrontRecordingInfo {
         write: (inout OriginalStateRecord) throws -> OriginalSettingsWriting.Result,
         observe: (OriginalFrontScreenEvent) throws -> Void) throws {
         let base = OriginalMatchPreparation.globalBase
-        guard globals.bytes.count == OriginalMatchPreparation.globalSize,selector == 7 || selector == 8 else { throw error("Globals extent or selector") }
+        guard globals.byteCount == OriginalMatchPreparation.globalSize,selector == 7 || selector == 8 else { throw error("Globals extent or selector") }
         var state = globals,owned = memory
         func word(_ a: Int) throws -> Int32 { try state.integer(at: a-base,as: Int32.self) }
         func put(_ a: Int,_ v: Int32) throws { try state.write(v,at: a-base) }

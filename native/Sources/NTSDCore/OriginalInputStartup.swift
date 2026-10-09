@@ -29,7 +29,7 @@ public enum OriginalInputStartup {
         store: OriginalWindowInput.Store = { _,_ in },
         capabilities: (Int, OriginalStateRecord) throws -> Void = { _,_ in }) throws -> UInt32 {
         var state = globals
-        guard state.bytes.count == OriginalMatchPreparation.globalSize else {
+        guard state.byteCount == OriginalMatchPreparation.globalSize else {
             throw OriginalStateError.invalidStorage("Input startup global extent")
         }
         func put<T: FixedWidthInteger>(_ address: Int, _ value: T) throws {
@@ -51,7 +51,7 @@ public enum OriginalInputStartup {
         var caps = try OriginalStateRecord(bytes:[UInt8](repeating:0,count:404),defined:[Bool](repeating:false,count:404))
         func output(_ response: Response, _ record: inout OriginalStateRecord) throws {
             for write in response.writes {
-                guard write.offset >= 0, write.offset <= record.bytes.count-write.bytes.count else {
+                guard write.offset >= 0, write.offset <= record.byteCount-write.bytes.count else {
                     throw OriginalStateError.invalidStorage("Input startup API output extent")
                 }
                 for (i,byte) in write.bytes.enumerated() { try record.write(byte,at:write.offset+i) }

@@ -8,7 +8,7 @@ public struct OriginalStageLoader {
     public private(set) var records: [OriginalStateRecord]
 
     public init(backing: [OriginalStateRecord]) throws {
-        guard backing.count == 60, backing.allSatisfy({ $0.bytes.count == Self.stageSize }) else { throw Self.error("Stage table size") }
+        guard backing.count == 60, backing.allSatisfy({ $0.byteCount == Self.stageSize }) else { throw Self.error("Stage table size") }
         records = backing
     }
 

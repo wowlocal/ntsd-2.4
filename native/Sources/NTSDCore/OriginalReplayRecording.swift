@@ -41,8 +41,8 @@ public struct OriginalReplayRecording {
     private mutating func initialize(mode: Int32, world: OriginalStateRecord, actors: [OriginalStateRecord],
                                      catalog: OriginalLoadedCatalog, globals: inout OriginalStateRecord,
                                      observe: (OriginalReplayAllocationEvent) throws -> Void) throws {
-        guard world.bytes.count == OriginalStateRecord.worldPrefixSize, actors.count == 400,
-              globals.bytes.count == OriginalMatchPreparation.globalSize else { throw Self.error("Input storage sizes") }
+        guard world.byteCount == OriginalStateRecord.worldPrefixSize, actors.count == 400,
+              globals.byteCount == OriginalMatchPreparation.globalSize else { throw Self.error("Input storage sizes") }
         try clear(observe: observe)
         guard generation != UInt32.max else { throw Self.error("Logical allocation identity exhausted") }
         generation += 1

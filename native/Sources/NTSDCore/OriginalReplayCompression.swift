@@ -31,12 +31,12 @@ public enum OriginalReplayCompression {
     /// Explicit allocator failure stimulus for the original-instruction corpus.
     static func compress(_ source: [UInt8], destination: inout OriginalStateRecord,
                          level: Int32, failureOrdinal: UInt32) throws -> Result {
-        guard source.count <= Int(UInt32.max), destination.bytes.count <= Int(UInt32.max) else {
+        guard source.count <= Int(UInt32.max), destination.byteCount <= Int(UInt32.max) else {
             throw OriginalStateError.invalidStorage("Replay compression: original 32-bit length extent")
         }
         var output: OriginalStateRecord? = destination
         let result = try compress(source, sourceCount: UInt32(source.count), destination: &output,
-                                  capacity: UInt32(destination.bytes.count), level: level, failureOrdinal: failureOrdinal)
+                                  capacity: UInt32(destination.byteCount), level: level, failureOrdinal: failureOrdinal)
         destination = output!
         return result
     }
@@ -47,7 +47,7 @@ public enum OriginalReplayCompression {
                          destination: inout OriginalStateRecord?, capacity: UInt32,
                          level: Int32 = -1, failureOrdinal: UInt32 = 0) throws -> Result {
         guard source == nil || source!.count == Int(sourceCount),
-              destination == nil || destination!.bytes.count == Int(capacity) else {
+              destination == nil || destination!.byteCount == Int(capacity) else {
             throw OriginalStateError.invalidStorage("Replay compression: backing/declared extent")
         }
         var input = (source ?? [])+[0], output = (destination?.bytes ?? [])+[UInt8](repeating: 0x69, count: 16)

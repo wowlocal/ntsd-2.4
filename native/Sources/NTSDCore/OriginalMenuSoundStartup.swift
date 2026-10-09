@@ -38,7 +38,7 @@ public enum OriginalMenuSoundStartup {
         observe: (Event,OriginalStateRecord) throws -> Void = { _,_ in }) throws -> Bool {
         var candidate = globals
         let base = OriginalMatchPreparation.globalBase
-        guard candidate.bytes.count == OriginalMatchPreparation.globalSize else {
+        guard candidate.byteCount == OriginalMatchPreparation.globalSize else {
             throw OriginalStateError.invalidStorage("Menu sound global extent")
         }
         func put(_ value: UInt32) throws {

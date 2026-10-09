@@ -50,7 +50,7 @@ public struct OriginalInitialLoading {
     public static func begin(globals: inout OriginalStateRecord,
                              store: (Int, [UInt8]) throws -> Void = { _, _ in }) throws -> Bool {
         let base = OriginalMatchPreparation.globalBase
-        guard globals.bytes.count == OriginalMatchPreparation.globalSize else {
+        guard globals.byteCount == OriginalMatchPreparation.globalSize else {
             throw OriginalStateError.invalidStorage("Initial loading global extent")
         }
         var candidate = globals

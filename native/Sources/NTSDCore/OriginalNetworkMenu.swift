@@ -23,8 +23,8 @@ public enum OriginalNetworkMenu {
         client: (inout OriginalStateRecord,inout OriginalStateRecord,OriginalStateRecord) throws -> OriginalNetworkClient.Exit,
         exit: (inout OriginalStateRecord) throws -> Void,
         observe: (OriginalFrontScreenEvent) throws -> Void = { _ in }) throws -> Continuation {
-        guard globals.bytes.count == OriginalMatchPreparation.globalSize,hostname.bytes.count == 51,
-              world.bytes.count == 0x7d8,local.bytes.count == 0x400 else { throw error("Storage extent") }
+        guard globals.byteCount == OriginalMatchPreparation.globalSize,hostname.byteCount == 51,
+              world.byteCount == 0x7d8,local.byteCount == 0x400 else { throw error("Storage extent") }
         var state = globals,ownWorld = world,host = hostname,scratch = local,text = libraryText,owned = memory
         let base = OriginalMatchPreparation.globalBase
         func bits(_ n: Int32) -> UInt32 { UInt32(bitPattern: n) }
@@ -43,7 +43,7 @@ public enum OriginalNetworkMenu {
         }
         func formatted(_ format: String,_ bytes: [UInt8],rootOffset: Int,x: Int32,y: Int32) throws {
             let offset = rootOffset-0x14
-            guard offset >= 0,bytes.count < scratch.bytes.count-offset else { throw error("Formatted caller string exceeds recovered backing") }
+            guard offset >= 0,bytes.count < scratch.byteCount-offset else { throw error("Formatted caller string exceeds recovered backing") }
             for (i,b) in (bytes+[0]).enumerated() { try scratch.write(b,at: offset+i) }
             try event("format",[UInt32(bytes.count)],[Array(format.utf8),bytes])
             let target = bits(try word(0x455608))

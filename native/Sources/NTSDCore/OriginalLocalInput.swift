@@ -52,9 +52,9 @@ extension OriginalMatchPreparation {
     mutating func localInputInPlace(phase: Int32, mode: Int32, commands: inout [UInt8],
                                     beforeDispatch: (Self, [UInt8]) throws -> Void,
                                     dispatch: (OriginalLocalInputDispatch, inout Self) throws -> Void) throws {
-        guard commands.count == 10, world.bytes.count == OriginalStateRecord.worldPrefixSize,
-              actors.count == 400, actors.allSatisfy({ $0.bytes.count == OriginalStateRecord.actorSize }),
-              globals.bytes.count == Self.globalSize else { throw OriginalStateError.invalidStorage("Local-input storage") }
+        guard commands.count == 10, world.byteCount == OriginalStateRecord.worldPrefixSize,
+              actors.count == 400, actors.allSatisfy({ $0.byteCount == OriginalStateRecord.actorSize }),
+              globals.byteCount == Self.globalSize else { throw OriginalStateError.invalidStorage("Local-input storage") }
         func integer(_ address: Int) throws -> Int32 { try globals.integer(at: address-Self.globalBase,as: Int32.self) }
         func byte(_ address: UInt32) throws -> UInt8 {
             guard address >= Self.globalBase, address < Self.globalBase+Self.globalSize else {

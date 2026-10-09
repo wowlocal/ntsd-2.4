@@ -123,14 +123,14 @@ import NTSDCore
                 try require(q.event.arguments == [binding.device,0],"WAV device binding");_ = try format(q)
             case .lock:
                 let b = try buffer(q.event.arguments[0],binding)
-                try require(q.event.arguments == [b.token,0,UInt32(b.raw.bytes.count),0] && b.active == nil,"whole WAV Lock")
+                try require(q.event.arguments == [b.token,0,UInt32(b.raw.byteCount),0] && b.active == nil,"whole WAV Lock")
             case .copy:
                 let r = try region(q.target!,binding)
-                try require(q.event.arguments == [0,0,UInt32(r.buffer.raw.bytes.count)],"whole first Lock region")
+                try require(q.event.arguments == [0,0,UInt32(r.buffer.raw.byteCount)],"whole first Lock region")
             case .unlock:
                 let b = try buffer(q.event.arguments[0],binding)
                 guard let active = b.active else { throw Boundary.owner(q.event.arguments[1]) }
-                try require(q.event.arguments == [b.token,active,UInt32(b.raw.bytes.count),0,0],"WAV Unlock region")
+                try require(q.event.arguments == [b.token,active,UInt32(b.raw.byteCount),0,0],"WAV Unlock region")
                 guard b.raw.defined.allSatisfy({ $0 }) else { throw Boundary.unknownSamples }
             case .restore:_ = try buffer(q.event.arguments[0],binding)
             case .message:try require(diagnostic != nil,"WAV diagnostic")
@@ -174,7 +174,7 @@ import NTSDCore
             case .lock:
                 let b = try buffer(q.event.arguments[0],binding),r = try Region(windows.identities.take(),b)
                 regions[r.token] = r;b.active = r.token;retained = [b,r]
-                response = .waveAudio(.locked(0,.init(firstPointer:r.token,firstCount:b.raw.bytes.count,
+                response = .waveAudio(.locked(0,.init(firstPointer:r.token,firstCount:b.raw.byteCount,
                     secondPointer:0,secondCount:0,first:.init(token:r.token,storage:.init(b.raw)),second:nil)))
             case .copy:
                 let r = try region(q.target!,binding),b = r.buffer
@@ -182,12 +182,12 @@ import NTSDCore
                 response = .waveAudio(.copied)
             case .unlock:
                 let b = try buffer(q.event.arguments[0],binding),f = b.format
-                let frames = b.raw.bytes.count/f.alignment
+                let frames = b.raw.byteCount/f.alignment
                 for frame in 0..<frames { for channel in 0..<f.channels {
                     let index = frame*f.alignment+channel*(f.bits/8),value: Float
-                    if f.bits == 8 { value = Float(Int(b.raw.bytes[index])-128)/128 }
+                    if f.bits == 8 { value = Float(Int(b.raw.byte(at: index))-128)/128 }
                     else {
-                        let word = UInt16(b.raw.bytes[index]) | (UInt16(b.raw.bytes[index+1]) << 8)
+                        let word = UInt16(b.raw.byte(at: index)) | (UInt16(b.raw.byte(at: index+1)) << 8)
                         value = Float(Int16(bitPattern:word))/32768
                     }
                     b.pcm.channels[channel][frame] = value

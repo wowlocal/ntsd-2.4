@@ -22,11 +22,11 @@ public enum OriginalNetworkClient {
         world: OriginalStateRecord,request: (Request) throws -> Response,
         store: (Region,Int,[UInt8]) throws -> Void = { _,_,_ in }) throws -> Exit {
         let base = OriginalMatchPreparation.globalBase
-        guard globals.bytes.count == OriginalMatchPreparation.globalSize,local.bytes.count == 0x400 else { throw error("Global/local extent") }
+        guard globals.byteCount == OriginalMatchPreparation.globalSize,local.byteCount == 0x400 else { throw error("Global/local extent") }
         var state = globals,temporary = local
         func word(_ a: Int) throws -> UInt32 { try state.integer(at: a-base,as: UInt32.self) }
         func put(_ region: Region,_ offset: Int,_ bytes: [UInt8]) throws {
-            let count = region == .globals ? state.bytes.count : temporary.bytes.count
+            let count = region == .globals ? state.byteCount : temporary.byteCount
             guard offset >= 0,offset <= count,bytes.count <= count-offset else { throw error("Required bytes exceed recovered backing") }
             for (i,b) in bytes.enumerated() {
                 if region == .globals { try state.write(b,at: offset+i) } else { try temporary.write(b,at: offset+i) }

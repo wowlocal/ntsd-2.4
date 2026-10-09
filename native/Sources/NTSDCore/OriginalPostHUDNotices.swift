@@ -57,7 +57,7 @@ public enum OriginalPostHUDNotices {
         textRenderer: OriginalSurfaceText.Renderer? = nil,
         observe: (OriginalFrontScreenEvent) throws -> Void = { _ in },
         observeFormatStorage: (OriginalStateRecord) throws -> Void = { _ in }) throws {
-        guard (local == nil || local?.bytes.count == localSize), globals.bytes.count == OriginalMatchPreparation.globalSize else {
+        guard (local == nil || local?.byteCount == localSize), globals.byteCount == OriginalMatchPreparation.globalSize else {
             throw error("Caller storage extent")
         }
         var scratch = local

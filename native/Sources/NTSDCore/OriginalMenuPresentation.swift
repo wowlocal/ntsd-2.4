@@ -61,7 +61,7 @@ public enum OriginalMenuPresentation {
         let pointer = try state.integer(at: offset, as: UInt32.self)
         if pointer == 0 { return }
         guard var allocation = owned.allocations[pointer], allocation.live,
-              allocation.storage.bytes.count == 0x1f50 else {
+              allocation.storage.byteCount == 0x1f50 else {
             throw OriginalStateError.invalidStorage("Menu bitmap ownership")
         }
         let surface = try allocation.storage.integer(at: 0, as: UInt32.self)
@@ -88,7 +88,7 @@ public enum OriginalMenuPresentation {
         if try word(0x44eecc) != 0 {
             for (countAddress,arrayAddress) in [(0x458438,0x452948),(0x45843c,0x451db0)] {
                 let count = Int32(bitPattern: try word(countAddress))
-                guard count <= (OriginalMatchPreparation.globalBase+state.bytes.count-arrayAddress)/4 else { throw OriginalStateError.invalidStorage("Sound release list extent") }
+                guard count <= (OriginalMatchPreparation.globalBase+state.byteCount-arrayAddress)/4 else { throw OriginalStateError.invalidStorage("Sound release list extent") }
                 if count > 0 { for index in 0..<Int(count) { try method(word(arrayAddress+index*4)) } }
             }
             try method(word(0x44eecc)); try state.write(UInt32(0),at: 0x44eecc-OriginalMatchPreparation.globalBase)
@@ -130,7 +130,7 @@ public enum OriginalMenuPresentation {
     /// 43e940 is shared by startup, menus and the match display path.
     public static func presentSurface(globals: OriginalStateRecord,
                                       observe: (OriginalMenuPresentationEvent) throws -> Void = { _ in }) throws {
-        guard globals.bytes.count == OriginalMatchPreparation.globalSize else { throw OriginalStateError.invalidStorage("Present globals extent") }
+        guard globals.byteCount == OriginalMatchPreparation.globalSize else { throw OriginalStateError.invalidStorage("Present globals extent") }
         func word(_ address: Int) throws -> UInt32 { try globals.integer(at: address-OriginalMatchPreparation.globalBase, as: UInt32.self) }
         let mode = try word(0x458348)
         if mode == 1 || mode == 2 {
@@ -173,7 +173,7 @@ public enum OriginalMenuPresentation {
         libraryText: inout OriginalLibSurfaceText, input: OriginalMenuPresentationInput,
         store: @escaping OriginalWindowInput.Store = { _,_ in },
         observe: (OriginalMenuPresentationEvent) throws -> Void = { _ in }) throws {
-        guard globals.bytes.count == OriginalMatchPreparation.globalSize else { throw OriginalStateError.invalidStorage("Overlay globals extent") }
+        guard globals.byteCount == OriginalMatchPreparation.globalSize else { throw OriginalStateError.invalidStorage("Overlay globals extent") }
         let unused = try OriginalStateRecord(bytes: [],defined: [])
         var execution = Execution(world: unused,globals: globals,memory: .init(replayPointers: unused),input: input,libraryText: libraryText)
         execution.store = store
@@ -305,9 +305,9 @@ public enum OriginalMenuPresentation {
             try OriginalMenuPresentation.shutdown(globals: &globals,memory: &memory,observe: observe)
         }
         mutating func run(_ entry: OriginalMenuPresentationEntry, _ observe: Observer) throws {
-            guard world.bytes.count == OriginalStateRecord.worldPrefixSize,
-                  globals.bytes.count == OriginalMatchPreparation.globalSize,
-                  memory.replayPointers.bytes.count == 8 else { throw error("Storage sizes") }
+            guard world.byteCount == OriginalStateRecord.worldPrefixSize,
+                  globals.byteCount == OriginalMatchPreparation.globalSize,
+                  memory.replayPointers.byteCount == 8 else { throw error("Storage sizes") }
             switch entry {
             case .epilogue: return
             case .overlay: try overlay(observe)

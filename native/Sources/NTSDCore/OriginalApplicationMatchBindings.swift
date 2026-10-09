@@ -82,7 +82,7 @@ public struct OriginalApplicationMatchBindings {
     }
 
     private func actor(_ token: UInt32,in memory: OriginalMenuPresentationMemory) throws -> OriginalStateRecord {
-        guard let a = memory.allocations[token],a.live,a.storage.bytes.count == OriginalStateRecord.actorSize else {
+        guard let a = memory.allocations[token],a.live,a.storage.byteCount == OriginalStateRecord.actorSize else {
             throw Boundary.actor(token)
         }
         return a.storage
@@ -139,11 +139,11 @@ public struct OriginalApplicationMatchBindings {
     public func store(_ match: OriginalMatchPreparation,context: OriginalInputControlContext,
                       in state: inout State) throws {
         try state.validateAliases()
-        guard context.savedPlayback.bytes.count == 0x320 else { throw Boundary.savedPlayback }
+        guard context.savedPlayback.byteCount == 0x320 else { throw Boundary.savedPlayback }
         guard match.loadedObjects.count == objectTokens.count,
-              match.world.bytes.count == 0x7d8,match.actors.count == 400,
+              match.world.byteCount == 0x7d8,match.actors.count == 400,
               match.actors.allSatisfy({ $0.byteCount == OriginalStateRecord.actorSize }),
-              match.globals.bytes.count == OriginalMatchPreparation.globalSize,
+              match.globals.byteCount == OriginalMatchPreparation.globalSize,
               try match.world.integer(at:0x7d4,as:UInt32.self) == 0 else { throw Boundary.catalog }
         var next = state,world = match.world,memory = context.memory
         try world.write(catalogToken,at:0x7d4)

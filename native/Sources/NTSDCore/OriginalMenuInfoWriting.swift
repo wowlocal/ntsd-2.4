@@ -14,7 +14,7 @@ public struct OriginalBufferedTextOutput: Sendable {
         buffer = try .init(bytes: backing,defined: [Bool](repeating: false,count: backing.count));count = Int32(backing.count)
     }
     public func fileStorage() throws -> OriginalStateRecord {
-        let words: [UInt32] = [bufferAddress+UInt32(position),UInt32(bitPattern: count),bufferAddress,flags,descriptor,0,UInt32(buffer.bytes.count),0]
+        let words: [UInt32] = [bufferAddress+UInt32(position),UInt32(bitPattern: count),bufferAddress,flags,descriptor,0,UInt32(buffer.byteCount),0]
         let bytes = words.flatMap { word in (0..<4).map { UInt8(truncatingIfNeeded: word >> ($0*8)) } }
         return try .init(bytes: bytes,defined: [Bool](repeating: true,count: 32))
     }
@@ -26,7 +26,7 @@ public struct OriginalBufferedTextOutput: Sendable {
             if count >= 0 { try buffer.write(byte,at: position);position += 1 }
             else {
                 flags = (flags & ~UInt32(0x10)) | 2
-                let pending = position;position = 1;count = Int32(buffer.bytes.count-1)
+                let pending = position;position = 1;count = Int32(buffer.byteCount-1)
                 let returned = pending > 0 ? try write(Array(buffer.bytes.prefix(pending)),self) : 0
                 // _flsbuf writes the next byte even when flushing the old
                 // block failed. fclose subsequently sees this one-byte tail.
@@ -99,7 +99,7 @@ public enum OriginalMenuInfoWriting {
     public static func run(_ mode: Mode,globals: inout OriginalStateRecord,output: inout OriginalBufferedTextOutput,available: Bool,
         write: ([UInt8]) throws -> Int32,close: () throws -> Int32,
         observe: (OriginalMenuInfoWriteEvent,OriginalStateRecord,OriginalBufferedTextOutput) throws -> Void = { _,_,_ in }) throws -> UInt32 {
-        guard globals.bytes.count == OriginalMatchPreparation.globalSize else { throw OriginalStateError.invalidStorage("Menu info globals extent") }
+        guard globals.byteCount == OriginalMatchPreparation.globalSize else { throw OriginalStateError.invalidStorage("Menu info globals extent") }
         var state = globals, stream = output
         let base = OriginalMatchPreparation.globalBase
         func word(_ p: Int) throws -> Int32 { try state.integer(at: p-base,as: Int32.self) }

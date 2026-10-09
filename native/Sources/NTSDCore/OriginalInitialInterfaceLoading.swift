@@ -64,7 +64,7 @@ public struct OriginalInitialInterfaceLoading {
                               observe: (OriginalInterfaceEvent) throws -> Void = { _ in }) throws {
         let base = OriginalMatchPreparation.globalBase
         var state = globals, candidate = self
-        guard state.bytes.count == OriginalMatchPreparation.globalSize,
+        guard state.byteCount == OriginalMatchPreparation.globalSize,
               try state.integer(at: 0x44d05c-base, as: Int32.self) == 1 else {
             throw OriginalStateError.invalidStorage("Initial interface loading context")
         }

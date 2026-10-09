@@ -204,7 +204,7 @@ public struct OriginalApplicationPoolSession {
             for a in entry.snapshot.allocations { reserve(a.token,a.count) }
             for stream in entry.files.streams.values { reserve(stream.allocation.buffer,stream.allocation.capacity) }
             for owner in entry.startup.waveOwners { try retain(owner) }
-            for (token,record) in entry.startup.music.allocations { reserve(token,record.bytes.count) }
+            for (token,record) in entry.startup.music.allocations { reserve(token,record.byteCount) }
             for owner in entry.entry.waveOwners { try retain(owner) }
             for owner in entry.snapshot.waveOwners { try retain(owner) }
         }

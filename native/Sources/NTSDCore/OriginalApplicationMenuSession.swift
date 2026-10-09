@@ -60,7 +60,7 @@ public struct OriginalApplicationMenuSession {
             for (bitmaps, surfaces) in [(front.bitmaps,frontSurfaces),(earlyScreen.bitmaps,earlyScreen.surfaces)] {
                 for (pointer, bitmap) in bitmaps {
                     guard pointer != 0, self.memory.allocations[pointer] == nil,
-                          let surface = surfaces[pointer], bitmap.storage.bytes.count == 0x1f50,
+                          let surface = surfaces[pointer], bitmap.storage.byteCount == 0x1f50,
                           try bitmap.storage.integer(at:0,as:UInt32.self) == (surface == 0 ? 0 : 1) else {
                         throw Boundary.bitmapOwnership(pointer)
                     }
@@ -791,7 +791,7 @@ public struct OriginalApplicationMenuSession {
                         var host = try State.slice(owned.full,Self.worldStart+0x7d8,51)
                         // Caller-local bytes from callerSP+14; only this call's body writes are known.
                         var local = try OriginalStateRecord(bytes:[UInt8](repeating:0,count:0x400),defined:[Bool](repeating:false,count:0x400))
-                        if let bodyLocal { for i in 0x14..<bodyLocal.bytes.count where bodyLocal.defined[i] { try local.write(bodyLocal.bytes[i],at:i-0x14) } }
+                        if let bodyLocal { for i in 0x14..<bodyLocal.byteCount where bodyLocal.isDefined(at: i) { try local.write(bodyLocal.byte(at: i),at:i-0x14) } }
                         enum Call { case window(OriginalWindowInput.Request),sleep([UInt32]) }
                         var calls: [Call] = []
                         func box(_ bytes: [UInt8]) throws {

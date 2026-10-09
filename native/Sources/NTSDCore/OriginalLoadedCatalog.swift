@@ -146,7 +146,7 @@ public struct OriginalLoadedCatalog {
                 onChild: (OriginalCatalogChildObservation) throws -> Void = { _ in },
                 onStage: (String, Int, Int?, OriginalStateRecord) throws -> Void = { _, _, _, _ in }, fileSession: FileSession?) throws {
         guard fileName.unicodeScalars.allSatisfy({ $0.value <= 255 }), backgroundBacking.count == 101,
-              backgroundBacking.allSatisfy({ $0.bytes.count == OriginalBackgroundLoader.recordSize }),
+              backgroundBacking.allSatisfy({ $0.byteCount == OriginalBackgroundLoader.recordSize }),
               parentBacking[0x4d81060] == backgroundBacking[99], parentBacking[0x4d819f0] == backgroundBacking[100] else {
             throw OriginalStateError.invalidStorage("Loaded catalog backing/filename mismatch")
         }

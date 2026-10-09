@@ -7,7 +7,7 @@ public struct OriginalLibHitState: Equatable {
         targets = try! .init(bytes: [UInt8](repeating: 0,count: 20000),defined: [Bool](repeating: true,count: 20000))
     }
     public init(targets: OriginalStateRecord) throws {
-        guard targets.bytes.count == 20000 else { throw OriginalStateError.invalidStorage("Library hit target extent") }
+        guard targets.byteCount == 20000 else { throw OriginalStateError.invalidStorage("Library hit target extent") }
         self.targets = targets
     }
 }

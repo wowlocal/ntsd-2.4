@@ -29,7 +29,7 @@ public enum OriginalWindowInput {
     /// Accept the enclosing startup record or the explicitly owned local region.
     public static func initializeText(_ storage: inout OriginalStateRecord,
                                      store: Store = { _,_ in }) throws {
-        guard storage.bytes.count >= 0x138 else { throw error("Text constructor storage extent") }
+        guard storage.byteCount >= 0x138 else { throw error("Text constructor storage extent") }
         var next = storage
         for offset in [0,0x130,0x134] {
             try next.write(UInt32(0),at: offset); try store(localBase+offset,little(0))
@@ -59,8 +59,8 @@ public enum OriginalWindowInput {
     public static func receive(_ input: Message, globals: inout OriginalStateRecord,
         local: inout OriginalStateRecord, memory: inout OriginalMenuPresentationMemory,
         request: (Request) throws -> Int32, store: Store = { _,_ in }) throws -> Int32 {
-        guard globals.bytes.count == OriginalMatchPreparation.globalSize,
-              local.bytes.count == localCount else { throw error("Global/local extents") }
+        guard globals.byteCount == OriginalMatchPreparation.globalSize,
+              local.byteCount == localCount else { throw error("Global/local extents") }
         var state = globals, retained = local, owned = memory
         func word(_ address: Int) throws -> UInt32 {
             if address >= localBase { return try retained.integer(at: address-localBase,as: UInt32.self) }

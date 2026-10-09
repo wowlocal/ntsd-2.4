@@ -4,7 +4,7 @@ extension OriginalBackgroundLoader {
     public mutating func releaseLayersWithSurface(in record: inout OriginalStateRecord,
         releaseBitmap: (Int,OriginalLoadedBitmap) throws -> Void) throws -> [Int] {
         var candidate=self,storage=record
-        guard storage.bytes.count==Self.recordSize else { throw OriginalStateError.invalidStorage("BG storage size") }
+        guard storage.byteCount==Self.recordSize else { throw OriginalStateError.invalidStorage("BG storage size") }
         if try storage.integer(at:0x914,as:UInt32.self) != 0 {
             let count=try storage.integer(at:0x1c,as:Int32.self)
             guard (0...30).contains(count) else { throw OriginalStateError.invalidStorage("BG release extent") }
@@ -25,7 +25,7 @@ extension OriginalBackgroundLoader {
     public mutating func loadLayersWithSurface(in record: inout OriginalStateRecord,
         constructBitmap: (String,Bool,[UInt8]) throws -> OriginalLoadedBitmap?) throws {
         var candidate=self,storage=record
-        guard storage.bytes.count==Self.recordSize else { throw OriginalStateError.invalidStorage("BG storage size") }
+        guard storage.byteCount==Self.recordSize else { throw OriginalStateError.invalidStorage("BG storage size") }
         let count=try storage.integer(at:0x1c,as:Int32.self)
         guard (0...30).contains(count) else { throw OriginalStateError.invalidStorage("BG layer extent") }
         for index in 0..<Int(count) {

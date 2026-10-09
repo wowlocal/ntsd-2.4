@@ -15,7 +15,7 @@ public enum OriginalMenuPanelUpdate {
         bitmap: (inout OriginalStateRecord) throws -> Bool,
         write: (OriginalMenuInfoWriting.Mode,inout OriginalStateRecord) throws -> UInt32,
         observe: (OriginalMenuPanelUpdateEvent,OriginalStateRecord) throws -> Void = { _,_ in }) throws -> Result {
-        guard globals.bytes.count == OriginalMatchPreparation.globalSize else { throw OriginalStateError.invalidStorage("Panel update globals extent") }
+        guard globals.byteCount == OriginalMatchPreparation.globalSize else { throw OriginalStateError.invalidStorage("Panel update globals extent") }
         var state = globals
         let base = OriginalMatchPreparation.globalBase
         func emit(_ kind: String,_ args: [UInt32]) throws { try observe(.init(kind,args),state) }

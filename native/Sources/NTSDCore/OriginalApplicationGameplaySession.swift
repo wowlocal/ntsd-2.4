@@ -97,7 +97,7 @@ public struct OriginalApplicationGameplaySession {
             var record: OriginalStateRecord
             let surface: UInt32,allocated: Bool
             if let allocation = a.state.memory.allocations[token] {
-                guard allocation.live,allocation.storage.bytes.count == 0x1f50 else { throw Menu.Boundary.owner(token) }
+                guard allocation.live,allocation.storage.byteCount == 0x1f50 else { throw Menu.Boundary.owner(token) }
                 record = allocation.storage;surface = try record.integer(at:0,as:UInt32.self);allocated = true
             } else {
                 guard let ordinal = a.model.bitmapOwners.first(where:{ $0.value == token })?.key,

@@ -23,7 +23,7 @@ public enum OriginalReplayPlayback {
         var scene = state, rec = recording, backup = saved
         let base = OriginalMatchPreparation.globalBase
         func error(_ s: String) -> OriginalStateError { .invalidStorage("Playback start: "+s) }
-        guard rec.bytes.count == OriginalReplayFileInput.recordingSize,backup.bytes.count == 0x320 else { throw error("Recording/backup extent") }
+        guard rec.byteCount == OriginalReplayFileInput.recordingSize,backup.byteCount == 0x320 else { throw error("Recording/backup extent") }
         func g(_ a: Int) throws -> Int32 { try scene.globals.integer(at: a-base,as: Int32.self) }
         func setG(_ a: Int,_ v: Int32) throws { try scene.globals.write(v,at: a-base) }
         func r(_ o: Int) throws -> Int32 { try rec.integer(at: o,as: Int32.self) }

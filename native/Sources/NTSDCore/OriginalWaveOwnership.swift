@@ -67,23 +67,23 @@ public struct OriginalWaveOwnership {
             binding.device != 0,result.output != 0,result.temporary != nil else { throw Boundary.incomplete }
         if let p = legacy {
             guard domain == .addressed,p.device == binding.device,p.destination == binding.destination,
-                p.buffer == result.output,p.firstCount == result.first.bytes.count,
-                p.secondCount == (result.second?.bytes.count ?? 0) else { throw Boundary.provenance }
-            var spans = [(p.firstPointer,result.first.bytes.count)]
-            if let second = result.second { spans.append((p.secondPointer,second.bytes.count)) }
+                p.buffer == result.output,p.firstCount == result.first.byteCount,
+                p.secondCount == (result.second?.byteCount ?? 0) else { throw Boundary.provenance }
+            var spans = [(p.firstPointer,result.first.byteCount)]
+            if let second = result.second { spans.append((p.secondPointer,second.byteCount)) }
             return spans
         }
         guard let reply = result.lockReplies.last,case .locked(_,let lock?) = reply,
             lock.firstPointer != 0,let first = result.regions[lock.firstPointer],
             first == result.first,lock.first?.token == lock.firstPointer,
-            lock.firstCount >= 0,lock.firstCount <= first.bytes.count else { throw Boundary.provenance }
-        var spans = [(lock.firstPointer,first.bytes.count)]
+            lock.firstCount >= 0,lock.firstCount <= first.byteCount else { throw Boundary.provenance }
+        var spans = [(lock.firstPointer,first.byteCount)]
         var tokens: Set<UInt32> = [lock.firstPointer]
         if lock.secondPointer != 0 {
             guard let second = result.regions[lock.secondPointer],second == result.second,
                 lock.second?.token == lock.secondPointer,lock.secondCount >= 0,
-                lock.secondCount <= second.bytes.count else { throw Boundary.provenance }
-            if tokens.insert(lock.secondPointer).inserted { spans.append((lock.secondPointer,second.bytes.count)) }
+                lock.secondCount <= second.byteCount else { throw Boundary.provenance }
+            if tokens.insert(lock.secondPointer).inserted { spans.append((lock.secondPointer,second.byteCount)) }
         } else {
             guard result.second == nil else { throw Boundary.provenance }
         }

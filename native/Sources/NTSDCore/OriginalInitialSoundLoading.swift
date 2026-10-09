@@ -37,7 +37,7 @@ public enum OriginalInitialSoundLoading {
                             observe: (OriginalInitialSoundEvent) throws -> Void = { _ in }) throws {
         var candidate = globals
         let base = OriginalMatchPreparation.globalBase
-        guard candidate.bytes.count == OriginalMatchPreparation.globalSize,
+        guard candidate.byteCount == OriginalMatchPreparation.globalSize,
               try candidate.integer(at: 0x44d05c-base, as: Int32.self) == 1 else {
             throw OriginalStateError.invalidStorage("Initial sound loading context")
         }

@@ -57,8 +57,8 @@ extension OriginalMatchPreparation {
     }
 
     private mutating func applyReceivedInput(packet: [UInt8], phase: Int32, remote: Bool, commands: inout [UInt8]) throws {
-        guard packet.count == 10, world.bytes.count == OriginalStateRecord.worldPrefixSize,
-              actors.count == 400, globals.bytes.count == Self.globalSize else {
+        guard packet.count == 10, world.byteCount == OriginalStateRecord.worldPrefixSize,
+              actors.count == 400, globals.byteCount == Self.globalSize else {
             throw OriginalStateError.invalidStorage("Received-input storage")
         }
         let masks: [UInt8] = [0x80,0x40,0x20,0x10,8,4,2]

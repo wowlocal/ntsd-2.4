@@ -174,7 +174,7 @@ public struct OriginalApplicationCatalogSession {
                     output:word(0x45560c+4*i),domain:audioDomain)
                 try retainWave(owner)
             }
-            for (token,record) in startup.music.allocations { try range(token,record.bytes.count) }
+            for (token,record) in startup.music.allocations { try range(token,record.byteCount) }
             for (i,owner) in entry.waveOwners.enumerated() {
                 guard owner.binding.index == i,owner.binding.path == OriginalInitialSoundLoading.paths[i] else { throw Boundary.input("Common WAV path/index") }
                 guard owner.matches(entry.common.sounds[i]) else { throw Boundary.input("Common WAV result") }
@@ -303,7 +303,7 @@ public struct OriginalApplicationCatalogSession {
             try emit(.front(event))
         }
         func draw(_ args: [UInt32]) throws {
-            guard args.count == 7,let a = state.memory.allocations[args[0]],a.live,a.storage.bytes.count == 0x1f50 else {
+            guard args.count == 7,let a = state.memory.allocations[args[0]],a.live,a.storage.byteCount == 0x1f50 else {
                 throw Boundary.input("Loading retained bitmap owner")
             }
             let surface = try a.storage.integer(at:0,as:UInt32.self)

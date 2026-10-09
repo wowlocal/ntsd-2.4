@@ -229,7 +229,7 @@ public struct OriginalApplicationLoadedMenuSession {
                 add(0x44d000,fullCount)
                 for (token,a) in allocations where a.live { add(token,a.storage.byteCount) }
                 spans += staticRanges
-                for (token,record) in audioAllocations { add(token,record.bytes.count) }
+                for (token,record) in audioAllocations { add(token,record.byteCount) }
                 return spans
             }
         }
@@ -340,7 +340,7 @@ public struct OriginalApplicationLoadedMenuSession {
             if observesFront { try observe(.front(e),&environment) }
         }
         func draw(_ args: [UInt32],_ globals: OriginalStateRecord,_ memory: OriginalMenuPresentationMemory) throws {
-            guard args.count == 7,let a = memory.allocations[args[0]],a.live,a.storage.bytes.count == 0x1f50 else { throw Boundary.dependency("Draw bitmap owner") }
+            guard args.count == 7,let a = memory.allocations[args[0]],a.live,a.storage.byteCount == 0x1f50 else { throw Boundary.dependency("Draw bitmap owner") }
             let surface = try a.storage.integer(at:0,as:UInt32.self)
             var record = a.storage;try record.write(UInt32(surface == 0 ? 0 : 1),at:0)
             let q = try OriginalBitmapDrawInput(x:Int32(bitPattern:args[1]),y:Int32(bitPattern:args[2]),frame:Int32(bitPattern:args[3]),colorKey:args[4],mirrored:args[5],sourceSurface:surface,targetSurface:args[6],viewportWidth:globals.integer(at:0x78c,as:Int32.self),viewportHeight:globals.integer(at:0x790,as:Int32.self))
