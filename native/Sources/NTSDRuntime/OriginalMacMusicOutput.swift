@@ -23,6 +23,10 @@ import Foundation
     private let load: (URL,@escaping () -> Void) throws -> Player
     private let tracks: [String:URL]
     private var graph: UInt32?, track: String?, player: Player?, seeks = -1, ended = false, loads = 0, pendingEnd: UInt32?
+    /// The last presented file's lower-cased name and track (`tracks` never
+    /// changes): present runs every message-loop iteration and decoded,
+    /// lower-cased and looked the name up each time (CORE_REALTIME tier 3 R0).
+    private var resolved: (file: [UInt8], name: String, url: URL?)?
     public private(set) var unresolved: [[UInt8]] = []
     /// Automated runs keep real playback state at zero output gain.
     public var muted = false
@@ -39,8 +43,10 @@ import Foundation
     nonisolated public static func gain(_ volume: Int32) -> Float { OriginalMacSoundEffects.gain(volume) }
     public func present(_ state: OriginalMacRuntimeMusic.Presented?) throws {
         guard let state,let file = state.file else { player?.pause(); return }
-        let name = String(decoding:file,as:UTF8.self).lowercased()
-        guard let url = tracks[name] else {
+        let name: String,found: URL?
+        if let resolved,resolved.file == file { (name,found) = (resolved.name,resolved.url) }
+        else { name = String(decoding:file,as:UTF8.self).lowercased(); found = tracks[name]; resolved = (file,name,found) }
+        guard let url = found else {
             if state.graph != graph { unresolved.append(file) }
             player?.pause(); player = nil; loads += 1; graph = state.graph; track = nil; return
         }

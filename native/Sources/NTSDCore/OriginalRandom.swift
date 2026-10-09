@@ -10,7 +10,10 @@ public struct OriginalRandom: Codable, Equatable, Sendable {
     public let sourceSHA256: String
 
     public func validate() throws {
-        guard table.count == 3000, !table.contains(0), (0..<3000).contains(index),
+        // `!table.contains(0)` with memchr: the same answer, vectorized (the AI
+        // pass validates the table at every draw; CORE_REALTIME tier 3 R0).
+        guard table.count == 3000, table.withUnsafeBufferPointer({ memchr($0.baseAddress!, 0, $0.count) == nil }),
+              (0..<3000).contains(index),
               (0..<1234).contains(counter) else {
             throw OriginalLoaderError.outsideVerifiedDomain("Invalid original replay RNG state")
         }
