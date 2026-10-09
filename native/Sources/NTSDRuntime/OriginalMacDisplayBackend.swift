@@ -46,7 +46,8 @@ import NTSDCore
         init(_ token: UInt32) { super.init(token,.display) }
     }
     /// Accounting may be released when a retained context dies off-main.
-    private final class Budget {
+    /// Internal (not private) for the storage tests (P2).
+    final class Budget {
         private let lock = NSLock(), maximum: Int
         private var used = 0
         init(_ maximum: Int) { self.maximum = maximum }
@@ -60,7 +61,7 @@ import NTSDCore
     }
     /// Pixel knowledge, one bit per pixel (it was one byte; MEMORY_FOOTPRINT
     /// step 2). The subscript reads and writes 0 or 1 like the byte mask did.
-    private struct KnownMask {
+    struct KnownMask {
         let words: UnsafeMutablePointer<UInt64>, count: Int
         /// True only while every pixel is known (CORE_REALTIME 1g): cleared by
         /// any write that can clear a bit, set where an operation is known to
@@ -128,9 +129,38 @@ import NTSDCore
         var bools: [Bool] { (0..<count).map { self[$0] != 0 } }
         func free() { Foundation.free(words); Foundation.free(fullFlag) }
     }
-    private final class Storage {
+    /// Pixel buffers of frames lent by storages, returned when the last holder
+    /// of the frame lets it go and taken by a storage's next write (P2): a
+    /// fresh 1.75 MB buffer per tick would cost an allocation and page faults.
+    final class PixelPool: @unchecked Sendable {
+        private let lock = NSLock()
+        private var buffers: [(count: Int,pointer: UnsafeMutablePointer<UInt32>)] = []
+        /// A returned buffer of `count` pixels, else a new one. Its contents
+        /// are unspecified: the taker overwrites every pixel.
+        func take(_ count: Int) -> UnsafeMutablePointer<UInt32> {
+            lock.lock()
+            if let i = buffers.firstIndex(where: { $0.count == count }) {
+                let pointer = buffers.remove(at:i).pointer; lock.unlock(); return pointer
+            }
+            lock.unlock()
+            guard let raw = malloc(count*4) else { fatalError("pixel buffer allocation") }
+            return raw.assumingMemoryBound(to:UInt32.self)
+        }
+        func give(_ pointer: UnsafeMutablePointer<UInt32>,_ count: Int) {
+            lock.lock()
+            buffers.append((count,pointer))
+            // Two idle buffers cover the steady state (the storage's next
+            // write takes one while the last frame still holds another).
+            let surplus = buffers.count > 2 ? buffers.removeFirst().pointer : nil
+            lock.unlock()
+            if let surplus { free(surplus) }
+        }
+    }
+    /// Internal (not private) for the storage tests (P2).
+    final class Storage {
         let width: Int, height: Int, count: Int, byteCount: Int, budget: Budget
-        private let valuesStorage: UnsafeMutablePointer<UInt32>, knownStorage: KnownMask
+        private var valuesStorage: UnsafeMutablePointer<UInt32>
+        private let knownStorage: KnownMask, pool: PixelPool
         /// Writes recorded but not yet applied, in order. A copy of a whole loaded
         /// image into a surface is recorded and written at the surface's first
         /// pixel access: the allocation stays at creation (zero pages cost no
@@ -143,8 +173,57 @@ import NTSDCore
         /// exact bytes and bits the copy writes) at (left, top). Written by the
         /// first access after the writes recorded before it, like `pending`.
         private var deferredCopy: (left: Int,top: Int,frame: OriginalFramebuffer)?
+        /// The frame the current values buffer is lent to (CORE_REALTIME P2):
+        /// from the loan the frame owns that buffer and nothing writes it
+        /// again; the storage's next write first moves to a buffer of its own
+        /// (copied, or not when that write covers every pixel), so no frame's
+        /// bytes ever change. Lent and moved only where the values are written
+        /// (the render thread while pipelined, else after a flush).
+        private var lentFrame: OriginalFramebuffer?
+        /// The values for reading.
         var values: UnsafeMutablePointer<UInt32> { if !pending.isEmpty || deferredCopy != nil { applyPending() }; return valuesStorage }
+        /// The values for writing: a lent buffer is left to its frame first.
+        var writableValues: UnsafeMutablePointer<UInt32> {
+            if !pending.isEmpty || deferredCopy != nil { applyPending() }
+            if lentFrame != nil { reclaim(copying:true) }
+            return valuesStorage
+        }
+        /// The values for a write of every pixel (a whole fill): a lent buffer
+        /// is left to its frame without copying it.
+        var overwrittenValues: UnsafeMutablePointer<UInt32> {
+            // Moved first: recorded writes then land in the new buffer, and
+            // the caller overwrites every value they wrote (their known bits
+            // stay), so the lent bytes are never copied.
+            if lentFrame != nil { reclaim(copying:false) }
+            if !pending.isEmpty || deferredCopy != nil { applyPending() }
+            return valuesStorage
+        }
         var known: KnownMask { if !pending.isEmpty || deferredCopy != nil { applyPending() }; return knownStorage }
+        /// The values as a frame of the whole storage (row-major, every pixel
+        /// as stored), without copying: `crop` of the whole storage when every
+        /// pixel is known (the caller checks). The buffer is the frame's from
+        /// now on (P2).
+        func lend() -> OriginalFramebuffer {
+            let reading = values
+            assert(knownStorage.isFull,"a lent frame has every pixel known")
+            if let lentFrame { return lentFrame }
+            let pool = self.pool,count = self.count
+            // Data keeps a few bytes inline, copying them and releasing the
+            // buffer at once: such a buffer would reach the pool while still
+            // in use, so a tiny storage's frame is a copy (P2's review).
+            guard count*4 >= 64 else {
+                return OriginalFramebuffer(width:width,height:height,pixels:Data(bytes:reading,count:count*4))
+            }
+            let frame = OriginalFramebuffer(width:width,height:height,pixels:Data(bytesNoCopy:reading,count:count*4,
+                deallocator:.custom { pointer,_ in pool.give(pointer.assumingMemoryBound(to:UInt32.self),count) }))
+            lentFrame = frame
+            return frame
+        }
+        private func reclaim(copying: Bool) {
+            let fresh = pool.take(count)
+            if copying { fresh.update(from:valuesStorage,count:count) }
+            valuesStorage = fresh; lentFrame = nil
+        }
         func record(_ write: @escaping (UnsafeMutablePointer<UInt32>,KnownMask) -> Void) {
             if let copy = deferredCopy { deferredCopy = nil; pending.append(written(copy)) }
             pending.append(write)
@@ -176,23 +255,25 @@ import NTSDCore
             }
         }
         private func applyPending() {
+            if lentFrame != nil { reclaim(copying:true) }
             let writes = pending; pending = []
             for write in writes { write(valuesStorage,knownStorage) }
             if let copy = deferredCopy { deferredCopy = nil; written(copy)(valuesStorage,knownStorage) }
             knownStorage.refreshFull()
         }
-        init(_ width: Int,_ height: Int,_ budget: Budget) throws {
+        init(_ width: Int,_ height: Int,_ budget: Budget,pool: PixelPool) throws {
             guard width > 0,height > 0,width <= Int.max/height,width*height <= Int.max/5 else { throw Boundary.geometry }
             // The budget still counts five bytes per pixel, as the byte mask did,
             // so allocation-budget boundaries fall where they did.
-            self.width = width; self.height = height; count = width*height; byteCount = count*5; self.budget = budget
+            self.width = width; self.height = height; count = width*height; byteCount = count*5; self.budget = budget; self.pool = pool
             try budget.reserve(byteCount)
             guard let pixels = calloc(count,4) else { budget.release(byteCount); throw Boundary.allocationFailed }
             guard let mask = KnownMask(count) else { free(pixels); budget.release(byteCount); throw Boundary.allocationFailed }
             valuesStorage = pixels.assumingMemoryBound(to:UInt32.self); knownStorage = mask
             // Zero allocation bytes are not an original initialized framebuffer.
         }
-        deinit { free(valuesStorage); knownStorage.free(); budget.release(byteCount) }
+        /// A lent buffer is the frame's to return (P2).
+        deinit { if lentFrame == nil { free(valuesStorage) }; knownStorage.free(); budget.release(byteCount) }
     }
     private final class Surface: Resource {
         let draw: Draw, width: Int, height: Int, screen: CGRect?
@@ -318,7 +399,7 @@ import NTSDCore
         self.keepsOperationLogs = keepsOperationLogs
     }
     private func storage(_ width: Int,_ height: Int) throws -> Storage {
-        let value = try Storage(width,height,budget)
+        let value = try Storage(width,height,budget,pool:pixelPool)
         if freshSurfacesKnownBlack { value.known.setAll() }
         return value
     }
@@ -494,6 +575,7 @@ import NTSDCore
         }
     }
     private let framePool = FramePool()
+    private let pixelPool = PixelPool()
     private nonisolated static func crop(_ data: Storage,_ region: (Int,Int,Int,Int,UInt32?),black presentUnknownAsBlack: Bool,
                                          pool: FramePool) throws -> OriginalFramebuffer {
         let (x,y,w,h,_) = region
@@ -922,7 +1004,7 @@ extension OriginalMacDisplayBackend {
         .init(data:data,mask:mask(bytes),x:x,y:y,opaque:dc.opaque,background:Self.xrgb(dc.background),color:Self.xrgb(dc.color))
     }
     private nonisolated static func textPixels(_ p: TextPlan) {
-        let data = p.data,mask = p.mask,values = data.values,known = data.known
+        let data = p.data,mask = p.mask,values = data.writableValues,known = data.known
         func set(_ column: Int,_ row: Int,_ value: UInt32) {
             guard column >= 0,row >= 0,column < data.width,row < data.height else { return }
             let i = row*data.width+column;values[i] = value.littleEndian;known[i] = 1
@@ -1151,7 +1233,10 @@ extension OriginalMacDisplayBackend {
     /// The same pixels and bits; the column range is formed per row, as the
     /// per-pixel loops did.
     private nonisolated static func fillRows(_ data: Storage,_ rows: Range<Int>,_ left: Int,_ right: Int,_ color: UInt32) {
-        let values = data.values,known = data.known,value = color.littleEndian
+        // A fill of the whole storage writes every pixel: a lent buffer need
+        // not be copied first (P2).
+        let whole = rows == 0..<data.height && left == 0 && right == data.width
+        let values = whole ? data.overwrittenValues : data.writableValues,known = data.known,value = color.littleEndian
         for row in rows {
             let columns = left..<right
             guard !columns.isEmpty else { continue }
@@ -1160,7 +1245,7 @@ extension OriginalMacDisplayBackend {
             known.setRange(start,columns.count)
         }
         // A fill of the whole storage made every pixel known (1g).
-        if rows == 0..<data.height && left == 0 && right == data.width { known.markFull() }
+        if whole { known.markFull() }
     }
     /// What a copy's pixel loop needs, without the surfaces (the render thread
     /// holds only storages and values).
@@ -1189,7 +1274,7 @@ extension OriginalMacDisplayBackend {
     }
     private nonisolated static func copyPixels(_ copy: CopyPlan,_ input: Storage,_ output: Storage) {
         if let rect = copy.region {
-            let inputValues = input.values,inputKnown = input.known,outputValues = output.values,outputKnown = output.known
+            let inputValues = input.values,inputKnown = input.known,outputValues = output.writableValues,outputKnown = output.known
             // Row by row: the source index steps by one pixel (back for a
             // mirrored copy), the key bounds are read once, a fully known
             // source span skips the per-pixel test, and the target's known
@@ -1304,7 +1389,9 @@ extension OriginalMacDisplayBackend {
                         // source and the target's copy is recorded, written at
                         // its next access (one full-frame pass fewer;
                         // CORE_REALTIME R1, CORE_REALTIME_RENDER_PASSES P1).
-                        let frame = try Self.crop(input,(0,0,input.width,input.height,rect.4),black:true,pool:pool)
+                        // The frame is the source's own buffer, lent (P2):
+                        // the source's next write moves to another buffer.
+                        let frame = input.lend()
                         output.deferCopy(left:rect.0,top:rect.1,frame:frame)
                         present.deliver(frame)
                     } else {
