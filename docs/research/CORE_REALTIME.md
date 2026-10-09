@@ -216,7 +216,8 @@ while measuring; restore `svc power stayon false` when the loop pauses or stops.
 | 2026-10-09 | S2b (tier 3): one buffer per record | Each flat record keeps its bytes, then one definedness bit per byte, in one buffer (it was a byte array and a Bool array); copies copy once, writes return early when the bytes are already there, the mask is packed byte-wise and whole-array reads are cached per written version. Profile: array copy-on-write 9.40 → 4.96% of the main thread. A12 vs main 15.29 → 14.36 ms per tick, Demo 15.25 → 14.04 (three runs against two of S2a, interleaved). Behaviour equal; the whole test bundle passes (287 suites, 755 tests); the checked test bundle's longest tests are slower (about 790 → 1,440 s); review OK after its findings were fixed | [evidence](../evidence/rt-s2b-record-storage-20261009.json) | 10b9c05 |
 | 2026-10-09 | S3 (tier 3): the actor table in chunks — **not committed** | The 400-record actor array became a table of 25 chunks of 16 behind Array's API, so a write copies one chunk instead of the array ([study](CORE_REALTIME_S3.md)). Behaviour gates passed and the review approved, but the A12 showed no gain (vs 14.18 → 14.26 ms per tick, Demo 14.00 → 13.60 with one low outlier): the actor-array copies went, but reads through the nested chunks retain and release records. Patch parked on X5 | [evidence](../evidence/rt-s3-actor-table-parked-20261009.json) | cea9fd0 (record only) |
 | 2026-10-09 | d2 (tier 3): the Host's commit keeps the loop tail apart | Each tick the loaded commit copied the whole operations list to append two to four loop entries; it now keeps the tail apart, `operations` is computed for tests, and the runtime walks both parts in order. Profile: finishLoadedMenu gone from the copy callers (it was 0.71%). A12 vs main 14.25 → 14.16 ms per tick, Demo 14.07 → 13.89 (three runs against two of S2b). Behaviour equal; review OK (its nits in g) | [evidence](../evidence/rt-d2-commit-tail-apart-20261009.json) | 86ef8f4 |
-| 2026-10-09 | g (tier 3): the display replay without owner arrays or second lookups | The committed-batch replay reads only each draw's response, so it no longer builds the served owner array; a Blt hands the surfaces validation just resolved to the copy; plus d2's review nits. Profile: the display backend 6.70 → 5.88% of the main thread (serveFront's allocations 1.03 → 0.64%). A12, without one phone-state outlier per side: vs 14.37 → 14.17 ms per tick, Demo 13.91 → 13.81 (with them 13.68 → 14.17 and 13.90 → 13.08). Behaviour equal | [evidence](../evidence/rt-g-replay-front-20261009.json) | this commit |
+| 2026-10-09 | g (tier 3): the display replay without owner arrays or second lookups | The committed-batch replay reads only each draw's response, so it no longer builds the served owner array; a Blt hands the surfaces validation just resolved to the copy; plus d2's review nits. Profile: the display backend 6.70 → 5.88% of the main thread (serveFront's allocations 1.03 → 0.64%). A12, without one phone-state outlier per side: vs 14.37 → 14.17 ms per tick, Demo 13.91 → 13.81 (with them 13.68 → 14.17 and 13.90 → 13.08). Behaviour equal | [evidence](../evidence/rt-g-replay-front-20261009.json) | c69b2ea |
+| 2026-10-09 | M1 (tier 3): the World's actor table converted in one pass | The match bindings converted the 400-seat actor table with 800 checked reads and writes per tick; they now map the words in one pass (the seat loop remains for the exact error) through a table indexed by the tokens' common step (actor tokens are allocation addresses). Profile: bindings 4.61 → 3.09% of the main thread. A12 vs main 14.19 → 14.02 ms per tick, Demo 13.90 → 13.80. A first version (a table only for tokens within 4096) still hashed every seat: gated, not committed. Behaviour equal; review OK (a second review of the stepped table: correct; its test probes follow) | [evidence](../evidence/rt-m1-actor-table-one-pass-20261009.json) | this commit |
 
 ## Next task
 
@@ -252,11 +253,12 @@ main thread; message-loop iterations 4.12 × 1.14 ms; render thread 18.7 ms,
   G3a–G3c and d1 done (emit 7.7 → 5.2%; vs main about 15.4 ms, Demo about
   15.3). R2 (the Android present on its own thread) measured and parked:
   render −4 ms but main +0.3–0.4 ms. S2a and S2b done (record storage v2:
-  vs main 14.36 ms, Demo 14.04). Next: the idle lane (L4b
-  planned at 0.11–0.17 ms; L4c/L5a first), the Host tail without its operations copy (d2), the
-  display replay's second surface lookups (g), compact commands (e),
-  the idle lane, record storage v2; ~11 ms without the user's decisions (Q1–Q4
-  in the plan), ~9–10 with them. Left from 4aa's review: the other packagers'
+  vs main 14.36 ms, Demo 14.04); S3 parked; d2, g and M1 done (vs main
+  14.02 ms, Demo 13.80). Next: compact commands (e,
+  [design](CORE_REALTIME_E.md)), then the idle lane (idle iterations are
+  ~10% of the main thread: L5a, the delivery context sharing the committed
+  platform; then L4b and L6), H2/H3 and the render thread; ~11 ms without
+  the user's decisions (Q1–Q4 in the plan), ~9–10 with them. Left from 4aa's review: the other packagers'
   opt-in (the macOS app build, Linux, Windows, iOS).
 - **B2** ([plan](CORE_REALTIME_B2.md)): in-place nested passes under the first
   transactional copy; P1–P4 done (P4b–P4f: every gameplay-body pass that

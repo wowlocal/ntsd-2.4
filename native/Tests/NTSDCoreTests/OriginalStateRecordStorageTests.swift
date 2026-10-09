@@ -276,4 +276,62 @@ final class OriginalStateRecordStorageTests: XCTestCase {
         XCTAssertEqual(zeroed.byte(at: 0), 0); XCTAssertEqual(zeroed.bytes[0], 0); XCTAssertTrue(zeroed.defined[0])
         XCTAssertEqual(record.bytes, m.bytes)
     }
+
+    /// `mapWords` equals reading and writing the words one by one when every
+    /// word is defined and maps, and otherwise changes nothing and reports
+    /// false; no word changed keeps the storage shared (tier 3 M1).
+    func testMapWordsMatchesWordByWord() throws {
+        var g = Generator(state: 0x4d31)
+        var outcomes = [0, 0, 0]
+        for round in 0..<3000 {
+            let count = g.int(0...0x7d8)
+            var m = model(count, &g)
+            if g.chance(60) { m.defined = Array(repeating: true, count: count) }
+            let base = try OriginalStateRecord(bytes: m.bytes, defined: m.defined)
+            let start = g.chance(90) ? g.int(0...max(0, count - 4)) : g.int(-4...count + 4)
+            let words = g.int(0...(count / 4 + 1)), mode = g.int(0...2), key = UInt32(truncatingIfNeeded: g.next())
+            let map: (UInt32) -> UInt32? = { w in
+                switch mode {
+                case 0: return w
+                case 1: return (w &* 2654435761) ^ key
+                default: return w % 97 == 0 ? nil : w ^ key
+                }
+            }
+            var expected = m
+            let succeeds: Bool = {
+                for k in 0..<words {
+                    guard let w = try? expected.integer(start + 4 * k, 4), let v = map(UInt32(w)) else { return false }
+                    try! expected.write(UInt64(v), start + 4 * k, 4)
+                }
+                return true
+            }()
+            var record = base
+            XCTAssertEqual(record.mapWords(at: start, count: words, map), succeeds, "round \(round)")
+            if succeeds {
+                XCTAssertEqual(record.bytes, expected.bytes, "round \(round)"); XCTAssertEqual(record.defined, expected.defined, "round \(round)")
+                if expected == m { XCTAssertTrue(words == 0 || record.sharesStorage(with: base), "round \(round): no change keeps sharing") }
+                outcomes[expected == m ? 0 : 1] += 1
+                // A unique record with its whole arrays cached (production's
+                // case: an earlier write made the world unique) is written in
+                // place and its whole reads follow.
+                var unique = try OriginalStateRecord(bytes: m.bytes, defined: m.defined)
+                _ = unique.bytes; _ = unique.defined
+                let identity = unique.storageIdentity
+                XCTAssertTrue(unique.mapWords(at: start, count: words, map), "round \(round)")
+                XCTAssertEqual(unique.bytes, expected.bytes, "round \(round): whole reads follow"); XCTAssertEqual(unique.defined, expected.defined)
+                XCTAssertEqual(unique.storageIdentity?.0, identity?.0, "round \(round): written in place")
+            } else {
+                XCTAssertTrue(record.sharesStorage(with: base), "round \(round): a refusal changes nothing")
+                XCTAssertEqual(record.bytes, m.bytes); XCTAssertEqual(record.defined, m.defined)
+                outcomes[2] += 1
+            }
+            XCTAssertEqual(base.bytes, m.bytes); XCTAssertEqual(base.defined, m.defined)
+            if count >= 16 && words > 0 {
+                var parted = base.partitioned(at: [0, 8])
+                XCTAssertFalse(parted.mapWords(at: start, count: words, map), "a parted record converts word by word")
+                XCTAssertTrue(parted.isPartitioned); XCTAssertEqual(parted.bytes, m.bytes); XCTAssertEqual(parted.defined, m.defined)
+            }
+        }
+        XCTAssertTrue(outcomes.allSatisfy { $0 > 200 }, "\(outcomes)")
+    }
 }

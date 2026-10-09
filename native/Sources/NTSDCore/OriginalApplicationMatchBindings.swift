@@ -11,6 +11,43 @@ public struct OriginalApplicationMatchBindings {
     }
     public let catalogToken: UInt32, actorTokens: [UInt32], objectTokens: [UInt32]
     private let actors: [UInt32:UInt32], objects: [UInt32:UInt32]
+    /// `actors` for the whole-table conversion (tier 3 M1).
+    private let actorOrdinals: TokenOrdinals
+    /// Token to ordinal: an array indexed by (token - lowest token) / step,
+    /// the step being the greatest common divisor of the tokens' distances
+    /// from the lowest (actor tokens are allocation addresses spaced by the
+    /// allocation size), when that array has at most 65,536 slots, else a
+    /// dictionary; the same answer as `Dictionary` over `tokens.enumerated()`
+    /// for every token.
+    struct TokenOrdinals {
+        private let low: UInt32, step: UInt32, table: [UInt32], sparse: [UInt32:UInt32]?
+        var usesTable: Bool { sparse == nil }
+        init(_ tokens: [UInt32]) {
+            if let low = tokens.min(),let high = tokens.max() {
+                let step = max(1,tokens.reduce(UInt32(0)) { Self.gcd($0,$1-low) })
+                if (high-low)/step < 1 << 16 {
+                    var table = [UInt32](repeating:.max,count:Int((high-low)/step)+1)
+                    for (i,token) in tokens.enumerated() { table[Int((token-low)/step)] = UInt32(i) }
+                    self.low = low;self.step = step;self.table = table;sparse = nil
+                    return
+                }
+            }
+            low = 0;step = 1;table = []
+            sparse = Dictionary(uniqueKeysWithValues:tokens.enumerated().map { ($0.element,UInt32($0.offset)) })
+        }
+        private static func gcd(_ a: UInt32,_ b: UInt32) -> UInt32 { b == 0 ? a : gcd(b,a % b) }
+        func callAsFunction(_ token: UInt32) -> UInt32? {
+            if let sparse { return sparse[token] }
+            // Below the lowest token the distance wraps past the highest, so
+            // a multiple of the step lands beyond the table.
+            let distance = token &- low
+            guard distance % step == 0 else { return nil }
+            let k = distance / step
+            guard k < table.count else { return nil }
+            let ordinal = table[Int(k)]
+            return ordinal == .max ? nil : ordinal
+        }
+    }
     /// The last session/model pair of each actor record (CORE_REALTIME R3).
     /// read and store rewrite only the Object reference at +0x368, in opposite
     /// directions over unique tokens, so a record equal to one side of a pair
@@ -63,6 +100,7 @@ public struct OriginalApplicationMatchBindings {
               !all.contains(0),Set(all).count == all.count else { throw Boundary.identities }
         self.catalogToken = catalogToken;self.actorTokens = actorTokens;self.objectTokens = objectTokens
         actors = Dictionary(uniqueKeysWithValues:actorTokens.enumerated().map { ($0.element,UInt32($0.offset)) })
+        actorOrdinals = TokenOrdinals(actorTokens)
         objects = Dictionary(uniqueKeysWithValues:objectTokens.enumerated().map { ($0.element,UInt32($0.offset)) })
         pairs = ActorPairs()
         shape = .init(tokens:actorTokens,objectTokens:objectTokens,pairs:pairs)
@@ -96,10 +134,15 @@ public struct OriginalApplicationMatchBindings {
         var world = try State.slice(state.full,0xbb00,0x7d8)
         guard try world.integer(at:0x7d4,as:UInt32.self) == catalogToken else { throw Boundary.catalog }
         try world.write(UInt32(0),at:0x7d4)
-        for seat in 0..<400 {
-            let token = try world.integer(at:0x194+seat*4,as:UInt32.self)
-            guard let ordinal = actors[token] else { throw Boundary.actor(token) }
-            try world.write(ordinal,at:0x194+seat*4)
+        // The whole table in one pass when every seat is defined and an actor
+        // token; otherwise seat by seat for the exact error (tier 3 M1).
+        let ordinals = actorOrdinals
+        if !world.mapWords(at:0x194,count:400,{ ordinals($0) }) {
+            for seat in 0..<400 {
+                let token = try world.integer(at:0x194+seat*4,as:UInt32.self)
+                guard let ordinal = actors[token] else { throw Boundary.actor(token) }
+                try world.write(ordinal,at:0x194+seat*4)
+            }
         }
         // The state's own actor tier is already the model form; its records
         // passed these checks when they were stored (R3 stage 1).
@@ -147,10 +190,14 @@ public struct OriginalApplicationMatchBindings {
               try match.world.integer(at:0x7d4,as:UInt32.self) == 0 else { throw Boundary.catalog }
         var next = state,world = match.world,memory = context.memory
         try world.write(catalogToken,at:0x7d4)
-        for seat in 0..<400 {
-            let ordinal = try world.integer(at:0x194+seat*4,as:UInt32.self)
-            guard ordinal < actorTokens.count else { throw Boundary.ordinal(ordinal) }
-            try world.write(actorTokens[Int(ordinal)],at:0x194+seat*4)
+        // As in read (tier 3 M1).
+        let tokens = actorTokens
+        if !world.mapWords(at:0x194,count:400,{ $0 < tokens.count ? tokens[Int($0)] : nil }) {
+            for seat in 0..<400 {
+                let ordinal = try world.integer(at:0x194+seat*4,as:UInt32.self)
+                guard ordinal < actorTokens.count else { throw Boundary.ordinal(ordinal) }
+                try world.write(actorTokens[Int(ordinal)],at:0x194+seat*4)
+            }
         }
         // The same checks per actor and in the same order as writing each
         // entry: the state's actor (implied when the state holds this tier),

@@ -676,6 +676,38 @@ public struct OriginalStateRecord: Equatable, Sendable {
         return flat.with({ _, _, m in Flat.allSet(m, range) }) ? flat.bytesArray(range) : nil
     }
 
+    /// Replaces the `count` little-endian words from `start` with `map(word)`
+    /// in one pass when the record is flat, the words are in range, all their
+    /// bytes are defined and every word maps; otherwise changes nothing and
+    /// returns false (the caller then converts word by word for the exact
+    /// error). The result equals writing the mapped words one by one in
+    /// order: storage stays shared when no word changes (CORE_REALTIME
+    /// tier 3 M1).
+    mutating func mapWords(at start: Int, count: Int, _ map: (UInt32) -> UInt32?) -> Bool {
+        if count == 0 { return true }
+        guard large == nil, count > 0, count <= flatCount / 4, start >= 0, start <= flatCount - count * 4 else { return false }
+        let n = count * 4
+        return withUnsafeTemporaryAllocation(of: UInt32.self, capacity: count) { mapped in
+            var changed = false
+            let mapsAll = flat!.with { _, b, m -> Bool in
+                guard Flat.allSet(m, start..<start + n) else { return false }
+                for k in 0..<count {
+                    let word = UInt32(littleEndian: UnsafeRawPointer(b).loadUnaligned(fromByteOffset: start + 4 * k, as: UInt32.self))
+                    guard let value = map(word) else { return false }
+                    mapped[k] = value; changed = changed || value != word
+                }
+                return true
+            }
+            guard mapsAll else { return false }
+            guard changed else { return true }
+            makeFlatUnique()
+            flat!.with { _, b, _ in
+                for k in 0..<count { UnsafeMutableRawPointer(b).storeBytes(of: mapped[k].littleEndian, toByteOffset: start + 4 * k, as: UInt32.self) }
+            }
+            return true
+        }
+    }
+
     public func binary64(at offset: Int) throws -> Double {
         Double(bitPattern: try integer(at: offset, as: UInt64.self))
     }
