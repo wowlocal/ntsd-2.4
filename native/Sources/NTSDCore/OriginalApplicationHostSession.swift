@@ -45,7 +45,7 @@ public final class OriginalApplicationHostSession<Platform: OriginalApplicationS
         private let storage: Storage
         public var application: Application { _read { yield storage.application } }
         fileprivate init(application: Application, platform: Platform) throws {
-            storage = Storage(application: application, retainedPlatform: try OriginalApplicationHostSession<Platform>.copy(platform))
+            storage = Storage(application: application, retainedPlatform: try OriginalApplicationHostSession<Platform>.retained(platform))
         }
         /// With the platform copy already made (CORE_REALTIME A1).
         fileprivate init(application: Application, retainedPlatform: Platform) {
@@ -128,6 +128,18 @@ public final class OriginalApplicationHostSession<Platform: OriginalApplicationS
         guard staged !== platform else { throw Boundary.sharedPlatform }
         return staged
     }
+    /// The delivery context's platform for a committed candidate: the
+    /// candidate itself for the shipping platform, else a copy as before
+    /// (CORE_REALTIME A3 L5a). Sharing equals copying there because its staged
+    /// copy cannot fail or share, and a committed platform is never changed in
+    /// place: every Host attempt stages a copy of it, `start` refuses a
+    /// started application before staging, and the publication hooks that
+    /// run after the context is built only read the candidate's cursors. Test
+    /// platforms keep the copy and its failures.
+    static func retained(_ candidate: Platform) throws -> Platform {
+        if Platform.self == OriginalApplicationPreparedStartupPlatform.self { return candidate }
+        return try copy(candidate)
+    }
     private func locked<T>(_ body: () throws -> T) rethrows -> T {
         lock.lock(); defer { lock.unlock() }; return try body()
     }
@@ -169,8 +181,8 @@ public final class OriginalApplicationHostSession<Platform: OriginalApplicationS
             guard application.startup != nil, inputs.initialization == nil, inputs.queue.isEmpty, inputs.windowDefault.isEmpty,
                   inputs.surface.isEmpty, inputs.lifecycle.isEmpty,
                   let idle = try application.session!.idleIteration(queue: { q in try queue(q, candidate) }) else { return nil }
-            // The delivery context's platform copy, then the final hook, as `step`.
-            let retained = try Self.copy(candidate)
+            // The delivery context's platform, then the final hook, as `step`.
+            let retained = try Self.retained(candidate)
             try beforePublication(candidate)
             application.commitIdle(idle); idleCommits += 1
             let value = Session.Committed(result: .continued, effects: idle.effects, graphics: [])

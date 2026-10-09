@@ -48,7 +48,11 @@ final class OriginalMatchBindingsPairsTests: XCTestCase {
             ((0..<400).map { UInt32.max - 0x500 * 399 + 0x500 * UInt32($0) }, true),
             ((0..<400).map { UInt32.max - 2 * UInt32($0) }, true),
             (irregular, true), ([1, 4097], true), ([7], true),
-            ([0, 1, 70_000], false), ((0..<400).map { _ in next() }, false)]
+            ([0, 1, 70_000], false), ((0..<400).map { _ in next() }, false),
+            // The table's limit: 65,536 slots use the table, 65,537 the dictionary.
+            ([5, 6, 5 + 65_535], true), ([5, 6, 5 + 65_536], false), ([0, 3, 3 * 65_535], true), ([0, 3, 3 * 65_536], false)]
+        let empty = OriginalApplicationMatchBindings.TokenOrdinals([])
+        for token: UInt32 in [0, 1, 7, UInt32.max] { XCTAssertNil(empty(token), "no tokens, no ordinals") }
         for (tokens, table) in sets {
             let truth = Dictionary(uniqueKeysWithValues: tokens.enumerated().map { ($0.element, UInt32($0.offset)) })
             XCTAssertEqual(truth.count, tokens.count, "unique tokens")
@@ -56,6 +60,14 @@ final class OriginalMatchBindingsPairsTests: XCTestCase {
             XCTAssertEqual(lookup.usesTable, table, "set starting \(tokens[0])")
             var probes: [UInt32] = [0, 1, UInt32.max, UInt32.max - 1, tokens.min()! &- 1, tokens.max()! &+ 1, tokens.min()! &- 0x420, tokens.max()! &+ 0x420]
             for token in tokens { probes += [token, token &- 1, token &+ 1, token &+ 8, token &+ 0x210, token &- 0x420] }
+            // Multiples of the step that wrap below the lowest token, and the
+            // first multiples past the highest (the review's probes).
+            let low = tokens.min()!, high = tokens.max()!
+            let step = tokens.reduce(UInt32(0)) { a, t in var (x, y) = (a, t - low); while y != 0 { (x, y) = (y, x % y) }; return x }
+            if step > 0 {
+                for k: UInt32 in [1, 2, 3, UInt32.max / step, UInt32.max / step - 1] { probes += [low &- step &* k, low &+ step &* k] }
+                probes += [high &+ step, high &+ 2 &* step]
+            }
             for _ in 0..<2000 { probes.append(next()) }
             for token in probes { XCTAssertEqual(lookup(token), truth[token], "token \(token) of a set starting \(tokens[0])") }
         }
