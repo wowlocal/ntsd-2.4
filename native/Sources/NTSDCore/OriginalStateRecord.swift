@@ -729,7 +729,27 @@ public struct OriginalStateRecord: Equatable, Sendable {
     }
 
     /// Writes preserve exact integer/floating-point bit patterns; no host-width pointer conversion.
+    /// The flat, in-range case (`checkedWrite`'s flat branch) runs inline at
+    /// the call site; every other case and every error is `checkedWrite`'s,
+    /// unchanged (CORE_REALTIME tier 3 L2, as L1 for reads).
+    @inline(__always)
     public mutating func write<T: FixedWidthInteger>(_ value: T, at offset: Int) throws {
+        let count = T.bitWidth / 8
+        if large == nil, offset >= 0, count <= flatCount, offset <= flatCount - count {
+            if flat!.with({ _, b, m in
+                T(littleEndian: UnsafeRawPointer(b).loadUnaligned(fromByteOffset: offset, as: T.self)) == value && Flat.allSet(m, offset, small: count)
+            }) { return }
+            makeFlatUnique()
+            flat!.with { _, b, m in
+                UnsafeMutableRawPointer(b).storeBytes(of: value.littleEndian, toByteOffset: offset, as: T.self)
+                Flat.setAll(m, offset, small: count)
+            }
+            return
+        }
+        try checkedWrite(value, at: offset)
+    }
+    @inline(never)
+    mutating func checkedWrite<T: FixedWidthInteger>(_ value: T, at offset: Int) throws {
         if large == nil {
             // A flat record: the same check and no-op return as below, then
             // one store each for the bytes and their definedness (at most one
