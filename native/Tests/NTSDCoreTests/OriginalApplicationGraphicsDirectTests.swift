@@ -44,10 +44,12 @@ final class OriginalApplicationGraphicsDirectTests: XCTestCase {
                             source: rect, destination: r == 1 ? [1, 2, 3, 4] : rect, flags: 0x1008000,
                             effects: source == 3 ? [UInt8](repeating: 1, count: 100) : nil)
                         var old = g
+                        let before = g
                         let expected = outcome { try old.consume(.blit(blit, result: Int32(r) - 1), inputs: owner) }
                         let actual = outcome { try g.blitCommand(blit, result: Int32(r) - 1, inputs: owner) }
                         XCTAssertEqual(actual, expected, "blit \(source)->\(target) rect \(rect)")
-                        XCTAssertEqual(old, g, "consume left the owner unchanged")
+                        XCTAssertEqual(g, before, "the mutating builder leaves the owner unchanged")
+                        XCTAssertEqual(old, before, "consume left the owner unchanged")
                         compared += 1
                         if expected.failed { errors += 1 } else { commands += 1 }
                         if case .command(let c?) = expected, c.sourceColors != nil { colored += 1 }
@@ -56,9 +58,11 @@ final class OriginalApplicationGraphicsDirectTests: XCTestCase {
                 let fill = OriginalSurfaceFillRequest(target: target, rectangle: rectangles[Int(source % 5)],
                     flags: 0x1000400, effects: [UInt8](repeating: 0, count: 100), defined: [Bool](repeating: source == 2, count: 100))
                 var old = g
+                let before = g
                 let expected = outcome { try old.consume(.fill(fill, result: 3), inputs: inputs) }
                 XCTAssertEqual(outcome { try g.fillCommand(fill, result: 3) }, expected, "fill \(target) \(fill.rectangle)")
-                XCTAssertEqual(old, g)
+                XCTAssertEqual(g, before)
+                XCTAssertEqual(old, before)
                 compared += 1
                 if expected.failed { errors += 1 } else { commands += 1 }
             }

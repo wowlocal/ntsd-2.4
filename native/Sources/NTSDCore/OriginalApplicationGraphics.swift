@@ -299,7 +299,7 @@ public struct OriginalApplicationGraphics: Equatable {
             guard let inputs else { throw Boundary.owner(source.token) }
             colors = try inputs.sourceColors(forSurface:source.token)
         } else if source == nil { dependencies.append("nullSource") }
-        return .init(family:"front",request:nil,windowResponse:nil,bitmapResponse:nil,event:Self.event("blit",blit:b),result:result,output:nil,
+        return .init(family:"front",request:nil,windowResponse:nil,bitmapResponse:nil,event:OriginalFrontScreenEvent(blit:b),result:result,output:nil,
             bindings:bindings,dependencies:dependencies,opaqueReferences:[],sourceRectangle:b.source,destinationRectangle:b.destination,sourceColors:colors)
     }
     /// `consume(.fill(f, r), inputs:)` the same way (G3a): the rectangle
@@ -307,14 +307,8 @@ public struct OriginalApplicationGraphics: Equatable {
     mutating func fillCommand(_ f: OriginalSurfaceFillRequest, result: Int32) throws -> Command {
         guard f.rectangle.count == 4 else { throw Boundary.request("fill") }
         let bindings = [Binding(role:"target",ref:try surface(f.target))]
-        return .init(family:"front",request:nil,windowResponse:nil,bitmapResponse:nil,event:Self.event("fill",fill:f),result:result,output:nil,
+        return .init(family:"front",request:nil,windowResponse:nil,bitmapResponse:nil,event:OriginalFrontScreenEvent(fill:f),result:result,output:nil,
             bindings:bindings,dependencies:[],opaqueReferences:[],sourceRectangle:nil,destinationRectangle:f.rectangle,sourceColors:nil)
-    }
-
-    /// `OriginalFrontScreenEvent(kind)` with its Blt or fill set, returned so
-    /// the builders move it into the command instead of copying a local (G3b).
-    private static func event(_ kind: String, blit: OriginalBitmapBlit? = nil, fill: OriginalSurfaceFillRequest? = nil) -> OriginalFrontScreenEvent {
-        var e = OriginalFrontScreenEvent(kind);e.blit = blit;e.fill = fill;return e
     }
 
     /// Resolve once at the actual effect boundary. Other terminal effects keep

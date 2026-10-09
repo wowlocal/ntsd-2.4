@@ -50,7 +50,8 @@ public struct OriginalApplicationGameplaySession {
         },
         /// nil (production): nobody observes, so the session builds no
         /// `.front`, `.gameplay` or checkpoint observations (CORE_REALTIME
-        /// tier 3 G3b); the checkpoint snapshots themselves are still taken.
+        /// tier 3 G3b); the checkpoint snapshots themselves are still taken,
+        /// and the Attempt's other observations go to a no-op as before.
         observe: ((Menu.Observation,inout Environment) throws -> Void)? = nil,
         pausedObserve: @escaping (OriginalPausedGameplay.Stage,OriginalFrontScreenEvent,inout Environment) throws -> Void = { _,_,_ in },
         pausedCheckpoint: @escaping (OriginalPausedGameplay.Stage,Menu.Snapshot,inout Environment) throws -> Void = { _,_,_ in },
