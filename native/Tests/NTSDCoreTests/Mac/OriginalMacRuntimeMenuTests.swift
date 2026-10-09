@@ -307,6 +307,43 @@ import XCTest
     /// same counters, delivered messages, sleeps, clock calls, committed globals,
     /// commits, frames, request bounds and failures as the whole step for every
     /// iteration, with the same number of prepared inputs.
+    /// CORE_REALTIME A3 L5a (its review): a delivery context holds the
+    /// shipping platform's committed candidate itself, so contexts kept across
+    /// later Host attempts — idle commits, whole steps, a failing step — keep
+    /// reading the platform exactly as it was committed.
+    func testKeptContextsKeepTheirCommittedPlatform() throws {
+        let root = FileManager.default.temporaryDirectory.appendingPathComponent("ntsd-kept-\(UUID().uuidString)",isDirectory:true)
+        defer { try? FileManager.default.removeItem(at:root) }
+        let (started,package) = try startup(root)
+        var kept: [OriginalApplicationHostSession<OriginalApplicationPreparedStartupPlatform>.DeliveryContext] = []
+        while let batch = try started.host.takeCommitted() { kept.append(batch.context) }
+        XCTAssertFalse(kept.isEmpty)
+        func fingerprint(_ p: OriginalApplicationPreparedStartupPlatform) -> String {
+            "\(p.snapshot) \(String(describing:p.windowExchange?.position)) \(String(describing:p.startupExchange?.position)) "
+            + "\(String(describing:p.bitmapDelivery.cursor?.position)) \(p.bitmapDelivery.retainedIterationCount) "
+            + "\(String(describing:p.lifecycleDelivery.cursor?.position)) \(p.lifecycleDelivery.retainedIterationCount) "
+            + "\(String(describing:p.graphicsDelivery.cursor?.position)) \(p.graphicsDelivery.retainedIterationCount) "
+            + "\(String(describing:p.iterationDelivery.cursor?.position)) \(p.iterationDelivery.retainedIterationCount)"
+        }
+        let committed = try kept.map { try fingerprint($0.platformSnapshot()) }
+        var now: UInt32 = 5_000_000,calls = 0,failAt = Int.max
+        let menu = try OriginalMacRuntimeMenu(started,inputs:package,clock:{
+            calls += 1
+            if calls == failAt { throw Stop.limit }
+            now &+= 7; return now
+        })
+        menu.servesIdleDirectly = true
+        for _ in 0..<400 where try XCTUnwrap(started.host.snapshot.session).state.settings == nil { guard case .committed = try menu.step() else { break } }
+        for _ in 0..<40 { guard case .committed = try menu.step() else { break } }
+        XCTAssertGreaterThan(started.host.idleCommitCount,0,"idle commits shared their platforms")
+        let hostBefore = try fingerprint(started.host.platformSnapshot())
+        failAt = calls + 2
+        XCTAssertThrowsError(try { for _ in 0..<20 { _ = try menu.step() } }())
+        XCTAssertEqual(try fingerprint(started.host.platformSnapshot()),hostBefore,"a failed attempt leaves the committed platform")
+        XCTAssertEqual(try kept.map { try fingerprint($0.platformSnapshot()) },committed)
+        XCTAssertNotEqual(hostBefore,committed.last,"later commits moved on from the kept platforms")
+    }
+
     func testIdleKernelMatchesTheWholeStep() throws {
         func run(idle: Bool,failAt: Int? = nil,jumps: Bool = false) throws -> (steps: [String],frame: Data?,prepares: Int,clockCalls: Int,idleCommits: UInt64) {
             let root = FileManager.default.temporaryDirectory.appendingPathComponent("ntsd-idle-\(UUID().uuidString)",isDirectory:true)

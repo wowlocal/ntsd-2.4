@@ -33,7 +33,8 @@ public final class OriginalApplicationHostSession<Platform: OriginalApplicationS
     /// later Host commits and the Host itself; it never consults latest state.
     /// This retains computed data, not an actual device lease or IO acknowledgement.
     public struct DeliveryContext {
-        /// The application and the retained platform copy in one shared,
+        /// The application and the retained platform (a copy, or the shipping
+        /// platform's committed candidate itself; `retained`) in one shared,
         /// immutable object: a batch carries its context through publication
         /// and every drain (CORE_REALTIME phase 4n).
         private final class Storage {
@@ -47,7 +48,7 @@ public final class OriginalApplicationHostSession<Platform: OriginalApplicationS
         fileprivate init(application: Application, platform: Platform) throws {
             storage = Storage(application: application, retainedPlatform: try OriginalApplicationHostSession<Platform>.retained(platform))
         }
-        /// With the platform copy already made (CORE_REALTIME A1).
+        /// With the retained platform already made (CORE_REALTIME A1).
         fileprivate init(application: Application, retainedPlatform: Platform) {
             storage = Storage(application: application, retainedPlatform: retainedPlatform)
         }
@@ -116,6 +117,9 @@ public final class OriginalApplicationHostSession<Platform: OriginalApplicationS
     private let lock = NSRecursiveLock()
     private var inFlight = false
     private var application = Application()
+    /// The committed platform. Never changed in place: attempts stage a copy,
+    /// and a delivery context may hold this object (A3 L5a), so a callback
+    /// must not keep a supplied platform beyond its call.
     private var platform: Platform
     private var pending: Pending?
     private var prepared: Prepared?
