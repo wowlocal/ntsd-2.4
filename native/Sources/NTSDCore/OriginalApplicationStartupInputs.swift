@@ -45,9 +45,14 @@ public struct OriginalApplicationStartupInputs: Equatable {
         }
         private init(dib: [UInt8],fileHeader: [UInt8]?,pixelOffset: Int?) throws {
             guard dib.count >= 40 else { throw Boundary.invalid("DIB header") }
-            let r = try OriginalStateRecord(bytes:dib,defined:[Bool](repeating:true,count:dib.count))
-            let header: UInt32 = try r.integer(at:0,as:UInt32.self),w: Int32 = try r.integer(at:4,as:Int32.self),h: Int32 = try r.integer(at:8,as:Int32.self)
-            let planes: UInt16 = try r.integer(at:12,as:UInt16.self),bits: UInt16 = try r.integer(at:14,as:UInt16.self),compression: UInt32 = try r.integer(at:16,as:UInt32.self)
+            // The header's little-endian fields, read in place: a whole-file
+            // record (and a definedness byte per file byte) was built for them
+            // (MEMORY_LOADING L4).
+            func word(_ at: Int) -> UInt32 {
+                UInt32(dib[at]) | UInt32(dib[at+1]) << 8 | UInt32(dib[at+2]) << 16 | UInt32(dib[at+3]) << 24
+            }
+            let header = word(0),w = Int32(bitPattern:word(4)),h = Int32(bitPattern:word(8))
+            let planes = UInt16(dib[12]) | UInt16(dib[13]) << 8,bits = UInt16(dib[14]) | UInt16(dib[15]) << 8,compression = word(16)
             guard header == 40,w > 0,h > 0,planes == 1,
                   ([4,8,24].contains(bits) && compression == 0) || (bits == 8 && compression == 1) else {
                 throw Boundary.invalid("Declared DIB format")
@@ -57,14 +62,15 @@ public struct OriginalApplicationStartupInputs: Equatable {
             self.dib = dib;width = w;height = h;rowBytes = Int32(stride);self.planes = planes;bitsPerPixel = bits
             bitmapFileHeader = fileHeader
             if let pixelOffset {
-                let colors = Int(try r.integer(at:32,as:UInt32.self))
+                let colors = Int(word(32))
                 let count = bits == 24 ? colors : (colors == 0 ? 1 << Int(bits) : colors)
                 guard count <= (dib.count-40)/4,pixelOffset >= 40+count*4 else {
                     throw Boundary.invalid("BMP pixel offset or palette")
                 }
             }
-            // Decoded once here, so an invalid image still fails at load.
-            self.pixelOffset = try OriginalDIBPixels(dib:dib,pixelOffset:pixelOffset).pixelOffset
+            // Validated here as the decoder would decode it, so an invalid image
+            // still fails at load with the decoder's error.
+            self.pixelOffset = try OriginalDIBPixels.validate(dib:dib,pixelOffset:pixelOffset)
             declaredPixelOffset = pixelOffset
         }
         /// Win32 BITMAP fields at the declared image boundary, not pixels or a

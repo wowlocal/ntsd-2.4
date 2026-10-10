@@ -34,15 +34,27 @@ public struct OriginalApplicationArenaInputs {
             guard values.isRegularFile == true,values.isSymbolicLink != true else { throw error("Ordinary packaged file") }
             return try Data(contentsOf:url)
         }
+        /// The size `read` would return, after `read`'s own checks and errors.
+        func size(_ path: String) throws -> Int? {
+            guard !path.hasPrefix("/"),!path.split(separator:"/").contains("..") else { throw error("Relative file path") }
+            let url = directory.appendingPathComponent(path)
+            let values = try OriginalFileFacts.of(url,[.isRegularFileKey,.isSymbolicLinkKey,.fileSizeKey])
+            guard values.isRegularFile == true,values.isSymbolicLink != true else { throw error("Ordinary packaged file") }
+            return values.fileSize
+        }
         let data = try read("manifest.json")
         guard digest(data) == manifestSHA256 else { throw error("Manifest digest") }
         let manifest = try JSONDecoder().decode(Manifest.self,from:data)
         guard manifest.version == 1,manifest.exeSHA256 == "3f7ac67c5890ef979ee24a6dae5528056e7f631725c292cf9cb0a928ebeff71c" else { throw error("Reference identity") }
         // Each file is read, checked and decoded concurrently; the checks that
         // depend on earlier entries (name, duplicate) and every error keep the
-        // manifest order: read error, then the guard, then the decode's.
-        enum Loaded { case mismatch,decoded(Result<OriginalApplicationStartupInputs.Bitmap,Error>) }
+        // manifest order: read error, then the guard, then the decode's. A file
+        // whose facts or size are not as declared is left unread here and takes
+        // the sequential path in manifest order, as before: a damaged package
+        // cannot make every core read a huge file before the first error.
+        enum Loaded { case unread,mismatch,decoded(Result<OriginalApplicationStartupInputs.Bitmap,Error>) }
         let loaded = OriginalConcurrentInputs.map(manifest.entries) { item -> Loaded in
+            guard let size = try? size(item.path),size == item.bytes else { return .unread }
             let bytes = try read(item.path)
             guard bytes.count == item.bytes,digest(bytes) == item.sha256 else { return .mismatch }
             return .decoded(Result { try .init(bitmapFile:Array(bytes)) })
@@ -50,6 +62,13 @@ public struct OriginalApplicationArenaInputs {
         var bitmaps: [String:OriginalApplicationStartupInputs.Bitmap] = [:]
         for (item,result) in zip(manifest.entries,loaded) {
             let outcome = try result.get()
+            if case .unread = outcome {
+                let bytes = try read(item.path)
+                guard item.name == item.path.replacingOccurrences(of:"/",with:"\\"),bitmaps[item.name] == nil,
+                      bytes.count == item.bytes,digest(bytes) == item.sha256 else { throw error(item.path) }
+                bitmaps[item.name] = try .init(bitmapFile:Array(bytes))
+                continue
+            }
             guard item.name == item.path.replacingOccurrences(of:"/",with:"\\"),bitmaps[item.name] == nil,
                   case .decoded(let bitmap) = outcome else { throw error(item.path) }
             bitmaps[item.name] = try bitmap.get()

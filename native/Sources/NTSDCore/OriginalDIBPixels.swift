@@ -97,6 +97,45 @@ public struct OriginalDIBPixels: Equatable {
         paletteZero = compression == 1 ? [dib[42],dib[41],dib[40]] : nil
     }
 
+    /// The pixel offset `init(dib:maximumPixels:pixelOffset:)` would resolve,
+    /// throwing exactly its error, without decoding: an uncompressed image can
+    /// then fail only on a palette index, which is checked pixel by pixel in the
+    /// decoder's order; RLE8 images decode (MEMORY_LOADING L4).
+    public static func validate(dib: [UInt8], maximumPixels: Int = 16_777_216, pixelOffset: Int? = nil) throws -> Int {
+        guard dib.count >= 40 else { throw Boundary.header }
+        func word(_ at: Int) -> UInt32 {
+            UInt32(dib[at]) | UInt32(dib[at+1]) << 8 | UInt32(dib[at+2]) << 16 | UInt32(dib[at+3]) << 24
+        }
+        let width = Int(Int32(bitPattern:word(4))),height = Int(Int32(bitPattern:word(8)))
+        guard word(0) == 40,width > 0,height > 0,dib[12] == 1,dib[13] == 0 else { throw Boundary.header }
+        let bits = Int(dib[14]) | Int(dib[15]) << 8,compression = word(16)
+        guard ([4,8,24].contains(bits) && compression == 0) || (bits == 8 && compression == 1) else { throw Boundary.format }
+        guard compression == 0 else { return try Self(dib:dib,maximumPixels:maximumPixels,pixelOffset:pixelOffset).pixelOffset }
+        let (count,overflow) = width.multipliedReportingOverflow(by:height)
+        let (_,byteOverflow) = count.multipliedReportingOverflow(by:3)
+        guard !overflow,!byteOverflow,maximumPixels > 0,count <= maximumPixels else { throw Boundary.pixelLimit }
+        let imageSize = Int(word(20)),colors = Int(word(32))
+        let paletteCount = bits == 24 ? colors : (colors == 0 ? 1 << bits : colors)
+        guard (bits == 24 || paletteCount <= 1 << bits),
+              paletteCount <= (dib.count-40)/4 else { throw Boundary.palette }
+        let minimumOffset = 40+paletteCount*4,start = pixelOffset ?? minimumOffset
+        guard start >= minimumOffset,start <= dib.count else { throw Boundary.extent }
+        let stride = ((width*bits+31)/32)*4
+        let (extent,extentOverflow) = stride.multipliedReportingOverflow(by:height)
+        guard !extentOverflow,extent <= dib.count-start,imageSize == 0 || imageSize == extent else { throw Boundary.extent }
+        if bits != 24 {
+            for row in 0..<height {
+                let source = start+row*stride
+                for x in 0..<width {
+                    let value = Int(dib[source+(bits == 8 ? x : x/2)])
+                    let index = bits == 8 ? value : (x%2 == 0 ? value >> 4 : value & 15)
+                    guard index < paletteCount else { throw Boundary.paletteIndex }
+                }
+            }
+        }
+        return start
+    }
+
     public func color(x: Int,y: Int) throws -> [UInt8] {
         guard x >= 0,x < width,y >= 0,y < height else { throw Boundary.output }
         let pixel = y*width+x

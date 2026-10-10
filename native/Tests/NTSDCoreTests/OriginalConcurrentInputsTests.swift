@@ -59,6 +59,70 @@ final class OriginalConcurrentInputsTests: XCTestCase {
         }
     }
 
+    /// The early entry is the largest file and fails only after its digest; the
+    /// last entry fails at once on its size: the late failure comes first in
+    /// time, the early one still decides.
+    func testAnEarlierEntryThatFailsLaterInTimeStillDecides() throws {
+        struct Sized: Decodable { let name: String, path: String, count: Int }
+        struct SizedManifest: Decodable { let entries: [Sized] }
+        let source = try OriginalApplicationCatalogInputs.bundledDirectory()
+        let entries = try JSONDecoder().decode(SizedManifest.self, from: Data(contentsOf: source.appendingPathComponent("manifest.json"))).entries
+        let early = try XCTUnwrap(entries.dropLast().max { $0.count < $1.count }), late = try XCTUnwrap(entries.last)
+        XCTAssertGreaterThan(early.count, 1_000_000)
+        let folder = try copied(source); defer { try? fm.removeItem(at: folder) }
+        try corrupt(folder.appendingPathComponent(early.path)); try truncate(folder.appendingPathComponent(late.path))
+        XCTAssertThrowsError(try OriginalApplicationCatalogInputs.load(directory: folder)) { error in
+            XCTAssertEqual(error as? OriginalApplicationCatalogInputs.Boundary, .invalid(early.name))
+        }
+    }
+
+    func testArenaReadErrorsAndMismatchesKeepTheManifestOrder() throws {
+        let source = try OriginalApplicationCatalogInputs.bundledDirectory().deletingLastPathComponent().appendingPathComponent("OriginalMatchArenas")
+        let manifest = try JSONDecoder().decode(Manifest.self, from: Data(contentsOf: source.appendingPathComponent("manifest.json")))
+        let early = manifest.entries[1], late = manifest.entries[manifest.entries.count - 1]
+        let mismatch = "\(OriginalStateError.invalidStorage("Arena inputs: " + early.path))"
+        for removeEarly in [false, true] {
+            let folder = try copied(source); defer { try? fm.removeItem(at: folder) }
+            if removeEarly {
+                try fm.removeItem(at: folder.appendingPathComponent(early.path)); try corrupt(folder.appendingPathComponent(late.path))
+            } else {
+                try corrupt(folder.appendingPathComponent(early.path)); try fm.removeItem(at: folder.appendingPathComponent(late.path))
+            }
+            XCTAssertThrowsError(try OriginalApplicationArenaInputs.load(directory: folder)) { error in
+                // A missing early file fails in its read (a file-system error), before any later mismatch.
+                if removeEarly { XCTAssertNotEqual("\(error)", mismatch); XCTAssertFalse("\(error)".contains("Arena inputs")) }
+                else { XCTAssertEqual("\(error)", mismatch) }
+            }
+        }
+    }
+
+    /// A wrong-sized or unreadable arena file is read in manifest order as
+    /// before: its own read error (or the guard's) decides, never a later one.
+    func testArenaFilesOfAnotherSizeOrUnreadableFailAsBefore() throws {
+        let source = try OriginalApplicationCatalogInputs.bundledDirectory().deletingLastPathComponent().appendingPathComponent("OriginalMatchArenas")
+        let manifest = try JSONDecoder().decode(Manifest.self, from: Data(contentsOf: source.appendingPathComponent("manifest.json")))
+        let early = manifest.entries[2], late = manifest.entries[manifest.entries.count - 1]
+        for damage in ["truncate", "unreadable", "directory"] {
+            let folder = try copied(source); defer { try? fm.removeItem(at: folder) }
+            let url = folder.appendingPathComponent(early.path)
+            switch damage {
+            case "truncate": try truncate(url)
+            case "unreadable": try truncate(url); try fm.setAttributes([.posixPermissions: 0], ofItemAtPath: url.path)
+            default: try fm.removeItem(at: url); try fm.createDirectory(at: url, withIntermediateDirectories: false)
+            }
+            defer { try? fm.setAttributes([.posixPermissions: 0o644], ofItemAtPath: url.path) }
+            try corrupt(folder.appendingPathComponent(late.path))
+            XCTAssertThrowsError(try OriginalApplicationArenaInputs.load(directory: folder)) { error in
+                let description = "\(error)"
+                switch damage {
+                case "truncate": XCTAssertEqual(description, "\(OriginalStateError.invalidStorage("Arena inputs: " + early.path))")
+                case "directory": XCTAssertEqual(description, "\(OriginalStateError.invalidStorage("Arena inputs: Ordinary packaged file"))")
+                default: XCTAssertFalse(description.contains("Arena inputs"), description)   // the read's own permission error
+                }
+            }
+        }
+    }
+
     func testTheFirstFailingArenaEntryInManifestOrderDecides() throws {
         let source = try OriginalApplicationCatalogInputs.bundledDirectory().deletingLastPathComponent().appendingPathComponent("OriginalMatchArenas")
         let manifest = try JSONDecoder().decode(Manifest.self, from: Data(contentsOf: source.appendingPathComponent("manifest.json")))

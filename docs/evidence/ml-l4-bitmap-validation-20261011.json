@@ -1,0 +1,589 @@
+{
+ "study": "docs/research/MEMORY_LOADING.md",
+ "increment": "ml-l4b",
+ "previous": "ml-l3",
+ "phase": "L4 (loading time): bitmap headers read in place, images validated without decoding",
+ "change": "OriginalApplicationStartupInputs.Bitmap.init reads its header fields from the DIB bytes (little-endian) instead of through an OriginalStateRecord over the whole file with a definedness byte per file byte, and validates the image with OriginalDIBPixels.validate, which runs the decoder's checks in the decoder's order and throws its errors without building the decoded colour and definedness arrays: a 24-bit image cannot fail after its extent check, 4/8-bit images check each pixel's palette index as the decoder reads it, RLE8 images decode. L3 review follow-ups: an arena entry whose facts or size are not as declared is not read on the worker threads; in manifest order it takes the old read-and-guard path, so its own errors (including a read's permission error) are unchanged; tests in which the earlier failure comes later in time.",
+ "profile": "A12 ml-p0-loadprof: Bitmap.init 8.8% of the load (StateRecord over the file 5.4%, Flat.make 4%, the throwaway decode 3.9%); after L3 it runs on all cores",
+ "review": "independent read-only reviewer: validate and the header reads are equivalent to the decoder and the old record reads (every check, order, bytes inspected; no unreachable errors gained or lost); finding: the first arena size precheck changed the error of an unreadable wrong-sized file (fixed before this gate, the stopped run ml-l4a is kept in logs/ml-l4a-gate-stopped.out)",
+ "notes": "Startup outliers of 23-25 s again come from the low-storage install path re-extracting the assets (S1).",
+ "testedTrees": "native bd20607a2333bc9c2ff7854dbc96300a8a973b6e tools 3fef69ebf74c8ce83927119db27b1ab44153a9a9",
+ "gate": [
+  "native bd20607a2333bc9c2ff7854dbc96300a8a973b6e tools 3fef69ebf74c8ce83927119db27b1ab44153a9a9",
+  "headless built (checked: 3191 beginAccess)",
+  "app built (checked: 3305 beginAccess)",
+  "unchecked headless built (0 beginAccess)",
+  "apk saved",
+  "apk libraries kept",
+  "launches: crashes 0 of 20",
+  "bundle exit=0",
+  "suites_done",
+  "phone A/B exit=0",
+  "{\"summary\": {\"build\": \"ml-l4b\", \"runs\": 3, \"startupSeconds\": {\"median\": 2.34, \"min\": 2.33, \"max\": 25.47}, \"loadSeconds\": {\"median\": 46.19, \"min\": 45.99, \"max\": 46.38}, \"startToLoadedSeconds\": {\"median\": 54.63, \"min\": 54.04, \"max\": 77.57}, \"peakResidentMB\": {\"median\": 1427, \"min\": 1418, \"max\": 1447}, \"peakFootprintMB\": {\"median\": 1565, \"min\": 1564, \"max\": 1567}, \"loadedResidentMB\": {\"median\": 1390, \"min\": 1342, \"max\": 1399}, \"bodiesResidentMB\": {\"median\": 1330, \"min\": 1301, \"max\": 1348}}}",
+  "{\"summary\": {\"build\": \"ml-l3\", \"runs\": 2, \"startupSeconds\": {\"median\": 23.799999999999997, \"min\": 22.95, \"max\": 24.65}, \"loadSeconds\": {\"median\": 48.129999999999995, \"min\": 47.71, \"max\": 48.55}, \"startToLoadedSeconds\": {\"median\": 77.65, \"min\": 76.41, \"max\": 78.89}, \"peakResidentMB\": {\"median\": 1305.0, \"min\": 1294, \"max\": 1316}, \"peakFootprintMB\": {\"median\": 1585.0, \"min\": 1580, \"max\": 1590}, \"loadedResidentMB\": {\"median\": 1141.5, \"min\": 1004, \"max\": 1279}, \"bodiesResidentMB\": {\"median\": 1158.0, \"min\": 1028, \"max\": 1288}}}",
+  "phone_done",
+  "{\"scenario\": \"vs\", \"exit\": 0, \"seconds\": 67.1, \"result\": \"equal\", \"differs\": []}",
+  "{\"scenario\": \"mission\", \"exit\": 0, \"seconds\": 62.7, \"result\": \"equal\", \"differs\": []}",
+  "{\"scenario\": \"demo\", \"exit\": 0, \"seconds\": 47.4, \"result\": \"equal\", \"differs\": []}",
+  "{\"scenario\": \"war\", \"exit\": 0, \"seconds\": 102.5, \"result\": \"equal\", \"differs\": []}",
+  "{\"scenario\": \"playback\", \"exit\": 0, \"seconds\": 72.5, \"result\": \"equal\", \"differs\": []}",
+  "{\"scenario\": \"tournament\", \"exit\": 0, \"seconds\": 91.2, \"result\": \"equal\", \"differs\": []}",
+  "{\"scenario\": \"altenter\", \"exit\": 0, \"seconds\": 65.1, \"result\": \"equal\", \"differs\": []}",
+  "{\"scenario\": \"tournament-win\", \"exit\": 0, \"seconds\": 100.7, \"result\": \"equal\", \"differs\": []}",
+  "{\"scenario\": \"team-tournament\", \"exit\": 0, \"seconds\": 78.6, \"result\": \"equal\", \"differs\": []}",
+  "{\"scenario\": \"joystick\", \"exit\": 0, \"seconds\": 21.8, \"result\": \"equal\", \"differs\": []}",
+  "{\"frames\": 1832, \"mismatched\": 0, \"result\": \"identical\"}",
+  "emu exit=0",
+  "{\"scenario\": \"vs\", \"seconds\": 66.6, \"result\": \"equal\", \"differs\": []}",
+  "{\"frames\": 1832, \"mismatched\": 0, \"result\": \"identical\"}",
+  "{\"scenario\": \"vs\", \"exit\": 0, \"seconds\": 64.1, \"result\": \"equal\", \"differs\": []}",
+  "{\"scenario\": \"playback\", \"exit\": 0, \"seconds\": 73.3, \"result\": \"equal\", \"differs\": []}",
+  "{\"frames\": 3960, \"mismatched\": 0, \"result\": \"identical\"}",
+  "{\"scenario\": \"vs\", \"exit\": 0, \"seconds\": 69.4, \"result\": \"equal\", \"differs\": []}",
+  "{\"scenario\": \"demo\", \"exit\": 0, \"seconds\": 50.1, \"result\": \"equal\", \"differs\": []}",
+  "{\"frames\": 1832, \"mismatched\": 0, \"result\": \"identical\"}",
+  "scenarios_done",
+  "mac A/B exit=0",
+  "{\"summary\": {\"build\": \"frozen-unchecked-ml-l4b\", \"runs\": 3, \"startupSeconds\": {\"median\": 0.114, \"min\": 0.094, \"max\": 0.115}, \"loadSeconds\": {\"median\": 2.094, \"min\": 2.091, \"max\": 2.12}, \"startToLoadedSeconds\": {\"median\": 2.588, \"min\": 2.559, \"max\": 2.615}, \"peakResidentMB\": {\"median\": 2022, \"min\": 2007, \"max\": 2045}, \"loadedResidentMB\": {\"median\": 1979, \"min\": 1965, \"max\": 2004}, \"bodiesResidentMB\": {\"median\": 2022, \"min\": 2007, \"max\": 2045}}}",
+  "{\"summary\": {\"build\": \"frozen-unchecked-ml-l3\", \"runs\": 3, \"startupSeconds\": {\"median\": 0.147, \"min\": 0.14, \"max\": 0.147}, \"loadSeconds\": {\"median\": 2.229, \"min\": 2.214, \"max\": 2.458}, \"startToLoadedSeconds\": {\"median\": 2.746, \"min\": 2.733, \"max\": 2.983}, \"peakResidentMB\": {\"median\": 1962, \"min\": 1921, \"max\": 1984}, \"loadedResidentMB\": {\"median\": 1938, \"min\": 1900, \"max\": 1959}, \"bodiesResidentMB\": {\"median\": 1962, \"min\": 1921, \"max\": 1984}}}",
+  "gate_done"
+ ],
+ "suites": [
+  "OriginalExclusivityChecksTests: Executed 1 test, with 0 failures (0 unexpected) in 0.000 (0.001) seconds",
+  "OriginalDIBValidationTests: Executed 2 tests, with 0 failures (0 unexpected) in 0.719 (0.720) seconds",
+  "OriginalConcurrentInputsTests: Executed 7 tests, with 0 failures (0 unexpected) in 1.542 (1.544) seconds",
+  "OriginalCatalogDIBPixelsTests: Executed 3 tests, with 0 failures (0 unexpected) in 3.194 (3.195) seconds",
+  "OriginalApplicationCatalogInputsTests: Executed 4 tests, with 0 failures (0 unexpected) in 5.446 (5.447) seconds",
+  "OriginalApplicationLoadedLaunchTests: Executed 2 tests, with 0 failures (0 unexpected) in 73.536 (73.538) seconds",
+  "OriginalApplicationCatalogFullTests: Executed 3 tests, with 0 failures (0 unexpected) in 42.001 (42.002) seconds",
+  "OriginalBitmapSurfaceLoadingTests: Executed 3 tests, with 0 failures (0 unexpected) in 3.331 (3.332) seconds",
+  "OriginalMenuLoadingTests: Executed 2 tests, with 0 failures (0 unexpected) in 19.230 (19.231) seconds",
+  "OriginalInitialLoadingTests: Executed 2 tests, with 0 failures (0 unexpected) in 17.304 (17.305) seconds",
+  "OriginalMacBitmapBackendTests: Executed 5 tests, with 0 failures (0 unexpected) in 2.540 (2.542) seconds",
+  "OriginalMacDisplayBackendTests: Executed 4 tests, with 0 failures (0 unexpected) in 2.945 (2.947) seconds",
+  "OriginalApplicationObservedBitmapTests: Executed 5 tests, with 0 failures (0 unexpected) in 12.627 (12.629) seconds",
+  "OriginalMacRuntimeStartupTests: Executed 5 tests, with 0 failures (0 unexpected) in 0.534 (0.536) seconds",
+  "OriginalMacRuntimeLoadingTests: Executed 7 tests, with 0 failures (0 unexpected) in 3.371 (3.373) seconds"
+ ],
+ "phone": {
+  "summary": {
+   "ml-l4b": {
+    "runs": 3,
+    "loadSeconds": {
+     "median": 46.19,
+     "min": 45.99,
+     "max": 46.38
+    },
+    "startupSeconds": {
+     "median": 2.34,
+     "min": 2.33,
+     "max": 25.47
+    },
+    "startToLoadedSeconds": {
+     "median": 54.63,
+     "min": 54.04,
+     "max": 77.57
+    },
+    "peakFootprintMB": {
+     "median": 1565,
+     "min": 1564,
+     "max": 1567
+    },
+    "peakResidentMB": {
+     "median": 1427,
+     "min": 1418,
+     "max": 1447
+    },
+    "loadedResidentMB": {
+     "median": 1390,
+     "min": 1342,
+     "max": 1399
+    },
+    "bodiesResidentMB": {
+     "median": 1330,
+     "min": 1301,
+     "max": 1348
+    },
+    "bodiesSwapMB": {
+     "median": 234,
+     "min": 215,
+     "max": 265
+    },
+    "mainCpuToLoadedSeconds": {
+     "median": 52.82,
+     "min": 52.26,
+     "max": 52.96
+    },
+    "loadedCounts": [
+     {
+      "allocations": 16105,
+      "audioRequests": 2072,
+      "bitmapRequests": 12817,
+      "files": 621
+     }
+    ]
+   },
+   "ml-l3": {
+    "runs": 2,
+    "loadSeconds": {
+     "median": 48.129999999999995,
+     "min": 47.71,
+     "max": 48.55
+    },
+    "startupSeconds": {
+     "median": 23.799999999999997,
+     "min": 22.95,
+     "max": 24.65
+    },
+    "startToLoadedSeconds": {
+     "median": 77.65,
+     "min": 76.41,
+     "max": 78.89
+    },
+    "peakFootprintMB": {
+     "median": 1585.0,
+     "min": 1580,
+     "max": 1590
+    },
+    "peakResidentMB": {
+     "median": 1305.0,
+     "min": 1294,
+     "max": 1316
+    },
+    "loadedResidentMB": {
+     "median": 1141.5,
+     "min": 1004,
+     "max": 1279
+    },
+    "bodiesResidentMB": {
+     "median": 1158.0,
+     "min": 1028,
+     "max": 1288
+    },
+    "bodiesSwapMB": {
+     "median": 424.0,
+     "min": 301,
+     "max": 547
+    },
+    "mainCpuToLoadedSeconds": {
+     "median": 55.085,
+     "min": 54.64,
+     "max": 55.53
+    },
+    "loadedCounts": [
+     {
+      "allocations": 16105,
+      "audioRequests": 2072,
+      "bitmapRequests": 12817,
+      "files": 621
+     }
+    ]
+   }
+  },
+  "runs": [
+   {
+    "label": "ml-l4b-ab-01-ml-l4b",
+    "host": "android",
+    "serial": "R58R36F7VFD",
+    "scenario": "vs",
+    "bodies": 600,
+    "apk": "ml-l4b.apk",
+    "loadedResidentMB": 1342,
+    "loadedAnonMB": 1313,
+    "loadedFileMB": 20,
+    "loadedSwapMB": 175,
+    "mainCpuToLoadedSeconds": 52.26,
+    "bodiesResidentMB": 1348,
+    "bodiesAnonMB": 1317,
+    "bodiesFileMB": 22,
+    "bodiesSwapMB": 215,
+    "pssMB": {
+     "Java Heap": 1,
+     "Native Heap": 1305,
+     "Code": 13,
+     "Stack": 0,
+     "Graphics": 5,
+     "Private Other": 2,
+     "System": 196,
+     "TOTAL PSS": 1522
+    },
+    "peakResidentMB": 1427,
+    "peakFootprintMB": 1564,
+    "startupSeconds": 2.34,
+    "loadSeconds": 45.99,
+    "startToLoadedSeconds": 54.04,
+    "loadedCounts": {
+     "allocations": 16105,
+     "audioRequests": 2072,
+     "bitmapRequests": 12817,
+     "files": 621
+    },
+    "build": "ml-l4b"
+   },
+   {
+    "label": "ml-l4b-ab-02-ml-l3",
+    "host": "android",
+    "serial": "R58R36F7VFD",
+    "scenario": "vs",
+    "bodies": 600,
+    "apk": "ml-l3.apk",
+    "loadedResidentMB": 1279,
+    "loadedAnonMB": 1247,
+    "loadedFileMB": 23,
+    "loadedSwapMB": 289,
+    "mainCpuToLoadedSeconds": 55.53,
+    "bodiesResidentMB": 1288,
+    "bodiesAnonMB": 1255,
+    "bodiesFileMB": 25,
+    "bodiesSwapMB": 301,
+    "pssMB": {
+     "Java Heap": 1,
+     "Native Heap": 1247,
+     "Code": 12,
+     "Stack": 0,
+     "Graphics": 5,
+     "Private Other": 2,
+     "System": 277,
+     "TOTAL PSS": 1545
+    },
+    "peakResidentMB": 1294,
+    "peakFootprintMB": 1590,
+    "startupSeconds": 24.65,
+    "loadSeconds": 48.55,
+    "startToLoadedSeconds": 78.89,
+    "loadedCounts": {
+     "allocations": 16105,
+     "audioRequests": 2072,
+     "bitmapRequests": 12817,
+     "files": 621
+    },
+    "build": "ml-l3"
+   },
+   {
+    "label": "ml-l4b-ab-03-ml-l4b",
+    "host": "android",
+    "serial": "R58R36F7VFD",
+    "scenario": "vs",
+    "bodies": 600,
+    "apk": "ml-l4b.apk",
+    "loadedResidentMB": 1390,
+    "loadedAnonMB": 1368,
+    "loadedFileMB": 15,
+    "loadedSwapMB": 147,
+    "mainCpuToLoadedSeconds": 52.82,
+    "bodiesResidentMB": 1330,
+    "bodiesAnonMB": 1305,
+    "bodiesFileMB": 18,
+    "bodiesSwapMB": 234,
+    "pssMB": {
+     "Java Heap": 1,
+     "Native Heap": 1296,
+     "Code": 13,
+     "Stack": 0,
+     "Graphics": 5,
+     "Private Other": 2,
+     "System": 210,
+     "TOTAL PSS": 1528
+    },
+    "peakResidentMB": 1447,
+    "peakFootprintMB": 1565,
+    "startupSeconds": 25.47,
+    "loadSeconds": 46.38,
+    "startToLoadedSeconds": 77.57,
+    "loadedCounts": {
+     "allocations": 16105,
+     "audioRequests": 2072,
+     "bitmapRequests": 12817,
+     "files": 621
+    },
+    "build": "ml-l4b"
+   },
+   {
+    "label": "ml-l4b-ab-04-ml-l3",
+    "host": "android",
+    "serial": "R58R36F7VFD",
+    "scenario": "vs",
+    "bodies": 600,
+    "apk": "ml-l3.apk",
+    "loadedResidentMB": 1004,
+    "loadedAnonMB": 982,
+    "loadedFileMB": 21,
+    "loadedSwapMB": 540,
+    "mainCpuToLoadedSeconds": 54.64,
+    "bodiesResidentMB": 1028,
+    "bodiesAnonMB": 1005,
+    "bodiesFileMB": 23,
+    "bodiesSwapMB": 547,
+    "pssMB": {
+     "Java Heap": 0,
+     "Native Heap": 996,
+     "Code": 10,
+     "Stack": 0,
+     "Graphics": 5,
+     "Private Other": 0,
+     "System": 522,
+     "TOTAL PSS": 1534
+    },
+    "peakResidentMB": 1316,
+    "peakFootprintMB": 1580,
+    "startupSeconds": 22.95,
+    "loadSeconds": 47.71,
+    "startToLoadedSeconds": 76.41,
+    "loadedCounts": {
+     "allocations": 16105,
+     "audioRequests": 2072,
+     "bitmapRequests": 12817,
+     "files": 621
+    },
+    "build": "ml-l3"
+   },
+   {
+    "label": "ml-l4b-ab-05-ml-l4b",
+    "host": "android",
+    "serial": "R58R36F7VFD",
+    "scenario": "vs",
+    "bodies": 600,
+    "apk": "ml-l4b.apk",
+    "loadedResidentMB": 1399,
+    "loadedAnonMB": 1366,
+    "loadedFileMB": 24,
+    "loadedSwapMB": 145,
+    "mainCpuToLoadedSeconds": 52.96,
+    "bodiesResidentMB": 1301,
+    "bodiesAnonMB": 1269,
+    "bodiesFileMB": 24,
+    "bodiesSwapMB": 265,
+    "pssMB": {
+     "Java Heap": 2,
+     "Native Heap": 1257,
+     "Code": 15,
+     "Stack": 0,
+     "Graphics": 5,
+     "Private Other": 1,
+     "System": 244,
+     "TOTAL PSS": 1525
+    },
+    "peakResidentMB": 1418,
+    "peakFootprintMB": 1567,
+    "startupSeconds": 2.33,
+    "loadSeconds": 46.19,
+    "startToLoadedSeconds": 54.63,
+    "loadedCounts": {
+     "allocations": 16105,
+     "audioRequests": 2072,
+     "bitmapRequests": 12817,
+     "files": 621
+    },
+    "build": "ml-l4b"
+   }
+  ]
+ },
+ "mac": {
+  "summary": {
+   "frozen-unchecked-ml-l4b": {
+    "runs": 3,
+    "loadSeconds": {
+     "median": 2.094,
+     "min": 2.091,
+     "max": 2.12
+    },
+    "startupSeconds": {
+     "median": 0.114,
+     "min": 0.094,
+     "max": 0.115
+    },
+    "startToLoadedSeconds": {
+     "median": 2.588,
+     "min": 2.559,
+     "max": 2.615
+    },
+    "peakResidentMB": {
+     "median": 2022,
+     "min": 2007,
+     "max": 2045
+    },
+    "loadedResidentMB": {
+     "median": 1979,
+     "min": 1965,
+     "max": 2004
+    },
+    "bodiesResidentMB": {
+     "median": 2022,
+     "min": 2007,
+     "max": 2045
+    },
+    "loadedCounts": [
+     {
+      "allocations": 16105,
+      "audioRequests": 2072,
+      "bitmapRequests": 12817,
+      "files": 621
+     }
+    ]
+   },
+   "frozen-unchecked-ml-l3": {
+    "runs": 3,
+    "loadSeconds": {
+     "median": 2.229,
+     "min": 2.214,
+     "max": 2.458
+    },
+    "startupSeconds": {
+     "median": 0.147,
+     "min": 0.14,
+     "max": 0.147
+    },
+    "startToLoadedSeconds": {
+     "median": 2.746,
+     "min": 2.733,
+     "max": 2.983
+    },
+    "peakResidentMB": {
+     "median": 1962,
+     "min": 1921,
+     "max": 1984
+    },
+    "loadedResidentMB": {
+     "median": 1938,
+     "min": 1900,
+     "max": 1959
+    },
+    "bodiesResidentMB": {
+     "median": 1962,
+     "min": 1921,
+     "max": 1984
+    },
+    "loadedCounts": [
+     {
+      "allocations": 16105,
+      "audioRequests": 2072,
+      "bitmapRequests": 12817,
+      "files": 621
+     }
+    ]
+   }
+  },
+  "runs": [
+   {
+    "label": "ml-l4b-mac-ab-01-frozen-unchecked-ml-l4b",
+    "host": "mac",
+    "scenario": "vs",
+    "bodies": 600,
+    "binary": "/private/tmp/claude-501/-Users-michael-Developer-ntsd-2-4/1f9218ae-9d5d-4c4e-a8dd-d5254994839c/scratchpad/frozen-unchecked-ml-l4b/NTSDHeadless",
+    "startupSeconds": 0.094,
+    "loadSeconds": 2.091,
+    "startToLoadedSeconds": 2.559,
+    "loadedCounts": {
+     "allocations": 16105,
+     "audioRequests": 2072,
+     "bitmapRequests": 12817,
+     "files": 621
+    },
+    "loadedResidentMB": 2004,
+    "bodiesResidentMB": 2045,
+    "peakResidentMB": 2045,
+    "build": "frozen-unchecked-ml-l4b"
+   },
+   {
+    "label": "ml-l4b-mac-ab-02-frozen-unchecked-ml-l3",
+    "host": "mac",
+    "scenario": "vs",
+    "bodies": 600,
+    "binary": "/private/tmp/claude-501/-Users-michael-Developer-ntsd-2-4/1f9218ae-9d5d-4c4e-a8dd-d5254994839c/scratchpad/frozen-unchecked-ml-l3/NTSDHeadless",
+    "startupSeconds": 0.147,
+    "loadSeconds": 2.458,
+    "startToLoadedSeconds": 2.983,
+    "loadedCounts": {
+     "allocations": 16105,
+     "audioRequests": 2072,
+     "bitmapRequests": 12817,
+     "files": 621
+    },
+    "loadedResidentMB": 1938,
+    "bodiesResidentMB": 1962,
+    "peakResidentMB": 1962,
+    "build": "frozen-unchecked-ml-l3"
+   },
+   {
+    "label": "ml-l4b-mac-ab-03-frozen-unchecked-ml-l4b",
+    "host": "mac",
+    "scenario": "vs",
+    "bodies": 600,
+    "binary": "/private/tmp/claude-501/-Users-michael-Developer-ntsd-2-4/1f9218ae-9d5d-4c4e-a8dd-d5254994839c/scratchpad/frozen-unchecked-ml-l4b/NTSDHeadless",
+    "startupSeconds": 0.114,
+    "loadSeconds": 2.094,
+    "startToLoadedSeconds": 2.588,
+    "loadedCounts": {
+     "allocations": 16105,
+     "audioRequests": 2072,
+     "bitmapRequests": 12817,
+     "files": 621
+    },
+    "loadedResidentMB": 1979,
+    "bodiesResidentMB": 2022,
+    "peakResidentMB": 2022,
+    "build": "frozen-unchecked-ml-l4b"
+   },
+   {
+    "label": "ml-l4b-mac-ab-04-frozen-unchecked-ml-l3",
+    "host": "mac",
+    "scenario": "vs",
+    "bodies": 600,
+    "binary": "/private/tmp/claude-501/-Users-michael-Developer-ntsd-2-4/1f9218ae-9d5d-4c4e-a8dd-d5254994839c/scratchpad/frozen-unchecked-ml-l3/NTSDHeadless",
+    "startupSeconds": 0.14,
+    "loadSeconds": 2.229,
+    "startToLoadedSeconds": 2.746,
+    "loadedCounts": {
+     "allocations": 16105,
+     "audioRequests": 2072,
+     "bitmapRequests": 12817,
+     "files": 621
+    },
+    "loadedResidentMB": 1900,
+    "bodiesResidentMB": 1921,
+    "peakResidentMB": 1921,
+    "build": "frozen-unchecked-ml-l3"
+   },
+   {
+    "label": "ml-l4b-mac-ab-05-frozen-unchecked-ml-l4b",
+    "host": "mac",
+    "scenario": "vs",
+    "bodies": 600,
+    "binary": "/private/tmp/claude-501/-Users-michael-Developer-ntsd-2-4/1f9218ae-9d5d-4c4e-a8dd-d5254994839c/scratchpad/frozen-unchecked-ml-l4b/NTSDHeadless",
+    "startupSeconds": 0.115,
+    "loadSeconds": 2.12,
+    "startToLoadedSeconds": 2.615,
+    "loadedCounts": {
+     "allocations": 16105,
+     "audioRequests": 2072,
+     "bitmapRequests": 12817,
+     "files": 621
+    },
+    "loadedResidentMB": 1965,
+    "bodiesResidentMB": 2007,
+    "peakResidentMB": 2007,
+    "build": "frozen-unchecked-ml-l4b"
+   },
+   {
+    "label": "ml-l4b-mac-ab-06-frozen-unchecked-ml-l3",
+    "host": "mac",
+    "scenario": "vs",
+    "bodies": 600,
+    "binary": "/private/tmp/claude-501/-Users-michael-Developer-ntsd-2-4/1f9218ae-9d5d-4c4e-a8dd-d5254994839c/scratchpad/frozen-unchecked-ml-l3/NTSDHeadless",
+    "startupSeconds": 0.147,
+    "loadSeconds": 2.214,
+    "startToLoadedSeconds": 2.733,
+    "loadedCounts": {
+     "allocations": 16105,
+     "audioRequests": 2072,
+     "bitmapRequests": 12817,
+     "files": 621
+    },
+    "loadedResidentMB": 1959,
+    "bodiesResidentMB": 1984,
+    "peakResidentMB": 1984,
+    "build": "frozen-unchecked-ml-l3"
+   }
+  ]
+ }
+}
