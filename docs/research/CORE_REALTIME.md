@@ -288,6 +288,21 @@ main thread; message-loop iterations 4.12 × 1.14 ms; render thread 18.7 ms,
   in vs and 11.75 in the Demo; render about 7.6 and 6.1 (**the 8 ms goal for
   the render thread is met in both**); the presenter thread about 5.7, the
   release thread about 2.
+  **Blocked on the user's decisions for the main thread (2026-10-10).** The
+  render thread meets the 8 ms goal (R4b: vs 7.6, Demo 6.1 ms per tick);
+  the main thread is at ~11.1 (vs) and ~11.7 (Demo). Every remaining
+  decision-free item is below the phone's resolution (±0.25 ms per run) and
+  would add a second code path, so none meets the commit rule (measurably
+  faster, or strictly less work without added complexity): H3 (~0.13 ms, a
+  second due-tick path with a large oracle), H2 (~0.15 ms, a fused Host
+  attempt), a polling render thread (~0.1 ms: the render queue's wake is
+  0.8% of the main thread), boxing the platform's rarely written deliveries
+  (~0.06 ms), L6 (~0.05 ms), `lastRequest` (~0.04 ms); the copies left in
+  the profile (`runCycle`'s cycle, the idle commit's State, session and
+  Bootstrap, the actors' copy-on-write) are the transactional copies that
+  keep a failed stage's state. **Input needed:** the user's answers to
+  Q1–Q4 ([TIER3](CORE_REALTIME_TIER3.md#decisions-for-the-user)); with
+  Q2–Q4 the main thread is projected at ~9–10 ms.
   **Per tick** (A12 vs, e5; `android_speed.py`): the loaded cycle
   (`complete`) ~7.5 ms, 3.12 idle message-loop steps × 0.47 ms, the tick's
   step ~0.95 ms, the rest ~1.2. With the real clock (`--real-clock`, 30.3
