@@ -266,13 +266,22 @@ main thread; message-loop iterations 4.12 × 1.14 ms; render thread 18.7 ms,
   15.3). R2 (the Android present on its own thread) measured and parked:
   render −4 ms but main +0.3–0.4 ms. S2a and S2b done (record storage v2:
   vs main 14.36 ms, Demo 14.04); S3 parked; d2, g and M1 done (vs main
-  14.02 ms, Demo 13.80); e done (vs about 13.6 ms, Demo 13.59). Next: the
-  idle lane (idle iterations are
-  ~10% of the main thread; L5a done (Demo 13.28): then L4b and L6), H2/H3
-  and the render thread (P2 done: vs render 12.62 ms, main 13.11; Demo
-  render 10.52, main 13.22; next the Android present, 38% of the render
-  thread: its channel swap and post); ~11 ms without
-  the user's decisions (Q1–Q4 in the plan), ~9–10 with them. Left from 4aa's review: the other packagers'
+  14.02 ms, Demo 13.80); e done (vs about 13.6 ms, Demo 13.59); L5a, e2,
+  P2 (render: vs 12.62, Demo 10.52), L1, R0, L2, L3, e3, G4a, L4 done; G4b
+  parked. **Status (2026-10-10, 581896e):** A12 main about 12.8 ms per tick
+  in vs and 13.2 in the Demo, render about 12.3 and 10.4.
+  **Where the rest is:** the largest remaining main-thread costs are the
+  transactional copies themselves (each stage's first write to a record
+  another stage still holds copies it: the loaded entry, the AI's globals,
+  the menu input, the hit pass, ~1.7% of the main thread in copy-on-write
+  alone, plus the State, Bootstrap and session copies) — what the user's
+  decisions Q1/Q2 (B, D: 0.6–1.2 ms) would remove; Q3 (L6b, 0.15–0.3) and
+  Q4 (P, 0.4–0.9) are the others. Without decisions: [H2](CORE_REALTIME_H2.md),
+  [H3](CORE_REALTIME_H3.md) and A3 L4b, each about 0.15 ms with a large
+  oracle; record copies through the passes' frame/header closures (~1%);
+  on the render thread the Android present (38%: channel swap, post) and the
+  two-thread row split, which help the 8 ms goal for that thread but, like
+  R2, may cost the main thread through memory contention. Left from 4aa's review: the other packagers'
   opt-in (the macOS app build, Linux, Windows, iOS).
 - **B2** ([plan](CORE_REALTIME_B2.md)): in-place nested passes under the first
   transactional copy; P1–P4 done (P4b–P4f: every gameplay-body pass that
