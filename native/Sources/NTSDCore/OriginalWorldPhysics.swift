@@ -9,7 +9,7 @@ public enum OriginalWorldPhysicsEvent: Equatable {
 public enum OriginalWorldPhysics {
     public static func apply(state: inout OriginalMatchPreparation,
                              observe: (OriginalWorldPhysicsEvent) throws -> Void = { _ in },
-                             afterActorPhysics: (Int,OriginalStateRecord) throws -> Void = { _,_ in },
+                             afterActorPhysics: ((Int,OriginalStateRecord) throws -> Void)? = nil,
                              respawned: () throws -> Void = {}) throws {
         try run(state: &state,observe: observe,afterActorPhysics: afterActorPhysics,respawned: respawned,inPlace: false)
     }
@@ -18,12 +18,12 @@ public enum OriginalWorldPhysics {
     /// drop the state when this throws.
     package static func applyInPlace(state: inout OriginalMatchPreparation,
                                      observe: (OriginalWorldPhysicsEvent) throws -> Void = { _ in },
-                                     afterActorPhysics: (Int,OriginalStateRecord) throws -> Void = { _,_ in },
+                                     afterActorPhysics: ((Int,OriginalStateRecord) throws -> Void)? = nil,
                                      respawned: () throws -> Void = {}) throws {
         try run(state: &state,observe: observe,afterActorPhysics: afterActorPhysics,respawned: respawned,inPlace: true)
     }
     private static func run(state: inout OriginalMatchPreparation,observe: (OriginalWorldPhysicsEvent) throws -> Void,
-                            afterActorPhysics: (Int,OriginalStateRecord) throws -> Void,respawned: () throws -> Void,inPlace: Bool) throws {
+                            afterActorPhysics: ((Int,OriginalStateRecord) throws -> Void)?,respawned: () throws -> Void,inPlace: Bool) throws {
         let catalog = state.catalog
         guard try state.world.integer(at: 0x7d4,as: UInt32.self) == 0,let registry = catalog.registry.records[0x4d82380] else { throw error("Catalog binding") }
         try apply(world: &state.world,actors: &state.actors,globals: &state.globals,precision: state.arithmeticPrecision,objectCount: registry.integer(at: 0,as: Int32.self),header: { index in
@@ -37,7 +37,7 @@ public enum OriginalWorldPhysics {
     static func apply(world: inout OriginalStateRecord,actors: inout [OriginalStateRecord],globals: inout OriginalStateRecord,
                       precision: OriginalArithmeticPrecision = .bits64,objectCount: Int32,header: (Int) throws -> OriginalStateRecord,frame: (Int,Int32) throws -> OriginalStateRecord,
                       observe: (OriginalWorldPhysicsEvent) throws -> Void = { _ in },
-                      afterActorPhysics: (Int,OriginalStateRecord) throws -> Void = { _,_ in },
+                      afterActorPhysics: ((Int,OriginalStateRecord) throws -> Void)? = nil,
                       respawned: () throws -> Void = {},inPlace: Bool = false) throws {
         guard inPlace else {
             // All or nothing: in place on copies, assigned when it completes.
@@ -75,9 +75,13 @@ public enum OriginalWorldPhysics {
             // the pass on a throw; CORE_REALTIME B2 P4).
             let actorHeader = try header(o)
             try OriginalActorPhysics.apply(actor: &pool[a],header: actorHeader,globals: &owned,precision: precision,frame: { try frame(o,$0) },observe: { try observe(.sound(slot: slot,event: $0)) },inPlace: true)
-            try afterActorPhysics(slot,pool[a])
-            if try state(a) == 9998 { try ownedWorld.write(UInt8(0),at: 4+slot) }
-            if try state(a) == 14 && i(a,0x2fc) <= 0 && (i(a,0x2f4) >= 0 || i(a,0x364) == 5 || slot >= 20) && i(a,8) > 0 && i(a,8) < 5 {
+            // Without an observer the actor is not copied for one (tier 3 L4).
+            if let afterActorPhysics { try afterActorPhysics(slot,pool[a]) }
+            // One frame lookup: the write between the two tests touches only
+            // the World, which `state` does not read (tier 3 L4).
+            let current = try state(a)
+            if current == 9998 { try ownedWorld.write(UInt8(0),at: 4+slot) }
+            if try current == 14 && i(a,0x2fc) <= 0 && (i(a,0x2f4) >= 0 || i(a,0x364) == 5 || slot >= 20) && i(a,8) > 0 && i(a,8) < 5 {
                 if try i(a,0x314) > 0 {
                     try pool[a].write(i(a,0x310),at: 0x30c);try pool[a].write(Int32(0),at: 0x308)
                     try pool[a].write(i(a,0x314),at: 0x304);try pool[a].write(i(a,0x304),at: 0x300);try pool[a].write(i(a,0x300),at: 0x2fc)
