@@ -51,7 +51,12 @@ func ntsdAndroidOnCreate(_ activity: UnsafeMutablePointer<ANativeActivity>) {
         callbacks.pointee.onInputQueueCreated = { _,queue in MainActor.assumeIsolated { NTSDAndroidApp.shared?.inputCreated(queue) } }
         callbacks.pointee.onInputQueueDestroyed = { _,queue in MainActor.assumeIsolated { NTSDAndroidApp.shared?.inputDestroyed(queue) } }
         callbacks.pointee.onPause = { _ in MainActor.assumeIsolated { NTSDAndroidApp.shared?.host?.setForeground(false) } }
-        callbacks.pointee.onResume = { _ in MainActor.assumeIsolated { NTSDAndroidApp.shared?.host?.setForeground(true) } }
+        callbacks.pointee.onResume = { _ in MainActor.assumeIsolated {
+            // A move between cpusets (background and back) can reset the pin
+            // on some kernels: apply it again (P0).
+            if NTSDAndroidApp.shared?.session != nil { NTSDAndroidApp.pinToFastCores() }
+            NTSDAndroidApp.shared?.host?.setForeground(true)
+        } }
         // Immersive mode is reset by dialogs and the keyboard: hide the bars again
         // whenever the window regains focus.
         callbacks.pointee.onWindowFocusChanged = { activity,focused in
@@ -116,8 +121,20 @@ func ntsdAndroidOnCreate(_ activity: UnsafeMutablePointer<ANativeActivity>) {
     }
     private func surfaceRedraw(_ window: OpaquePointer?) { host?.windows.redraw() }
 
+    /// The main thread (the game's) on the cores faster than the slowest tier:
+    /// with the render thread busy too the scheduler often ran it on the A12's
+    /// slower cluster (CPUs 4–7 at 1.8 GHz against 2.3), which costs time per
+    /// tick and changes nothing the game computes. Threads created from it
+    /// afterwards (the render queue's workers, audio callbacks) inherit the
+    /// mask. Equal cores, unreadable frequencies or a refused mask leave the
+    /// thread where the scheduler puts it (CORE_REALTIME P0).
+    static func pinToFastCores() {
+        let fast = ntsd_cpu_cluster_mask(1)
+        if fast != 0 { _ = ntsd_pin_current_thread(fast) }
+    }
     private func startIfReady() {
         guard session == nil,dataReady,let surface else { return }
+        Self.pinToFastCores()
         var arguments = ["NTSDAndroid"]
         if let extra = try? String(contentsOf:files.appendingPathComponent("args.txt"),encoding:.utf8) {
             arguments += extra.split(separator:"\n",omittingEmptySubsequences:true).map(String.init)

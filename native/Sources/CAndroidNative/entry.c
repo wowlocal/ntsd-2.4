@@ -1,3 +1,8 @@
+// sched_setaffinity and cpu_set_t need the GNU interface (ntsd_pin_current_thread).
+#define _GNU_SOURCE
+#include <sched.h>
+#include <stdio.h>
+#include <limits.h>
 #include "CAndroidNative.h"
 #include <jni.h>
 
@@ -35,4 +40,36 @@ void ntsd_android_hide_system_bars(ANativeActivity *activity) {
     }
     (*env)->DeleteLocalRef(env, activityClass);
     if ((*env)->ExceptionCheck(env)) (*env)->ExceptionClear(env);
+}
+
+int ntsd_pin_current_thread(unsigned long mask) {
+    cpu_set_t set;
+    CPU_ZERO(&set);
+    for (int cpu = 0; cpu < 64 && cpu < CPU_SETSIZE; cpu++) {
+        if (mask & (1UL << cpu)) { CPU_SET(cpu, &set); }
+    }
+    return sched_setaffinity(0, sizeof(set), &set);
+}
+
+unsigned long ntsd_cpu_cluster_mask(int fast) {
+    long count = sysconf(_SC_NPROCESSORS_CONF);
+    if (count <= 0 || count > (long)(sizeof(unsigned long) * CHAR_BIT)) { return 0; }
+    unsigned long frequency[sizeof(unsigned long) * CHAR_BIT], top = 0, low = ULONG_MAX;
+    for (long cpu = 0; cpu < count; cpu++) {
+        char path[96];
+        snprintf(path, sizeof(path), "/sys/devices/system/cpu/cpu%ld/cpufreq/cpuinfo_max_freq", cpu);
+        FILE *file = fopen(path, "r");
+        if (!file) { return 0; }
+        int scanned = fscanf(file, "%lu", &frequency[cpu]);
+        fclose(file);
+        if (scanned != 1) { return 0; }
+        if (frequency[cpu] > top) { top = frequency[cpu]; }
+        if (frequency[cpu] < low) { low = frequency[cpu]; }
+    }
+    if (top == low) { return 0; }
+    unsigned long mask = 0;
+    for (long cpu = 0; cpu < count; cpu++) {
+        if ((frequency[cpu] > low) == (fast != 0)) { mask |= 1UL << cpu; }
+    }
+    return mask;
 }
