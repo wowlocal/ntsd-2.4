@@ -1,0 +1,374 @@
+{
+ "study": "docs/research/CORE_REALTIME.md",
+ "plan": "docs/research/CORE_REALTIME_A3.md (L5b)",
+ "phase": "e4: two copies off the per-tick path (A3 L5b and the present's 16 bytes)",
+ "date": "2026-10-10",
+ "change": [
+  "OriginalApplicationPreparedStartupPlatform keeps its immutable inputs and prepared replies in one private final class (Fixed) that every staged copy shares; inputs and prepared are _read accessors. A platform copy (one per idle commit, ~3 per tick, and each loaded stage) retains one reference instead of copying ~25 arrays and the inputs' fields (A3 L5b)",
+  "OriginalMenuPresentation.presentSurface reads the mode-3 rectangle's 16 bytes with the record's ranged read (bytes(in:)) instead of building the whole globals byte array every tick"
+ ],
+ "probe": {
+  "profiles": "rtr3-prof-vs vs rte4-prof-vs (DWARF 16 KiB, 500 Hz, share of the main thread)",
+  "stagedCopy": "1.96% -> 1.41%",
+  "copies of Prepared and StartupInputs": "0.35% + 0.23% -> 0%",
+  "presentSurface": "0.95% -> 0.31%",
+  "OriginalStateRecord.bytes getter": "0.94% -> 0.43%",
+  "summary": "about 1.2% of the main thread (~0.14 ms per tick) less work"
+ },
+ "phone": {
+  "vs": {
+   "rtr3_same_session": [
+    {
+     "label": "rtr3-for-rte4-vs1",
+     "scenario": "vs",
+     "runSeconds": 207,
+     "peakResidentMB": 1538,
+     "ticksPerSecond": 33.75,
+     "busySeconds": 103.25,
+     "bodies": 1800,
+     "completeMsPerTick": 7.7,
+     "partAssembliesPerTick": 0.0,
+     "menuMsPerStep": 0.61,
+     "menuStepsPerTick": 4.12,
+     "idleMsPerStep": 0.491,
+     "idleIterationMs": 0.55,
+     "idleStepsPerTick": 3.12,
+     "tickStepMs": 0.99,
+     "mainCpuShare": 0.384,
+     "renderCpuShare": 0.273,
+     "mainMsPerTick": 11.38,
+     "renderMsPerTick": 8.09,
+     "presentMsPerTick": 5.72,
+     "releaseMsPerTick": 2.1,
+     "presentCounts": {
+      "submitted": 2100,
+      "drawn": 2100,
+      "waits": 0
+     }
+    },
+    {
+     "label": "rtr3-for-rte4-vs2",
+     "scenario": "vs",
+     "runSeconds": 207,
+     "peakResidentMB": 1415,
+     "ticksPerSecond": 33.83,
+     "busySeconds": 103.52,
+     "bodies": 1800,
+     "completeMsPerTick": 7.6,
+     "partAssembliesPerTick": 0.0,
+     "menuMsPerStep": 0.61,
+     "menuStepsPerTick": 4.12,
+     "idleMsPerStep": 0.487,
+     "idleIterationMs": 0.547,
+     "idleStepsPerTick": 3.12,
+     "tickStepMs": 0.988,
+     "mainCpuShare": 0.383,
+     "renderCpuShare": 0.272,
+     "mainMsPerTick": 11.33,
+     "renderMsPerTick": 8.05,
+     "presentMsPerTick": 5.67,
+     "releaseMsPerTick": 2.04,
+     "presentCounts": {
+      "submitted": 2100,
+      "drawn": 2100,
+      "waits": 0
+     }
+    }
+   ],
+   "after": [
+    {
+     "label": "rte4-vs1",
+     "scenario": "vs",
+     "runSeconds": 207,
+     "peakResidentMB": 1429,
+     "ticksPerSecond": 33.94,
+     "busySeconds": 102.26,
+     "bodies": 1800,
+     "completeMsPerTick": 7.6,
+     "partAssembliesPerTick": 0.0,
+     "menuMsPerStep": 0.6,
+     "menuStepsPerTick": 4.12,
+     "idleMsPerStep": 0.478,
+     "idleIterationMs": 0.538,
+     "idleStepsPerTick": 3.12,
+     "tickStepMs": 0.98,
+     "mainCpuShare": 0.385,
+     "renderCpuShare": 0.277,
+     "mainMsPerTick": 11.33,
+     "renderMsPerTick": 8.15,
+     "presentMsPerTick": 5.74,
+     "releaseMsPerTick": 2.07,
+     "presentCounts": {
+      "submitted": 2100,
+      "drawn": 2100,
+      "waits": 0
+     }
+    },
+    {
+     "label": "rte4-vs2",
+     "scenario": "vs",
+     "runSeconds": 207,
+     "peakResidentMB": 1449,
+     "ticksPerSecond": 33.91,
+     "busySeconds": 102.54,
+     "bodies": 1800,
+     "completeMsPerTick": 7.6,
+     "partAssembliesPerTick": 0.0,
+     "menuMsPerStep": 0.61,
+     "menuStepsPerTick": 4.12,
+     "idleMsPerStep": 0.479,
+     "idleIterationMs": 0.541,
+     "idleStepsPerTick": 3.12,
+     "tickStepMs": 1.015,
+     "mainCpuShare": 0.385,
+     "renderCpuShare": 0.29,
+     "mainMsPerTick": 11.36,
+     "renderMsPerTick": 8.55,
+     "presentMsPerTick": 5.71,
+     "releaseMsPerTick": 2.05,
+     "presentCounts": {
+      "submitted": 2100,
+      "drawn": 2100,
+      "waits": 0
+     }
+    },
+    {
+     "label": "rte4-vs3",
+     "scenario": "vs",
+     "runSeconds": 207,
+     "peakResidentMB": 1549,
+     "ticksPerSecond": 33.95,
+     "busySeconds": 102.66,
+     "bodies": 1800,
+     "completeMsPerTick": 7.5,
+     "partAssembliesPerTick": 0.0,
+     "menuMsPerStep": 0.6,
+     "menuStepsPerTick": 4.12,
+     "idleMsPerStep": 0.475,
+     "idleIterationMs": 0.535,
+     "idleStepsPerTick": 3.12,
+     "tickStepMs": 0.993,
+     "mainCpuShare": 0.384,
+     "renderCpuShare": 0.275,
+     "mainMsPerTick": 11.31,
+     "renderMsPerTick": 8.09,
+     "presentMsPerTick": 5.69,
+     "releaseMsPerTick": 2.09,
+     "presentCounts": {
+      "submitted": 2100,
+      "drawn": 2100,
+      "waits": 0
+     }
+    }
+   ],
+   "result": "main 11.36 -> 11.33, render 8.07 -> 8.26, release thread 2.07 -> 2.07 ms per tick"
+  },
+  "demo": {
+   "rtr3_same_session": [
+    {
+     "label": "rtr3-for-rte4-demo1",
+     "scenario": "demo",
+     "runSeconds": 187,
+     "peakResidentMB": 1397,
+     "ticksPerSecond": 33.56,
+     "busySeconds": 93.38,
+     "bodies": 900,
+     "completeMsPerTick": 8.3,
+     "partAssembliesPerTick": 0.0,
+     "menuMsPerStep": 0.61,
+     "menuStepsPerTick": 4.13,
+     "idleMsPerStep": 0.494,
+     "idleIterationMs": 0.554,
+     "idleStepsPerTick": 3.13,
+     "tickStepMs": 0.954,
+     "mainCpuShare": 0.399,
+     "renderCpuShare": 0.2,
+     "mainMsPerTick": 11.88,
+     "renderMsPerTick": 5.94,
+     "presentMsPerTick": 5.66,
+     "releaseMsPerTick": 1.72,
+     "presentCounts": {
+      "submitted": 1500,
+      "drawn": 1500,
+      "waits": 0
+     }
+    },
+    {
+     "label": "rtr3-for-rte4-demo2",
+     "scenario": "demo",
+     "runSeconds": 187,
+     "peakResidentMB": 1503,
+     "ticksPerSecond": 33.53,
+     "busySeconds": 93.87,
+     "bodies": 900,
+     "completeMsPerTick": 8.3,
+     "partAssembliesPerTick": 0.0,
+     "menuMsPerStep": 0.61,
+     "menuStepsPerTick": 4.13,
+     "idleMsPerStep": 0.493,
+     "idleIterationMs": 0.552,
+     "idleStepsPerTick": 3.13,
+     "tickStepMs": 0.963,
+     "mainCpuShare": 0.397,
+     "renderCpuShare": 0.202,
+     "mainMsPerTick": 11.85,
+     "renderMsPerTick": 6.03,
+     "presentMsPerTick": 5.73,
+     "releaseMsPerTick": 1.73,
+     "presentCounts": {
+      "submitted": 1500,
+      "drawn": 1500,
+      "waits": 0
+     }
+    }
+   ],
+   "after": [
+    {
+     "label": "rte4-demo1",
+     "scenario": "demo",
+     "runSeconds": 188,
+     "peakResidentMB": 1447,
+     "ticksPerSecond": 33.7,
+     "busySeconds": 93.79,
+     "bodies": 900,
+     "completeMsPerTick": 8.2,
+     "partAssembliesPerTick": 0.0,
+     "menuMsPerStep": 0.6,
+     "menuStepsPerTick": 4.13,
+     "idleMsPerStep": 0.48,
+     "idleIterationMs": 0.54,
+     "idleStepsPerTick": 3.13,
+     "tickStepMs": 0.966,
+     "mainCpuShare": 0.394,
+     "renderCpuShare": 0.199,
+     "mainMsPerTick": 11.7,
+     "renderMsPerTick": 5.92,
+     "presentMsPerTick": 5.72,
+     "releaseMsPerTick": 1.68,
+     "presentCounts": {
+      "submitted": 1500,
+      "drawn": 1500,
+      "waits": 0
+     }
+    },
+    {
+     "label": "rte4-demo2",
+     "scenario": "demo",
+     "runSeconds": 188,
+     "peakResidentMB": 1353,
+     "ticksPerSecond": 33.57,
+     "busySeconds": 93.4,
+     "bodies": 900,
+     "completeMsPerTick": 8.3,
+     "partAssembliesPerTick": 0.0,
+     "menuMsPerStep": 0.6,
+     "menuStepsPerTick": 4.13,
+     "idleMsPerStep": 0.482,
+     "idleIterationMs": 0.542,
+     "idleStepsPerTick": 3.13,
+     "tickStepMs": 0.956,
+     "mainCpuShare": 0.397,
+     "renderCpuShare": 0.202,
+     "mainMsPerTick": 11.82,
+     "renderMsPerTick": 6.02,
+     "presentMsPerTick": 5.7,
+     "releaseMsPerTick": 1.7,
+     "presentCounts": {
+      "submitted": 1500,
+      "drawn": 1500,
+      "waits": 0
+     }
+    },
+    {
+     "label": "rte4-demo3",
+     "scenario": "demo",
+     "runSeconds": 187,
+     "peakResidentMB": 1385,
+     "ticksPerSecond": 33.65,
+     "busySeconds": 92.97,
+     "bodies": 900,
+     "completeMsPerTick": 8.2,
+     "partAssembliesPerTick": 0.0,
+     "menuMsPerStep": 0.6,
+     "menuStepsPerTick": 4.13,
+     "idleMsPerStep": 0.483,
+     "idleIterationMs": 0.542,
+     "idleStepsPerTick": 3.13,
+     "tickStepMs": 0.957,
+     "mainCpuShare": 0.396,
+     "renderCpuShare": 0.201,
+     "mainMsPerTick": 11.76,
+     "renderMsPerTick": 5.96,
+     "presentMsPerTick": 5.75,
+     "releaseMsPerTick": 1.68,
+     "presentCounts": {
+      "submitted": 1500,
+      "drawn": 1500,
+      "waits": 0
+     }
+    }
+   ],
+   "result": "main 11.87 -> 11.76, render 5.99 -> 5.97, release thread 1.73 -> 1.69 ms per tick"
+  },
+  "summary": "Demo main −0.11 ms, vs −0.03 (below the phone's resolution, as expected for ~0.14 ms); render within noise (one vs run read 8.55, the others 8.15 and 8.09 against 8.05-8.17)"
+ },
+ "gates": {
+  "tested_trees": {
+   "game": "native 84f30e7ab3253b62d1a65b0ccd30dc91b95acb7c (builds, scenarios, AppKit, shipping build, phone, emulator, suites)",
+   "tests": "native acbb99df043c1d0a045b44515e9297db6bf0aaaf = the game tree plus the review's two tests",
+   "tools": "a112e55a61c90e559d8ceb59b8b379423848dd31"
+  },
+  "builds": "clean; checked headless and AppKit, unchecked headless and APK (shipping)",
+  "scenarios": [
+   "{\"scenario\": \"vs\", \"exit\": 0, \"seconds\": 71.6, \"result\": \"equal\", \"differs\": []}",
+   "{\"scenario\": \"mission\", \"exit\": 0, \"seconds\": 69.6, \"result\": \"equal\", \"differs\": []}",
+   "{\"scenario\": \"demo\", \"exit\": 0, \"seconds\": 51.2, \"result\": \"equal\", \"differs\": []}",
+   "{\"scenario\": \"war\", \"exit\": 0, \"seconds\": 110.2, \"result\": \"equal\", \"differs\": []}",
+   "{\"scenario\": \"playback\", \"exit\": 0, \"seconds\": 78.0, \"result\": \"equal\", \"differs\": []}",
+   "{\"scenario\": \"tournament\", \"exit\": 0, \"seconds\": 96.9, \"result\": \"equal\", \"differs\": []}",
+   "{\"scenario\": \"altenter\", \"exit\": 0, \"seconds\": 72.4, \"result\": \"equal\", \"differs\": []}",
+   "{\"scenario\": \"tournament-win\", \"exit\": 0, \"seconds\": 103.7, \"result\": \"equal\", \"differs\": []}",
+   "{\"scenario\": \"team-tournament\", \"exit\": 0, \"seconds\": 79.7, \"result\": \"equal\", \"differs\": []}",
+   "{\"scenario\": \"joystick\", \"exit\": 0, \"seconds\": 25.1, \"result\": \"equal\", \"differs\": []}",
+   "{\"frames\": 1832, \"mismatched\": 0, \"result\": \"identical\"}"
+  ],
+  "appkit": [
+   "{\"scenario\": \"vs\", \"exit\": 0, \"seconds\": 70.0, \"result\": \"equal\", \"differs\": []}",
+   "{\"scenario\": \"playback\", \"exit\": 0, \"seconds\": 74.5, \"result\": \"equal\", \"differs\": []}",
+   "{\"frames\": 3960, \"mismatched\": 0, \"result\": \"identical\"}"
+  ],
+  "unchecked_headless": [
+   "{\"scenario\": \"vs\", \"exit\": 0, \"seconds\": 73.3, \"result\": \"equal\", \"differs\": []}",
+   "{\"scenario\": \"demo\", \"exit\": 0, \"seconds\": 53.8, \"result\": \"equal\", \"differs\": []}",
+   "{\"frames\": 1832, \"mismatched\": 0, \"result\": \"identical\"}"
+  ],
+  "launches": "20 of 20 clean",
+  "emulator": "{\"frames\": 1832, \"mismatched\": 0, \"result\": \"identical\"}",
+  "tests": {
+   "game_tree": [
+    "OriginalExclusivityChecksTests exit=0 1s \t Executed 1 test, with 0 failures (0 unexpected) in 0.000 (0.017) seconds",
+    "OriginalApplicationPreparedStartupPlatformTests exit=0 6s \t Executed 3 tests, with 0 failures (0 unexpected) in 5.633 (5.634) seconds",
+    "OriginalApplicationWindowStartupTests exit=0 9s \t Executed 5 tests, with 0 failures (0 unexpected) in 8.869 (8.871) seconds",
+    "OriginalWinMainStartupTests exit=0 2s \t Executed 2 tests, with 0 failures (0 unexpected) in 1.650 (1.651) seconds",
+    "OriginalStartupAudioTests exit=0 53s \t Executed 5 tests, with 0 failures (0 unexpected) in 53.175 (53.176) seconds",
+    "OriginalApplicationObservedStartupTests exit=0 13s \t Executed 4 tests, with 0 failures (0 unexpected) in 12.973 (12.974) seconds",
+    "OriginalApplicationHostDeliveryContextTests exit=0 87s \t Executed 7 tests, with 0 failures (0 unexpected) in 86.344 (86.346) seconds",
+    "OriginalApplicationHostSessionTests exit=0 78s \t Executed 5 tests, with 0 failures (0 unexpected) in 77.888 (77.893) seconds",
+    "OriginalMacRuntimeMenuTests exit=0 13s \t Executed 11 tests, with 0 failures (0 unexpected) in 12.686 (12.689) seconds",
+    "OriginalMacRuntimeLoadingTests exit=0 11s \t Executed 7 tests, with 0 failures (0 unexpected) in 11.252 (11.254) seconds",
+    "OriginalNetworkMenuTests exit=0 15s \t Executed 3 tests, with 0 failures (0 unexpected) in 14.967 (14.969) seconds"
+   ],
+   "with_the_new_tests (clean release bundle)": [
+    "OriginalExclusivityChecksTests exit=0 2s \t Executed 1 test, with 0 failures (0 unexpected) in 0.001 (0.002) seconds",
+    "OriginalMenuPresentationSurfaceTests exit=0 0s \t Executed 1 test, with 0 failures (0 unexpected) in 0.001 (0.002) seconds",
+    "OriginalApplicationPreparedStartupPlatformTests exit=0 5s \t Executed 4 tests, with 0 failures (0 unexpected) in 5.627 (5.628) seconds",
+    "OriginalApplicationHostDeliveryContextTests exit=0 85s \t Executed 7 tests, with 0 failures (0 unexpected) in 84.496 (84.498) seconds"
+   ],
+   "new": [
+    "OriginalMenuPresentationSurfaceTests: the mode-3 rectangle equals the whole-array slice for flat and parted globals, undefined bytes included",
+    "OriginalApplicationPreparedStartupPlatformTests.testStagedCopyAnswersAfterTheOriginalIsGone"
+   ]
+  }
+ },
+ "review": "independent read-only review: approve with nits (both fields were let and nothing relies on copies owning them; no protocol requires inputs; the ranged read returns the same raw bytes for flat, parted, paged and empty records and traps as before). Applied: the two tests. Gate binaries come from clean builds (the class layout changed across modules)"
+}

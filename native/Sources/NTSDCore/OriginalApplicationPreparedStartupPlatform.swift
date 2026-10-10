@@ -88,8 +88,16 @@ public final class OriginalApplicationPreparedStartupPlatform: OriginalApplicati
         public fileprivate(set) var panelWrites: [[UInt8]] = []
         public fileprivate(set) var panelCloses: [Int32] = []
     }
-    public let inputs: OriginalApplicationStartupInputs
-    private let prepared: Prepared
+    /// The immutable inputs and prepared replies, in one object every staged
+    /// copy shares: a copy retains it once instead of copying ~25 arrays and
+    /// the inputs' fields (one copy per idle commit; CORE_REALTIME A3 L5b).
+    private final class Fixed: @unchecked Sendable {
+        let inputs: OriginalApplicationStartupInputs,prepared: Prepared
+        init(_ inputs: OriginalApplicationStartupInputs,_ prepared: Prepared) { self.inputs = inputs;self.prepared = prepared }
+    }
+    private let fixed: Fixed
+    public var inputs: OriginalApplicationStartupInputs { _read { yield fixed.inputs } }
+    private var prepared: Prepared { _read { yield fixed.prepared } }
     private var state = Snapshot()
     public var windowExchange: OriginalWindowRequestExchange.Cursor?
     public var startupExchange: OriginalStartupRequestExchange.Cursor?
@@ -104,10 +112,11 @@ public final class OriginalApplicationPreparedStartupPlatform: OriginalApplicati
     public var observesAudio: Bool { prepared.observesAudio }
 
     public init(inputs: OriginalApplicationStartupInputs, prepared: Prepared) {
-        self.inputs = inputs; self.prepared = prepared
+        fixed = Fixed(inputs,prepared)
     }
+    private init(fixed: Fixed) { self.fixed = fixed }
     public func stagedCopy() throws -> OriginalApplicationPreparedStartupPlatform {
-        let copy = OriginalApplicationPreparedStartupPlatform(inputs:inputs,prepared:prepared)
+        let copy = OriginalApplicationPreparedStartupPlatform(fixed:fixed)
         copy.state = state; copy.windowExchange = windowExchange; copy.startupExchange = startupExchange; copy.bitmapDelivery = bitmapDelivery; copy.lifecycleDelivery = lifecycleDelivery; copy.graphicsDelivery = graphicsDelivery; copy.iterationDelivery = iterationDelivery
         return copy
     }

@@ -140,7 +140,8 @@ public enum OriginalMenuPresentation {
         } else if mode == 3 {
             let resource = try word(0x455634), start = 0x453ccc-OriginalMatchPreparation.globalBase
             guard resource != 0 else { throw OriginalStateError.invalidStorage("Null blit destination") }
-            try observe(.init(.method, [resource, 0x14, 0x453ccc, word(0x455608), 0, 0x1000000, 0], [Array(globals.bytes[start..<(start+16)])]))
+            // The 16 bytes in place, not a whole copy of the globals' bytes (e4).
+            try observe(.init(.method, [resource, 0x14, 0x453ccc, word(0x455608), 0, 0x1000000, 0], [globals.bytes(in: start..<(start+16))]))
         }
     }
     public static func apply(_ entry: OriginalMenuPresentationEntry, input: OriginalMenuPresentationInput,
