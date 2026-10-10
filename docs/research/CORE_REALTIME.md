@@ -238,7 +238,8 @@ while measuring; restore `svc power stayon false` when the loop pauses or stops.
 | 2026-10-10 | e4 (main thread): two copies off the per-tick path | The platform's immutable inputs and prepared replies live in one object every staged copy shares (A3 L5b: a copy per idle commit retained ~25 arrays); `presentSurface` reads its 16 bytes in place instead of building the globals' whole byte array each tick. Profile: `stagedCopy` 1.96 → 1.41% of the main thread, the input copies 0.58 → 0%, `presentSurface` 0.95 → 0.31% (~1.2%, ~0.14 ms). A12 Demo main 11.87 → 11.76, vs 11.36 → 11.33 (below resolution). Behaviour equal; review approved with nits (tests added) | [evidence](../evidence/rt-e4-fixed-inputs-and-present-20261010.json) | e7af764 |
 | 2026-10-10 | R4a (render thread): four-pixel SIMD copies — **parked** | The render thread is 88% `copyPixels`. Four pixels per step with per-group offset checks, branches in the loop and the target always loaded and stored: frames identical but slower (A12 render: Demo 6.05 → 6.42 ms per tick, vs 8.26 → 8.72); the gate was stopped | [evidence](../evidence/rt-r4a-simd-copies-parked-20261010.json) | — |
 | 2026-10-10 | R4b (render thread): four-pixel copies in tight loops | Separate keyed/mirrored loops on raw pointers with hoisted key constants; a group the key rejects entirely is skipped, one it accepts entirely is stored without reading the target. A12 render vs 8.16 → 7.59 ms per tick (under 8), Demo 6.01 → 6.12; main within noise. Frames identical; per-pixel tests incl. key ranges and top bytes | [evidence](../evidence/rt-r4b-simd-copies-20261010.json) | 32d464c |
-| 2026-10-10 | R3b (main thread): the release thread wakes on its own | `retire` signalled the sleeping release thread for every value (a kernel call: 0.62% of the main thread, mostly menu steps' drivers). The thread now waits with a 16 ms timeout (signalled only at half the backlog). Profile: `retire` 0.68 → 0.11%, no signals left. A12 Demo main 11.76 → 11.69, vs within noise. Behaviour equal | [evidence](../evidence/rt-r3b-release-thread-polls-20261010.json) | this commit |
+| 2026-10-10 | R3b (main thread): the release thread wakes on its own | `retire` signalled the sleeping release thread for every value (a kernel call: 0.62% of the main thread, mostly menu steps' drivers). The thread now waits with a 16 ms timeout (signalled only at half the backlog). Profile: `retire` 0.68 → 0.11%, no signals left. A12 Demo main 11.76 → 11.69, vs within noise. Behaviour equal | [evidence](../evidence/rt-r3b-release-thread-polls-20261010.json) | 03c06a0 |
+| 2026-10-10 | e5 (main thread): `emit` takes its effect | Every caller passes a temporary that `emit` copied into the operations and the caller then destroyed; it now takes the effect (`consuming`). Profile: `emit` 4.67 → 3.66% of the main thread, the Effect copies 0.93 → 0.16% (~0.11 ms). Phone within resolution. Behaviour equal | [evidence](../evidence/rt-e5-emit-consumes-20261010.json) | this commit |
 
 ## Next task
 
@@ -279,8 +280,8 @@ main thread; message-loop iterations 4.12 × 1.14 ms; render thread 18.7 ms,
   P2 (render: vs 12.62, Demo 10.52), L1, R0, L2, L3, e3, G4a, L4 done; G4b
   parked; then P0 (the main thread on the faster cores) and R2 (the
   present on its own thread, on the slower cores), A3 L4b and R3 (dead
-  values freed on a release thread), e4, R4b (four-pixel copies) and R3b
-  done; R4a parked. **Status (2026-10-10, R4b):** A12 main about 11.2 ms per tick
+  values freed on a release thread), e4, R4b (four-pixel copies), R3b and
+  e5 done; R4a parked. **Status (2026-10-10, R4b):** A12 main about 11.2 ms per tick
   in vs and 11.75 in the Demo; render about 7.6 and 6.1 (**the 8 ms goal for
   the render thread is met in both**); the presenter thread about 5.7, the
   release thread about 2.

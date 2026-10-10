@@ -243,7 +243,10 @@ public struct OriginalApplicationLoadedMenuSession {
                   !ranges.contains(where:{ lo < $0.1 && $0.0 < hi }) else { throw Boundary.overlap(token) }
             reserve(token,count)
         }
-        func emit(_ effect: Session.Effect) throws {
+        /// Takes the effect (every caller passes a temporary): it moves into
+        /// the operations instead of being copied there and then destroyed
+        /// (CORE_REALTIME e5).
+        func emit(_ effect: consuming Session.Effect) throws {
             // One in-place access to the state, without copying the graphics
             // owner or the bitmap inputs (CORE_REALTIME phase 4b, tier 3 G3a).
             if let command = try state.loadedCommand(for:effect) { graphics.append(command) }
