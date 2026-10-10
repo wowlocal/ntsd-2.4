@@ -60,6 +60,12 @@ public final class OriginalRequestExchange<Input: OriginalExchangeRequest, Resou
         /// as a permit cursor does. Nil for permit cursors.
         fileprivate var inline: ((RequestNeeded) throws -> Receipt?)?
         public var isSuspended: Bool { pending != nil }
+        /// The checks `finish` makes of the cursor itself: not suspended, every
+        /// receipt consumed (CORE_REALTIME A3 L4b, for a cursor of no exchange).
+        public func requireConsumed() throws {
+            guard pending == nil else { throw Boundary.suspendedCursor }
+            guard position == receipts.count else { throw Boundary.unconsumedReplies }
+        }
         /// Whether any receipt keeps a resource alive.
         public var retainsResources: Bool { receipts.contains { !$0.resources.isEmpty } }
         fileprivate init(owner: Identity, receipts: [Receipt]) {
@@ -145,6 +151,24 @@ public final class OriginalRequestExchange<Input: OriginalExchangeRequest, Resou
             return Receipt(request: ticket.request, response: response, resources: [])
         }
         return cursor
+    }
+    /// A cursor bound to no exchange whose missing requests `serve` answers
+    /// (nil suspends it), for an attempt that may need no exchange at all
+    /// (CORE_REALTIME A3 L4b). An exchange takes its replies with `record` if
+    /// the attempt falls back; nothing else of it can reach one.
+    public static func standaloneCursor(_ serve: @escaping (Request) throws -> Response?) -> Cursor {
+        var cursor = Cursor(owner: Identity(), receipts: [])
+        cursor.inline = { ticket in
+            guard let response = try serve(ticket.request) else { return nil }
+            return Receipt(request: ticket.request, response: response, resources: [])
+        }
+        return cursor
+    }
+    /// `claim` of the ticket a cursor over all current receipts would raise for
+    /// `request` after consuming them (CORE_REALTIME A3 L4b).
+    public func claimNext(_ request: Request) throws -> Permit {
+        let count = locked { receipts.count }
+        return try claim(RequestNeeded(request: request, ordinal: count, owner: owner, revision: count))
     }
     /// Adds replies a direct cursor served, in order, as their claims and
     /// answers would have (CORE_REALTIME A3 L4a).

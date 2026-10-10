@@ -368,6 +368,10 @@ import XCTest
                 let loop = started.host.snapshot.session?.loop
                 globals.combine(loop?.timer.baseline);globals.combine(loop?.counter);globals.combine(loop?.message.bytes)
                 globals.combine(loop?.message.defined)
+                // The committed platform's delivery (A3 invariant 11, L4b).
+                let delivery = try? started.host.platformSnapshot().iterationDelivery
+                globals.combine(delivery?.cursor?.position);globals.combine(delivery?.cursor?.isSuspended)
+                globals.combine(delivery?.retainedIterationCount)
                 steps.append("\(kind) \(menu.requests) \(menu.textRequests) \(menu.emptyBlits) \(menu.iterations) \(clockCalls) "
                     + "\(String(describing:menu.lastRequest)) \(menu.messages.delivered.map(\.message)) \(menu.messages.sleeps) "
                     + "\(started.host.committedSequence) \(started.display.frontOperationCount) \(started.display.operationCount) "
@@ -425,7 +429,9 @@ import XCTest
         typealias Loop = OriginalApplicationMessageLoop
         struct Fail: Error {}
         enum Case: String, CaseIterable { case idle,message,bound,failure,mismatch }
-        func run(direct: Bool,_ kind: Case) throws -> (log: [String],directCalls: Int) {
+        /// `lane`: the runtime's driverless first attempt (A3 L4b) — the lane,
+        /// then a driver's `resumeAfterIdle` when it falls back.
+        func run(direct: Bool,lane: Bool = false,_ kind: Case) throws -> (log: [String],common: [String],directCalls: Int) {
             let root = FileManager.default.temporaryDirectory.appendingPathComponent("ntsd-direct-\(UUID().uuidString)",isDirectory:true)
             defer { try? FileManager.default.removeItem(at:root) }
             let (started,package) = try startup(root)
@@ -475,26 +481,50 @@ import XCTest
                 served += 1; directCalls += 1
                 return try answer(q)
             } : nil)
-            let driver = Driver(host:started.host),outcome: String
+            var driver: Driver?
+            let outcome: String
+            func describe(_ resumed: Driver.Outcome) -> String {
+                switch resumed {
+                case .request(let permit): return "request \(permit.ordinal) \(permit.request)"
+                case .advanced(let o): return "advanced \(o)"
+                }
+            }
             do {
-                switch try driver.resumeIdleFirst(prepare:{ _,state in try menu.inputs(state) },network:false,inline:inline) {
-                case .request(let permit): outcome = "request \(permit.ordinal) \(permit.request)"
-                case .advanced(let o): outcome = "advanced \(o)"
+                if lane {
+                    switch try Driver.resumeIdleDirect(host:started.host,prepare:{ _,state in try menu.inputs(state) },direct:try XCTUnwrap(inline.direct)) {
+                    case .committed(let o): outcome = "advanced \(o)"
+                    case .fallback(let fallback):
+                        let d = Driver(host:started.host);driver = d
+                        outcome = describe(try d.resumeAfterIdle(fallback,prepare:{ _,state in try menu.inputs(state) },network:false,inline:inline))
+                    }
+                } else {
+                    let d = Driver(host:started.host);driver = d
+                    outcome = describe(try d.resumeIdleFirst(prepare:{ _,state in try menu.inputs(state) },network:false,inline:inline))
                 }
             } catch { outcome = "error \(error)" }
-            let s = driver.exchangeSnapshot
-            return (["\(kind.rawValue) \(outcome)","status \(s.status)","outstanding \(String(describing:s.outstandingRequest))",
+            // The committed platform's delivery (A3 invariant 11).
+            let delivery = try started.host.platformSnapshot().iterationDelivery
+            let common = ["\(kind.rawValue) \(outcome)","served \(served)",
+                          "sequence \(started.host.committedSequence)","pending \(started.host.pendingBatchCount)",
+                          "delivery \(String(describing:delivery.cursor?.position)) \(String(describing:delivery.cursor?.isSuspended)) \(delivery.retainedIterationCount)",
+                          "idle commits \(started.host.idleCommitCount - idleCommits)"]
+            guard let s = driver?.exchangeSnapshot else { return (common,common,directCalls) }
+            return (common + ["status \(s.status)","outstanding \(String(describing:s.outstandingRequest))",
                      "service \(s.serviceStarted)","failure \(String(describing:s.failure?.request)) \(s.failure?.diagnostic ?? "-") \(String(describing:s.failure?.afterCancellation))",
-                     "receipts \(s.receipts.map { "\($0.request) \($0.response) \($0.resources.count)" })","served \(served)",
-                     "sequence \(started.host.committedSequence)","pending \(started.host.pendingBatchCount)",
-                     "idle commits \(started.host.idleCommitCount - idleCommits)"],directCalls)
+                     "receipts \(s.receipts.map { "\($0.request) \($0.response) \($0.resources.count)" })"],common,directCalls)
         }
         for kind in Case.allCases {
             let lane = try run(direct:true,kind),permits = try run(direct:false,kind)
             XCTAssertEqual(lane.log,permits.log,kind.rawValue)
+            // A3 L4b: the driverless lane gives the same outcome, counters and
+            // delivery, and the same exchange whenever it hands over to a driver.
+            let driverless = try run(direct:true,lane:true,kind)
+            XCTAssertEqual(driverless.common,permits.common,"lane \(kind.rawValue)")
+            if driverless.log.count > driverless.common.count { XCTAssertEqual(driverless.log,permits.log,"lane \(kind.rawValue)") }
+            XCTAssertEqual(kind == .message || kind == .bound,driverless.log.count > driverless.common.count,"lane \(kind.rawValue) fell back to a driver")
             XCTAssertGreaterThan(lane.directCalls,0,"\(kind.rawValue) went through the direct server")
             XCTAssertEqual(permits.directCalls,0)
-            let outcome = lane.log[0],idle = lane.log.last!
+            let outcome = lane.log[0],idle = lane.common.last!
             switch kind {
             case .idle: XCTAssertTrue(outcome.contains("advanced") && idle == "idle commits 1",outcome+" "+idle)
             case .message: XCTAssertTrue(idle == "idle commits 0" && !outcome.contains("error"),outcome+" "+idle)

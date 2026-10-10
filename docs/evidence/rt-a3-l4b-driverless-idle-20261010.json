@@ -1,0 +1,334 @@
+{
+ "study": "docs/research/CORE_REALTIME.md",
+ "plan": "docs/research/CORE_REALTIME_A3.md (L4, invariants 9-12); docs/research/CORE_REALTIME_TIER3.md",
+ "phase": "A3 L4b: the first idle attempt of a step without a driver or exchange",
+ "date": "2026-10-10",
+ "change": "OriginalMacRuntimeMenu.step's first resume runs Driver.resumeIdleDirect: resumeIdleFirst's idle attempt with no Driver, exchange, claim or lock. Queue requests are answered by the same direct server through a cursor of no exchange (Exchange.standaloneCursor); the publication makes the cursor checks finish would (Cursor.requireConsumed; a fresh exchange passes the others). A committed idle iteration needs no driver at all (the step's driver is a lazy local). Otherwise the lane returns its replies, prepared inputs and declined request, and a fresh driver of the same committed sequence continues (resumeAfterIdle): the replies are recorded as resumeIdleFirst records them, then the declined request is claimed (claimNext) or the whole step runs over a cursor that replays them with the same inputs. Later resumes are unchanged",
+ "phone": {
+  "vs": {
+   "rtr2e_same_session": [
+    {
+     "label": "rtr2e-for-rtl4b-vs1",
+     "scenario": "vs",
+     "runSeconds": 212,
+     "peakResidentMB": 1445,
+     "ticksPerSecond": 32.95,
+     "busySeconds": 106.79,
+     "bodies": 1800,
+     "completeMsPerTick": 8.3,
+     "partAssembliesPerTick": 0.0,
+     "menuMsPerStep": 0.63,
+     "menuStepsPerTick": 4.12,
+     "idleMsPerStep": 0.54,
+     "idleIterationMs": 0.599,
+     "idleStepsPerTick": 3.12,
+     "tickStepMs": 0.927,
+     "mainCpuShare": 0.396,
+     "renderCpuShare": 0.264,
+     "mainMsPerTick": 12.03,
+     "renderMsPerTick": 8.02,
+     "presentMsPerTick": 5.92,
+     "presentCounts": {
+      "submitted": 2100,
+      "drawn": 2100,
+      "waits": 0
+     }
+    },
+    {
+     "label": "rtr2e-for-rtl4b-vs2",
+     "scenario": "vs",
+     "runSeconds": 211,
+     "peakResidentMB": 1324,
+     "ticksPerSecond": 32.98,
+     "busySeconds": 105.56,
+     "bodies": 1800,
+     "completeMsPerTick": 8.3,
+     "partAssembliesPerTick": 0.0,
+     "menuMsPerStep": 0.64,
+     "menuStepsPerTick": 4.12,
+     "idleMsPerStep": 0.541,
+     "idleIterationMs": 0.6,
+     "idleStepsPerTick": 3.12,
+     "tickStepMs": 0.944,
+     "mainCpuShare": 0.399,
+     "renderCpuShare": 0.265,
+     "mainMsPerTick": 12.11,
+     "renderMsPerTick": 8.05,
+     "presentMsPerTick": 5.92,
+     "presentCounts": {
+      "submitted": 2100,
+      "drawn": 2100,
+      "waits": 0
+     }
+    }
+   ],
+   "after": [
+    {
+     "label": "rtl4b-vs1",
+     "scenario": "vs",
+     "runSeconds": 207,
+     "peakResidentMB": 1355,
+     "ticksPerSecond": 33.13,
+     "busySeconds": 105.05,
+     "bodies": 1800,
+     "completeMsPerTick": 8.3,
+     "partAssembliesPerTick": 0.0,
+     "menuMsPerStep": 0.6,
+     "menuStepsPerTick": 4.12,
+     "idleMsPerStep": 0.473,
+     "idleIterationMs": 0.535,
+     "idleStepsPerTick": 3.12,
+     "tickStepMs": 0.977,
+     "mainCpuShare": 0.392,
+     "renderCpuShare": 0.27,
+     "mainMsPerTick": 11.84,
+     "renderMsPerTick": 8.16,
+     "presentMsPerTick": 5.84,
+     "presentCounts": {
+      "submitted": 2100,
+      "drawn": 2100,
+      "waits": 0
+     }
+    },
+    {
+     "label": "rtl4b-vs2",
+     "scenario": "vs",
+     "runSeconds": 211,
+     "peakResidentMB": 1394,
+     "ticksPerSecond": 33.21,
+     "busySeconds": 105.66,
+     "bodies": 1800,
+     "completeMsPerTick": 8.2,
+     "partAssembliesPerTick": 0.0,
+     "menuMsPerStep": 0.59,
+     "menuStepsPerTick": 4.12,
+     "idleMsPerStep": 0.472,
+     "idleIterationMs": 0.533,
+     "idleStepsPerTick": 3.12,
+     "tickStepMs": 0.956,
+     "mainCpuShare": 0.393,
+     "renderCpuShare": 0.26,
+     "mainMsPerTick": 11.82,
+     "renderMsPerTick": 7.82,
+     "presentMsPerTick": 5.93,
+     "presentCounts": {
+      "submitted": 2100,
+      "drawn": 2100,
+      "waits": 0
+     }
+    },
+    {
+     "label": "rtl4b-vs3",
+     "scenario": "vs",
+     "runSeconds": 211,
+     "peakResidentMB": 1343,
+     "ticksPerSecond": 33.2,
+     "busySeconds": 105.64,
+     "bodies": 1800,
+     "completeMsPerTick": 8.2,
+     "partAssembliesPerTick": 0.0,
+     "menuMsPerStep": 0.59,
+     "menuStepsPerTick": 4.12,
+     "idleMsPerStep": 0.47,
+     "idleIterationMs": 0.531,
+     "idleStepsPerTick": 3.12,
+     "tickStepMs": 0.969,
+     "mainCpuShare": 0.392,
+     "renderCpuShare": 0.269,
+     "mainMsPerTick": 11.8,
+     "renderMsPerTick": 8.11,
+     "presentMsPerTick": 5.88,
+     "presentCounts": {
+      "submitted": 2100,
+      "drawn": 2100,
+      "waits": 0
+     }
+    }
+   ],
+   "result": "main 12.07 -> 11.82, render 8.04 -> 8.03, presenter 5.92 -> 5.88 ms per tick"
+  },
+  "demo": {
+   "rtr2e_same_session": [
+    {
+     "label": "rtr2e-for-rtl4b-demo1",
+     "scenario": "demo",
+     "runSeconds": 190,
+     "peakResidentMB": 1357,
+     "ticksPerSecond": 32.97,
+     "busySeconds": 94.51,
+     "bodies": 900,
+     "completeMsPerTick": 8.6,
+     "partAssembliesPerTick": 0.0,
+     "menuMsPerStep": 0.64,
+     "menuStepsPerTick": 4.13,
+     "idleMsPerStep": 0.546,
+     "idleIterationMs": 0.604,
+     "idleStepsPerTick": 3.13,
+     "tickStepMs": 0.922,
+     "mainCpuShare": 0.408,
+     "renderCpuShare": 0.191,
+     "mainMsPerTick": 12.37,
+     "renderMsPerTick": 5.78,
+     "presentMsPerTick": 5.71,
+     "presentCounts": {
+      "submitted": 1500,
+      "drawn": 1500,
+      "waits": 0
+     }
+    },
+    {
+     "label": "rtr2e-for-rtl4b-demo2",
+     "scenario": "demo",
+     "runSeconds": 190,
+     "peakResidentMB": 1473,
+     "ticksPerSecond": 32.9,
+     "busySeconds": 95.16,
+     "bodies": 900,
+     "completeMsPerTick": 8.7,
+     "partAssembliesPerTick": 0.0,
+     "menuMsPerStep": 0.64,
+     "menuStepsPerTick": 4.13,
+     "idleMsPerStep": 0.549,
+     "idleIterationMs": 0.608,
+     "idleStepsPerTick": 3.13,
+     "tickStepMs": 0.913,
+     "mainCpuShare": 0.407,
+     "renderCpuShare": 0.192,
+     "mainMsPerTick": 12.38,
+     "renderMsPerTick": 5.82,
+     "presentMsPerTick": 5.71,
+     "presentCounts": {
+      "submitted": 1500,
+      "drawn": 1500,
+      "waits": 0
+     }
+    }
+   ],
+   "after": [
+    {
+     "label": "rtl4b-demo1",
+     "scenario": "demo",
+     "runSeconds": 189,
+     "peakResidentMB": 1454,
+     "ticksPerSecond": 33.1,
+     "busySeconds": 94.14,
+     "bodies": 900,
+     "completeMsPerTick": 8.6,
+     "partAssembliesPerTick": 0.0,
+     "menuMsPerStep": 0.6,
+     "menuStepsPerTick": 4.13,
+     "idleMsPerStep": 0.486,
+     "idleIterationMs": 0.547,
+     "idleStepsPerTick": 3.13,
+     "tickStepMs": 0.958,
+     "mainCpuShare": 0.406,
+     "renderCpuShare": 0.192,
+     "mainMsPerTick": 12.27,
+     "renderMsPerTick": 5.8,
+     "presentMsPerTick": 5.7,
+     "presentCounts": {
+      "submitted": 1500,
+      "drawn": 1500,
+      "waits": 0
+     }
+    },
+    {
+     "label": "rtl4b-demo2",
+     "scenario": "demo",
+     "runSeconds": 190,
+     "peakResidentMB": 1397,
+     "ticksPerSecond": 33.05,
+     "busySeconds": 94.88,
+     "bodies": 900,
+     "completeMsPerTick": 8.7,
+     "partAssembliesPerTick": 0.0,
+     "menuMsPerStep": 0.6,
+     "menuStepsPerTick": 4.13,
+     "idleMsPerStep": 0.489,
+     "idleIterationMs": 0.549,
+     "idleStepsPerTick": 3.13,
+     "tickStepMs": 0.951,
+     "mainCpuShare": 0.406,
+     "renderCpuShare": 0.194,
+     "mainMsPerTick": 12.3,
+     "renderMsPerTick": 5.88,
+     "presentMsPerTick": 5.74,
+     "presentCounts": {
+      "submitted": 1500,
+      "drawn": 1500,
+      "waits": 0
+     }
+    },
+    {
+     "label": "rtl4b-demo3",
+     "scenario": "demo",
+     "runSeconds": 191,
+     "peakResidentMB": 1330,
+     "ticksPerSecond": 32.99,
+     "busySeconds": 94.86,
+     "bodies": 900,
+     "completeMsPerTick": 8.7,
+     "partAssembliesPerTick": 0.0,
+     "menuMsPerStep": 0.61,
+     "menuStepsPerTick": 4.13,
+     "idleMsPerStep": 0.489,
+     "idleIterationMs": 0.549,
+     "idleStepsPerTick": 3.13,
+     "tickStepMs": 1.002,
+     "mainCpuShare": 0.409,
+     "renderCpuShare": 0.206,
+     "mainMsPerTick": 12.39,
+     "renderMsPerTick": 6.24,
+     "presentMsPerTick": 5.67,
+     "presentCounts": {
+      "submitted": 1500,
+      "drawn": 1500,
+      "waits": 0
+     }
+    }
+   ],
+   "result": "main 12.38 -> 12.32, render 5.8 -> 5.97, presenter 5.71 -> 5.7 ms per tick"
+  },
+  "summary": "vs main −0.25 ms per tick (11.84, 11.82, 11.80 against 12.03, 12.11), the Demo −0.06; render and presenter unchanged"
+ },
+ "gates": {
+  "tested_trees": {
+   "game": "native 469bf24f9e89d786eec9b9fa084494a9ca5adf7f (builds, scenarios, AppKit, shipping build, phone, emulator)",
+   "suites": "native 26594357727920f9e85776c186f24d4d5453b550 = the game tree plus the unit test's workaround (only OriginalRequestExchangeLaneTests.swift differs)",
+   "tools": "141b56031607c8fd27699d571c7b8a2df2bf8cdc"
+  },
+  "builds": "clean; checked headless, AppKit; unchecked headless and APK (shipping)",
+  "scenarios": [
+   "{\"scenario\": \"vs\", \"exit\": 0, \"seconds\": 71.7, \"result\": \"equal\", \"differs\": []}",
+   "{\"scenario\": \"mission\", \"exit\": 0, \"seconds\": 69.7, \"result\": \"equal\", \"differs\": []}",
+   "{\"scenario\": \"demo\", \"exit\": 0, \"seconds\": 51.3, \"result\": \"equal\", \"differs\": []}",
+   "{\"scenario\": \"war\", \"exit\": 0, \"seconds\": 112.5, \"result\": \"equal\", \"differs\": []}",
+   "{\"scenario\": \"playback\", \"exit\": 0, \"seconds\": 79.9, \"result\": \"equal\", \"differs\": []}",
+   "{\"scenario\": \"tournament\", \"exit\": 0, \"seconds\": 103.4, \"result\": \"equal\", \"differs\": []}",
+   "{\"scenario\": \"altenter\", \"exit\": 0, \"seconds\": 74.9, \"result\": \"equal\", \"differs\": []}",
+   "{\"scenario\": \"tournament-win\", \"exit\": 0, \"seconds\": 110.2, \"result\": \"equal\", \"differs\": []}",
+   "{\"scenario\": \"team-tournament\", \"exit\": 0, \"seconds\": 85.1, \"result\": \"equal\", \"differs\": []}",
+   "{\"scenario\": \"joystick\", \"exit\": 0, \"seconds\": 26.2, \"result\": \"equal\", \"differs\": []}",
+   "{\"frames\": 1832, \"mismatched\": 0, \"result\": \"identical\"}"
+  ],
+  "appkit": [
+   "{\"scenario\": \"vs\", \"exit\": 0, \"seconds\": 73.9, \"result\": \"equal\", \"differs\": []}",
+   "{\"scenario\": \"playback\", \"exit\": 0, \"seconds\": 79.1, \"result\": \"equal\", \"differs\": []}",
+   "{\"frames\": 3960, \"mismatched\": 0, \"result\": \"identical\"}"
+  ],
+  "unchecked_headless": [
+   "{\"scenario\": \"vs\", \"exit\": 0, \"seconds\": 74.6, \"result\": \"equal\", \"differs\": []}",
+   "{\"scenario\": \"demo\", \"exit\": 0, \"seconds\": 54.1, \"result\": \"equal\", \"differs\": []}",
+   "{\"frames\": 1832, \"mismatched\": 0, \"result\": \"identical\"}"
+  ],
+  "launches": "20 of 20 clean",
+  "emulator": "{\"frames\": 1832, \"mismatched\": 0, \"result\": \"identical\"}",
+  "tests": [
+   "release test bundle (checked), clean, rtl4bu: OriginalExclusivityChecksTests 1, OriginalRequestExchangeLaneTests 1, OriginalMacRuntimeMenuTests 11, OriginalMacRuntimeLoadingTests 7, OriginalApplicationObservedIterationTests 3, OriginalApplicationHostSessionTests 5, OriginalApplicationHostDeliveryContextTests 7, OriginalApplicationMenuInputTests 5, OriginalApplicationObservedStartupTests 4, OriginalApplicationHostGameplayTests 6: all pass",
+   "testDirectIdleAttemptKeepsTheExchangeState now also runs the driverless lane for idle, message, bound, failure and mismatch: the same outcome, counters, committed delivery and (when it hands over) the same exchange as resumeIdleFirst and the permit path",
+   "testIdleKernelMatchesTheWholeStep fingerprints the committed platform's delivery (cursor position, suspension, retained iterations) each step"
+  ],
+  "compiler": "the first two release test bundles (rtl4b, rtl4bt) crashed the Swift optimizer (signal 6: PerfInliner, Assertion isLoadableOrOpaque in SILBuilder createLoad) while closure-specialising the still-generic standaloneCursor for the unit test's constant closure; the test now passes its closure through an @inline(never) identity. The game builds (headless, AppKit, APK) were unaffected; logs rtl4b-tests-build.log, rtl4bt-tests-build.log"
+ },
+ "review": "independent read-only review: approve with nits (no observable divergence from resumeIdleFirst on the runtime's paths). Applied: the lane drops its reply log on exit; resumeAfterIdle requires a fresh driver of the lane's committed sequence; the lane-mode exchange-state test; the delivery fingerprint. Not done: the design's two-Host oracle (the runtime oracle covers the lane against the whole step)"
+}

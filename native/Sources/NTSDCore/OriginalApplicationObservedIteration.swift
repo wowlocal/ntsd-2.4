@@ -210,6 +210,96 @@ public final class OriginalApplicationObservedIteration<Platform: OriginalApplic
             } catch { try? flush(); throw error }
         }
     }
+    /// What a step's idle attempt without a driver leaves for the driver that
+    /// takes over (CORE_REALTIME A3 L4b): the replies it served, in order, the
+    /// inputs `prepare` made, and the request it declined, if any.
+    public struct IdleFallback {
+        fileprivate let replies: [Exchange.Receipt], inputs: Host.Inputs?, declined: Exchange.Request?
+        /// The committed sequence the lane ran against (the driver's `sequence`).
+        fileprivate let sequence: UInt64
+    }
+    public enum IdleLane { case committed(Host.Outcome), fallback(IdleFallback) }
+    private final class LaneLog {
+        var direct: ((OriginalApplicationMessageLoop.Request) throws -> OriginalApplicationMessageLoop.Response?)?
+        var replies: [Exchange.Receipt] = []
+        init(_ direct: @escaping (OriginalApplicationMessageLoop.Request) throws -> OriginalApplicationMessageLoop.Response?) { self.direct = direct }
+    }
+    /// `resumeIdleFirst`'s idle attempt for the first resume of a step, with no
+    /// driver, exchange, claim or lock (CORE_REALTIME A3 L4b): queue requests
+    /// are answered by `direct` through a cursor of no exchange, the commit's
+    /// publication makes the checks `finish` would make of that cursor (a
+    /// fresh exchange passes the others), and a committed iteration leaves the
+    /// platform's delivery with the same receipts and position. Anything else
+    /// returns what a driver needs to continue as `resumeIdleFirst` would
+    /// (`resumeAfterIdle`); errors propagate as they do from it.
+    public static func resumeIdleDirect(host: Host,
+        prepare: (Platform, Host.Session.State) throws -> Host.Inputs,
+        beforePublication: (Platform) throws -> Void = { _ in },
+        direct: @escaping (OriginalApplicationMessageLoop.Request) throws -> OriginalApplicationMessageLoop.Response?) throws -> IdleLane {
+        let log = LaneLog(direct),sequence = host.committedSequence
+        // A stored cursor must not keep the server alive (as the driver's Gate),
+        // nor a second copy of its replies (as `flush` drops them).
+        defer { log.direct = nil;log.replies = [] }
+        let idle = Exchange.standaloneCursor { [log] request in
+            guard case .queue(let q) = request,let direct = log.direct else { return nil }
+            guard let reply = try direct(q) else { return nil }
+            let response = Exchange.Response.queue(reply)
+            guard request.accepts(response) else { throw Exchange.Boundary.responseMismatch }
+            log.replies.append(.init(request:request,response:response,resources:[]))
+            return response
+        }
+        var inputs: Host.Inputs?
+        do {
+            if let outcome = try host.stepIdle(prepare:{ p,state in
+                p.iterationDelivery.begin(idle)
+                let made = try prepare(p,state);inputs = made;return made
+            },queue:{ q,p in
+                guard case .queue(let r) = try p.iterationDelivery.response(for:.queue(q)) else { throw Boundary.invalidResponse }
+                return r
+            },beforePublication:{ p in
+                try beforePublication(p)
+                guard let consumed = p.iterationDelivery.cursor else { throw Boundary.missingCursor }
+                try consumed.requireConsumed()
+            },expectedSequence:sequence) {
+                return .committed(outcome)
+            }
+            return .fallback(.init(replies:log.replies,inputs:inputs,declined:nil,sequence:sequence))
+        } catch let needed as Exchange.RequestNeeded {
+            return .fallback(.init(replies:log.replies,inputs:inputs,declined:needed.request,sequence:sequence))
+        }
+    }
+    /// `resumeIdleFirst` after its idle attempt, continuing from
+    /// `resumeIdleDirect`'s fallback (CORE_REALTIME A3 L4b): the served replies
+    /// enter this driver's exchange as `resumeIdleFirst` records them, then a
+    /// declined request is claimed, or the whole step runs over a cursor that
+    /// replays them, with the same prepared inputs.
+    public func resumeAfterIdle(_ fallback: IdleFallback,
+        prepare: (Platform, Host.Session.State) throws -> Host.Inputs,
+        beforePublication: (Platform) throws -> Void = { _ in },
+        network: Bool = false,inline: Inline? = nil) throws -> Outcome {
+        try attempt {
+            // A fresh driver of the same committed sequence, as the one
+            // `resumeIdleFirst` would have run on.
+            guard fallback.sequence == sequence else { throw Host.Boundary.staleSequence }
+            let fresh = exchange.snapshot
+            guard fresh.status == .open,fresh.receipts.isEmpty,fresh.outstandingRequest == nil else { throw Exchange.Boundary.staleRevision }
+            let gate = inline.map(Gate.init)
+            defer { gate?.inline = nil }
+            try exchange.record(fallback.replies)
+            if let declined = fallback.declined { return .request(try exchange.claimNext(declined)) }
+            var inputs = fallback.inputs
+            do {
+                let full = try makeCursor(gate)
+                return .advanced(try fullStep(prepare:{ p,state in
+                    p.iterationDelivery.begin(full)
+                    if let inputs { return inputs }
+                    let made = try prepare(p,state);inputs = made;return made
+                },observesCommit:false,beforePublication:beforePublication,network:network))
+            } catch let needed as Exchange.RequestNeeded {
+                return .request(try exchange.claim(needed))
+            }
+        }
+    }
     private func makeCursor(_ gate: Gate?) throws -> Exchange.Cursor {
         try gate.map { gate in
             try exchange.inlineCursor(accepting:{ gate.inline?.accepts($0) ?? false }) { permit,exchange in

@@ -134,7 +134,9 @@ import NTSDCore
     /// their device effects were already performed when their permits were
     /// served, except sound methods, which have no permit and play on commit.
     public func step(maximumRequests: Int = 20000) throws -> Host.Outcome {
-        let driver = Driver(host:host)
+        // Made only when needed: a step whose first idle attempt commits needs
+        // no driver (CORE_REALTIME A3 L4b).
+        lazy var driver = Driver(host:host)
         // Message-queue requests and the window Blt are served inside the
         // attempt (CORE_REALTIME M2) instead of unwinding and re-running it for
         // each one; the same requests are counted and answered in the same
@@ -162,12 +164,26 @@ import NTSDCore
             served += 1; requests += 1; lastRequest = .queue(q)
             return try messages.answer(q)
         }) : nil
+        var firstResume = true
         while served < maximumRequests {
             // No beforeCommit observer here: the menu session skips the merged
             // copy of its state made for one (CORE_REALTIME A0).
-            let resumed = try servesQueueInline && servesIdleDirectly
-                ? driver.resumeIdleFirst(prepare:{ _,state in try self.inputs(state) },network:network != nil,inline:inline)
-                : driver.resume(prepare:{ _,state in try self.inputs(state) },observesCommit:false,network:network != nil,inline:inline)
+            let resumed: Driver.Outcome
+            if firstResume,servesQueueInline && servesIdleDirectly,let direct = inline?.direct {
+                // The first resume's idle attempt without a driver; a driver
+                // continues only when it falls back (CORE_REALTIME A3 L4b).
+                firstResume = false
+                switch try Driver.resumeIdleDirect(host:host,prepare:{ _,state in try self.inputs(state) },direct:direct) {
+                case .committed(let outcome): resumed = .advanced(outcome)
+                case .fallback(let fallback):
+                    resumed = try driver.resumeAfterIdle(fallback,prepare:{ _,state in try self.inputs(state) },network:network != nil,inline:inline)
+                }
+            } else {
+                firstResume = false
+                resumed = try servesQueueInline && servesIdleDirectly
+                    ? driver.resumeIdleFirst(prepare:{ _,state in try self.inputs(state) },network:network != nil,inline:inline)
+                    : driver.resume(prepare:{ _,state in try self.inputs(state) },observesCommit:false,network:network != nil,inline:inline)
+            }
             switch resumed {
             case .request(let permit):
                 served += 1; requests += 1; lastRequest = permit.request
