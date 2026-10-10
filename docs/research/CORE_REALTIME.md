@@ -286,7 +286,16 @@ main thread; message-loop iterations 4.12 × 1.14 ms; render thread 18.7 ms,
   in vs and 11.75 in the Demo; render about 7.6 and 6.1 (**the 8 ms goal for
   the render thread is met in both**); the presenter thread about 5.7, the
   release thread about 2.
-  **Where the rest is** (profiles `rtr3-prof-vs`, `rte4-prof-vs`): the
+  **Per tick** (A12 vs, e5; `android_speed.py`): the loaded cycle
+  (`complete`) ~7.5 ms, 3.12 idle message-loop steps × 0.47 ms, the tick's
+  step ~0.95 ms, the rest ~1.2. With the real clock (`--real-clock`, 30.3
+  ticks per second) there are 4.1 idle steps per tick (0.45 ms each, ~1.8
+  ms): per-step savings count ~1.3× more in the shipping app than in the
+  virtual-clock measurements. An idle step is the kernel (`idleIteration`
+  3.5% of the main thread per tick: peek, time, time and the alias checks),
+  the platform copy (1.4%; Q3 would remove it), the State, session and
+  Bootstrap copies (~1.1%) and request handling.
+  **Where the rest is** (profiles `rtr3-prof-vs`, `rte4-prof-vs`, `rte5-prof-vs`): the
   largest remaining main-thread costs are the transactional copies
   themselves: copy-on-write of the 400-actor array in the local input and
   the control pass (~2.1%), the first writes to records another stage still
