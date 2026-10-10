@@ -1,0 +1,294 @@
+{
+ "study": "docs/research/MEMORY_LOADING.md",
+ "phase": "0: harness, baseline, noise floor, load profiles",
+ "date": "2026-10-10",
+ "sources": "0034e45 (exp/core-realtime) plus the uptime fields of the started and loaded events (ml-p0)",
+ "harness": "tools/crossplatform/load_memory.py (vs script, virtual clock, stop at body 600); Mac frozen unchecked headless binary, A12 debuggable APK",
+ "data": "834 24-bit BMPs 638 MB, 58 other bitmaps 21 MB, 155 DAT 5.3 MB, 388 WAV 15 MB",
+ "phoneRuns": [
+  {
+   "label": "ml-p0-loadprof",
+   "host": "android",
+   "serial": "R58R36F7VFD",
+   "scenario": "vs",
+   "bodies": 600,
+   "apk": "ml-p0.apk",
+   "loadedResidentMB": 1327,
+   "loadedAnonMB": 1288,
+   "loadedFileMB": 29,
+   "mainCpuToLoadedSeconds": 130.96,
+   "bodiesResidentMB": 1372,
+   "bodiesAnonMB": 1333,
+   "bodiesFileMB": 30,
+   "pssMB": {
+    "Java Heap": 3,
+    "Native Heap": 1319,
+    "Code": 12,
+    "Stack": 0,
+    "Graphics": 5,
+    "Private Other": 1,
+    "System": 223,
+    "TOTAL PSS": 1564
+   },
+   "peakResidentMB": 1375,
+   "startupSeconds": 3.34,
+   "loadSeconds": 126.05,
+   "startToLoadedSeconds": 135.3,
+   "loadedCounts": {
+    "allocations": 16105,
+    "audioRequests": 2072,
+    "bitmapRequests": 12817,
+    "files": 621
+   },
+   "profile": {
+    "swift_retain": 15.4,
+    "swift_release": 13.9,
+    "$s8NTSDCore14PortableSHA256O6HasherV8compress33_C1BB714475F1B1F03FF6067F6FAE6D12LLyySVFySrys6UInt32V": 10.0,
+    "$s8NTSDCore19OriginalStateRecordV4Flat33_6F1CE11750B536670D344DF3FDDCD368LLC4make5bytes7definedAFSgS": 3.9,
+    "$s8NTSDCore17OriginalDIBPixelsV3dib13maximumPixels11pixelOffsetACSays5UInt8VG_S2iSgtKcfCTf4nnnd_n": 3.6,
+    "__memcpy": 2.6,
+    "memset": 2.4,
+    "$s8NTSDCore17OriginalFrameHeapV8allocate_4kind7addresss6UInt32VSi_AA0bC14AllocationKindOAHSgtKF": 2.3,
+    "__aarch64_cas8_relax": 2.1,
+    "__aarch64_cas8_rel": 2.0,
+    "je_free": 1.5,
+    "$s8NTSDCore20OriginalLoadedBitmapVwcp": 1.5,
+    "je_malloc": 1.2,
+    "$ss17_NativeDictionaryV4copyyyF8NTSDCore27OriginalApplicationGraphicsV9ReferenceV_AF8ResourceVTg5": 1.2,
+    "read": 1.1
+   },
+   "build": "ml-p0"
+  },
+  {
+   "label": "ml-p0-noise-ml-p0-1",
+   "host": "android",
+   "serial": "R58R36F7VFD",
+   "scenario": "vs",
+   "bodies": 600,
+   "apk": "ml-p0.apk",
+   "loadedResidentMB": 1377,
+   "loadedAnonMB": 1347,
+   "loadedFileMB": 20,
+   "mainCpuToLoadedSeconds": 127.05,
+   "bodiesResidentMB": 1422,
+   "bodiesAnonMB": 1391,
+   "bodiesFileMB": 22,
+   "pssMB": {
+    "Java Heap": 0,
+    "Native Heap": 1381,
+    "Code": 13,
+    "Stack": 0,
+    "Graphics": 5,
+    "Private Other": 1,
+    "System": 157,
+    "TOTAL PSS": 1558
+   },
+   "peakResidentMB": 1496,
+   "startupSeconds": 2.94,
+   "loadSeconds": 122.1,
+   "startToLoadedSeconds": 130.96,
+   "loadedCounts": {
+    "allocations": 16105,
+    "audioRequests": 2072,
+    "bitmapRequests": 12817,
+    "files": 621
+   },
+   "build": "ml-p0"
+  },
+  {
+   "label": "ml-p0-noise-ml-p0-2",
+   "host": "android",
+   "serial": "R58R36F7VFD",
+   "scenario": "vs",
+   "bodies": 600,
+   "apk": "ml-p0.apk",
+   "loadedResidentMB": 1509,
+   "loadedAnonMB": 1460,
+   "loadedFileMB": 41,
+   "mainCpuToLoadedSeconds": 127.84,
+   "bodiesResidentMB": 1453,
+   "bodiesAnonMB": 1403,
+   "bodiesFileMB": 42,
+   "pssMB": {
+    "Java Heap": 0,
+    "Native Heap": 1395,
+    "Code": 23,
+    "Stack": 0,
+    "Graphics": 5,
+    "Private Other": 0,
+    "System": 150,
+    "TOTAL PSS": 1575
+   },
+   "peakResidentMB": 1550,
+   "startupSeconds": 2.93,
+   "loadSeconds": 123.25,
+   "startToLoadedSeconds": 131.92,
+   "loadedCounts": {
+    "allocations": 16105,
+    "audioRequests": 2072,
+    "bitmapRequests": 12817,
+    "files": 621
+   },
+   "build": "ml-p0"
+  },
+  {
+   "label": "ml-p0-noise-ml-p0-3",
+   "host": "android",
+   "serial": "R58R36F7VFD",
+   "scenario": "vs",
+   "bodies": 600,
+   "apk": "ml-p0.apk",
+   "loadedResidentMB": 1503,
+   "loadedAnonMB": 1466,
+   "loadedFileMB": 28,
+   "mainCpuToLoadedSeconds": 127.69,
+   "bodiesResidentMB": 1448,
+   "bodiesAnonMB": 1412,
+   "bodiesFileMB": 27,
+   "pssMB": {
+    "Java Heap": 0,
+    "Native Heap": 1404,
+    "Code": 16,
+    "Stack": 0,
+    "Graphics": 5,
+    "Private Other": 2,
+    "System": 132,
+    "TOTAL PSS": 1559
+   },
+   "peakResidentMB": 1545,
+   "startupSeconds": 2.89,
+   "loadSeconds": 122.87,
+   "startToLoadedSeconds": 131.57,
+   "loadedCounts": {
+    "allocations": 16105,
+    "audioRequests": 2072,
+    "bitmapRequests": 12817,
+    "files": 621
+   },
+   "build": "ml-p0"
+  }
+ ],
+ "macRuns": [
+  {
+   "label": "mac-p0-noise-frozen-unchecked-ml-p0-1",
+   "host": "mac",
+   "scenario": "vs",
+   "bodies": 600,
+   "binary": "/private/tmp/claude-501/-Users-michael-Developer-ntsd-2-4/1f9218ae-9d5d-4c4e-a8dd-d5254994839c/scratchpad/frozen-unchecked-ml-p0/NTSDHeadless",
+   "startupSeconds": 0.694,
+   "loadSeconds": 5.393,
+   "startToLoadedSeconds": 6.455,
+   "loadedCounts": {
+    "allocations": 16105,
+    "audioRequests": 2072,
+    "bitmapRequests": 12817,
+    "files": 621
+   },
+   "loadedResidentMB": 1933,
+   "bodiesResidentMB": 1970,
+   "peakResidentMB": 2013,
+   "build": "frozen-unchecked-ml-p0"
+  },
+  {
+   "label": "mac-p0-noise-frozen-unchecked-ml-p0-2",
+   "host": "mac",
+   "scenario": "vs",
+   "bodies": 600,
+   "binary": "/private/tmp/claude-501/-Users-michael-Developer-ntsd-2-4/1f9218ae-9d5d-4c4e-a8dd-d5254994839c/scratchpad/frozen-unchecked-ml-p0/NTSDHeadless",
+   "startupSeconds": 0.119,
+   "loadSeconds": 5.098,
+   "startToLoadedSeconds": 5.595,
+   "loadedCounts": {
+    "allocations": 16105,
+    "audioRequests": 2072,
+    "bitmapRequests": 12817,
+    "files": 621
+   },
+   "loadedResidentMB": 1943,
+   "bodiesResidentMB": 1974,
+   "peakResidentMB": 2020,
+   "build": "frozen-unchecked-ml-p0"
+  },
+  {
+   "label": "mac-p0-noise-frozen-unchecked-ml-p0-3",
+   "host": "mac",
+   "scenario": "vs",
+   "bodies": 600,
+   "binary": "/private/tmp/claude-501/-Users-michael-Developer-ntsd-2-4/1f9218ae-9d5d-4c4e-a8dd-d5254994839c/scratchpad/frozen-unchecked-ml-p0/NTSDHeadless",
+   "startupSeconds": 0.111,
+   "loadSeconds": 5.049,
+   "startToLoadedSeconds": 5.53,
+   "loadedCounts": {
+    "allocations": 16105,
+    "audioRequests": 2072,
+    "bitmapRequests": 12817,
+    "files": 621
+   },
+   "loadedResidentMB": 1956,
+   "bodiesResidentMB": 1993,
+   "peakResidentMB": 2036,
+   "build": "frozen-unchecked-ml-p0"
+  }
+ ],
+ "phoneLoadProfile": {
+  "samples": 12757,
+  "selfTop": {
+   "swift_retain": 15.4,
+   "swift_release": 13.9,
+   "$s8NTSDCore14PortableSHA256O6HasherV8compress33_C1BB714475F1B1F03FF6067F6FAE6D12LLyySVFySrys6UInt32V": 10.0,
+   "$s8NTSDCore19OriginalStateRecordV4Flat33_6F1CE11750B536670D344DF3FDDCD368LLC4make5bytes7definedAFSgS": 3.9,
+   "$s8NTSDCore17OriginalDIBPixelsV3dib13maximumPixels11pixelOffsetACSays5UInt8VG_S2iSgtKcfCTf4nnnd_n": 3.6,
+   "__memcpy": 2.6,
+   "memset": 2.4,
+   "$s8NTSDCore17OriginalFrameHeapV8allocate_4kind7addresss6UInt32VSi_AA0bC14AllocationKindOAHSgtKF": 2.3,
+   "__aarch64_cas8_relax": 2.1,
+   "__aarch64_cas8_rel": 2.0,
+   "je_free": 1.5,
+   "$s8NTSDCore20OriginalLoadedBitmapVwcp": 1.5,
+   "je_malloc": 1.2,
+   "$ss17_NativeDictionaryV4copyyyF8NTSDCore27OriginalApplicationGraphicsV9ReferenceV_AF8ResourceVTg5": 1.2,
+   "read": 1.1
+  },
+  "inclusiveMainThread": {
+   "catalog session load": 49.1,
+   "object consume": 32.0,
+   "sheet finishing": 19.0,
+   "array copies in sheet finishing": 9.65,
+   "decodeDAT": 16.1,
+   "frame bodies": 9.45,
+   "catalog package load": 25.0,
+   "PortableSHA256": 14.9,
+   "Bitmap.init": 8.8,
+   "arena package": 2.45,
+   "sounds": 4.2
+  }
+ },
+ "macLoadProfile": {
+  "samples": 2492,
+  "inclusive": {
+   "decodeDAT": 38.0,
+   "Stream copies and destroys within decodeDAT": "~75% of it",
+   "frame bodies": 24.7,
+   "projected": 7.9,
+   "sheet finishing": 19.2,
+   "sounds": 13.1
+  }
+ },
+ "macHeapAtBody600": {
+  "allocatedBytes": 2730351648,
+  "physFootprintMB": 1944,
+  "topHolders": [
+   "888 1222420736 1376599.9 OriginalMacDisplayBackend.Storage.valuesStorage (malloc) NTSDHeadless",
+   "36336 914559088 25169.5 Swift._ContiguousArrayStorage<Swift.UInt8> Swift libswiftCore.dylib",
+   "75527 195869824 2593.4 OriginalStateRecord.Flat Swift NTSDHeadless",
+   "54800 168345600 3072.0 Swift._DictionaryStorage<Swift.String, Swift.Int32> Swift libswiftCore.dylib",
+   "7432 61326016 8251.6 Swift._ContiguousArrayStorage<Swift.Bool> Swift libswiftCore.dylib",
+   "887 41595120 46894.2 OriginalMacDisplayBackend.Storage.knownStorage.words (malloc) NTSDHeadless",
+   "433 34539008 79766.8 Swift._ContiguousArrayStorage<Swift.Float> Swift libswiftCore.dylib",
+   "1 19595264 19595264.0 Swift._ContiguousArrayStorage<NTSDCore.OriginalApplicationPoolSession.Operation> Swift libswiftCore.dylib",
+   "1 19202048 19202048.0 Swift._ContiguousArrayStorage<NTSDCore.OriginalApplicationCatalogSession.Operation> Swift libswiftCore.dylib",
+   "10 7890304 789030.4 Swift._ContiguousArrayStorage<NTSDCore.OriginalApplicationGraphics.Command> Swift libswiftCore.dylib",
+   "3 6586368 2195456.0 __DataStorage._bytes (malloc) Foundation"
+  ]
+ }
+}

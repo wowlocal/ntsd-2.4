@@ -177,6 +177,63 @@ def record_profile(serial, seconds, out, label, lib, call_graph="fp", frequency=
     return result
 
 
+def install(s, apk):
+    """Installs APK on device S unless that exact build is installed."""
+    if installed_sha256(s) == sha256(apk):
+        return   # already installed: a same-size reinstall needs room for two copies
+    # -d: builds from older commits have lower version codes (debuggable build).
+    r = adb(s, "install", "-r", "-d", apk)
+    if r.returncode != 0 and no_space(r):
+        # The test phone's storage is nearly full and install -r keeps the
+        # old code until the new one is in place (two 222 MB APKs plus
+        # libraries). First let the system trim app caches (disposable by
+        # contract; it does the same under storage pressure) and retry.
+        adb(s, "shell", "pm trim-caches 4G")
+        r = adb(s, "install", "-r", "-d", apk)
+    if r.returncode != 0 and no_space(r):
+        # Then remove the old code but keep the app's data (-k: files/ntsd-data
+        # is not extracted again for the same assets).
+        adb(s, "shell", f"pm uninstall -k {PACKAGE}")
+        r = adb(s, "install", "-d", apk)
+        if r.returncode != 0 and no_space(r):
+            # Last, drop files/ntsd-data: only the copy of the APK's assets,
+            # extracted again at the first launch when its marker does not
+            # match files.txt (NTSDAndroidApp.prepareData). The game's own
+            # files (files/NTSD Native) stay.
+            shell(s, f"run-as {PACKAGE} rm -rf files/ntsd-data")
+            r = adb(s, "install", "-d", apk)
+            # Free space on the full phone swings by a few hundred MB while
+            # the system cleans up (0.6-1.0 GB seen); try a few more times.
+            for _ in range(5):
+                if r.returncode == 0 or not no_space(r):
+                    break
+                time.sleep(20)
+                adb(s, "shell", "pm trim-caches 4G")
+                r = adb(s, "install", "-d", apk)
+        if r.returncode != 0:
+            raise SystemExit(f"install failed after `pm uninstall -k` ({PACKAGE} is uninstalled, its data kept): "
+                             + (r.stdout + r.stderr).strip()[-300:])
+    if r.returncode != 0:
+        raise SystemExit("install failed: " + (r.stdout + r.stderr).strip()[-300:])
+
+
+def wake(s):
+    """Keeps device S awake and dismisses a swipe lock screen; refuses a PIN lock."""
+    shell(s, "svc power stayon usb")
+    shell(s, "input keyevent KEYCODE_WAKEUP")
+    if "isKeyguardShowing=true" in shell(s, "dumpsys window"):
+        # A swipe lock goes away on request; a secure lock shows its PIN screen and stays.
+        shell(s, "wm dismiss-keyguard"); time.sleep(3)
+        # Fallbacks for a swipe lock that ignores the request after a long
+        # sleep: a swipe up, then the MENU key (unlocks a non-secure keyguard).
+        for gesture in ("input swipe 360 1400 360 300 300", "input keyevent 82"):
+            if "isKeyguardShowing=true" not in shell(s, "dumpsys window"):
+                break
+            shell(s, gesture); time.sleep(2)
+        if "isKeyguardShowing=true" in shell(s, "dumpsys window"):
+            raise SystemExit(f"{s} shows its lock screen: unlock it (the game pauses behind it)")
+
+
 def main():
     a = argparse.ArgumentParser()
     a.add_argument("out"); a.add_argument("--serial", default=os.environ.get("ANDROID_SERIAL", "R58R36F7VFD"))
@@ -193,56 +250,9 @@ def main():
     o = a.parse_args()
     out = Path(o.out); out.mkdir(parents=True, exist_ok=True)
     s = o.serial
-    if o.apk and installed_sha256(s) == sha256(o.apk):
-        o.apk = None   # already installed: a same-size reinstall needs room for two copies
     if o.apk:
-        # -d: builds from older commits have lower version codes (debuggable build).
-        r = adb(s, "install", "-r", "-d", o.apk)
-        if r.returncode != 0 and no_space(r):
-            # The test phone's storage is nearly full and install -r keeps the
-            # old code until the new one is in place (two 222 MB APKs plus
-            # libraries). First let the system trim app caches (disposable by
-            # contract; it does the same under storage pressure) and retry.
-            adb(s, "shell", "pm trim-caches 4G")
-            r = adb(s, "install", "-r", "-d", o.apk)
-        if r.returncode != 0 and no_space(r):
-            # Then remove the old code but keep the app's data (-k: files/ntsd-data
-            # is not extracted again for the same assets).
-            adb(s, "shell", f"pm uninstall -k {PACKAGE}")
-            r = adb(s, "install", "-d", o.apk)
-            if r.returncode != 0 and no_space(r):
-                # Last, drop files/ntsd-data: only the copy of the APK's assets,
-                # extracted again at the first launch when its marker does not
-                # match files.txt (NTSDAndroidApp.prepareData). The game's own
-                # files (files/NTSD Native) stay.
-                shell(s, f"run-as {PACKAGE} rm -rf files/ntsd-data")
-                r = adb(s, "install", "-d", o.apk)
-                # Free space on the full phone swings by a few hundred MB while
-                # the system cleans up (0.6-1.0 GB seen); try a few more times.
-                for _ in range(5):
-                    if r.returncode == 0 or not no_space(r):
-                        break
-                    time.sleep(20)
-                    adb(s, "shell", "pm trim-caches 4G")
-                    r = adb(s, "install", "-d", o.apk)
-            if r.returncode != 0:
-                raise SystemExit(f"install failed after `pm uninstall -k` ({PACKAGE} is uninstalled, its data kept): "
-                                 + (r.stdout + r.stderr).strip()[-300:])
-        if r.returncode != 0:
-            raise SystemExit("install failed: " + (r.stdout + r.stderr).strip()[-300:])
-    shell(s, "svc power stayon usb")
-    shell(s, "input keyevent KEYCODE_WAKEUP")
-    if "isKeyguardShowing=true" in shell(s, "dumpsys window"):
-        # A swipe lock goes away on request; a secure lock shows its PIN screen and stays.
-        shell(s, "wm dismiss-keyguard"); time.sleep(3)
-        # Fallbacks for a swipe lock that ignores the request after a long
-        # sleep: a swipe up, then the MENU key (unlocks a non-secure keyguard).
-        for gesture in ("input swipe 360 1400 360 300 300", "input keyevent 82"):
-            if "isKeyguardShowing=true" not in shell(s, "dumpsys window"):
-                break
-            shell(s, gesture); time.sleep(2)
-        if "isKeyguardShowing=true" in shell(s, "dumpsys window"):
-            raise SystemExit(f"{s} shows its lock screen: unlock it (the game pauses behind it)")
+        install(s, o.apk)
+    wake(s)
     try:
         shell(s, f"am force-stop {PACKAGE}")
         shell(s, f"run-as {PACKAGE} sh -c 'rm -rf files/speed && mkdir -p files/speed/overlay && cat > files/args.txt'",

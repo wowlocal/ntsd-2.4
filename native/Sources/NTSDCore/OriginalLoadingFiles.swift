@@ -79,49 +79,21 @@ public struct OriginalLoadingFiles: Equatable, Sendable {
     }
 
     public mutating func character(_ token: UInt32, observe: Observe = { _ in }) throws -> UInt8? {
-        var stream = try self.stream(token, mode: "r")
-        if stream.eof { return nil }
-        if stream.position == stream.loaded {
-            let end = min(stream.input.count, stream.loaded + stream.allocation.readLimit)
-            let bytes = Array(stream.input[stream.loaded..<end]), a = stream.allocation
-            try observe(.init(.readFile, [a.descriptor, a.buffer, UInt32(a.capacity), UInt32(bytes.count)], bytes: bytes))
-            stream.loaded = end
-            if bytes.isEmpty { stream.eof = true; streams[token] = stream; return nil }
-        }
-        let byte = stream.input[stream.position]
-        stream.position += 1; streams[token] = stream
-        return byte
+        let i = try index(token, mode: "r")
+        return try Self.read(&streams.values[i], observe: observe)
     }
 
     /// A scanner consumes through position-1 and looks at position to decide
     /// whether its token/number ended. A delimiter is retained for the next
     /// scan; looking at input.count attempts the actual EOF refill.
     public mutating func scannerAccess(_ token: UInt32, position: Int, observe: Observe = { _ in }) throws {
-        var stream = try self.stream(token, mode: "r")
-        guard position >= stream.position, position <= stream.input.count else {
-            throw Self.error("Scanner position outside its own forward input")
-        }
-        while !stream.eof && position >= stream.loaded {
-            let end = min(stream.input.count, stream.loaded + stream.allocation.readLimit)
-            let bytes = Array(stream.input[stream.loaded..<end]), a = stream.allocation
-            try observe(.init(.readFile, [a.descriptor, a.buffer, UInt32(a.capacity), UInt32(bytes.count)], bytes: bytes))
-            stream.loaded = end
-            if bytes.isEmpty { stream.eof = true }
-        }
-        stream.position = position; streams[token] = stream
+        let i = try index(token, mode: "r")
+        try Self.scan(&streams.values[i], to: position, observe: observe)
     }
 
     public mutating func write(_ bytes: [UInt8], to token: UInt32, observe: Observe = { _ in }) throws {
-        _ = try self.stream(token, mode: "w")
-        for byte in bytes {
-            // VC80's full-buffer path flushes before storing the triggering byte.
-            if streams[token]!.pending.count == streams[token]!.allocation.capacity {
-                var stream = streams[token]!
-                try flush(&stream, observe: observe)
-                streams[token] = stream
-            }
-            streams[token]!.pending.append(byte); streams[token]!.output.append(byte)
-        }
+        let i = try index(token, mode: "w")
+        for byte in bytes { try Self.append(byte, to: &streams.values[i], files: &files, translation: translation, observe: observe) }
     }
 
     @discardableResult
@@ -145,19 +117,25 @@ public struct OriginalLoadingFiles: Equatable, Sendable {
         var candidate = self
         let input = try candidate.open(path, mode: "r", source: source, allocate: allocate, observe: observe)
         let output = try candidate.open(outputPath, mode: "w", source: source, allocate: allocate, observe: observe)
+        // The same character, scanner and write steps on the two streams held
+        // here, stored back before the closes (MEMORY_LOADING L1). Nothing
+        // observes the candidate meanwhile; a throw discards it as before.
+        var source = candidate.streams[input]!, target = candidate.streams[output]!
         for _ in 0..<123 {
-            guard try candidate.character(input, observe: observe) != nil else { throw Self.error("Truncated DAT header") }
+            guard try Self.read(&source, observe: observe) != nil else { throw Self.error("Truncated DAT header") }
         }
         var position = 123
-        while let byte = try candidate.character(input, observe: observe) {
+        while let byte = try Self.read(&source, observe: observe) {
             if scanfLookahead {
-                let next = candidate.streams[input]!.position
-                try candidate.scannerAccess(input, position: next, observe: observe)
-                if candidate.streams[input]!.eof && next == candidate.streams[input]!.input.count { break }
+                let next = source.position
+                try Self.scan(&source, to: next, observe: observe)
+                if source.eof && next == source.input.count { break }
             }
-            try candidate.write([OriginalDATDecoder.byte(byte, at: position)], to: output, observe: observe)
+            try Self.append(OriginalDATDecoder.byte(byte, at: position), to: &target, files: &candidate.files,
+                            translation: translation, observe: observe)
             position += 1
         }
+        candidate.streams[input] = source; candidate.streams[output] = target
         try candidate.close(input, observe: observe)
         let result = try candidate.close(output, observe: observe)
         candidate.decoderReturns.append(result)
@@ -231,13 +209,56 @@ public struct OriginalLoadingFiles: Equatable, Sendable {
         return result
     }
 
-    private func stream(_ token: UInt32, mode: String) throws -> Stream {
-        guard let stream = streams[token], !stream.closed, stream.mode == mode else {
+    private func index(_ token: UInt32, mode: String) throws -> [UInt32: Stream].Index {
+        guard let i = streams.index(forKey: token), !streams.values[i].closed, streams.values[i].mode == mode else {
             throw Self.error("Unknown, closed or wrong-mode stream")
         }
-        return stream
+        return i
+    }
+    /// One character from a read stream, refilling its buffer (the read event)
+    /// when the loaded bytes are used up. Changes the stream in place, only after
+    /// the observer returned: a throwing observer leaves it unchanged.
+    private static func read(_ stream: inout Stream, observe: Observe) throws -> UInt8? {
+        if stream.eof { return nil }
+        if stream.position == stream.loaded {
+            let end = min(stream.input.count, stream.loaded + stream.allocation.readLimit)
+            let bytes = Array(stream.input[stream.loaded..<end]), a = stream.allocation
+            try observe(.init(.readFile, [a.descriptor, a.buffer, UInt32(a.capacity), UInt32(bytes.count)], bytes: bytes))
+            stream.loaded = end
+            if bytes.isEmpty { stream.eof = true; return nil }
+        }
+        let byte = stream.input[stream.position]
+        stream.position += 1
+        return byte
+    }
+    /// The scanner's look at `position`: refills through it, then moves there.
+    /// The stream changes only when every refill's observer returned.
+    private static func scan(_ stream: inout Stream, to position: Int, observe: Observe) throws {
+        guard position >= stream.position, position <= stream.input.count else {
+            throw Self.error("Scanner position outside its own forward input")
+        }
+        var loaded = stream.loaded, eof = stream.eof
+        while !eof && position >= loaded {
+            let end = min(stream.input.count, loaded + stream.allocation.readLimit)
+            let bytes = Array(stream.input[loaded..<end]), a = stream.allocation
+            try observe(.init(.readFile, [a.descriptor, a.buffer, UInt32(a.capacity), UInt32(bytes.count)], bytes: bytes))
+            loaded = end
+            if bytes.isEmpty { eof = true }
+        }
+        stream.loaded = loaded; stream.eof = eof; stream.position = position
+    }
+    /// One byte into a write stream: VC80's full-buffer path flushes before
+    /// storing the triggering byte.
+    private static func append(_ byte: UInt8, to stream: inout Stream, files: inout [String: [UInt8]],
+                               translation: OriginalFileTranslation, observe: Observe) throws {
+        if stream.pending.count == stream.allocation.capacity { try flush(&stream, files: &files, translation: translation, observe: observe) }
+        stream.pending.append(byte); stream.output.append(byte)
     }
     private mutating func flush(_ stream: inout Stream, observe: Observe) throws {
+        try Self.flush(&stream, files: &files, translation: translation, observe: observe)
+    }
+    private static func flush(_ stream: inout Stream, files: inout [String: [UInt8]], translation: OriginalFileTranslation,
+                              observe: Observe) throws {
         guard !stream.pending.isEmpty else { return }
         let a = stream.allocation
         try observe(.init(.writeFile, [a.descriptor, a.buffer, UInt32(stream.pending.count)], bytes: stream.pending))
