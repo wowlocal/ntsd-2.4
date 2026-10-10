@@ -1,0 +1,586 @@
+{
+ "study": "docs/research/MEMORY_LOADING.md",
+ "increment": "ml-m2",
+ "previous": "ml-m1c",
+ "phase": "M2 (memory and loading time): frame records' words in slots",
+ "change": "OriginalFrameRecord keeps its words in 94 Int32 slots (offsets 0...0x174) with a presence mask and any other key apart, instead of a [String: Int32] dictionary per record; words stays a computed dictionary for the JSON form and tests; projected writes slots directly; Codable is written out to give and accept the same JSON; equality stays synthesized over a canonical storage. 54,800 projected frames (400 per object for 137 objects) held 161 MB as dictionaries; the projection was 7.6% of the A12 load.",
+ "profile": "malloc_history at body 600: OriginalFrameLoader.projected 161 MB in 65,911 allocations; A12 ml-l4b-loadprof: projected 7.6% of the load",
+ "review": "independent read-only reviewer: no correctness defect (canonical storage, equality, subscripts and JSON equivalent; no per-frame use of the computed words); its suggestions applied before the gate (a precondition in setWord; tests for equal distinct records, reassignment, present zero versus absent, removal, JSON with missing, null and unknown keys)",
+ "notes": "A12 tick check of M1 (android_speed vs, ml-m1c): main 11.09 ms, render 7.55 ms per tick, the same as before this study; the whole scripted run 129 s against 207 s at the study's start.",
+ "testedTrees": "native bfbb6beadde6595e2710527f0e3105624c017633 tools 3fef69ebf74c8ce83927119db27b1ab44153a9a9",
+ "gate": [
+  "native bfbb6beadde6595e2710527f0e3105624c017633 tools 3fef69ebf74c8ce83927119db27b1ab44153a9a9",
+  "headless built (checked: 3198 beginAccess)",
+  "app built (checked: 3312 beginAccess)",
+  "unchecked headless built (0 beginAccess)",
+  "apk saved",
+  "apk libraries kept",
+  "launches: crashes 0 of 20",
+  "bundle exit=0",
+  "phone A/B exit=0",
+  "{\"summary\": {\"build\": \"ml-m2\", \"runs\": 3, \"startupSeconds\": {\"median\": 1.98, \"min\": 1.93, \"max\": 2.06}, \"loadSeconds\": {\"median\": 43.65, \"min\": 43.23, \"max\": 43.89}, \"startToLoadedSeconds\": {\"median\": 51.78, \"min\": 51.09, \"max\": 51.84}, \"peakResidentMB\": {\"median\": 814, \"min\": 812, \"max\": 817}, \"peakFootprintMB\": {\"median\": 834, \"min\": 834, \"max\": 838}, \"loadedResidentMB\": {\"median\": 786, \"min\": 769, \"max\": 791}, \"bodiesResidentMB\": {\"median\": 811, \"min\": 806, \"max\": 816}}}",
+  "{\"summary\": {\"build\": \"ml-m1c\", \"runs\": 2, \"startupSeconds\": {\"median\": 2.285, \"min\": 2.1, \"max\": 2.47}, \"loadSeconds\": {\"median\": 46.3, \"min\": 46.28, \"max\": 46.32}, \"startToLoadedSeconds\": {\"median\": 54.504999999999995, \"min\": 54.32, \"max\": 54.69}, \"peakResidentMB\": {\"median\": 948.5, \"min\": 948, \"max\": 949}, \"peakFootprintMB\": {\"median\": 970.0, \"min\": 969, \"max\": 971}, \"loadedResidentMB\": {\"median\": 917.0, \"min\": 911, \"max\": 923}, \"bodiesResidentMB\": {\"median\": 877.5, \"min\": 819, \"max\": 936}}}",
+  "phone_done",
+  "emu exit=0",
+  "{\"scenario\": \"vs\", \"seconds\": 68.7, \"result\": \"equal\", \"differs\": []}",
+  "{\"frames\": 1832, \"mismatched\": 0, \"result\": \"identical\"}",
+  "suites_done",
+  "{\"scenario\": \"vs\", \"exit\": 0, \"seconds\": 65.4, \"result\": \"equal\", \"differs\": []}",
+  "{\"scenario\": \"mission\", \"exit\": 0, \"seconds\": 62.5, \"result\": \"equal\", \"differs\": []}",
+  "{\"scenario\": \"demo\", \"exit\": 0, \"seconds\": 47.4, \"result\": \"equal\", \"differs\": []}",
+  "{\"scenario\": \"war\", \"exit\": 0, \"seconds\": 102.2, \"result\": \"equal\", \"differs\": []}",
+  "{\"scenario\": \"playback\", \"exit\": 0, \"seconds\": 72.4, \"result\": \"equal\", \"differs\": []}",
+  "{\"scenario\": \"tournament\", \"exit\": 0, \"seconds\": 90.6, \"result\": \"equal\", \"differs\": []}",
+  "{\"scenario\": \"altenter\", \"exit\": 0, \"seconds\": 65.3, \"result\": \"equal\", \"differs\": []}",
+  "{\"scenario\": \"tournament-win\", \"exit\": 0, \"seconds\": 100.0, \"result\": \"equal\", \"differs\": []}",
+  "{\"scenario\": \"team-tournament\", \"exit\": 0, \"seconds\": 78.4, \"result\": \"equal\", \"differs\": []}",
+  "{\"scenario\": \"joystick\", \"exit\": 0, \"seconds\": 22.8, \"result\": \"equal\", \"differs\": []}",
+  "{\"frames\": 1832, \"mismatched\": 0, \"result\": \"identical\"}",
+  "{\"scenario\": \"vs\", \"exit\": 0, \"seconds\": 67.8, \"result\": \"equal\", \"differs\": []}",
+  "{\"scenario\": \"playback\", \"exit\": 0, \"seconds\": 73.1, \"result\": \"equal\", \"differs\": []}",
+  "{\"frames\": 3960, \"mismatched\": 0, \"result\": \"identical\"}",
+  "{\"scenario\": \"vs\", \"exit\": 0, \"seconds\": 68.8, \"result\": \"equal\", \"differs\": []}",
+  "{\"scenario\": \"demo\", \"exit\": 0, \"seconds\": 50.1, \"result\": \"equal\", \"differs\": []}",
+  "{\"frames\": 1832, \"mismatched\": 0, \"result\": \"identical\"}",
+  "scenarios_done",
+  "mac A/B exit=0",
+  "{\"summary\": {\"build\": \"frozen-unchecked-ml-m2\", \"runs\": 3, \"startupSeconds\": {\"median\": 0.079, \"min\": 0.079, \"max\": 0.081}, \"loadSeconds\": {\"median\": 1.754, \"min\": 1.753, \"max\": 1.781}, \"startToLoadedSeconds\": {\"median\": 2.215, \"min\": 2.212, \"max\": 2.242}, \"peakResidentMB\": {\"median\": 1368, \"min\": 1336, \"max\": 1381}, \"loadedResidentMB\": {\"median\": 1343, \"min\": 1313, \"max\": 1345}, \"bodiesResidentMB\": {\"median\": 1290, \"min\": 1257, \"max\": 1381}}}",
+  "{\"summary\": {\"build\": \"frozen-unchecked-ml-m1c\", \"runs\": 3, \"startupSeconds\": {\"median\": 0.079, \"min\": 0.079, \"max\": 0.092}, \"loadSeconds\": {\"median\": 2.024, \"min\": 2.006, \"max\": 2.083}, \"startToLoadedSeconds\": {\"median\": 2.478, \"min\": 2.468, \"max\": 2.557}, \"peakResidentMB\": {\"median\": 1447, \"min\": 1443, \"max\": 1502}, \"loadedResidentMB\": {\"median\": 1384, \"min\": 1373, \"max\": 1424}, \"bodiesResidentMB\": {\"median\": 1433, \"min\": 1415, \"max\": 1466}}}",
+  "gate_done"
+ ],
+ "suites": [
+  "OriginalExclusivityChecksTests: Executed 1 test, with 0 failures (0 unexpected) in 0.001 (0.002) seconds",
+  "OriginalFrameRecordCompactTests: Executed 2 tests, with 0 failures (0 unexpected) in 0.022 (0.024) seconds",
+  "OriginalFrameLoaderTests: Executed 2 tests, with 0 failures (0 unexpected) in 0.006 (0.007) seconds",
+  "OriginalObjectTests: Executed 4 tests, with 0 failures (0 unexpected) in 6.316 (6.317) seconds",
+  "OriginalLoadedCatalogTests: Executed 3 tests, with 0 failures (0 unexpected) in 17.480 (17.481) seconds",
+  "OriginalApplicationCatalogSessionTests: Executed 3 tests, with 0 failures (0 unexpected) in 128.778 (128.782) seconds",
+  "OriginalApplicationCatalogFullTests: Executed 3 tests, with 0 failures (0 unexpected) in 69.650 (69.651) seconds",
+  "OriginalCatalogTests: Executed 2 tests, with 0 failures (0 unexpected) in 0.019 (0.020) seconds",
+  "OriginalStageTests: Executed 2 tests, with 0 failures (0 unexpected) in 3.932 (3.933) seconds",
+  "OriginalLoadedCatalogFilesTests: Executed 5 tests, with 0 failures (0 unexpected) in 19.045 (19.047) seconds",
+  "OriginalMacRuntimeLoadingTests: Executed 7 tests, with 0 failures (0 unexpected) in 3.328 (3.330) seconds",
+  "OriginalApplicationLoadedCharacterTests: Executed 2 tests, with 0 failures (0 unexpected) in 31.491 (31.492) seconds"
+ ],
+ "phone": {
+  "summary": {
+   "ml-m2": {
+    "runs": 3,
+    "loadSeconds": {
+     "median": 43.65,
+     "min": 43.23,
+     "max": 43.89
+    },
+    "startupSeconds": {
+     "median": 1.98,
+     "min": 1.93,
+     "max": 2.06
+    },
+    "startToLoadedSeconds": {
+     "median": 51.78,
+     "min": 51.09,
+     "max": 51.84
+    },
+    "peakFootprintMB": {
+     "median": 834,
+     "min": 834,
+     "max": 838
+    },
+    "peakResidentMB": {
+     "median": 814,
+     "min": 812,
+     "max": 817
+    },
+    "loadedResidentMB": {
+     "median": 786,
+     "min": 769,
+     "max": 791
+    },
+    "bodiesResidentMB": {
+     "median": 811,
+     "min": 806,
+     "max": 816
+    },
+    "bodiesSwapMB": {
+     "median": 22,
+     "min": 22,
+     "max": 22
+    },
+    "mainCpuToLoadedSeconds": {
+     "median": 50.1,
+     "min": 49.36,
+     "max": 50.23
+    },
+    "loadedCounts": [
+     {
+      "allocations": 16105,
+      "audioRequests": 2072,
+      "bitmapRequests": 12817,
+      "files": 621
+     }
+    ]
+   },
+   "ml-m1c": {
+    "runs": 2,
+    "loadSeconds": {
+     "median": 46.3,
+     "min": 46.28,
+     "max": 46.32
+    },
+    "startupSeconds": {
+     "median": 2.285,
+     "min": 2.1,
+     "max": 2.47
+    },
+    "startToLoadedSeconds": {
+     "median": 54.504999999999995,
+     "min": 54.32,
+     "max": 54.69
+    },
+    "peakFootprintMB": {
+     "median": 970.0,
+     "min": 969,
+     "max": 971
+    },
+    "peakResidentMB": {
+     "median": 948.5,
+     "min": 948,
+     "max": 949
+    },
+    "loadedResidentMB": {
+     "median": 917.0,
+     "min": 911,
+     "max": 923
+    },
+    "bodiesResidentMB": {
+     "median": 877.5,
+     "min": 819,
+     "max": 936
+    },
+    "bodiesSwapMB": {
+     "median": 81.5,
+     "min": 23,
+     "max": 140
+    },
+    "mainCpuToLoadedSeconds": {
+     "median": 52.629999999999995,
+     "min": 52.61,
+     "max": 52.65
+    },
+    "loadedCounts": [
+     {
+      "allocations": 16105,
+      "audioRequests": 2072,
+      "bitmapRequests": 12817,
+      "files": 621
+     }
+    ]
+   }
+  },
+  "runs": [
+   {
+    "label": "ml-m2-ab-01-ml-m2",
+    "host": "android",
+    "serial": "R58R36F7VFD",
+    "scenario": "vs",
+    "bodies": 600,
+    "apk": "ml-m2.apk",
+    "loadedResidentMB": 791,
+    "loadedAnonMB": 741,
+    "loadedFileMB": 41,
+    "loadedSwapMB": 22,
+    "mainCpuToLoadedSeconds": 50.1,
+    "bodiesResidentMB": 811,
+    "bodiesAnonMB": 759,
+    "bodiesFileMB": 42,
+    "bodiesSwapMB": 22,
+    "pssMB": {
+     "Java Heap": 9,
+     "Native Heap": 735,
+     "Code": 19,
+     "Stack": 1,
+     "Graphics": 5,
+     "Private Other": 2,
+     "System": 10,
+     "TOTAL PSS": 781
+    },
+    "peakResidentMB": 812,
+    "peakFootprintMB": 834,
+    "startupSeconds": 1.93,
+    "loadSeconds": 43.65,
+    "startToLoadedSeconds": 51.78,
+    "loadedCounts": {
+     "allocations": 16105,
+     "audioRequests": 2072,
+     "bitmapRequests": 12817,
+     "files": 621
+    },
+    "build": "ml-m2"
+   },
+   {
+    "label": "ml-m2-ab-02-ml-m1c",
+    "host": "android",
+    "serial": "R58R36F7VFD",
+    "scenario": "vs",
+    "bodies": 600,
+    "apk": "ml-m1c.apk",
+    "loadedResidentMB": 923,
+    "loadedAnonMB": 882,
+    "loadedFileMB": 32,
+    "loadedSwapMB": 22,
+    "mainCpuToLoadedSeconds": 52.61,
+    "bodiesResidentMB": 819,
+    "bodiesAnonMB": 779,
+    "bodiesFileMB": 31,
+    "bodiesSwapMB": 140,
+    "pssMB": {
+     "Java Heap": 1,
+     "Native Heap": 765,
+     "Code": 14,
+     "Stack": 0,
+     "Graphics": 5,
+     "Private Other": 2,
+     "System": 123,
+     "TOTAL PSS": 911
+    },
+    "peakResidentMB": 949,
+    "peakFootprintMB": 971,
+    "startupSeconds": 2.47,
+    "loadSeconds": 46.28,
+    "startToLoadedSeconds": 54.69,
+    "loadedCounts": {
+     "allocations": 16105,
+     "audioRequests": 2072,
+     "bitmapRequests": 12817,
+     "files": 621
+    },
+    "build": "ml-m1c"
+   },
+   {
+    "label": "ml-m2-ab-03-ml-m2",
+    "host": "android",
+    "serial": "R58R36F7VFD",
+    "scenario": "vs",
+    "bodies": 600,
+    "apk": "ml-m2.apk",
+    "loadedResidentMB": 769,
+    "loadedAnonMB": 724,
+    "loadedFileMB": 35,
+    "loadedSwapMB": 22,
+    "mainCpuToLoadedSeconds": 49.36,
+    "bodiesResidentMB": 806,
+    "bodiesAnonMB": 761,
+    "bodiesFileMB": 36,
+    "bodiesSwapMB": 22,
+    "pssMB": {
+     "Java Heap": 9,
+     "Native Heap": 736,
+     "Code": 19,
+     "Stack": 1,
+     "Graphics": 5,
+     "Private Other": 2,
+     "System": 10,
+     "TOTAL PSS": 781
+    },
+    "peakResidentMB": 814,
+    "peakFootprintMB": 834,
+    "startupSeconds": 2.06,
+    "loadSeconds": 43.23,
+    "startToLoadedSeconds": 51.09,
+    "loadedCounts": {
+     "allocations": 16105,
+     "audioRequests": 2072,
+     "bitmapRequests": 12817,
+     "files": 621
+    },
+    "build": "ml-m2"
+   },
+   {
+    "label": "ml-m2-ab-04-ml-m1c",
+    "host": "android",
+    "serial": "R58R36F7VFD",
+    "scenario": "vs",
+    "bodies": 600,
+    "apk": "ml-m1c.apk",
+    "loadedResidentMB": 911,
+    "loadedAnonMB": 861,
+    "loadedFileMB": 40,
+    "loadedSwapMB": 22,
+    "mainCpuToLoadedSeconds": 52.65,
+    "bodiesResidentMB": 936,
+    "bodiesAnonMB": 894,
+    "bodiesFileMB": 33,
+    "bodiesSwapMB": 23,
+    "pssMB": {
+     "Java Heap": 9,
+     "Native Heap": 870,
+     "Code": 18,
+     "Stack": 1,
+     "Graphics": 5,
+     "Private Other": 2,
+     "System": 9,
+     "TOTAL PSS": 912
+    },
+    "peakResidentMB": 948,
+    "peakFootprintMB": 969,
+    "startupSeconds": 2.1,
+    "loadSeconds": 46.32,
+    "startToLoadedSeconds": 54.32,
+    "loadedCounts": {
+     "allocations": 16105,
+     "audioRequests": 2072,
+     "bitmapRequests": 12817,
+     "files": 621
+    },
+    "build": "ml-m1c"
+   },
+   {
+    "label": "ml-m2-ab-05-ml-m2",
+    "host": "android",
+    "serial": "R58R36F7VFD",
+    "scenario": "vs",
+    "bodies": 600,
+    "apk": "ml-m2.apk",
+    "loadedResidentMB": 786,
+    "loadedAnonMB": 738,
+    "loadedFileMB": 39,
+    "loadedSwapMB": 22,
+    "mainCpuToLoadedSeconds": 50.23,
+    "bodiesResidentMB": 816,
+    "bodiesAnonMB": 766,
+    "bodiesFileMB": 40,
+    "bodiesSwapMB": 22,
+    "pssMB": {
+     "Java Heap": 9,
+     "Native Heap": 741,
+     "Code": 21,
+     "Stack": 1,
+     "Graphics": 5,
+     "Private Other": 2,
+     "System": 10,
+     "TOTAL PSS": 790
+    },
+    "peakResidentMB": 817,
+    "peakFootprintMB": 838,
+    "startupSeconds": 1.98,
+    "loadSeconds": 43.89,
+    "startToLoadedSeconds": 51.84,
+    "loadedCounts": {
+     "allocations": 16105,
+     "audioRequests": 2072,
+     "bitmapRequests": 12817,
+     "files": 621
+    },
+    "build": "ml-m2"
+   }
+  ]
+ },
+ "mac": {
+  "summary": {
+   "frozen-unchecked-ml-m2": {
+    "runs": 3,
+    "loadSeconds": {
+     "median": 1.754,
+     "min": 1.753,
+     "max": 1.781
+    },
+    "startupSeconds": {
+     "median": 0.079,
+     "min": 0.079,
+     "max": 0.081
+    },
+    "startToLoadedSeconds": {
+     "median": 2.215,
+     "min": 2.212,
+     "max": 2.242
+    },
+    "peakResidentMB": {
+     "median": 1368,
+     "min": 1336,
+     "max": 1381
+    },
+    "loadedResidentMB": {
+     "median": 1343,
+     "min": 1313,
+     "max": 1345
+    },
+    "bodiesResidentMB": {
+     "median": 1290,
+     "min": 1257,
+     "max": 1381
+    },
+    "loadedCounts": [
+     {
+      "allocations": 16105,
+      "audioRequests": 2072,
+      "bitmapRequests": 12817,
+      "files": 621
+     }
+    ]
+   },
+   "frozen-unchecked-ml-m1c": {
+    "runs": 3,
+    "loadSeconds": {
+     "median": 2.024,
+     "min": 2.006,
+     "max": 2.083
+    },
+    "startupSeconds": {
+     "median": 0.079,
+     "min": 0.079,
+     "max": 0.092
+    },
+    "startToLoadedSeconds": {
+     "median": 2.478,
+     "min": 2.468,
+     "max": 2.557
+    },
+    "peakResidentMB": {
+     "median": 1447,
+     "min": 1443,
+     "max": 1502
+    },
+    "loadedResidentMB": {
+     "median": 1384,
+     "min": 1373,
+     "max": 1424
+    },
+    "bodiesResidentMB": {
+     "median": 1433,
+     "min": 1415,
+     "max": 1466
+    },
+    "loadedCounts": [
+     {
+      "allocations": 16105,
+      "audioRequests": 2072,
+      "bitmapRequests": 12817,
+      "files": 621
+     }
+    ]
+   }
+  },
+  "runs": [
+   {
+    "label": "ml-m2-mac-ab-01-frozen-unchecked-ml-m2",
+    "host": "mac",
+    "scenario": "vs",
+    "bodies": 600,
+    "binary": "/private/tmp/claude-501/-Users-michael-Developer-ntsd-2-4/1f9218ae-9d5d-4c4e-a8dd-d5254994839c/scratchpad/frozen-unchecked-ml-m2/NTSDHeadless",
+    "startupSeconds": 0.079,
+    "loadSeconds": 1.754,
+    "startToLoadedSeconds": 2.215,
+    "loadedCounts": {
+     "allocations": 16105,
+     "audioRequests": 2072,
+     "bitmapRequests": 12817,
+     "files": 621
+    },
+    "loadedResidentMB": 1313,
+    "bodiesResidentMB": 1257,
+    "peakResidentMB": 1336,
+    "build": "frozen-unchecked-ml-m2"
+   },
+   {
+    "label": "ml-m2-mac-ab-02-frozen-unchecked-ml-m1c",
+    "host": "mac",
+    "scenario": "vs",
+    "bodies": 600,
+    "binary": "/private/tmp/claude-501/-Users-michael-Developer-ntsd-2-4/1f9218ae-9d5d-4c4e-a8dd-d5254994839c/scratchpad/frozen-unchecked-ml-m1c/NTSDHeadless",
+    "startupSeconds": 0.092,
+    "loadSeconds": 2.083,
+    "startToLoadedSeconds": 2.557,
+    "loadedCounts": {
+     "allocations": 16105,
+     "audioRequests": 2072,
+     "bitmapRequests": 12817,
+     "files": 621
+    },
+    "loadedResidentMB": 1373,
+    "bodiesResidentMB": 1415,
+    "peakResidentMB": 1443,
+    "build": "frozen-unchecked-ml-m1c"
+   },
+   {
+    "label": "ml-m2-mac-ab-03-frozen-unchecked-ml-m2",
+    "host": "mac",
+    "scenario": "vs",
+    "bodies": 600,
+    "binary": "/private/tmp/claude-501/-Users-michael-Developer-ntsd-2-4/1f9218ae-9d5d-4c4e-a8dd-d5254994839c/scratchpad/frozen-unchecked-ml-m2/NTSDHeadless",
+    "startupSeconds": 0.079,
+    "loadSeconds": 1.753,
+    "startToLoadedSeconds": 2.212,
+    "loadedCounts": {
+     "allocations": 16105,
+     "audioRequests": 2072,
+     "bitmapRequests": 12817,
+     "files": 621
+    },
+    "loadedResidentMB": 1343,
+    "bodiesResidentMB": 1290,
+    "peakResidentMB": 1368,
+    "build": "frozen-unchecked-ml-m2"
+   },
+   {
+    "label": "ml-m2-mac-ab-04-frozen-unchecked-ml-m1c",
+    "host": "mac",
+    "scenario": "vs",
+    "bodies": 600,
+    "binary": "/private/tmp/claude-501/-Users-michael-Developer-ntsd-2-4/1f9218ae-9d5d-4c4e-a8dd-d5254994839c/scratchpad/frozen-unchecked-ml-m1c/NTSDHeadless",
+    "startupSeconds": 0.079,
+    "loadSeconds": 2.024,
+    "startToLoadedSeconds": 2.478,
+    "loadedCounts": {
+     "allocations": 16105,
+     "audioRequests": 2072,
+     "bitmapRequests": 12817,
+     "files": 621
+    },
+    "loadedResidentMB": 1384,
+    "bodiesResidentMB": 1433,
+    "peakResidentMB": 1447,
+    "build": "frozen-unchecked-ml-m1c"
+   },
+   {
+    "label": "ml-m2-mac-ab-05-frozen-unchecked-ml-m2",
+    "host": "mac",
+    "scenario": "vs",
+    "bodies": 600,
+    "binary": "/private/tmp/claude-501/-Users-michael-Developer-ntsd-2-4/1f9218ae-9d5d-4c4e-a8dd-d5254994839c/scratchpad/frozen-unchecked-ml-m2/NTSDHeadless",
+    "startupSeconds": 0.081,
+    "loadSeconds": 1.781,
+    "startToLoadedSeconds": 2.242,
+    "loadedCounts": {
+     "allocations": 16105,
+     "audioRequests": 2072,
+     "bitmapRequests": 12817,
+     "files": 621
+    },
+    "loadedResidentMB": 1345,
+    "bodiesResidentMB": 1381,
+    "peakResidentMB": 1381,
+    "build": "frozen-unchecked-ml-m2"
+   },
+   {
+    "label": "ml-m2-mac-ab-06-frozen-unchecked-ml-m1c",
+    "host": "mac",
+    "scenario": "vs",
+    "bodies": 600,
+    "binary": "/private/tmp/claude-501/-Users-michael-Developer-ntsd-2-4/1f9218ae-9d5d-4c4e-a8dd-d5254994839c/scratchpad/frozen-unchecked-ml-m1c/NTSDHeadless",
+    "startupSeconds": 0.079,
+    "loadSeconds": 2.006,
+    "startToLoadedSeconds": 2.468,
+    "loadedCounts": {
+     "allocations": 16105,
+     "audioRequests": 2072,
+     "bitmapRequests": 12817,
+     "files": 621
+    },
+    "loadedResidentMB": 1424,
+    "bodiesResidentMB": 1466,
+    "peakResidentMB": 1502,
+    "build": "frozen-unchecked-ml-m1c"
+   }
+  ]
+ }
+}

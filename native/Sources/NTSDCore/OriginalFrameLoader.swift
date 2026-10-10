@@ -7,7 +7,26 @@ import Foundation
 public struct OriginalFrameRecord: Codable, Equatable, Sendable {
     public let number: Int
     public internal(set) var name: String
-    public internal(set) var words: [String: Int32]
+    /// The words by decimal byte offset. Kept compact (MEMORY_LOADING M2): the
+    /// record's 94 four-byte offsets 0...0x174 as slots with a presence mask,
+    /// any other key apart; 400 projected frames for each of 137 objects held
+    /// 161 MB as dictionaries. Equality and the JSON form are the dictionary's.
+    public internal(set) var words: [String: Int32] {
+        get {
+            var result = extra
+            for slot in 0..<Self.slotCount where isPresent(slot) { result[String(slot*4)] = slots[slot] }
+            return result
+        }
+        set {
+            slots = []; low = 0; high = 0; extra = [:]
+            for (key, value) in newValue {
+                if let slot = Self.slot(key) { setWord(value, offset: slot*4) } else { extra[key] = value }
+            }
+        }
+    }
+    /// Absent slots hold 0, so equal words give equal storage.
+    private var slots: [Int32] = [], low: UInt64 = 0, high: UInt64 = 0
+    private var extra: [String: Int32] = [:]
     public internal(set) var sound: String?
     /// A name write can replace part/all of the original pointer. Keep its bits
     /// explicitly; it is neither a valid path nor a null pointer.
@@ -15,14 +34,47 @@ public struct OriginalFrameRecord: Codable, Equatable, Sendable {
     public internal(set) var interactions: [[Int32]] = []
     public internal(set) var bodies: [[Int32]] = []
 
+    static let slotCount = 0x178/4
+    private static func slot(_ key: String) -> Int? {
+        guard let value = Int(key), String(value) == key, value >= 0, value < 0x178, value % 4 == 0 else { return nil }
+        return value/4
+    }
+    private func isPresent(_ slot: Int) -> Bool { slot < 64 ? low >> UInt64(slot) & 1 != 0 : high >> UInt64(slot-64) & 1 != 0 }
+    mutating func setWord(_ value: Int32, offset: Int) {
+        precondition(offset >= 0 && offset < 0x178 && offset % 4 == 0, "frame word offset")
+        let slot = offset/4
+        if slots.isEmpty { slots = Array(repeating: 0, count: Self.slotCount) }
+        slots[slot] = value
+        if slot < 64 { low |= 1 << UInt64(slot) } else { high |= 1 << UInt64(slot-64) }
+    }
+
     init(number: Int) {
-        self.number = number; name = ""; words = [:]
+        self.number = number; name = ""
         // Defaults live in OriginalStateRecord.frame; this is only a projection.
     }
-    public subscript(offset: Int) -> Int32? { words[String(offset)] }
+    public subscript(offset: Int) -> Int32? {
+        guard offset >= 0, offset < 0x178, offset % 4 == 0 else { return extra[String(offset)] }
+        return isPresent(offset/4) ? slots[offset/4] : nil
+    }
     public func field(_ name: String) -> Int32? {
         guard let offset = OriginalFrameLoader.frameFields[name + ":"] else { return nil }
         return self[offset]
+    }
+
+    enum CodingKeys: String, CodingKey { case number, name, words, sound, opaqueSoundPointer, interactions, bodies }
+    public init(from decoder: Decoder) throws {
+        let c = try decoder.container(keyedBy: CodingKeys.self)
+        number = try c.decode(Int.self, forKey: .number); name = try c.decode(String.self, forKey: .name)
+        sound = try c.decodeIfPresent(String.self, forKey: .sound)
+        opaqueSoundPointer = try c.decodeIfPresent(String.self, forKey: .opaqueSoundPointer)
+        interactions = try c.decode([[Int32]].self, forKey: .interactions); bodies = try c.decode([[Int32]].self, forKey: .bodies)
+        words = try c.decode([String: Int32].self, forKey: .words)
+    }
+    public func encode(to encoder: Encoder) throws {
+        var c = encoder.container(keyedBy: CodingKeys.self)
+        try c.encode(number, forKey: .number); try c.encode(name, forKey: .name); try c.encode(words, forKey: .words)
+        try c.encodeIfPresent(sound, forKey: .sound); try c.encodeIfPresent(opaqueSoundPointer, forKey: .opaqueSoundPointer)
+        try c.encode(interactions, forKey: .interactions); try c.encode(bodies, forKey: .bodies)
     }
 }
 
@@ -54,13 +106,13 @@ public struct OriginalFrameLoader {
 
     func projected(at index: Int, record: OriginalStateRecord) throws -> OriginalFrameRecord {
         var result = OriginalFrameRecord(number: index)
-        result.words = ["0": Int32(try record.integer(at: 0, as: UInt8.self))]
+        result.setWord(Int32(try record.integer(at: 0, as: UInt8.self)), offset: 0)
         for offset in stride(from: 4, to: 0x178, by: 4) where offset != 0x130 && offset != 0x134 && !(0x15c..<0x174).contains(offset) {
             if record.allDefined(in: offset..<(offset+4)) {
-                result.words[String(offset)] = try record.integer(at: offset, as: Int32.self)
+                result.setWord(try record.integer(at: offset, as: Int32.self), offset: offset)
             }
         }
-        result.name = result.words["0"] == 0 ? "" : try OriginalFrameHeap.string(in: record, at: 0x15c)
+        result.name = result[0] == 0 ? "" : try OriginalFrameHeap.string(in: record, at: 0x15c)
         for (countOffset, pointerOffset, stride) in [(0x128, 0x130, 20), (0x12c, 0x134, 10)] {
             let count = Int(try record.integer(at: countOffset, as: Int32.self))
             guard (0...5).contains(count) else { throw OriginalStateError.invalidStorage("Frame box count") }
