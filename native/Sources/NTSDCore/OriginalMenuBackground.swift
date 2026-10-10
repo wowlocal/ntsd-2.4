@@ -26,7 +26,7 @@ public enum OriginalMenuBackground {
             let device = try state.integer(at: 0x457578-base,as: UInt32.self)
             if let constructBitmap {
                 let (loaded,surface) = try constructBitmap(allocation,device,path)
-                guard loaded.input.path == path, loaded.storage.bytes.count == 0x1f50,
+                guard loaded.input.path == path, loaded.storage.byteCount == 0x1f50,
                       try loaded.storage.integer(at:0,as:UInt32.self) == (surface == 0 ? 0 : 1) else {
                     throw OriginalStateError.invalidStorage("Menu background constructed surface binding")
                 }

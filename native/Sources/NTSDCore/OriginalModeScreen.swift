@@ -94,7 +94,7 @@ public enum OriginalModeScreen {
         panel: (inout OriginalStateRecord,OriginalMenuPresentationMemory) throws -> Void,
         draw: ([UInt32],OriginalStateRecord,OriginalMenuPresentationMemory) throws -> Void,
         observe: (OriginalFrontScreenEvent) throws -> Void) throws -> OriginalModeScreenExit {
-        guard local.bytes.count == 0x704 else { throw OriginalStateError.invalidStorage("Mode screen local extent") }
+        guard local.byteCount == 0x704 else { throw OriginalStateError.invalidStorage("Mode screen local extent") }
         var state = globals, owned = memory, scratch = local, textState = libraryText
         let base = OriginalMatchPreparation.globalBase
         func word(_ address: Int) throws -> Int32 { try state.integer(at: address-base,as: Int32.self) }
@@ -106,7 +106,7 @@ public enum OriginalModeScreen {
         }
         func string(_ offset: Int) throws -> [UInt8] {
             let start = offset-0x10
-            guard start >= 0,start < scratch.bytes.count,let end = scratch.bytes[start...].firstIndex(of: 0) else { throw OriginalStateError.invalidStorage("Mode screen string extent") }
+            guard start >= 0,start < scratch.byteCount,let end = scratch.bytes[start...].firstIndex(of: 0) else { throw OriginalStateError.invalidStorage("Mode screen string extent") }
             guard scratch.defined[start...end].allSatisfy({ $0 }) else { throw OriginalStateError.invalidStorage("Unknown mode screen string backing") }
             return Array(scratch.bytes[start..<end])
         }
@@ -160,7 +160,7 @@ public enum OriginalModeScreen {
         for offset in [0x28,0x44,0x78] {
             var i = 0
             while i < (try string(offset).count) {
-                try scratch.write(scratch.bytes[offset-0x10+i] &- UInt8(i & 3),at: offset-0x10+i);i += 1
+                try scratch.write(scratch.byte(at: offset-0x10+i) &- UInt8(i & 3),at: offset-0x10+i);i += 1
             }
         }
         try text(0x28,591,y);try text(0x44,591,y &+ 20);try text(0x78,591,y &+ 40)

@@ -1,0 +1,20 @@
+{
+  "study": "docs/research/MOBILE_PERFORMANCE.md",
+  "step": "6b",
+  "date": "2026-10-05",
+  "change": "OriginalApplicationGameplaySession.advance builds its set of sound-buffer tokens by inserting each nonzero `output` of the two load arrays (by index) and of the registered-sound dictionary values, instead of concatenating the three lists (which copied every OriginalWaveLoadResult each gameplay cycle) and mapping",
+  "why": "phone profile after step 6: 672 reference-counting samples in OriginalWaveLoadResult copies, all from GameplaySession.advance",
+  "phone": {
+    "speed (vs script, no frame capture)": "9.4 -> 9.9 ticks per second"
+  },
+  "gates": {
+    "headless (frozen binary sha256 6d3a9999…)": "all 10 scenarios equal; vs frames 1,832 identical to m1-frames-ref",
+    "AppKit": "vs and playback equal; 3,960 frames identical to the AppKit step-6 run",
+    "Core suites (release test build of the tree with only this change)": "18 gameplay suites (see p2s6b-*.log)"
+  },
+  "review": {
+    "reviewer": "independent read-only agent",
+    "verdict": "OK: same members for every input (all sources stored lets, same UInt32 output, every element/value visited once), used only for contains, no new throws or side effects, still a captured let",
+    "note": "Dictionary subscript(position:) returns a (key, value) tuple, so the registered values may still be copied; the arrays are not"
+  }
+}

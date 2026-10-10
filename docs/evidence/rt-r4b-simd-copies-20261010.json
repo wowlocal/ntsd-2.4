@@ -1,0 +1,350 @@
+{
+ "study": "docs/research/CORE_REALTIME.md",
+ "phase": "R4b (render thread): four-pixel copies in tight loops",
+ "date": "2026-10-10",
+ "profile": "rte4-prof-vs: the render thread is 88% copyPixels (71.5% in its own loops)",
+ "change": "copyPixels' fully-known-target branch, when source and target storages differ (little-endian only), processes four pixels per step in separate loops for keyed (forward or mirrored) and unkeyed mirrored copies: raw pointers stepped without overflow checks, the key constants hoisted, the 24-bit key test per lane; a group the key rejects entirely is skipped (no load or store), one it accepts entirely is stored without reading the target, a mixed group stores the rejected lanes' target values back unchanged. The row's remainder and same-surface copies stay scalar. R4a (the first version: per-group offsets with overflow checks, branches inside the loop, always loading and storing the target) was slower and is parked (rt-r4a-simd-copies-parked-20261010.json)",
+ "phone": {
+  "vs": {
+   "rte4_same_session": [
+    {
+     "label": "rte4-for-rtr4b-vs1",
+     "scenario": "vs",
+     "runSeconds": 207,
+     "peakResidentMB": 1495,
+     "ticksPerSecond": 33.94,
+     "busySeconds": 104.27,
+     "bodies": 1800,
+     "completeMsPerTick": 7.5,
+     "partAssembliesPerTick": 0.0,
+     "menuMsPerStep": 0.61,
+     "menuStepsPerTick": 4.12,
+     "idleMsPerStep": 0.479,
+     "idleIterationMs": 0.54,
+     "idleStepsPerTick": 3.12,
+     "tickStepMs": 0.999,
+     "mainCpuShare": 0.379,
+     "renderCpuShare": 0.274,
+     "mainMsPerTick": 11.17,
+     "renderMsPerTick": 8.06,
+     "presentMsPerTick": 5.77,
+     "releaseMsPerTick": 2.05,
+     "presentCounts": {
+      "submitted": 2100,
+      "drawn": 2100,
+      "waits": 0
+     }
+    },
+    {
+     "label": "rte4-for-rtr4b-vs2",
+     "scenario": "vs",
+     "runSeconds": 207,
+     "peakResidentMB": 1423,
+     "ticksPerSecond": 33.95,
+     "busySeconds": 104.06,
+     "bodies": 1800,
+     "completeMsPerTick": 7.5,
+     "partAssembliesPerTick": 0.0,
+     "menuMsPerStep": 0.6,
+     "menuStepsPerTick": 4.12,
+     "idleMsPerStep": 0.478,
+     "idleIterationMs": 0.538,
+     "idleStepsPerTick": 3.12,
+     "tickStepMs": 0.985,
+     "mainCpuShare": 0.377,
+     "renderCpuShare": 0.281,
+     "mainMsPerTick": 11.1,
+     "renderMsPerTick": 8.27,
+     "presentMsPerTick": 5.74,
+     "releaseMsPerTick": 2.06,
+     "presentCounts": {
+      "submitted": 2100,
+      "drawn": 2100,
+      "waits": 0
+     }
+    }
+   ],
+   "after": [
+    {
+     "label": "rtr4b-vs1",
+     "scenario": "vs",
+     "runSeconds": 207,
+     "peakResidentMB": 1529,
+     "ticksPerSecond": 34.04,
+     "busySeconds": 102.79,
+     "bodies": 1800,
+     "completeMsPerTick": 7.5,
+     "partAssembliesPerTick": 0.0,
+     "menuMsPerStep": 0.6,
+     "menuStepsPerTick": 4.12,
+     "idleMsPerStep": 0.475,
+     "idleIterationMs": 0.533,
+     "idleStepsPerTick": 3.12,
+     "tickStepMs": 0.983,
+     "mainCpuShare": 0.382,
+     "renderCpuShare": 0.255,
+     "mainMsPerTick": 11.22,
+     "renderMsPerTick": 7.49,
+     "presentMsPerTick": 5.7,
+     "releaseMsPerTick": 2.06,
+     "presentCounts": {
+      "submitted": 2100,
+      "drawn": 2100,
+      "waits": 0
+     }
+    },
+    {
+     "label": "rtr4b-vs2",
+     "scenario": "vs",
+     "runSeconds": 207,
+     "peakResidentMB": 1420,
+     "ticksPerSecond": 33.98,
+     "busySeconds": 102.93,
+     "bodies": 1800,
+     "completeMsPerTick": 7.6,
+     "partAssembliesPerTick": 0.0,
+     "menuMsPerStep": 0.6,
+     "menuStepsPerTick": 4.12,
+     "idleMsPerStep": 0.475,
+     "idleIterationMs": 0.536,
+     "idleStepsPerTick": 3.12,
+     "tickStepMs": 0.994,
+     "mainCpuShare": 0.379,
+     "renderCpuShare": 0.261,
+     "mainMsPerTick": 11.16,
+     "renderMsPerTick": 7.68,
+     "presentMsPerTick": 5.83,
+     "releaseMsPerTick": 2.08,
+     "presentCounts": {
+      "submitted": 2100,
+      "drawn": 2100,
+      "waits": 0
+     }
+    },
+    {
+     "label": "rtr4b-vs3",
+     "scenario": "vs",
+     "runSeconds": 207,
+     "peakResidentMB": 1504,
+     "ticksPerSecond": 33.95,
+     "busySeconds": 102.84,
+     "bodies": 1800,
+     "completeMsPerTick": 7.6,
+     "partAssembliesPerTick": 0.0,
+     "menuMsPerStep": 0.6,
+     "menuStepsPerTick": 4.12,
+     "idleMsPerStep": 0.477,
+     "idleIterationMs": 0.537,
+     "idleStepsPerTick": 3.12,
+     "tickStepMs": 0.98,
+     "mainCpuShare": 0.384,
+     "renderCpuShare": 0.258,
+     "mainMsPerTick": 11.32,
+     "renderMsPerTick": 7.6,
+     "presentMsPerTick": 5.74,
+     "releaseMsPerTick": 2.1,
+     "presentCounts": {
+      "submitted": 2100,
+      "drawn": 2100,
+      "waits": 0
+     }
+    }
+   ],
+   "result": "render 8.16 -> 7.59, main 11.13 -> 11.23, presenter 5.75 -> 5.76 ms per tick"
+  },
+  "demo": {
+   "rte4_same_session": [
+    {
+     "label": "rte4-for-rtr4b-demo1",
+     "scenario": "demo",
+     "runSeconds": 189,
+     "peakResidentMB": 1314,
+     "ticksPerSecond": 33.62,
+     "busySeconds": 94.53,
+     "bodies": 900,
+     "completeMsPerTick": 8.3,
+     "partAssembliesPerTick": 0.0,
+     "menuMsPerStep": 0.59,
+     "menuStepsPerTick": 4.13,
+     "idleMsPerStep": 0.48,
+     "idleIterationMs": 0.539,
+     "idleStepsPerTick": 3.13,
+     "tickStepMs": 0.951,
+     "mainCpuShare": 0.398,
+     "renderCpuShare": 0.202,
+     "mainMsPerTick": 11.85,
+     "renderMsPerTick": 6.01,
+     "presentMsPerTick": 5.73,
+     "releaseMsPerTick": 1.75,
+     "presentCounts": {
+      "submitted": 1500,
+      "drawn": 1500,
+      "waits": 0
+     }
+    },
+    {
+     "label": "rte4-for-rtr4b-demo2",
+     "scenario": "demo",
+     "runSeconds": 210,
+     "peakResidentMB": 1397,
+     "ticksPerSecond": 33.65,
+     "busySeconds": 94.11,
+     "bodies": 900,
+     "completeMsPerTick": 8.2,
+     "partAssembliesPerTick": 0.0,
+     "menuMsPerStep": 0.6,
+     "menuStepsPerTick": 4.13,
+     "idleMsPerStep": 0.483,
+     "idleIterationMs": 0.544,
+     "idleStepsPerTick": 3.13,
+     "tickStepMs": 0.971,
+     "mainCpuShare": 0.397,
+     "renderCpuShare": 0.202,
+     "mainMsPerTick": 11.81,
+     "renderMsPerTick": 6.02,
+     "presentMsPerTick": 5.72,
+     "releaseMsPerTick": 1.73,
+     "presentCounts": {
+      "submitted": 1500,
+      "drawn": 1500,
+      "waits": 0
+     }
+    }
+   ],
+   "after": [
+    {
+     "label": "rtr4b-demo1",
+     "scenario": "demo",
+     "runSeconds": 188,
+     "peakResidentMB": 1495,
+     "ticksPerSecond": 33.94,
+     "busySeconds": 94.02,
+     "bodies": 900,
+     "completeMsPerTick": 8.1,
+     "partAssembliesPerTick": 0.0,
+     "menuMsPerStep": 0.59,
+     "menuStepsPerTick": 4.13,
+     "idleMsPerStep": 0.474,
+     "idleIterationMs": 0.533,
+     "idleStepsPerTick": 3.13,
+     "tickStepMs": 0.958,
+     "mainCpuShare": 0.393,
+     "renderCpuShare": 0.207,
+     "mainMsPerTick": 11.59,
+     "renderMsPerTick": 6.09,
+     "presentMsPerTick": 5.59,
+     "releaseMsPerTick": 1.68,
+     "presentCounts": {
+      "submitted": 1500,
+      "drawn": 1500,
+      "waits": 0
+     }
+    },
+    {
+     "label": "rtr4b-demo2",
+     "scenario": "demo",
+     "runSeconds": 188,
+     "peakResidentMB": 1339,
+     "ticksPerSecond": 33.62,
+     "busySeconds": 93.45,
+     "bodies": 900,
+     "completeMsPerTick": 8.3,
+     "partAssembliesPerTick": 0.0,
+     "menuMsPerStep": 0.6,
+     "menuStepsPerTick": 4.13,
+     "idleMsPerStep": 0.482,
+     "idleIterationMs": 0.541,
+     "idleStepsPerTick": 3.13,
+     "tickStepMs": 0.96,
+     "mainCpuShare": 0.398,
+     "renderCpuShare": 0.205,
+     "mainMsPerTick": 11.82,
+     "renderMsPerTick": 6.08,
+     "presentMsPerTick": 5.66,
+     "releaseMsPerTick": 1.74,
+     "presentCounts": {
+      "submitted": 1500,
+      "drawn": 1500,
+      "waits": 0
+     }
+    },
+    {
+     "label": "rtr4b-demo3",
+     "scenario": "demo",
+     "runSeconds": 188,
+     "peakResidentMB": 1385,
+     "ticksPerSecond": 33.62,
+     "busySeconds": 93.9,
+     "bodies": 900,
+     "completeMsPerTick": 8.2,
+     "partAssembliesPerTick": 0.0,
+     "menuMsPerStep": 0.6,
+     "menuStepsPerTick": 4.13,
+     "idleMsPerStep": 0.48,
+     "idleIterationMs": 0.538,
+     "idleStepsPerTick": 3.13,
+     "tickStepMs": 0.957,
+     "mainCpuShare": 0.396,
+     "renderCpuShare": 0.209,
+     "mainMsPerTick": 11.77,
+     "renderMsPerTick": 6.2,
+     "presentMsPerTick": 5.71,
+     "releaseMsPerTick": 1.69,
+     "presentCounts": {
+      "submitted": 1500,
+      "drawn": 1500,
+      "waits": 0
+     }
+    }
+   ],
+   "result": "render 6.01 -> 6.12, main 11.83 -> 11.73, presenter 5.72 -> 5.65 ms per tick"
+  },
+  "probe_before_the_gate": {
+   "vs": "render 8.05 -> 7.44, main 11.38 -> 11.02, presenter 5.7 -> 5.0 ms per tick",
+   "demo": "render 5.94 -> 6.12, main 11.82 -> 11.8, presenter 5.71 -> 5.68 ms per tick"
+  },
+  "summary": "the render thread −0.57 ms per tick in vs (8.16 -> 7.59: under its 8 ms goal) and +0.11 in the Demo (6.01 -> 6.12; the probe: +0.18, run ranges not overlapping); the main thread within noise",
+  "demo_profile": "exp-r4b-prof-demo vs rte4-prof-demo (render thread, 500 Hz): copyPixels' own loops 1,404 -> 1,238 samples, its row copies (memcpy) 843 -> 982 samples for the same rows — the Demo's small cost is in the unchanged row copies (memory traffic or noise), not in the new loops"
+ },
+ "gates": {
+  "tested_trees": "native a8a11d33b690ae4d57abcbf731b553e17d1588ab, tools a112e55a61c90e559d8ceb59b8b379423848dd31",
+  "builds": "clean; checked headless and AppKit, unchecked headless and APK (shipping)",
+  "scenarios": [
+   "{\"scenario\": \"vs\", \"exit\": 0, \"seconds\": 71.5, \"result\": \"equal\", \"differs\": []}",
+   "{\"scenario\": \"mission\", \"exit\": 0, \"seconds\": 69.3, \"result\": \"equal\", \"differs\": []}",
+   "{\"scenario\": \"demo\", \"exit\": 0, \"seconds\": 51.3, \"result\": \"equal\", \"differs\": []}",
+   "{\"scenario\": \"war\", \"exit\": 0, \"seconds\": 109.6, \"result\": \"equal\", \"differs\": []}",
+   "{\"scenario\": \"playback\", \"exit\": 0, \"seconds\": 78.6, \"result\": \"equal\", \"differs\": []}",
+   "{\"scenario\": \"tournament\", \"exit\": 0, \"seconds\": 104.4, \"result\": \"equal\", \"differs\": []}",
+   "{\"scenario\": \"altenter\", \"exit\": 0, \"seconds\": 75.5, \"result\": \"equal\", \"differs\": []}",
+   "{\"scenario\": \"tournament-win\", \"exit\": 0, \"seconds\": 111.0, \"result\": \"equal\", \"differs\": []}",
+   "{\"scenario\": \"team-tournament\", \"exit\": 0, \"seconds\": 85.4, \"result\": \"equal\", \"differs\": []}",
+   "{\"scenario\": \"joystick\", \"exit\": 0, \"seconds\": 26.4, \"result\": \"equal\", \"differs\": []}",
+   "{\"frames\": 1832, \"mismatched\": 0, \"result\": \"identical\"}"
+  ],
+  "appkit": [
+   "{\"scenario\": \"vs\", \"exit\": 0, \"seconds\": 73.4, \"result\": \"equal\", \"differs\": []}",
+   "{\"scenario\": \"playback\", \"exit\": 0, \"seconds\": 79.7, \"result\": \"equal\", \"differs\": []}",
+   "{\"frames\": 3960, \"mismatched\": 0, \"result\": \"identical\"}"
+  ],
+  "unchecked_headless": [
+   "{\"scenario\": \"vs\", \"exit\": 0, \"seconds\": 74.8, \"result\": \"equal\", \"differs\": []}",
+   "{\"scenario\": \"demo\", \"exit\": 0, \"seconds\": 54.4, \"result\": \"equal\", \"differs\": []}",
+   "{\"frames\": 1832, \"mismatched\": 0, \"result\": \"identical\"}"
+  ],
+  "launches": "20 of 20 clean",
+  "emulator": "{\"frames\": 1832, \"mismatched\": 0, \"result\": \"identical\"}",
+  "tests": [
+   "OriginalExclusivityChecksTests exit=0 1s \t Executed 1 test, with 0 failures (0 unexpected) in 0.000 (0.016) seconds",
+   "OriginalMacFrontRasterTests exit=0 19s \t Executed 12 tests, with 0 failures (0 unexpected) in 18.855 (18.858) seconds",
+   "OriginalMacDisplayBackendTests exit=0 3s \t Executed 4 tests, with 0 failures (0 unexpected) in 2.953 (2.955) seconds",
+   "OriginalMacDisplayStorageTests exit=0 0s \t Executed 6 tests, with 0 failures (0 unexpected) in 0.002 (0.003) seconds",
+   "OriginalMacBitmapBackendTests exit=0 3s \t Executed 5 tests, with 0 failures (0 unexpected) in 2.649 (2.651) seconds",
+   "OriginalMacDisplayColorTests exit=0 1s \t Executed 1 test, with 0 failures (0 unexpected) in 0.451 (0.452) seconds",
+   "OriginalFramebufferTests exit=0 0s \t Executed 1 test, with 0 failures (0 unexpected) in 0.000 (0.001) seconds",
+   "testWideSpriteCopiesMatchAPerPixelModel: also spans 31, 30, 29 over a full target (remainders after the groups)",
+   "testKeyRangeAndTopByteFollowThePerPixelModel (new): key 0x101010-0x202020 with pixels below, at, inside and above both bounds, and filled pixels with the top byte set, forward and mirrored; it fails when the 24-bit mask is dropped (checked)"
+  ]
+ },
+ "review": "independent read-only review of R4a: approve with nits (lane equivalence, bounds, no aliasing between storages since same-surface copies are rejected earlier and writableValues moves off a lent buffer, no race on the write-back). R4b keeps the same lanes, bounds and guard; its loop restructuring was checked by the same per-pixel tests and the frame gates"
+}

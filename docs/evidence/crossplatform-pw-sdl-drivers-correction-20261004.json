@@ -1,0 +1,14 @@
+{
+  "study": "docs/research/CROSS_PLATFORM.md",
+  "subject": "correction: SDL drivers in the Windows (Wine) SDL runs",
+  "date": "2026-10-04",
+  "finding": "CrossOver's wine passes ordinary environment variables to Windows processes but drops SDL_* ones: `SDL_AUDIO_DRIVER=dummy NTSD_PROBE_VAR=hello wine cmd /c echo` printed 'audio=%SDL_AUDIO_DRIVER% probe=hello'",
+  "affected": [
+    "docs/evidence/crossplatform-pw-sdl-20261004.json (harness: 'SDL_VIDEO_DRIVER=offscreen, SDL_AUDIO_DRIVER=dummy via NTSD_WINE_ENV')",
+    "docs/evidence/crossplatform-pw-package-20261004.json (check run)",
+    "docs/evidence/crossplatform-pw-winsock-20261004.json (pair probe)"
+  ],
+  "whatActuallyRan": "SDL's default Windows drivers under Wine: a real (Mac-driver) window and WASAPI audio. The recorded results (state equal, text frames agreeing, the pair probe) came from those runs and remain valid observations; only the stated driver configuration was wrong. The earlier files are kept unchanged",
+  "howItShowed": "with the Mac's screen locked (from 12:20) the matrix's Windows SDL run failed: the music player's stream reported 'WASAPI can't initialize audio client: Call failed.' and later scenarios stalled at 0% CPU",
+  "fix": "NTSDSDL reads NTSD_SDL_VIDEO_DRIVER / NTSD_SDL_AUDIO_DRIVER and sets them as SDL hints before SDL_Init; matrix.py, check_windows_package.sh and pair_probe.py use them. Verified: Windows SDL with offscreen/dummy drivers under a locked screen, joystick scenario equal in 47 s, then all 10 scenarios 9/10 in the matrix"
+}

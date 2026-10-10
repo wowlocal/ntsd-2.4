@@ -1,0 +1,62 @@
+{
+  "study": "docs/research/CROSS_PLATFORM.md",
+  "phase": "P7: Linux package (aarch64)",
+  "date": "2026-10-04",
+  "tool": "tools/crossplatform/package_linux.py (cross-build with --static-swift-stdlib, assemble, reproducible tar.gz, manifest with per-file SHA-256); tools/crossplatform/check_linux_package.sh",
+  "archive": {
+    "name": "ntsd-linux-aarch64-927f319.tar.gz",
+    "bytes": 216805929,
+    "sha256": "a43b8c326addfe63f7da0fd418c6f5abb6d0bbb5f53d801abed927bb4380555d"
+  },
+  "commitBuiltFrom": "927f3193f0c240a27669edd2923304e8feaa965b",
+  "dirtyAtBuild": true,
+  "contents": {
+    "LICENSES": {
+      "files": 4,
+      "bytes": 28490
+    },
+    "NTSDNative_NTSDCore.bundle": {
+      "files": 1520,
+      "bytes": 757705854
+    },
+    "NTSDSDL": {
+      "files": 1,
+      "bytes": 112340632
+    },
+    "OriginalMusic": {
+      "files": 9,
+      "bytes": 116921966
+    },
+    "README.txt": {
+      "files": 1,
+      "bytes": 589
+    },
+    "libSDL3.so.0": {
+      "files": 1,
+      "bytes": 4312472
+    }
+  },
+  "binary": {
+    "NEEDED": [
+      "libSDL3.so.0",
+      "libm.so.6",
+      "libstdc++.so.6",
+      "libgcc_s.so.1",
+      "libc.so.6",
+      "ld-linux-aarch64.so.1"
+    ],
+    "RUNPATH starts with": "$ORIGIN",
+    "swiftRuntime": "static (--static-swift-stdlib)"
+  },
+  "check": {
+    "image": "ntsd-linux-clean:noble = ubuntu:24.04 + X11 libraries, fonts, Xvfb, xdotool; no Swift (test harness)",
+    "ldd": "all resolved",
+    "defaultLaunch": "no --music-dir: packaged music found beside the executable ('packaged ALAC tracks'), font DejaVu Sans Condensed Bold, exit 0, no sdlMusicError",
+    "x11": "linux_x11_smoke.sh against the unpacked package: loaded, matchLaunched, gameplay, progress",
+    "vs": "app_e2e vs scenario equal to the frozen reference; its 1,832 frames identical to the earlier Linux SDL run"
+  },
+  "notes": [
+    "built from 927f319 plus this increment's uncommitted changes (main.swift music fallback, packaging tools); the package is rebuilt from the commit next and its hash compared",
+    "local artefact on X5; publishing it is a separate decision for the user (it contains the original game's data)"
+  ]
+}

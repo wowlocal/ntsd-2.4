@@ -1,0 +1,50 @@
+--- a/Windows.sdk/usr/share/ucrt.modulemap
++++ b/Windows.sdk/usr/share/ucrt.modulemap
+@@ -89,20 +89,16 @@
+       export *
+     }
+ 
+-    module math {
+-      header "math.h"
+-      export *
+-    }
++    // math.h belongs to corecrt.math below: UCRT 10.0.26624 folded
++    // corecrt_math.h into it, and the prebuilt Swift modules expect the math
++    // declarations in corecrt.
+ 
+     module signal {
+       header "signal.h"
+       export *
+     }
+ 
+-    module stdalign {
+-      header "stdalign.h"
+-      export  *
+-    }
++    // stdalign.h is absent from UCRT 10.0.26624 (the one xwin downloads).
+ 
+     module stddef {
+       textual header "stddef.h"
+@@ -126,10 +122,7 @@
+       export *
+     }
+ 
+-    module stdnoreturn {
+-      textual header "stdnoreturn.h"
+-      export *
+-    }
++    // stdnoreturn.h is absent from UCRT 10.0.26624 (the one xwin downloads).
+ 
+     module string {
+       header "string.h"
+@@ -233,8 +226,9 @@
+     export *
+   }
+ 
++  // UCRT 10.0.26624 has no corecrt_math.h; its declarations are in math.h.
+   module math {
+-    header "corecrt_math.h"
++    header "math.h"
+     export *
+   }
+ 

@@ -7,6 +7,12 @@ public struct OriginalApplicationMenuSession {
     public typealias Loop = OriginalApplicationMessageLoop
     private static let globalCount = 0xb440, outerStart = 0xb440
     private static let worldStart = 0xbb00, replayStart = 0xb8a8, counterOffset = 0xb580
+    /// The parts `State.full` is held in (CORE_REALTIME B1): globals, the
+    /// outer local, the loop counter, the saved playback, the replay alias, the
+    /// rest of the outer block, World, the tail (key-scan words, host name).
+    /// Production slices and replaces of `full` are exactly one part or lie
+    /// inside one (the network host name at 0xc2d8, catalog global stores).
+    static let partStarts = [0, 0xb440, 0xb580, 0xb588, 0xb8a8, 0xb8b0, 0xbb00, 0xc2d8]
 
     public enum Boundary: Error, Equatable {
         case dependency(String)
@@ -39,7 +45,11 @@ public struct OriginalApplicationMenuSession {
                     front: OriginalFrontMenuResources, frontSurfaces: [UInt32:UInt32],
                     earlyScreen: OriginalFrontScreenPrelude, libraryText: OriginalLibSurfaceText,
                     random: OriginalCRTRandom, screenBody: OriginalFrontScreenBody.StartupResult?) throws {
-            self.full = full; self.memory = memory; self.front = front
+            // Held in parts (B1): the same contents; slices and replaces at a
+            // part's extent then share that part's buffers.
+            self.full = full.byteCount == OriginalApplicationDispatchEntry.globalSize
+                ? full.partitioned(at: OriginalApplicationMenuSession.partStarts) : full
+            self.memory = memory; self.front = front
             self.earlyScreen = earlyScreen; self.libraryText = libraryText
             self.random = random; self.screenBody = screenBody
             try validateAliases()
@@ -50,7 +60,7 @@ public struct OriginalApplicationMenuSession {
             for (bitmaps, surfaces) in [(front.bitmaps,frontSurfaces),(earlyScreen.bitmaps,earlyScreen.surfaces)] {
                 for (pointer, bitmap) in bitmaps {
                     guard pointer != 0, self.memory.allocations[pointer] == nil,
-                          let surface = surfaces[pointer], bitmap.storage.bytes.count == 0x1f50,
+                          let surface = surfaces[pointer], bitmap.storage.byteCount == 0x1f50,
                           try bitmap.storage.integer(at:0,as:UInt32.self) == (surface == 0 ? 0 : 1) else {
                         throw Boundary.bitmapOwnership(pointer)
                     }
@@ -61,31 +71,42 @@ public struct OriginalApplicationMenuSession {
             }
         }
 
+        /// The same state with `full` as one flat record (the reference for tests).
+        func flatFullForTesting() -> State { var state = self; state.full = full.flattened(); return state }
         func validateAliases() throws {
-            guard full.bytes.count == OriginalApplicationDispatchEntry.globalSize,
-                  memory.replayPointers.bytes.count == 8,
+            guard full.byteCount == OriginalApplicationDispatchEntry.globalSize,
+                  memory.replayPointers.byteCount == 8,
                   try Self.slice(full,OriginalApplicationMenuSession.replayStart,8) == memory.replayPointers else {
                 throw OriginalStateError.invalidStorage("Menu replay alias bytes or masks")
             }
         }
         static func slice(_ record: OriginalStateRecord,_ start: Int,_ count: Int) throws -> OriginalStateRecord {
-            guard start >= 0, count >= 0, start <= record.bytes.count-count else {
+            guard start >= 0, count >= 0, start <= record.byteCount-count else {
                 throw OriginalStateError.invalidStorage("Menu record extent")
             }
-            return try .init(bytes:Array(record.bytes[start..<start+count]),defined:Array(record.defined[start..<start+count]))
+            // The same record as copying the arrays, sharing a part's buffers
+            // when the extent is exactly that part (CORE_REALTIME B1).
+            return record.extract(start..<start+count)
         }
         mutating func replace(_ start: Int,_ record: OriginalStateRecord) throws {
-            guard start >= 0, start <= full.bytes.count-record.bytes.count else {
+            guard start >= 0, start <= full.byteCount-record.byteCount else {
                 throw OriginalStateError.invalidStorage("Menu replacement extent")
             }
-            var bytes = full.bytes, mask = full.defined
-            bytes.replaceSubrange(start..<start+record.bytes.count,with:record.bytes)
-            mask.replaceSubrange(start..<start+record.bytes.count,with:record.defined)
-            full = try .init(bytes:bytes,defined:mask)
+            full.overwrite(at:start,with:record)
         }
         fileprivate mutating func mergeAliases(counter: UInt32) throws {
             try replace(OriginalApplicationMenuSession.replayStart,memory.replayPointers)
             try full.write(counter,at:OriginalApplicationMenuSession.counterOffset)
+        }
+        /// The checks `mergeAliases` makes, in its order and with its errors,
+        /// without writing (CORE_REALTIME A0).
+        fileprivate func checkMergeAliases() throws {
+            let start = OriginalApplicationMenuSession.replayStart
+            guard start >= 0, start <= full.byteCount-memory.replayPointers.byteCount else {
+                throw OriginalStateError.invalidStorage("Menu replacement extent")
+            }
+            let offset = OriginalApplicationMenuSession.counterOffset,total = full.byteCount
+            guard offset >= 0, 4 <= total, offset <= total-4 else { throw OriginalStateError.outOfBounds(offset:offset,count:4) }
         }
     }
 
@@ -143,25 +164,93 @@ public struct OriginalApplicationMenuSession {
         public let effects: [Effect]
         public let graphics: [OriginalApplicationGraphics.Command]
     }
+    /// An idle message-loop iteration (no message, the timer not due) as
+    /// `step` would commit it: the loop after it and its effects (CORE_REALTIME A1).
+    struct IdleIteration { let loop: Loop, effects: [Effect] }
+    private struct NotIdle: Error {}
+    private struct ProviderFailure: Error { let error: Error }
+    /// `step`'s message-loop iteration when it is idle: the same loop code and
+    /// requests through `queue`, on a copy. nil when the iteration is anything
+    /// else (a message, the timer due, a failed check); the caller then runs
+    /// `step`, which replays the served requests and raises any error itself.
+    /// Errors of `queue` itself propagate unchanged (CORE_REALTIME A1).
+    func idleIteration(queue: (Loop.Request) throws -> Loop.Response) throws -> IdleIteration? {
+        guard (try? state.validateAliases()) != nil,revision < UInt64.max else { return nil }
+        // On this path the loop reads only the speed flag of `full` and writes
+        // nothing into its context (its requests leave the state alone), so it
+        // runs on an empty context instead of two copies of the State
+        // (CORE_REALTIME A3 L3); the speed is read from the state at the same
+        // point.
+        var loop = self.loop,unit: Void = (),effects: [Effect] = []
+        do {
+            let result = try loop.step(context:&unit,
+                speed:{ _ in try state.full.integer(at:0x2c,as:Int32.self) },
+                target:{ _ in throw NotIdle() },
+                perform:{ request,_ in
+                    switch request.kind {
+                    case .peek,.time,.sleep:break
+                    default:throw NotIdle()
+                    }
+                    let response: Loop.Response
+                    do { response = try queue(request) } catch { throw ProviderFailure(error:error) }
+                    if request.kind == .sleep { effects.append(.sleep(request.arguments[0])) }
+                    return response
+                })
+            guard result == .continued else { return nil }
+            try state.checkMergeAliases()
+        } catch let failure as ProviderFailure { throw failure.error }
+        catch { return nil }
+        return .init(loop:loop,effects:effects)
+    }
+    /// Install an idle iteration as `step` commits it (CORE_REALTIME A1).
+    mutating func commitIdle(_ idle: IdleIteration) {
+        loop = idle.loop
+        // idleIteration ran the merge's checks on this same state.
+        try! state.mergeAliases(counter:loop.counter)
+        revision += 1
+    }
     /// Child-entry evidence only. The tentative timer work in the caller has
     /// not returned. These operations must not be dispatched as committed IO.
     public struct PendingLoading {
-        fileprivate let ownerID: UUID,revision: UInt64
-        // Transfer identity only. Distinguishes separate attempts made from
-        // copies of one committed Session; never enters original game state.
-        private let attemptID = UUID()
-        func isSameAttempt(as other: Self) -> Bool {
-            ownerID == other.ownerID && revision == other.revision && attemptID == other.attemptID
+        /// The values, fixed at creation, in one shared object: a pending
+        /// loading is copied and dropped many times per gameplay tick (Host
+        /// attempts, retained stages, the runtime's loaded cycle), and each
+        /// copy retained and released every reference of its State and staged
+        /// lists (CORE_REALTIME phase 4l, as 4a for PendingInput). Reads borrow
+        /// through `_read`.
+        private final class Storage {
+            let ownerID: UUID,revision: UInt64
+            // This object is the attempt's transfer identity: every attempt
+            // makes one and copies share it, so it distinguishes separate
+            // attempts made from copies of one committed Session without a
+            // random UUID per attempt (which opened /dev/urandom each step on
+            // Android; CORE_REALTIME 4x). Never enters original game state.
+            let state: State,target: UInt32
+            let loopContinuation: Loop.PendingDispatch
+            let stagedEffects: [Effect]
+            let stagedGraphics: [OriginalApplicationGraphics.Command]
+            init(ownerID: UUID,revision: UInt64,state: State,target: UInt32,loopContinuation: Loop.PendingDispatch,
+                 stagedEffects: [Effect],stagedGraphics: [OriginalApplicationGraphics.Command]) {
+                self.ownerID = ownerID;self.revision = revision;self.state = state;self.target = target
+                self.loopContinuation = loopContinuation;self.stagedEffects = stagedEffects;self.stagedGraphics = stagedGraphics
+            }
         }
-        public let state: State, target: UInt32
-        public let loopContinuation: Loop.PendingDispatch
-        public let stagedEffects: [Effect]
-        public let stagedGraphics: [OriginalApplicationGraphics.Command]
+        private let storage: Storage
+        fileprivate var ownerID: UUID { storage.ownerID }
+        fileprivate var revision: UInt64 { storage.revision }
+        func isSameAttempt(as other: Self) -> Bool {
+            ownerID == other.ownerID && revision == other.revision && storage === other.storage
+        }
+        public var state: State { _read { yield storage.state } }
+        public var target: UInt32 { storage.target }
+        public var loopContinuation: Loop.PendingDispatch { _read { yield storage.loopContinuation } }
+        public var stagedEffects: [Effect] { _read { yield storage.stagedEffects } }
+        public var stagedGraphics: [OriginalApplicationGraphics.Command] { _read { yield storage.stagedGraphics } }
         fileprivate init(ownerID: UUID,revision: UInt64,state: State,target: UInt32,
             loopContinuation: Loop.PendingDispatch,stagedEffects: [Effect],
             stagedGraphics: [OriginalApplicationGraphics.Command]) {
-            self.ownerID = ownerID;self.revision = revision;self.state = state;self.target = target
-            self.loopContinuation = loopContinuation;self.stagedEffects = stagedEffects;self.stagedGraphics = stagedGraphics
+            storage = Storage(ownerID:ownerID,revision:revision,state:state,target:target,loopContinuation:loopContinuation,
+                              stagedEffects:stagedEffects,stagedGraphics:stagedGraphics)
         }
         public func makeLoadingSession() throws -> OriginalApplicationLoadingSession {
             try .init(pending:self)
@@ -173,9 +262,28 @@ public struct OriginalApplicationMenuSession {
     private let ownerID = UUID()
     private var revision: UInt64 = 0
     public struct LoadedOwners {
-        public let entry: OriginalApplicationPoolSession.PendingInput
-        public let match: OriginalMatchPreparation,music: OriginalMusicMemory
-        public let resources: OriginalMenuResourceLoading,backgrounds: [UInt32:OriginalLoadedBitmap]
+        /// Fixed values in one shared object: copied with every menu session
+        /// copy (each Host attempt and message-loop iteration) and with the
+        /// loaded cycle's owners (CORE_REALTIME phase 4n, as 4a, 4l and 4m).
+        private final class Storage {
+            let entry: OriginalApplicationPoolSession.PendingInput
+            let match: OriginalMatchPreparation,music: OriginalMusicMemory
+            let resources: OriginalMenuResourceLoading,backgrounds: [UInt32:OriginalLoadedBitmap]
+            init(entry: OriginalApplicationPoolSession.PendingInput,match: OriginalMatchPreparation,music: OriginalMusicMemory,
+                 resources: OriginalMenuResourceLoading,backgrounds: [UInt32:OriginalLoadedBitmap]) {
+                self.entry = entry;self.match = match;self.music = music;self.resources = resources;self.backgrounds = backgrounds
+            }
+        }
+        private let storage: Storage
+        public var entry: OriginalApplicationPoolSession.PendingInput { _read { yield storage.entry } }
+        public var match: OriginalMatchPreparation { _read { yield storage.match } }
+        public var music: OriginalMusicMemory { _read { yield storage.music } }
+        public var resources: OriginalMenuResourceLoading { _read { yield storage.resources } }
+        public var backgrounds: [UInt32:OriginalLoadedBitmap] { _read { yield storage.backgrounds } }
+        init(entry: OriginalApplicationPoolSession.PendingInput,match: OriginalMatchPreparation,music: OriginalMusicMemory,
+             resources: OriginalMenuResourceLoading,backgrounds: [UInt32:OriginalLoadedBitmap]) {
+            storage = Storage(entry:entry,match:match,music:music,resources:resources,backgrounds:backgrounds)
+        }
     }
     public private(set) var loadedOwners: LoadedOwners?
     public private(set) var state: State
@@ -200,6 +308,10 @@ public struct OriginalApplicationMenuSession {
         checkpoint: (Checkpoint,OriginalStateRecord,Int32?) throws -> Void = { _,_,_ in },
         bodyProduced: (OriginalFrontScreenBody.StartupResult) throws -> Void = { _ in },
         beforeCommit: (Loop,State) throws -> Void = { _,_ in },
+        /// false: the caller's `beforeCommit` ignores the state, so the merged
+        /// copy of `full` made for it is skipped (CORE_REALTIME A0); the merge's
+        /// checks still run in the same place.
+        observesCommit: Bool = true,
         initialization: OriginalApplicationBootstrap.MenuInputs? = nil,
         initializationBitmap: ((OriginalApplicationBootstrap.Stage,OriginalBitmapSurfaceLoading.Request) throws -> OriginalBitmapSurfaceLoading.Response)? = nil,
         frontProvider: ((OriginalApplicationBootstrap.Stage,OriginalFrontScreenEvent) throws -> OriginalLibSurfaceText.Response)? = nil,
@@ -222,8 +334,9 @@ public struct OriginalApplicationMenuSession {
         var bitmapInputs = state.bitmapInputs ?? initialization?.bitmapResources.map { OriginalApplicationBitmapInputs(resources:$0) }
         var graphics = state.graphics, graphicsCommands: [OriginalApplicationGraphics.Command] = []
         func emit(_ effect: Effect) throws {
-            if var owner = graphics {
-                let command = try owner.consume(effect,inputs:bitmapInputs);graphics = owner
+            if graphics != nil {
+                // In place: consume is all-or-nothing (CORE_REALTIME phase 4b).
+                let command = try graphics!.consume(effect,inputs:bitmapInputs)
                 if let command { graphicsCommands.append(command);try graphicsObserve(command) }
             }
             effects.append(effect)
@@ -678,7 +791,7 @@ public struct OriginalApplicationMenuSession {
                         var host = try State.slice(owned.full,Self.worldStart+0x7d8,51)
                         // Caller-local bytes from callerSP+14; only this call's body writes are known.
                         var local = try OriginalStateRecord(bytes:[UInt8](repeating:0,count:0x400),defined:[Bool](repeating:false,count:0x400))
-                        if let bodyLocal { for i in 0x14..<bodyLocal.bytes.count where bodyLocal.defined[i] { try local.write(bodyLocal.bytes[i],at:i-0x14) } }
+                        if let bodyLocal { for i in 0x14..<bodyLocal.byteCount where bodyLocal.isDefined(at: i) { try local.write(bodyLocal.byte(at: i),at:i-0x14) } }
                         enum Call { case window(OriginalWindowInput.Request),sleep([UInt32]) }
                         var calls: [Call] = []
                         func box(_ bytes: [UInt8]) throws {
@@ -764,8 +877,10 @@ public struct OriginalApplicationMenuSession {
                     try point(.dispatchReturn,owned.full,result)
                     return .init(result:result)
                 },counterWritten:{ try event(.init("write",[0x458580,4,$0])) },beforeCommit:{ timer,staged,_ in
-                    var coherent = staged; try coherent.mergeAliases(counter:timer.counter)
-                    try beforeCommit(timer,coherent)
+                    if observesCommit {
+                        var coherent = staged; try coherent.mergeAliases(counter:timer.counter)
+                        try beforeCommit(timer,coherent)
+                    } else { try staged.checkMergeAliases(); try beforeCommit(timer,staged) }
                 })
             try next.state.mergeAliases(counter:next.loop.counter)
             next.revision += 1;self = next
@@ -781,8 +896,24 @@ extension OriginalApplicationMenuSession {
     public struct LoadedCommit {
         public let result: Loop.Result
         public let menu: OriginalApplicationLoadedMenuSession.PendingReturn
-        public let operations: [OriginalApplicationLoadedMenuSession.Operation]
+        /// The loop tail's operations, kept apart from the menu's (`menu`'s
+        /// snapshot) so committing does not copy the menu's list
+        /// (CORE_REALTIME tier 3 d2).
+        let tailOperations: [OriginalApplicationLoadedMenuSession.Operation]
         public let graphics: [OriginalApplicationGraphics.Command]
+        /// Every operation in order (the menu's, then the tail's), built anew
+        /// on each read: per-commit readers walk `orderedOperations`.
+        public var operations: [OriginalApplicationLoadedMenuSession.Operation] { menu.snapshot.operations + tailOperations }
+        /// The same order without building the list.
+        public var orderedOperations: FlattenSequence<[[OriginalApplicationLoadedMenuSession.Operation]]> {
+            [menu.snapshot.operations, tailOperations].joined()
+        }
+        /// The same order as two lists, for walking by index without copying
+        /// each operation out (CORE_REALTIME tier 3 e3).
+        public var operationParts: (menu: [OriginalApplicationLoadedMenuSession.Operation],
+                                    tail: [OriginalApplicationLoadedMenuSession.Operation]) {
+            (menu.snapshot.operations, tailOperations)
+        }
     }
     /// Complete the exact suspended iteration once. A different session or any
     /// intervening committed iteration invalidates this child before platform
@@ -791,27 +922,33 @@ extension OriginalApplicationMenuSession {
     public mutating func finishLoadedMenu<Environment>(_ pending: OriginalApplicationLoadedMenuSession.PendingReturn,
         environment: inout Environment,
         perform: (Loop.Request,inout Environment) throws -> Loop.Response,
-        beforeCommit: (Loop,State,inout Environment) throws -> Void = { _,_,_ in }) throws -> LoadedCommit {
+        beforeCommit: (Loop,State,inout Environment) throws -> Void = { _,_,_ in },
+        /// false: the caller's `beforeCommit` ignores the state, so the merged
+        /// copy of `full` made for it is skipped (CORE_REALTIME A0); the merge's
+        /// checks still run in the same place.
+        observesCommit: Bool = true) throws -> LoadedCommit {
         let origin = pending.loading
         guard ownerID == origin.ownerID,revision == origin.revision,revision < UInt64.max else {
             throw Boundary.dependency("Stale or foreign loaded continuation")
         }
         guard pending.exit == .returned,let result = pending.dispatcherResult else { throw Boundary.dependency("Unreturned loaded menu") }
         try pending.snapshot.state.validateAliases()
-        var candidate = environment,staged = pending.snapshot.state,operations = pending.snapshot.operations
+        var candidate = environment,staged = pending.snapshot.state,tail: [OriginalApplicationLoadedMenuSession.Operation] = []
         let complete = try origin.loopContinuation.resume(dispatchResult:result,context:&staged,perform:{ request,_ in
             guard request.kind == .time || request.kind == .sleep else { throw Boundary.dependency("Loaded outer surface recovery") }
             let response = try perform(request,&candidate)
-            operations.append(.loop(request,response));return response
+            tail.append(.loop(request,response));return response
         },beforeCommit:{ timer,context,_ in
-            var coherent = context;try coherent.mergeAliases(counter:timer.counter)
-            try beforeCommit(timer,coherent,&candidate)
+            if observesCommit {
+                var coherent = context;try coherent.mergeAliases(counter:timer.counter)
+                try beforeCommit(timer,coherent,&candidate)
+            } else { try context.checkMergeAliases(); try beforeCommit(timer,context,&candidate) }
         })
         try staged.mergeAliases(counter:complete.loop.counter)
         state = staged;loop = complete.loop;revision += 1;environment = candidate
         loadedOwners = .init(entry:pending.entry.entry,match:pending.snapshot.match,music:pending.snapshot.music,
                              resources:pending.snapshot.resources,backgrounds:pending.snapshot.backgrounds)
-        return .init(result:complete.result,menu:pending,operations:operations,graphics:pending.graphics)
+        return .init(result:complete.result,menu:pending,tailOperations:tail,graphics:pending.graphics)
     }
 }
 

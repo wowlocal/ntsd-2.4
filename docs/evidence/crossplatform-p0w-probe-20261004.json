@@ -1,0 +1,35 @@
+{
+  "study": "docs/research/CROSS_PLATFORM.md",
+  "phase": "P0-W: Swift 6.4 cross-compile to Windows x86_64 from macOS",
+  "date": "2026-10-04",
+  "finding": {
+    "ucrt": "xwin takes the UCRT from the VS manifest's ucrt.msi: 'Universal CRT Headers Libraries and Sources' ProductVersion 10.0.26624 (SHA-256 prefix 54448641eef05831), the same for --manifest-version 16 and 17. Its MSI and 11 CABs contain no corecrt_math.h, corecrt_math_defines.h, stdnoreturn.h, stdalign.h or tgmath.h; its math.h (1,009 lines) includes only corecrt.h and carries the math declarations. xwin did not skip them.",
+    "modulemap": "Swift 6.4.0's Windows.sdk/usr/share/ucrt.modulemap (SHA-256 d704b35b343b9094829bd5b7ff134033c6cdeaf6188d7437f2955de9f842a200) names stdalign.h, stdnoreturn.h and corecrt_math.h, i.e. an older UCRT layout",
+    "licence": "a matching older UCRT would come from a standalone Windows SDK under separate terms; not downloaded"
+  },
+  "solution": {
+    "patch": "tools/crossplatform/windows/ucrt-26624.modulemap.patch removes the three modules in a copy of the SDK (math stays available through math.h, module C.math)",
+    "toolset": "MSVC 14.44.17.14 headers fail as modules (threads.h uses _UCRT_DISABLE_CLANG_WARNINGS from the UCRT; uchar.h then fails); MSVC 14.29.16.10 + Windows SDK 10.0.22621 (winsysroot-vs16 splat) compile",
+    "link": "swiftc passes lld-link no SDK library directories (only relative lib/amd64); -Xlinker -libpath for um/x86_64, ucrt/x86_64 and MSVC lib/x86_64 links. X5 is case-insensitive, so lib name casing is not an issue there",
+    "script": "tools/crossplatform/windows_probe.sh"
+  },
+  "result": {
+    "exe": "probe.exe, PE32+ console x86-64",
+    "run": "CrossOver Wine bottle ntsd-xplat-test (win10_64; test harness), with the Swift 6.4.0 runtime DLLs and MSVC runtime from the installer beside the exe",
+    "output": [
+      "os=windows ptr=8 clong=4",
+      "fmt=000fabff",
+      "regex=[\"12\", \"-3\"]",
+      "double=0.30000000000000004 9223372036854775807"
+    ],
+    "vsMacOS": "identical except line 1 (os=other, clong=8 on macOS: LP64 vs LLP64); Windows stdout uses CRLF line endings",
+    "outputSHA256": "c15eec1af3c802a5d7a02a0260b544866c8ed585c9b9197a320e0c127b09ff6e"
+  },
+  "open": [
+    "SwiftPM cross-builds of the package for Windows (a Swift SDK bundle with these flags)",
+    "LLP64 audit of the C targets (NTSDReplayCodec, CALAC)",
+    "Winsock/Win32 host instead of BSD sockets on Windows",
+    "SDL3 for Windows",
+    "actual Windows hardware"
+  ]
+}

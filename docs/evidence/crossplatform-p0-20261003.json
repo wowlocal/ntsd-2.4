@@ -1,0 +1,43 @@
+{
+  "study": "docs/research/CROSS_PLATFORM.md",
+  "phase": "P0 toolchains (Linux)",
+  "date": "2026-10-03",
+  "source_commit": "c753d7c",
+  "host": "Apple M4 Pro, macOS (Darwin 27.0.0)",
+  "toolchains": {
+    "macos_reference": "Xcode toolchain, Apple Swift 6.4 (swiftlang-6.4.0.34.1), invoked as `xcrun --toolchain XcodeDefault swift` (tools/build-native.sh)",
+    "cross": "swift-6.4.0-RELEASE open-source toolchain, ~/Library/Developer/Toolchains/swift-6.4.0-RELEASE.xctoolchain; pkg SHA-256 8fd03185b98fe27f54a54631c2449decf75d5b466ce8e34abbd414141063c6aa, signed 'Developer ID Installer: Swift Open Source (V9AUD2URP3)', notarized",
+    "path_default": "swiftly swift-6.3.3-RELEASE (unchanged default); fails on this macOS SDK with `unknown argument: '-target-arch-variant'`",
+    "static_linux_sdk": {
+      "id": "swift-6.4.0-RELEASE_static-linux-0.1.0",
+      "url": "https://download.swift.org/swift-6.4.0-release/static-sdk/swift-6.4.0-RELEASE/swift-6.4.0-RELEASE_static-linux-0.1.0.artifactbundle.tar.gz",
+      "checksum": "47d2fd89eebfdf9eb4d536b6710414297f755c17926cdebc4742c08982b40a9e",
+      "checksum_source": "https://www.swift.org/api/v1/install/releases.json"
+    },
+    "removed": "swift-6.3.3-RELEASE_static-linux-0.1.0, installed and removed in this session because two SDKs matching one triple make `--swift-sdk <triple>` ambiguous",
+    "windows": "releases.json lists only installer/Docker images for Windows 6.4.0; no Windows Swift SDK artifact bundle"
+  },
+  "probe": {
+    "source": "tools/crossplatform/probe",
+    "covers": "pointer/CInt/CLong width, String(format:%02x), NSRegularExpression .dotMatchesLineSeparators (pattern from OriginalMovement/OriginalFighter), JSONDecoder, NSLock + DispatchQueue.concurrentPerform, Bundle.module resource copy, contentsOfDirectory, FileManager.enumerator with resource keys, UTF-8 read, Double printing",
+    "harness": "OrbStack docker alpine:3.22; linux/arm64 native, linux/amd64 under Rosetta (test harness, not a Linux host observation)",
+    "outputs_sha256": {
+      "linux aarch64/x86_64, toolchain 6.3.3 and 6.4.0 (all four identical)": "a2d17e08767f6812d35e21bad229bc67f8a7a7a9109ef715c172ac4b072c7c5c",
+      "macos Xcode 6.4": "044c10d69c23fb6ac368937acaee32a3e840361596df44b6f58770ce37934278"
+    },
+    "comparison": "All lines equal to macOS except `os=` and `crypto=` (CryptoKit absent on Linux).",
+    "caveat": "Directory listing order matched because the container read the same APFS directory through the OrbStack mount; ext4 order is untested. Core sites that enumerate directories must be audited for order dependence in P2."
+  },
+  "core_first_build": {
+    "command": "swift build --package-path native --scratch-path /Volumes/X5/ntsd-2.4-research/crossplatform/build-linux-aarch64 --swift-sdk aarch64-swift-linux-musl --target NTSDCore",
+    "result": "exit 1 after 8.7 s",
+    "first_error": "NTSDCore/OriginalApplicationArenaInputs.swift:2:8: error: no such module 'CryptoKit'",
+    "note": "The missing module stops each compile batch, so later errors (e.g. `import Darwin` in OriginalMacStartupClock.swift) are not yet reported.",
+    "log": "/Volumes/X5/ntsd-2.4-research/crossplatform/logs/p0-core-linux-aarch64-debug.log"
+  },
+  "open": [
+    "Windows cross-compilation feasibility (no SDK bundle)",
+    "glibc Linux SDK for the SDL desktop build",
+    "real Linux host observation"
+  ]
+}

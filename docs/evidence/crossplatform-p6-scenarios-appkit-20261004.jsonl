@@ -1,0 +1,10 @@
+{"scenario": "vs", "exit": 0, "seconds": 73.7, "result": "equal", "differs": []}
+{"scenario": "mission", "exit": 0, "seconds": 74.5, "result": "equal", "differs": []}
+{"scenario": "demo", "exit": 0, "seconds": 57.3, "result": "equal", "differs": []}
+{"scenario": "war", "exit": 0, "seconds": 120.8, "result": "equal", "differs": []}
+{"scenario": "playback", "exit": 0, "seconds": 93.7, "result": "differs", "differs": ["milestones", "progress"]}
+{"scenario": "tournament", "exit": 0, "seconds": 105.8, "result": "equal", "differs": []}
+{"scenario": "altenter", "exit": 0, "seconds": 144.4, "result": "equal", "differs": []}
+{"scenario": "tournament-win", "exit": 0, "seconds": 109.9, "result": "equal", "differs": []}
+{"scenario": "team-tournament", "exit": 0, "seconds": 88.4, "result": "equal", "differs": []}
+{"scenario": "joystick", "exit": 0, "seconds": 31.3, "result": "equal", "differs": []}

@@ -1,0 +1,13 @@
+{
+  "study": "docs/research/CROSS_PLATFORM.md",
+  "phase": "P7: Linux SDL on Wayland",
+  "date": "2026-10-04",
+  "harness": "ntsd-linux-runtime:noble with weston 13 (headless backend, 1280x1024) and the Wayland client libraries; SDL_VIDEO_DRIVER=wayland, SDL_AUDIO_DRIVER=dummy; tools/crossplatform/linux_wayland_check.py",
+  "sdlDrivers": "NTSDSDL now reports the drivers SDL chose as an sdlDrivers event at launch; the check requires video=wayland",
+  "finding": "first run: state equal to the reference but every frame different: the whole scene was drawn shifted by (243,237), the centred client origin on 1280x1024. Wayland exposes no window positions (SDL reports 0,0) and the game offsets its drawing by the difference from where it asked the window to be",
+  "fix": "SDLWindowHost keeps the position it placed each window at and reports it under Wayland (or when SDL_GetWindowPosition fails)",
+  "result": "vs scenario equal; all 1,832 frames identical to the Linux SDL (offscreen) matrix run; drivers wayland/dummy",
+  "open": [
+    "a real Wayland desktop (GNOME, KDE) with input and audio"
+  ]
+}

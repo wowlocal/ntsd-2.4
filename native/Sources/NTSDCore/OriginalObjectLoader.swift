@@ -26,7 +26,7 @@ public struct OriginalLoadedBitmap: Equatable, Sendable {
     }
 
     static func checkedConstruction(_ bitmap: Self, path: String, optional: Bool) throws -> Self {
-        guard bitmap.input.path == path, bitmap.optional == optional, bitmap.storage.bytes.count == 0x1f50,
+        guard bitmap.input.path == path, bitmap.optional == optional, bitmap.storage.byteCount == 0x1f50,
               try bitmap.storage.integer(at: 0, as: UInt32.self) <= 1 else {
             throw OriginalStateError.invalidStorage("Loader bitmap constructor binding")
         }

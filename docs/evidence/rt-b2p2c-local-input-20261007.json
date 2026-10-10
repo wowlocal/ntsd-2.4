@@ -1,0 +1,87 @@
+{
+ "study": "docs/research/CORE_REALTIME.md",
+ "phase": "B2 P2c (local input in place)",
+ "date": "2026-10-07",
+ "design": "docs/research/CORE_REALTIME_B2.md (P2, the loaded entry chain's last sub-step)",
+ "profile_before": "phone DWARF profile rtb2p2b-dwarf: OriginalLoadedMatchEntry.run 8.37% inclusive, of which OriginalMatchPreparation.localInput 4.91% (the AI/object children 3.52%, the actors array's copy-on-write _consumeAndCreateNew 0.55%, initializeWithCopy of 400 records 0.23%); beginLocalInput copied the entry's candidate and localInput copied it again",
+ "change": "internal beginLocalInputInPlace and localInputInPlace hold the old bodies on self and the inout commands; the public beginLocalInput and localInput copy, call them and assign back; OriginalLoadedMatchEntry.run calls beginLocalInputInPlace on its candidate, so the AI/object children receive that candidate",
+ "phone": {
+  "before": [
+   {
+    "label": "rtb2p2b-run1",
+    "runSeconds": 300,
+    "peakResidentMB": 1496,
+    "ticksPerSecond": 25.82,
+    "busySeconds": 198.79,
+    "bodies": 1800,
+    "completeMsPerTick": 14.8,
+    "partAssembliesPerTick": 0.0,
+    "menuMsPerStep": 0.83,
+    "menuStepsPerTick": 4.12,
+    "mainCpuShare": 0.517,
+    "renderCpuShare": 0.423,
+    "mainMsPerTick": 20.0,
+    "renderMsPerTick": 16.4
+   },
+   {
+    "label": "rtb2p2b-run2",
+    "runSeconds": 305,
+    "peakResidentMB": 1313,
+    "ticksPerSecond": 25.88,
+    "busySeconds": 198.62,
+    "bodies": 1800,
+    "completeMsPerTick": 14.7,
+    "partAssembliesPerTick": 0.0,
+    "menuMsPerStep": 0.82,
+    "menuStepsPerTick": 4.12,
+    "mainCpuShare": 0.517,
+    "renderCpuShare": 0.403,
+    "mainMsPerTick": 20.0,
+    "renderMsPerTick": 15.6
+   }
+  ],
+  "after": [
+   {
+    "label": "rtb2p2c-run1",
+    "runSeconds": 300,
+    "peakResidentMB": 1298,
+    "ticksPerSecond": 25.89,
+    "busySeconds": 198.63,
+    "bodies": 1800,
+    "completeMsPerTick": 14.7,
+    "partAssembliesPerTick": 0.0,
+    "menuMsPerStep": 0.83,
+    "menuStepsPerTick": 4.12,
+    "mainCpuShare": 0.519,
+    "renderCpuShare": 0.403,
+    "mainMsPerTick": 20.0,
+    "renderMsPerTick": 15.5
+   },
+   {
+    "label": "rtb2p2c-run2",
+    "runSeconds": 300,
+    "peakResidentMB": 1092,
+    "ticksPerSecond": 25.89,
+    "busySeconds": 199.2,
+    "bodies": 1800,
+    "completeMsPerTick": 14.7,
+    "partAssembliesPerTick": 0.0,
+    "menuMsPerStep": 0.83,
+    "menuStepsPerTick": 4.12,
+    "mainCpuShare": 0.518,
+    "renderCpuShare": 0.405,
+    "mainMsPerTick": 20.0,
+    "renderMsPerTick": 15.7
+   }
+  ],
+  "result": "main 20.0/20.0 -> 20.0/20.0 ms per tick: no measurable change (the copies removed are below run variation)"
+ },
+ "gates": {
+  "headless": "vs equal, 1,832 frames identical",
+  "scenarios": "all 10 equal, frames identical (rt-b2p2c-all)",
+  "AppKit": "vs and playback equal, 3,960 frames identical to the P2b AppKit run",
+  "emulator": "vs equal, 1,832 frames identical",
+  "tests": "bundle C (native tree 68af721a, the same as this commit's): 74 suites, 205 tests, pass, incl. local input (303 source cases through the wrappers), menu startup (the entry rollback test now also throws at localBeforeDispatch, inside local input after its writes) and every input, replay, round, gameplay and post-draw suite"
+ },
+ "review": "independent read-only review: approve. Equivalent reads, writes, errors and order; the guard's move after the copy is unobservable; discard proof holds from the production child (OriginalMacRuntimeLoading.runCycle rethrows) up through every level; no exclusivity risk (nested functions capture inout self statically; indices evaluate before the write access); other callers use the wrappers. Findings: the new rollback case proves little (addressed by P2d: a direct LoadedMatchEntry rollback test with a child that writes then throws), wrapper rollback untested (P2d), localInputInPlace could be fileprivate (kept internal, alongside beginLocalInputInPlace)."
+}

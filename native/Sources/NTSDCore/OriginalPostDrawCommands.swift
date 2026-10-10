@@ -20,6 +20,19 @@ public enum OriginalPostDrawCommands {
     public static func apply(state: inout OriginalMatchPreparation, requestSlot: inout OriginalRequestSlotWord?,
                              sse2: Bool = false, library: OriginalLibStageCommands? = nil,
                              observe: (OriginalPostDrawCommandEvent) throws -> Void = { _ in }) throws {
+        try run(state: &state, requestSlot: &requestSlot, sse2: sse2, library: library, observe: observe, inPlace: false)
+    }
+    /// `apply` with the caller's world, actors, globals and slot word moved
+    /// into the pass and written back on every path (CORE_REALTIME B2 P4): for
+    /// callers that drop them when this throws.
+    package static func applyInPlace(state: inout OriginalMatchPreparation, requestSlot: inout OriginalRequestSlotWord?,
+                                     sse2: Bool = false, library: OriginalLibStageCommands? = nil,
+                                     observe: (OriginalPostDrawCommandEvent) throws -> Void = { _ in }) throws {
+        try run(state: &state, requestSlot: &requestSlot, sse2: sse2, library: library, observe: observe, inPlace: true)
+    }
+    private static func run(state: inout OriginalMatchPreparation, requestSlot: inout OriginalRequestSlotWord?, sse2: Bool,
+                            library: OriginalLibStageCommands?, observe: (OriginalPostDrawCommandEvent) throws -> Void,
+                            inPlace: Bool) throws {
         let catalog = state.catalog, backgrounds = state.backgrounds
         let installedLibrary = library ?? state.libraryCommands
         guard try state.world.integer(at: 0x7d4, as: UInt32.self) == 0,
@@ -32,7 +45,7 @@ public enum OriginalPostDrawCommands {
                 return catalog.objects[n].frameStorage[Int(f)]
             }, background: { n in
                 guard backgrounds.indices.contains(Int(n)) else { throw error("Background binding") }; return backgrounds[Int(n)]
-            }, observe: observe)
+            }, observe: observe, inPlace: inPlace)
     }
     private static func error(_ text: String) -> OriginalStateError { .invalidStorage("Post-draw commands: "+text) }
     static func apply(world: inout OriginalStateRecord, actors: inout [OriginalStateRecord], globals: inout OriginalStateRecord,
@@ -49,15 +62,26 @@ public enum OriginalPostDrawCommands {
                       requestSlot: inout OriginalRequestSlotWord?, sse2: Bool, objectCount: Int32, library: OriginalLibStageCommands? = nil,
                       header: (Int) throws -> OriginalStateRecord, frame: (Int, Int32) throws -> OriginalStateRecord,
                       background: (Int32) throws -> OriginalStateRecord,
-                      observe: (OriginalPostDrawCommandEvent) throws -> Void = { _ in }) throws {
+                      observe: (OriginalPostDrawCommandEvent) throws -> Void = { _ in }, inPlace: Bool = false) throws {
+        guard inPlace else {
+            // All or nothing: in place on copies, assigned when it completes.
+            var copiedWorld = world, copies = actors, copiedGlobals = globals, copiedSlot = requestSlot
+            try apply(world: &copiedWorld, actors: &copies, globals: &copiedGlobals, requestSlot: &copiedSlot, sse2: sse2, objectCount: objectCount,
+                      library: library, header: header, frame: frame, background: background, observe: observe, inPlace: true)
+            world = copiedWorld; actors = copies; globals = copiedGlobals; requestSlot = copiedSlot
+            return
+        }
         try withoutActuallyEscaping(header) { headers in
             try withoutActuallyEscaping(frame) { frames in
                 try withoutActuallyEscaping(background) { backgrounds in
                     try withoutActuallyEscaping(observe) { observer in
-                        var body = Body(world: world, actors: actors, globals: globals, requestSlot: requestSlot,
+                        // The caller's records, moved into the body and written back
+                        // on every path (CORE_REALTIME B2 P4).
+                        var body = Body(world: inPlaceTake(&world, leaving: .vacant), actors: inPlaceTake(&actors, leaving: []),
+                            globals: inPlaceTake(&globals, leaving: .vacant), requestSlot: requestSlot,
                             sse2: sse2, objectCount: objectCount, library: library, header: headers, frame: frames, background: backgrounds, observe: observer)
+                        defer { world = body.world; actors = body.actors; globals = body.globals; requestSlot = body.requestSlot }
                         try body.run()
-                        world = body.world; actors = body.actors; globals = body.globals; requestSlot = body.requestSlot
                     }
                 }
             }
@@ -83,7 +107,7 @@ public enum OriginalPostDrawCommands {
         func h(_ actor: Int, _ offset: Int) throws -> Int32 { try header(object(actor)).integer(at: offset, as: Int32.self) }
         mutating func put(_ actor: Int, _ offset: Int, _ value: Int32) throws { try actors[actor].write(value, at: offset) }
         mutating func draw(_ stream: Int32, _ range: Int32) throws -> Int32 {
-            var random = OriginalRandom(table: try (0..<3000).map { try globals.integer(at: 0x44ff90-0x44d000+$0, as: UInt8.self) },
+            var random = OriginalRandom(table: try OriginalRandom.table(globals, at: 0x44ff90-0x44d000),
                 index: Int(try global(0x450bcc)), counter: Int(try global(0x450c34)), source: "post-draw commands", sourceSHA256: "")
             try random.validate(); let result = Int32(random.next(Int(range)))
             try globals.write(Int32(random.index), at: 0x450bcc-0x44d000)

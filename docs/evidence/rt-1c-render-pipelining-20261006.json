@@ -1,0 +1,144 @@
+{
+ "study": "docs/research/CORE_REALTIME.md",
+ "phase": "1c (render pipelining)",
+ "date": "2026-10-06",
+ "design": "docs/research/CORE_REALTIME_RENDER.md (constraints, two-phase design, As built)",
+ "change": "During OriginalMacRuntimeLoading.replay of a committed gameplay batch, on hosts that present concurrently (headless, Android), front fill/copy/flip validate and change metadata on the main thread and queue their pixel work, crop and present on one serial render thread (RenderExecutor); closures hold only Storage objects and values (CopyPlan). At most one batch is in flight (replay flushes first); every other display entry point, window observation, capture and exit flushes; a failed present check applies the pixels first and throws at the same draw. AppKit, iOS and SDL stay synchronous; --synchronous-render turns it off. Android keeps frame, surface and geometry in a locked target; touches map with the window and size recorded on the main thread.",
+ "phone": {
+  "baseline": "phase 2b (R3): 11.21 / 11.20 ticks/s, alternating runs",
+  "after": [
+   {
+    "label": "rt1c-run1",
+    "serial": "R58R36F7VFD",
+    "runSeconds": 406,
+    "peakResidentMB": 1230,
+    "ticksPerSecond": 11.94,
+    "busySeconds": 269.98,
+    "bodies": 1800
+   },
+   {
+    "label": "rt1c-run2",
+    "serial": "R58R36F7VFD",
+    "runSeconds": 405,
+    "peakResidentMB": 1350,
+    "ticksPerSecond": 11.92,
+    "busySeconds": 270.11,
+    "bodies": 1800
+   }
+  ],
+  "result": "11.94 / 11.92 ticks/s (+6.5% over phase 2b); game-thread busy seconds 284-285 -> 270",
+  "note": "apks/rt3-1c-b.apk (the committed tree). rt3-run1 by another session on this machine, the other three by this loop; the phone's storage is nearly full, so installs fell back to trimming app caches and `pm uninstall -k` (tools/crossplatform/android_speed.py)."
+ },
+ "mac": {
+  "rows": [
+   {
+    "label": "rt3",
+    "round": 0,
+    "exit": 0,
+    "ticksPerSecond": 38.18,
+    "busySeconds": 11.99,
+    "bodies": 1800
+   },
+   {
+    "label": "rt1c",
+    "round": 0,
+    "exit": 0,
+    "ticksPerSecond": 38.44,
+    "busySeconds": 11.77,
+    "bodies": 1800
+   },
+   {
+    "label": "rt3",
+    "round": 1,
+    "exit": 0,
+    "ticksPerSecond": 40.27,
+    "busySeconds": 11.18,
+    "bodies": 1800
+   },
+   {
+    "label": "rt1c",
+    "round": 1,
+    "exit": 0,
+    "ticksPerSecond": 40.67,
+    "busySeconds": 10.47,
+    "bodies": 1800
+   },
+   {
+    "label": "rt3",
+    "round": 2,
+    "exit": 0,
+    "ticksPerSecond": 40.19,
+    "busySeconds": 11.18,
+    "bodies": 1800
+   },
+   {
+    "label": "rt1c",
+    "round": 2,
+    "exit": 0,
+    "ticksPerSecond": 40.75,
+    "busySeconds": 10.49,
+    "bodies": 1800
+   }
+  ],
+  "result": "busy seconds median 11.18 (R3, 5f7e2a55) -> 10.49 (1c, a61d9f6c): -6.2%; ticks/s at the paced rate"
+ },
+ "emulator": {
+  "rows": [
+   {
+    "label": "emu-rt3",
+    "serial": "emulator-5554",
+    "runSeconds": 81,
+    "peakResidentMB": 1702,
+    "ticksPerSecond": 36.31,
+    "busySeconds": 16,
+    "bodies": 1800
+   },
+   {
+    "label": "emu-rt3-1c-b-run1",
+    "serial": "emulator-5554",
+    "runSeconds": 76,
+    "peakResidentMB": 1703,
+    "ticksPerSecond": 38.69,
+    "busySeconds": 14,
+    "bodies": 1800
+   },
+   {
+    "label": "emu-rt3-run2",
+    "serial": "emulator-5554",
+    "runSeconds": 76,
+    "peakResidentMB": 1705,
+    "ticksPerSecond": 37.51,
+    "busySeconds": 16,
+    "bodies": 1800
+   },
+   {
+    "label": "emu-rt3-1c-b-run2",
+    "serial": "emulator-5554",
+    "runSeconds": 76,
+    "peakResidentMB": 1705,
+    "ticksPerSecond": 38.94,
+    "busySeconds": 14,
+    "bodies": 1800
+   },
+   {
+    "label": "emu-rt3-run3",
+    "serial": "emulator-5554",
+    "runSeconds": 76,
+    "peakResidentMB": 1704,
+    "ticksPerSecond": 37.58,
+    "busySeconds": 15,
+    "bodies": 1800
+   }
+  ],
+  "result": "busy seconds 16/16/15 (R3) -> 14/14 (1c), at the paced rate ~38-39 ticks/s; vs equal and 1,832 frames identical to the earlier Android app run (APK rt3-1c-b)",
+  "profile": "emu-rt3-1c-profile (pre-review build): render thread 36.4% of samples (copy loop, emulator window transfer), main thread 62.8%: gameplay session 32.6%, observed iteration 18.4%, loaded cycle 12.7%, replay 8.2%, display perform 6.5% self (per-pixel blt colour fill: phase 1d)"
+ },
+ "gates": {
+  "headless": "vs equal and 1,832 frames identical (frozen a61d9f6c, with digests: every body flushes); all 10 scenarios equal with digests and 1,832 frames identical; all 10 equal with full overlap (NTSD_NO_FRAME_DIGESTS=1; 300-body frames identical). The pre-review binary e491f430 also passed all 10",
+  "ThreadSanitizer": "headless vs under -sanitize=thread, with digests and with full overlap: 0 warnings, 6 progress events each (pre-review build also 0)",
+  "AppKit": "vs and playback equal (frozen app with the fixes); 3,960 frames identical to the R3 AppKit run",
+  "Core suites": "release test build of native diff 718cdd99 (the committed content): MacDisplayBackend, MacBitmapBackend, MacFrontRaster, MacDisplayColor, ObservedGraphics, ObservedBitmap, ObservedIteration, MacAudioBackend, MacRuntimeLoading, MacRuntimeMenu, MacWindowBackend, MacWindowGeometry and MacLoadingAudio (3,001 s): 13 suites, 0 failures. A run of MacLoadingAudio on the pre-review bundle was stopped as superseded (logs/rt1c-OriginalMacLoadingAudioTests.log)",
+  "Android": "APK built from the same tree; emulator vs equal and frames identical"
+ },
+ "review": "independent read-only review: OK on ordering, pixels, errors, races and flush coverage; four low issues fixed (copy closure held surfaces -> CopyPlan; host presenter failures deferred -> non-throwing presenter; no flush before exit -> flushBeforeExit at every terminate/exit and in stop; Android touch mapping read the render-thread frame size -> shownSize set on the main thread); re-review of the fixes: OK, two nits fixed (stale comment, unused getter)"
+}

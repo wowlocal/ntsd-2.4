@@ -56,7 +56,7 @@ public struct OriginalFrameLoader {
         var result = OriginalFrameRecord(number: index)
         result.words = ["0": Int32(try record.integer(at: 0, as: UInt8.self))]
         for offset in stride(from: 4, to: 0x178, by: 4) where offset != 0x130 && offset != 0x134 && !(0x15c..<0x174).contains(offset) {
-            if record.defined[offset..<(offset+4)].allSatisfy({ $0 }) {
+            if record.allDefined(in: offset..<(offset+4)) {
                 result.words[String(offset)] = try record.integer(at: offset, as: Int32.self)
             }
         }

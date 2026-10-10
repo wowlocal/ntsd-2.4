@@ -1,0 +1,12 @@
+{
+  "study": "docs/research/CROSS_PLATFORM.md",
+  "phase": "P8: iPad on the user's device",
+  "date": "2026-10-05",
+  "observation": "user report (2026-10-05): they downloaded NTSD-iPad-edccfde.ipa (built at edccfde: cursor reported from the last touch, OriginalRuntimeTouchMouse, cancelled presses released), installed it from another Mac on their iPad Pro 11-inch (M4) and the keyboard input worked ('taps on the keyboard worked')",
+  "kind": "actual device observation reported by the user; not instrumented, no event log or frames collected",
+  "server": "the temporary LAN HTTP server (192.168.0.50:8799) was stopped after the user confirmed the download",
+  "open": [
+    "touch and audio on the device not reported separately",
+    "no scripted scenario run on the device"
+  ]
+}

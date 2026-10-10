@@ -1,0 +1,52 @@
+{
+  "study": "docs/research/CROSS_PLATFORM.md",
+  "phase": "P6 groundwork: headless session host",
+  "date": "2026-10-04",
+  "scenario": "app_e2e 'vs' (computer VS, Naruto/Sasuke, District, Summary, Jump): tools/app_e2e_computer_vs.script + '9000 key 74; 9100 capture …; 9200 exit'",
+  "arguments": "--original --mute-music --mute-sounds --no-network --overlay DIR --virtual-clock 123456789 8 --script-clock gameplay --body-captures DIR --script …, TZ=Etc/GMT-1 (same as app_e2e plus --no-network)",
+  "host": "NTSDHeadless: offscreen windows (screen 3008x1692, caption 32, centred), framebuffer PNG captures, silent music on the virtual clock with manifest durations (equal to AVAudioPlayer.duration for all 8 tracks), no sound output, no sockets, blank TextOutA masks (declared stand-in)",
+  "runs": {
+    "macOS": {
+      "build": "debug, Xcode toolchain",
+      "seconds": 882,
+      "exit": 0
+    },
+    "linux": {
+      "build": "release, cross-compiled static aarch64-swift-linux-musl, run in swift:6.4.0-noble on OrbStack (test harness)",
+      "seconds": 95,
+      "exit": 0
+    }
+  },
+  "comparisonWithFrozenReference": {
+    "tool": "tools/crossplatform/compare_headless.py (app_e2e summarize/compare, capture hashes excluded)",
+    "reference": "tools/app_e2e_reference.json",
+    "macOS": "equal: exitCode, boundary, milestones (6), progress (6), overlayFiles",
+    "linux": "equal: exitCode, boundary, milestones (6), progress (6), overlayFiles"
+  },
+  "linuxVsMacFrames": {
+    "identical": true,
+    "sha256": {
+      "b000300.png": "c663e691b448a9bc8677765a67f37857752892ea4635d62bdb2978dcb38dc15f",
+      "b000600.png": "7ce0d274f19a4c54699ece29c6c30e4df03532531ec2b0e27c398c36e757756e",
+      "b000900.png": "d22caebb3d3d822913b8240d86805d52ef7ff3152c75a0082f925a71fe44e087",
+      "b001200.png": "978b8e5cf9c2d112204e9a78479a9230dbffe8d9b9bb76978291830da7575839",
+      "b001500.png": "6c44715d721658c4b3ea853c5fa90a6c43e619fe078b0eb27a6f10a0e2308f8d",
+      "b001800.png": "accc08eb5b744466b87613d33bb531a9e183a60acda755c418b20a8f2003ea09",
+      "selection.png": "256f285add8e51eda364dc73bdab08028dd1713d02de9224bfb2dfac9186e810"
+    }
+  },
+  "match": {
+    "gameplayBodies": 1826,
+    "cycles": 2291,
+    "iterations": 7186,
+    "replay": "recording\\\\20260101_010000_VS.lfr 11044 bytes"
+  },
+  "meaning": "The whole scripted VS match runs on Linux with the same game state, counters, music events and replay file as the macOS AppKit app's frozen reference, and every captured framebuffer is byte-identical between Linux and macOS headless runs. Frames are not compared with AppKit window renders (scaling, and text is not rasterised headless yet).",
+  "open": [
+    "portable glyph rasteriser (needs a user decision on fonts for Linux/Windows)",
+    "SDL3 interactive host",
+    "other e2e scenarios headless",
+    "x86_64",
+    "real Linux host"
+  ]
+}

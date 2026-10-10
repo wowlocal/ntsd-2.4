@@ -1,0 +1,17 @@
+{
+  "study": "docs/research/CROSS_PLATFORM.md",
+  "phase": "P7 Windows: ONLINE GAME through real Winsock",
+  "date": "2026-10-04",
+  "adapter": "native/Sources/NTSDRuntime/OriginalWindowsWinsock.swift (Windows only): OriginalRuntimeSockets over WinSDK Winsock 2 with the BSD adapter's declared contract (handles 0x100 step 4, the same WSADATA bytes, blocking until WSAAsyncSelect, FD_ACCEPT/FD_READ one delivery per arm re-armed by accept/recv, FD_CLOSE once, notifications on the main queue). Readiness: a watcher thread with WSAPoll (POLLRDNORM), then the same peek-based decision as the BSD adapter; the runtime has no real window for WSAAsyncSelect. Errors: the stack's WSAGetLastError values. Own host name: GetAdaptersAddresses' up, non-loopback IPv4 addresses. bind without SO_REUSEADDR (on Windows it would let a second process take an active listener's port, unlike BSD; the client's own bind of 12345 must fail as on macOS)",
+  "wiring": "NTSDSDL uses OriginalWindowsWinsock on Windows and no longer requires --no-network; the exe imports WS2_32.dll and IPHLPAPI.DLL",
+  "probe": {
+    "tool": "tools/crossplatform/pair_probe.py --wine (the retained probe's scripts, names, seeds and assertions; listener seen with lsof on the Mac, since Wine maps Windows sockets to host sockets)",
+    "result": "PASS between two NTSDSDL.exe processes in the CrossOver bottle ntsd-xplat-test: roles 2/1, world 2, selectors 2/4, 127.0.0.1, 9 notification / 11 client requests, seats, names, identical 3001-byte RNG",
+    "rngSHA256": "5352f941c619060669587370c1974685877d4899a6ad0d1b165f54ecd4aa89c7 (equal to the Linux, macOS SDL and AppKit pairs and to the retained 2026-10-02 run)"
+  },
+  "harness": "Wine is a test harness; Winsock behaviour on actual Windows (firewall prompts, adapters) stays open",
+  "open": [
+    "actual Windows",
+    "Windows to macOS/Linux across machines"
+  ]
+}

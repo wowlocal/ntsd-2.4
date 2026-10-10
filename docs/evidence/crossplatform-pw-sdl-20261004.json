@@ -1,0 +1,30 @@
+{
+  "study": "docs/research/CROSS_PLATFORM.md",
+  "phase": "P7 Windows: the SDL build on Windows",
+  "date": "2026-10-04",
+  "sdl3": {
+    "source": "https://github.com/libsdl-org/SDL/releases/download/release-3.4.16/SDL3-devel-3.4.16-VC.zip",
+    "sha256": "1a784cb2a5c64d56fe7a62090fe9d242d9865f235e4ea9678f1a6ba4e693e7de",
+    "licence": "zlib",
+    "prefix": "X5 windows-deps/sdl3/install-x86_64 (include/, lib/SDL3.lib, bin/SDL3.dll from lib/x64)"
+  },
+  "build": "NTSD_PORTABLE=1 NTSD_SDL=1 NTSD_SDL_PREFIX=<prefix> swift build --build-system native --swift-sdk ntsd-6.4.0-windows-x86_64 -c release --product NTSDSDL -> NTSDSDL.exe (40 MB)",
+  "fixes": [
+    "Package.swift: the rpath linker flags only on macOS/Linux (lld-link has none; SDL3.dll sits beside the exe)",
+    "SDL_Scancode and SDL_EventType raw values are signed with MSVC: converted with truncatingIfNeeded",
+    "make_windows_sdk.py: C/C++ with -fms-runtime-lib=dll; clang's default /MT failed lld-link's RuntimeLibrary check against Swift's /MD objects (CALAC)",
+    "sockets: OriginalMacWinsock is BSD-only; NTSDSDL on Windows requires --no-network until a real-Winsock adapter exists"
+  ],
+  "text": "SDLGlyphs.GDIText: TextOutA of the game's bytes with the stock SYSTEM_FONT into a 32-bpp top-down DIB, extent from GetTextExtentPoint32A, 4-px margin, the same mask contract; on real Windows this is the original's own font (user decision 2026-10-01: original first). Under Wine it is Wine's substitute font (declared)",
+  "harness": "CrossOver bottle ntsd-xplat-test; SDL_VIDEO_DRIVER=offscreen, SDL_AUDIO_DRIVER=dummy via NTSD_WINE_ENV; run directory with NTSDSDL.exe, SDL3.dll, resources and the Swift/MSVC runtime DLLs",
+  "results": {
+    "scenarios": "9/10 equal to the frozen AppKit references; playback as on main",
+    "textFrames": "compare_text_frames.py vs AppKit (CoreText) with the Linux headless run as text-free baseline: 15,909 frames, 9,211 with text and 6,698 without on both, 0 disagreements"
+  },
+  "open": [
+    "a real-Winsock adapter for ONLINE GAME",
+    "a Windows package (zip)",
+    "actual Windows hardware (the original SYSTEM_FONT, audio devices, input)",
+    "Windows arm64"
+  ]
+}

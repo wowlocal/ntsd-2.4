@@ -68,13 +68,17 @@ public enum OriginalGameplayBody {
         write: ([UInt8]) throws -> Int32, close: () throws -> Int32,
         soundRequest: OriginalQueuedSound.Request,
         music: OriginalMusicPlayback.Request = { _ in throw OriginalStateError.invalidStorage("Gameplay music request provider") },
+        /// false: nobody observes the drawing's read, clip, draw and rectangle
+        /// events, so they are not built (CORE_REALTIME 4d). Every other event,
+        /// value and error is the same.
+        detail: Bool = true,
         observe: (Event) throws -> Void = { _ in },
         checkpoint: (Stage, OriginalMatchPreparation, OriginalInputControlContext, OriginalCRTRandom) throws -> Void = { _,_,_,_ in },
         ownedCheckpoint: (Stage, OriginalMatchPreparation, OriginalInputControlContext, OriginalCRTRandom, Library?) throws -> Void = { _,_,_,_,_ in }) throws -> Library? {
         guard round.continuation == .gameplay else {
             throw OriginalStateError.invalidStorage("Gameplay body requires the own gameplay continuation")
         }
-        guard caller.formatter == nil || caller.formatter?.bytes.count == OriginalResultLayout.localSize else {
+        guard caller.formatter == nil || caller.formatter?.byteCount == OriginalResultLayout.localSize else {
             throw OriginalStateError.invalidStorage("Gameplay body caller formatter extent")
         }
         guard (library != nil) == (state.libraryCommands != nil) else {
@@ -89,29 +93,33 @@ public enum OriginalGameplayBody {
             try checkpoint(stage,match,input,crt)
             try ownedCheckpoint(stage,match,input,crt,installed)
         }
-        try OriginalWorldControl.apply(state: &next, bundledLibrary: library != nil, observe: { try observe(.control(slot: $0, $1)) })
+        // Control, physics, links, contacts, hits, cpoints, camera, drawing,
+        // the post-draw impulses, lifecycle and commands, the result recording
+        // and the output run in place on this body's own copy (and its own
+        // context), which it drops when anything throws (CORE_REALTIME B2 P4).
+        try OriginalWorldControl.applyInPlace(state: &next, bundledLibrary: library != nil, observe: { try observe(.control(slot: $0, $1)) })
         try emitCheckpoint(.control, next, owned, random)
         // The hit pass's item word [esp+4c]: only a reserve respawn writes it
         // earlier in this call (APPLICATION_HIT_ITEM_SLOT_PLAN.md).
         var itemSlot: OriginalRequestSlotWord?
-        try OriginalWorldPhysics.apply(state: &next, observe: { try observe(.physics($0)) },
+        try OriginalWorldPhysics.applyInPlace(state: &next, observe: { try observe(.physics($0)) },
             respawned: { itemSlot = .respawn() })
         try emitCheckpoint(.physics, next, owned, random)
-        try OriginalWorldLinks.apply(state: &next, sse2Conversion: sse2, observe: { try observe(.links(.links, $0)) })
+        try OriginalWorldLinks.applyInPlace(state: &next, sse2Conversion: sse2, observe: { try observe(.links(.links, $0)) })
         try emitCheckpoint(.links, next, owned, random)
-        try OriginalWorldContacts.apply(state: &next, bundledLibrary: library != nil, observe: { try observe(.contacts($0)) })
+        try OriginalWorldContacts.apply(state: &next, bundledLibrary: library != nil, observe: { try observe(.contacts($0)) }, inPlace: true)
         try emitCheckpoint(.contacts, next, owned, random)
         // The full-pool item's root4c has one producer in this call, a reserve
         // respawn (above); otherwise it and the incoming cpoint partner have no
         // whole-body native producer, and children retain nil until used.
         if installed != nil {
-            try OriginalLibWorldHits.apply(state:&next,crt:&random,library:&installed!.hits,itemSlot:itemSlot,sse2:sse2,
+            try OriginalLibWorldHits.applyInPlace(state:&next,crt:&random,library:&installed!.hits,itemSlot:itemSlot,sse2:sse2,
                                           observe:{ try observe(.hits($0)) })
         } else {
-            try OriginalWorldHits.apply(state: &next, crt: &random, itemSlot: itemSlot, sse2: sse2, observe: { try observe(.hits($0)) })
+            try OriginalWorldHits.applyInPlace(state: &next, crt: &random, itemSlot: itemSlot, sse2: sse2, observe: { try observe(.hits($0)) })
         }
         try emitCheckpoint(.hits, next, owned, random)
-        try OriginalWorldCPoints.apply(state: &next, sse2Conversion: sse2,
+        try OriginalWorldCPoints.applyInPlace(state: &next, sse2Conversion: sse2,
             observe: { try observe(.links(.attachments, $0)) }, afterStage: { stage, value in
                 let point: Stage
                 switch stage {
@@ -123,14 +131,14 @@ public enum OriginalGameplayBody {
                 try emitCheckpoint(point, value, owned, random)
             })
         let mode = try next.globals.integer(at: 0x451160-0x44d000, as: Int32.self)
-        try OriginalWorldCamera.apply(state: &next, mode: mode, target: target,
+        try OriginalWorldCamera.applyInPlace(state: &next, mode: mode, target: target,
             sse2Conversion: sse2, surface: surface, fillBacking: fillBacking,
-            performFill: performFill, performBlit: performBlit, observe: { try observe(.drawing(.camera, $0)) })
+            performFill: performFill, performBlit: performBlit, detail: detail, observe: { try observe(.drawing(.camera, $0)) })
         try emitCheckpoint(.camera, next, owned, random)
         let phase = try next.globals.integer(at: 0x450bd8-0x44d000, as: Int32.self)
-        try OriginalWorldDrawing.apply(state: &next, target: target, phase: phase,
+        try OriginalWorldDrawing.applyInPlace(state: &next, target: target, phase: phase,
             surface: surface, resourceBitmap: resourceBitmap, performBlit: performBlit,
-            observe: { try observe(.drawing(.drawing, $0)) })
+            detail: detail, observe: { try observe(.drawing(.drawing, $0)) })
         try emitCheckpoint(.drawing, next, owned, random)
         // Mission stage logic (mode1): its callee calls become the gameplay
         // body's own draws, fills, text, sounds and music requests.
@@ -147,7 +155,7 @@ public enum OriginalGameplayBody {
                     let width = try g(0x44d78c), height = try g(0x44d790)
                     let input = OriginalBitmapDrawInput(x: a[0], y: a[1], frame: a[2], colorKey: c.arguments[3], mirrored: c.arguments[4],
                         sourceSurface: source, targetSurface: c.arguments[5], viewportWidth: width, viewportHeight: height)
-                    try OriginalBitmapDrawing.draw(input, bitmap: record, observeRead: { r in
+                    try OriginalBitmapDrawing.draw(input, bitmap: record, detail: detail, observeRead: { r in
                         var e = OriginalFrontScreenEvent("read"); e.read = r; try observe(.drawing(.impulses, e))
                     }, observeClip: { clip in
                         var e = OriginalFrontScreenEvent("clip"); e.clip = clip; try observe(.drawing(.impulses, e))
@@ -192,17 +200,17 @@ public enum OriginalGameplayBody {
                     var label = try OriginalStateRecord(bytes: c.text+[0], defined: [Bool](repeating: true, count: c.text.count+1))
                     try OriginalBitmapFont.draw(.fourPass, text: &label, x: a[0], y: a[1], columns: a[2], lines: a[3], style: a[4],
                         cursor: c.arguments[5], globals: globals, resourceBitmap: resourceBitmap, performBlit: performBlit,
-                        observe: { try observe(.drawing(.impulses, $0)) })
+                        detail: detail, observe: { try observe(.drawing(.impulses, $0)) })
                 }
             })
             return true
         }
-        try OriginalPostDrawImpulses.apply(state: &next, dcResult: presentation.dcResult, dc: presentation.dc, textRenderer: textRenderer, mission: { try mission(&$0) }, war: { try war(&$0) }, observe: { event in
+        try OriginalPostDrawImpulses.applyInPlace(state: &next, dcResult: presentation.dcResult, dc: presentation.dc, textRenderer: textRenderer, mission: { try mission(&$0) }, war: { try war(&$0) }, observe: { event in
             // This original diagnostic sprintf writes root48c. If full backing
             // is known, retain its own output for the later overlapping users.
             // A nil backing remains unavailable, never filled from a fixture.
             if event.kind == .format, var storage = retained.formatter {
-                guard event.strings.count == 2, event.strings[1].count+1 <= storage.bytes.count-0x40 else {
+                guard event.strings.count == 2, event.strings[1].count+1 <= storage.byteCount-0x40 else {
                     throw OriginalStateError.invalidStorage("Gameplay diagnostic formatter extent")
                 }
                 for (offset, byte) in (event.strings[1]+[0]).enumerated() { try storage.write(byte, at: 0x40+offset) }
@@ -216,17 +224,17 @@ public enum OriginalGameplayBody {
         // nil; these are not seeded or carried between separate match calls.
         // SP+34 is known: 41f2c7 stores −4 − World on every call.
         var scratch = OriginalPostDrawScratch(requestSlot: .initial())
-        let transforms = try OriginalPostDrawLifecycle.apply(state: &next, scratch: &scratch, sse2: sse2, library: installed?.transforms,
+        let transforms = try OriginalPostDrawLifecycle.applyInPlace(state: &next, scratch: &scratch, sse2: sse2, library: installed?.transforms,
             observe: { try observe(.lifecycle($0)) })
         if let transforms { installed!.transforms = transforms }
         try emitCheckpoint(.lifecycle, next, owned, random)
         // SP+34 as the loop left it: 41f2c7's −4 − World or the loop's last writer.
         var spawn = scratch.requestSlot
-        try OriginalPostDrawCommands.apply(state: &next, requestSlot: &spawn, sse2: sse2,
+        try OriginalPostDrawCommands.applyInPlace(state: &next, requestSlot: &spawn, sse2: sse2,
             observe: { try observe(.commands($0)) })
         try emitCheckpoint(.commands, next, owned, random)
         try OriginalWorldHUD.apply(state: &next, surface: surface, resourceBitmap: resourceBitmap,
-            performBlit: performBlit, observe: { try observe(.drawing(.hud, $0)) })
+            performBlit: performBlit, detail: detail, observe: { try observe(.drawing(.hud, $0)) })
         try emitCheckpoint(.hud, next, owned, random)
         var notice: OriginalStateRecord?
         if let storage = retained.formatter {
@@ -241,18 +249,18 @@ public enum OriginalGameplayBody {
                 defined: Array(original.defined[..<0x20])+notice.defined)
         }
         try emitCheckpoint(.notices, next, owned, random)
-        let result = try OriginalResultRecording.apply(state: &next, context: &owned,
+        let result = try OriginalResultRecording.applyInPlace(state: &next, context: &owned,
             stageDefeated: round.stageDefeated, allocate: allocate, processorSignature: processorSignature,
             open: open, write: write, close: close, observe: { try observe(.recording($0)) })
         try emitCheckpoint(.recording, next, owned, random)
         try OriginalResultLayout.apply(state: &next, context: owned, continuation: result.continuation,
             stageDefeated: round.stageDefeated, indicatorTarget: retained.indicatorTarget, local: &retained.formatter,
             dcResult: presentation.dcResult, dc: presentation.dc, surface: surface, resourceBitmap: resourceBitmap,
-            performBlit: performBlit, textRenderer: textRenderer, observe: { try observe(.drawing(.layout, $0)) })
+            performBlit: performBlit, textRenderer: textRenderer, detail: detail, observe: { try observe(.drawing(.layout, $0)) })
         try emitCheckpoint(.layout, next, owned, random)
-        try OriginalGameplayOutput.returnFromDispatcher(world: &next.world, globals: &next.globals,
+        try OriginalGameplayOutput.returnFromDispatcherInPlace(world: &next.world, globals: &next.globals,
             memory: &owned.memory, input: presentation, resourceBitmap: resourceBitmap,
-            performBlit: performBlit, soundRequest: soundRequest, textRenderer: textRenderer, observe: { try observe(.drawing(.output, $0)) })
+            performBlit: performBlit, soundRequest: soundRequest, textRenderer: textRenderer, detail: detail, observe: { try observe(.drawing(.output, $0)) })
         try emitCheckpoint(.output, next, owned, random)
         state = next; context = owned; crt = random; caller = retained
         return installed

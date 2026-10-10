@@ -1,0 +1,13 @@
+{
+  "date": "2026-10-05",
+  "scenario": "app_e2e playback",
+  "symptom": "playback differed on every host since before the cross-platform work (ledger 2026-10-03: 'Recording file may be corrupted' at 74be317 too); matrix 2026-10-05: playback differs on all nine hosts (milestones, progress)",
+  "cause": "tools/app_e2e.py copies downloads/NTSD_2.4_2.0a/NTSD 2.4_2.0a/recording/20260331_012329_VS.lfr, which is tracked in Git LFS; this working tree holds the 130-byte pointer (oid sha256:37d56900c4955b8c31b8266351907562d3343832c037c9ef28b81adf1c0f6742, size 10867), not the recording. The game's loader (OriginalReplayFileInput, 43e620) treats a file under 1000 bytes as unreadable and shows the original 'Loading error!  Recording file may be corrupted!!' alert. 1,959 LFS files in the working tree are pointers; the recording's object is in the local LFS store.",
+  "fix": "recording_bytes() in tools/app_e2e.py: when the file is an LFS pointer, read the object from <git-common-dir>/lfs/objects and check its SHA-256 and size against the pointer. No asset, reference or expected value changes; the working tree is untouched.",
+  "results": {
+    "AppKit app at accefc6 (speed steps 1-2)": "playback equal",
+    "headless with the uncommitted paged-record change (speed step 3)": "playback equal",
+    "other hosts": "not rerun yet (the matrix uses the same harness)"
+  },
+  "side effect noticed and undone": "running git-lfs commands (ls-files/env/smudge) during the investigation installed post-checkout and pre-push hooks into core.hooksPath (.githooks); both untracked files were removed, and the harness reads the store directly so it never runs git-lfs"
+}

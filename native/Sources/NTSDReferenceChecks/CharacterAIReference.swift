@@ -9,6 +9,11 @@ public enum CharacterAIReference {
         public let initial: InitialLoadingReference.Result
         public let cases: Int, records: Int, bytes: Int, random: Int, blocks: Int
         public let owners: [Int32: Int], modes: [Int32: Int]
+        /// Cases rerun with an observer that throws at the first and the last
+        /// event (the all-or-nothing form leaves the state unchanged, the
+        /// in-place form writes every record back) and with a corrupted Object
+        /// binding (the same error from both forms) (CORE_REALTIME B2).
+        public let rollbacks: Int
     }
     private struct Blob: Decodable { let count: Int, deflate: String }
     private struct Record: Decodable { let bytes: String, defined: String }
@@ -35,7 +40,9 @@ public enum CharacterAIReference {
         }
         return try stride(from: 0,to: utf8.count,by: 2).map { try value(utf8[$0])*16+value(utf8[$0+1]) }
     }
-    public static func compare(input: Data, loading: Data, catalog: Data, sounds: Data) throws -> Result {
+    /// `inPlace` runs every case through the in-place form (CORE_REALTIME B2)
+    /// against the same recorded expectations.
+    public static func compare(input: Data, loading: Data, catalog: Data, sounds: Data, inPlace: Bool = false) throws -> Result {
         let c = try JSONDecoder().decode(Corpus.self,from: MatchPreparationReference.unpack(input))
         guard c.exeSHA256 == "3f7ac67c5890ef979ee24a6dae5528056e7f631725c292cf9cb0a928ebeff71c",
               c.objectAddresses.count == 137, Set(c.objectAddresses).count == 137,
@@ -46,7 +53,7 @@ public enum CharacterAIReference {
         }
         let precision: OriginalArithmeticPrecision = c.controlWord == 0x27f ? .bits53 : .bits64
         var blobs: [String:[UInt8]] = [:], stored: [String:OriginalStateRecord] = [:]
-        var bytes = 0, records = 0, random = 0, owners: [Int32:Int] = [:], modes: [Int32:Int] = [:]
+        var bytes = 0, records = 0, random = 0, owners: [Int32:Int] = [:], modes: [Int32:Int] = [:], rollbacks = 0
         let objects = Dictionary(uniqueKeysWithValues: c.objectAddresses.enumerated().map { ($0.element,UInt32($0.offset)) })
         func blob(_ key: String) throws -> [UInt8] {
             if let raw = blobs[key] { return raw }
@@ -94,7 +101,8 @@ public enum CharacterAIReference {
                 modes[item.mode,default: 0] += 1
                 let before = state
                 var events: [OriginalCharacterAIEvent] = []
-                try OriginalCharacterAI.apply(slot: item.slot,mode: item.mode,state: &state,sse2: c.sse2,observe: { events.append($0) })
+                if inPlace { try OriginalCharacterAI.applyInPlace(slot: item.slot,mode: item.mode,state: &state,sse2: c.sse2,observe: { events.append($0) }) }
+                else { try OriginalCharacterAI.apply(slot: item.slot,mode: item.mode,state: &state,sse2: c.sse2,observe: { events.append($0) }) }
                 let draws = events.map { e -> [UInt32] in
                     if case let .random(stream,range,result) = e { return [UInt32(bitPattern: stream),UInt32(bitPattern: range),UInt32(bitPattern: result)] }
                     return []
@@ -103,6 +111,58 @@ public enum CharacterAIReference {
                     throw error(item.label+" RNG calls \(draws) vs \(item.random.map { [$0.stream,$0.range,$0.result] })")
                 }
                 random += draws.count
+                if !events.isEmpty, rollbacks < 20 {
+                    // An observer throwing at the first and at the last event: the
+                    // all-or-nothing form leaves the state unchanged and the
+                    // in-place form writes every record back (CORE_REALTIME B2).
+                    struct Interrupt: Error {}
+                    for stop in Set([0,events.count-1]).sorted() {
+                        var copy = before, seen = 0
+                        let observer: (OriginalCharacterAIEvent) throws -> Void = { _ in
+                            defer { seen += 1 }
+                            if seen == stop { throw Interrupt() }
+                        }
+                        do {
+                            if inPlace { try OriginalCharacterAI.applyInPlace(slot: item.slot,mode: item.mode,state: &copy,sse2: c.sse2,observe: observer) }
+                            else { try OriginalCharacterAI.apply(slot: item.slot,mode: item.mode,state: &copy,sse2: c.sse2,observe: observer) }
+                            throw error(item.label+" observer stop")
+                        } catch is Interrupt {}
+                        if inPlace {
+                            // The observer runs after the pass: written back whole,
+                            // the records equal the completed case's.
+                            guard copy.world == state.world, copy.actors == state.actors, copy.globals == state.globals else {
+                                throw error(item.label+" records after an in-place observer throw")
+                            }
+                        } else {
+                            guard copy.world == before.world, copy.actors == before.actors, copy.globals == before.globals else {
+                                throw error(item.label+" state after an observer throw")
+                            }
+                        }
+                    }
+                    // A corrupted Object binding of the called slot: the same
+                    // error from both forms, the all-or-nothing caller unchanged.
+                    var wrapped = before, placed = before
+                    let bound = Int(try before.world.integer(at: 0x194+item.slot*4,as: UInt32.self))
+                    guard (0..<400).contains(bound) else { throw error("Called slot binding") }
+                    try wrapped.actors[bound].write(UInt32.max,at: 0x368); try placed.actors[bound].write(UInt32.max,at: 0x368)
+                    let corrupted = wrapped
+                    var wrappedError: String?, placedError: String?
+                    do { try OriginalCharacterAI.apply(slot: item.slot,mode: item.mode,state: &wrapped,sse2: c.sse2,observe: { _ in }) } catch let e { wrappedError = "\(e)" }
+                    do { try OriginalCharacterAI.applyInPlace(slot: item.slot,mode: item.mode,state: &placed,sse2: c.sse2,observe: { _ in }) } catch let e { placedError = "\(e)" }
+                    guard wrappedError == placedError, placed.actors.count == 400 else {
+                        throw error(item.label+" corrupted binding \(String(describing: wrappedError)) vs \(String(describing: placedError))")
+                    }
+                    if wrappedError != nil {
+                        guard wrapped.world == corrupted.world, wrapped.actors == corrupted.actors, wrapped.globals == corrupted.globals else {
+                            throw error(item.label+" state after a corrupted binding")
+                        }
+                    } else {
+                        guard wrapped.world == placed.world, wrapped.actors == placed.actors, wrapped.globals == placed.globals else {
+                            throw error(item.label+" forms after a corrupted binding")
+                        }
+                    }
+                    rollbacks += 1
+                }
                 var globals = before.globals
                 guard item.words.count == 9 else { throw error("AI global words") }
                 for (key,value) in item.words {
@@ -129,6 +189,6 @@ public enum CharacterAIReference {
             }
         })
         return .init(initial: initial,cases: c.cases.count,records: records,bytes: bytes,random: random,
-                     blocks: c.blocks.count,owners: owners,modes: modes)
+                     blocks: c.blocks.count,owners: owners,modes: modes,rollbacks: rollbacks)
     }
 }

@@ -1,0 +1,46 @@
+{
+ "study": "docs/research/CORE_REALTIME.md",
+ "phase": "1e (pipelined text)",
+ "date": "2026-10-06",
+ "finding": "A Mac sample of the 1d build (frozen 834fc05d, 20 s during gameplay; scratchpad rt1d-mac-sample.txt) put 467 of 2,347 busy main-thread samples (20%) in kevent_id under RenderExecutor.flush <- performFront <- replay: every text step flushed the render queue, so a batch that draws HUD text waited for its queued pixel work.",
+ "change": "OriginalMacDisplayBackend: the DC steps (acquire, mode, background, colour, release) change the text DC alone and no longer flush. TextOutA (drawText) is split into textPlan (main thread: storage check, the host's glyph mask, the DC's opacity and colours as values), textPixels (static) and bounds. Without pipelining it flushes and runs the old order (pixels, frontTarget, present). Pipelining: a released surface flushes and throws before drawing; empty bounds queue the pixels; frontTarget (rectangle and geometry only) is checked before queuing and a failure flushes, draws and rethrows; then the fill/copy pipeline (a failed present check flushes, draws, rethrows) and the closure draws and delivers the crop. textCell is nonisolated.",
+ "phone": {
+  "baseline": "phase 1d: 12.11 / 12.10 ticks/s",
+  "after": [
+   {
+    "label": "rt1e-run1",
+    "serial": "R58R36F7VFD",
+    "runSeconds": 376,
+    "peakResidentMB": 1337,
+    "ticksPerSecond": 14.22,
+    "busySeconds": 245.72,
+    "bodies": 1800
+   },
+   {
+    "label": "rt1e-run2",
+    "serial": "R58R36F7VFD",
+    "runSeconds": 375,
+    "peakResidentMB": 1281,
+    "ticksPerSecond": 14.18,
+    "busySeconds": 242.93,
+    "bodies": 1800
+   }
+  ],
+  "result": "14.22 / 14.18 ticks/s (+17%); busy seconds 269-272 -> 243-246",
+  "note": "apks/rt1e.apk built from native diff d9e515bb (the committed tree)"
+ },
+ "mac": {
+  "note": "The Mac A/B was not usable this time: other load on the machine (the emulator, a headless Chromium, OrbStack) raised the same binary's CPU time from ~15 s to ~26 s between runs; the rows are kept in rt-speed/mac-ab-1e-*.jsonl and not used."
+ },
+ "emulator": {
+  "result": "vs equal and 1,832 frames identical to the earlier Android app run, whose frames contain FreeType glyphs from body 1 (they differ from the headless reference there), so drawing pipelined text is covered"
+ },
+ "gates": {
+  "headless": "vs equal, 1,832 frames identical (frozen 93d8d0b2, rt-1e); full overlap vs, playback, war equal (rt-1e-overlap). The headless host's glyph mask is empty, so headless covers only the empty-bounds branch",
+  "all 10": "all 10 scenarios equal, 1,832 frames identical (rt-1e-all)",
+  "AppKit": "vs and playback equal; 3,960 frames identical to the 1d AppKit run (rt-1e-appkit)",
+  "ThreadSanitizer": "headless vs with digests and with full overlap: 0 warnings, 6 progress events each",
+  "Core suites": "release test build swiftpm-test-release of native diff d9e515bb (the committed content): the 13 display, window and runtime suites, MacLoadingAudio 3,036 s: 0 failures"
+ },
+ "review": "independent read-only review: no correctness issues. Main-thread pixel readers all flush; the DC steps touch no pixels and the DC state is copied into the plan; error paths equivalent (frontTarget reads no pixels, host call order unchanged); the closure holds Storage and values; serial order kept; the non-pipelined path is the old code. Raised: no unit test exercises pipelined text with glyphs and its failure paths (Android frames cover drawing; the failure paths are covered by reasoning only), a stale design-note line (fixed) and an inexact comment (fixed)."
+}

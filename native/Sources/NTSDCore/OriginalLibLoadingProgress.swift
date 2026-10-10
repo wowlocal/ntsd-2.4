@@ -14,7 +14,7 @@ public enum OriginalLibLoadingProgress {
         store: @escaping (Int,[UInt8]) throws -> Void = { _,_ in },
         checkpoint: (OriginalStateRecord) throws -> Void = { _ in },
         observe: (OriginalFrontScreenEvent) throws -> Void = { _ in }) throws {
-        guard globals.bytes.count == OriginalMatchPreparation.globalSize else { throw OriginalStateError.invalidStorage("Loading globals extent") }
+        guard globals.byteCount == OriginalMatchPreparation.globalSize else { throw OriginalStateError.invalidStorage("Loading globals extent") }
         var state = globals, text = libraryText
         func word(_ p: Int) throws -> UInt32 { try state.integer(at: p-0x44d000,as: UInt32.self) }
         func signed(_ p: Int) throws -> Int32 { Int32(bitPattern: try word(p)) }

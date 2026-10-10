@@ -1,0 +1,40 @@
+{
+ "study": "docs/research/CORE_REALTIME.md",
+ "phase": "4b (graphics consumed in place per emitted draw; CORE_REALTIME_COPIES M4)",
+ "date": "2026-10-06",
+ "change": "OriginalApplicationLoadedMenuSession.Attempt.emit and OriginalApplicationMenuSession.step's emit called consume on a copy of the graphics owner and stored it back; they now call it on the owner in place. consume is all-or-nothing (window, bitmap and front each work on their own copy and assign it on success; the bitmap case's missing-inputs throw comes first), so a throw leaves the owner as the copy did. bitmapInputs is bound before the in-place access (passing it inline would overlap the class property's modify access).",
+ "phone": {
+  "baseline": "phase 4a: 16.01 / 16.04 ticks/s",
+  "after": [
+   {
+    "label": "rt4b-run1",
+    "serial": "R58R36F7VFD",
+    "runSeconds": 359,
+    "peakResidentMB": 1367,
+    "ticksPerSecond": 16.01,
+    "busySeconds": 236.86,
+    "bodies": 1800
+   },
+   {
+    "label": "rt4b-run2",
+    "serial": "R58R36F7VFD",
+    "runSeconds": 354,
+    "peakResidentMB": 1226,
+    "ticksPerSecond": 16.06,
+    "busySeconds": 234.5,
+    "bodies": 1800
+   }
+  ],
+  "result": "16.01 / 16.06 ticks/s: no measurable change. Committed as strictly less work without added complexity (one owner copy, about 14-21 reference-count operations, fewer per draw; the code is no longer).",
+  "note": "apks/rt4b.apk built from native diff ee0263ad"
+ },
+ "emulator": {
+  "result": "vs equal, 1,832 frames identical to the earlier Android app run"
+ },
+ "gates": {
+  "headless": "vs equal, 1,832 frames identical (frozen 0ed0a53e, rt-4b); all 10 scenarios equal, frames identical (rt-4b-all)",
+  "AppKit": "vs and playback equal; 3,960 frames identical to the 4a AppKit run (rt-4b-appkit)",
+  "Core suites": "release test build swiftpm-test-release of native diff ee0263ad against 86d5e5d (2c + 2d + 4a + 4b; the committed 4b content on top of 45f3cdf): 105 suites (the 94-suite set plus every suite using the menu session, loaded menu session or graphics model), 300 tests, 0 failures"
+ },
+ "review": "independent read-only review: OK. consume is all-or-nothing at every throw point (all mutations land on next); the attempt's state and the step's local have no observers and consume runs no callbacks, so nothing re-enters during the in-place access; a graphicsObserve throw leaves the same state as before (the owner was assigned before observing in both versions); binding bitmapInputs first is equivalent and needed."
+}

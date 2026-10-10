@@ -1,0 +1,66 @@
+{
+ "study": "docs/research/CORE_REALTIME.md",
+ "phase": 0,
+ "date": "2026-10-06",
+ "tool": "tools/crossplatform/android_speed.py (debuggable build local.ntsd.port; app_e2e computer-vs script, music/sounds/network off, no frame capture; ticks = gameplay bodies 300->1800 over uptime; optional simpleperf --app profile with inclusive phase shares; restores perf_harden and svc power stayon)",
+ "build": "debug APK 0.1.565, sources = 36edf83 (= c8177d7 code)",
+ "device": "Galaxy A12 R58R36F7VFD (actual device)",
+ "speed": {
+  "label": "baseline-36edf83",
+  "serial": "R58R36F7VFD",
+  "runSeconds": 440,
+  "peakResidentMB": 1330,
+  "ticksPerSecond": 10.07,
+  "busySeconds": 306,
+  "bodies": 1800,
+  "profile": {
+   "front-buffer drawing": 19.7,
+   "gameplay session": 17.3,
+   "gameplay body": 11.4,
+   "loaded cycle": 11.3,
+   "bindings store": 7.4,
+   "Android window drawing": 6.8,
+   "loaded menu attempt": 4.7,
+   "loaded match entry": 4.2,
+   "display perform": 3.1,
+   "bindings read": 2.7,
+   "menu state replace": 1.9,
+   "observed iteration": 1.6
+  }
+ },
+ "profile": {
+  "samples": 24318,
+  "seconds": 30,
+  "inclusive": {
+   "front-buffer drawing": 19.7,
+   "gameplay session": 17.3,
+   "gameplay body": 11.4,
+   "loaded cycle": 11.3,
+   "bindings store": 7.4,
+   "Android window drawing": 6.8,
+   "loaded menu attempt": 4.7,
+   "loaded match entry": 4.2,
+   "display perform": 3.1,
+   "bindings read": 2.7,
+   "menu state replace": 1.9,
+   "observed iteration": 1.6
+  },
+  "self": {
+   "__memcpy": 16.1,
+   "swift_retain": 7.6,
+   "swift_release": 7.0,
+   "$s11NTSDRuntime25OriginalMacDisplayBackendC12performFrontyAC0G6ServedVAC0G8PreparedVKF": 6.4,
+   "$s11NTSDAndroid0A10WindowHostC4drawyys13OpaquePointerVF": 4.4,
+   "$s11NTSDRuntime25OriginalMacDisplayBackendC7performyAC6ServedVAC8PreparedVKF": 3.0,
+   "__aarch64_cas8_rel": 2.6,
+   "__ioctl": 1.9,
+   "$s11NTSDRuntime25OriginalMacDisplayBackendC9KnownMask33_1A245BEFD0E7722E72DA58121456B313LLV03allF0yS": 1.8,
+   "$s8NTSDCore19OriginalStateRecordV7integer2at2asxSi_xmtKs17FixedWidthIntegerRzlFs5UInt8V_Tt1g5": 1.7,
+   "__aarch64_cas8_relax": 1.3,
+   "$s11NTSDRuntime25OriginalMacDisplayBackendC9KnownMask33_1A245BEFD0E7722E72DA58121456B313LLV8setRange": 1.1,
+   "je_free": 1.0,
+   "$s8NTSDCore36OriginalApplicationLoadedMenuSessionV7AttemptC_____________8resumingAEy_xGAA0bc5InputF0": 1.0,
+   "$s8NTSDCore19OriginalStateRecordV7integer2at2asxSi_xmtKs17FixedWidthIntegerRzlFs6UInt32V_Tt1g5": 1.0
+  }
+ }
+}

@@ -8,8 +8,21 @@ public enum OriginalWorldDrawing {
         surface: (Int) throws -> UInt32,
         resourceBitmap: (UInt32) throws -> (OriginalStateRecord,UInt32),
         performBlit: (OriginalBitmapBlit) throws -> Int32,
+        detail: Bool = true,
         observe: (OriginalFrontScreenEvent) throws -> Void = { _ in }) throws {
         var next = state
+        try applyInPlace(state: &next,target: target,phase: phase,surface: surface,resourceBitmap: resourceBitmap,
+                         performBlit: performBlit,detail: detail,observe: observe)
+        state = next
+    }
+    /// `apply` run on the caller's state (CORE_REALTIME B2 P4): for callers
+    /// that drop the state when this throws.
+    package static func applyInPlace(state next: inout OriginalMatchPreparation,target: UInt32,phase: Int32,
+        surface: (Int) throws -> UInt32,
+        resourceBitmap: (UInt32) throws -> (OriginalStateRecord,UInt32),
+        performBlit: (OriginalBitmapBlit) throws -> Int32,
+        detail: Bool = true,
+        observe: (OriginalFrontScreenEvent) throws -> Void = { _ in }) throws {
         let catalog = next.catalog,bitmaps = next.bitmaps,released = next.releasedBitmaps
         guard try next.world.integer(at: 0x7d4,as: UInt32.self) == 0 else { throw error("Catalog binding") }
         try draw(world: next.world,actors: &next.actors,globals: next.globals,backgrounds: next.backgrounds,
@@ -22,8 +35,7 @@ public enum OriginalWorldDrawing {
             },catalogBitmap: { token in
                 guard token != 0,Int(token)-1 < bitmaps.count,!released.contains(Int(token)-1) else { throw error("Bitmap binding") }
                 return try (bitmaps[Int(token)-1].storage,surface(Int(token)-1))
-            },resourceBitmap: resourceBitmap,performBlit: performBlit,observe: observe)
-        state = next
+            },resourceBitmap: resourceBitmap,performBlit: performBlit,detail: detail,observe: observe)
     }
     private static func error(_ detail: String) -> OriginalStateError { .invalidStorage("World drawing: "+detail) }
     static func draw(world: OriginalStateRecord,actors: inout [OriginalStateRecord],globals: OriginalStateRecord,
@@ -32,6 +44,7 @@ public enum OriginalWorldDrawing {
         catalogBitmap: (UInt32) throws -> (OriginalStateRecord,UInt32),
         resourceBitmap: (UInt32) throws -> (OriginalStateRecord,UInt32),
         performBlit: (OriginalBitmapBlit) throws -> Int32,
+        detail: Bool = true,
         observe: (OriginalFrontScreenEvent) throws -> Void) throws {
         func g(_ address: Int) throws -> Int32 { try globals.integer(at: address-0x44d000,as: Int32.self) }
         func index(_ slot: Int) throws -> Int {
@@ -41,12 +54,12 @@ public enum OriginalWorldDrawing {
         func read(_ r: OriginalBitmapDrawRead) throws { var e = OriginalFrontScreenEvent("read");e.read = r;try observe(e) }
         func blit(_ b: OriginalBitmapBlit) throws -> Int32 { var e = OriginalFrontScreenEvent("blit");e.blit = b;try observe(e);return try performBlit(b) }
         func bitmapDraw(_ token: UInt32,_ catalog: Bool,_ x: Int32,_ y: Int32,_ picture: Int32,_ key: UInt32,_ destination: UInt32) throws {
-            try observe(.init("draw",[token,UInt32(bitPattern: x),UInt32(bitPattern: y),UInt32(bitPattern: picture),key,0,destination]))
+            if detail { try observe(.init("draw",[token,UInt32(bitPattern: x),UInt32(bitPattern: y),UInt32(bitPattern: picture),key,0,destination])) }
             guard token != 0 else { throw error("Null bitmap") }
             let (record,surface) = try catalog ? catalogBitmap(token) : resourceBitmap(token)
             let input = try OriginalBitmapDrawInput(x: x,y: y,frame: picture,colorKey: key,mirrored: 0,sourceSurface: surface,targetSurface: destination,
                 viewportWidth: g(0x44d78c),viewportHeight: g(0x44d790))
-            try OriginalBitmapDrawing.draw(input,bitmap: record,observeRead: read,observeClip: { c in
+            try OriginalBitmapDrawing.draw(input,bitmap: record,detail: detail,observeRead: read,observeClip: { c in
                 var e = OriginalFrontScreenEvent("clip");e.clip = c;try observe(e)
             },perform: blit)
         }
@@ -94,12 +107,12 @@ public enum OriginalWorldDrawing {
                     bitmapWord: { token,offset in
                         try observe(.init("width",[token,offset]))
                         let (record,surface) = try catalogBitmap(token)
-                        return try OriginalBitmapDrawing.word(offset,bitmap: record,surface: surface,observe: read)
+                        return try OriginalBitmapDrawing.word(offset,bitmap: record,surface: surface,detail: detail,observe: read)
                     },bitmapDraw: { try bitmapDraw($0,true,$1,$2,$3,$4,$5) },pointDraw: { x,y in
                         let token = UInt32(bitPattern: try g(0x44fd7c)),destination = UInt32(bitPattern: try g(0x455608))
-                        try observe(.init("rectangle",[token,0,20,1,3,UInt32(bitPattern: x),UInt32(bitPattern: y),destination]))
+                        if detail { try observe(.init("rectangle",[token,0,20,1,3,UInt32(bitPattern: x),UInt32(bitPattern: y),destination])) }
                         let (record,surface) = try resourceBitmap(token)
-                        try OriginalRectangleDrawing.draw(bitmap: record,surface: surface,target: destination,sourceX: 0,sourceY: 20,width: 1,height: 3,x: x,y: y,observeRead: read,perform: blit)
+                        try OriginalRectangleDrawing.draw(bitmap: record,surface: surface,target: destination,sourceX: 0,sourceY: 20,width: 1,height: 3,x: x,y: y,detail: detail,observeRead: read,perform: blit)
                     })
             }
             let lives = try i(0x30c)

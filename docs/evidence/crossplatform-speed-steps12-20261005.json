@@ -1,0 +1,57 @@
+{
+  "study": "docs/research/MOBILE_PERFORMANCE.md",
+  "steps": [
+    1,
+    2
+  ],
+  "date": "2026-10-05",
+  "change": {
+    "1": "OriginalMacDisplayBackend.frontKnown returns at once when presentUnknownAsBlack is set; its scan of the whole delivered rectangle (run in validateFront at both prepare and perform of every front Blt/fill) can only throw unknownPixel, which that flag rules out. Every host's runtime sets the flag (OriginalMacRuntimeStartup); unit tests construct the backend without it and still run the scan.",
+    "2": "values/known storage accessors read once before each per-pixel loop (framebuffer, blt, drawText, front fill, front copy) instead of per pixel; nothing inside those loops records a deferred write or swaps storage."
+  },
+  "profile before (macOS sample, 20 s of gameplay, main-thread top of stack)": {
+    "performFront": 1418,
+    "frontCopy": 1066,
+    "memmove": 831,
+    "perform": 261,
+    "framebuffer": 104
+  },
+  "profile after": {
+    "memmove": 968,
+    "performFront": 775,
+    "framebuffer": 89,
+    "perform": 67,
+    "note": "frontCopy gone; memmove is now mostly copy-on-write of state records in the cycle's rollback copies (see probe)"
+  },
+  "speed (gameplay bodies 300->1800, vs script)": {
+    "macOS headless": {
+      "before": "27.0 bodies/s, busy 24.0 s",
+      "after": "30.1 bodies/s, busy 16.4 s (now at the game's own rate)"
+    },
+    "Galaxy A12, no frame capture": {
+      "before": "5.4 bodies/s, busy 454 s",
+      "after": "7.6 bodies/s, busy 339 s"
+    }
+  },
+  "gates": {
+    "macOS app release build": "ok",
+    "headless vs": "equal; 1,832 frames identical to m1-frames-ref",
+    "AppKit vs": "equal",
+    "display backend suites": "7 suites, 35 tests, 0 failures"
+  },
+  "review": {
+    "reviewer": "independent read-only agent",
+    "verdict": "OK: the skipped scan has no side effect other than draining deferred writes earlier, which is unobservable; no trap or throw possible in it with the flag set; flag immutable and set by every host; hoisted pointers cannot dangle or alias; first error thrown is unchanged for every input",
+    "notes": [
+      "no unit test constructs the backend with presentUnknownAsBlack:true, so the early return is exercised by whole-runtime runs only",
+      "the frontCopy closure's rename is not a hoist; harmless since that path now runs only without the flag"
+    ]
+  },
+  "copy-on-write probe (temporary, not committed; headless vs run, all records copied by OriginalStateRecord.write)": {
+    "0x630e18 bytes (replay recording buffer)": "1,659 copies, about one per gameplay cycle: ~21.5 GB of bytes plus definedness",
+    "0x420 bytes (actors)": "2.9 million copies, ~6.2 GB",
+    "0x1f50 bytes": "363,000 copies, ~5.8 GB",
+    "0xb440 bytes (globals)": "28,000 copies, ~2.6 GB",
+    "cause": "rollback copies (var candidate = state ... state = candidate) share the arrays, so the first write per cycle duplicates each written record in full"
+  }
+}

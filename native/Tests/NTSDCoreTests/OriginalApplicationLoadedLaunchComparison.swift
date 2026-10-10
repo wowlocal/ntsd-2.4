@@ -68,9 +68,10 @@ final class OriginalApplicationLoadedLaunchComparison {
         try .init(bytes:state.world.bytes+state.actors.flatMap(\.bytes),defined:state.world.defined+state.actors.flatMap(\.defined))
     }
     func equal(_ actual: OriginalStateRecord,_ expected: OriginalStateRecord,_ label: String) throws {
-        guard actual.bytes.count == expected.bytes.count else { throw M.Stop.unexpected(label+" extent") }
-        if let i = actual.bytes.indices.first(where:{ actual.bytes[$0] != expected.bytes[$0] || actual.defined[$0] != expected.defined[$0] }) {
-            throw M.Stop.unexpected(label+" byte "+String(i,radix:16)+" actual \(actual.bytes[i])/\(actual.defined[i]) expected \(expected.bytes[i])/\(expected.defined[i])")
+        let ab = actual.bytes,ad = actual.defined,eb = expected.bytes,ed = expected.defined
+        guard ab.count == eb.count else { throw M.Stop.unexpected(label+" extent") }
+        if let i = ab.indices.first(where:{ ab[$0] != eb[$0] || ad[$0] != ed[$0] }) {
+            throw M.Stop.unexpected(label+" byte "+String(i,radix:16)+" actual \(ab[i])/\(ad[i]) expected \(eb[i])/\(ed[i])")
         }
     }
     func copy(_ from: OriginalStateRecord,_ range: Range<Int>,into to: inout OriginalStateRecord) throws {
@@ -80,12 +81,13 @@ final class OriginalApplicationLoadedLaunchComparison {
     }
     func delta(_ own: OriginalStateRecord,_ before: OriginalStateRecord,_ after: OriginalStateRecord,
                overwrites: Set<Int> = []) throws -> OriginalStateRecord {
-        var b = own.bytes,m = own.defined
-        for i in b.indices where before.bytes[i] != after.bytes[i] || before.defined[i] != after.defined[i] {
-            guard overwrites.contains(i) || (own.bytes[i] == before.bytes[i] && own.defined[i] == before.defined[i]) else {
+        let ob = own.bytes,od = own.defined,bb = before.bytes,bd = before.defined,xb = after.bytes,xd = after.defined
+        var b = ob,m = od
+        for i in b.indices where bb[i] != xb[i] || bd[i] != xd[i] {
+            guard overwrites.contains(i) || (ob[i] == bb[i] && od[i] == bd[i]) else {
                 throw M.Stop.unexpected("Undeclared changed launch input "+String(i,radix:16))
             }
-            b[i] = after.bytes[i];m[i] = after.defined[i]
+            b[i] = xb[i];m[i] = xd[i]
         }
         return try .init(bytes:b,defined:m)
     }

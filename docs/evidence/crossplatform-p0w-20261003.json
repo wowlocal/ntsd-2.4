@@ -1,0 +1,41 @@
+{
+  "study": "docs/research/CROSS_PLATFORM.md",
+  "phase": "P0-W Windows SDK feasibility (Swift side)",
+  "date": "2026-10-03",
+  "installer": {
+    "url": "https://download.swift.org/swift-6.4.0-release/windows10/swift-6.4.0-RELEASE/swift-6.4.0-RELEASE-windows10.exe",
+    "bytes": 2097914680,
+    "sha256": "76169a85bcba82854a0cd8f9655ffb74b3758d60c35a245457510095f2823c03",
+    "trust": "HTTPS from download.swift.org; the Authenticode signature was not verified on macOS",
+    "also_published": "swift-6.4.0-RELEASE-windows10-arm64.exe (HTTP 200)"
+  },
+  "bundle_layout": {
+    "format": "WiX Burn, .wixburn section magic 0x00f14300 version 2, CAB containers",
+    "stub_bytes": 1082368,
+    "ux_container": {"offset": 1082368, "bytes": 219810},
+    "attached_container": {
+      "offset": 1312800,
+      "bytes": 2096591258,
+      "sha512": "D8A56E697A592222C27801499D3B7A679A9104F3DC9EA47CDA70F235F3143F0DFDF79F07A802AB360F18C5284F607BC8F1895B50CA975CEA86596ABDF6C72C42",
+      "verification": "equal to the burn manifest Container Hash"
+    },
+    "failed_attempts": [
+      "container taken as the file tail: SHA-512 mismatch (the file ends with an Authenticode signature)",
+      "offset stub+ux = 1302178: SHA-512 mismatch; a scan for the CAB header found it at 1312800 (10,622 bytes reserved for the stub's original signature)"
+    ]
+  },
+  "payloads_used": {
+    "a12": "windows.msi", "a29": "windows.cab", "a31": "sdk.windows.x64.cab", "a30": "sdk.windows.arm64.cab",
+    "a10": "rtl.amd64.msi", "a23": "rtl.amd64.cab"
+  },
+  "tools": "Homebrew sevenzip 26.03 (7zz), msitools 0.106 (msiextract)",
+  "extracted": {
+    "root": "/Volumes/X5/ntsd-2.4-research/crossplatform/windows-sdk-extract/tree (782 MB)",
+    "sdk": "LocalApp/Programs/Swift/Platforms/6.4.0/Windows.platform/Developer/SDKs/Windows.sdk: swiftmodules for Swift, Foundation(+Essentials/Internationalization/Networking/XML), Dispatch, WinSDK, CRT, Synchronization; x86_64 and aarch64 import libraries",
+    "xctest": "Windows.platform/Developer/Library/XCTest-6.4.0/usr/bin64/XCTest.dll (and bin64a)",
+    "runtime": "rtl.amd64.msi: Swift runtime DLLs (swiftCore, Foundation*, dispatch, _FoundationICU, ...) and the bundled VC++ runtime DLLs (vcruntime140*, msvcp140*, concrt140, vccorlib140)",
+    "note": "msiextract of windows.msi exits 1 at the omitted sdk.windows.x86.cab (Media DiskId 4) after extracting the x64/arm64 media"
+  },
+  "missing_for_linking": "MSVC CRT and Windows SDK (UCRT, um, shared) headers and import libraries. Candidate source: xwin 0.10.0 (Homebrew, Apache-2.0), which downloads them from Microsoft only with `--accept-license` under Microsoft's license terms.",
+  "blocked_on": "the user's decision to accept Microsoft's license terms (asked 2026-10-03)"
+}

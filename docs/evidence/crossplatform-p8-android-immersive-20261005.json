@@ -1,0 +1,13 @@
+{
+  "study": "docs/research/CROSS_PLATFORM.md",
+  "phase": "P8 Android: immersive mode",
+  "date": "2026-10-05",
+  "change": "the Android host hides the status and navigation bars: ntsd_android_hide_system_bars (C, JNI) calls getWindow().getDecorView().setSystemUiVisibility(LAYOUT_STABLE|LAYOUT_HIDE_NAVIGATION|LAYOUT_FULLSCREEN|HIDE_NAVIGATION|FULLSCREEN|IMMERSIVE_STICKY) on the main thread at creation and whenever the window regains focus (dialogs and the keyboard reset it); Java exceptions are cleared, leaving the bars",
+  "why": "the navigation bar (phone) and gesture handle (emulator) stayed over the game",
+  "checks": {
+    "emulator (API 35)": "Android's one-time 'Viewing full screen' notice appears, the gesture handle is gone; after 'Got it' the game has focus and the bars stay hidden; vs scenario equal, 1,832 frames identical to the earlier Android app run (android-app, archived on T7)",
+    "Galaxy A12 (actual device)": "Samsung's one-time full-screen notice appears; the Home/Back/Recents buttons are hidden and the game fills the full 720-pixel height (pillarboxed); the notice was left for the user",
+    "macOS builds": "unaffected (CAndroidNative is built only for Android)"
+  },
+  "kind": "emulator and actual device; presentation only, no game behaviour change"
+}

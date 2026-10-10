@@ -83,17 +83,30 @@ public enum OriginalPostDrawSlotPrefix {
                       slot: Int, retainedObjectIndex: inout Int32?, requestSlot: inout OriginalRequestSlotWord?, objectCount: Int32,
                       library: inout OriginalLibTransformBacking?,
                       header: (Int) throws -> OriginalStateRecord, frame: (Int, Int32) throws -> OriginalStateRecord,
-                      observe: (OriginalPostDrawSlotEvent) throws -> Void = { _ in }) throws -> Bool {
+                      observe: (OriginalPostDrawSlotEvent) throws -> Void = { _ in }, inPlace: Bool = false) throws -> Bool {
         guard (0..<400).contains(slot) else { throw error("Slot extent") }
+        guard inPlace else {
+            // All or nothing: the pass runs in place on copies, assigned only
+            // when it completes.
+            var w = world, a = actors, g = globals, r = retainedObjectIndex, q = requestSlot, l = library
+            let active = try apply(world: &w, actors: &a, globals: &g, slot: slot, retainedObjectIndex: &r, requestSlot: &q,
+                                   objectCount: objectCount, library: &l, header: header, frame: frame, observe: observe, inPlace: true)
+            world = w; actors = a; globals = g; retainedObjectIndex = r; requestSlot = q; library = l
+            return active
+        }
         return try withoutActuallyEscaping(header) { headers in
             try withoutActuallyEscaping(frame) { frames in
                 try withoutActuallyEscaping(observe) { observer in
-                    var body = Body(world: world, actors: actors, globals: globals, retained: retainedObjectIndex, requestSlot: requestSlot,
+                    // The caller's records moved in and written back on every
+                    // path (CORE_REALTIME B2; callers that drop them on throw).
+                    var body = Body(world: inPlaceTake(&world, leaving: .vacant), actors: inPlaceTake(&actors, leaving: []),
+                                    globals: inPlaceTake(&globals, leaving: .vacant), retained: retainedObjectIndex, requestSlot: requestSlot,
                                     slot: slot, objectCount: objectCount, library: library, header: headers, frame: frames, observe: observer)
-                    let active = try body.run()
-                    world = body.world; actors = body.actors; globals = body.globals; retainedObjectIndex = body.retained; library = body.library
-                    requestSlot = body.requestSlot
-                    return active
+                    defer {
+                        world = body.world; actors = body.actors; globals = body.globals; retainedObjectIndex = body.retained
+                        library = body.library; requestSlot = body.requestSlot
+                    }
+                    return try body.run()
                 }
             }
         }
@@ -128,7 +141,7 @@ public enum OriginalPostDrawSlotPrefix {
         mutating func number(_ actor: Int, _ offset: Int, _ value: Double) throws { try actors[actor].writeBinary64(value, at: offset) }
         mutating func draw(_ stream: Int32, _ range: Int32) throws -> Int32 {
             let base = OriginalMatchPreparation.globalBase
-            var random = OriginalRandom(table: try (0..<3000).map { try globals.integer(at: 0x44ff90-base+$0, as: UInt8.self) },
+            var random = OriginalRandom(table: try OriginalRandom.table(globals, at: 0x44ff90-base),
                 index: Int(try g(0x450bcc)), counter: Int(try g(0x450c34)), source: "post-draw slot prefix", sourceSHA256: "")
             try random.validate()
             let result = Int32(random.next(Int(range)))
@@ -225,14 +238,16 @@ public enum OriginalPostDrawSlotPrefix {
             }
             if try type(actorIndex) == 0 { try resources(actorIndex) }
             let objectIndex = try object(actorIndex), mode = try g(0x451160)
-            var actor = actors[actorIndex]
-            try OriginalActorScheduler.apply(actor: &actor, header: header(objectIndex), globals: &globals,
-                mode: mode, slot: Int32(slot), frame: { try frame(objectIndex, $0) }, observe: { event in
+            // The scheduler writes this body's actor and globals in place: this
+            // body is dropped when it throws (CORE_REALTIME B2). The closures
+            // read locals, not this body, while its fields are passed inout.
+            let chosen = try header(objectIndex), frames = frame, observer = observe, current = slot
+            try OriginalActorScheduler.apply(actor: &actors[actorIndex], header: chosen, globals: &globals,
+                mode: mode, slot: Int32(current), frame: { try frames(objectIndex, $0) }, observe: { event in
                     switch event {
-                    case let .catalogSound(x, index): try observe(.catalogSound(slot: slot, x: x, index: index))
+                    case let .catalogSound(x, index): try observer(.catalogSound(slot: current, x: x, index: index))
                     }
-                })
-            actors[actorIndex] = actor
+                }, inPlace: true)
             return true
         }
     }

@@ -1,5 +1,7 @@
 import Foundation
+#if canImport(CryptoKit)
 import CryptoKit
+#endif
 import XCTest
 @testable import NTSDCore
 @testable import NTSDReferenceChecks
@@ -133,6 +135,37 @@ final class OriginalActorControlTests: XCTestCase {
         }))
         XCTAssertTrue(drew)
         XCTAssertEqual(actor,beforeActor); XCTAssertEqual(globals,beforeGlobals)
+        // In place (CORE_REALTIME B2 P4): the same error after the draw, the
+        // partial writes kept and no field left vacant.
+        drew = false
+        XCTAssertThrowsError(try OriginalActorControl.apply(actor: &actor,header: header,globals: &globals,frame: { index in
+            guard index == 0 else { throw OriginalStateError.invalidStorage("Missing selected attack frame") }
+            return current
+        },observe: { event in
+            if case .random = event { drew = true }
+        },inPlace: true)) { XCTAssertEqual("\($0)","\(OriginalStateError.invalidStorage("Missing selected attack frame"))") }
+        XCTAssertTrue(drew)
+        XCTAssertEqual(actor.byteCount,OriginalStateRecord.actorSize); XCTAssertEqual(globals.byteCount,OriginalMatchPreparation.globalSize)
+        XCTAssertNotEqual(globals,beforeGlobals,"the draw's index and counter written")
+    }
+
+    /// CORE_REALTIME B2 P4: a throw in the input stage, before the actor and
+    /// globals move into the body, keeps the input's writes in place and
+    /// leaves the globals untouched; the default form keeps neither.
+    func testInPlaceFailureInTheInputStage() throws {
+        var actor = try OriginalStateRecord.actor(over: [UInt8](repeating: 0xa5,count: OriginalStateRecord.actorSize))
+        try actor.write(UInt8(1),at: 0xd1)
+        let header = try OriginalStateRecord(bytes: [UInt8](repeating: 0,count: 0x7a4),defined: [Bool](repeating: true,count: 0x7a4))
+        var globals = try OriginalStateRecord(bytes: [UInt8](repeating: 0,count: OriginalMatchPreparation.globalSize),defined: [Bool](repeating: true,count: OriginalMatchPreparation.globalSize))
+        let before = actor,beforeGlobals = globals
+        let failure = OriginalStateError.invalidStorage("No frames")
+        for inPlace in [false,true] {
+            XCTAssertThrowsError(try OriginalActorControl.apply(actor: &actor,header: header,globals: &globals,frame: { _ in throw failure },inPlace: inPlace)) {
+                XCTAssertEqual("\($0)","\(failure)")
+            }
+            XCTAssertEqual(globals,beforeGlobals)
+            if inPlace { XCTAssertNotEqual(actor,before);XCTAssertEqual(actor.byteCount,OriginalStateRecord.actorSize) } else { XCTAssertEqual(actor,before) }
+        }
     }
 
     private func compare(_ corpus: Corpus,objects: [OriginalLoadedObject]? = nil) throws {
@@ -163,6 +196,10 @@ final class OriginalActorControlTests: XCTestCase {
             for p in item.frames ?? [] {
                 var record = frames[p.index] ?? emptyFrame; try patch(&record,p.offset,p.bytes); frames[p.index] = record
             }
+            // Both forms against the same recorded results (CORE_REALTIME B2 P4).
+            let startActor = actor,startGlobals = globals
+            for inPlace in [false,true] {
+            var actor = startActor,globals = startGlobals
             var events: [Event] = []
             do {
                 try OriginalActorControl.apply(actor: &actor,header: header,globals: &globals,frame: { index in
@@ -174,7 +211,7 @@ final class OriginalActorControlTests: XCTestCase {
                     case let .random(stream,range,result): events.append(.init(kind: "random",arguments: [stream,range,result].map(UInt32.init(bitPattern:))))
                     case let .sound(x,index): events.append(.init(kind: "sound",arguments: [x,index].map(UInt32.init(bitPattern:))))
                     }
-                })
+                },inPlace: inPlace)
             } catch { XCTFail("\(item.label): \(error)"); return }
             let expected = try hex(item.after), mask = try hex(item.defined).map { $0 != 0 }
             guard actor.bytes == expected && actor.defined == mask else {
@@ -185,6 +222,7 @@ final class OriginalActorControlTests: XCTestCase {
             let sha = SHA256.hash(data: Data(globals.bytes)).map { String(format:"%02x",$0) }.joined()
             guard sha == item.globalsSHA256 && globals.defined.allSatisfy({ $0 }) && events == item.events else {
                 XCTFail("\(item.label): global SHA \(sha) != \(item.globalsSHA256) or events \(events) != \(item.events)"); return
+            }
             }
         }
     }

@@ -82,7 +82,7 @@ public struct OriginalApplicationLoadingSession {
         }
         func draw(_ arguments: [UInt32]) throws {
             guard arguments.count == 7,let bitmap = state.memory.allocations[arguments[0]],bitmap.live,
-                  bitmap.storage.bytes.count == 0x1f50 else { throw Boundary.operation("Loading bitmap owner") }
+                  bitmap.storage.byteCount == 0x1f50 else { throw Boundary.operation("Loading bitmap owner") }
             let surface = try bitmap.storage.integer(at:0,as:UInt32.self)
             var canonical = bitmap.storage;try canonical.write(UInt32(surface == 0 ? 0 : 1),at:0)
             let request = try OriginalBitmapDrawInput(x:Int32(bitPattern:arguments[1]),y:Int32(bitPattern:arguments[2]),

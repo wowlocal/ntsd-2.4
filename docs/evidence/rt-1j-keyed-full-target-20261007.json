@@ -1,0 +1,87 @@
+{
+ "study": "docs/research/CORE_REALTIME.md",
+ "phase": "1j (keyed and mirrored copies without known-bit work over a fully known target)",
+ "date": "2026-10-07",
+ "profile_before": "phone profile rtb1b2-profile, render thread: OriginalMacDisplayBackend.copyPixels 36.9% self (memcpy 24.5%, swapChannels 10.7%); the keyed per-pixel loop gathers known bits per pixel into 64-bit words and merges them although the live app's targets are always fully known (phase 1g's full flag)",
+ "benchmark": "A12 (R58R36F7VFD), 2026-10-07 ~06:57, standalone benchmark (scratchpad/blitbench, swift 6.4 android sdk, -c release):\n300 keyed 80x80 sprite blits per frame into a fully known 794x600 target, 400 frames x 3 rounds, same pixels in every variant:\n  current (display backend loop: per-pixel known-bit gathering, merges into the full mask)  18.60-18.88 ms/frame\n  fast (only the key test and the store)                                                  11.29-11.35 ms/frame  (-40%)\n  branchless (load target, select, store every pixel)                                       21.5 ms/frame\n  SIMD4 (unaligned 4-pixel loads, select, store)                                           19.5-20.7 ms/frame\nA12, ~07:50, present variants on one 794x550 frame into a 1222-wide window buffer, 300 frames x 3 rounds:\n  swap (B,G,R,X -> R,G,B,X, SIMD4)  1.656-1.696 ms/frame\n  alpha OR only (BGRA window)       1.688-1.690 ms/frame\n  plain row copy                    1.654-1.690 ms/frame\n  black side bars fill              0.248 ms/frame\n=> present passes are memory-bound: a BGRA window format would save nothing; removing a whole pass saves ~1.7 ms.\n",
+ "change": "OriginalMacDisplayBackend.copyPixels: for a row whose source span is fully known over a target whose known mask is full, only the key test and the store run (forward or mirrored, keyed or not); the bits such a row would gather are already set and none would be cleared, so the pixels, the mask and the full flag are the same. Other rows keep the bit-gathering loop; the unkeyed forward row copy is unchanged.",
+ "phone": {
+  "before": [
+   {
+    "label": "rt4m-run1",
+    "runSeconds": 310,
+    "peakResidentMB": 1450,
+    "ticksPerSecond": 23.71,
+    "busySeconds": 205.82,
+    "bodies": 1800,
+    "completeMsPerTick": 18.3,
+    "partAssembliesPerTick": 0.0,
+    "menuMsPerStep": 0.89,
+    "menuStepsPerTick": 4.12,
+    "mainCpuShare": 0.563,
+    "renderCpuShare": 0.429,
+    "mainMsPerTick": 23.8,
+    "renderMsPerTick": 18.1
+   },
+   {
+    "label": "rt4m-run2",
+    "runSeconds": 311,
+    "peakResidentMB": 1080,
+    "ticksPerSecond": 23.67,
+    "busySeconds": 205.66,
+    "bodies": 1800,
+    "completeMsPerTick": 18.4,
+    "partAssembliesPerTick": 0.0,
+    "menuMsPerStep": 0.89,
+    "menuStepsPerTick": 4.12,
+    "mainCpuShare": 0.565,
+    "renderCpuShare": 0.428,
+    "mainMsPerTick": 23.9,
+    "renderMsPerTick": 18.1
+   }
+  ],
+  "after": [
+   {
+    "label": "rt1j-run1",
+    "runSeconds": 310,
+    "peakResidentMB": 1376,
+    "ticksPerSecond": 23.38,
+    "busySeconds": 206.44,
+    "bodies": 1800,
+    "completeMsPerTick": 18.4,
+    "partAssembliesPerTick": 0.0,
+    "menuMsPerStep": 0.9,
+    "menuStepsPerTick": 4.12,
+    "mainCpuShare": 0.563,
+    "renderCpuShare": 0.409,
+    "mainMsPerTick": 24.1,
+    "renderMsPerTick": 17.5
+   },
+   {
+    "label": "rt1j-run2",
+    "runSeconds": 310,
+    "peakResidentMB": 1075,
+    "ticksPerSecond": 23.43,
+    "busySeconds": 203.71,
+    "bodies": 1800,
+    "completeMsPerTick": 18.4,
+    "partAssembliesPerTick": 0.0,
+    "menuMsPerStep": 0.9,
+    "menuStepsPerTick": 4.12,
+    "mainCpuShare": 0.561,
+    "renderCpuShare": 0.411,
+    "mainMsPerTick": 24.0,
+    "renderMsPerTick": 17.5
+   }
+  ],
+  "result": "render thread 18.1/18.1 -> 17.5/17.5 ms per tick (a quarter of the benchmark's projection: keyed sprite pixels are a smaller share of render time than the benchmark's 300 sprites); main 24.1/24.0 ms (unchanged within run variation)"
+ },
+ "gates": {
+  "headless": "vs equal, 1,832 frames identical (frozen-rt1j; the runtime's surfaces are fully known, so every scenario takes the new path)",
+  "scenarios": "all 10 equal, frames identical (rt-1j-all)",
+  "AppKit": "vs and playback equal, 3,960 frames identical to the 4m AppKit run",
+  "emulator": "vs equal, 1,832 frames identical",
+  "tests": "bundle B (native tree b779891d, the same as this commit's): the 12 Mac and graphics suites pass (OriginalMacFrontRasterTests 10 incl. the per-pixel model over a fully known target, OriginalMacDisplayBackendTests, OriginalMacBitmapBackendTests, OriginalApplicationObservedGraphicsTests, OriginalApplicationObservedBitmapTests, OriginalApplicationFrontScreenTests, OriginalMacRuntimeLoadingTests, OriginalMacRuntimeMenuTests, OriginalMacRuntimeStartupTests, OriginalMacSoundEffectsTests, OriginalMacWindowGeometryTests, OriginalMacLoadingAudioTests)"
+ },
+ "review": "not required (a branch whose effect equals the existing loop's when its condition holds; no storage-model change); covered by the per-pixel model test run a second time over a fully known target (and an unknown source pixel clearing a bit afterwards)"
+}

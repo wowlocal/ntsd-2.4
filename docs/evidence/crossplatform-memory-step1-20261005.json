@@ -1,0 +1,27 @@
+{
+  "study": "docs/research/MEMORY_FOOTPRINT.md",
+  "step": 1,
+  "date": "2026-10-05",
+  "change": {
+    "Bitmap": "no stored decoded pixels: pixelOffset stored (resolved at init), pixels decoded on each read from dib and the declared offset; the init still decodes once, so invalid images fail at load as before",
+    "OriginalSurfaceSourceColors": "content is either materialized arrays or, after a whole-surface copy of a bitmap, that bitmap (a shared box that caches the decoded arrays on first read; writes decode without filling the cache); rgb/defined computed; custom == compares by value with a fast path for the same bitmap",
+    "OriginalApplicationBitmapInputs": "the stretch copy passes the image's Bitmap instead of decoded pixels; pixels(forImage:) decodes via bitmap(forImage:)"
+  },
+  "finding on the way": "removing Bitmap.pixels alone freed nothing: each surface's source-colour record held the same decoded arrays (copy-on-write), so the record had to keep the bitmap instead",
+  "memory": {
+    "metric": "live heap (heap -s, 40 s into the computer-vs run): deterministic; macOS footprint counts compressed memory and varied 1.4-3.1 GB between identical runs",
+    "before": "~4.1 GB (malloc_history 3.84 GiB at the peak)",
+    "after": "3.02 GB (3023928688 bytes)",
+    "by class after": "display surface values 1.21 GB and known 0.31 GB (unchanged), byte arrays 1.05 GB (was 1.86), Bool arrays 0.19 GB (was 0.46)"
+  },
+  "gates": {
+    "macOS app release build": "ok",
+    "Core suites (release test build, xctest)": "15 suites, 51 tests, 0 failures: SurfaceSourceColors 3, CatalogDIBPixels 3, Graphics 3, InterfaceInputs 3, MenuInputs 3, ObservedGraphics 5, ObservedBitmap 5, MacFrontRaster 7, Bootstrap 2, CatalogSession 3, LoadedMenu 5, LoadedLaunch 2, Pool 3, PausedGameplay 2, GameplayProjection 2",
+    "headless vs": "equal; all 1,832 frames identical to the linux-headless matrix run",
+    "AppKit vs": "equal"
+  },
+  "review": {
+    "reviewer": "independent read-only agent",
+    "verdict": "values, error boundaries, equality and ownership unchanged; flagged that per-pixel reads of rgb/defined in three macOS tests would become quadratic; fixed in the type (cached decode) rather than in the tests; those suites then ran in 46, 15 and 17 s"
+  }
+}

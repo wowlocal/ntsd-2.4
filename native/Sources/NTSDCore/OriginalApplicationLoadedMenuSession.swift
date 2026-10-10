@@ -39,19 +39,54 @@ public struct OriginalApplicationLoadedMenuSession {
         public let local: OriginalStateRecord,operations: [Operation]
     }
     public struct PendingReturn {
-        public let entry: Input.PendingContinuation, snapshot: Snapshot
-        public let exit: OriginalModeScreenExit,dispatcherResult: Int32?
-        public let graphics: [OriginalApplicationGraphics.Command]
+        /// Fixed values in one shared object: copied with every Host stage and
+        /// loaded batch of a tick (CORE_REALTIME phase 4m).
+        private final class Storage {
+            let entry: Input.PendingContinuation, snapshot: Snapshot
+            let exit: OriginalModeScreenExit,dispatcherResult: Int32?
+            let graphics: [OriginalApplicationGraphics.Command]
+            init(entry: Input.PendingContinuation,snapshot: Snapshot,exit: OriginalModeScreenExit,dispatcherResult: Int32?,
+                 graphics: [OriginalApplicationGraphics.Command]) {
+                self.entry = entry;self.snapshot = snapshot;self.exit = exit;self.dispatcherResult = dispatcherResult;self.graphics = graphics
+            }
+        }
+        private let storage: Storage
+        public var entry: Input.PendingContinuation { _read { yield storage.entry } }
+        public var snapshot: Snapshot { _read { yield storage.snapshot } }
+        public var exit: OriginalModeScreenExit { _read { yield storage.exit } }
+        public var dispatcherResult: Int32? { storage.dispatcherResult }
+        public var graphics: [OriginalApplicationGraphics.Command] { _read { yield storage.graphics } }
         public var loading: Session.PendingLoading { entry.loading }
+        init(entry: Input.PendingContinuation,snapshot: Snapshot,exit: OriginalModeScreenExit,dispatcherResult: Int32?,
+             graphics: [OriginalApplicationGraphics.Command]) {
+            storage = Storage(entry:entry,snapshot:snapshot,exit:exit,dispatcherResult:dispatcherResult,graphics:graphics)
+        }
     }
     /// Start has been selected, but preparation and the enclosing return have
     /// not run. Retain current owners and the original suspended loop ticket.
     public struct PendingMatchPrelude {
-        public let entry: Input.PendingContinuation, snapshot: Snapshot
-        public let confirmation: Int32
-        public let locals: [Int:Int32]
-        public let graphics: [OriginalApplicationGraphics.Command]
+        /// Fixed values in one shared object (CORE_REALTIME phase 4m).
+        private final class Storage {
+            let entry: Input.PendingContinuation, snapshot: Snapshot
+            let confirmation: Int32
+            let locals: [Int:Int32]
+            let graphics: [OriginalApplicationGraphics.Command]
+            init(entry: Input.PendingContinuation,snapshot: Snapshot,confirmation: Int32,locals: [Int:Int32],
+                 graphics: [OriginalApplicationGraphics.Command]) {
+                self.entry = entry;self.snapshot = snapshot;self.confirmation = confirmation;self.locals = locals;self.graphics = graphics
+            }
+        }
+        private let storage: Storage
+        public var entry: Input.PendingContinuation { _read { yield storage.entry } }
+        public var snapshot: Snapshot { _read { yield storage.snapshot } }
+        public var confirmation: Int32 { storage.confirmation }
+        public var locals: [Int:Int32] { _read { yield storage.locals } }
+        public var graphics: [OriginalApplicationGraphics.Command] { _read { yield storage.graphics } }
         public var loading: Session.PendingLoading { entry.loading }
+        init(entry: Input.PendingContinuation,snapshot: Snapshot,confirmation: Int32,locals: [Int:Int32],
+             graphics: [OriginalApplicationGraphics.Command]) {
+            storage = Storage(entry:entry,snapshot:snapshot,confirmation:confirmation,locals:locals,graphics:graphics)
+        }
     }
     public enum Outcome {
         case returned(PendingReturn), matchPrelude(PendingMatchPrelude)
@@ -142,7 +177,20 @@ public struct OriginalApplicationLoadedMenuSession {
         var audio: OriginalMusicMemory,resources = OriginalMenuResourceLoading()
         var backgrounds: [UInt32:OriginalLoadedBitmap] = [:]
         var local: OriginalStateRecord,operations: [Operation],graphics: [OriginalApplicationGraphics.Command]
-        var ranges: [(UInt64,UInt64)] = [],surfaces: [UInt32:UInt32] = [:],current: UInt32?,outputPhase = false
+        var surfaces: [UInt32:UInt32] = [:],current: UInt32?,outputPhase = false
+        /// false: nobody receives the `.front` observations (the gameplay
+        /// session without an observer), so they are not built (CORE_REALTIME
+        /// tier 3 G3b; `observe` is then the no-op it was).
+        var observesFront = true
+        /// The address ranges reserved at the attempt's start, then claims. Only
+        /// claim/reserve use them (allocation events), so the starting ranges
+        /// are collected on first use from values captured in init
+        /// (CORE_REALTIME R2).
+        var ranges: [(UInt64,UInt64)] { collectStartingRanges(); return collectedRanges! }
+        private var collectedRanges: [(UInt64,UInt64)]?, collectRanges: (() -> [(UInt64,UInt64)])?
+        private func collectStartingRanges() {
+            if collectedRanges == nil { collectedRanges = collectRanges!(); collectRanges = nil }
+        }
         var target: UInt32 { entry.loading.target }
         init(_ entry: Input.PendingContinuation,_ inputs: OriginalApplicationMenuInputs,_ env: E,
              _ screen: OriginalFrontScreenBodyInput,_ output: OriginalMenuPresentationInput,
@@ -170,19 +218,24 @@ public struct OriginalApplicationLoadedMenuSession {
             guard output.targetSurface == entry.loading.target else { throw Boundary.dependency("Menu target") }
             guard var images = state.bitmapInputs else { throw Boundary.dependency("Bitmap inputs") }
             try images.addResources(inputs.bitmaps);state.bitmapInputs = images
-            reserve(0x44d000,state.full.bytes.count)
-            for (token,a) in state.memory.allocations where a.live { reserve(token,a.storage.bytes.count) }
-            let catalog = entry.entry.entry
-            for a in catalog.snapshot.allocations { reserve(a.token,a.count) }
-            for f in catalog.files.streams.values { reserve(f.allocation.buffer,f.allocation.capacity) }
-            for owner in catalog.startup.waveOwners { try retain(owner) }
-            for owner in catalog.entry.waveOwners { try retain(owner) }
-            for owner in catalog.snapshot.waveOwners { try retain(owner) }
-            for (token,record) in audio.allocations { reserve(token,record.bytes.count) }
+            // The starting ranges, in the order they were always reserved: the
+            // globals, live allocations, the session's static ranges (built once
+            // per session; a wave-owner failure throws here as before), audio.
+            let fullCount = state.full.byteCount,allocations = state.memory.allocations
+            let staticRanges = try entry.entry.staticRanges(),audioAllocations = audio.allocations
+            collectRanges = {
+                var spans: [(UInt64,UInt64)] = []
+                func add(_ token: UInt32,_ count: Int) { if token != 0 && count > 0 { spans.append((UInt64(token),UInt64(token)+UInt64(count))) } }
+                add(0x44d000,fullCount)
+                for (token,a) in allocations where a.live { add(token,a.storage.byteCount) }
+                spans += staticRanges
+                for (token,record) in audioAllocations { add(token,record.byteCount) }
+                return spans
+            }
         }
-        func reserve(_ token: UInt32,_ count: Int) { if token != 0 && count > 0 { ranges.append((UInt64(token),UInt64(token)+UInt64(count))) } }
-        func retain(_ owner: OriginalWaveOwnership) throws {
-            for span in try owner.addressedRegions() { reserve(span.token,span.count) }
+        func reserve(_ token: UInt32,_ count: Int) {
+            guard token != 0 && count > 0 else { return }
+            collectStartingRanges(); collectedRanges!.append((UInt64(token),UInt64(token)+UInt64(count)))
         }
         func claim(_ token: UInt32,_ count: Int) throws {
             let lo = UInt64(token),hi = lo+UInt64(count)
@@ -190,10 +243,14 @@ public struct OriginalApplicationLoadedMenuSession {
                   !ranges.contains(where:{ lo < $0.1 && $0.0 < hi }) else { throw Boundary.overlap(token) }
             reserve(token,count)
         }
-        func emit(_ effect: Session.Effect) throws {
-            guard var owner = state.graphics else { throw Boundary.dependency("Graphics") }
-            if let command = try owner.consume(effect,inputs:state.bitmapInputs) { graphics.append(command) }
-            state.graphics = owner;operations.append(.menu(effect))
+        /// Takes the effect (every caller passes a temporary): it moves into
+        /// the operations instead of being copied there and then destroyed
+        /// (CORE_REALTIME e5).
+        func emit(_ effect: consuming Session.Effect) throws {
+            // One in-place access to the state, without copying the graphics
+            // owner or the bitmap inputs (CORE_REALTIME phase 4b, tier 3 G3a).
+            if let command = try state.loadedCommand(for:effect) { graphics.append(command) }
+            operations.append(.menu(effect))
         }
         func allocate(_ kind: AllocationKind) throws -> OriginalInterfaceAllocation {
             let a = try allocation(kind,0x1f50,&environment)
@@ -283,10 +340,10 @@ public struct OriginalApplicationLoadedMenuSession {
             case "width","rectangle","labelWrite","fontPass","stringWrite","localWrite","formatWrite","infoWrite","infoText","stage","queueWrite","play","dispatcherWrite","write","read","clip","draw","text","stringLength","soundRequest","format","panel","keyName","timer","call","return","allocate","construct","candidates","random","musicConfiguration","stopMusic","warFrame":break
             default:throw Boundary.dependency("Front operation "+e.kind)
             }
-            try observe(.front(e),&environment)
+            if observesFront { try observe(.front(e),&environment) }
         }
         func draw(_ args: [UInt32],_ globals: OriginalStateRecord,_ memory: OriginalMenuPresentationMemory) throws {
-            guard args.count == 7,let a = memory.allocations[args[0]],a.live,a.storage.bytes.count == 0x1f50 else { throw Boundary.dependency("Draw bitmap owner") }
+            guard args.count == 7,let a = memory.allocations[args[0]],a.live,a.storage.byteCount == 0x1f50 else { throw Boundary.dependency("Draw bitmap owner") }
             let surface = try a.storage.integer(at:0,as:UInt32.self)
             var record = a.storage;try record.write(UInt32(surface == 0 ? 0 : 1),at:0)
             let q = try OriginalBitmapDrawInput(x:Int32(bitPattern:args[1]),y:Int32(bitPattern:args[2]),frame:Int32(bitPattern:args[3]),colorKey:args[4],mirrored:args[5],sourceSurface:surface,targetSurface:args[6],viewportWidth:globals.integer(at:0x78c,as:Int32.self),viewportHeight:globals.integer(at:0x790,as:Int32.self))
@@ -666,5 +723,27 @@ public struct OriginalApplicationLoadedMenuSession {
             if end == .returned { dispatcher = try OriginalApplicationDispatchEntry.finishWorldCall(globals:final.state.full) }
             return .returned(.init(entry:entry,snapshot:final,exit:end,dispatcherResult:dispatcher,graphics:graphics))
         }
+    }
+}
+
+extension OriginalApplicationMenuSession.State {
+    /// The graphics command for one loaded attempt's effect (CORE_REALTIME
+    /// tier 3 G3a). `mutating` so the attempt's `state` is accessed once, in
+    /// place: a Blt only reads the owner and the inputs (`blitCommand`), a
+    /// fill only the owner (`fillCommand`); other effects go through `consume`, which assigns the
+    /// owner only on success, so a throw leaves it unchanged as before.
+    mutating func loadedCommand(for effect: OriginalApplicationMenuSession.Effect) throws -> OriginalApplicationGraphics.Command? {
+        // Blt and fill: optional chaining reaches the owner in place and
+        // evaluates nothing without one (G3c: the nil check copied the owner
+        // on this path, 0.44% of the phone's main thread). Other effects are
+        // rare and keep the check, since consume may return no command.
+        switch effect {
+        case let .blit(b,r):if let command = try graphics?.blitCommand(b,result:r,inputs:bitmapInputs) { return command }
+        case let .fill(f,r):if let command = try graphics?.fillCommand(f,result:r) { return command }
+        default:
+            guard graphics != nil else { break }
+            return try graphics!.consume(effect,inputs:bitmapInputs)
+        }
+        throw OriginalApplicationLoadedMenuSession.Boundary.dependency("Graphics")
     }
 }

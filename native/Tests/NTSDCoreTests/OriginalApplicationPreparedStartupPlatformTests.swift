@@ -325,6 +325,22 @@ final class OriginalApplicationPreparedStartupPlatformTests: XCTestCase {
         try run(); XCTAssertNil(weakOwner)
     }
 
+    /// CORE_REALTIME A3 L5b: a staged copy shares the fixed inputs; it keeps
+    /// answering from them after the original is gone, as a fresh platform does.
+    func testStagedCopyAnswersAfterTheOriginalIsGone() throws {
+        let package = try OriginalApplicationStartupInputsTests.shared.get()
+        var values = N.Prepared(panelIO:.init(outputBacking:[0xa5]),environmentTZ:nil,sound:.init(createResult:-1,createdDevice:nil))
+        values.files["absent"] = .absent; values.files["empty"] = .bytes([]); values.milliseconds = [7]
+        var original: N? = N(inputs:package,prepared:values)
+        let copy = try XCTUnwrap(original).stagedCopy(),fresh = N(inputs:package,prepared:values)
+        original = nil
+        for platform in [copy,fresh] {
+            XCTAssertNil(try platform.file("absent")); XCTAssertEqual(try platform.file("empty"),[])
+            XCTAssertEqual(try platform.file("data\\m_join.wav"),try package.file("data\\m_join.wav"))
+        }
+        XCTAssertEqual(copy.snapshot,fresh.snapshot)
+        XCTAssertEqual(try copy.inputs.file("data\\m_join.wav"),try package.file("data\\m_join.wav"))
+    }
     func testPreparedInputBoundariesAndConsumption() throws {
         let package = try OriginalApplicationStartupInputsTests.shared.get()
         let base = N.Prepared(panelIO:.init(outputBacking:[0xa5]),environmentTZ:nil,

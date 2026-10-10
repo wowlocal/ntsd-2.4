@@ -1,0 +1,122 @@
+{
+ "study": "docs/research/CORE_REALTIME.md",
+ "phase": "R1 (render passes P1: the present's back-buffer copy and crop fused)",
+ "date": "2026-10-07",
+ "design": "docs/research/CORE_REALTIME_RENDER_PASSES.md (P1)",
+ "profile_before": "render thread 17.3-17.5 ms per tick after 1j; an A12 benchmark showed each full-frame pass costs ~1.69 ms whatever its per-pixel work; per gameplay tick the present copies the 794x550 back buffer unkeyed onto the primary's client rectangle (method 0x14) and then crops that same rectangle from the primary: two full passes over the same bytes",
+ "change": "OriginalMacDisplayBackend, pipelined .copy present: when the copy is unkeyed, not mirrored, its region equals its destination and the delivery rectangle, its source rectangle is the whole source and the source mask is full, the frame is cropped from the source (identical bytes: the copy would write the source's bytes over the rectangle and the crop would read them back on its known-row path), delivered, and the copy into the target is recorded in one deferred slot written by the target's next values/known access after earlier recorded writes. A newer deferred copy whose rectangle contains the recorded one replaces it; a moved rectangle writes the recorded one at once (the review's fix: frames never pile up). AppKit's synchronous path is unchanged.",
+ "phone": {
+  "before": [
+   {
+    "label": "rt4o-run1",
+    "runSeconds": 311,
+    "peakResidentMB": 1465,
+    "ticksPerSecond": 23.54,
+    "busySeconds": 205.66,
+    "bodies": 1800,
+    "completeMsPerTick": 18.5,
+    "partAssembliesPerTick": 0.0,
+    "menuMsPerStep": 0.82,
+    "menuStepsPerTick": 4.12,
+    "mainCpuShare": 0.56,
+    "renderCpuShare": 0.413,
+    "mainMsPerTick": 23.8,
+    "renderMsPerTick": 17.5
+   },
+   {
+    "label": "rt4o-run2",
+    "runSeconds": 310,
+    "peakResidentMB": 1563,
+    "ticksPerSecond": 23.63,
+    "busySeconds": 205.06,
+    "bodies": 1800,
+    "completeMsPerTick": 18.4,
+    "partAssembliesPerTick": 0.0,
+    "menuMsPerStep": 0.82,
+    "menuStepsPerTick": 4.12,
+    "mainCpuShare": 0.56,
+    "renderCpuShare": 0.408,
+    "mainMsPerTick": 23.7,
+    "renderMsPerTick": 17.3
+   }
+  ],
+  "after_before_review_fix": [
+   {
+    "label": "rtr1-run1",
+    "runSeconds": 310,
+    "peakResidentMB": 1418,
+    "ticksPerSecond": 23.73,
+    "busySeconds": 205.51,
+    "bodies": 1800,
+    "completeMsPerTick": 18.3,
+    "partAssembliesPerTick": 0.0,
+    "menuMsPerStep": 0.82,
+    "menuStepsPerTick": 4.12,
+    "mainCpuShare": 0.56,
+    "renderCpuShare": 0.374,
+    "mainMsPerTick": 23.6,
+    "renderMsPerTick": 15.8
+   },
+   {
+    "label": "rtr1-run2",
+    "runSeconds": 310,
+    "peakResidentMB": 1006,
+    "ticksPerSecond": 23.68,
+    "busySeconds": 204.13,
+    "bodies": 1800,
+    "completeMsPerTick": 18.4,
+    "partAssembliesPerTick": 0.0,
+    "menuMsPerStep": 0.82,
+    "menuStepsPerTick": 4.12,
+    "mainCpuShare": 0.56,
+    "renderCpuShare": 0.377,
+    "mainMsPerTick": 23.7,
+    "renderMsPerTick": 15.9
+   }
+  ],
+  "after": [
+   {
+    "label": "rtr1b-run1",
+    "runSeconds": 310,
+    "peakResidentMB": 1417,
+    "ticksPerSecond": 23.68,
+    "busySeconds": 205.64,
+    "bodies": 1800,
+    "completeMsPerTick": 18.4,
+    "partAssembliesPerTick": 0.0,
+    "menuMsPerStep": 0.82,
+    "menuStepsPerTick": 4.12,
+    "mainCpuShare": 0.56,
+    "renderCpuShare": 0.375,
+    "mainMsPerTick": 23.6,
+    "renderMsPerTick": 15.8
+   },
+   {
+    "label": "rtr1b-run2",
+    "runSeconds": 311,
+    "peakResidentMB": 1563,
+    "ticksPerSecond": 23.9,
+    "busySeconds": 208.19,
+    "bodies": 1800,
+    "completeMsPerTick": 18.4,
+    "partAssembliesPerTick": 0.0,
+    "menuMsPerStep": 0.79,
+    "menuStepsPerTick": 4.12,
+    "mainCpuShare": 0.556,
+    "renderCpuShare": 0.339,
+    "mainMsPerTick": 23.3,
+    "renderMsPerTick": 14.2
+   }
+  ],
+  "result": "render thread 17.5/17.3 -> 15.8/14.2 ms per tick after the fix (15.8/15.9 before it): about one full-frame pass; tier 2 (16 ms) met on the render thread; main 23.6/23.3 ms"
+ },
+ "gates": {
+  "headless": "vs equal, 1,832 frames identical (frozen-rtr1b; headless pipelines, so every gameplay present takes R1)",
+  "scenarios": "all 10 equal, frames identical (rt-r1b-all)",
+  "AppKit": "vs and playback equal, 3,960 frames identical to the 4o AppKit run (AppKit presents synchronously, so this checks it is unaffected)",
+  "emulator": "vs equal, 1,832 frames identical (Android pipelines: R1 active)",
+  "tests": "bundle C (native tree 89f7e205, the same as this commit's): the 12 Mac and graphics suites, 67 tests, pass"
+ },
+ "review": "independent read-only review: no correctness defect; the delivered frame and the primary's values and known bits match today's at every observation point (every storage access goes through values/known; the deferred copy is always the newest write; flips move it with its storage; deferCopy only runs on the render thread, and main-thread entry points flush first). The full flag may now be set by refreshFull where copyPixels left it clear (a cache only; no result depends on it). Applied: a moved rectangle writes the recorded copy at once (pending could otherwise grow without bound with a window dragged every frame while nothing reads the primary). Review gap: no unit oracle (no test windowing presents from the render thread; the tests' AppKit host is synchronous); coverage is headless body-frame digests of every gameplay present (one present per tick), all scenarios and the emulator.",
+ "pre_fix_gates": "the tree before the review's fix: vs equal, 1,832 frames identical; all 10 scenarios equal, frames identical; AppKit vs and playback equal, 3,960 frames identical to the 4o run; emulator vs equal, 1,832 frames identical; 11 of the 12 suites passed (the audio suite was stopped when the fix superseded the tree)"
+}

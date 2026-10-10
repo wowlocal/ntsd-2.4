@@ -96,7 +96,14 @@ final class OriginalActorPhysicsTests: XCTestCase {
                 let loaded = try XCTUnwrap(objects);XCTAssertTrue(item.header?.isEmpty != false && item.frames?.isEmpty != false)
                 try OriginalActorPhysics.apply(actor: &actor,object: loaded[index],globals: &globals,sse2Conversion: item.sse2 == 1,precision: OriginalArithmeticPrecision(controlWord: UInt16(c.fpcw)),observe: observe)
             } else {
+                // Both forms: in place on copies first, then the default form
+                // checked against the recorded results (CORE_REALTIME B2 P4).
+                var placed = actor,placedGlobals = globals
+                try OriginalActorPhysics.apply(actor: &placed,header: header,globals: &placedGlobals,sse2Conversion: item.sse2 == 1,precision: OriginalArithmeticPrecision(controlWord: UInt16(c.fpcw)),frame: { ownFrames[Int($0)] },observe: observe,inPlace: true)
+                let placedEvents = events;events = []
                 try OriginalActorPhysics.apply(actor: &actor,header: header,globals: &globals,sse2Conversion: item.sse2 == 1,precision: OriginalArithmeticPrecision(controlWord: UInt16(c.fpcw)),frame: { ownFrames[Int($0)] },observe: observe)
+                XCTAssertEqual(placed,actor,item.label+" in place");XCTAssertEqual(placedGlobals,globals,item.label+" in place")
+                XCTAssertEqual(placedEvents,events,item.label+" in place")
             }
             let expected = try hex(item.after),mask = try hex(item.defined).map { $0 != 0 }
             if actor.bytes != expected || actor.defined != mask {

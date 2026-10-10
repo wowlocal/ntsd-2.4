@@ -1,0 +1,32 @@
+{
+ "study": "docs/research/CORE_REALTIME.md",
+ "phase": "4c (flat record reads through the buffers)",
+ "date": "2026-10-06",
+ "finding": "Phone profile after 4a (rt4a-profile): OriginalStateRecord.integer(at:as:) 3.4% self and checkedRange 1.8% of the main thread; the flat path checked definedness through an ArraySlice allSatisfy and assembled the value with enumerated().reduce.",
+ "change": "OriginalStateRecord.integer(at:as:), flat path: checkedRange first as before; then a loop over flatDefined through withUnsafeBufferPointer (undefinedBytes with the same offset and count) and an unaligned little-endian load of T from flatBytes. Paged path unchanged. A unit test compares typed reads (unsigned and signed, 1-8 bytes) and their errors at the record's edges, out of range and over a partly undefined range with the plain arrays.",
+ "phone": {
+  "baseline": "phase 4b: 16.01 / 16.06 ticks/s",
+  "after": [
+   {
+    "label": "rt4c-run1",
+    "serial": "R58R36F7VFD",
+    "runSeconds": 360,
+    "peakResidentMB": 1346,
+    "ticksPerSecond": 16.1,
+    "busySeconds": 235.97,
+    "bodies": 1800
+   }
+  ],
+  "result": "16.10 ticks/s (one run; within noise of 4b). Committed as strictly less work: no slice, no per-byte reduce, one load.",
+  "note": "One run: the second could not install while the phone's storage was full, and a later retry found its lock screen. apks/rt4c.apk built from native diff 1a3457d6."
+ },
+ "emulator": {
+  "result": "vs equal, 1,832 frames identical to the earlier Android app run"
+ },
+ "gates": {
+  "headless": "vs equal, 1,832 frames identical (frozen cbc97f03, rt-4c); all 10 scenarios equal, frames identical (rt-4c-all)",
+  "AppKit": "vs and playback equal; 3,960 frames identical to the 4b AppKit run (rt-4c-appkit)",
+  "Core suites": "release test build swiftpm-test-release-b of native diff 6329704b against f3cf76a (4a + 4b + 4c source; the committed source): 154 suites (every suite constructing records), 438 tests, 0 failures. The flat-read unit test (added afterwards; the committed test file): OriginalStateRecordPagingTests 6 tests, 0 failures, in swiftpm-test-release-b of native diff 0b80b59c against 45f3cdf"
+ },
+ "review": "independent read-only review: OK. Every call site passes a standard integer whose size equals bitWidth/8; signed results have the same bit pattern; little-endian conversion exact on any host; errors and payloads unchanged and in the same order; loadUnaligned is always-emit-into-client (no back-deployment need); paged path unchanged. Noted: the buffer reads rely on the flat arrays' equal lengths (kept by every mutator); a flat-path unit test was suggested and added."
+}

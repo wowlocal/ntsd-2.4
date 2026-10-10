@@ -38,7 +38,7 @@ public struct OriginalCalendarTime: Equatable {
     /// Its optional output is eight bytes; subsecond ticks are discarded.
     public static func readClock(filetime: () throws -> UInt64,output: inout OriginalStateRecord?,observe: (OriginalCalendarEvent) throws -> Void = { _ in }) throws -> UInt64 {
         var candidate = output
-        if let candidate, candidate.bytes.count != 8 { throw error("Clock output extent") }
+        if let candidate, candidate.byteCount != 8 { throw error("Clock output extent") }
         let ticks = try filetime();try observe(.init("filetime",value:ticks))
         let result = (ticks &- 116_444_736_000_000_000)/10_000_000
         if candidate != nil { try candidate!.write(result,at:0) }
@@ -68,7 +68,7 @@ public struct OriginalCalendarTime: Equatable {
         return a.address
     }
     private mutating func setTM(_ values: [Int32]) throws {
-        guard values.count == 9,var record = allocations[tmPointer],record.bytes.count == 36 else { throw Self.error("tm backing") }
+        guard values.count == 9,var record = allocations[tmPointer],record.byteCount == 36 else { throw Self.error("tm backing") }
         for (i,v) in values.enumerated() { try record.write(v,at:i*4) }
         allocations[tmPointer] = record
     }

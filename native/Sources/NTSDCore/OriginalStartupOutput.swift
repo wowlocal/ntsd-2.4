@@ -30,7 +30,7 @@ public struct OriginalStartupOutput {
         requestCursor: (_ load: Bool,_ arguments: [UInt32]) throws -> UInt32,
         store: OriginalWindowInput.Store = { _,_ in },
         after: (OriginalStartupOutput,OriginalStateRecord) throws -> Void = { _,_ in }) throws -> Result {
-        guard globals.bytes.count == OriginalMatchPreparation.globalSize else {
+        guard globals.byteCount == OriginalMatchPreparation.globalSize else {
             throw OriginalStateError.invalidStorage("Startup output globals extent")
         }
         var candidate = self,state = globals,output: OriginalStateRecord?

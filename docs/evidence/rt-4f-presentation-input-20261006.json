@@ -1,0 +1,94 @@
+{
+ "study": "docs/research/CORE_REALTIME.md",
+ "phase": "4f (presentation input built directly)",
+ "date": "2026-10-06",
+ "profile_before": "rt-speed/rt4e-profile-profile: OriginalMacRuntimeLoading.presentation 2.6% of the main thread (exclusive): the runtime built the gameplay session's OriginalMenuPresentationInput every tick through JSONSerialization and JSONDecoder, because the struct (in Core) had no public initializer",
+ "change": "OriginalMenuPresentationInput gains a public memberwise initializer with the same labels (the synthesized Codable decoder is unchanged, so recorded inputs decode as before); OriginalMacRuntimeLoading.presentation builds the same values directly (target, zero results, the display's text DC handle).",
+ "phone": {
+  "before": [
+   {
+    "label": "rt4e-run1",
+    "runSeconds": 329,
+    "peakResidentMB": 1446,
+    "ticksPerSecond": 20.3,
+    "busySeconds": 218.95,
+    "bodies": 1800
+   },
+   {
+    "label": "rt4e-run2",
+    "runSeconds": 334,
+    "peakResidentMB": 1344,
+    "ticksPerSecond": 19.94,
+    "busySeconds": 221.35,
+    "bodies": 1800
+   },
+   {
+    "label": "rt4e-profile",
+    "runSeconds": 332,
+    "peakResidentMB": 1515,
+    "ticksPerSecond": 19.9,
+    "busySeconds": 219.99,
+    "bodies": 1800
+   }
+  ],
+  "after": [
+   {
+    "label": "rt4f-run1",
+    "runSeconds": 329,
+    "peakResidentMB": 1144,
+    "ticksPerSecond": 20.39,
+    "busySeconds": 218.59,
+    "bodies": 1800
+   },
+   {
+    "label": "rt4f-run2",
+    "runSeconds": 328,
+    "peakResidentMB": 1396,
+    "ticksPerSecond": 20.28,
+    "busySeconds": 218.96,
+    "bodies": 1800
+   },
+   {
+    "label": "rt4f-run3",
+    "runSeconds": 328,
+    "peakResidentMB": 1550,
+    "ticksPerSecond": 20.35,
+    "busySeconds": 218.01,
+    "bodies": 1800
+   },
+   {
+    "label": "rt4f-cpu-virtual",
+    "runSeconds": 331,
+    "peakResidentMB": 1452,
+    "ticksPerSecond": 20.43,
+    "busySeconds": 218.64,
+    "bodies": 1800,
+    "mainCpuShare": 0.622,
+    "renderCpuShare": 0.453,
+    "mainMsPerTick": 30.4,
+    "renderMsPerTick": 22.2
+   },
+   {
+    "label": "rt4f-cpu-realclock",
+    "runSeconds": 394,
+    "peakResidentMB": 1194,
+    "ticksPerSecond": 30.25,
+    "busySeconds": 283.2,
+    "bodies": 4200,
+    "mainCpuShare": 0.788,
+    "renderCpuShare": 0.584,
+    "mainMsPerTick": 26.1,
+    "renderMsPerTick": 19.3
+   }
+  ],
+  "result": "virtual clock 20.30/19.94 (4e) -> 20.39/20.28/20.35 ticks per second (+1.4%); compute per tick (new measure, 4f): main 30.4 ms, render 22.2 ms; real clock 30.25 ticks per second (the game's own rate), main 26.1 ms, render 19.3 ms"
+ },
+ "gates": {
+  "headless": "vs equal, 1,832 frames identical (frozen-rt4f, rt-4f)",
+  "scenarios": "all 10 equal, frames identical (rt-4f-all on frozen-rt4f)",
+  "AppKit": "vs and playback equal, 3,960 frames identical to the 4e AppKit run (rt-4f-appkit vs rt-4e-appkit)",
+  "emulator": "vs equal, 1,832 frames identical (APK from native diff 51f623da, verified before and after the build)",
+  "tests": "bundle B (native diff bd776a31 against 29a15de via a temporary index): OriginalRandomTableTests with the 4e review's extra boundary cases pass, and the 35 suites that use the presentation input or the runtime loading pass"
+ },
+ "review": "not required (no storage-model or architecture change: the same values built without a JSON round trip); the author checked that every field equals what the decoder produced (UInt32/Int32 values exactly representable as JSON numbers)"
+}

@@ -6,8 +6,22 @@ public enum OriginalWorldCamera {
         fillBacking: () throws -> [UInt8],
         performFill: (OriginalSurfaceFillRequest) throws -> Int32,
         performBlit: (OriginalBitmapBlit) throws -> Int32,
+        detail: Bool = true,
         observe: (OriginalFrontScreenEvent) throws -> Void = { _ in }) throws {
         var next = state
+        try applyInPlace(state: &next,mode: mode,target: target,sse2Conversion: sse2Conversion,surface: surface,fillBacking: fillBacking,
+                         performFill: performFill,performBlit: performBlit,detail: detail,observe: observe)
+        state = next
+    }
+    /// `apply` run on the caller's state (CORE_REALTIME B2 P4): for callers
+    /// that drop the state when this throws.
+    package static func applyInPlace(state next: inout OriginalMatchPreparation,mode: Int32,target: UInt32,
+        sse2Conversion: Bool = false,surface: (Int) throws -> UInt32,
+        fillBacking: () throws -> [UInt8],
+        performFill: (OriginalSurfaceFillRequest) throws -> Int32,
+        performBlit: (OriginalBitmapBlit) throws -> Int32,
+        detail: Bool = true,
+        observe: (OriginalFrontScreenEvent) throws -> Void = { _ in }) throws {
         let catalog = next.catalog,bitmaps = next.bitmaps,released = next.releasedBitmaps,backgrounds = next.backgrounds
         guard try next.world.integer(at: 0x7d4,as: UInt32.self) == 0 else { throw error("Catalog binding") }
         try bounds(world: &next.world,actors: &next.actors,globals: &next.globals,mode: mode,sse2Conversion: sse2Conversion,
@@ -23,8 +37,7 @@ public enum OriginalWorldCamera {
         try OriginalBackgroundDrawing.draw(backgrounds: &next.backgrounds,globals: next.globals,target: target,bitmap: { token in
             guard token != 0,Int(token)-1 < bitmaps.count,!released.contains(Int(token)-1) else { throw error("Bitmap binding") }
             return try (bitmaps[Int(token)-1].storage,surface(Int(token)-1))
-        },fillBacking: fillBacking,performFill: performFill,performBlit: performBlit,observe: observe)
-        state = next
+        },fillBacking: fillBacking,performFill: performFill,performBlit: performBlit,detail: detail,observe: observe)
     }
     private static func error(_ detail: String) -> OriginalStateError { .invalidStorage("World camera: "+detail) }
     /// Bounds and camera calculations are a child of apply, not a complete tick.

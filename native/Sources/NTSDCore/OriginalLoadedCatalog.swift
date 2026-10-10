@@ -25,6 +25,9 @@ public struct OriginalLoadedCatalog {
     public let stages: [OriginalStateRecord]
     public let bitmaps: [OriginalLoadedBitmap]
     public let frameAllocations: [OriginalFrameAllocation]
+    /// The allocations' indices in address order, for contact and hit frame
+    /// memory (CORE_REALTIME 4p): made once at load instead of per tick.
+    let frameAllocationOrder: [Int]
     public let checksum: UInt32, soundCount: Int
     public let soundBytes: [UInt8]
 
@@ -143,7 +146,7 @@ public struct OriginalLoadedCatalog {
                 onChild: (OriginalCatalogChildObservation) throws -> Void = { _ in },
                 onStage: (String, Int, Int?, OriginalStateRecord) throws -> Void = { _, _, _, _ in }, fileSession: FileSession?) throws {
         guard fileName.unicodeScalars.allSatisfy({ $0.value <= 255 }), backgroundBacking.count == 101,
-              backgroundBacking.allSatisfy({ $0.bytes.count == OriginalBackgroundLoader.recordSize }),
+              backgroundBacking.allSatisfy({ $0.byteCount == OriginalBackgroundLoader.recordSize }),
               parentBacking[0x4d81060] == backgroundBacking[99], parentBacking[0x4d819f0] == backgroundBacking[100] else {
             throw OriginalStateError.invalidStorage("Loaded catalog backing/filename mismatch")
         }
@@ -241,6 +244,8 @@ public struct OriginalLoadedCatalog {
         backgrounds[100] = registry.records[0x4d819f0]!
         self.registry = registry; self.objects = objects; self.backgrounds = backgrounds; self.stages = stageLoader.records
         self.bitmaps = resources.bitmaps; self.frameAllocations = resources.frameHeap.allocations
+        let allocations = resources.frameHeap.allocations
+        frameAllocationOrder = allocations.indices.sorted { allocations[$0].address < allocations[$1].address }
         self.resources = resources
         self.checksum = registry.checksum; self.soundCount = resources.sounds.count; self.soundBytes = resources.sounds.bytes
     }

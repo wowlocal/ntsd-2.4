@@ -1,0 +1,20 @@
+{
+  "study": "docs/research/MEMORY_FOOTPRINT.md",
+  "step": 2,
+  "date": "2026-10-05",
+  "change": "OriginalMacDisplayBackend surfaces keep pixel knowledge as one bit per pixel (private struct KnownMask: UInt64 words, a 0/1 subscript, setAll, knownCount, allKnown, bools) instead of one byte; the allocation budget still counts five bytes per pixel so allocation-budget boundaries fall where they did",
+  "memory": {
+    "live heap at 40 s": "2.75 GB (2749999440 bytes), from 3.02 GB after step 1",
+    "known masks": "41.7 MB in 889 surfaces, from 307 MB"
+  },
+  "gates": {
+    "macOS app release build": "ok",
+    "display backend suites (release test build)": "7 suites, 35 tests, 0 failures: MacDisplayBackend 4, MacBitmapBackend 5, MacFrontRaster 7, ObservedGraphics 5, ObservedBitmap 5, MacAudioBackend 5, MacLoadingAudio 4 (whole catalog, 3605 s)",
+    "headless vs": "equal; all 1,832 frames identical to the linux-headless matrix run",
+    "AppKit vs": "equal"
+  },
+  "review": {
+    "reviewer": "independent read-only agent",
+    "verdict": "OK: every former byte-mask use has the same result (writes only 0/1, reads only != 0), padding bits stay clear, index arithmetic in bounds, lifetime and failure paths correct, main-actor only, budget accounting keeps the allocation tests valid; nit applied: KnownMask made private"
+  }
+}

@@ -1,0 +1,33 @@
+{
+ "study": "docs/research/CORE_REALTIME.md",
+ "phase": "4ad: the Linux, Windows and iOS packagers drop dynamic exclusivity checks",
+ "date": "2026-10-10",
+ "decision": "the user's decision of 2026-10-08 (4aa): shipping builds without Swift's dynamic exclusivity checks; 4ac did the macOS app build",
+ "change": "tools/crossplatform/package_linux.py, package_windows.py and ios_app.py pass NTSD_UNCHECKED_EXCLUSIVITY=1 to their release builds (Package.swift applies -enforce-exclusivity=unchecked to release builds only); ios_app.py gains --scratch (default unchanged: X5 build-ios-sim)",
+ "checks": {
+  "source": "HEAD 1035e40 plus this change (native unchanged)",
+  "linux_aarch64": {
+   "package": "ntsd-linux-aarch64-1035e40.tar.gz, 218,487,869 bytes, sha256 8c0cf02e2d7067b93bc675474f2e75f6c04bab9348a0db9864bda0cc4ddd370d",
+   "check_linux_package.sh": "exit 0: libraries resolve, default launch finds the packaged music and font, X11 smoke, app_e2e vs equal",
+   "exclusivity": "0 swift_beginAccess calls in our modules' functions; 2,170 in the statically linked Foundation and other toolchain code (the APK's 2,164 likewise)"
+  },
+  "ios_simulator": {
+   "ios_app.py vs": "exit 0, result equal",
+   "exclusivity": "0 swift_beginAccess call sites in NTSDiOS"
+  },
+  "windows_x86_64": {
+   "package": "ntsd-windows-x86_64-1035e40.zip, 218,454,127 bytes, sha256 0d0e5cb59e45330f9d4ac5134c679b53088e560dc75c025016c0165d275fa54c",
+   "check_windows_package.sh": "exit 0 in a fresh CrossOver bottle: default launch (GDI SYSTEM_FONT, packaged music), app_e2e vs equal",
+   "exclusivity": "the build description passes -enforce-exclusivity=unchecked (PE imports hide call-site names)"
+  },
+  "flag_in_build_descriptions": "the -enforce-exclusivity=unchecked flag appears in each build's description (Linux 1 file, iOS 1, Windows 4)",
+  "logs": [
+   "4ad-linux-package.log",
+   "4ad-linux-check.log",
+   "4ad-ios.log",
+   "4ad-windows-package.log",
+   "4ad-windows-check.log"
+  ]
+ },
+ "scope": "test harnesses only (Docker, the simulator, CrossOver), as these packagers' own checks; no device or clean-machine acceptance claimed"
+}

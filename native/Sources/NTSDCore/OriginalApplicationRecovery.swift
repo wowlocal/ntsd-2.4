@@ -9,7 +9,7 @@ public enum OriginalApplicationRecovery {
         backing: (String,Int) throws -> [UInt8], perform: (Request,inout Context) throws -> Response,
         store: OriginalWindowInput.Store = { _,_ in },
         beforeCommit: (OriginalStateRecord,Context,Int32) throws -> Void = { _,_,_ in }) throws -> Int32 {
-        guard globals.bytes.count == OriginalMatchPreparation.globalSize else {
+        guard globals.byteCount == OriginalMatchPreparation.globalSize else {
             throw OriginalStateError.invalidStorage("Application recovery globals extent")
         }
         var state = globals, staged = context

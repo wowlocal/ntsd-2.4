@@ -1,0 +1,86 @@
+{
+ "study": "docs/research/CORE_REALTIME.md",
+ "phase": "4l (the pending loading's values in one shared object)",
+ "date": "2026-10-07",
+ "profile_before": "phone profile rt4k-dwarf (30 s, DWARF call graphs, 4k tree): outlined destroy of OriginalApplicationMenuSession.PendingLoading? 2.47% of the main thread (the largest single item of the menu session's 5.7%), destroyed copies in OriginalMacRuntimeLoading.complete (0.87%) and finish (0.83%), Host resumeGameplay/finishLoadedMenu/prepareBoundary closures and Attempt.emit: each copy retained and released every reference of its MenuSession.State and staged lists",
+ "change": "PendingLoading keeps ownerID, revision, attemptID, state, target, loopContinuation, stagedEffects and stagedGraphics in one private final class (all were let; attemptID is still drawn once per initialization); public accessors read through _read; the fileprivate init is unchanged. A copy retains one object.",
+ "phone": {
+  "before": [
+   {
+    "label": "rt4k-run1",
+    "runSeconds": 316,
+    "peakResidentMB": 1472,
+    "ticksPerSecond": 23.07,
+    "busySeconds": 209.26,
+    "bodies": 1800,
+    "completeMsPerTick": 19.0,
+    "partAssembliesPerTick": 0.0,
+    "menuMsPerStep": 0.98,
+    "menuStepsPerTick": 4.12,
+    "mainCpuShare": 0.574,
+    "renderCpuShare": 0.423,
+    "mainMsPerTick": 24.9,
+    "renderMsPerTick": 18.4
+   },
+   {
+    "label": "rt4k-run2",
+    "runSeconds": 310,
+    "peakResidentMB": 1284,
+    "ticksPerSecond": 23.1,
+    "busySeconds": 206.63,
+    "bodies": 1800,
+    "completeMsPerTick": 19.0,
+    "partAssembliesPerTick": 0.0,
+    "menuMsPerStep": 0.97,
+    "menuStepsPerTick": 4.12,
+    "mainCpuShare": 0.577,
+    "renderCpuShare": 0.42,
+    "mainMsPerTick": 25.0,
+    "renderMsPerTick": 18.2
+   }
+  ],
+  "after": [
+   {
+    "label": "rt4l-run1",
+    "runSeconds": 310,
+    "peakResidentMB": 1354,
+    "ticksPerSecond": 23.25,
+    "busySeconds": 205.58,
+    "bodies": 1800,
+    "completeMsPerTick": 18.8,
+    "partAssembliesPerTick": 0.0,
+    "menuMsPerStep": 0.95,
+    "menuStepsPerTick": 4.12,
+    "mainCpuShare": 0.571,
+    "renderCpuShare": 0.416,
+    "mainMsPerTick": 24.6,
+    "renderMsPerTick": 17.9
+   },
+   {
+    "label": "rt4l-run2",
+    "runSeconds": 310,
+    "peakResidentMB": 1268,
+    "ticksPerSecond": 23.32,
+    "busySeconds": 206.39,
+    "bodies": 1800,
+    "completeMsPerTick": 18.7,
+    "partAssembliesPerTick": 0.0,
+    "menuMsPerStep": 0.94,
+    "menuStepsPerTick": 4.12,
+    "mainCpuShare": 0.571,
+    "renderCpuShare": 0.427,
+    "mainMsPerTick": 24.5,
+    "renderMsPerTick": 18.3
+   }
+  ],
+  "result": "main 24.9/25.0 -> 24.6/24.5 ms per tick, message-loop step 0.98/0.97 -> 0.95/0.94 ms, complete 19.0/19.0 -> 18.8/18.7 ms, render 17.9/18.3 ms"
+ },
+ "gates": {
+  "headless": "vs equal, 1,832 frames identical (frozen-rt4l)",
+  "scenarios": "all 10 equal, frames identical (rt-4l-all)",
+  "AppKit": "vs and playback equal, 3,960 frames identical to the 4k AppKit run",
+  "emulator": "vs equal, 1,832 frames identical",
+  "tests": "bundle A (native tree dedf8ae5, the same as this commit's): all 172 suites, 503 tests, pass"
+ },
+ "review": "independent read-only review: nothing blocking; all fields were let with no mutating API, one construction site with the fileprivate init unchanged, every use a read; no Equatable/Hashable/Codable/Mirror use on it or its containers; attemptID per initialization as before (the pinned isSameAttempt tests unchanged); let -> get-only var keeps read-only source compatibility (no library evolution, no @inlinable/@frozen); concurrent reads of an immutable final class are safe; the default description changes only in an uncompared failure message. It named the next candidates: Input.PendingContinuation (~380 references per copy), PendingReturn and PendingMatchPrelude (with their Snapshot, ~460) (phase 4m)."
+}

@@ -1,0 +1,118 @@
+{
+ "study": "docs/research/CORE_REALTIME.md",
+ "phase": "M2b (the window Blt served inside the Host attempt)",
+ "date": "2026-10-06",
+ "design": "docs/research/CORE_REALTIME_M2.md",
+ "change": "OriginalMacRuntimeMenu's inline server also accepts .graphics(.window(w)) with w.kind == \"blt\" while served+1 < maximumRequests and serves it through a new OriginalMacFrontService.serve(_:on exchange:) for the whole-iteration exchange (the same private core as the permit path). It matches the dispatch entry's back-buffer clear in every iteration, ArtSetup's clear and the Alt+Enter configure clear; the target is always the back buffer, so the work moved into the attempt is a render-queue flush and a fill. With M2a a gameplay tick runs the Host attempt once.",
+ "phone": {
+  "baseline": "M2a: 16.70 / 16.57 ticks/s",
+  "after": [
+   {
+    "label": "rtm2b-run1",
+    "serial": "R58R36F7VFD",
+    "runSeconds": 349,
+    "peakResidentMB": 958,
+    "ticksPerSecond": 16.66,
+    "busySeconds": 234.9,
+    "bodies": 1800
+   },
+   {
+    "label": "rtm2b-run2",
+    "serial": "R58R36F7VFD",
+    "runSeconds": 349,
+    "peakResidentMB": 1247,
+    "ticksPerSecond": 16.73,
+    "busySeconds": 234.36,
+    "bodies": 1800
+   }
+  ],
+  "result": "16.66 / 16.73 ticks/s: no measurable change on the phone",
+  "note": "apks/rtm2b.apk built from native diff 98e144d3 against 81b40e4 (M2a + M2b)"
+ },
+ "mac": {
+  "rows": [
+   {
+    "label": "rtm2a",
+    "round": 0,
+    "exit": 0,
+    "cpuSeconds": 14.96,
+    "ticksPerSecond": 41.76,
+    "busySeconds": 9.64,
+    "bodies": 1800
+   },
+   {
+    "label": "rtm2b",
+    "round": 0,
+    "exit": 0,
+    "cpuSeconds": 14.27,
+    "ticksPerSecond": 41.51,
+    "busySeconds": 9.05,
+    "bodies": 1800
+   },
+   {
+    "label": "rtm2a",
+    "round": 1,
+    "exit": 0,
+    "cpuSeconds": 15.05,
+    "ticksPerSecond": 41.97,
+    "busySeconds": 9.85,
+    "bodies": 1800
+   },
+   {
+    "label": "rtm2b",
+    "round": 1,
+    "exit": 0,
+    "cpuSeconds": 14.79,
+    "ticksPerSecond": 41.75,
+    "busySeconds": 9.81,
+    "bodies": 1800
+   },
+   {
+    "label": "rtm2a",
+    "round": 2,
+    "exit": 0,
+    "cpuSeconds": 15.1,
+    "ticksPerSecond": 41.6,
+    "busySeconds": 9.48,
+    "bodies": 1800
+   },
+   {
+    "label": "rtm2b",
+    "round": 2,
+    "exit": 0,
+    "cpuSeconds": 14.42,
+    "ticksPerSecond": 42.52,
+    "busySeconds": 9.18,
+    "bodies": 1800
+   },
+   {
+    "label": "rtm2a",
+    "round": 3,
+    "exit": 0,
+    "cpuSeconds": 14.79,
+    "ticksPerSecond": 41.7,
+    "busySeconds": 9.68,
+    "bodies": 1800
+   },
+   {
+    "label": "rtm2b",
+    "round": 3,
+    "exit": 0,
+    "cpuSeconds": 14.92,
+    "ticksPerSecond": 42.4,
+    "busySeconds": 9.77,
+    "bodies": 1800
+   }
+  ],
+  "result": "process CPU seconds median 15.01 (M2a, aa239862) -> 14.61 (M2b, 2c88fedb): -2.7% over four rounds in rotation; busy seconds -1.9%. Committed as strictly less work (one fewer attempt per tick) measurable on the Mac."
+ },
+ "emulator": {
+  "result": "vs equal, 1,832 frames identical to the earlier Android app run"
+ },
+ "gates": {
+  "headless": "vs equal, 1,832 frames identical (frozen 2c88fedb, rt-m2b); all 10 scenarios equal, frames identical (rt-m2b-all; altenter exercises the Alt+Enter clear)",
+  "AppKit": "vs and playback equal; 3,960 frames identical to the M2a AppKit run (rt-m2b-appkit)",
+  "Core suites": "release test build swiftpm-test-release of native diff 50d5ee7c against 81b40e4 (M2a + M2b with the final comments and the side-by-side test recording the display's operation count; the committed content on top of dda500b): 105 suites, 299 tests, 0 failures"
+ },
+ "review": "independent read-only review: OK. A window blt matched no earlier permit case and touched no counter beyond requests/lastRequest; both paths run the same front-service core; the three blt sources all clear word 0x455608, always a backbuffer surface, so rectangle() yields no window and nothing is presented; no callback into the Host, driver, session or platform; errors leave the same exchange state; receipts retain the same resources. Acted on: comments and the design note describe the wider scope; the side-by-side test records the display's operation count."
+}

@@ -23,7 +23,7 @@ struct OriginalFrameHeap {
                            address: UInt32?) throws -> UInt32 {
         let base = address ?? next
         guard size > 0, size <= 400, base != 0, UInt64(base) + UInt64(size) + 15 <= UInt64(UInt32.max),
-              !allocations.contains(where: { UInt64(base) < UInt64($0.address) + UInt64($0.storage.bytes.count) && UInt64($0.address) < UInt64(base) + UInt64(size) }) else {
+              !allocations.contains(where: { UInt64(base) < UInt64($0.address) + UInt64($0.storage.byteCount) && UInt64($0.address) < UInt64(base) + UInt64(size) }) else {
             throw OriginalStateError.invalidStorage("Overlapping or invalid Frame allocation")
         }
         let record = try OriginalStateRecord(bytes: Array(repeating: fill, count: size), defined: Array(repeating: false, count: size))
@@ -47,13 +47,13 @@ struct OriginalFrameHeap {
     }
 
     func string(at address: UInt32) throws -> String? {
-        guard let allocation = allocations.last(where: { $0.address <= address && UInt64(address) < UInt64($0.address) + UInt64($0.storage.bytes.count) }) else { return nil }
+        guard let allocation = allocations.last(where: { $0.address <= address && UInt64(address) < UInt64($0.address) + UInt64($0.storage.byteCount) }) else { return nil }
         return try Self.string(in: allocation.storage, at: Int(address - allocation.address))
     }
 
     static func string(in record: OriginalStateRecord, at offset: Int) throws -> String {
         var bytes: [UInt8] = []
-        for position in offset..<record.bytes.count {
+        for position in offset..<record.byteCount {
             let byte = try record.integer(at: position, as: UInt8.self)
             if byte == 0 { return String(String.UnicodeScalarView(bytes.map { UnicodeScalar($0) })) }
             bytes.append(byte)

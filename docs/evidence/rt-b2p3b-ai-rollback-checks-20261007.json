@@ -1,0 +1,13 @@
+{
+ "study": "docs/research/CORE_REALTIME.md",
+ "phase": "B2 P3b (the AI and object-input rollback checks through both forms)",
+ "date": "2026-10-07",
+ "design": "the B2 P3 review's test findings",
+ "change": "reference checks and tests only: in both modes, up to 20 cases with events rerun with an observer that throws at the first and at the last event (the all-or-nothing form leaves world, actors and globals unchanged; the in-place form writes every record back whole, and for character AI, whose observer runs after the pass, equal to the completed case's records), and with the called slot's Object binding corrupted (both forms give the same outcome and error; the all-or-nothing caller unchanged); Result.rollbacks counts them and both suites require it above zero in both modes",
+ "gates": {
+  "sources": "production sources identical to B2 P3's (e7dedda); vs, scenarios, AppKit, emulator and phone as recorded there",
+  "tests": "bundle B (native tree 8051d84f, the same as this commit's): OriginalCharacterAITests and OriginalObjectInputTests (2 tests each) pass"
+ },
+ "open": "the review's copy probe (the globals' storage identity constant across a child call) and a runtime count assertion remain unwritten; the phone profile shows the gain",
+ "review": "answers the P3 review's test findings; test and reference-check code only, not separately reviewed"
+}

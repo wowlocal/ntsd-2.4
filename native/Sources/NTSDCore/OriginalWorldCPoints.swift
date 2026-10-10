@@ -6,9 +6,23 @@ public enum OriginalWorldCPoints {
                              observe: (OriginalWorldLinksEvent) throws -> Void = { _ in },
                              afterStage: (Stage,OriginalMatchPreparation) throws -> Void = { _,_ in },
                              afterDepth: (Int,OriginalStateRecord) throws -> Void = { _,_ in }) throws {
-        var next = state,stage = Stage.actions
-        let catalog = state.catalog
-        var pass = OriginalCPointPass(world: next.world,actors: next.actors,globals: next.globals,
+        var next = state
+        try applyInPlace(state: &next,retainedPartnerSlot: retainedPartnerSlot,sse2Conversion: sse2Conversion,observe: observe,
+                         afterStage: afterStage,afterDepth: afterDepth)
+        state = next
+    }
+    /// `apply` on the caller's state (CORE_REALTIME B2 P4): its actors and
+    /// globals move into the pass, back into the state around each stage's
+    /// observer, and the second links pass runs in place; on a throw the state
+    /// holds them again. For callers that drop the state when this throws.
+    package static func applyInPlace(state next: inout OriginalMatchPreparation,retainedPartnerSlot: Int32? = nil,
+                                     sse2Conversion: Bool = false,
+                                     observe: (OriginalWorldLinksEvent) throws -> Void = { _ in },
+                                     afterStage: (Stage,OriginalMatchPreparation) throws -> Void = { _,_ in },
+                                     afterDepth: (Int,OriginalStateRecord) throws -> Void = { _,_ in }) throws {
+        var stage = Stage.actions
+        let catalog = next.catalog
+        var pass = OriginalCPointPass(world: next.world,actors: inPlaceTake(&next.actors,leaving: []),globals: inPlaceTake(&next.globals,leaving: .vacant),
             header: { n in
                 guard catalog.objects.indices.contains(n) else { throw OriginalStateError.invalidStorage("Cpoint Object binding") }
                 return catalog.objects[n].header
@@ -17,15 +31,23 @@ public enum OriginalWorldCPoints {
                 if catalog.objects[n].frameStorage.indices.contains(Int(f)) { return catalog.objects[n].frameStorage[Int(f)] }
                 return try OriginalCPointPass.headerFrame(f,header: catalog.objects[n].header,object: n,site: "cpoint "+stage.rawValue)
             })
+        var passHolds = true
+        defer { if passHolds { next.actors = pass.actors;next.globals = pass.globals } }
+        /// The stage's records into the state for its observer; `resume` takes
+        /// them back for the next stage.
+        func publish(_ done: Stage,resume: Bool) throws {
+            next.actors = inPlaceTake(&pass.actors,leaving: []);next.globals = inPlaceTake(&pass.globals,leaving: .vacant);passHolds = false
+            try afterStage(done,next)
+            if resume { pass.actors = inPlaceTake(&next.actors,leaving: []);pass.globals = inPlaceTake(&next.globals,leaving: .vacant);passHolds = true }
+        }
         try pass.actions(retainedPartnerSlot: retainedPartnerSlot)
-        next.actors = pass.actors;next.globals = pass.globals;try afterStage(.actions,next)
+        try publish(.actions,resume: true)
         stage = .placement;try pass.placement()
-        next.actors = pass.actors;next.globals = pass.globals;try afterStage(.placement,next)
+        try publish(.placement,resume: true)
         stage = .cleanup;try pass.cleanup()
-        next.actors = pass.actors;next.globals = pass.globals;try afterStage(.cleanup,next)
-        try OriginalWorldLinks.apply(state: &next,sse2Conversion: sse2Conversion,observe: observe,afterDepth: afterDepth)
+        try publish(.cleanup,resume: false)
+        try OriginalWorldLinks.applyInPlace(state: &next,sse2Conversion: sse2Conversion,observe: observe,afterDepth: afterDepth)
         try afterStage(.attachments,next)
-        state = next
     }
 }
 
@@ -56,8 +78,8 @@ struct OriginalCPointPass {
     static func headerFrame(_ number: Int32,header: OriginalStateRecord,object: Int,site: String) throws -> OriginalStateRecord {
         if outsideAllocation(number) { return beyondAllocation }
         let offset = Int(UInt32(bitPattern: Int32(0x7a4) &+ number &* 0x178))
-        guard offset <= header.bytes.count-0x178 else {
-            throw OriginalStateError.invalidStorage("Cpoint Frame outside known Object storage (\(site): Object \(object), frame \(number), header \(header.bytes.count) bytes)")
+        guard offset <= header.byteCount-0x178 else {
+            throw OriginalStateError.invalidStorage("Cpoint Frame outside known Object storage (\(site): Object \(object), frame \(number), header \(header.byteCount) bytes)")
         }
         return try OriginalStateRecord(bytes: Array(header.bytes[offset..<offset+0x178]),defined: Array(header.defined[offset..<offset+0x178]))
     }

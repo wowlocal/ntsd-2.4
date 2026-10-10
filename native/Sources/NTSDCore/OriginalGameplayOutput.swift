@@ -11,14 +11,31 @@ public enum OriginalGameplayOutput {
         performBlit: (OriginalBitmapBlit) throws -> Int32,
         soundRequest: OriginalQueuedSound.Request,
         textRenderer: OriginalSurfaceText.Renderer? = nil,
+        detail: Bool = true,
         observe: (OriginalFrontScreenEvent) throws -> Void = { _ in }) throws {
+        // All or nothing: in place on copies, assigned when it completes.
         var stagedWorld = world, stagedGlobals = globals, stagedMemory = memory
-        try apply(world: &stagedWorld, globals: &stagedGlobals, memory: &stagedMemory,
+        try returnFromDispatcherInPlace(world: &stagedWorld, globals: &stagedGlobals, memory: &stagedMemory,
             input: input, resourceBitmap: resourceBitmap, performBlit: performBlit,
-            soundRequest: soundRequest, textRenderer: textRenderer, observe: observe)
-        try stagedGlobals.write(UInt32(0), at: 0x457580-0x44d000)
-        try observe(.init("dispatcherWrite", [0x457580, 0]))
+            soundRequest: soundRequest, textRenderer: textRenderer, detail: detail, observe: observe)
         world = stagedWorld; globals = stagedGlobals; memory = stagedMemory
+    }
+    /// `returnFromDispatcher` on the caller's world, globals and memory, the
+    /// output and mode label in place too (CORE_REALTIME B2 P4g): for callers
+    /// that drop all three when this throws.
+    package static func returnFromDispatcherInPlace(world: inout OriginalStateRecord, globals: inout OriginalStateRecord,
+        memory: inout OriginalMenuPresentationMemory, input: OriginalMenuPresentationInput,
+        resourceBitmap: (UInt32) throws -> (OriginalStateRecord, UInt32),
+        performBlit: (OriginalBitmapBlit) throws -> Int32,
+        soundRequest: OriginalQueuedSound.Request,
+        textRenderer: OriginalSurfaceText.Renderer? = nil,
+        detail: Bool = true,
+        observe: (OriginalFrontScreenEvent) throws -> Void = { _ in }) throws {
+        try applyInPlace(world: &world, globals: &globals, memory: &memory,
+            input: input, resourceBitmap: resourceBitmap, performBlit: performBlit,
+            soundRequest: soundRequest, textRenderer: textRenderer, detail: detail, observe: observe)
+        try globals.write(UInt32(0), at: 0x457580-0x44d000)
+        try observe(.init("dispatcherWrite", [0x457580, 0]))
     }
 
     public static func apply(world: inout OriginalStateRecord, globals: inout OriginalStateRecord,
@@ -27,13 +44,31 @@ public enum OriginalGameplayOutput {
         performBlit: (OriginalBitmapBlit) throws -> Int32,
         soundRequest: OriginalQueuedSound.Request,
         textRenderer: OriginalSurfaceText.Renderer? = nil,
+        detail: Bool = true,
         observe: (OriginalFrontScreenEvent) throws -> Void = { _ in }) throws {
+        // All or nothing: in place on copies, assigned when it completes.
         var stagedWorld = world, stagedGlobals = globals, stagedMemory = memory
+        try applyInPlace(world: &stagedWorld, globals: &stagedGlobals, memory: &stagedMemory,
+            input: input, resourceBitmap: resourceBitmap, performBlit: performBlit,
+            soundRequest: soundRequest, textRenderer: textRenderer, detail: detail, observe: observe)
+        world = stagedWorld; globals = stagedGlobals; memory = stagedMemory
+    }
+    /// `apply` on the caller's world, globals and memory, the mode label in
+    /// place too (CORE_REALTIME B2 P4g): for callers that drop all three when
+    /// this throws.
+    package static func applyInPlace(world stagedWorld: inout OriginalStateRecord, globals stagedGlobals: inout OriginalStateRecord,
+        memory stagedMemory: inout OriginalMenuPresentationMemory, input: OriginalMenuPresentationInput,
+        resourceBitmap: (UInt32) throws -> (OriginalStateRecord, UInt32),
+        performBlit: (OriginalBitmapBlit) throws -> Int32,
+        soundRequest: OriginalQueuedSound.Request,
+        textRenderer: OriginalSurfaceText.Renderer? = nil,
+        detail: Bool = true,
+        observe: (OriginalFrontScreenEvent) throws -> Void = { _ in }) throws {
         let alternate = try stagedGlobals.integer(at: 0x450b84-0x44d000, as: UInt32.self)
         let mode = try stagedGlobals.integer(at: 0x451160-0x44d000, as: Int32.self)
         try observe(.init("stage", [0x41b130]))
-        try OriginalModeLabel.draw(mode: mode, alternateLine: alternate, globals: &stagedGlobals,
-            resourceBitmap: resourceBitmap, performBlit: performBlit, observe: observe)
+        try OriginalModeLabel.drawInPlace(mode: mode, alternateLine: alternate, globals: &stagedGlobals,
+            resourceBitmap: resourceBitmap, performBlit: performBlit, detail: detail, observe: observe)
         try observe(.init("stage", [0x4028a0]))
         try OriginalMenuPresentation.apply(.overlay, input: input, world: &stagedWorld,
             globals: &stagedGlobals, memory: &stagedMemory, textRenderer: textRenderer) {
@@ -48,6 +83,5 @@ public enum OriginalGameplayOutput {
             try observe(.init($0.kind.rawValue, $0.arguments))
             return try soundRequest($0)
         }
-        world = stagedWorld; globals = stagedGlobals; memory = stagedMemory
     }
 }

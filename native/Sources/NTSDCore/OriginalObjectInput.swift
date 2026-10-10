@@ -14,14 +14,26 @@ public enum OriginalObjectInput {
 
     public static func apply(slot: Int,state: inout OriginalMatchPreparation,
                              observe: (OriginalObjectInputEvent) throws -> Void = { _ in }) throws {
+        // All or nothing: the pass runs in place on a copy, whose records are
+        // assigned only when it completes.
+        var copy = state
+        try applyInPlace(slot: slot,state: &copy,observe: observe)
+        state.world = copy.world; state.actors = copy.actors; state.globals = copy.globals
+    }
+    /// `apply` with the caller's world, actors and globals moved into the pass
+    /// and written back on every path (CORE_REALTIME B2): for callers that drop
+    /// the state when this throws.
+    package static func applyInPlace(slot: Int,state: inout OriginalMatchPreparation,
+                                     observe: (OriginalObjectInputEvent) throws -> Void = { _ in }) throws {
         let catalog = state.catalog
         guard try state.world.integer(at: 0x7d4,as: UInt32.self) == 0,
               let registry = catalog.registry.records[0x4d82380] else { throw error("Object-input catalog binding") }
-        var pass = OriginalObjectInputPass(world: state.world,actors: state.actors,globals: state.globals,
-                                           objects: catalog.objects,objectCount: try registry.integer(at: 0,as: Int32.self),
-                                           precision: state.arithmeticPrecision)
+        let objectCount = try registry.integer(at: 0,as: Int32.self),precision = state.arithmeticPrecision
+        var pass = OriginalObjectInputPass(world: inPlaceTake(&state.world,leaving: .vacant),actors: inPlaceTake(&state.actors,leaving: []),
+                                           globals: inPlaceTake(&state.globals,leaving: .vacant),
+                                           objects: catalog.objects,objectCount: objectCount,precision: precision)
+        defer { state.world = pass.world; state.actors = pass.actors; state.globals = pass.globals }
         try pass.run(slot,observe: observe)
-        state.world = pass.world; state.actors = pass.actors; state.globals = pass.globals
     }
 
     static func error(_ message: String) -> OriginalStateError { .invalidStorage(message) }
@@ -76,7 +88,7 @@ struct OriginalObjectInputPass {
         return nil
     }
     mutating func draw(_ stream: Int32,_ range: Int32,observe: (OriginalObjectInputEvent) throws -> Void) throws -> Int32 {
-        var rng = OriginalRandom(table: try (0..<3000).map { try globals.integer(at: 0x44ff90-0x44d000+$0,as: UInt8.self) },
+        var rng = OriginalRandom(table: try OriginalRandom.table(globals, at: 0x44ff90-0x44d000),
             index: Int(try globals.integer(at: 0x450bcc-0x44d000,as: Int32.self)),counter: Int(try globals.integer(at: 0x450c34-0x44d000,as: Int32.self)),
             source: "owned object input",sourceSHA256: "")
         try rng.validate(); let result = Int32(rng.next(Int(range)))

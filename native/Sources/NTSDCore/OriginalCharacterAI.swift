@@ -11,14 +11,27 @@ public enum OriginalCharacterAIEvent: Equatable {
 public enum OriginalCharacterAI {
     public static func apply(slot: Int,mode: Int32,state: inout OriginalMatchPreparation,sse2: Bool = false,
                              observe: (OriginalCharacterAIEvent) throws -> Void = { _ in }) throws {
+        // All or nothing: the pass runs in place on a copy, whose records are
+        // assigned only when it completes.
+        var copy = state
+        try applyInPlace(slot: slot,mode: mode,state: &copy,sse2: sse2,observe: observe)
+        state.world = copy.world; state.actors = copy.actors; state.globals = copy.globals
+    }
+    /// `apply` with the caller's world, actors and globals moved into the pass
+    /// and written back on every path (CORE_REALTIME B2): for callers that drop
+    /// the state when this throws.
+    package static func applyInPlace(slot: Int,mode: Int32,state: inout OriginalMatchPreparation,sse2: Bool = false,
+                                     observe: (OriginalCharacterAIEvent) throws -> Void = { _ in }) throws {
         let catalog = state.catalog
         guard try state.world.integer(at: 0x7d4,as: UInt32.self) == 0,
               let registry = catalog.registry.records[0x4d82380] else { throw OriginalStateError.invalidStorage("Character-AI catalog binding") }
-        var pass = OriginalCharacterAIPass(world: state.world,actors: state.actors,globals: state.globals,objects: catalog.objects,
-                                           objectCount: try registry.integer(at: 0,as: Int32.self),backgrounds: state.backgrounds,sse2: sse2)
+        let objectCount = try registry.integer(at: 0,as: Int32.self),backgrounds = state.backgrounds
+        var pass = OriginalCharacterAIPass(world: inPlaceTake(&state.world,leaving: .vacant),actors: inPlaceTake(&state.actors,leaving: []),
+                                           globals: inPlaceTake(&state.globals,leaving: .vacant),objects: catalog.objects,
+                                           objectCount: objectCount,backgrounds: backgrounds,sse2: sse2)
+        defer { state.world = pass.world; state.actors = pass.actors; state.globals = pass.globals }
         try pass.run(slot,mode: mode)
         for event in pass.events { try observe(event) }
-        state.world = pass.world; state.actors = pass.actors; state.globals = pass.globals
     }
 }
 
@@ -75,7 +88,7 @@ struct OriginalCharacterAIPass {
     }
     func abs(_ value: Int32) -> Int32 { value < 0 ? 0 &- value : value } // 4034e0
     mutating func draw(_ stream: Int32,_ range: Int32) throws -> Int32 {
-        var rng = OriginalRandom(table: try (0..<3000).map { try globals.integer(at: 0x44ff90-0x44d000+$0,as: UInt8.self) },
+        var rng = OriginalRandom(table: try OriginalRandom.table(globals, at: 0x44ff90-0x44d000),
             index: Int(try g(0x450bcc)),counter: Int(try g(0x450c34)),source: "owned character AI",sourceSHA256: "")
         try rng.validate(); let result = Int32(rng.next(Int(range)))
         try setG(0x450bcc,Int32(rng.index)); try setG(0x450c34,Int32(rng.counter))

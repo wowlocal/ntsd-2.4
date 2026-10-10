@@ -21,14 +21,14 @@ public enum OriginalBitmapSurfaceLoading {
     }
     static func apply(_ response: Response,_ storage: inout OriginalStateRecord) throws {
         for w in response.writes {
-            guard w.offset >= 0,w.offset+w.bytes.count <= storage.bytes.count else {
+            guard w.offset >= 0,w.offset+w.bytes.count <= storage.byteCount else {
                 throw OriginalStateError.invalidStorage("Bitmap API output extent")
             }
             for (i,b) in w.bytes.enumerated() { try storage.write(b,at:w.offset+i) }
         }
     }
     static func field(_ record: OriginalStateRecord,_ offset: Int,_ name: String) throws -> UInt32 {
-        guard record.defined[offset..<offset+4].allSatisfy({ $0 }) else { throw Boundary.unknownField(name) }
+        guard record.allDefined(in: offset..<offset+4) else { throw Boundary.unknownField(name) }
         return try record.integer(at:offset,as:UInt32.self)
     }
     /// Only the copy descriptor's height/width survive the controlled menu's

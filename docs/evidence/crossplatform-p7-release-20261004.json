@@ -1,0 +1,50 @@
+{
+  "study": "docs/research/CROSS_PLATFORM.md",
+  "phase": "P7: packages published",
+  "date": "2026-10-04",
+  "approval": "user approved publishing the Linux and Windows packages (2026-10-04); they contain the original NTSD 2.4 game data",
+  "release": {
+    "url": "https://github.com/wowlocal/ntsd-2.4/releases/tag/crossplatform-preview-20261004",
+    "tag": "crossplatform-preview-20261004",
+    "target": "e240ca2be8eedf9656ddc73c9357d954ece27932",
+    "prerelease": true,
+    "latest": false,
+    "note": "the macOS release v0.4.0 stays Latest"
+  },
+  "before": {
+    "b13b1de packages": "built and checked (all three pass) but not published: the Windows package carried 17 DLLs NTSDSDL.exe never loads (FoundationNetworking with libcurl, FoundationXML with libxml2, ...) and neither package carried ICU's licence although Foundation's ICU is in both",
+    "fix e240ca2": "LICENSES gains ICU 76.1's Unicode License v3 and swift-foundation-icu's Apache 2.0 licence (tools/crossplatform/licenses); the Windows package keeps only the import closure of NTSDSDL.exe (19 DLLs incl. SDL3), computed by a PE import reader that matched llvm-readobj's closure"
+  },
+  "assets": {
+    "ntsd-linux-aarch64-e240ca2.tar.gz": {
+      "bytes": 216833358,
+      "sha256": "bb6acacfed332df07c9e950a31e5be638476340243a26cc838d32dfd4982c944"
+    },
+    "ntsd-linux-x86_64-e240ca2.tar.gz": {
+      "bytes": 216976773,
+      "sha256": "5b73d4774ed74d3077ea27ba1bfd21ffa5812b613669f8a7be2c1fdda59f6806"
+    },
+    "ntsd-windows-x86_64-e240ca2.zip": {
+      "bytes": 216748487,
+      "sha256": "ed224f5500c819110ae41817bb7c5bd8e2071aeca8f40c0cb24f9037271c2604"
+    },
+    "manifests": {
+      "ntsd-linux-aarch64-e240ca2.manifest.json": "83531da8dbee82b40524f2fcc183b0bb719ea3ad9b9d0884140d2f61c2472825",
+      "ntsd-linux-x86_64-e240ca2.manifest.json": "f3436accbfa6d4edc060b5a2921e70d7d691c918dbd8642ab644ad6b3ad87b7a",
+      "ntsd-windows-x86_64-e240ca2.manifest.json": "0e2ad42a729eb36cfd5b94f3ea8050188ef94023cf34f57159e3631d722fd51b"
+    },
+    "SHA256SUMS.txt": "included"
+  },
+  "checks e240ca2": {
+    "build": "all three manifests: commit e240ca2, dirty false",
+    "linux-aarch64": "check_linux_package.sh in ntsd-linux-clean:noble: every library resolves, default launch with packaged music and font, X11 smoke reaches a match with xdotool input, vs scenario equal",
+    "linux-x86_64": "same on linux/amd64 (Rosetta harness): vs scenario equal",
+    "windows-x86_64": "check_windows_package.sh in a fresh CrossOver 26.3 bottle: default launch with GDI SYSTEM_FONT and packaged music, vs scenario equal (offscreen/dummy SDL drivers)",
+    "published bytes": "gh release download of every asset: shasum -c SHA256SUMS.txt all OK, sums file identical to the local one"
+  },
+  "notes": "release notes state the scope honestly: containers and Wine only, never real hardware; the 9/10 matrix result is for the e752f9c development builds, the packaged binaries were checked on vs; playback diverges at iteration 251 on every platform; Linux font is a temporary deviation",
+  "open": [
+    "real Linux and Windows hardware",
+    "ONLINE GAME between machines or across platforms"
+  ]
+}

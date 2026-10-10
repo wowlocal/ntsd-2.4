@@ -1,0 +1,39 @@
+{
+ "study": "docs/research/CORE_REALTIME.md",
+ "phase": "1a",
+ "date": "2026-10-06",
+ "change": "NTSDAndroidWindowHost.draw clears only the black margins around the frame (it cleared the whole window buffer, then overwrote the frame's pixels) and swaps B,G,R,X to R,G,B,X four pixels at a time with SIMD4<UInt32> (unaligned loads/stores), scalar for the tail",
+ "checks": {
+  "swap equivalence": "scratch program: the SIMD swap equals the previous per-pixel formula for lengths 0,1,3,4,5,7,8,799,800,801 at every alignment offset 0-3 (0 mismatches)",
+  "emulator": "vs equal; 1,832 frames identical to the earlier Android app run (android-app on T7)",
+  "phone screenshot": "main menu with correct colours and black margins",
+  "macOS builds": "unaffected (NTSDAndroid is Android-only)"
+ },
+ "phone": {
+  "baseline": "10.07 ticks/s, Android window drawing 6.8% inclusive",
+  "after": {
+   "label": "rt1a",
+   "serial": "R58R36F7VFD",
+   "runSeconds": 446,
+   "peakResidentMB": 1269,
+   "ticksPerSecond": 10.16,
+   "busySeconds": 308,
+   "bodies": 1800,
+   "profile": {
+    "front-buffer drawing": 18.8,
+    "gameplay session": 17.7,
+    "gameplay body": 11.7,
+    "loaded cycle": 11.2,
+    "bindings store": 7.3,
+    "loaded menu attempt": 4.9,
+    "loaded match entry": 4.0,
+    "Android window drawing": 3.2,
+    "bindings read": 2.8,
+    "display perform": 2.7,
+    "menu state replace": 1.9,
+    "observed iteration": 1.9
+   }
+  },
+  "note": "the window drawing's share halved (6.8% -> 3.2%); the tick rate change (10.07 -> 10.16) is within run-to-run variation"
+ }
+}

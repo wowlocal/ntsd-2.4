@@ -38,6 +38,23 @@ final class OriginalApplicationHostDeliveryContextTests: XCTestCase {
         case .shared:XCTAssertEqual(error as? Host.Boundary,.sharedPlatform)
         }
     }
+    /// CORE_REALTIME A3 L5a: the shipping platform's committed candidate is
+    /// the delivery context's platform itself; any other platform is still
+    /// copied, with its copy failures.
+    func testOnlyTheShippingPlatformIsShared() throws {
+        let (p,_) = try inputs()
+        let copied = try Host.retained(p)
+        XCTAssertFalse(copied === p)
+        XCTAssertEqual(copied.hostQueuePosition,p.hostQueuePosition);XCTAssertEqual(copied.shadow,p.shadow)
+        for failure in [CopyFailure.throwing,.shared] {
+            let (q,_) = try inputs();arm(q,failure)
+            XCTAssertThrowsError(try Host.retained(q)) { self.error($0,failure) }
+        }
+        let package = try OriginalApplicationStartupInputsTests.shared.get()
+        let shipping = OriginalApplicationPreparedStartupPlatform(inputs:package,
+            prepared:.init(panelIO:.init(outputBacking:[0xa5]),environmentTZ:nil,sound:.init(createResult:0,createdDevice:0)))
+        XCTAssertTrue(try OriginalApplicationHostSession<OriginalApplicationPreparedStartupPlatform>.retained(shipping) === shipping)
+    }
     func encoded<T: Encodable>(_ value: T) throws -> Data {
         let encoder = JSONEncoder();encoder.outputFormatting = [.sortedKeys]
         return try encoder.encode(value)

@@ -1,0 +1,61 @@
+{
+ "study": "docs/research/CORE_REALTIME.md",
+ "phase": "A3 P0 (idle iterations measured apart from the tick step)",
+ "date": "2026-10-07",
+ "design": "docs/research/CORE_REALTIME_A3.md (P0)",
+ "change": "OriginalRuntimeSession counts committed message-loop iterations (in a match nearly all idle: no message, the timer not due): their step time and their whole iterate, which adds the runtime's own work; the progress event carries committedSteps, committedBusySeconds and committedIterationSeconds; android_speed.py reports idleMsPerStep, idleIterationMs, idleStepsPerTick and tickStepMs (the step that reaches the loaded cycle). Telemetry only.",
+ "phone": {
+  "runs": [
+   {
+    "label": "rta3p0-run1",
+    "runSeconds": 305,
+    "peakResidentMB": 1495,
+    "ticksPerSecond": 25.93,
+    "busySeconds": 199.05,
+    "bodies": 1800,
+    "completeMsPerTick": 14.6,
+    "partAssembliesPerTick": 0.0,
+    "menuMsPerStep": 0.84,
+    "menuStepsPerTick": 4.12,
+    "idleMsPerStep": 0.658,
+    "idleIterationMs": 0.805,
+    "idleStepsPerTick": 3.12,
+    "tickStepMs": 1.392,
+    "mainCpuShare": 0.515,
+    "renderCpuShare": 0.424,
+    "mainMsPerTick": 19.9,
+    "renderMsPerTick": 16.4
+   },
+   {
+    "label": "rta3p0-run2",
+    "runSeconds": 299,
+    "peakResidentMB": 1535,
+    "ticksPerSecond": 26.02,
+    "busySeconds": 196.59,
+    "bodies": 1800,
+    "completeMsPerTick": 14.5,
+    "partAssembliesPerTick": 0.0,
+    "menuMsPerStep": 0.83,
+    "menuStepsPerTick": 4.12,
+    "idleMsPerStep": 0.66,
+    "idleIterationMs": 0.808,
+    "idleStepsPerTick": 3.12,
+    "tickStepMs": 1.364,
+    "mainCpuShare": 0.515,
+    "renderCpuShare": 0.408,
+    "mainMsPerTick": 19.8,
+    "renderMsPerTick": 15.7
+   }
+  ],
+  "result": "idle step 0.658/0.660 ms, whole idle iteration 0.805/0.808 ms (the runtime's own work ~0.15 ms), 3.12 idle iterations per tick: ~2.5 ms per tick; the tick's own step 1.39/1.36 ms; the loaded cycle 14.6/14.5 ms; main 19.9/19.8 ms per tick"
+ },
+ "mac": "vs on the frozen binary: idle step 0.033 ms, iteration 0.040 ms, 3.12 per tick",
+ "gates": {
+  "headless": "vs equal, 1,832 frames identical",
+  "scenarios": "all 10 equal, frames identical (rt-a3p0-all)",
+  "AppKit": "vs and playback equal, 3,960 frames identical to the B2 P3 AppKit run",
+  "emulator": "vs equal, 1,832 frames identical",
+  "tests": "bundle B (tested native tree 8a5b609b): OriginalMacRuntimeMenuTests (9), OriginalMacRuntimeLoadingTests (7), OriginalMacRuntimeStartupTests (5) pass; no suite drives OriginalRuntimeSession, so the scenarios are its check"
+ },
+ "review": "not required (telemetry, no storage or architecture change)"
+}

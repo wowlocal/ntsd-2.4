@@ -1,0 +1,61 @@
+{
+  "url": "https://github.com/macosforge/alac",
+  "commit": "c38887c5c5e64a4b31108733bd79ca9b2496d987",
+  "path": "codec/",
+  "license": "Apache-2.0 (each file's header; LICENSE copied from the repository root)",
+  "licenseSHA256": "a337314dd82d26791112c1e5a85725b2eb92f5b7e6f9102fa4eaa2903f77518f",
+  "files": {
+    "ALACAudioTypes.h": {
+      "originalSHA256": "a0fe17bf82191d28c500b9ee1e773d49700df5e33ad862ed61b13c8a094c03b9",
+      "vendoredSHA256": "a0fe17bf82191d28c500b9ee1e773d49700df5e33ad862ed61b13c8a094c03b9"
+    },
+    "ALACBitUtilities.c": {
+      "originalSHA256": "276ac7d7f2d240a4b0437d7e222afcba4c78bd8fd8104d0e9c6b0d45f67abcfe",
+      "vendoredSHA256": "276ac7d7f2d240a4b0437d7e222afcba4c78bd8fd8104d0e9c6b0d45f67abcfe"
+    },
+    "ALACBitUtilities.h": {
+      "originalSHA256": "18d1c8f957a403cc5b9b7d99e9d3987001adeac6ceadb4a4b1b5dc1ea4bff8ca",
+      "vendoredSHA256": "18d1c8f957a403cc5b9b7d99e9d3987001adeac6ceadb4a4b1b5dc1ea4bff8ca"
+    },
+    "ALACDecoder.cpp": {
+      "originalSHA256": "b071c3a82bcb0b5e8ad704cafb514aaeba5b0869b7dcc83fa79561bae994c019",
+      "vendoredSHA256": "b071c3a82bcb0b5e8ad704cafb514aaeba5b0869b7dcc83fa79561bae994c019"
+    },
+    "ALACDecoder.h": {
+      "originalSHA256": "779a1686417687f3ba107f9a12bb0f4c892885c0654d0bd5db7133bc4edfe24c",
+      "vendoredSHA256": "779a1686417687f3ba107f9a12bb0f4c892885c0654d0bd5db7133bc4edfe24c"
+    },
+    "EndianPortable.c": {
+      "originalSHA256": "34b4d4c4dd599e05ac43f4a58eef61ef2eb5a7093e46209eebdf6ac7024b3dfc",
+      "vendoredSHA256": "34b4d4c4dd599e05ac43f4a58eef61ef2eb5a7093e46209eebdf6ac7024b3dfc"
+    },
+    "EndianPortable.h": {
+      "originalSHA256": "5c3b1df02e8bef3adb4feee6f0ed0684b2d000d44e57a0c2ed754668794d40b0",
+      "vendoredSHA256": "5c3b1df02e8bef3adb4feee6f0ed0684b2d000d44e57a0c2ed754668794d40b0"
+    },
+    "ag_dec.c": {
+      "originalSHA256": "622d7551ef041d82fa6462292155c48fcc2d8b912ed0241e202b86afa3536747",
+      "vendoredSHA256": "622d7551ef041d82fa6462292155c48fcc2d8b912ed0241e202b86afa3536747"
+    },
+    "aglib.h": {
+      "originalSHA256": "ef715d64666e4a4faaa0fafcd5050bd5b7f8c45e9760382735f37cf183c55778",
+      "vendoredSHA256": "ef715d64666e4a4faaa0fafcd5050bd5b7f8c45e9760382735f37cf183c55778"
+    },
+    "dp_dec.c": {
+      "originalSHA256": "1f8e8b25e61c5b667ad729a9c33e3916df7eb4883125dcac7266d719cbf23516",
+      "vendoredSHA256": "1f8e8b25e61c5b667ad729a9c33e3916df7eb4883125dcac7266d719cbf23516"
+    },
+    "dplib.h": {
+      "originalSHA256": "fd2b9806f8cf2386dcbdc919ddf56c18608ce1b0812a74b6b9d0b0eb9df67d78",
+      "vendoredSHA256": "fd2b9806f8cf2386dcbdc919ddf56c18608ce1b0812a74b6b9d0b0eb9df67d78"
+    },
+    "matrix_dec.c": {
+      "originalSHA256": "ae9dd8abc1a9d1cf7f6256c0b15ffd72f9d51c6ffdae9b833f6e96d9d8a03495",
+      "vendoredSHA256": "ae9dd8abc1a9d1cf7f6256c0b15ffd72f9d51c6ffdae9b833f6e96d9d8a03495"
+    },
+    "matrixlib.h": {
+      "originalSHA256": "00839b4672b4ae7887a4d0448d6258165753b1e5f85f84c53c67e7e7b8b9d76d",
+      "vendoredSHA256": "00839b4672b4ae7887a4d0448d6258165753b1e5f85f84c53c67e7e7b8b9d76d"
+    }
+  }
+}

@@ -1,6 +1,7 @@
 import Foundation
-import Compression
+#if canImport(CryptoKit)
 import CryptoKit
+#endif
 import NTSDCore
 
 /// Rebuilds and verifies the full native catalog once, then continues through
@@ -53,7 +54,7 @@ public enum MatchPreparationReference {
         var bytes = [UInt8](repeating: 0, count: count+1)
         let actual = bytes.withUnsafeMutableBufferPointer { output in
             source.withUnsafeBytes { input in
-                compression_decode_buffer(output.baseAddress!, output.count, input.bindMemory(to: UInt8.self).baseAddress!, input.count, nil, COMPRESSION_ZLIB)
+                FixtureInflate.decode(output.baseAddress!, output.count, input.bindMemory(to: UInt8.self).baseAddress!, input.count)
             }
         }
         guard actual == count else { throw error("Compressed length mismatch") }

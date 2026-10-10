@@ -1,5 +1,7 @@
 import Foundation
+#if canImport(CryptoKit)
 import CryptoKit
+#endif
 import XCTest
 @testable import NTSDCore
 @testable import NTSDReferenceChecks
@@ -68,7 +70,8 @@ final class OriginalActorSchedulerTests: XCTestCase {
         try globalBase.write(Int32(1), at: 0x44d034-base)
         for index in 0..<3000 { try globalBase.write(UInt8(1+index%255), at: 0x44ff90-base+index) }
         var eventCount = 0
-        for item in corpus.cases {
+        // Every case all-or-nothing and in place (CORE_REALTIME B2).
+        for (item, inPlace) in corpus.cases.flatMap({ [($0, false), ($0, true)] }) {
             var actor = try XCTUnwrap(templates[item.fill]), header = headerBase, globals = globalBase
             var frames: [Int32: OriginalStateRecord] = [:]
             for p in item.actor { try patch(&actor, p.offset, p.bytes) }
@@ -88,7 +91,7 @@ final class OriginalActorSchedulerTests: XCTestCase {
                         case let .catalogSound(x, index):
                             events.append(.init(kind: "catalogSound", arguments: [x, index].map(UInt32.init(bitPattern:))))
                         }
-                    })
+                    }, inPlace: inPlace)
             } catch { XCTFail("\(item.label): \(error)"); return }
             let expected = try hex(item.after), mask = try hex(item.defined).map { $0 != 0 }
             if let offset = actor.bytes.indices.first(where: { actor.bytes[$0] != expected[$0] || actor.defined[$0] != mask[$0] }) {
@@ -99,7 +102,7 @@ final class OriginalActorSchedulerTests: XCTestCase {
             guard sha == item.globalsSHA256 && globals.defined.allSatisfy({ $0 }) && events == item.events else {
                 XCTFail("\(item.label): global SHA or ordered sound requests differ"); return
             }
-            eventCount += events.count
+            if !inPlace { eventCount += events.count }
         }
         XCTAssertEqual(eventCount, 756)
         print("ACTOR SCHEDULER", corpus.cases.count, "whole calls and", eventCount, "ordered sound requests compared")

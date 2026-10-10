@@ -33,16 +33,29 @@ public final class OriginalApplicationHostSession<Platform: OriginalApplicationS
     /// later Host commits and the Host itself; it never consults latest state.
     /// This retains computed data, not an actual device lease or IO acknowledgement.
     public struct DeliveryContext {
-        public let application: Application
-        private let retainedPlatform: Platform
+        /// The application and the retained platform (a copy, or the shipping
+        /// platform's committed candidate itself; `retained`) in one shared,
+        /// immutable object: a batch carries its context through publication
+        /// and every drain (CORE_REALTIME phase 4n).
+        private final class Storage {
+            let application: Application, retainedPlatform: Platform
+            init(application: Application, retainedPlatform: Platform) {
+                self.application = application; self.retainedPlatform = retainedPlatform
+            }
+        }
+        private let storage: Storage
+        public var application: Application { _read { yield storage.application } }
         fileprivate init(application: Application, platform: Platform) throws {
-            self.application = application
-            retainedPlatform = try OriginalApplicationHostSession<Platform>.copy(platform)
+            storage = Storage(application: application, retainedPlatform: try OriginalApplicationHostSession<Platform>.retained(platform))
+        }
+        /// With the retained platform already made (CORE_REALTIME A1).
+        fileprivate init(application: Application, retainedPlatform: Platform) {
+            storage = Storage(application: application, retainedPlatform: retainedPlatform)
         }
         /// A caller may mutate this independent inspection copy without changing
         /// the batch or Host. stagedCopy retains its existing value-state contract.
         public func platformSnapshot() throws -> Platform {
-            try OriginalApplicationHostSession<Platform>.copy(retainedPlatform)
+            try OriginalApplicationHostSession<Platform>.copy(storage.retainedPlatform)
         }
     }
 
@@ -104,6 +117,9 @@ public final class OriginalApplicationHostSession<Platform: OriginalApplicationS
     private let lock = NSRecursiveLock()
     private var inFlight = false
     private var application = Application()
+    /// The committed platform. Never changed in place: attempts stage a copy,
+    /// and a delivery context may hold this object (A3 L5a), so a callback
+    /// must not keep a supplied platform beyond its call.
     private var platform: Platform
     private var pending: Pending?
     private var prepared: Prepared?
@@ -115,6 +131,18 @@ public final class OriginalApplicationHostSession<Platform: OriginalApplicationS
         let staged = try platform.stagedCopy()
         guard staged !== platform else { throw Boundary.sharedPlatform }
         return staged
+    }
+    /// The delivery context's platform for a committed candidate: the
+    /// candidate itself for the shipping platform, else a copy as before
+    /// (CORE_REALTIME A3 L5a). Sharing equals copying there because its staged
+    /// copy cannot fail or share, and a committed platform is never changed in
+    /// place: every Host attempt stages a copy of it, `start` refuses a
+    /// started application before staging, and the publication hooks that
+    /// run after the context is built only read the candidate's cursors. Test
+    /// platforms keep the copy and its failures.
+    static func retained(_ candidate: Platform) throws -> Platform {
+        if Platform.self == OriginalApplicationPreparedStartupPlatform.self { return candidate }
+        return try copy(candidate)
     }
     private func locked<T>(_ body: () throws -> T) rethrows -> T {
         lock.lock(); defer { lock.unlock() }; return try body()
@@ -135,9 +163,45 @@ public final class OriginalApplicationHostSession<Platform: OriginalApplicationS
         return sequence
     }
 
+    private var idleCommits: UInt64 = 0
+    /// Iterations committed by `stepIdle` (a diagnostic for tests and probes).
+    public var idleCommitCount: UInt64 { locked { idleCommits } }
+    /// `step` for an idle message-loop iteration (no message, the timer not
+    /// due) without the whole step: the same checks in `step`'s order, the
+    /// session's `idleIteration` (the step's own loop code and requests), then
+    /// the same publication, committing in place once nothing can fail. nil
+    /// when the iteration is anything else; the caller then runs `step`, which
+    /// raises any error itself (CORE_REALTIME A1).
+    func stepIdle(prepare: (Platform, Session.State) throws -> Inputs,
+        queue: (Session.Loop.Request, Platform) throws -> Session.Loop.Response,
+        beforePublication: (Platform) throws -> Void = { _ in },
+        expectedSequence: UInt64? = nil) throws -> Outcome? {
+        try attempt {
+            try requirePublication()
+            guard expectedSequence == nil || expectedSequence == sequence else { throw Boundary.staleSequence }
+            guard application.session != nil else { throw Application.Boundary.notStarted }
+            let candidate = try Self.copy(platform)
+            let inputs = try prepare(candidate, application.session!.state)
+            guard application.startup != nil, inputs.initialization == nil, inputs.queue.isEmpty, inputs.windowDefault.isEmpty,
+                  inputs.surface.isEmpty, inputs.lifecycle.isEmpty,
+                  let idle = try application.session!.idleIteration(queue: { q in try queue(q, candidate) }) else { return nil }
+            // The delivery context's platform, then the final hook, as `step`.
+            let retained = try Self.retained(candidate)
+            try beforePublication(candidate)
+            application.commitIdle(idle); idleCommits += 1
+            let value = Session.Committed(result: .continued, effects: idle.effects, graphics: [])
+            platform = candidate
+            return .committed(sequence: publish(.iteration(value), context: .init(application: application, retainedPlatform: retained)),
+                              result: .continued)
+        }
+    }
+
     /// A value snapshot of the last committed Core owner. Observers during an
     /// attempt see this same committed state, never the tentative child state.
     public var snapshot: Application { locked { application } }
+    /// The committed application's startup, without copying the whole
+    /// application (CORE_REALTIME 4o; the runtime reads it every loaded run).
+    public var committedStartup: OriginalWinMainStartup? { locked { application.startup } }
     public var committedSequence: UInt64 { locked { sequence } }
     public var pendingLoading: Session.PendingLoading? { locked { pending?.loading } }
     public var preparedLoadedMenu: LoadedMenu.PendingReturn? { locked { prepared?.returned } }
@@ -195,6 +259,9 @@ public final class OriginalApplicationHostSession<Platform: OriginalApplicationS
         checkpoint: (Session.Checkpoint, OriginalStateRecord, Int32?) throws -> Void = { _,_,_ in },
         bodyProduced: (OriginalFrontScreenBody.StartupResult) throws -> Void = { _ in },
         beforeCommit: (Session.Loop, Session.State) throws -> Void = { _,_ in },
+        /// false: `beforeCommit` ignores the state (it gets the step's staged
+        /// state without the alias merge); see OriginalApplicationMenuSession.step.
+        observesCommit: Bool = true,
         bitmap: ((Application.Stage, OriginalBitmapSurfaceLoading.Request, Platform) throws -> OriginalBitmapSurfaceLoading.Response)? = nil,
         lifecycle: ((OriginalWindowInitialization.Request, Platform) throws -> OriginalWindowInitialization.Response)? = nil,
         surface: ((OriginalWindowInitialization.Request, Platform) throws -> OriginalWindowInitialization.Response)? = nil,
@@ -211,15 +278,17 @@ public final class OriginalApplicationHostSession<Platform: OriginalApplicationS
         try attempt {
             try requirePublication()
             guard expectedSequence == nil || expectedSequence == sequence else { throw Boundary.staleSequence }
-            guard let session = application.session else { throw Application.Boundary.notStarted }
+            // Checked and read in place: a bound copy of the whole session
+            // retained and released every owner it holds (CORE_REALTIME 4o).
+            guard application.session != nil else { throw Application.Boundary.notStarted }
             let candidate = try Self.copy(platform)
-            let inputs = try prepare(candidate, session.state)
+            let inputs = try prepare(candidate, application.session!.state)
             var next = application
             let result = try next.step(inputs: inputs.initialization, responses: inputs.responses,
                 queue: inputs.queue, windowDefault: inputs.windowDefault, surface: inputs.surface,
                 lifecycle: inputs.lifecycle, observe: observe, menuObserve: menuObserve,
                 graphicsObserve: graphicsObserve, checkpoint: checkpoint, bodyProduced: bodyProduced,
-                beforeCommit: beforeCommit,
+                beforeCommit: beforeCommit, observesCommit: observesCommit,
                 bitmap: bitmap.map { callback in { stage,q in try callback(stage,q,candidate) } },
                 lifecycleProvider: lifecycle.map { callback in { q in try callback(q,candidate) } },
                 surfaceProvider: surface.map { callback in { q in try callback(q,candidate) } },
@@ -304,9 +373,9 @@ public final class OriginalApplicationHostSession<Platform: OriginalApplicationS
     ) throws -> LoadedOutcome {
         guard let pending else { throw Boundary.noPendingLoading }
         guard prepared == nil else { throw Boundary.alreadyPreparedLoading }
-        guard let startup = application.startup, let session = application.session else { throw Application.Boundary.notStarted }
+        guard let startup = application.startup, application.session != nil else { throw Application.Boundary.notStarted }
         let candidate = try Self.copy(pending.platform)
-        let cycle = try session.loadedOwners.map { _ in try application.makeLoadedCycle(pending:pending.loading) }
+        let cycle = application.session!.loadedOwners == nil ? nil : try application.makeLoadedCycle(pending:pending.loading)
         let outcome = try prepare(.init(entry:pending.loading,startup:startup,cycle:cycle),candidate)
         let next: Prepared
         switch outcome {
@@ -370,7 +439,10 @@ public final class OriginalApplicationHostSession<Platform: OriginalApplicationS
     @discardableResult
     public func finishLoadedMenu(
         perform: (Session.Loop.Request, Platform) throws -> Session.Loop.Response,
-        beforeCommit: (Session.Loop, Session.State, Platform) throws -> Void = { _,_,_ in }
+        beforeCommit: (Session.Loop, Session.State, Platform) throws -> Void = { _,_,_ in },
+        /// false: `beforeCommit` ignores the state (it gets the step's staged
+        /// state without the alias merge); see OriginalApplicationMenuSession.step.
+        observesCommit: Bool = true
     ) throws -> Outcome {
         try attempt {
             guard let pending else { throw Boundary.noPendingLoading }
@@ -380,7 +452,7 @@ public final class OriginalApplicationHostSession<Platform: OriginalApplicationS
             var candidate = try Self.copy(preparedPlatform), next = application
             let result = try next.finishLoadedMenu(child,environment:&candidate,
                 perform:{ request,platform in try perform(request,platform) },
-                beforeCommit:{ loop,state,platform in try beforeCommit(loop,state,platform) })
+                beforeCommit:{ loop,state,platform in try beforeCommit(loop,state,platform) },observesCommit:observesCommit)
             let context = try DeliveryContext(application: next, platform: candidate)
             application = next;self.platform = candidate;self.prepared = nil;self.pending = nil
             return .committed(sequence:publish(.loaded(result),context:context),result:result.result)

@@ -1,0 +1,39 @@
+{
+  "study": "docs/research/CROSS_PLATFORM.md",
+  "phase": "Memory footprint (measurement only)",
+  "date": "2026-10-05",
+  "why": "the game was killed by Android's low-memory killer on a 2.8 GB phone (crossplatform-p8-android-phone-20261005.json); this records where its memory goes before any change",
+  "run": "macOS NTSDHeadless (36e7e8e), app_e2e computer-vs script with --virtual-clock 123456789 8, --no-network; footprint sampled every 3 s",
+  "footprint": {
+    "rise": "3.7 MB at start, 1.6 GB after 4 s, 2.8 GB after 7 s, ~3.9 GB peak (footprint -p)",
+    "vmmap": "physical footprint 3.8 G, peak 3.9 G; DefaultMallocZone 3.8 G allocated in 360,394 blocks; mapped files 34.8 M: the game data is copied into the heap, not mapped"
+  },
+  "heap -s at 3.6 GB": {
+    "Swift._ContiguousArrayStorage<UInt8>": {
+      "count": 108552,
+      "bytes": 1856266528
+    },
+    "OriginalMacDisplayBackend.Storage.values": {
+      "count": 890,
+      "bytes": 1207418112
+    },
+    "Swift._ContiguousArrayStorage<Bool>": {
+      "count": 80163,
+      "bytes": 457682208
+    },
+    "OriginalMacDisplayBackend.Storage.known": {
+      "count": 890,
+      "bytes": 306997056
+    },
+    "Swift._DictionaryStorage<String, Int32>": {
+      "count": 54800,
+      "bytes": 168345600
+    }
+  },
+  "reading (inference, to be checked before any change)": [
+    "about 1.5 GB is the display backend's 890 surfaces (pixel values plus a per-pixel 'known' mask)",
+    "about 1.9 GB is byte arrays, the game's loaded files and bitmaps held as copies",
+    "Bool arrays store one byte per flag (458 MB); a bit set would be an eighth"
+  ],
+  "status": "measurement only; no code change. Reducing it touches how Core and the runtime hold game data, which must not change behaviour and needs the macOS gate; awaiting the user's decision (asked 2026-10-05)"
+}

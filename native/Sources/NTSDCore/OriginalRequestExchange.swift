@@ -8,7 +8,8 @@ public protocol OriginalExchangeRequest: Equatable {
 }
 
 /// Prepared responses for a typed external request consumer. Pure
-/// value cursors run inside a Core attempt; claim/answer/fail run outside it.
+/// value cursors run inside a Core attempt; claim/answer/fail run outside it,
+/// except for an inline cursor's server, which runs them inside the attempt.
 /// Retrying Native calculation reuses values, not already performed host IO.
 public final class OriginalRequestExchange<Input: OriginalExchangeRequest, Resource> {
     public typealias Request = Input
@@ -55,9 +56,16 @@ public final class OriginalRequestExchange<Input: OriginalExchangeRequest, Resou
         public private(set) var position = 0
         fileprivate var pending: RequestNeeded?
         /// Inline service: answers a missing request synchronously and records
-        /// its receipt instead of suspending the attempt. Nil for permit cursors.
-        fileprivate var inline: ((RequestNeeded) throws -> Receipt)?
+        /// its receipt instead of suspending the attempt; nil from it suspends
+        /// as a permit cursor does. Nil for permit cursors.
+        fileprivate var inline: ((RequestNeeded) throws -> Receipt?)?
         public var isSuspended: Bool { pending != nil }
+        /// The checks `finish` makes of the cursor itself: not suspended, every
+        /// receipt consumed (CORE_REALTIME A3 L4b, for a cursor of no exchange).
+        public func requireConsumed() throws {
+            guard pending == nil else { throw Boundary.suspendedCursor }
+            guard position == receipts.count else { throw Boundary.unconsumedReplies }
+        }
         /// Whether any receipt keeps a resource alive.
         public var retainsResources: Bool { receipts.contains { !$0.resources.isEmpty } }
         fileprivate init(owner: Identity, receipts: [Receipt]) {
@@ -71,8 +79,7 @@ public final class OriginalRequestExchange<Input: OriginalExchangeRequest, Resou
                 position += 1; return receipt.response
             }
             let ticket = RequestNeeded(request: request, ordinal: position, owner: owner, revision: receipts.count)
-            if let inline {
-                let receipt = try inline(ticket)
+            if let inline, let receipt = try inline(ticket) {
                 receipts.append(receipt); position += 1; return receipt.response
             }
             pending = ticket; throw ticket
@@ -112,6 +119,75 @@ public final class OriginalRequestExchange<Input: OriginalExchangeRequest, Resou
             }
         }
         return cursor
+    }
+    /// Inline cursor that serves only the missing requests `accepts` takes; any
+    /// other suspends the attempt as a permit cursor does. `accepts` runs before
+    /// the claim (a claim cannot be undone); `serve` gets this exchange and must
+    /// begin service and answer (or fail) through the permit, as a permit
+    /// service would (CORE_REALTIME M2). The cursor holds the exchange weakly.
+    public func inlineCursor(accepting accepts: @escaping (Request) -> Bool,
+                             _ serve: @escaping (Permit, OriginalRequestExchange) throws -> Void) throws -> Cursor {
+        var cursor = try snapshot.cursor()
+        cursor.inline = { [weak self] ticket in
+            guard let self, accepts(ticket.request) else { return nil }
+            let permit = try self.claim(ticket)
+            try serve(permit, self)
+            return try self.locked {
+                guard self.status == .open || self.status == .finished,self.active == nil,
+                      self.receipts.count == ticket.ordinal+1 else { throw Boundary.unconsumedReplies }
+                return self.receipts[ticket.ordinal]
+            }
+        }
+        return cursor
+    }
+    /// Cursor over all current receipts whose missing requests `serve` answers
+    /// directly, without a claim, permit or service record (CORE_REALTIME A3
+    /// L4a); nil from `serve` suspends the cursor as a permit cursor does. Its
+    /// replies stay in the cursor until `record` adds them here.
+    public func directCursor(_ serve: @escaping (Request) throws -> Response?) throws -> Cursor {
+        var cursor = try snapshot.cursor()
+        cursor.inline = { ticket in
+            guard let response = try serve(ticket.request) else { return nil }
+            return Receipt(request: ticket.request, response: response, resources: [])
+        }
+        return cursor
+    }
+    /// A cursor bound to no exchange whose missing requests `serve` answers
+    /// (nil suspends it), for an attempt that may need no exchange at all
+    /// (CORE_REALTIME A3 L4b). An exchange takes its replies with `record` if
+    /// the attempt falls back; nothing else of it can reach one.
+    public static func standaloneCursor(_ serve: @escaping (Request) throws -> Response?) -> Cursor {
+        var cursor = Cursor(owner: Identity(), receipts: [])
+        cursor.inline = { ticket in
+            guard let response = try serve(ticket.request) else { return nil }
+            return Receipt(request: ticket.request, response: response, resources: [])
+        }
+        return cursor
+    }
+    /// `claim` of the ticket a cursor over all current receipts would raise for
+    /// `request` after consuming them (CORE_REALTIME A3 L4b).
+    public func claimNext(_ request: Request) throws -> Permit {
+        let count = locked { receipts.count }
+        return try claim(RequestNeeded(request: request, ordinal: count, owner: owner, revision: count))
+    }
+    /// Adds replies a direct cursor served, in order, as their claims and
+    /// answers would have (CORE_REALTIME A3 L4a).
+    public func record(_ replies: [Receipt]) throws {
+        try locked {
+            guard status == .open else { throw Boundary.closed(status) }
+            guard active == nil else { throw Boundary.requestInFlight }
+            receipts.append(contentsOf: replies)
+        }
+    }
+    /// A direct server's failure, as `fail` records it after a claim
+    /// (CORE_REALTIME A3 L4a).
+    public func recordFailure(_ request: Request, diagnostic: String) throws {
+        try locked {
+            guard status == .open else { throw Boundary.closed(status) }
+            guard active == nil else { throw Boundary.requestInFlight }
+            failure = .init(request: request, diagnostic: diagnostic, afterCancellation: false, resources: [])
+            serviceStarted = false; status = .indeterminate
+        }
     }
     /// Call after the Core attempt has unwound, before performing the operation.
     /// A claim is not success and supplies no numeric response to Core.

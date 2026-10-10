@@ -156,7 +156,10 @@ final class OriginalMenuStartupTests: XCTestCase {
         guard rollback else { return }
         let beforeGlobals=loaded.globals,beforeSaved=input.savedPlayback,beforePointers=input.memory.replayPointers,beforeMemory=input.memory.allocations
         let beforeEntryGlobals=entry.state.globals
-        for failure in ["local","round","final"] {
+        // control, received and replay throw right after the entry's in-place
+        // sub-steps wrote its candidate (CORE_REALTIME B2 P2); localBeforeDispatch
+        // inside local input, after its writes and before its children.
+        for failure in ["localBeforeDispatch","local","control","received","replay","round","final"] {
             var environment=Environment(),result: OriginalInitialMatchEntry?
             let before=environment
             XCTAssertThrowsError(try {

@@ -1,0 +1,63 @@
+{
+ "study": "docs/research/CORE_REALTIME.md",
+ "topic": "what the phone's main thread waits on; compute per tick and a real clock in the speed harness",
+ "date": "2026-10-06",
+ "observation": "4e removed 3.6 points of main-thread samples but ticks per second rose ~1%, and main-thread samples per tick did not fall (31.05 -> 31.0). The phone profile samples cycles at 1000 Hz; the main thread gave ~617 samples per second, i.e. on the CPU ~62% of the time.",
+ "schedstat": "per-thread /proc/<pid>/task/*/schedstat over 10 s windows during the 4f run1 (scratchpad phone_schedstat.sh): loading 91-100% on-CPU; gameplay main thread ~62% on-CPU, ~0.4% run-queue wait, ~37% off-CPU with ~105 context switches per second; render workers ~20% each",
+ "offcpu": "simpleperf --trace-offcpu -e cpu-clock (android_speed.py --offcpu, rt-speed/rt4f-offcpu-profile): main thread 20.28 s recorded, 7.56 s (37%) off-CPU, 99.8% of it in __epoll_pwait <- android::Looper::pollOnce <- MessageQueue.nativePollOnce; 1,785 waits in ~20 s, 1,316 of them 4-6 ms (6.87 s, median 5.14 ms)",
+ "cause": "OriginalRuntimeSession schedules the next iteration after the sum of the game's Sleep calls (asyncAfter). The original timer (OriginalApplicationTimer, EXE 43d157..43d1ef) dispatches a tick when more than 33 ms passed since its baseline and otherwise sleeps min(remainder, 5) ms. android_speed.py ran with --virtual-clock 123456789 8 (8 ms per message-loop iteration), so every tick takes ~4 iterations and the 3 idle ones sleep 5 ms for real: ~16 ms of every tick is pacing whatever the compute time.",
+ "harness": "android_speed.py: --offcpu (off-CPU call graphs), --real-clock (no virtual clock), and per-thread compute per tick (mainCpuShare/renderCpuShare from schedstat between bodies 600 and 1500; mainMsPerTick/renderMsPerTick = share x 1000 / ticks per second)",
+ "runs": [
+  {
+   "label": "rt4f-offcpu",
+   "serial": "R58R36F7VFD",
+   "runSeconds": 332,
+   "peakResidentMB": 1301,
+   "ticksPerSecond": 20.17,
+   "busySeconds": 220.65,
+   "bodies": 1800,
+   "profile": {
+    "front-buffer drawing": 28.8,
+    "gameplay session": 11.6,
+    "gameplay body": 9.1,
+    "Android window drawing": 5.3,
+    "loaded cycle": 4.7,
+    "bindings store": 2.8,
+    "observed iteration": 2.1,
+    "loaded menu attempt": 1.4,
+    "display perform": 1.0,
+    "menu state replace": 0.8,
+    "bindings read": 0.5,
+    "loaded match entry": 0.0
+   }
+  },
+  {
+   "label": "rt4f-cpu-virtual",
+   "serial": "R58R36F7VFD",
+   "runSeconds": 331,
+   "peakResidentMB": 1452,
+   "ticksPerSecond": 20.43,
+   "busySeconds": 218.64,
+   "bodies": 1800,
+   "mainCpuShare": 0.622,
+   "renderCpuShare": 0.453,
+   "mainMsPerTick": 30.4,
+   "renderMsPerTick": 22.2
+  },
+  {
+   "label": "rt4f-cpu-realclock",
+   "serial": "R58R36F7VFD",
+   "runSeconds": 394,
+   "peakResidentMB": 1194,
+   "ticksPerSecond": 30.25,
+   "busySeconds": 283.2,
+   "bodies": 4200,
+   "mainCpuShare": 0.788,
+   "renderCpuShare": 0.584,
+   "mainMsPerTick": 26.1,
+   "renderMsPerTick": 19.3
+  }
+ ],
+ "result": "4f: virtual clock main 30.4 ms, render 22.2 ms per tick at 20.43 ticks per second; real clock 30.25 ticks per second (the game's own rate is at most 30.3), main 26.1 ms, render 19.3 ms. Tier 1 (33 ms compute per tick on each thread) is met; an idle message-loop iteration costs ~1.6 ms of main-thread CPU ((30.4-26.1) ms over ~2.6 fewer idle iterations per tick).",
+ "open": "playing by hand on the A12 (manual check by the user)"
+}

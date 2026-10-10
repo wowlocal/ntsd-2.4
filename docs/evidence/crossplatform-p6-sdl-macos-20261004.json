@@ -1,0 +1,47 @@
+{
+  "study": "docs/research/CROSS_PLATFORM.md",
+  "phase": "P6 step 1: SDL3 backend on macOS",
+  "date": "2026-10-04",
+  "build": {
+    "sdl": "NTSD_SDL=1 (manifest flag; default builds unchanged), NTSD_SDL_PREFIX default /opt/homebrew/opt/sdl3 (Homebrew SDL3 3.4.16, video driver cocoa)",
+    "appkit": "app_e2e build: swift-build --scratch-path build/swiftpm-app -c release --product NTSDNative",
+    "sdlScratch": "build/swiftpm-sdl, release"
+  },
+  "host": {
+    "windows": "SDL window + renderer + streaming XRGB8888 texture (nearest); full-screen popup = SDL fullscreen (Spaces off), image scaled to fit; windowed client from the reported metrics, centred like the headless host",
+    "metrics": "macOS: the AppKit window host's SM_CXFIXEDFRAME/SM_CYFIXEDFRAME/SM_CYCAPTION (SDL_GetWindowBordersSize is unsupported on Cocoa: probe returned false); display bounds via SDL 3008x1692 scale 1.0, same as AppKit",
+    "input": "SDL scancodes mapped onto the existing macOS key-code table (one VK/scan/extended definition); Caps Lock as a whole press per toggle on macOS like the AppKit host; mouse client points with scale-to-fit; gamepads (first two at launch, 25 ms sampling) mapped like the AppKit controller host",
+    "audio": "SDL audio stream fed by OriginalMacSoundEffects.render at the device rate; gain 0 while muted or unfocused (DirectSound focus)",
+    "music": "silent, manifest durations (OriginalRuntimeSilentMusicPlayer), declared until P7 decoding",
+    "text": "macOS: the AppKit host's CoreText masks; elsewhere blank masks (declared)",
+    "other": "SDL message boxes; on macOS the Darwin Winsock and the standard overlay, elsewhere --no-network and SDL_GetPrefPath"
+  },
+  "runtime": "WindowLease.presented keeps the last presented crop; OriginalFramebufferPNG writes it identically on every host (--body-frames DIR, --body-frame-every N, script 'frame PATH'); silent manifest music and the PNG encoder moved from NTSDHeadless into NTSDRuntime",
+  "results": {
+    "vsAppKitFullReference": "AppKit run with --body-frames: app_e2e compare equal including capture hashes (no regression from the new option)",
+    "scenarios": {
+      "appkit": "9/10 equal (playback as on main)",
+      "sdl": "9/10 equal (playback as on main)",
+      "linux-aarch64": "9/10 equal",
+      "linux-x86_64": "9/10 equal (Rosetta harness)"
+    },
+    "frames": {
+      "appkit-vs-sdl": "51/51 identical across 8 scenarios with gameplay frames (joystick and playback have none)",
+      "linux-aarch64-vs-x86_64": "51/51 identical",
+      "linux-vs-appkit": "24/51 identical; the 27 others differ only where AppKit draws text (e.g. vs f001800: 2404 px in y 231-545 in 5 flat text colours; demo f000300: 1255 px in y 113-124, 2 colours), since headless draws no glyphs"
+    }
+  },
+  "open": [
+    "per-frame (every body) comparison: frame digests option next",
+    "audio sample comparison between AVAudioEngine and SDL output",
+    "SDL host full screen (toggleFullScreen) unsupported",
+    "recording chooser dialog (nil) on SDL",
+    "SDL on Linux: glibc SDK with SDL3 in the sysroot, glyph rasteriser, POSIX sockets (P7)",
+    "interactive (unscripted) play through SDL not yet exercised by a person"
+  ],
+  "gates": {
+    "macOS tests": "release test build; 70/70 in the affected runtime classes plus OriginalFramebufferPNGTests (3549 s incl. the whole-catalog loading test); 701 listed",
+    "Xcode release": "default build (no NTSD_SDL) ok",
+    "AppKit e2e": "tools/app_e2e.py --scenario all on the build with these sources: 9/10 = baseline (playback pre-existing on main)"
+  }
+}

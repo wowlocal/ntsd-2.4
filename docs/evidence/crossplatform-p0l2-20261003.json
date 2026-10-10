@@ -1,0 +1,39 @@
+{
+  "study": "docs/research/CROSS_PLATFORM.md",
+  "phase": "P0-L2 glibc Linux SDK with XCTest; first Linux test run",
+  "date": "2026-10-03",
+  "sdk": {
+    "id": "ntsd-6.4.0-ubuntu24.04-aarch64",
+    "generator": "swiftlang/swift-sdk-generator tag swift-6.4.0-RELEASE (57190988c478930fbcee768f6119384e3ad5a0a8), built with the 6.4.0 open-source toolchain",
+    "command": "swift-sdk-generator make-linux-sdk --swift-version 6.4.0-RELEASE --with-docker --distribution-name ubuntu --distribution-version 24.04 --target aarch64-unknown-linux-gnu --no-host-toolchain --sdk-name ntsd-6.4.0-ubuntu24.04-aarch64",
+    "source_image": "swift:6.4.0-noble swift@sha256:31d14d727f4451f25e29bac9c42563a098c39ac66415e8bad970f48038e38aca (arm64)",
+    "contents": "usr/lib/swift/linux: XCTest.swiftmodule, libXCTest.so, Testing.swiftmodule, libTesting.so",
+    "installed_bytes": 1053626368,
+    "bundle_copy": "/Volumes/X5/ntsd-2.4-research/crossplatform/tools/swift-sdk-generator/Bundles"
+  },
+  "smoke": {
+    "xctest": "cross-built package with a resource bundle; 2 tests pass in swift:6.4.0-noble, Bundle.module resource found",
+    "probe": "glibc dynamic probe output SHA-256 a2d17e08767f6812d35e21bad229bc67f8a7a7a9109ef715c172ac4b072c7c5c, identical to the static musl runs and equal to macOS except os/crypto lines"
+  },
+  "package_tests_build": {
+    "command": "NTSD_PORTABLE=1 swift build --package-path native --scratch-path /Volumes/X5/ntsd-2.4-research/crossplatform/build-linux-gnu-aarch64 --swift-sdk ntsd-6.4.0-ubuntu24.04-aarch64 --build-tests",
+    "rounds": [
+      "r1: 5 x `missing arguments for parameters 'name', 'testClosure'` (suites construct other suites with `()`)",
+      "r2: extension XCTestCase { convenience init() } rejected: init() declared in XCTest cannot be overridden from extension",
+      "r3: per-suite init for 5 suites; more construction sites and 21 type errors in OriginalApplicationBootstrapTests",
+      "r4: generated init for all 252 direct XCTestCase subclasses (Linux only); 21 errors left, all cascading from `as NSDictionary` bridging",
+      "r5: bridge cast removed; `autoreleasepool` missing",
+      "r6: Build complete"
+    ],
+    "test_source_changes": "CorelibsXCTestSupport.swift (Linux-only inits; pass-through autoreleasepool without the ObjC runtime); OriginalApplicationBootstrapTests keeps the raw parent as a Swift dictionary for NSDictionary.isEqual(to:). No expected values changed."
+  },
+  "macos_check_of_touched_tests": "release test build: OriginalApplicationBootstrapTests, OriginalApplicationIterationDeliveryTests, PortableSHA256Tests — 6 tests, 0 failures",
+  "first_linux_run": {
+    "harness": "tools/crossplatform/linux-test-run.sh in swift:6.4.0-noble on OrbStack (linux/arm64); repo and build dir mounted at /repo and /build, macOS absolute paths recreated as symlinks; OrbStack rejects bind targets under /Volumes",
+    "build": "debug",
+    "filter": "PortableSHA256Tests (vectors, lengths), OriginalBootstrapTests, OriginalObjectTests, OriginalStageTests, OriginalBackgroundTests",
+    "result": "12 tests, 0 failures, 465.7 s; includes whole Stage table, complete Object streams and allocated/staged pools against original-instruction references",
+    "note": "The XCTest runner on Linux takes one filter argument; separate suites with commas. FixtureInflateTests skips itself without Compression.",
+    "log": "/Volumes/X5/ntsd-2.4-research/crossplatform/logs/p3-linux-first-tests.log"
+  }
+}

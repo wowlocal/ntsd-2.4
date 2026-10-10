@@ -11,9 +11,32 @@ public enum OriginalBitmapFont {
         globals: OriginalStateRecord,
         resourceBitmap: (UInt32) throws -> (OriginalStateRecord, UInt32),
         performBlit: (OriginalBitmapBlit) throws -> Int32,
+        detail: Bool = true,
         observe: (OriginalFrontScreenEvent) throws -> Void = { _ in }) throws {
         var storage = text
-        func word(_ address: Int) throws -> UInt32 { try globals.integer(at: address-0x44d000, as: UInt32.self) }
+        // The globals are an independent input that no glyph changes, so each
+        // word reads the same value, or fails the same way, every time: read
+        // once, where it is first used (CORE_REALTIME tier 3 G1; the original
+        // reads the style, target and viewport words per glyph).
+        var words: [(Int, UInt32)] = []
+        words.reserveCapacity(6)
+        func word(_ address: Int) throws -> UInt32 {
+            if let known = words.first(where: { $0.0 == address }) { return known.1 }
+            let value = try globals.integer(at: address-0x44d000, as: UInt32.self)
+            words.append((address, value)); return value
+        }
+        // Each glyph's bitmap resolved once per call (CORE_REALTIME 4z): the
+        // style's word comes from these independent globals, which no glyph
+        // changes, so a pointer names the same bitmap for the whole call (the
+        // original reads it per glyph); the first lookup of each happens where
+        // it did and fails the same way. The lookup was a tenth of the A12's
+        // main thread in the Demo.
+        var resolved: [(UInt32, OriginalStateRecord, UInt32)] = []
+        func bitmapResource(_ pointer: UInt32) throws -> (OriginalStateRecord, UInt32) {
+            if let known = resolved.first(where: { $0.0 == pointer }) { return (known.1, known.2) }
+            let (record, surface) = try resourceBitmap(pointer)
+            resolved.append((pointer, record, surface)); return (record, surface)
+        }
         func string() throws -> [UInt8] {
             var bytes: [UInt8] = [], index = offset
             while true {
@@ -31,14 +54,16 @@ public enum OriginalBitmapFont {
             default: return
             }
             let bitmap = try word(address), target = try word(0x455608)
-            try observe(.init("draw", [bitmap, UInt32(bitPattern: px), UInt32(bitPattern: py),
-                UInt32(bitPattern: character), 1, 0, target]))
+            if detail {
+                try observe(.init("draw", [bitmap, UInt32(bitPattern: px), UInt32(bitPattern: py),
+                    UInt32(bitPattern: character), 1, 0, target]))
+            }
             guard bitmap != 0 else { throw OriginalStateError.invalidStorage("Bitmap font: Null resource") }
-            let (record, surface) = try resourceBitmap(bitmap)
+            let (record, surface) = try bitmapResource(bitmap)
             let input = try OriginalBitmapDrawInput(x: px, y: py, frame: character, colorKey: 1, mirrored: 0,
                 sourceSurface: surface, targetSurface: target,
                 viewportWidth: Int32(bitPattern: word(0x44d78c)), viewportHeight: Int32(bitPattern: word(0x44d790)))
-            try OriginalBitmapDrawing.draw(input, bitmap: record, observeRead: { value in
+            try OriginalBitmapDrawing.draw(input, bitmap: record, detail: detail, observeRead: { value in
                 var event = OriginalFrontScreenEvent("read"); event.read = value; try observe(event)
             }, observeClip: { value in
                 var event = OriginalFrontScreenEvent("clip"); event.clip = value; try observe(event)

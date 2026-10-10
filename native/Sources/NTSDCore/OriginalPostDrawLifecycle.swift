@@ -48,6 +48,20 @@ public enum OriginalPostDrawLifecycle {
     @discardableResult
     public static func apply(state: inout OriginalMatchPreparation, scratch: inout OriginalPostDrawScratch,
                              sse2: Bool = false, library: OriginalLibTransformBacking? = nil, observe: (OriginalPostDrawLifecycleEvent) throws -> Void = { _ in }) throws -> OriginalLibTransformBacking? {
+        try run(state: &state, scratch: &scratch, sse2: sse2, library: library, observe: observe, inPlace: false)
+    }
+    /// `apply` with the caller's world, actors, globals and scratch moved into
+    /// the loop and written back on every path (CORE_REALTIME B2 P4): for
+    /// callers that drop them when this throws.
+    @discardableResult
+    package static func applyInPlace(state: inout OriginalMatchPreparation, scratch: inout OriginalPostDrawScratch,
+                                     sse2: Bool = false, library: OriginalLibTransformBacking? = nil,
+                                     observe: (OriginalPostDrawLifecycleEvent) throws -> Void = { _ in }) throws -> OriginalLibTransformBacking? {
+        try run(state: &state, scratch: &scratch, sse2: sse2, library: library, observe: observe, inPlace: true)
+    }
+    private static func run(state: inout OriginalMatchPreparation, scratch: inout OriginalPostDrawScratch, sse2: Bool,
+                            library: OriginalLibTransformBacking?, observe: (OriginalPostDrawLifecycleEvent) throws -> Void,
+                            inPlace: Bool) throws -> OriginalLibTransformBacking? {
         let catalog = state.catalog
         guard try state.world.integer(at: 0x7d4, as: UInt32.self) == 0,
               let registry = catalog.registry.records[0x4d82380] else { throw error("Catalog binding") }
@@ -62,7 +76,7 @@ public enum OriginalPostDrawLifecycle {
                 if OriginalCPointPass.outsideAllocation(number) && catalog.objects.indices.contains(index) { return OriginalCPointPass.beyondAllocation }
                 guard catalog.objects.indices.contains(index), catalog.objects[index].frameStorage.indices.contains(Int(number)) else { throw error("Frame binding") }
                 return catalog.objects[index].frameStorage[Int(number)]
-            }, observe: observe)
+            }, observe: observe, inPlace: inPlace)
     }
     private static func error(_ text: String) -> OriginalStateError { .invalidStorage("Post-draw lifecycle: " + text) }
     @discardableResult
@@ -71,18 +85,41 @@ public enum OriginalPostDrawLifecycle {
                       library: OriginalLibTransformBacking? = nil,
                       precision: OriginalArithmeticPrecision, sse2: Bool, objectCount: Int32,
                       header: (Int) throws -> OriginalStateRecord, frame: (Int, Int32) throws -> OriginalStateRecord,
-                      observe: (OriginalPostDrawLifecycleEvent) throws -> Void = { _ in }) throws -> OriginalLibTransformBacking? {
+                      observe: (OriginalPostDrawLifecycleEvent) throws -> Void = { _ in }, inPlace: Bool = false) throws -> OriginalLibTransformBacking? {
         guard (0..<400).contains(slot) else { throw error("Slot extent") }
+        guard inPlace else {
+            // All or nothing: in place on copies, assigned when it completes.
+            var copiedWorld = world, copies = actors, copiedGlobals = globals, copiedScratch = scratch
+            let result = try apply(world: &copiedWorld, actors: &copies, globals: &copiedGlobals, scratch: &copiedScratch, wholeLoop: wholeLoop,
+                                   slot: slot, library: library, precision: precision, sse2: sse2, objectCount: objectCount,
+                                   header: header, frame: frame, observe: observe, inPlace: true)
+            world = copiedWorld; actors = copies; globals = copiedGlobals; scratch = copiedScratch
+            return result
+        }
         return try withoutActuallyEscaping(header) { headers in
             return try withoutActuallyEscaping(frame) { frames in
                 return try withoutActuallyEscaping(observe) { observer in
-                    var body = Body(world: world, actors: actors, globals: globals, scratch: scratch, slot: slot, library: library,
-                                    precision: precision, sse2: sse2, objectCount: objectCount, header: headers, frame: frames, observe: observer)
+                    // The slot passes' events as lifecycle events, made once per
+                    // pass instead of once per slot (400 closure allocations a
+                    // tick; CORE_REALTIME 4q).
+                    let converted: (OriginalPostDrawSlotEvent) throws -> Void = { event in
+                        switch event {
+                        case let .reconstruct(slot, created): try observer(.reconstruct(slot: slot, created: created))
+                        case let .random(slot, stream, range, result): try observer(.random(slot: slot, stream: stream, range: range, result: result))
+                        case let .catalogSound(slot, x, index): try observer(.catalogSound(slot: slot, x: x, index: index))
+                        }
+                    }
+                    // The caller's records, moved into the loop and written back on
+                    // every path (CORE_REALTIME B2 P4).
+                    var body = Body(world: inPlaceTake(&world, leaving: .vacant), actors: inPlaceTake(&actors, leaving: []),
+                                    globals: inPlaceTake(&globals, leaving: .vacant), scratch: scratch, slot: slot, library: library,
+                                    precision: precision, sse2: sse2, objectCount: objectCount, header: headers, frame: frames, observe: observer,
+                                    converted: converted)
+                    defer { world = body.world; actors = body.actors; globals = body.globals; scratch = body.scratch }
                     for selected in wholeLoop ? 0..<400 : slot..<slot+1 {
                         body.slot = selected
                         try body.run(prefix: wholeLoop)
                     }
-                    world = body.world; actors = body.actors; globals = body.globals; scratch = body.scratch
                     return body.library
                 }
             }
@@ -95,6 +132,7 @@ public enum OriginalPostDrawLifecycle {
         let precision: OriginalArithmeticPrecision, sse2: Bool, objectCount: Int32
         let header: (Int) throws -> OriginalStateRecord, frame: (Int, Int32) throws -> OriginalStateRecord
         let observe: (OriginalPostDrawLifecycleEvent) throws -> Void
+        let converted: (OriginalPostDrawSlotEvent) throws -> Void
         func index(_ slot: Int) throws -> Int {
             guard (0..<400).contains(slot) else { throw error("Actor slot extent") }
             let n = Int(try world.integer(at: 0x194+4*slot, as: UInt32.self))
@@ -124,7 +162,7 @@ public enum OriginalPostDrawLifecycle {
         }
         mutating func draw(_ stream: Int32, _ range: Int32) throws -> Int32 {
             let base = OriginalMatchPreparation.globalBase
-            var random = OriginalRandom(table: try (0..<3000).map { try globals.integer(at: 0x44ff90-base+$0, as: UInt8.self) },
+            var random = OriginalRandom(table: try OriginalRandom.table(globals, at: 0x44ff90-base),
                 index: Int(try globals.integer(at: 0x450bcc-base, as: Int32.self)),
                 counter: Int(try globals.integer(at: 0x450c34-base, as: Int32.self)), source: "post-draw lifecycle", sourceSHA256: "")
             try random.validate(); let result = Int32(random.next(Int(range)))
@@ -279,21 +317,26 @@ public enum OriginalPostDrawLifecycle {
             try put(parent, 0x78, i(parent, 0x70))
         }
         mutating func run(prefix: Bool) throws {
-            let observer = observe
-            let converted: (OriginalPostDrawSlotEvent) throws -> Void = { event in
-                switch event {
-                case let .reconstruct(slot, created): try observer(.reconstruct(slot: slot, created: created))
-                case let .random(slot, stream, range, result): try observer(.random(slot: slot, stream: stream, range: range, result: result))
-                case let .catalogSound(slot, x, index): try observer(.catalogSound(slot: slot, x: x, index: index))
-                }
-            }
+            let converted = self.converted
+            // An inactive slot: the prefix would read this byte (with the same
+            // error if it is undefined), return false and change nothing, so
+            // the slot ends here without building its passes (~350 of 400
+            // slots a tick; CORE_REALTIME 4r).
+            if prefix, try world.integer(at: 4 + slot, as: UInt8.self) == 0 { return }
             if prefix {
-                let active = try OriginalPostDrawSlotPrefix.apply(world: &world, actors: &actors, globals: &globals, slot: slot,
-                    retainedObjectIndex: &scratch.particleObject, requestSlot: &scratch.requestSlot, objectCount: objectCount, library: &library, header: header, frame: frame, observe: converted)
+                // Per slot in place: when a slot throws, this body's records
+                // are dropped (the default form's copies) or written back to a
+                // caller that drops them (CORE_REALTIME B2), so the slot passes
+                // write its records without copying them.
+                let headers = header, frames = frame, current = slot
+                let active = try OriginalPostDrawSlotPrefix.apply(world: &world, actors: &actors, globals: &globals, slot: current,
+                    retainedObjectIndex: &scratch.particleObject, requestSlot: &scratch.requestSlot, objectCount: objectCount, library: &library,
+                    header: headers, frame: frames, observe: converted, inPlace: true)
                 if !active { return }
             }
             let continuation = try OriginalPostDrawOpoint.apply(world: &world, actors: &actors, slot: slot,
-                requestSlot: &scratch.requestSlot, precision: precision, sse2: sse2, objectCount: objectCount, header: header, frame: frame, observe: converted)
+                requestSlot: &scratch.requestSlot, precision: precision, sse2: sse2, objectCount: objectCount, header: header, frame: frame,
+                observe: converted, inPlace: true)
             if continuation == .nextSlot { return }
             let parent = try index(slot)
             if try continuation == .weaponCreation && !weapon(parent) { try command(parent) }

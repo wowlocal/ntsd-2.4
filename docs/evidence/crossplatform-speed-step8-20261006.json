@@ -1,0 +1,24 @@
+{
+  "study": "docs/research/MOBILE_PERFORMANCE.md",
+  "step": 8,
+  "date": "2026-10-06",
+  "change": "OriginalStateRecord.overwrite(at:with:) copies a record's bytes and definedness over a subrange in place (one copy-on-write copy when the storage is shared); OriginalApplicationMenuSession.State.replace uses it instead of copying full.bytes/defined into local arrays and rebuilding the record (called several times per cycle, e.g. four times in OriginalApplicationMatchBindings.store)",
+  "phone": {
+    "speed (vs script, no frame capture)": "10.2 -> 10.1 ticks per second: within run-to-run noise; busy 311 -> 308 s",
+    "profile (24,326 samples)": "MenuState.replace still 1.8% (445 samples), nearly all memcpy: the inherent copy of the new 46 KB globals and the one copy-on-write copy of the shared record remain; the two redundant whole-record copies per call are gone"
+  },
+  "gates": {
+    "headless (frozen binary sha256 607b384c…)": "all 10 scenarios equal; vs frames 1,832 identical to m1-frames-ref",
+    "AppKit": "vs and playback equal; 3,960 frames identical to the AppKit step-7 run",
+    "Core suites (release test build)": "87 suites that use the menu session, bindings, pool, loading, match launch or bootstrap, 0 failures (p2s8-*.log); the strengthened OriginalStateRecordPagingTests (4 tests) pass on a rebuilt bundle",
+    "new unit test": "testOverwriteEqualsRebuilding: flat and paged records against rebuilding from arrays, at page boundaries and the end, copies keep their contents, a sole holder whose contents were read first, an empty piece and a whole-size (paged into paged) piece"
+  },
+  "review": {
+    "reviewer": "independent read-only agent",
+    "verdict": "OK: same result as the rebuild for every start the unchanged guard accepts (empty and full-size included), same error, the precondition cannot fire, copies keep their contents, the old init could not throw, the representation follows from the length either way",
+    "applied suggestions": [
+      "step 8 row in the plan",
+      "the missing test cases"
+    ]
+  }
+}

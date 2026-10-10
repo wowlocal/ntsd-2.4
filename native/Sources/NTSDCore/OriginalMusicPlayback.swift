@@ -37,7 +37,7 @@ public enum OriginalMusicPlayback {
     }
     private static func string(_ state: OriginalStateRecord, _ address: Int) throws -> [UInt8] {
         let start = address-base
-        guard start >= 0, start < state.bytes.count,
+        guard start >= 0, start < state.byteCount,
               let end = state.bytes[start...].firstIndex(of: 0) else { throw error("String outside owned globals") }
         guard state.defined[start...end].allSatisfy({ $0 }) else { throw error("Undefined global string") }
         return Array(state.bytes[start..<end])
@@ -145,7 +145,7 @@ public enum OriginalMusicPlayback {
     @discardableResult
     public static func initializeGraph(globals: inout OriginalStateRecord,request: Request,
         store: OriginalWindowInput.Store = { _,_ in }) throws -> Int32 {
-        guard globals.bytes.count == OriginalMatchPreparation.globalSize else { throw error("Graph globals extent") }
+        guard globals.byteCount == OriginalMatchPreparation.globalSize else { throw error("Graph globals extent") }
         var state = globals
         func put(_ address: Int,_ pointer: UInt32) throws {
             try state.write(pointer,at: address-base)
@@ -172,7 +172,7 @@ public enum OriginalMusicPlayback {
     public static func play(_ path: [UInt8], globals: inout OriginalStateRecord,
                              memory: inout OriginalMusicMemory, request: Request,
                              store: OriginalWindowInput.Store = { _,_ in }) throws {
-        guard globals.bytes.count == OriginalMatchPreparation.globalSize, !path.contains(0) else { throw error("Globals/path extent") }
+        guard globals.byteCount == OriginalMatchPreparation.globalSize, !path.contains(0) else { throw error("Globals/path extent") }
         var state = globals, owned = memory
         _ = try request(.init(.helper,[0x402020],[path]))
         if try word(state,0x44d010) == 0 { return }
@@ -221,7 +221,7 @@ public enum OriginalMusicPlayback {
         let control = try word(state,0x44f044)
         if control != 0 {
             let offset = 0x44ef04-base
-            guard path.count < state.bytes.count-offset else { throw error("Cached path extent") }
+            guard path.count < state.byteCount-offset else { throw error("Cached path extent") }
             for (index,byte) in (path+[0]).enumerated() { try state.write(byte,at: offset+index) }
             try store(0x44ef04,path+[0])
             try method(control,0x1c,request: request)

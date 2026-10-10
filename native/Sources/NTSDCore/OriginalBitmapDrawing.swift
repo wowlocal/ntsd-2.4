@@ -36,31 +36,38 @@ public struct OriginalBitmapClip: Codable, Equatable, Sendable {
 public enum OriginalBitmapDrawing {
     /// Rebind only the known surface pointer. Other untouched words retain
     /// their supplied backing and their initialization provenance.
-    static func word(_ offset: UInt32,bitmap: OriginalStateRecord,surface: UInt32,
+    /// `detail` false: nobody observes the reads, so no read record is built
+    /// and `observe` is not called (CORE_REALTIME 4d; value and errors unchanged).
+    static func word(_ offset: UInt32,bitmap: OriginalStateRecord,surface: UInt32,detail: Bool = true,
                      observe: (OriginalBitmapDrawRead) throws -> Void) throws -> Int32 {
-        guard bitmap.bytes.count == 0x1f50 else { throw OriginalStateError.invalidStorage("Bitmap draw extent") }
+        // The raw word in place, without the whole byte array (CORE_REALTIME 4s).
+        guard bitmap.byteCount == 0x1f50 else { throw OriginalStateError.invalidStorage("Bitmap draw extent") }
         let i = Int(offset)
-        guard i <= bitmap.bytes.count-4 else { throw OriginalStateError.outOfBounds(offset: i,count: 4) }
-        var value = (0..<4).reduce(UInt32(0)) { $0 | UInt32(bitmap.bytes[i+$1]) << ($1*8) }
+        guard i <= bitmap.byteCount-4 else { throw OriginalStateError.outOfBounds(offset: i,count: 4) }
+        var value = bitmap.rawWord(at: i)
         if offset == 0 {
             guard value == (surface == 0 ? 0 : 1) else { throw OriginalStateError.invalidStorage("Bitmap surface binding") }
             value = surface
         }
-        try observe(.init(offset: i,value: value,defined: bitmap.defined[i..<i+4].allSatisfy { $0 }))
+        if detail { try observe(.init(offset: i,value: value,defined: bitmap.allDefined(in: i..<i+4))) }
         return Int32(bitPattern: value)
     }
     /// Bitmap backing is an explicit input. This helper really reads untouched
     /// allocator words, notably +0c after43ee50 and negative frame indices.
     /// Observe their provenance without marking them initialized or inventing0.
     /// This does not establish where a Windows allocator obtained those bytes.
+    /// `detail` false: the read and clip records are neither built nor
+    /// observed (nobody observes them; CORE_REALTIME 4d). The blit, its result
+    /// and every error are the same.
     @discardableResult
-    public static func draw(_ input: OriginalBitmapDrawInput, bitmap: OriginalStateRecord,
+    public static func draw(_ input: OriginalBitmapDrawInput, bitmap: OriginalStateRecord, detail: Bool = true,
                             observeRead: (OriginalBitmapDrawRead) throws -> Void = { _ in },
                             observeClip: (OriginalBitmapClip) throws -> Void = { _ in },
                             perform: (OriginalBitmapBlit) throws -> Int32) throws -> Int32 {
-        guard bitmap.bytes.count == 0x1f50 else { throw OriginalStateError.invalidStorage("Bitmap draw extent") }
+        guard bitmap.byteCount == 0x1f50 else { throw OriginalStateError.invalidStorage("Bitmap draw extent") }
+        if !detail { return try drawUnobserved(input, bitmap: bitmap, perform: perform) }
         func word(_ offset: UInt32) throws -> Int32 {
-            try Self.word(offset,bitmap: bitmap,surface: input.sourceSurface,observe: observeRead)
+            try Self.word(offset,bitmap: bitmap,surface: input.sourceSurface,detail: detail,observe: observeRead)
         }
         func clip(_ destination: inout [Int32], _ source: inout [Int32]) throws -> Bool {
             let beforeSource = source, beforeDestination = destination
@@ -78,8 +85,10 @@ public enum OriginalBitmapDrawing {
             return true
             }
             let visible = apply()
-            try observeClip(.init(beforeSource: beforeSource,beforeDestination: beforeDestination,
-                                  source: source,destination: destination,visible: visible))
+            if detail {
+                try observeClip(.init(beforeSource: beforeSource,beforeDestination: beforeDestination,
+                                      source: source,destination: destination,visible: visible))
+            }
             return visible
         }
         let effects: [UInt8]?
@@ -116,16 +125,80 @@ public enum OriginalBitmapDrawing {
         }
         return try blit(destination,source)
     }
+
+    /// One rectangle as left, top, right, bottom on the stack.
+    private struct Rectangle { var left, top, right, bottom: Int32 }
+
+    /// `draw` with `detail` false: the same words read in the same order, the
+    /// same clip, Blt, result and errors, with the rectangles on the stack;
+    /// they become arrays only for a Blt that is performed (CORE_REALTIME
+    /// tier 3 G1: each glyph's rectangle arrays, their copies in the clip and
+    /// the effects array were ~7% of the A12's main thread in the Demo,
+    /// visible or not).
+    private static func drawUnobserved(_ input: OriginalBitmapDrawInput, bitmap: OriginalStateRecord,
+                                       perform: (OriginalBitmapBlit) throws -> Int32) throws -> Int32 {
+        func word(_ offset: UInt32) throws -> Int32 {
+            try Self.word(offset,bitmap: bitmap,surface: input.sourceSurface,detail: false,observe: { _ in })
+        }
+        let viewportWidth = input.viewportWidth, viewportHeight = input.viewportHeight
+        func clip(_ destination: inout Rectangle, _ source: inout Rectangle) -> Bool {
+            // Strict comparisons: touching an edge can produce a zero-area Blt.
+            if destination.left < 0 && destination.right < 0 { return false }
+            if destination.left > viewportWidth && destination.right > viewportWidth { return false }
+            if destination.top < 0 && destination.bottom < 0 { return false }
+            if destination.top > viewportHeight && destination.bottom > viewportHeight { return false }
+            if destination.left < 0 { source.left = source.left &- destination.left; destination.left = 0 }
+            if destination.top < 0 { source.top = source.top &- destination.top; destination.top = 0 }
+            if destination.right > viewportWidth { source.right = source.right &+ (viewportWidth &- destination.right); destination.right = viewportWidth }
+            if destination.bottom > viewportHeight { source.bottom = source.bottom &+ (viewportHeight &- destination.bottom); destination.bottom = viewportHeight }
+            return true
+        }
+        let flags: UInt32 = 0x1000000 | (input.colorKey != 0 ? 0x8000 : 0) | (input.mirrored != 0 ? 0x800 : 0)
+        func blit(_ destination: Rectangle, _ source: Rectangle, whole: Bool = false) throws -> Int32 {
+            if whole && input.targetSurface == 0 { throw OriginalStateError.invalidStorage("Null bitmap target surface") }
+            _ = try word(0)
+            guard input.targetSurface != 0 else { throw OriginalStateError.invalidStorage("Null bitmap target surface") }
+            let effects: [UInt8]?
+            if input.mirrored != 0 {
+                var bytes = [UInt8](repeating: 0,count: 100); bytes[0] = 100; bytes[4] = 2; effects = bytes
+            } else { effects = nil }
+            return try perform(.init(sourceSurface: input.sourceSurface,targetSurface: input.targetSurface,
+                                     source: [source.left,source.top,source.right,source.bottom],
+                                     destination: [destination.left,destination.top,destination.right,destination.bottom],
+                                     flags: flags,effects: effects))
+        }
+        if try word(0x0c) == 0 || input.frame < 0 {
+            let width = try word(4), height = try word(8)
+            var destination = Rectangle(left: input.x,top: input.y,right: input.x &+ width,bottom: input.y &+ height)
+            var source = Rectangle(left: 0,top: 0,right: width,bottom: height)
+            if clip(&destination,&source) { _ = try blit(destination,source,whole: true) }
+            // Deliberate fallthrough: negative frames may draw AGAIN below.
+        }
+        guard try input.frame < word(0x0c) else { return input.frame }
+        let offset = UInt32(bitPattern: input.frame) &* 4
+        let x = try word(offset &+ 0x10), width = try word(offset &+ 0xfb0)
+        let y = try word(offset &+ 0x7e0), height = try word(offset &+ 0x1780)
+        var destination = Rectangle(left: input.x,top: input.y,right: input.x &+ width,bottom: input.y &+ height)
+        var source = Rectangle(left: x,top: y,right: x &+ width,bottom: y &+ height)
+        guard clip(&destination,&source) else { return 0 }
+        if input.mirrored != 0 {
+            let originalX = try word(offset &+ 0x10), originalWidth = try word(offset &+ 0xfb0)
+            let clippedLeft = source.left &- originalX
+            source.left = originalX &+ originalX &- source.right &+ originalWidth
+            source.right = originalWidth &- clippedLeft &+ originalX
+        }
+        return try blit(destination,source)
+    }
 }
 
 /// Whole43f310..43f37a. Direct rectangles bypass43ef70 and color keying.
 public enum OriginalRectangleDrawing {
     @discardableResult
     public static func draw(bitmap: OriginalStateRecord,surface: UInt32,target: UInt32,
-        sourceX: Int32,sourceY: Int32,width: Int32,height: Int32,x: Int32,y: Int32,
+        sourceX: Int32,sourceY: Int32,width: Int32,height: Int32,x: Int32,y: Int32,detail: Bool = true,
         observeRead: (OriginalBitmapDrawRead) throws -> Void = { _ in },
         perform: (OriginalBitmapBlit) throws -> Int32) throws -> Int32 {
-        _ = try OriginalBitmapDrawing.word(0,bitmap: bitmap,surface: surface,observe: observeRead)
+        _ = try OriginalBitmapDrawing.word(0,bitmap: bitmap,surface: surface,detail: detail,observe: observeRead)
         guard target != 0 else { throw OriginalStateError.invalidStorage("Null rectangle target") }
         return try perform(.init(sourceSurface: surface,targetSurface: target,
             source: [sourceX,sourceY,sourceX &+ width,sourceY &+ height],

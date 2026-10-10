@@ -1,0 +1,34 @@
+{
+  "study": "docs/research/CROSS_PLATFORM.md",
+  "phase": "P8 step 1: iPadOS host in the simulator",
+  "date": "2026-10-04",
+  "build": "NTSD_PORTABLE=1 NTSD_IOS=1 swift build --triple arm64-apple-ios17.0-simulator --sdk <iPhoneSimulator 27.0 SDK> --product NTSDiOS (Xcode toolchain); NTSDCore/NTSDRuntime built unchanged for iOS",
+  "app": "tools/crossplatform/ios_app.py: NTSDiOS.app (executable, Original* resource folders at the app root, OriginalMusic, Info.plist for an iPad-only landscape scene app, ad-hoc signed), installed with simctl on iPad Air 13-inch (M4), iOS 27 simulator",
+  "host": {
+    "view": "one UIView showing the presented framebuffer as a CGImage, resizeAspect, nearest",
+    "windows": "virtual windows centred on the scene's screen, no frame metrics",
+    "input": "touches as left-button mouse messages through the fit rect; hardware keyboard via UIKey.keyCode (USB HID usage) and OriginalHIDKeys, the table now shared with SDL",
+    "text": "CoreText masks with UIFont.systemFont(13, .bold), the same code as the macOS masks: frames are byte-identical to AppKit's",
+    "audio": "AVAudioSession (ambient) + AVAudioEngine for the effects mixer; music silent by manifest duration (declared)",
+    "sockets": "Darwin Winsock (OriginalMacWinsock)",
+    "overlay": "Documents/NTSD Native"
+  },
+  "findings": [
+    "all six input loaders read their folders from the main bundle's resources when it is an .app (as the macOS packaging installs them): the first run found no manifest.json until the folders were installed at the app root",
+    "simctl did not forward the app's stdout (--console-pty returned early, --console printed only the pid); --events-file PATH redirects the session's event lines to a file",
+    "the simulator's CoreAudio aborted the app at engine setup ('Initialize: RPC timeout. Apparently deadlocked. Aborting now.') with and without an audio session and a deferred start; scripted muted runs therefore open no output (declared); interactive runs start the engine",
+    "the session starts on the next main-loop turn after the scene connects"
+  ],
+  "results": {
+    "scenarios": "9/10 equal to the frozen references (playback as on main)",
+    "frames": "15,960/15,960 identical to the AppKit app's (per-body digests and PNGs, text included)"
+  },
+  "gates": "macOS release build and Linux musl build still compile; macOS SDL builds with the shared OriginalHIDKeys",
+  "open": [
+    "a real iPad (audio, touch feel, memory: the desktop soak footprint is about 2 GB)",
+    "music on iOS",
+    "touch controls beyond the mouse mapping",
+    "an Xcode project / signing for devices",
+    "Android"
+  ]
+}

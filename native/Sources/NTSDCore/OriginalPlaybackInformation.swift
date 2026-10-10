@@ -5,6 +5,7 @@ public enum OriginalPlaybackInformation {
         globals: inout OriginalStateRecord,
         resourceBitmap: (UInt32) throws -> (OriginalStateRecord, UInt32),
         performBlit: (OriginalBitmapBlit) throws -> Int32,
+        detail: Bool = true,
         observe: (OriginalFrontScreenEvent) throws -> Void = { _ in }) throws {
         var staged = globals
         func byte(_ address: Int) throws -> UInt8 { try staged.integer(at: address-0x44d000, as: UInt8.self) }
@@ -33,7 +34,7 @@ public enum OriginalPlaybackInformation {
             let fontGlobals = staged
             try OriginalBitmapFont.draw(.fourPass, text: &staged, offset: address-0x44d000,
                 x: x, y: y, columns: 64, lines: lines, style: 0, cursor: 0,
-                globals: fontGlobals, resourceBitmap: resourceBitmap, performBlit: performBlit, observe: observe)
+                globals: fontGlobals, resourceBitmap: resourceBitmap, performBlit: performBlit, detail: detail, observe: observe)
         }
         func equalsSentinel(_ address: Int, _ literal: String) throws -> Bool {
             // REP CMPSB stops on its first differing byte. Do not require

@@ -1,0 +1,103 @@
+{
+ "study": "docs/research/CORE_REALTIME.md",
+ "phase": "M2a (message-queue requests served inside the Host attempt)",
+ "date": "2026-10-06",
+ "design": "docs/research/CORE_REALTIME_M2.md",
+ "finding": "Static trace (read-only planner): a gameplay tick ran the menu loop's Host attempt 5-6 times, once per unrecorded request (peek, two or three timeGetTime calls, the dispatch's surface blt), each unwinding and replaying; production passes no observers, so the discarded runs had no visible effect.",
+ "change": "OriginalRequestExchange: Cursor.inline returns Receipt? (nil suspends) and inlineCursor(accepting:_:) serves only accepted requests (accepts before claim, the exchange passed to the server, held weakly). OriginalApplicationObservedIteration.resume takes inline: Inline? and reaches the server through a gate disarmed when the attempt exits (stored cursors suspend and do not keep the runtime alive). OriginalMacRuntimeMessages.serve split into a core with begin/answer/fail closures (on driver: and on exchange:). OriginalMacRuntimeMenu.step serves .queue requests inline while served+1 < maximumRequests, counting requests and lastRequest as the permit path does; the request bound is kept (the request reaching it goes through the permit path). servesQueueInline (default true) allows side-by-side tests.",
+ "phone": {
+  "baseline": "phase 4c: 16.10 ticks/s (4b: 16.01 / 16.06)",
+  "after": [
+   {
+    "label": "rtm2a-run1",
+    "serial": "R58R36F7VFD",
+    "runSeconds": 349,
+    "peakResidentMB": 1229,
+    "ticksPerSecond": 16.7,
+    "busySeconds": 231.42,
+    "bodies": 1800
+   },
+   {
+    "label": "rtm2a-run2",
+    "serial": "R58R36F7VFD",
+    "runSeconds": 349,
+    "peakResidentMB": 1092,
+    "ticksPerSecond": 16.57,
+    "busySeconds": 234.43,
+    "bodies": 1800
+   }
+  ],
+  "result": "16.70 / 16.57 ticks/s (about +3.6%)",
+  "note": "apks/rtm2a.apk built from native diff 8d712db1 against 45f3cdf (4b + 4c + M2a)"
+ },
+ "mac": {
+  "rows": [
+   {
+    "label": "rt4c",
+    "round": 0,
+    "exit": 0,
+    "cpuSeconds": 14.26,
+    "ticksPerSecond": 42.38,
+    "busySeconds": 9.01,
+    "bodies": 1800
+   },
+   {
+    "label": "rtm2a",
+    "round": 0,
+    "exit": 0,
+    "cpuSeconds": 13.61,
+    "ticksPerSecond": 42.53,
+    "busySeconds": 8.48,
+    "bodies": 1800
+   },
+   {
+    "label": "rt4c",
+    "round": 1,
+    "exit": 0,
+    "cpuSeconds": 13.83,
+    "ticksPerSecond": 42.43,
+    "busySeconds": 8.55,
+    "bodies": 1800
+   },
+   {
+    "label": "rtm2a",
+    "round": 1,
+    "exit": 0,
+    "cpuSeconds": 13.52,
+    "ticksPerSecond": 42.35,
+    "busySeconds": 8.45,
+    "bodies": 1800
+   },
+   {
+    "label": "rt4c",
+    "round": 2,
+    "exit": 0,
+    "cpuSeconds": 13.97,
+    "ticksPerSecond": 42.25,
+    "busySeconds": 8.66,
+    "bodies": 1800
+   },
+   {
+    "label": "rtm2a",
+    "round": 2,
+    "exit": 0,
+    "cpuSeconds": 13.71,
+    "ticksPerSecond": 42.53,
+    "busySeconds": 8.71,
+    "bodies": 1800
+   }
+  ],
+  "result": "process CPU seconds median 13.97 (4c) -> 13.61 (M2a): -2.6%"
+ },
+ "emulator": {
+  "result": "vs equal, 1,832 frames identical to the earlier Android app run"
+ },
+ "gates": {
+  "headless": "vs equal, 1,832 frames identical (frozen aa239862, rt-m2a)",
+  "all 10": "all 10 scenarios equal, 1,832 frames identical (rt-m2a-all); their references were recorded with permit service",
+  "AppKit": "vs and playback equal (AppKit uses the same runtime menu, so inline serving runs there too); 3,960 frames identical to the 4c AppKit run (rt-m2a-appkit)",
+  "tests": "the new exchange test (accepting cursor) and the strengthened side-by-side runtime menu test (counters, delivered messages, clock calls, a per-step digest of the committed globals, commits, front operations and the final frame equal in both modes; fewer prepared attempts inline; bounds 0, 1, 2; a clock failing half way through fails the same way): OriginalMacRuntimeMenuTests 7 tests, OriginalMacRuntimeLoadingTests 7, OriginalApplicationObservedIterationTests 3, 0 failures (swiftpm-test-release-b)",
+  "Core suites": "release test build swiftpm-test-release-c of native diff 87e96603 against 45f3cdf (4b + 4c + M2a before its comment fixes and test strengthening): 105 suites (every suite using the observed iteration, request exchange, runtime menu/messages/loading, Host session or iteration delivery, plus the 94-suite set), 299 tests, 0 failures. The committed content (comments and strengthened tests) passed OriginalMacRuntimeMenuTests (7), OriginalMacRuntimeLoadingTests (7), OriginalApplicationObservedIterationTests (3) and OriginalStateRecordPagingTests (6) in swiftpm-test-release-b of native diff c863cafd against 7190530"
+ },
+ "review": "independent read-only review: correct; no case found where the inline path differs from the permit path (the bound for every maximumRequests value and request mix, cursor ordinal/revision bookkeeping, the gate disarmed on every exit and shared by stored platform copies, the exchange lock free during serve, errors and exchange state equal to a failed permit, production passes no observers). Acted on: the side-by-side test was strengthened (it could have passed without inline service and compared no committed state), stale comments fixed, the design note now records that prepare inputs (Caps Lock) are sampled once per resume and that a negative bound now throws instead of crashing."
+}

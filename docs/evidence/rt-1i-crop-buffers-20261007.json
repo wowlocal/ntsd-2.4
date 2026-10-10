@@ -1,0 +1,134 @@
+{
+ "study": "docs/research/CORE_REALTIME.md",
+ "phase": "1i (crop buffers reused); 1h tried and reverted",
+ "date": "2026-10-07",
+ "tried_1h": {
+  "change": "colour-keyed and mirrored copies of known source rows four pixels at a time (SIMD4 compare and select)",
+  "review": "correct, no counterexample; the model test was strengthened from it (patterned background, known bits over unknown pixels, offsets derived from the row stride)",
+  "phone": [
+   {
+    "label": "rt1h-run1",
+    "runSeconds": 326,
+    "peakResidentMB": 1348,
+    "ticksPerSecond": 20.77,
+    "busySeconds": 219.0,
+    "bodies": 1800,
+    "completeMsPerTick": 22.6,
+    "menuMsPerStep": 1.23,
+    "menuStepsPerTick": 4.12,
+    "mainCpuShare": 0.613,
+    "renderCpuShare": 0.455,
+    "mainMsPerTick": 29.5,
+    "renderMsPerTick": 21.9
+   },
+   {
+    "label": "rt1h-run2",
+    "runSeconds": 326,
+    "peakResidentMB": 1163,
+    "ticksPerSecond": 20.82,
+    "busySeconds": 218.72,
+    "bodies": 1800,
+    "completeMsPerTick": 22.5,
+    "menuMsPerStep": 1.23,
+    "menuStepsPerTick": 4.12,
+    "mainCpuShare": 0.613,
+    "renderCpuShare": 0.455,
+    "mainMsPerTick": 29.4,
+    "renderMsPerTick": 21.9
+   },
+   {
+    "label": "rt1h-profile",
+    "runSeconds": 324,
+    "peakResidentMB": 1503,
+    "ticksPerSecond": 20.85,
+    "busySeconds": 217.41,
+    "bodies": 1800,
+    "completeMsPerTick": 22.4,
+    "menuMsPerStep": 1.23,
+    "menuStepsPerTick": 4.12,
+    "mainCpuShare": 0.6,
+    "renderCpuShare": 0.464,
+    "mainMsPerTick": 28.8,
+    "renderMsPerTick": 22.3
+   }
+  ],
+  "result": "render thread 21.9 ms per tick (A1: 22.0/22.3): no measurable gain; the copy loop fell only from 34% to 32% of the render thread's samples: the render thread is bound by memory traffic (a 1.75 MB back buffer streamed several times per tick), not arithmetic. Reverted; the copy-model test kept as a regression test; the tried version kept in the session scratchpad (tried-1h)."
+ },
+ "profile_before": "render thread (rt1h-profile): copy loop 31.7%, memcpy 31.3%, channel swap 9.8%, ioctl 6.5%, madvise 2.9%; crop allocated Data(count:) (calloc, zero-filled 1.75 MB) for every present, then freed it (pages returned with madvise), so each present also paid page faults and zero-filling in the kernel",
+ "change": "OriginalMacDisplayBackend.FramePool keeps the buffers of the last three crops; crop takes the oldest when it has the right size and overwrites it in place (copy-on-write makes a fresh copy if anything still holds it), and every byte of the crop is written either way. Used by every crop (the four render-thread present paths and the synchronous framebuffer path).",
+ "phone": {
+  "before": [
+   {
+    "label": "rta1-run1",
+    "runSeconds": 331,
+    "peakResidentMB": 1219,
+    "ticksPerSecond": 20.89,
+    "busySeconds": 220.24,
+    "bodies": 1800,
+    "completeMsPerTick": 22.3,
+    "menuMsPerStep": 1.23,
+    "menuStepsPerTick": 4.12,
+    "mainCpuShare": 0.61,
+    "renderCpuShare": 0.461,
+    "mainMsPerTick": 29.2,
+    "renderMsPerTick": 22.0
+   },
+   {
+    "label": "rta1-run2",
+    "runSeconds": 326,
+    "peakResidentMB": 1299,
+    "ticksPerSecond": 20.98,
+    "busySeconds": 218.27,
+    "bodies": 1800,
+    "completeMsPerTick": 22.1,
+    "menuMsPerStep": 1.22,
+    "menuStepsPerTick": 4.12,
+    "mainCpuShare": 0.607,
+    "renderCpuShare": 0.467,
+    "mainMsPerTick": 29.0,
+    "renderMsPerTick": 22.3
+   }
+  ],
+  "after": [
+   {
+    "label": "rt1i-run1",
+    "runSeconds": 326,
+    "peakResidentMB": 1203,
+    "ticksPerSecond": 20.97,
+    "busySeconds": 218.39,
+    "bodies": 1800,
+    "completeMsPerTick": 22.2,
+    "menuMsPerStep": 1.21,
+    "menuStepsPerTick": 4.12,
+    "mainCpuShare": 0.608,
+    "renderCpuShare": 0.429,
+    "mainMsPerTick": 29.0,
+    "renderMsPerTick": 20.4
+   },
+   {
+    "label": "rt1i-run2",
+    "runSeconds": 326,
+    "peakResidentMB": 1372,
+    "ticksPerSecond": 20.97,
+    "busySeconds": 219.76,
+    "bodies": 1800,
+    "completeMsPerTick": 22.3,
+    "menuMsPerStep": 1.2,
+    "menuStepsPerTick": 4.12,
+    "mainCpuShare": 0.607,
+    "renderCpuShare": 0.424,
+    "mainMsPerTick": 29.0,
+    "renderMsPerTick": 20.2
+   }
+  ],
+  "result": "render thread 22.0/22.3 -> 20.4/20.2 ms per tick (-1.9 ms, -8.5%); main thread unchanged (29.0 ms)"
+ },
+ "gates": {
+  "headless": "vs equal, 1,832 frames identical (frozen-rt1i, rt-1i)",
+  "scenarios": "all 10 equal, frames identical (rt-1i-all on frozen-rt1i)",
+  "AppKit": "vs and playback equal, 3,960 frames identical to the A1 AppKit run (rt-1i-appkit vs rt-a1-appkit)",
+  "emulator": "vs equal, 1,832 frames identical",
+  "tests": "bundle C (native diff 444b145b against 3b3d7f5 via a temporary index): 13 display/runtime suites pass incl. OriginalMacFrontRasterTests with the strengthened copy-model test (10 tests) and OriginalMacLoadingAudioTests (3,054 s)"
+ },
+ "review": "not required (no storage-model or architecture change: a buffer reuse whose values are fixed by copy-on-write and a full overwrite)"
+}

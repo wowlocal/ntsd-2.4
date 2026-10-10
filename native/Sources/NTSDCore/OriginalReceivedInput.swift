@@ -13,35 +13,52 @@ extension OriginalMatchPreparation {
                                      afterRemote: (Self, [UInt8]) throws -> Void = { _, _ in }) throws -> OriginalReceivedInputContinuation {
         if paused { return .recording }
         var candidate = self, output = commands
-        let phase = try candidate.globals.integer(at: 0x450b90-Self.globalBase,as: Int32.self)
-        let packet = try (0..<10).map { try candidate.globals.integer(at: 0x44f198-Self.globalBase+$0,as: UInt8.self) }
-        try candidate.remoteInput(packet: packet,phase: phase,commands: &output)
-        try afterRemote(candidate,output)
-        let playback = try candidate.globals.integer(at: 0x450b84-Self.globalBase,as: Int32.self) != 0
-        if playback { try candidate.playbackInput(packet: playbackCommands,phase: phase) }
+        let next = try candidate.receiveInputInPlace(paused: paused,commands: &output,playbackCommands: playbackCommands,afterRemote: afterRemote)
         self = candidate; commands = output
+        return next
+    }
+
+    /// `receiveInput`'s body on this state and the commands in place
+    /// (CORE_REALTIME B2): `receiveInput` runs it on copies; the loaded match
+    /// entry runs it on its own candidate, which it drops when this throws.
+    mutating func receiveInputInPlace(paused: Bool, commands: inout [UInt8], playbackCommands: [UInt8],
+                                      afterRemote: (Self, [UInt8]) throws -> Void = { _, _ in }) throws -> OriginalReceivedInputContinuation {
+        if paused { return .recording }
+        let phase = try globals.integer(at: 0x450b90-Self.globalBase,as: Int32.self)
+        let packet = try (0..<10).map { try globals.integer(at: 0x44f198-Self.globalBase+$0,as: UInt8.self) }
+        try remoteInputInPlace(packet: packet,phase: phase,commands: &commands)
+        try afterRemote(self,commands)
+        let playback = try globals.integer(at: 0x450b84-Self.globalBase,as: Int32.self) != 0
+        if playback { try playbackInputInPlace(packet: playbackCommands,phase: phase) }
         return playback ? .playbackChecksum : .recording
     }
 
     /// 4198f0/ret12. Only status==-1 seats receive network input. Recording
     /// replaces the entire packet byte, including bit0; it does not OR buttons.
     public mutating func remoteInput(packet: [UInt8], phase: Int32, commands: inout [UInt8]) throws {
-        guard commands.count == 10 else { throw OriginalStateError.invalidStorage("Remote command extent") }
         var candidate = self, output = commands
-        try candidate.applyReceivedInput(packet: packet,phase: phase,remote: true,commands: &output)
+        try candidate.remoteInputInPlace(packet: packet,phase: phase,commands: &output)
         self = candidate; commands = output
+    }
+    private mutating func remoteInputInPlace(packet: [UInt8], phase: Int32, commands: inout [UInt8]) throws {
+        guard commands.count == 10 else { throw OriginalStateError.invalidStorage("Remote command extent") }
+        try applyReceivedInput(packet: packet,phase: phase,remote: true,commands: &commands)
     }
 
     /// 4197a0/ret8. Playback visits all eight seats, ignoring status/activity.
     public mutating func playbackInput(packet: [UInt8], phase: Int32) throws {
-        var candidate = self, unused: [UInt8] = []
-        try candidate.applyReceivedInput(packet: packet,phase: phase,remote: false,commands: &unused)
+        var candidate = self
+        try candidate.playbackInputInPlace(packet: packet,phase: phase)
         self = candidate
+    }
+    private mutating func playbackInputInPlace(packet: [UInt8], phase: Int32) throws {
+        var unused: [UInt8] = []
+        try applyReceivedInput(packet: packet,phase: phase,remote: false,commands: &unused)
     }
 
     private mutating func applyReceivedInput(packet: [UInt8], phase: Int32, remote: Bool, commands: inout [UInt8]) throws {
-        guard packet.count == 10, world.bytes.count == OriginalStateRecord.worldPrefixSize,
-              actors.count == 400, globals.bytes.count == Self.globalSize else {
+        guard packet.count == 10, world.byteCount == OriginalStateRecord.worldPrefixSize,
+              actors.count == 400, globals.byteCount == Self.globalSize else {
             throw OriginalStateError.invalidStorage("Received-input storage")
         }
         let masks: [UInt8] = [0x80,0x40,0x20,0x10,8,4,2]

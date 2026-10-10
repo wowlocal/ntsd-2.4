@@ -1,0 +1,349 @@
+{
+ "study": "docs/research/CORE_REALTIME.md",
+ "phase": "e5 (main thread): emit takes its effect",
+ "date": "2026-10-10",
+ "profile": "rtr3b-prof-vs: Attempt.emit 4.67% of the main thread inclusive, of which the Effect's outlined copy 0.93% (each call site passes a temporary, which emit copied into the operations and the caller then destroyed)",
+ "change": "OriginalApplicationLoadedMenuSession.Attempt.emit takes its effect as a consuming parameter: every caller's temporary moves into the operations list instead of being copied there and destroyed",
+ "probe": {
+  "profiles": "rtr3b-prof-vs vs rte5-prof-vs (share of the main thread)",
+  "emit": "4.67% -> 3.66%",
+  "Effect copies (outlined init, initializeWithCopy, outlined copy)": "0.93% + 0.88% + 0.49% -> 0.16% + 0.16% + 0.11% (overlapping frames)",
+  "summary": "about 1% of the main thread (~0.11 ms per tick) less work"
+ },
+ "phone": {
+  "vs": {
+   "rtr3b_same_session": [
+    {
+     "label": "rtr3b-for-rte5-vs1",
+     "scenario": "vs",
+     "runSeconds": 207,
+     "peakResidentMB": 1448,
+     "ticksPerSecond": 33.97,
+     "busySeconds": 103.87,
+     "bodies": 1800,
+     "completeMsPerTick": 7.6,
+     "partAssembliesPerTick": 0.0,
+     "menuMsPerStep": 0.58,
+     "menuStepsPerTick": 4.12,
+     "idleMsPerStep": 0.468,
+     "idleIterationMs": 0.529,
+     "idleStepsPerTick": 3.12,
+     "tickStepMs": 0.933,
+     "mainCpuShare": 0.376,
+     "renderCpuShare": 0.263,
+     "mainMsPerTick": 11.06,
+     "renderMsPerTick": 7.75,
+     "presentMsPerTick": 5.77,
+     "releaseMsPerTick": 1.93,
+     "presentCounts": {
+      "submitted": 2100,
+      "drawn": 2100,
+      "waits": 0
+     }
+    },
+    {
+     "label": "rtr3b-for-rte5-vs2",
+     "scenario": "vs",
+     "runSeconds": 207,
+     "peakResidentMB": 1411,
+     "ticksPerSecond": 34.02,
+     "busySeconds": 103.06,
+     "bodies": 1800,
+     "completeMsPerTick": 7.6,
+     "partAssembliesPerTick": 0.0,
+     "menuMsPerStep": 0.58,
+     "menuStepsPerTick": 4.12,
+     "idleMsPerStep": 0.468,
+     "idleIterationMs": 0.528,
+     "idleStepsPerTick": 3.12,
+     "tickStepMs": 0.944,
+     "mainCpuShare": 0.382,
+     "renderCpuShare": 0.255,
+     "mainMsPerTick": 11.23,
+     "renderMsPerTick": 7.51,
+     "presentMsPerTick": 5.69,
+     "releaseMsPerTick": 1.93,
+     "presentCounts": {
+      "submitted": 2100,
+      "drawn": 2100,
+      "waits": 0
+     }
+    }
+   ],
+   "after": [
+    {
+     "label": "rte5-vs1",
+     "scenario": "vs",
+     "runSeconds": 206,
+     "peakResidentMB": 1437,
+     "ticksPerSecond": 34.06,
+     "busySeconds": 103.1,
+     "bodies": 1800,
+     "completeMsPerTick": 7.5,
+     "partAssembliesPerTick": 0.0,
+     "menuMsPerStep": 0.58,
+     "menuStepsPerTick": 4.12,
+     "idleMsPerStep": 0.47,
+     "idleIterationMs": 0.531,
+     "idleStepsPerTick": 3.12,
+     "tickStepMs": 0.944,
+     "mainCpuShare": 0.381,
+     "renderCpuShare": 0.258,
+     "mainMsPerTick": 11.19,
+     "renderMsPerTick": 7.58,
+     "presentMsPerTick": 5.7,
+     "releaseMsPerTick": 1.94,
+     "presentCounts": {
+      "submitted": 2100,
+      "drawn": 2100,
+      "waits": 0
+     }
+    },
+    {
+     "label": "rte5-vs2",
+     "scenario": "vs",
+     "runSeconds": 207,
+     "peakResidentMB": 1407,
+     "ticksPerSecond": 34.01,
+     "busySeconds": 104.79,
+     "bodies": 1800,
+     "completeMsPerTick": 7.6,
+     "partAssembliesPerTick": 0.0,
+     "menuMsPerStep": 0.59,
+     "menuStepsPerTick": 4.12,
+     "idleMsPerStep": 0.474,
+     "idleIterationMs": 0.535,
+     "idleStepsPerTick": 3.12,
+     "tickStepMs": 0.953,
+     "mainCpuShare": 0.375,
+     "renderCpuShare": 0.257,
+     "mainMsPerTick": 11.04,
+     "renderMsPerTick": 7.56,
+     "presentMsPerTick": 5.74,
+     "releaseMsPerTick": 1.95,
+     "presentCounts": {
+      "submitted": 2100,
+      "drawn": 2100,
+      "waits": 0
+     }
+    },
+    {
+     "label": "rte5-vs3",
+     "scenario": "vs",
+     "runSeconds": 207,
+     "peakResidentMB": 1437,
+     "ticksPerSecond": 34.06,
+     "busySeconds": 102.37,
+     "bodies": 1800,
+     "completeMsPerTick": 7.5,
+     "partAssembliesPerTick": 0.0,
+     "menuMsPerStep": 0.59,
+     "menuStepsPerTick": 4.12,
+     "idleMsPerStep": 0.473,
+     "idleIterationMs": 0.534,
+     "idleStepsPerTick": 3.12,
+     "tickStepMs": 0.938,
+     "mainCpuShare": 0.376,
+     "renderCpuShare": 0.256,
+     "mainMsPerTick": 11.05,
+     "renderMsPerTick": 7.52,
+     "presentMsPerTick": 5.8,
+     "releaseMsPerTick": 1.93,
+     "presentCounts": {
+      "submitted": 2100,
+      "drawn": 2100,
+      "waits": 0
+     }
+    }
+   ],
+   "result": "main 11.14 -> 11.09, render 7.63 -> 7.55 ms per tick"
+  },
+  "demo": {
+   "rtr3b_same_session": [
+    {
+     "label": "rtr3b-for-rte5-demo1",
+     "scenario": "demo",
+     "runSeconds": 187,
+     "peakResidentMB": 1310,
+     "ticksPerSecond": 33.71,
+     "busySeconds": 93.49,
+     "bodies": 900,
+     "completeMsPerTick": 8.3,
+     "partAssembliesPerTick": 0.0,
+     "menuMsPerStep": 0.58,
+     "menuStepsPerTick": 4.13,
+     "idleMsPerStep": 0.473,
+     "idleIterationMs": 0.533,
+     "idleStepsPerTick": 3.13,
+     "tickStepMs": 0.907,
+     "mainCpuShare": 0.395,
+     "renderCpuShare": 0.207,
+     "mainMsPerTick": 11.73,
+     "renderMsPerTick": 6.13,
+     "presentMsPerTick": 5.61,
+     "releaseMsPerTick": 1.63,
+     "presentCounts": {
+      "submitted": 1500,
+      "drawn": 1500,
+      "waits": 0
+     }
+    },
+    {
+     "label": "rtr3b-for-rte5-demo2",
+     "scenario": "demo",
+     "runSeconds": 209,
+     "peakResidentMB": 1376,
+     "ticksPerSecond": 33.73,
+     "busySeconds": 93.59,
+     "bodies": 900,
+     "completeMsPerTick": 8.3,
+     "partAssembliesPerTick": 0.0,
+     "menuMsPerStep": 0.58,
+     "menuStepsPerTick": 4.13,
+     "idleMsPerStep": 0.471,
+     "idleIterationMs": 0.534,
+     "idleStepsPerTick": 3.13,
+     "tickStepMs": 0.918,
+     "mainCpuShare": 0.395,
+     "renderCpuShare": 0.203,
+     "mainMsPerTick": 11.72,
+     "renderMsPerTick": 6.02,
+     "presentMsPerTick": 5.64,
+     "releaseMsPerTick": 1.62,
+     "presentCounts": {
+      "submitted": 1500,
+      "drawn": 1500,
+      "waits": 1
+     }
+    }
+   ],
+   "after": [
+    {
+     "label": "rte5-demo1",
+     "scenario": "demo",
+     "runSeconds": 187,
+     "peakResidentMB": 1431,
+     "ticksPerSecond": 34.38,
+     "busySeconds": 92.81,
+     "bodies": 900,
+     "completeMsPerTick": 8.0,
+     "partAssembliesPerTick": 0.0,
+     "menuMsPerStep": 0.59,
+     "menuStepsPerTick": 4.13,
+     "idleMsPerStep": 0.45,
+     "idleIterationMs": 0.508,
+     "idleStepsPerTick": 3.13,
+     "tickStepMs": 1.016,
+     "mainCpuShare": 0.391,
+     "renderCpuShare": 0.213,
+     "mainMsPerTick": 11.37,
+     "renderMsPerTick": 6.2,
+     "presentMsPerTick": 5.1,
+     "releaseMsPerTick": 1.42,
+     "presentCounts": {
+      "submitted": 1500,
+      "drawn": 1500,
+      "waits": 0
+     }
+    },
+    {
+     "label": "rte5-demo2",
+     "scenario": "demo",
+     "runSeconds": 188,
+     "peakResidentMB": 1397,
+     "ticksPerSecond": 33.73,
+     "busySeconds": 93.81,
+     "bodies": 900,
+     "completeMsPerTick": 8.2,
+     "partAssembliesPerTick": 0.0,
+     "menuMsPerStep": 0.58,
+     "menuStepsPerTick": 4.13,
+     "idleMsPerStep": 0.476,
+     "idleIterationMs": 0.535,
+     "idleStepsPerTick": 3.13,
+     "tickStepMs": 0.913,
+     "mainCpuShare": 0.398,
+     "renderCpuShare": 0.208,
+     "mainMsPerTick": 11.79,
+     "renderMsPerTick": 6.16,
+     "presentMsPerTick": 5.64,
+     "releaseMsPerTick": 1.61,
+     "presentCounts": {
+      "submitted": 1500,
+      "drawn": 1500,
+      "waits": 0
+     }
+    },
+    {
+     "label": "rte5-demo3",
+     "scenario": "demo",
+     "runSeconds": 187,
+     "peakResidentMB": 1484,
+     "ticksPerSecond": 33.72,
+     "busySeconds": 93.98,
+     "bodies": 900,
+     "completeMsPerTick": 8.3,
+     "partAssembliesPerTick": 0.0,
+     "menuMsPerStep": 0.58,
+     "menuStepsPerTick": 4.13,
+     "idleMsPerStep": 0.473,
+     "idleIterationMs": 0.532,
+     "idleStepsPerTick": 3.13,
+     "tickStepMs": 0.91,
+     "mainCpuShare": 0.394,
+     "renderCpuShare": 0.204,
+     "mainMsPerTick": 11.69,
+     "renderMsPerTick": 6.05,
+     "presentMsPerTick": 5.61,
+     "releaseMsPerTick": 1.64,
+     "presentCounts": {
+      "submitted": 1500,
+      "drawn": 1500,
+      "waits": 0
+     }
+    }
+   ],
+   "result": "main 11.73 -> 11.62, render 6.07 -> 6.14 ms per tick"
+  },
+  "summary": "within the phone's resolution (vs main −0.05 ms, Demo −0.11 with one low run)"
+ },
+ "gates": {
+  "tested_trees": "native c4ce722db199b332736700f1a9d11089e2f035e5, tools a112e55a61c90e559d8ceb59b8b379423848dd31",
+  "builds": "clean; checked headless and AppKit, unchecked headless and APK (shipping)",
+  "scenarios": [
+   "{\"scenario\": \"vs\", \"exit\": 0, \"seconds\": 71.2, \"result\": \"equal\", \"differs\": []}",
+   "{\"scenario\": \"mission\", \"exit\": 0, \"seconds\": 69.1, \"result\": \"equal\", \"differs\": []}",
+   "{\"scenario\": \"demo\", \"exit\": 0, \"seconds\": 51.3, \"result\": \"equal\", \"differs\": []}",
+   "{\"scenario\": \"war\", \"exit\": 0, \"seconds\": 110.0, \"result\": \"equal\", \"differs\": []}",
+   "{\"scenario\": \"playback\", \"exit\": 0, \"seconds\": 78.5, \"result\": \"equal\", \"differs\": []}",
+   "{\"scenario\": \"tournament\", \"exit\": 0, \"seconds\": 97.2, \"result\": \"equal\", \"differs\": []}",
+   "{\"scenario\": \"altenter\", \"exit\": 0, \"seconds\": 71.0, \"result\": \"equal\", \"differs\": []}",
+   "{\"scenario\": \"tournament-win\", \"exit\": 0, \"seconds\": 103.7, \"result\": \"equal\", \"differs\": []}",
+   "{\"scenario\": \"team-tournament\", \"exit\": 0, \"seconds\": 80.4, \"result\": \"equal\", \"differs\": []}",
+   "{\"scenario\": \"joystick\", \"exit\": 0, \"seconds\": 25.6, \"result\": \"equal\", \"differs\": []}",
+   "{\"frames\": 1832, \"mismatched\": 0, \"result\": \"identical\"}"
+  ],
+  "appkit": [
+   "{\"scenario\": \"vs\", \"exit\": 0, \"seconds\": 69.0, \"result\": \"equal\", \"differs\": []}",
+   "{\"scenario\": \"playback\", \"exit\": 0, \"seconds\": 74.9, \"result\": \"equal\", \"differs\": []}",
+   "{\"frames\": 3960, \"mismatched\": 0, \"result\": \"identical\"}"
+  ],
+  "unchecked_headless": [
+   "{\"scenario\": \"vs\", \"exit\": 0, \"seconds\": 70.3, \"result\": \"equal\", \"differs\": []}",
+   "{\"scenario\": \"demo\", \"exit\": 0, \"seconds\": 51.5, \"result\": \"equal\", \"differs\": []}",
+   "{\"frames\": 1832, \"mismatched\": 0, \"result\": \"identical\"}"
+  ],
+  "launches": "20 of 20 clean",
+  "emulator": "{\"frames\": 1832, \"mismatched\": 0, \"result\": \"identical\"}",
+  "tests": [
+   "OriginalExclusivityChecksTests exit=0 1s \t Executed 1 test, with 0 failures (0 unexpected) in 0.001 (0.005) seconds",
+   "OriginalApplicationLoadedMenuTests exit=0 20s \t Executed 5 tests, with 0 failures (0 unexpected) in 19.810 (19.811) seconds",
+   "OriginalApplicationGraphicsDirectTests exit=0 0s \t Executed 2 tests, with 0 failures (0 unexpected) in 0.084 (0.085) seconds",
+   "OriginalApplicationPausedGameplayTests exit=0 70s \t Executed 2 tests, with 0 failures (0 unexpected) in 70.041 (70.042) seconds",
+   "OriginalGameplayDetailTests exit=0 189s \t Executed 2 tests, with 0 failures (0 unexpected) in 188.611 (188.612) seconds",
+   "OriginalApplicationHostGameplayTests exit=0 503s \t Executed 6 tests, with 0 failures (0 unexpected) in 502.796 (502.830) seconds",
+   "OriginalMacRuntimeLoadingTests exit=0 11s \t Executed 7 tests, with 0 failures (0 unexpected) in 11.092 (11.094) seconds"
+  ]
+ },
+ "review": "no independent review: a parameter-ownership change with no storage or behaviour change (the same values reach the operations in the same order)"
+}

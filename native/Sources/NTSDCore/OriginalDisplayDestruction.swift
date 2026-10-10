@@ -5,7 +5,7 @@ public enum OriginalDisplayDestruction {
     public static func destroy(globals: inout OriginalStateRecord,
         perform: (OriginalWindowInitialization.Request) throws -> OriginalWindowInitialization.Response,
         store: OriginalWindowInput.Store = { _,_ in }) throws {
-        guard globals.bytes.count == OriginalMatchPreparation.globalSize else {
+        guard globals.byteCount == OriginalMatchPreparation.globalSize else {
             throw OriginalStateError.invalidStorage("Display destruction globals extent")
         }
         var state = globals

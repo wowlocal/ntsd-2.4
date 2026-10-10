@@ -1,0 +1,119 @@
+{
+ "study": "docs/research/CORE_REALTIME.md",
+ "phase": "B1 stage 3a (the parts representation; no production record split)",
+ "date": "2026-10-07",
+ "design": "docs/research/CORE_REALTIME_B1.md (plan by a read-only planner at 3b3d7f5)",
+ "change": "OriginalStateRecord gains a third representation next to flat and paged: fixed flat parts (a final class Parts: records, starts, an assembled-contents cache and the probe partAssemblies), created only by partitioned(at:). A slice (extract) or overwrite at one part's exact extent shares or installs that part's buffers; every other operation runs over logical offsets with the flat record's results and errors; bytes/defined are assembled on demand and cached per written version. New range accessors bytes(in:), allDefined(in:) and byteCount replace whole-record reads at the hot call sites (MenuSession.State slice/replace/validateAliases/checkMergeAliases, the dispatch entry's size checks and keyboard read, LoadedMenuSession, CatalogSession, PoolSession); for flat records they give identical values. Paged and parted storage share one optional enum field (large: .pages or .parts).",
+ "rejected_first_version": {
+  "what": "parts as a second optional stored field next to pages (the plan's first choice)",
+  "phone": [
+   {
+    "label": "rtb1a-run1",
+    "runSeconds": 336,
+    "peakResidentMB": 1496,
+    "ticksPerSecond": 20.91,
+    "busySeconds": 225.55,
+    "bodies": 1800,
+    "completeMsPerTick": 22.3,
+    "menuMsPerStep": 1.23,
+    "menuStepsPerTick": 4.12,
+    "mainCpuShare": 0.612,
+    "renderCpuShare": 0.402,
+    "mainMsPerTick": 29.3,
+    "renderMsPerTick": 19.2
+   },
+   {
+    "label": "rtb1a-run2",
+    "runSeconds": 336,
+    "peakResidentMB": 1270,
+    "ticksPerSecond": 20.95,
+    "busySeconds": 226.11,
+    "bodies": 1800,
+    "completeMsPerTick": 22.2,
+    "menuMsPerStep": 1.24,
+    "menuStepsPerTick": 4.12,
+    "mainCpuShare": 0.612,
+    "renderCpuShare": 0.395,
+    "mainMsPerTick": 29.2,
+    "renderMsPerTick": 18.8
+   }
+  ],
+  "result": "main 28.2/28.3 -> 29.3/29.2 ms per tick, complete 21.4 -> 22.3/22.2 ms, with no production record split: the extra field made every flat record 48 bytes instead of 40 (MemoryLayout measured afterwards with a standalone program replicating the stored layouts: HEAD 40, separate field 48, one enum field 40), and flat records are copied very many times per tick",
+  "action": "folded pages and parts into one field (the plan's named fallback); paged writes move the pages out of the field (withPages) so they stay uniquely referenced"
+ },
+ "phone": {
+  "before": [
+   {
+    "label": "rt4h-run1",
+    "runSeconds": 320,
+    "peakResidentMB": 1383,
+    "ticksPerSecond": 21.33,
+    "busySeconds": 213.93,
+    "bodies": 1800,
+    "completeMsPerTick": 21.4,
+    "menuMsPerStep": 1.21,
+    "menuStepsPerTick": 4.12,
+    "mainCpuShare": 0.604,
+    "renderCpuShare": 0.407,
+    "mainMsPerTick": 28.3,
+    "renderMsPerTick": 19.1
+   },
+   {
+    "label": "rt4h-run2",
+    "runSeconds": 326,
+    "peakResidentMB": 1009,
+    "ticksPerSecond": 21.41,
+    "busySeconds": 215.29,
+    "bodies": 1800,
+    "completeMsPerTick": 21.3,
+    "menuMsPerStep": 1.2,
+    "menuStepsPerTick": 4.12,
+    "mainCpuShare": 0.603,
+    "renderCpuShare": 0.408,
+    "mainMsPerTick": 28.2,
+    "renderMsPerTick": 19.0
+   }
+  ],
+  "after": [
+   {
+    "label": "rtb1a2-run1",
+    "runSeconds": 321,
+    "peakResidentMB": 1058,
+    "ticksPerSecond": 21.28,
+    "busySeconds": 214.0,
+    "bodies": 1800,
+    "completeMsPerTick": 21.5,
+    "menuMsPerStep": 1.23,
+    "menuStepsPerTick": 4.12,
+    "mainCpuShare": 0.606,
+    "renderCpuShare": 0.406,
+    "mainMsPerTick": 28.5,
+    "renderMsPerTick": 19.1
+   },
+   {
+    "label": "rtb1a2-run2",
+    "runSeconds": 325,
+    "peakResidentMB": 1391,
+    "ticksPerSecond": 21.29,
+    "busySeconds": 218.08,
+    "bodies": 1800,
+    "completeMsPerTick": 21.4,
+    "menuMsPerStep": 1.24,
+    "menuStepsPerTick": 4.12,
+    "mainCpuShare": 0.604,
+    "renderCpuShare": 0.404,
+    "mainMsPerTick": 28.4,
+    "renderMsPerTick": 19.0
+   }
+  ],
+  "result": "main 28.3/28.2 -> 28.5/28.4 ms per tick, complete 21.4/21.3 -> 21.5/21.4 ms, render 19.1/19.0 -> 19.1/19.0 ms: within run variation (no production record is split in 3a; the gain comes with 3b)"
+ },
+ "gates": {
+  "headless": "vs equal, 1,832 frames identical (frozen-rtb1a2)",
+  "scenarios": "all 10 equal, frames identical (rt-b1a-all, frozen-rtb1a2)",
+  "AppKit": "vs and playback equal, 3,960 frames identical to the 4h AppKit run (rt-b1a-appkit vs rt-4h-appkit)",
+  "emulator": "vs equal, 1,832 frames identical",
+  "tests": "bundle A (native diff 53b7b5eb against d8a1a21 via a temporary index): all 170 suites, 496 tests, pass, incl. the new OriginalStateRecordPartsTests (a seeded model test against a flat record over the menu layout, random layouts and one-byte parts; logical-offset errors; buffer sharing; the assembly probe)"
+ },
+ "review": "independent read-only review of the representation (before the fold): correct, no counterexample, copy-on-write sound; it asked for stronger tests (a cache assertion that could not fail, overwrites from parted sources, zeroing, wide writes across boundaries, equality across layouts, an extracted part unchanged after the parent writes, no-op and empty installs, probe checks for every accessor) and for paths that assembled the whole record needlessly (empty extract, flat target with a parted source, parted-vs-flat equality, the range accessors); all applied. The fold into one field was reviewed with stage 3b by a second independent reviewer: paged values unchanged, buffers uniquely referenced when written, isKnownUniquelyReferenced meaningful through the accessor."
+}

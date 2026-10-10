@@ -1,0 +1,29 @@
+{
+  "study": "docs/research/MOBILE_PERFORMANCE.md",
+  "steps": [
+    4,
+    5
+  ],
+  "date": "2026-10-05",
+  "change": {
+    "4": "performFront's front copy walks each row with a source index that steps by one pixel (back for a mirrored copy) instead of recomputing sourceIndex(x,y) per pixel; the colour-key bounds are read once. KnownMask.allKnown tests whole 64-bit words in the middle of a span.",
+    "5": "the copy loop checks once per row whether the whole source span is known (then skips the per-pixel test) and gathers the target's known bits per 64-bit word, written once per word (KnownMask.merge); the loop never reads the target mask, and source and target are distinct storages."
+  },
+  "why": "phone profile after steps 1-3: performFront self 16.2%, half of it KnownMask bit get/set (OriginalMacDisplayBackend.swift:70/73 in that build); the copy loop is the game's sprite renderer",
+  "speed (Galaxy A12, vs script, no frame capture, on top of step 3)": {
+    "step 3": "8.8 ticks/s",
+    "steps 3-4": "9.2 ticks/s",
+    "steps 3-5": "9.3 ticks/s"
+  },
+  "gates": {
+    "headless vs": "equal; 1,832 frames identical to m1-frames-ref (steps 3-4 and 3-5 builds)",
+    "all 10 headless scenarios": "equal on the frozen steps 3-5 binary (p2-step3c)",
+    "AppKit": "vs and playback equal; 1,832 frames identical to the AppKit steps 1-2 run",
+    "display suites (test bundle B: tree with steps 4-5 and the then-uncommitted, uncached step-3 Core change; tree diff sha256 5ed9d908…)": "7 suites, 35 tests, 0 failures (OriginalMacLoadingAudioTests whole catalog 4,330 s)"
+  },
+  "review": {
+    "reviewer": "independent read-only agent (step 4)",
+    "verdict": "OK: allKnown returns the old result for every reachable span and cannot read past the allocation; the stepped index equals sourceIndex(x,y) in both directions; the key test is the exact negation; unknown pixels still clear the bit; copy.key always has two elements",
+    "step 5": "independent read-only agent after the commit: OK — the allKnown span is exactly the row's source indices in both directions and inside the allocation; set/clear masks are disjoint and reproduce the old per-pixel writes; every word is flushed once per row and merge touches only the current word's bits; nothing reads the target mask before the flush; source and target are distinct storages. Not verified by it: test coverage of rows narrower than 64 sharing a word"
+  }
+}

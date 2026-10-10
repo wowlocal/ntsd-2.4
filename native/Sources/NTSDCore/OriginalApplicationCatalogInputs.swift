@@ -1,5 +1,7 @@
 import Foundation
+#if canImport(CryptoKit)
 import CryptoKit
+#endif
 
 /// Original catalog/media bytes acquired before a Core attempt. Device replies,
 /// decoded DAT state and comparison records are not part of this package.
@@ -35,7 +37,7 @@ public struct OriginalApplicationCatalogInputs: Equatable {
     public static func load(directory: URL) throws -> Self {
         let fm = FileManager.default
         guard fm.fileExists(atPath:directory.path) else { throw Boundary.missing("OriginalCatalog") }
-        let root = try directory.resourceValues(forKeys:[.isDirectoryKey,.isSymbolicLinkKey])
+        let root = try OriginalFileFacts.of(directory,[.isDirectoryKey,.isSymbolicLinkKey])
         guard root.isDirectory == true,root.isSymbolicLink != true else { throw Boundary.invalid("Package root") }
         func read(_ path: String, count: Int? = nil) throws -> [UInt8] {
             var url = directory
@@ -46,7 +48,7 @@ public struct OriginalApplicationCatalogInputs: Equatable {
             for (i,part) in parts.enumerated() {
                 url.appendPathComponent(String(part))
                 guard fm.fileExists(atPath:url.path) else { throw Boundary.missing(path) }
-                let v = try url.resourceValues(forKeys:[.isDirectoryKey,.isRegularFileKey,.isSymbolicLinkKey,.fileSizeKey])
+                let v = try OriginalFileFacts.of(url,[.isDirectoryKey,.isRegularFileKey,.isSymbolicLinkKey,.fileSizeKey])
                 guard v.isSymbolicLink != true else { throw Boundary.invalid(path) }
                 if i+1 == parts.count {
                     guard v.isRegularFile == true,let size = v.fileSize,
@@ -70,11 +72,11 @@ public struct OriginalApplicationCatalogInputs: Equatable {
         }
         var actualFiles = Set<String>(),actualDirectories = Set<String>()
         var enumerationError: Error?
-        guard let iterator = fm.enumerator(at:directory,includingPropertiesForKeys:[.isDirectoryKey,.isRegularFileKey,.isSymbolicLinkKey],errorHandler:{ _,error in
+        guard let iterator = fm.enumerator(at:directory,includingPropertiesForKeys:OriginalDirectoryPrefetch.keys([.isDirectoryKey,.isRegularFileKey,.isSymbolicLinkKey]),errorHandler:{ _,error in
             enumerationError = error;return false
         }) else { throw Boundary.missing("Package directory") }
         for case let url as URL in iterator {
-            let v = try url.resourceValues(forKeys:[.isDirectoryKey,.isRegularFileKey,.isSymbolicLinkKey])
+            let v = try OriginalFileFacts.of(url,[.isDirectoryKey,.isRegularFileKey,.isSymbolicLinkKey])
             guard v.isSymbolicLink != true else { throw Boundary.invalid("Package symlink") }
             let path = url.standardizedFileURL.resolvingSymlinksInPath().path
             guard path.hasPrefix(rootPath+"/") else { throw Boundary.invalid("Package root") }

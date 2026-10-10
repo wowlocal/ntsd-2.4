@@ -1,0 +1,206 @@
+{
+  "date": "2026-10-05T19:59:29",
+  "commit": "870c24a40a3fa06729bbadd9b1fdfaec6862a5c0",
+  "dirty": false,
+  "hosts": {
+    "appkit": {
+      "group": "coretext",
+      "equal": [
+        "vs",
+        "mission",
+        "demo",
+        "war",
+        "playback",
+        "tournament",
+        "altenter",
+        "tournament-win",
+        "team-tournament",
+        "joystick"
+      ],
+      "differs": {}
+    },
+    "macos-sdl": {
+      "group": "coretext",
+      "equal": [
+        "vs",
+        "mission",
+        "demo",
+        "war",
+        "playback",
+        "tournament",
+        "altenter",
+        "tournament-win",
+        "team-tournament",
+        "joystick"
+      ],
+      "differs": {}
+    },
+    "ios": {
+      "group": "coretext",
+      "equal": [
+        "vs",
+        "mission",
+        "demo",
+        "war",
+        "playback",
+        "tournament",
+        "altenter",
+        "tournament-win",
+        "team-tournament",
+        "joystick"
+      ],
+      "differs": {}
+    },
+    "linux-headless": {
+      "group": "none",
+      "equal": [
+        "vs",
+        "mission",
+        "demo",
+        "war",
+        "playback",
+        "tournament",
+        "altenter",
+        "tournament-win",
+        "team-tournament",
+        "joystick"
+      ],
+      "differs": {}
+    },
+    "linux-x86_64": {
+      "group": "none",
+      "equal": [
+        "vs",
+        "mission",
+        "demo",
+        "war",
+        "playback",
+        "tournament",
+        "altenter",
+        "tournament-win",
+        "team-tournament",
+        "joystick"
+      ],
+      "differs": {}
+    },
+    "windows": {
+      "group": "none",
+      "equal": [
+        "vs",
+        "mission",
+        "demo",
+        "war",
+        "tournament",
+        "altenter",
+        "tournament-win",
+        "team-tournament",
+        "joystick"
+      ],
+      "differs": {
+        "playback": [
+          "milestones"
+        ]
+      }
+    },
+    "linux-sdl": {
+      "group": "freetype",
+      "equal": [
+        "vs",
+        "mission",
+        "demo",
+        "war",
+        "playback",
+        "tournament",
+        "altenter",
+        "tournament-win",
+        "team-tournament",
+        "joystick"
+      ],
+      "differs": {}
+    },
+    "windows-sdl": {
+      "group": "gdi",
+      "equal": [
+        "vs",
+        "mission",
+        "demo",
+        "war",
+        "playback",
+        "tournament",
+        "altenter",
+        "tournament-win",
+        "team-tournament",
+        "joystick"
+      ],
+      "differs": {}
+    },
+    "android": {
+      "group": "none",
+      "equal": [
+        "vs",
+        "mission",
+        "demo",
+        "war",
+        "playback",
+        "tournament",
+        "altenter",
+        "tournament-win",
+        "team-tournament",
+        "joystick"
+      ],
+      "differs": {}
+    }
+  },
+  "frames": {
+    "appkit==macos-sdl": {
+      "frames": 18088,
+      "mismatched": 0,
+      "result": "identical"
+    },
+    "appkit==ios": {
+      "frames": 18088,
+      "mismatched": 0,
+      "result": "identical"
+    },
+    "linux-headless==linux-x86_64": {
+      "frames": 18088,
+      "mismatched": 0,
+      "result": "identical"
+    },
+    "linux-headless==windows": {
+      "frames": 18088,
+      "mismatched": 0,
+      "result": "identical"
+    },
+    "linux-headless==android": {
+      "frames": 18088,
+      "mismatched": 0,
+      "result": "identical"
+    },
+    "text:appkit~linux-sdl": {
+      "frames": 18030,
+      "textless": 8465,
+      "text": 9565,
+      "disagree": 0,
+      "result": "agree"
+    },
+    "text:appkit~windows-sdl": {
+      "frames": 18030,
+      "textless": 8465,
+      "text": 9565,
+      "disagree": 0,
+      "result": "agree"
+    }
+  },
+  "note": "Matrix at 870c24a (memory steps 1-3, speed steps 1-7, the playback harness reading the committed recording from Git LFS). All nine hosts ran all 10 scenarios: 89 equal on the first comparison; windows/playback differed only because app_e2e.summarize took the playback dialog's file name with a POSIX Path on a Windows path (Z:\\...\\20260331_012329_VS.lfr). With the comparator fix in this commit (PureWindowsPath for paths with backslashes) its stored outputs compare equal; windows-sdl ran after the fix and is equal. Playback passes on every host for the first time (it had failed everywhere because the recording was an LFS pointer).",
+  "recompare": {
+    "windows/playback (stored outputs, fixed comparator)": {
+      "result": "equal",
+      "differs": []
+    },
+    "linux-headless/playback (stored outputs, fixed comparator)": {
+      "result": "equal",
+      "differs": []
+    }
+  }
+}

@@ -86,7 +86,7 @@ public enum OriginalMainMenu {
         store: @escaping OriginalWindowInput.Store = { _,_ in },
         worldStored: @escaping (Int,UInt32) throws -> Void = { _,_ in },
         observe: (OriginalMainMenuEvent) throws -> Void = { _ in }) throws -> OriginalMainMenuExit {
-        guard world.bytes.count == OriginalStateRecord.worldPrefixSize,globals.bytes.count == OriginalMatchPreparation.globalSize else { throw OriginalStateError.invalidStorage("Main menu storage sizes") }
+        guard world.byteCount == OriginalStateRecord.worldPrefixSize,globals.byteCount == OriginalMatchPreparation.globalSize else { throw OriginalStateError.invalidStorage("Main menu storage sizes") }
         var execution = Execution(world: world,globals: globals,store:store,worldStored:worldStored,live:network),random = crt
         let result = try execution.consumeMainMenu(crt: &random,input: input,observe: observe)
         world = execution.world;globals = execution.globals;crt = random;return result

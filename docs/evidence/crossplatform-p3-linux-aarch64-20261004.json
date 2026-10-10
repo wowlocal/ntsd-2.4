@@ -1,0 +1,35 @@
+{
+  "study": "docs/research/CROSS_PLATFORM.md",
+  "phase": "P3 headless Linux determinism (aarch64)",
+  "date": "2026-10-04",
+  "build": "NTSD_PORTABLE=1 swift build -c release --build-tests -Xswiftc -enable-testing --swift-sdk ntsd-6.4.0-ubuntu24.04-aarch64 (cross-compiled on macOS), test sources at 503af05 (JSON-equality fix)",
+  "harness": "tools/crossplatform/run_linux_suites.py: one suite per swift:6.4.0-noble container on OrbStack linux/arm64 (11.7 GiB VM), repo and build mounted read-only, macOS paths recreated as symlinks; test harness, not a Linux host observation",
+  "suites": 251,
+  "clean": 241,
+  "tests": {
+    "passed": 581,
+    "failed": 0,
+    "skipped": 1
+  },
+  "skipped": "FixtureInflateTests: its reference is Apple's Compression",
+  "oomKilled": [
+    "OriginalLibSelectionCommandsTests",
+    "OriginalLibSelectionStageTests",
+    "OriginalLibStageModeTests",
+    "OriginalLibTeamTournamentBracketTests",
+    "OriginalLibTeamTournamentPreparationTests",
+    "OriginalLibTeamTournamentSetupTests",
+    "OriginalLibTournamentArenaReleaseTests",
+    "OriginalLibTournamentBracketTests",
+    "OriginalLibTournamentPreparationTests",
+    "OriginalLibTournamentSetupTests"
+  ],
+  "oomNote": "exit 137 with OOMKilled=true; even alone (--jobs 1) these suites exceed the VM limit. OriginalLibStageModeTests: macOS peak RSS 4.1 GB vs >11.7 GiB in the container while building a full JSONSerialization tree of a 1.19 GB corpus. Not a result mismatch; their assertions never ran.",
+  "earlierRounds": [
+    "round 1 (binary before 503af05): Active* suites failed at OriginalApplicationBootstrapTests:77; cause: Darwin NSDictionary treats JSON true==1, corelibs does not; fixed with sameJSONObject",
+    "--jobs 2: OOM kills; restarted with --jobs 1; killed suites requeued (records in /Volumes/X5/.../results-killed-137-*.jsonl)"
+  ],
+  "totalSeconds": 24931,
+  "results": "docs/evidence/crossplatform-p3-linux-aarch64-20261004-results.jsonl (one JSON line per suite)",
+  "meaning": "Every portable test that ran on Linux aarch64 passes against the same frozen references as macOS: Core produces the same bytes/state on Linux. Open: the 10 memory-bound suites, x86_64, and a real Linux host."
+}

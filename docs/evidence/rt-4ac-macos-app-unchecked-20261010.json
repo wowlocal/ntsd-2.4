@@ -1,0 +1,18 @@
+{
+ "study": "docs/research/CORE_REALTIME.md",
+ "phase": "4ac: the macOS app build drops dynamic exclusivity checks",
+ "date": "2026-10-10",
+ "decision": "the user's decision of 2026-10-08 (4aa): shipping builds drop Swift's dynamic exclusivity checks, test bundles keep them. 4aa's review left the other packagers' opt-in open (the macOS app build, Linux, Windows, iOS)",
+ "change": "tools/build-native.sh (the macOS app bundle's release build) exports NTSD_UNCHECKED_EXCLUSIVITY=1, as tools/crossplatform/android_app.py does; Package.swift applies -enforce-exclusivity=unchecked to release builds only, so test bundles and the gates' checked binaries keep their checks",
+ "checks": {
+  "build": "NTSDNative, release, NTSD_UNCHECKED_EXCLUSIVITY=1, clean scratch: builds; 0 swift_beginAccess call sites in the binary (the checked gate app has 3,306)",
+  "appkit_scenarios": [
+   "{\"scenario\": \"vs\", \"exit\": 0, \"seconds\": 74.3, \"result\": \"equal\", \"differs\": []}",
+   "{\"scenario\": \"playback\", \"exit\": 0, \"seconds\": 79.2, \"result\": \"equal\", \"differs\": []}",
+   "{\"frames\": 3960, \"mismatched\": 0, \"result\": \"identical\"}"
+  ],
+  "launches": "launches: crashes 0 of 20",
+  "note": "the full bundle script (asset import and packaging) was not run; only its build step changed"
+ },
+ "open": "Linux (package_linux.py), Windows (package_windows.py) and iOS (ios_app.py): the same opt-in needs their package builds to verify (X5 at 25 GiB free against a 20 GiB floor; the cross builds were archived to T7 on 2026-10-09)"
+}

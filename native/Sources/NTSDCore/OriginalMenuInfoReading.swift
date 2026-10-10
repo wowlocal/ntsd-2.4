@@ -18,7 +18,7 @@ public enum OriginalMenuInfoReading {
         store: (Int,Int,[UInt8]) throws -> Void = { _,_,_ in },
         written: (Int,Int,[UInt8]) throws -> Void = { _,_,_ in },
         observe: (Event,OriginalStateRecord,OriginalStateRecord) throws -> Void = { _,_,_ in }) throws -> UInt32 {
-        guard globals.bytes.count == OriginalMatchPreparation.globalSize,local.bytes.count == localCount,
+        guard globals.byteCount == OriginalMatchPreparation.globalSize,local.byteCount == localCount,
               chunk > 0,readFailAt >= -1,translatedBytes == nil || file != 0 else {
             throw OriginalStateError.invalidStorage("Menu info reading inputs")
         }

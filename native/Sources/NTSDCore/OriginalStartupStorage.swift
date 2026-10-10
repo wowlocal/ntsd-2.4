@@ -16,7 +16,7 @@ public enum OriginalStartupStorage {
     /// until this enclosing operation commits.
     public static func initialize(_ storage: inout OriginalStateRecord,
         completed: (Constructor) throws -> Void = { _ in }) throws {
-        guard storage.bytes.count == observedCount else {
+        guard storage.byteCount == observedCount else {
             throw OriginalStateError.invalidStorage("Startup storage extent")
         }
         var staged = storage

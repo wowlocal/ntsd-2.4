@@ -60,16 +60,21 @@ final class OriginalWorldImpulsesTests: XCTestCase {
                 try world.write(UInt32(aliases[i] ?? i),at: 0x194+i*4);try world.write(UInt8(active[i] ?? 0),at: 4+i);try actors[i].write(UInt32(0),at: 0x368)
             };try world.write(UInt32(0),at: 0x7d4)
             for a in item.actors ?? [] { for p in a.patches { try patch(&actors[a.index],p) } }
-            var seen: [Write] = []
+            // Both forms against the same recorded results; writes are counted
+            // once (CORE_REALTIME B2 P4).
+            let startActors = actors
+            for inPlace in [false,true] {
+            var actors = startActors,seen: [Write] = []
             try OriginalWorldImpulses.apply(world: world,actors: &actors,precision: OriginalArithmeticPrecision(controlWord: item.fpcw ?? UInt16(c.fpcw ?? 0x37f)),observe: { w in
                 let bytes = (0..<w.size).map { String(format: "%02x",UInt8(truncatingIfNeeded: w.value >> (8*$0))) }.joined()
                 seen.append(.init(slot: w.slot,actor: w.actor,offset: w.offset,bytes: bytes))
-            })
-            XCTAssertEqual(seen,item.events,item.label+" writes");writes += seen.count
+            },inPlace: inPlace)
+            XCTAssertEqual(seen,item.events,item.label+" writes");if !inPlace { writes += seen.count }
             let records = [world]+actors
             XCTAssertEqual(MatchPreparationReference.digest(Data(records.flatMap(\.bytes))),item.poolSHA256,item.label+" pool")
             XCTAssertEqual(MatchPreparationReference.digest(Data(records.flatMap { $0.defined.map { $0 ? UInt8(1) : UInt8(0) } })),item.maskSHA256,item.label+" masks")
             XCTAssertEqual(globalsSHA,item.globalsSHA256,item.label+" globals")
+            }
         }
         if let formats = c.formats {
         XCTAssertEqual(formats.dllSHA256,"c3ac989c8489a23bb96400b1856f5325ffc67e844f04651ea5d61bc20a991c6d")
@@ -96,5 +101,14 @@ final class OriginalWorldImpulsesTests: XCTestCase {
             if w.offset == 0x20 { throw OriginalStateError.invalidStorage("Injected stop after three velocity stores") }
         }))
         XCTAssertEqual(writes,[0x40,0x48,0x50,0x20]);XCTAssertEqual(actors,before)
+        // In place (CORE_REALTIME B2 P4): the same writes up to the same error,
+        // the three velocity stores and the count kept.
+        writes = []
+        XCTAssertThrowsError(try OriginalWorldImpulses.apply(world: world,actors: &actors,observe: { w in
+            writes.append(w.offset)
+            if w.offset == 0x20 { throw OriginalStateError.invalidStorage("Injected stop after three velocity stores") }
+        },inPlace: true)) { XCTAssertEqual("\($0)","\(OriginalStateError.invalidStorage("Injected stop after three velocity stores"))") }
+        XCTAssertEqual(writes,[0x40,0x48,0x50,0x20]);XCTAssertEqual(actors.count,400)
+        XCTAssertNotEqual(actors[0],before[0]);XCTAssertEqual(try actors[0].integer(at: 0x20,as: Int32.self),0)
     }
 }

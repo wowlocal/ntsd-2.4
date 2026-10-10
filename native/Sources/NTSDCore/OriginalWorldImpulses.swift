@@ -11,9 +11,25 @@ public enum OriginalWorldImpulses {
                              observe: (OriginalWorldImpulseWrite) throws -> Void = { _ in }) throws {
         try apply(world: state.world,actors: &state.actors,precision: state.arithmeticPrecision,observe: observe)
     }
+    /// `apply` with the caller's actors moved into the pass and written back on
+    /// every path (CORE_REALTIME B2 P4): for callers that drop the state when
+    /// this throws.
+    package static func applyInPlace(state: inout OriginalMatchPreparation,
+                                     observe: (OriginalWorldImpulseWrite) throws -> Void = { _ in }) throws {
+        try apply(world: state.world,actors: &state.actors,precision: state.arithmeticPrecision,observe: observe,inPlace: true)
+    }
     static func apply(world: OriginalStateRecord,actors: inout [OriginalStateRecord],
-                      precision: OriginalArithmeticPrecision = .bits64,observe: (OriginalWorldImpulseWrite) throws -> Void = { _ in }) throws {
-        var pool = actors
+                      precision: OriginalArithmeticPrecision = .bits64,observe: (OriginalWorldImpulseWrite) throws -> Void = { _ in },
+                      inPlace: Bool = false) throws {
+        guard inPlace else {
+            // All or nothing: in place on a copy, assigned when it completes.
+            var copies = actors
+            try apply(world: world,actors: &copies,precision: precision,observe: observe,inPlace: true)
+            actors = copies
+            return
+        }
+        var pool = inPlaceTake(&actors,leaving: [])
+        defer { actors = pool }
         func index(_ slot: Int) throws -> Int {
             let value = Int(try world.integer(at: 0x194+4*slot,as: UInt32.self))
             guard pool.indices.contains(value) else { throw OriginalStateError.invalidStorage("World impulses: Actor binding") }
@@ -38,7 +54,6 @@ public enum OriginalWorldImpulses {
             }
             for offset in [0x28,0x30,0x38] { try put(slot,offset,0) }
         }
-        actors = pool
     }
     private static func scaled(_ bits: UInt64,divisor: Int32,precision: OriginalArithmeticPrecision) throws -> UInt64 {
         let magnitude = bits & 0x7fffffffffffffff

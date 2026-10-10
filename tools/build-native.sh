@@ -5,6 +5,9 @@ python3 tools/import_ntsd.py
 python3 tools/inspect_original.py
 # Pin Xcode's toolchain; another swift earlier in PATH may not match the SDK.
 swift=(xcrun --toolchain XcodeDefault swift)
+# The shipping build drops Swift's dynamic exclusivity checks, as the APK does
+# (the user's decision, CORE_REALTIME 4aa); test bundles keep them.
+export NTSD_UNCHECKED_EXCLUSIVITY=1
 "${swift[@]}" build --package-path native -c release
 binary_dir="$("${swift[@]}" build --package-path native -c release --show-bin-path)"
 bundle='build/NTSD Native.app'

@@ -30,7 +30,7 @@ public struct OriginalWorldBootstrap: Equatable, Sendable {
     public init(world initialWorld: OriginalStateRecord,
                 allocateActor: (Int, Int) throws -> [UInt8],
                 afterConstructor: (Int, OriginalStateRecord) throws -> Void = { _, _ in }) throws {
-        guard initialWorld.bytes.count == OriginalStateRecord.worldPrefixSize else {
+        guard initialWorld.byteCount == OriginalStateRecord.worldPrefixSize else {
             throw OriginalStateError.invalidStorage("Bootstrap requires World and400 Actor backing allocations")
         }
         self.world = initialWorld

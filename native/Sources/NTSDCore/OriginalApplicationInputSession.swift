@@ -13,24 +13,53 @@ public struct OriginalApplicationInputSession {
         case roundMethod(OriginalMatchRoundEvent)
     }
     public struct PendingContinuation {
-        public let entry: Pool.PendingInput, state: State, match: OriginalMatchPreparation
-        public let inputContext: OriginalInputControlContext, music: OriginalMusicMemory
-        public let commands: [UInt8], playbackCommands: [UInt8], paused: Bool
-        public let round: OriginalMatchRoundResult, operations: [Operation]
-        public let graphics: [OriginalApplicationGraphics.Command]
-        public let loading: OriginalApplicationMenuSession.PendingLoading
-        public let menuResources: OriginalMenuResourceLoading
-        public let menuBackgrounds: [UInt32:OriginalLoadedBitmap]
+        /// The values, fixed at creation, in one shared object: the loaded
+        /// cycle's continuation is copied with every Host stage, pending return
+        /// and batch of a tick (~380 references per copy before;
+        /// CORE_REALTIME phase 4m, as 4a and 4l). Reads borrow through `_read`.
+        private final class Storage {
+            let entry: Pool.PendingInput, state: State, match: OriginalMatchPreparation
+            let inputContext: OriginalInputControlContext, music: OriginalMusicMemory
+            let commands: [UInt8], playbackCommands: [UInt8], paused: Bool
+            let round: OriginalMatchRoundResult, operations: [Operation]
+            let graphics: [OriginalApplicationGraphics.Command]
+            let loading: OriginalApplicationMenuSession.PendingLoading
+            let menuResources: OriginalMenuResourceLoading
+            let menuBackgrounds: [UInt32:OriginalLoadedBitmap]
+            init(entry: Pool.PendingInput,state: State,match: OriginalMatchPreparation,inputContext: OriginalInputControlContext,
+                 music: OriginalMusicMemory,commands: [UInt8],playbackCommands: [UInt8],paused: Bool,round: OriginalMatchRoundResult,
+                 operations: [Operation],graphics: [OriginalApplicationGraphics.Command],loading: OriginalApplicationMenuSession.PendingLoading,
+                 menuResources: OriginalMenuResourceLoading,menuBackgrounds: [UInt32:OriginalLoadedBitmap]) {
+                self.entry = entry;self.state = state;self.match = match;self.inputContext = inputContext;self.music = music
+                self.commands = commands;self.playbackCommands = playbackCommands;self.paused = paused;self.round = round
+                self.operations = operations;self.graphics = graphics;self.loading = loading
+                self.menuResources = menuResources;self.menuBackgrounds = menuBackgrounds
+            }
+        }
+        private let storage: Storage
+        public var entry: Pool.PendingInput { _read { yield storage.entry } }
+        public var state: State { _read { yield storage.state } }
+        public var match: OriginalMatchPreparation { _read { yield storage.match } }
+        public var inputContext: OriginalInputControlContext { _read { yield storage.inputContext } }
+        public var music: OriginalMusicMemory { _read { yield storage.music } }
+        public var commands: [UInt8] { _read { yield storage.commands } }
+        public var playbackCommands: [UInt8] { _read { yield storage.playbackCommands } }
+        public var paused: Bool { storage.paused }
+        public var round: OriginalMatchRoundResult { _read { yield storage.round } }
+        public var operations: [Operation] { _read { yield storage.operations } }
+        public var graphics: [OriginalApplicationGraphics.Command] { _read { yield storage.graphics } }
+        public var loading: OriginalApplicationMenuSession.PendingLoading { _read { yield storage.loading } }
+        public var menuResources: OriginalMenuResourceLoading { _read { yield storage.menuResources } }
+        public var menuBackgrounds: [UInt32:OriginalLoadedBitmap] { _read { yield storage.menuBackgrounds } }
         init(entry: Pool.PendingInput,state: State,match: OriginalMatchPreparation,
              inputContext: OriginalInputControlContext,music: OriginalMusicMemory,
              commands: [UInt8],playbackCommands: [UInt8],paused: Bool,
              round: OriginalMatchRoundResult,operations: [Operation],graphics: [OriginalApplicationGraphics.Command],
              loading: OriginalApplicationMenuSession.PendingLoading? = nil,
              menuResources: OriginalMenuResourceLoading = .init(),menuBackgrounds: [UInt32:OriginalLoadedBitmap] = [:]) {
-            self.entry = entry;self.state = state;self.match = match;self.inputContext = inputContext;self.music = music
-            self.commands = commands;self.playbackCommands = playbackCommands;self.paused = paused;self.round = round
-            self.operations = operations;self.graphics = graphics;self.loading = loading ?? entry.entry.entry.entry
-            self.menuResources = menuResources;self.menuBackgrounds = menuBackgrounds
+            storage = Storage(entry:entry,state:state,match:match,inputContext:inputContext,music:music,commands:commands,
+                              playbackCommands:playbackCommands,paused:paused,round:round,operations:operations,graphics:graphics,
+                              loading:loading ?? entry.entry.entry.entry,menuResources:menuResources,menuBackgrounds:menuBackgrounds)
         }
     }
     public let entry: Pool.PendingInput, bindings: OriginalApplicationMatchBindings

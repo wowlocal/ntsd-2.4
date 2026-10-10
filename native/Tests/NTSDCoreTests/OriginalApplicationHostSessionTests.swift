@@ -75,6 +75,9 @@ final class OriginalApplicationHostSessionTests: XCTestCase {
                     graphicsObserve:graphicsObserve,checkpoint:checkpoint,bodyProduced:bodyProduced,beforeCommit:beforeCommit)
             }
             let old = try XCTUnwrap(driver.snapshot.session), platform = try driver.platformSnapshot()
+            // `full`'s bytes now: a parted `full` shared with a failed attempt and
+            // written in place would still compare equal by identity (B1).
+            let oldBytes = old.state.full.bytes, oldDefined = old.state.full.defined
             let oldBatches = driver.pendingBatchCount
             func prepare(_ p: Parent.Adapter,_ state: S.State) throws -> Host.Inputs {
                 XCTAssertEqual(state.full,old.state.full)
@@ -85,6 +88,8 @@ final class OriginalApplicationHostSessionTests: XCTestCase {
             }
             func unchanged() throws {
                 Bootstrap.same(try XCTUnwrap(driver.snapshot.session),old)
+                let full = try XCTUnwrap(driver.snapshot.session).state.full
+                XCTAssertEqual(full.bytes,oldBytes);XCTAssertEqual(full.defined,oldDefined)
                 let after = try driver.platformSnapshot()
                 XCTAssertEqual(after.hostQueuePosition,platform.hostQueuePosition)
                 XCTAssertEqual(after.hostReservations,platform.hostReservations)

@@ -5,7 +5,7 @@ extension OriginalMatchPreparation {
     /// Stream is an original call-site tag; it does not select an independent RNG.
     mutating func drawMenuRandom(stream: Int32, range: Int32,
                                 observe: (OriginalFrontScreenEvent) throws -> Void) throws -> Int32 {
-        var random = OriginalRandom(table: try (0..<3000).map { try globals.integer(at: 0x44ff90-Self.globalBase+$0,as: UInt8.self) },
+        var random = OriginalRandom(table: try OriginalRandom.table(globals, at: 0x44ff90-Self.globalBase),
             index: Int(try global(0x450bcc)),counter: Int(try global(0x450c34)),source: "own menu state",sourceSHA256: "")
         try random.validate()
         let index = random.index,counter = random.counter,result = Int32(random.next(Int(range)))

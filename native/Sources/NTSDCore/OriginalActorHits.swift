@@ -20,8 +20,29 @@ public enum OriginalActorHits {
         guard try state.world.integer(at: 0x7d4,as: UInt32.self) == 0,
               let registry = catalog.registry.records[0x4d82380] else { throw OriginalStateError.invalidStorage("Hit catalog binding") }
         return OriginalHitPass(world: state.world,actors: state.actors,globals: state.globals,
-            memory: OriginalContactFrameMemory(state.frameAllocations),crt: crt,
+            memory: OriginalContactFrameMemory(state.frameAllocations,order: state.catalog.frameAllocationOrder),crt: crt,
             objectCount: try registry.integer(at: 0,as: Int32.self),header: { n in
+                guard catalog.objects.indices.contains(n) else { throw OriginalStateError.invalidStorage("Hit Object binding") }
+                return catalog.objects[n].header
+            },frame: { n,f in
+                guard catalog.objects.indices.contains(n),catalog.objects[n].frameStorage.indices.contains(Int(f)) else { throw OriginalStateError.invalidStorage("Hit Frame binding") }
+                return catalog.objects[n].frameStorage[Int(f)]
+            },sse2: sse2,precision: state.arithmeticPrecision,library: library)
+    }
+    /// `makePass` with the caller's world, actors, globals and frame
+    /// allocations moved into the pass (CORE_REALTIME B2 P4); `publish` writes
+    /// them back. The guards and the Object count are read first, so a throw
+    /// here takes nothing.
+    static func makePass(taking state: inout OriginalMatchPreparation,crt: OriginalCRTRandom,sse2: Bool,
+                         library: OriginalLibHitState? = nil) throws -> OriginalHitPass {
+        let catalog = state.catalog
+        guard try state.world.integer(at: 0x7d4,as: UInt32.self) == 0,
+              let registry = catalog.registry.records[0x4d82380] else { throw OriginalStateError.invalidStorage("Hit catalog binding") }
+        let objectCount = try registry.integer(at: 0,as: Int32.self)
+        return OriginalHitPass(world: inPlaceTake(&state.world,leaving: .vacant),actors: inPlaceTake(&state.actors,leaving: []),
+            globals: inPlaceTake(&state.globals,leaving: .vacant),
+            memory: OriginalContactFrameMemory(inPlaceTake(&state.frameAllocations,leaving: []),order: catalog.frameAllocationOrder),crt: crt,
+            objectCount: objectCount,header: { n in
                 guard catalog.objects.indices.contains(n) else { throw OriginalStateError.invalidStorage("Hit Object binding") }
                 return catalog.objects[n].header
             },frame: { n,f in
@@ -81,7 +102,7 @@ struct OriginalHitPass {
     }
     mutating func draw(_ stream: Int32,_ range: Int32,observe: (OriginalHitEvent) throws -> Void) throws -> Int32 {
         guard range != 0 else { throw OriginalStateError.invalidStorage("Original hit RNG division by zero") }
-        var rng = OriginalRandom(table: try (0..<3000).map { try globals.integer(at: 0x44ff90-0x44d000+$0,as: UInt8.self) },
+        var rng = OriginalRandom(table: try OriginalRandom.table(globals, at: 0x44ff90-0x44d000),
             index: Int(try globals.integer(at: 0x450bcc-0x44d000,as: Int32.self)),counter: Int(try globals.integer(at: 0x450c34-0x44d000,as: Int32.self)),source: "owned hits",sourceSHA256: "")
         try rng.validate();let result = Int32(rng.next(Int(range)))
         try globals.write(Int32(rng.index),at: 0x450bcc-0x44d000);try globals.write(Int32(rng.counter),at: 0x450c34-0x44d000)

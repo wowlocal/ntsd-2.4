@@ -23,13 +23,34 @@ public enum OriginalResultRecording {
                              open: (OriginalReplayFileOutput.OpenRequest) throws -> Bool,
                              write: ([UInt8]) throws -> Int32, close: () throws -> Int32,
                              observe: (Event) throws -> Void = { _ in }) throws -> Result {
+        try run(state: &state, context: &context, stageDefeated: stageDefeated, allocate: allocate, processorSignature: processorSignature,
+                open: open, write: write, close: close, observe: observe, inPlace: false)
+    }
+    /// `apply` with the caller's globals moved into the pass and written back
+    /// on every path (CORE_REALTIME B2 P4); the context still commits only
+    /// when it completes. For callers that drop both when this throws.
+    package static func applyInPlace(state: inout OriginalMatchPreparation,
+                                     context: inout OriginalInputControlContext, stageDefeated: UInt32?,
+                                     allocate: () throws -> UInt32, processorSignature: () throws -> UInt32,
+                                     open: (OriginalReplayFileOutput.OpenRequest) throws -> Bool,
+                                     write: ([UInt8]) throws -> Int32, close: () throws -> Int32,
+                                     observe: (Event) throws -> Void = { _ in }) throws -> Result {
+        try run(state: &state, context: &context, stageDefeated: stageDefeated, allocate: allocate, processorSignature: processorSignature,
+                open: open, write: write, close: close, observe: observe, inPlace: true)
+    }
+    private static func run(state: inout OriginalMatchPreparation,
+                            context: inout OriginalInputControlContext, stageDefeated: UInt32?,
+                            allocate: () throws -> UInt32, processorSignature: () throws -> UInt32,
+                            open: (OriginalReplayFileOutput.OpenRequest) throws -> Bool,
+                            write: ([UInt8]) throws -> Int32, close: () throws -> Int32,
+                            observe: (Event) throws -> Void, inPlace: Bool) throws -> Result {
         let catalog = state.catalog
         return try apply(world: state.world, actors: state.actors, globals: &state.globals,
             context: &context, stageDefeated: stageDefeated, header: { index in
                 guard catalog.objects.indices.contains(index) else { throw error("Object binding") }
                 return catalog.objects[index].header
             }, allocate: allocate, processorSignature: processorSignature,
-            open: open, write: write, close: close, observe: observe)
+            open: open, write: write, close: close, observe: observe, inPlace: inPlace)
     }
 
     private static func error(_ text: String) -> OriginalStateError { .invalidStorage("Result recording: "+text) }
@@ -41,8 +62,20 @@ public enum OriginalResultRecording {
                       allocate: () throws -> UInt32, processorSignature: () throws -> UInt32,
                       open: (OriginalReplayFileOutput.OpenRequest) throws -> Bool,
                       write: ([UInt8]) throws -> Int32, close: () throws -> Int32,
-                      observe: (Event) throws -> Void = { _ in }) throws -> Result {
-        var state = globals, owned = context
+                      observe: (Event) throws -> Void = { _ in }, inPlace: Bool = false) throws -> Result {
+        guard inPlace else {
+            // All or nothing: the globals in place on a copy, assigned when it completes.
+            var copied = globals
+            let result = try apply(world: world, actors: actors, globals: &copied, context: &context, stageDefeated: stageDefeated, header: header,
+                                   codecFailureOrdinal: codecFailureOrdinal, bufferAvailable: bufferAvailable, allocate: allocate,
+                                   processorSignature: processorSignature, open: open, write: write, close: close, observe: observe, inPlace: true)
+            globals = copied
+            return result
+        }
+        // The caller's globals (written back on every path); the context is a
+        // copy committed only when this completes.
+        var state = inPlaceTake(&globals, leaving: .vacant), owned = context
+        defer { globals = state }
         func global(_ address: Int) throws -> Int32 { try state.integer(at: address-0x44d000, as: Int32.self) }
         func set(_ address: Int, _ value: Int32) throws { try state.write(value, at: address-0x44d000) }
         func active(_ slot: Int) throws -> Bool { try world.integer(at: 4+slot, as: UInt8.self) != 0 }
@@ -143,7 +176,7 @@ public enum OriginalResultRecording {
                 if try global(0x450bdc) == 101 { try set(0x450b84, 0) }
             }
         }
-        globals = state; context = owned
+        context = owned
         return .init(continuation: continuation, writer: writer)
     }
 }

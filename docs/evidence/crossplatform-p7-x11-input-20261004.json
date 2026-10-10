@@ -1,0 +1,64 @@
+{
+  "study": "docs/research/CROSS_PLATFORM.md",
+  "phase": "P7: X11 window and input path",
+  "date": "2026-10-04",
+  "harness": "ntsd-linux-runtime:noble (tools/crossplatform/linux-runtime/Dockerfile: + Xvfb, xdotool, X11 libraries), test only; tools/crossplatform/linux_x11_smoke.sh",
+  "run": "Xvfb :99 1280x1024x24, SDL_VIDEO_DRIVER=x11, SDL_AUDIO_DRIVER=dummy, NTSDSDL cross-built for glibc aarch64 with FreeType text; real time (no --virtual-clock), no --script: input only from xdotool (XTEST)",
+  "input": "app_e2e VS script's first inputs at real-time spacing: click START (350,230), wait for 'loaded', click (402,218), keys j j d j j KP_4 Right x5 KP_4 KP_4, then d j j j s j j w w w j; every press held 150 ms",
+  "findings": [
+    "xdotool's instant click/key (press and release within milliseconds) was not seen by the game, which reads input once per iteration; 150 ms presses, like physical ones, were",
+    "clicking the mode menu 3 s after START was lost while the game was still loading (about 11 s); waiting for the 'loaded' event fixed it"
+  ],
+  "window": [
+    "Absolute upper-left X:  243",
+    "Absolute upper-left Y:  237",
+    "Width: 794",
+    "Height: 550"
+  ],
+  "windowExpected": "client 794x550 centred on 1280x1024: x (1280-794)/2 = 243, y (1024-550)/2 = 237",
+  "events": [
+    {
+      "event": "sdlText",
+      "font": "/usr/share/fonts/truetype/dejavu/DejaVuSansCondensed-Bold.ttf"
+    },
+    {
+      "attempts": 76,
+      "event": "started",
+      "requests": 75,
+      "soundOutput": "muted"
+    },
+    {
+      "allocations": 16105,
+      "event": "loaded",
+      "files": 621
+    },
+    {
+      "cycles": 816,
+      "event": "matchLaunched",
+      "iterations": 2522
+    },
+    {
+      "cycles": 817,
+      "event": "gameplay"
+    },
+    {
+      "cycles": 1116,
+      "event": "progress",
+      "gameplayBodies": 300,
+      "iterations": 3344
+    }
+  ],
+  "frames": {
+    "f000100.png": "98fb606d983ed8423ecf5b6caefa2060f61e64849437c05be78e5f0cfcf8bbb6",
+    "f000200.png": "50c4b8be6d3c888c45ae607914b6e667fa9eb2a0413995dcc020596f345525a4",
+    "f000300.png": "ec2d35e2f50e539f4f41167bf6e14ccbfd8476fed254a51f7545ce5139ab0d3b",
+    "f000400.png": "94f75e741a8643b4323aadd789665807474e2795472b8fbf5cd9bc6db588a2b4"
+  },
+  "result": "the window opened at the client size and position the game was told; real X mouse and keyboard input reached the game through START, mode and character selection to a Naruto/Sasuke District match (matchLaunched, gameplay, 400 bodies, then --exit-after-bodies ended it, exit 0); frames presented with FreeType text",
+  "open": [
+    "a window manager's decorations and SM_CYCAPTION on X11 (metrics are 0 here; the game derives the client size, so only the outer size differs)",
+    "Wayland",
+    "real Linux desktop with audio and a person playing",
+    "gamepads on Linux"
+  ]
+}

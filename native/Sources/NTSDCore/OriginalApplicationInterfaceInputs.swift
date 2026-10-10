@@ -1,5 +1,7 @@
 import Foundation
+#if canImport(CryptoKit)
 import CryptoKit
+#endif
 
 /// Immutable embedded game DIBs. Package IO completes before the tentative pool
 /// continuation; expected pixels, EXE execution and platform writes are absent.
@@ -26,7 +28,7 @@ public struct OriginalApplicationInterfaceInputs: Equatable {
         func read(_ path: String) throws -> Data {
             let url = directory.appendingPathComponent(path)
             guard FileManager.default.fileExists(atPath:url.path) else { throw Boundary.missing(path) }
-            let v = try url.resourceValues(forKeys:[.isRegularFileKey,.isSymbolicLinkKey])
+            let v = try OriginalFileFacts.of(url,[.isRegularFileKey,.isSymbolicLinkKey])
             guard v.isRegularFile == true,v.isSymbolicLink != true else { throw Boundary.invalid(path) }
             return try Data(contentsOf:url)
         }

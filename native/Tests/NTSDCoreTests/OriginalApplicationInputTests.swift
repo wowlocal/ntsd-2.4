@@ -181,6 +181,93 @@ final class OriginalApplicationInputTests: XCTestCase {
         XCTAssertThrowsError(try B(catalogToken:b.catalogToken,actorTokens:[UInt32](repeating:1,count:400),objectTokens:b.objectTokens))
     }
 
+    /// CORE_REALTIME B2: the loaded entry runs its sub-steps in place on its own
+    /// copy. A throw at any checkpoint, replay or round event, or from an
+    /// AI/object child after its writes leaves the caller's model, commands and
+    /// context as they were, and a retry equals the uninjected run; the
+    /// local-input wrappers keep their caller's values too. The saved entry has
+    /// no live slot from 10 up, so a copy makes slot 10 a live character for
+    /// the child cases.
+    static func checkEntryRollback(_ model: OriginalMatchPreparation,_ context: OriginalInputControlContext,
+                                   _ commands: [UInt8],playback: [UInt8],paused: Bool) throws {
+        func same(_ a: OriginalMatchPreparation,_ b: OriginalMatchPreparation,_ label: String) {
+            XCTAssertEqual(a.world,b.world,label);XCTAssertEqual(a.actors,b.actors,label)
+            XCTAssertEqual(a.globals,b.globals,label);XCTAssertEqual(a.interface.bitmaps,b.interface.bitmaps,label)
+        }
+        func same(_ a: OriginalInputControlContext,_ b: OriginalInputControlContext,_ label: String) {
+            XCTAssertEqual(a.savedPlayback,b.savedPlayback,label);XCTAssertEqual(a.memory.replayPointers,b.memory.replayPointers,label)
+            XCTAssertEqual(a.memory.allocations,b.memory.allocations,label)
+        }
+        struct Outcome {
+            var state: OriginalMatchPreparation,commands: [UInt8],context: OriginalInputControlContext,error: Error?
+            var points: [OriginalLoadedMatchEntry.Checkpoint],replay: Int,round: Int,children: Int
+        }
+        func attempt(_ start: OriginalMatchPreparation,checkpointAt: OriginalLoadedMatchEntry.Checkpoint? = nil,
+                     replayAt: Int? = nil,roundAt: Int? = nil,childFails: Bool = false) -> Outcome {
+            var state = start,buffer = commands,owned = context,failure: Error?
+            var points: [OriginalLoadedMatchEntry.Checkpoint] = [],replay = 0,round = 0,children = 0
+            do {
+                _ = try OriginalLoadedMatchEntry.run(state:&state,paused:paused,commands:&buffer,playbackCommands:playback,context:&owned,
+                    dispatch:{ request,child in
+                        children += 1
+                        guard childFails else { return } // The no-effect child of the reference checks.
+                        let slot = Int(request.arguments[0]),index = Int(try child.world.integer(at:0x194+slot*4,as:UInt32.self))
+                        try child.globals.write(UInt8(0x5a),at:0x10);try child.actors[index].write(UInt8(0x5a),at:0xc6)
+                        throw Stop.injected("child")
+                    },controlBoundary:{ _ in throw Stop.platform },replayEvent:{ _ in
+                        defer { replay += 1 };if replay == replayAt { throw Stop.injected("replay") }
+                    },roundEvent:{ _ in
+                        defer { round += 1 };if round == roundAt { throw Stop.injected("round") }
+                    },checkpoint:{ point,_,_,_ in
+                        points.append(point);if point == checkpointAt { throw Stop.injected(point.rawValue) }
+                    })
+            } catch { failure = error }
+            return .init(state:state,commands:buffer,context:owned,error:failure,points:points,replay:replay,round:round,children:children)
+        }
+        func unchanged(_ o: Outcome,_ start: OriginalMatchPreparation,_ label: String) {
+            guard let stop = o.error as? Stop,case .injected = stop else { return XCTFail("\(label): \(String(describing: o.error))") }
+            same(o.state,start,label);XCTAssertEqual(o.commands,commands,label);same(o.context,context,label)
+        }
+        let plain = attempt(model)
+        XCTAssertNil(plain.error);XCTAssertEqual(plain.children,0)
+        for (k,point) in plain.points.enumerated() {
+            let o = attempt(model,checkpointAt:point)
+            unchanged(o,model,"checkpoint \(point)");XCTAssertEqual(o.points,Array(plain.points.prefix(k+1)))
+        }
+        for k in 0..<plain.replay { unchanged(attempt(model,replayAt:k),model,"replay event \(k)") }
+        for k in 0..<plain.round { unchanged(attempt(model,roundAt:k),model,"round event \(k)") }
+        let retry = attempt(model)
+        XCTAssertNil(retry.error);same(retry.state,plain.state,"retry");XCTAssertEqual(retry.commands,plain.commands)
+        same(retry.context,plain.context,"retry");XCTAssertEqual(retry.points,plain.points)
+
+        var live = model,character: Int?
+        for (i,object) in model.loadedObjects.enumerated() where character == nil {
+            if try object.header.integer(at:0x6f8,as:Int32.self) == 0 { character = i }
+        }
+        let actor = Int(try live.world.integer(at:0x194+10*4,as:UInt32.self))
+        try live.actors[actor].write(UInt32(try XCTUnwrap(character)),at:0x368);try live.world.write(UInt8(1),at:4+10)
+        if !paused {
+            let o = attempt(live,childFails:true)
+            unchanged(o,live,"entry child");XCTAssertEqual(o.children,1);XCTAssertEqual(o.points,[.localBeforeDispatch])
+        }
+        // The transactional local-input forms: a child or observer failing
+        // after the template and button writes, and the storage check.
+        var wrapped = live,buffer = commands
+        XCTAssertThrowsError(try wrapped.beginLocalInput(paused:false,commands:&buffer,dispatch:{ _,child in
+            try child.globals.write(UInt8(0x5a),at:0x10);throw Stop.injected("wrapper child")
+        })) { XCTAssertEqual($0 as? Stop,.injected("wrapper child")) }
+        same(wrapped,live,"wrapper child");XCTAssertEqual(buffer,commands)
+        XCTAssertThrowsError(try wrapped.beginLocalInput(paused:false,commands:&buffer,beforeDispatch:{ _,_ in throw Stop.injected("before") })) {
+            XCTAssertEqual($0 as? Stop,.injected("before"))
+        }
+        same(wrapped,live,"wrapper before dispatch");XCTAssertEqual(buffer,commands)
+        var short = Array(commands.prefix(9))
+        XCTAssertThrowsError(try wrapped.localInput(phase:0,mode:0,commands:&short)) { error in
+            XCTAssertEqual("\(error)","\(OriginalStateError.invalidStorage("Local-input storage"))")
+        }
+        same(wrapped,live,"wrapper storage");XCTAssertEqual(short,Array(commands.prefix(9)))
+    }
+
     /// Both retained MENU_STARTUP source comparators invoke this after their
     /// original six checkpoint checks. Inputs here come from their Native load,
     /// not the source after-state. The independently source-checked result is
@@ -206,6 +293,7 @@ final class OriginalApplicationInputTests: XCTestCase {
         var own = try state(full,memory),model = try b.read(own,catalog:loaded.catalog,interface:loaded.interface,arithmeticPrecision:.bits64)
         XCTAssertEqual(model.world,loaded.bootstrap.world);XCTAssertEqual(model.actors,loaded.bootstrap.actors)
         var context = try b.inputContext(own),commands = Array(loaded.commands.prefix(10))
+        try checkEntryRollback(model,context,commands,playback:Array(loaded.commands.suffix(10)),paused:loaded.paused)
         var phases: [OriginalLoadedMatchEntry.Checkpoint] = []
         let round = try OriginalLoadedMatchEntry.run(state:&model,paused:loaded.paused,commands:&commands,
             playbackCommands:Array(loaded.commands.suffix(10)),context:&context,

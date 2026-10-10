@@ -18,18 +18,21 @@ public enum OriginalLoadedMatchEntry {
                            roundEvent: (OriginalMatchRoundEvent) throws -> Void = { _ in },
                            checkpoint: (Checkpoint, OriginalMatchPreparation, OriginalInputControlContext, [UInt8]) throws -> Void = { _,_,_,_ in }) throws -> OriginalMatchRoundResult {
         var candidate = state, output = commands, owned = context
-        try candidate.beginLocalInput(paused: paused,commands: &output,beforeDispatch: { value,buffer in
+        // The sub-steps run in place on this entry's own candidate, which is
+        // dropped when anything throws (CORE_REALTIME B2): no second copy of
+        // the globals, actors or context per sub-step.
+        try candidate.beginLocalInputInPlace(paused: paused,commands: &output,beforeDispatch: { value,buffer in
             try checkpoint(.localBeforeDispatch,value,owned,buffer)
         },dispatch: dispatch)
         try checkpoint(.local,candidate,owned,output)
-        _ = try candidate.controlInput(commands: &output,playbackCommands: playbackCommands,context: &owned,boundary: controlBoundary)
+        _ = try candidate.controlInputInPlace(commands: &output,playbackCommands: playbackCommands,context: &owned,boundary: controlBoundary)
         try checkpoint(.control,candidate,owned,output)
-        let next = try candidate.receiveInput(paused: paused,commands: &output,playbackCommands: playbackCommands)
+        let next = try candidate.receiveInputInPlace(paused: paused,commands: &output,playbackCommands: playbackCommands)
         try checkpoint(.received,candidate,owned,output)
-        try candidate.finishReplayInput(entry: next == .recording ? .recording : .playbackChecksum,paused: paused,
+        try candidate.finishReplayInputInPlace(entry: next == .recording ? .recording : .playbackChecksum,paused: paused,
             commands: output,playbackCommands: playbackCommands,context: &owned,observe: replayEvent)
         try checkpoint(.replay,candidate,owned,output)
-        let result = try candidate.beginMatchRound(paused: paused,context: &owned,observe: roundEvent)
+        let result = try candidate.beginMatchRoundInPlace(paused: paused,context: &owned,observe: roundEvent)
         try checkpoint(.round,candidate,owned,output)
         state = candidate;commands = output;context = owned
         return result

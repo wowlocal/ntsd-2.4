@@ -76,6 +76,9 @@ public struct OriginalApplicationBootstrap {
         checkpoint: (Session.Checkpoint,OriginalStateRecord,Int32?) throws -> Void = { _,_,_ in },
         bodyProduced: (OriginalFrontScreenBody.StartupResult) throws -> Void = { _ in },
         beforeCommit: (Session.Loop,Session.State) throws -> Void = { _,_ in },
+        /// false: `beforeCommit` ignores the state (it gets the step's staged
+        /// state without the alias merge); see OriginalApplicationMenuSession.step.
+        observesCommit: Bool = true,
         bitmap: ((Stage,OriginalBitmapSurfaceLoading.Request) throws -> OriginalBitmapSurfaceLoading.Response)? = nil,
         lifecycleProvider: ((OriginalWindowInitialization.Request) throws -> OriginalWindowInitialization.Response)? = nil,
         surfaceProvider: ((OriginalWindowInitialization.Request) throws -> OriginalWindowInitialization.Response)? = nil,
@@ -111,7 +114,7 @@ public struct OriginalApplicationBootstrap {
         },observe:menuObserve,graphicsObserve:graphicsObserve,checkpoint:checkpoint,bodyProduced:bodyProduced,beforeCommit:{ loop,state in
             try requireConsumed()
             try beforeCommit(loop,state)
-        },initialization:inputs,initializationBitmap:bitmap,frontProvider:frontProvider,networkProvider:networkProvider,socketProvider:socketProvider,clientProvider:clientProvider,networkExitProvider:networkExitProvider,bootstrapObserve:observe,lifecycle:{ q in
+        },observesCommit:observesCommit,initialization:inputs,initializationBitmap:bitmap,frontProvider:frontProvider,networkProvider:networkProvider,socketProvider:socketProvider,clientProvider:clientProvider,networkExitProvider:networkExitProvider,bootstrapObserve:observe,lifecycle:{ q in
             let r = try lifecycleProvider?(q) ?? take(lifecycle,&li,"lifecycle");try observe(.lifecycleResponse(q,r));return r
         },graph:{ q in
             guard let graphProvider else { throw Session.Boundary.dependency("Bootstrap graph events") }
@@ -133,7 +136,7 @@ public struct OriginalApplicationBootstrap {
         beforeCommit: (OriginalWinMainStartup,Session,P) throws -> Void = { _,_,_ in },
         failedAttempt: (P,Error) -> Void = { _,_ in }) throws -> Started {
         guard startup == nil,session == nil else { throw Boundary.alreadyStarted }
-        guard initial.bytes.count == OriginalApplicationDispatchEntry.globalSize else {
+        guard initial.byteCount == OriginalApplicationDispatchEntry.globalSize else {
             throw OriginalStateError.invalidStorage("Bootstrap full initial extent")
         }
         let staged = try platform.stagedCopy()
@@ -148,8 +151,8 @@ public struct OriginalApplicationBootstrap {
             try owner.run(instance:instance,show:show,globals:&globals,platform:bridge,
                           store:{ try store(staged,$0,$1) })
             var bytes = initial.bytes,mask = initial.defined
-            bytes.replaceSubrange(0..<globals.bytes.count,with:globals.bytes)
-            mask.replaceSubrange(0..<globals.bytes.count,with:globals.defined)
+            bytes.replaceSubrange(0..<globals.byteCount,with:globals.bytes)
+            mask.replaceSubrange(0..<globals.byteCount,with:globals.defined)
             let full = try OriginalStateRecord(bytes:bytes,defined:mask)
             let memory = OriginalMenuPresentationMemory(replayPointers:try Session.State.slice(full,0xb8a8,8))
             var state = try Session.State(full:full,memory:memory,front:.init(),frontSurfaces:[:],
@@ -169,17 +172,25 @@ public struct OriginalApplicationBootstrap {
 
 extension OriginalApplicationBootstrap {
     public func makeLoadedCycle(pending: Session.PendingLoading) throws -> OriginalApplicationLoadedCycleSession {
-        guard let session,startup != nil else { throw Boundary.notStarted }
-        return try session.makeLoadedCycle(pending:pending)
+        guard session != nil,startup != nil else { throw Boundary.notStarted }
+        return try session!.makeLoadedCycle(pending:pending)
     }
+    /// Install an idle iteration computed by the session's `idleIteration`
+    /// (CORE_REALTIME A1).
+    mutating func commitIdle(_ idle: Session.IdleIteration) { session!.commitIdle(idle) }
+
     /// Keep the actual application Session and its current loaded owners in one
     /// commit. The caller environment remains tentative through the final hook.
     @discardableResult
     public mutating func finishLoadedMenu<Environment>(_ pending: OriginalApplicationLoadedMenuSession.PendingReturn,
         environment: inout Environment,perform: (Session.Loop.Request,inout Environment) throws -> Session.Loop.Response,
-        beforeCommit: (Session.Loop,Session.State,inout Environment) throws -> Void = { _,_,_ in }) throws -> Session.LoadedCommit {
+        beforeCommit: (Session.Loop,Session.State,inout Environment) throws -> Void = { _,_,_ in },
+        /// false: `beforeCommit` ignores the state (it gets the step's staged
+        /// state without the alias merge); see OriginalApplicationMenuSession.step.
+        observesCommit: Bool = true) throws -> Session.LoadedCommit {
         guard var next = session,startup != nil else { throw Boundary.notStarted }
-        let result = try next.finishLoadedMenu(pending,environment:&environment,perform:perform,beforeCommit:beforeCommit)
+        let result = try next.finishLoadedMenu(pending,environment:&environment,perform:perform,beforeCommit:beforeCommit,
+                                               observesCommit:observesCommit)
         session = next;return result
     }
 }

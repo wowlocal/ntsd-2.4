@@ -47,7 +47,7 @@ public struct OriginalStartupPanel {
             // Same child entrySP: content(entrySP-454) overlaps the info region
             // (entrySP-bc) at398. Carry only this native producer's known bytes.
             var content = try unknown(0x450)
-            for i in local.bytes.indices where local.defined[i] { try content.write(local.bytes[i],at:0x398+i) }
+            for i in local.bytes.indices where local.isDefined(at: i) { try content.write(local.byte(at: i),at:0x398+i) }
             try call(0x43c780)
             let result = try withoutActuallyEscaping(contentSource) { source in
                 try OriginalMenuContent.load(globals:&state,local:&content,translatedBytes:nil,closeResult:contentClose,

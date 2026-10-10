@@ -1,0 +1,350 @@
+{
+ "study": "docs/research/CORE_REALTIME.md",
+ "phase": "R3 (main thread): dead values freed on a release thread",
+ "date": "2026-10-10",
+ "profile": {
+  "phone": "rtl4b-prof-vs (DWARF 16 KiB, 500 Hz) and rtl4b-prof-d64-vs (64 KiB): _ContiguousArrayStorage.__deallocating_deinit 7.3-7.8% of the main thread inclusive (swift_arrayDestroy over OriginalStateRecord elements); its callers do not unwind on the phone (DWARF and frame pointers both stop in libswiftCore)",
+  "mac": "sample of the shipping headless build, three vs runs (~3,300 game samples on the main thread): deallocation ~10% of the game work; under OriginalMacRuntimeLoading.complete (the cycle's PendingContinuation storage 59 samples, the body's PendingReturn 24), finish (the drained batches' arrays) and OriginalMacRuntimeMenu.step (the driver 25, a delivery context 8)"
+ },
+ "change": "OriginalDeferredRelease (NTSDRuntime): one lazily started thread, NTSD.release (utility QoS; the Android host pins it to the slowest tier, like the presenter), takes values whose last reference the caller hands over (retire, consuming) and frees them. complete(first:) retires the cycle's outcome and the body's PendingReturn after the Host's tail commits (they hold the last references to their State copies then); finish() retires the drained batches after performing them; the menu step retires the driver it made. A backlog beyond 256 values is freed by the caller. The game never observes when Swift frees a value",
+ "phone": {
+  "vs": {
+   "rtl4b_same_session": [
+    {
+     "label": "rtl4b-for-rtr3-vs1",
+     "scenario": "vs",
+     "runSeconds": 206,
+     "peakResidentMB": 1433,
+     "ticksPerSecond": 33.43,
+     "busySeconds": 104.76,
+     "bodies": 1800,
+     "completeMsPerTick": 8.2,
+     "partAssembliesPerTick": 0.0,
+     "menuMsPerStep": 0.59,
+     "menuStepsPerTick": 4.12,
+     "idleMsPerStep": 0.463,
+     "idleIterationMs": 0.522,
+     "idleStepsPerTick": 3.12,
+     "tickStepMs": 0.968,
+     "mainCpuShare": 0.39,
+     "renderCpuShare": 0.263,
+     "mainMsPerTick": 11.67,
+     "renderMsPerTick": 7.87,
+     "presentMsPerTick": 5.62,
+     "presentCounts": {
+      "submitted": 2100,
+      "drawn": 2100,
+      "waits": 0
+     }
+    },
+    {
+     "label": "rtl4b-for-rtr3-vs2",
+     "scenario": "vs",
+     "runSeconds": 211,
+     "peakResidentMB": 1401,
+     "ticksPerSecond": 33.12,
+     "busySeconds": 105.86,
+     "bodies": 1800,
+     "completeMsPerTick": 8.3,
+     "partAssembliesPerTick": 0.0,
+     "menuMsPerStep": 0.6,
+     "menuStepsPerTick": 4.12,
+     "idleMsPerStep": 0.476,
+     "idleIterationMs": 0.537,
+     "idleStepsPerTick": 3.12,
+     "tickStepMs": 0.979,
+     "mainCpuShare": 0.392,
+     "renderCpuShare": 0.268,
+     "mainMsPerTick": 11.84,
+     "renderMsPerTick": 8.1,
+     "presentMsPerTick": 5.95,
+     "presentCounts": {
+      "submitted": 2100,
+      "drawn": 2100,
+      "waits": 0
+     }
+    }
+   ],
+   "after": [
+    {
+     "label": "rtr3-vs1",
+     "scenario": "vs",
+     "runSeconds": 207,
+     "peakResidentMB": 1524,
+     "ticksPerSecond": 33.78,
+     "busySeconds": 103.11,
+     "bodies": 1800,
+     "completeMsPerTick": 7.7,
+     "partAssembliesPerTick": 0.0,
+     "menuMsPerStep": 0.61,
+     "menuStepsPerTick": 4.12,
+     "idleMsPerStep": 0.489,
+     "idleIterationMs": 0.549,
+     "idleStepsPerTick": 3.12,
+     "tickStepMs": 0.991,
+     "mainCpuShare": 0.389,
+     "renderCpuShare": 0.272,
+     "mainMsPerTick": 11.51,
+     "renderMsPerTick": 8.05,
+     "presentMsPerTick": 5.71,
+     "releaseMsPerTick": 2.09,
+     "presentCounts": {
+      "submitted": 2100,
+      "drawn": 2100,
+      "waits": 0
+     }
+    },
+    {
+     "label": "rtr3-vs2",
+     "scenario": "vs",
+     "runSeconds": 206,
+     "peakResidentMB": 1336,
+     "ticksPerSecond": 33.79,
+     "busySeconds": 104.07,
+     "bodies": 1800,
+     "completeMsPerTick": 7.6,
+     "partAssembliesPerTick": 0.0,
+     "menuMsPerStep": 0.61,
+     "menuStepsPerTick": 4.12,
+     "idleMsPerStep": 0.491,
+     "idleIterationMs": 0.552,
+     "idleStepsPerTick": 3.12,
+     "tickStepMs": 0.982,
+     "mainCpuShare": 0.382,
+     "renderCpuShare": 0.276,
+     "mainMsPerTick": 11.3,
+     "renderMsPerTick": 8.17,
+     "presentMsPerTick": 5.79,
+     "releaseMsPerTick": 2.09,
+     "presentCounts": {
+      "submitted": 2100,
+      "drawn": 2100,
+      "waits": 0
+     }
+    },
+    {
+     "label": "rtr3-vs3",
+     "scenario": "vs",
+     "runSeconds": 206,
+     "peakResidentMB": 1532,
+     "ticksPerSecond": 33.76,
+     "busySeconds": 103.46,
+     "bodies": 1800,
+     "completeMsPerTick": 7.6,
+     "partAssembliesPerTick": 0.0,
+     "menuMsPerStep": 0.61,
+     "menuStepsPerTick": 4.12,
+     "idleMsPerStep": 0.489,
+     "idleIterationMs": 0.549,
+     "idleStepsPerTick": 3.12,
+     "tickStepMs": 0.979,
+     "mainCpuShare": 0.379,
+     "renderCpuShare": 0.272,
+     "mainMsPerTick": 11.22,
+     "renderMsPerTick": 8.06,
+     "presentMsPerTick": 5.76,
+     "releaseMsPerTick": 2.07,
+     "presentCounts": {
+      "submitted": 2100,
+      "drawn": 2100,
+      "waits": 0
+     }
+    }
+   ],
+   "result": "main 11.75 -> 11.34, render 7.98 -> 8.09, presenter 5.79 -> 5.75, release thread 2.08 ms per tick; peak resident 1417.0 -> 1464.0 MB"
+  },
+  "demo": {
+   "rtl4b_same_session": [
+    {
+     "label": "rtl4b-for-rtr3-demo1",
+     "scenario": "demo",
+     "runSeconds": 191,
+     "peakResidentMB": 1417,
+     "ticksPerSecond": 33.37,
+     "busySeconds": 94.38,
+     "bodies": 900,
+     "completeMsPerTick": 8.5,
+     "partAssembliesPerTick": 0.0,
+     "menuMsPerStep": 0.59,
+     "menuStepsPerTick": 4.13,
+     "idleMsPerStep": 0.479,
+     "idleIterationMs": 0.539,
+     "idleStepsPerTick": 3.13,
+     "tickStepMs": 0.942,
+     "mainCpuShare": 0.401,
+     "renderCpuShare": 0.193,
+     "mainMsPerTick": 12.02,
+     "renderMsPerTick": 5.79,
+     "presentMsPerTick": 5.71,
+     "presentCounts": {
+      "submitted": 1500,
+      "drawn": 1500,
+      "waits": 0
+     }
+    },
+    {
+     "label": "rtl4b-for-rtr3-demo2",
+     "scenario": "demo",
+     "runSeconds": 190,
+     "peakResidentMB": 1566,
+     "ticksPerSecond": 33.18,
+     "busySeconds": 94.63,
+     "bodies": 900,
+     "completeMsPerTick": 8.6,
+     "partAssembliesPerTick": 0.0,
+     "menuMsPerStep": 0.6,
+     "menuStepsPerTick": 4.13,
+     "idleMsPerStep": 0.487,
+     "idleIterationMs": 0.548,
+     "idleStepsPerTick": 3.13,
+     "tickStepMs": 0.962,
+     "mainCpuShare": 0.407,
+     "renderCpuShare": 0.195,
+     "mainMsPerTick": 12.27,
+     "renderMsPerTick": 5.88,
+     "presentMsPerTick": 5.68,
+     "presentCounts": {
+      "submitted": 1500,
+      "drawn": 1500,
+      "waits": 0
+     }
+    }
+   ],
+   "after": [
+    {
+     "label": "rtr3-demo1",
+     "scenario": "demo",
+     "runSeconds": 189,
+     "peakResidentMB": 1455,
+     "ticksPerSecond": 33.55,
+     "busySeconds": 94.06,
+     "bodies": 900,
+     "completeMsPerTick": 8.3,
+     "partAssembliesPerTick": 0.0,
+     "menuMsPerStep": 0.61,
+     "menuStepsPerTick": 4.13,
+     "idleMsPerStep": 0.493,
+     "idleIterationMs": 0.553,
+     "idleStepsPerTick": 3.13,
+     "tickStepMs": 0.969,
+     "mainCpuShare": 0.397,
+     "renderCpuShare": 0.202,
+     "mainMsPerTick": 11.84,
+     "renderMsPerTick": 6.03,
+     "presentMsPerTick": 5.72,
+     "releaseMsPerTick": 1.69,
+     "presentCounts": {
+      "submitted": 1500,
+      "drawn": 1500,
+      "waits": 0
+     }
+    },
+    {
+     "label": "rtr3-demo2",
+     "scenario": "demo",
+     "runSeconds": 188,
+     "peakResidentMB": 1476,
+     "ticksPerSecond": 33.63,
+     "busySeconds": 93.78,
+     "bodies": 900,
+     "completeMsPerTick": 8.2,
+     "partAssembliesPerTick": 0.0,
+     "menuMsPerStep": 0.61,
+     "menuStepsPerTick": 4.13,
+     "idleMsPerStep": 0.496,
+     "idleIterationMs": 0.556,
+     "idleStepsPerTick": 3.13,
+     "tickStepMs": 0.955,
+     "mainCpuShare": 0.396,
+     "renderCpuShare": 0.198,
+     "mainMsPerTick": 11.77,
+     "renderMsPerTick": 5.89,
+     "presentMsPerTick": 5.79,
+     "releaseMsPerTick": 1.68,
+     "presentCounts": {
+      "submitted": 1500,
+      "drawn": 1500,
+      "waits": 0
+     }
+    },
+    {
+     "label": "rtr3-demo3",
+     "scenario": "demo",
+     "runSeconds": 187,
+     "peakResidentMB": 1402,
+     "ticksPerSecond": 33.48,
+     "busySeconds": 93.37,
+     "bodies": 900,
+     "completeMsPerTick": 8.3,
+     "partAssembliesPerTick": 0.0,
+     "menuMsPerStep": 0.61,
+     "menuStepsPerTick": 4.13,
+     "idleMsPerStep": 0.489,
+     "idleIterationMs": 0.548,
+     "idleStepsPerTick": 3.13,
+     "tickStepMs": 0.992,
+     "mainCpuShare": 0.4,
+     "renderCpuShare": 0.209,
+     "mainMsPerTick": 11.95,
+     "renderMsPerTick": 6.23,
+     "presentMsPerTick": 5.67,
+     "releaseMsPerTick": 1.71,
+     "presentCounts": {
+      "submitted": 1500,
+      "drawn": 1500,
+      "waits": 0
+     }
+    }
+   ],
+   "result": "main 12.14 -> 11.85, render 5.83 -> 6.05, presenter 5.7 -> 5.73, release thread 1.69 ms per tick; peak resident 1491.5 -> 1444.33 MB"
+  },
+  "probe_before_the_gate": {
+   "vs": "main 11.87 -> 11.3, render 8.04 -> 8.01, presenter 5.92 -> 5.73, release thread 2.04 ms per tick; peak resident 1468.0 -> 1402.0 MB",
+   "demo": "main 12.26 -> 11.99, render 5.88 -> 5.98, presenter 5.7 -> 5.71, release thread 1.71 ms per tick; peak resident 1322.0 -> 1481.67 MB",
+   "note": "exp-r3b: the prototype before the review nits (the same sites)"
+  },
+  "summary": "the main thread −0.41 ms per tick in vs and −0.29 in the Demo (probe: −0.57 and −0.27); about 2 ms per tick of freeing now runs on the slow cores; render and presenter within run noise; peak memory within the baseline's run-to-run spread (1,289-1,547 MB)"
+ },
+ "gates": {
+  "tested_trees": "native cc2c25e05f38002b17a733303dd526f7f5c4b0ab, tools a112e55a61c90e559d8ceb59b8b379423848dd31",
+  "builds": "clean; checked headless and AppKit, unchecked headless and APK (shipping)",
+  "scenarios": [
+   "{\"scenario\": \"vs\", \"exit\": 0, \"seconds\": 71.3, \"result\": \"equal\", \"differs\": []}",
+   "{\"scenario\": \"mission\", \"exit\": 0, \"seconds\": 69.8, \"result\": \"equal\", \"differs\": []}",
+   "{\"scenario\": \"demo\", \"exit\": 0, \"seconds\": 51.1, \"result\": \"equal\", \"differs\": []}",
+   "{\"scenario\": \"war\", \"exit\": 0, \"seconds\": 110.2, \"result\": \"equal\", \"differs\": []}",
+   "{\"scenario\": \"playback\", \"exit\": 0, \"seconds\": 79.1, \"result\": \"equal\", \"differs\": []}",
+   "{\"scenario\": \"tournament\", \"exit\": 0, \"seconds\": 104.2, \"result\": \"equal\", \"differs\": []}",
+   "{\"scenario\": \"altenter\", \"exit\": 0, \"seconds\": 75.3, \"result\": \"equal\", \"differs\": []}",
+   "{\"scenario\": \"tournament-win\", \"exit\": 0, \"seconds\": 110.5, \"result\": \"equal\", \"differs\": []}",
+   "{\"scenario\": \"team-tournament\", \"exit\": 0, \"seconds\": 85.4, \"result\": \"equal\", \"differs\": []}",
+   "{\"scenario\": \"joystick\", \"exit\": 0, \"seconds\": 26.2, \"result\": \"equal\", \"differs\": []}",
+   "{\"frames\": 1832, \"mismatched\": 0, \"result\": \"identical\"}"
+  ],
+  "appkit": [
+   "{\"scenario\": \"vs\", \"exit\": 0, \"seconds\": 73.8, \"result\": \"equal\", \"differs\": []}",
+   "{\"scenario\": \"playback\", \"exit\": 0, \"seconds\": 79.1, \"result\": \"equal\", \"differs\": []}",
+   "{\"frames\": 3960, \"mismatched\": 0, \"result\": \"identical\"}"
+  ],
+  "unchecked_headless": [
+   "{\"scenario\": \"vs\", \"exit\": 0, \"seconds\": 74.7, \"result\": \"equal\", \"differs\": []}",
+   "{\"scenario\": \"demo\", \"exit\": 0, \"seconds\": 54.4, \"result\": \"equal\", \"differs\": []}",
+   "{\"frames\": 1832, \"mismatched\": 0, \"result\": \"identical\"}"
+  ],
+  "launches": "20 of 20 clean",
+  "emulator": "{\"frames\": 1832, \"mismatched\": 0, \"result\": \"identical\"}",
+  "tests": [
+   "OriginalExclusivityChecksTests exit=0 1s \t Executed 1 test, with 0 failures (0 unexpected) in 0.000 (0.005) seconds",
+   "OriginalDeferredReleaseTests exit=0 0s \t Executed 2 tests, with 0 failures (0 unexpected) in 0.002 (0.002) seconds",
+   "OriginalMacRuntimeLoadingTests exit=0 12s \t Executed 7 tests, with 0 failures (0 unexpected) in 11.116 (11.117) seconds",
+   "OriginalMacRuntimeMenuTests exit=0 12s \t Executed 11 tests, with 0 failures (0 unexpected) in 11.814 (11.816) seconds",
+   "OriginalMacRuntimeStartupTests exit=0 0s \t Executed 5 tests, with 0 failures (0 unexpected) in 0.581 (0.582) seconds",
+   "OriginalRequestExchangeLaneTests exit=0 0s \t Executed 1 test, with 0 failures (0 unexpected) in 0.001 (0.002) seconds",
+   "OriginalDeferredReleaseTests: 1,000 objects freed on NTSD.release and none on the caller; live copies sharing their buffers keep their contents and can be written; a starved thread holds 256 values and the caller frees the rest",
+   "OriginalMacRuntimeLoadingTests: the menu steps retire their drivers and the loaded tail retires its batches once"
+  ],
+  "thread_sanitizer": "debug test bundle with -sanitize=thread (runtime preloaded): OriginalDeferredReleaseTests and OriginalMacRuntimeLoadingTests.testStartLoadsCatalogPoolAndLoadedMenuInOneAttempt (673 s under TSan) pass with no report",
+  "crash_found_and_fixed": "after the review nits, retire(consume drained) inside a defer double-released the array in a debug build (the loading test crashed twice on NTSD.release in _swift_release_dealloc; a type log showed the Array<Batch>): the compiler still released the consumed variable at the scope's end. The retire moved after the drain loop; the 7 loading tests then passed in debug, and the comment forbids consuming an outer variable from a defer"
+ },
+ "review": "independent read-only review: approve with nits (no game-observable change; on a committed step the platform's receipt histories keep every resource alive; after a failed step a retired driver may free a new window lease or display storage, whose deinits already run on any thread). Applied: retire takes its value consuming and callers move it (no deinit can land on the caller); the comment states the throw-path case; a backlog cap; nonisolated(unsafe) threadStart; tests for the hook and the backlog; a TSan run"
+}

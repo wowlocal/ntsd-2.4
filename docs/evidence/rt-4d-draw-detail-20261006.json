@@ -1,0 +1,53 @@
+{
+ "study": "docs/research/CORE_REALTIME.md",
+ "phase": "4d (no drawing detail when nobody observes it)",
+ "date": "2026-10-06",
+ "budget": "docs/research/CORE_REALTIME_BUDGET.md (tier 1, first step)",
+ "profile_before": "rt-speed/rtr3s1-profile-profile: bitmap reads reaching the gameplay session's observer 4.7% of the main thread (OriginalBitmapDrawing.word -> observer closure -> attempt front string switch -> no-op observers); callers: bitmap font 4.5%, world HUD 1.6%, world drawing 1.5%, backgrounds 1.05% (shares include blits)",
+ "change": "A new detail: Bool = true parameter on OriginalBitmapDrawing.draw/word, OriginalRectangleDrawing.draw, the drawing helpers (world camera, backgrounds, world drawing, world HUD, bitmap font, mode label, gameplay output, playback information, result layout), the gameplay body and OriginalApplicationGameplaySession.advance. When false, the read and clip records and the draw and rectangle events are neither built nor observed; values, clipping, blits, every other event and every error are unchanged. Only OriginalMacRuntimeLoading.gameplay() (shared by every host; it passes no observer) passes false. Those four kinds are no-ops in every session's front; stage events (which can start sound draining) and blits are never gated.",
+ "phone": {
+  "before": [
+   {
+    "label": "rt1g-run1",
+    "ticksPerSecond": 19.19,
+    "busySeconds": 226.74,
+    "peakResidentMB": 1337,
+    "runSeconds": 339
+   },
+   {
+    "label": "rt1g-run2",
+    "ticksPerSecond": 19.1,
+    "busySeconds": 225.07,
+    "peakResidentMB": 1210,
+    "runSeconds": 339
+   }
+  ],
+  "after": [
+   {
+    "label": "rt4d-run1",
+    "ticksPerSecond": 19.82,
+    "busySeconds": 224.53,
+    "peakResidentMB": 1347,
+    "runSeconds": 334
+   },
+   {
+    "label": "rt4d-run2",
+    "ticksPerSecond": 19.78,
+    "busySeconds": 221.77,
+    "peakResidentMB": 1286,
+    "runSeconds": 334
+   }
+  ],
+  "result": "19.19 / 19.10 -> 19.82 / 19.78 ticks per second (+3.4%); ~50.5 ms per tick",
+  "ms_per_tick": "52.3 -> 50.5 ms per tick"
+ },
+ "gates": {
+  "headless": "vs equal, 1,832 frames identical (frozen-rt4d, rt-4d)",
+  "scenarios": "all 10 equal, frames identical (rt-4d-all on frozen-rt4d)",
+  "AppKit": "vs and playback equal, 3,960 frames identical to the 1g AppKit run (rt-4d-appkit vs rt-1g-appkit)",
+  "emulator": "vs equal, 1,832 frames identical (APK from native diff fc732615, verified before and after the build)",
+  "tests": "bundle C (build/swiftpm-test-release-c; tracked native diff 4fd2df2b against e122049): the new OriginalGameplayDetailTests pass (2 tests, 162 s: every tick of the active gameplay sequence in both control orders with and without detail; same snapshot, graphics, dispatcher result, checkpoint snapshots and other events in the same order; no detail events without detail) and all 54 suites that use the changed files pass"
+ },
+ "review": "independent read-only review: correct, no counterexample. Production attaches no observer anywhere on the path (resumeGameplay, the attempt, checkpoints, beforeCommit); the four kinds hit break in the attempt's front with no emit or operation; every gated site computes its throwing reads before the gate and the skipped code only builds event arguments; clip visibility and blits run unconditionally; every new parameter defaults to true and only the runtime passes false; every host reaches gameplay through OriginalRuntimeSession and OriginalMacRuntimeLoading. Acted on: the advance doc comment (observe never sees the four kinds; the paused branch ignores the flag). Left for later (missed speedups only): post-HUD notices, the paused path, other ignored kinds (width, fontPass, stringWrite, labelWrite, localWrite, formatWrite, text, format, infoWrite).",
+ "profile_after": "rt-speed/rt4d-profile-profile: the gameplay session's observer closure 4.7% -> 0.5%, the attempt's front 2.4% -> 0.6% of the main thread"
+}

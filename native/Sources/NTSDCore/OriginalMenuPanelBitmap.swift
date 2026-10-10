@@ -26,7 +26,7 @@ public struct OriginalMenuPanelBitmap {
         deviceResult: () throws -> (surface: UInt32,colorKeyResult: Int32),
         observe: (OriginalMenuPanelBitmapEvent) throws -> Void = { _ in }) throws -> Bool {
         let base = OriginalMatchPreparation.globalBase
-        guard globals.bytes.count == OriginalMatchPreparation.globalSize else { throw Self.error("Global extent") }
+        guard globals.byteCount == OriginalMatchPreparation.globalSize else { throw Self.error("Global extent") }
         var state = globals, candidate = self
         func global(_ address: Int,_ value: UInt32) throws {
             try state.write(value,at: address-base)

@@ -1,3 +1,5 @@
+import Foundation
+
 /// Own application continuation from the completed catalog through400 Actors,
 /// eight staging reconstructions and ten UI constructors, before41c581. Shared
 /// recovered loaders execute the rules. A failed attempt publishes no effects.
@@ -35,9 +37,131 @@ public struct OriginalApplicationPoolSession {
         case preceding(Catalog.Operation), allocation(Allocation), menu(Session.Effect)
     }
     public struct PendingInput {
-        public let entry: Catalog.PendingPool,loaded: OriginalInitialLoading,state: Session.State
-        public let allocations: [Allocation],actorTokens: [UInt32],interfaceTokens: [UInt32],interfaceSurfaces: [UInt32]
-        public let operations: [Operation],graphics: [OriginalApplicationGraphics.Command]
+        /// The loaded session's values, built once and never changed, in one
+        /// shared object: every copy of the owners holding this input (menu
+        /// session, bootstrap, continuations; ~40 per game cycle) retains one
+        /// reference instead of about 250 (CORE_REALTIME phase 4a,
+        /// CORE_REALTIME_COPIES M1). Reads borrow through `_read`.
+        private final class Storage {
+            let entry: Catalog.PendingPool,loaded: OriginalInitialLoading,state: Session.State
+            let allocations: [Allocation],actorTokens: [UInt32],interfaceTokens: [UInt32],interfaceSurfaces: [UInt32]
+            let operations: [Operation],graphics: [OriginalApplicationGraphics.Command]
+            let derived = Derived()
+            init(entry: Catalog.PendingPool,loaded: OriginalInitialLoading,state: Session.State,allocations: [Allocation],
+                 actorTokens: [UInt32],interfaceTokens: [UInt32],interfaceSurfaces: [UInt32],operations: [Operation],
+                 graphics: [OriginalApplicationGraphics.Command]) {
+                self.entry = entry;self.loaded = loaded;self.state = state;self.allocations = allocations
+                self.actorTokens = actorTokens;self.interfaceTokens = interfaceTokens;self.interfaceSurfaces = interfaceSurfaces
+                self.operations = operations;self.graphics = graphics
+            }
+        }
+        private let storage: Storage
+        init(entry: Catalog.PendingPool,loaded: OriginalInitialLoading,state: Session.State,allocations: [Allocation],
+             actorTokens: [UInt32],interfaceTokens: [UInt32],interfaceSurfaces: [UInt32],operations: [Operation],
+             graphics: [OriginalApplicationGraphics.Command]) {
+            storage = .init(entry:entry,loaded:loaded,state:state,allocations:allocations,actorTokens:actorTokens,
+                interfaceTokens:interfaceTokens,interfaceSurfaces:interfaceSurfaces,operations:operations,graphics:graphics)
+        }
+        public var entry: Catalog.PendingPool { _read { yield storage.entry } }
+        public var loaded: OriginalInitialLoading { _read { yield storage.loaded } }
+        public var state: Session.State { _read { yield storage.state } }
+        public var allocations: [Allocation] { _read { yield storage.allocations } }
+        public var actorTokens: [UInt32] { _read { yield storage.actorTokens } }
+        public var interfaceTokens: [UInt32] { _read { yield storage.interfaceTokens } }
+        public var interfaceSurfaces: [UInt32] { _read { yield storage.interfaceSurfaces } }
+        public var operations: [Operation] { _read { yield storage.operations } }
+        public var graphics: [OriginalApplicationGraphics.Command] { _read { yield storage.graphics } }
+        /// Per-session memos shared by copies (CORE_REALTIME R1, phase 2c).
+        /// `bindings` and `ranges` derive only from the immutable fields above
+        /// and are built once per loaded session instead of in every game
+        /// cycle. Unlike OriginalWaveOwnership's own cache, their failure is
+        /// kept: the derivation is deterministic over immutable inputs and
+        /// throws an equatable error, so rethrowing the kept error is the same
+        /// as deriving again. `resource` depends on gameplay state instead: it
+        /// checks its kept result against the given source on every call and
+        /// keeps nothing on failure. None of them calls another (the lock is
+        /// not recursive).
+        var derived: Derived { storage.derived }
+        final class Derived {
+            private let lock = NSLock()
+            private var bindings: Result<OriginalApplicationMatchBindings,Error>?
+            private var ranges: Result<[(UInt64,UInt64)],Error>?
+            func bindings(_ make: () throws -> OriginalApplicationMatchBindings) throws -> OriginalApplicationMatchBindings {
+                lock.lock(); defer { lock.unlock() }
+                if bindings == nil { bindings = Result { try make() } }
+                return try bindings!.get()
+            }
+            func ranges(_ make: () throws -> [(UInt64,UInt64)]) throws -> [(UInt64,UInt64)] {
+                lock.lock(); defer { lock.unlock() }
+                if ranges == nil { ranges = Result { try make() } }
+                return try ranges!.get()
+            }
+            /// The number of graphics commands and operations the last
+            /// gameplay tick appended: the next tick reserves that much
+            /// before its body runs, so the lists do not grow step by step
+            /// (CORE_REALTIME tier 3 d1). Capacity is not observable.
+            private var appended = (graphics: 0, operations: 0)
+            func appendedCounts() -> (graphics: Int, operations: Int) {
+                lock.lock(); defer { lock.unlock() }
+                return appended
+            }
+            func recordAppended(graphics: Int, operations: Int) {
+                lock.lock(); appended = (graphics, operations); lock.unlock()
+            }
+            /// Gameplay's current WAV buffer owners: the outputs of the
+            /// catalog's load lists and registered sound buffers, all fixed for
+            /// the loaded session (CORE_REALTIME phase 4i; built per tick before).
+            private var soundTokens: Set<UInt32>?
+            func soundTokens(_ make: () -> Set<UInt32>) -> Set<UInt32> {
+                lock.lock(); defer { lock.unlock() }
+                if soundTokens == nil { soundTokens = make() }
+                return soundTokens!
+            }
+            /// Gameplay's bitmap owner check (`surface`): whether the kept
+            /// resource record equals the model's bitmap record. The last pair
+            /// found equal is kept per token; a pair holding both of its
+            /// buffers is equal again without comparing 0x1f50 bytes and mask
+            /// (CORE_REALTIME phase 4i). Kept records hold their buffers, so a
+            /// buffer's address cannot be reused while it is kept.
+            private var equalBitmaps: [UInt32:(record: OriginalStateRecord,model: OriginalStateRecord)] = [:]
+            func bitmapMatches(_ token: UInt32,_ record: OriginalStateRecord,_ model: OriginalStateRecord) -> Bool {
+                lock.lock(); defer { lock.unlock() }
+                if let kept = equalBitmaps[token],kept.record.sharesStorage(with:record),kept.model.sharesStorage(with:model) { return true }
+                guard record == model else { return false }
+                equalBitmaps[token] = (record,model)
+                return true
+            }
+            /// Gameplay's resource bitmap records with `value` written at offset
+            /// 0 (OriginalApplicationGameplaySession's `resource`), per
+            /// allocation token: the result for an equal source and value is
+            /// returned again instead of copying the 0x1f50-byte record on every
+            /// call (CORE_REALTIME phase 2c). Records compare by contents
+            /// (buffer identity first), so a changed source is written anew.
+            private var resources: [UInt32:(source: OriginalStateRecord,value: UInt32,record: OriginalStateRecord)] = [:]
+            func resource(_ token: UInt32,_ source: OriginalStateRecord,writing value: UInt32) throws -> OriginalStateRecord {
+                lock.lock(); defer { lock.unlock() }
+                if let kept = resources[token],kept.value == value,kept.source == source { return kept.record }
+                var record = source
+                try record.write(value,at:0)
+                resources[token] = (source,value,record)
+                return record
+            }
+        }
+        /// The loaded session's fixed address ranges, in order: catalog
+        /// allocations, file streams, then the startup, entry and snapshot wave
+        /// owners' addressed regions (empty ones left out).
+        func staticRanges() throws -> [(UInt64,UInt64)] {
+            try derived.ranges {
+                var spans: [(UInt64,UInt64)] = []
+                func add(_ token: UInt32,_ count: Int) { if token != 0 && count > 0 { spans.append((UInt64(token),UInt64(token)+UInt64(count))) } }
+                for a in entry.snapshot.allocations { add(a.token,a.count) }
+                for f in entry.files.streams.values { add(f.allocation.buffer,f.allocation.capacity) }
+                for owners in [entry.startup.waveOwners,entry.entry.waveOwners,entry.snapshot.waveOwners] {
+                    for i in owners.indices { for span in try owners[i].addressedRegions() { add(span.token,span.count) } }
+                }
+                return spans
+            }
+        }
     }
     public let entry: Catalog.PendingPool
     public private(set) var pendingInput: PendingInput?
@@ -75,12 +199,12 @@ public struct OriginalApplicationPoolSession {
             try images.addResources(inputs.bitmaps);state.bitmapInputs = images
             // The canonical globals/outer/World record is also live owned
             // storage; a logical heap identity cannot overlap that interval.
-            reserve(0x44d000,state.full.bytes.count)
-            for (token,a) in state.memory.allocations where a.live { reserve(token,a.storage.bytes.count) }
+            reserve(0x44d000,state.full.byteCount)
+            for (token,a) in state.memory.allocations where a.live { reserve(token,a.storage.byteCount) }
             for a in entry.snapshot.allocations { reserve(a.token,a.count) }
             for stream in entry.files.streams.values { reserve(stream.allocation.buffer,stream.allocation.capacity) }
             for owner in entry.startup.waveOwners { try retain(owner) }
-            for (token,record) in entry.startup.music.allocations { reserve(token,record.bytes.count) }
+            for (token,record) in entry.startup.music.allocations { reserve(token,record.byteCount) }
             for owner in entry.entry.waveOwners { try retain(owner) }
             for owner in entry.snapshot.waveOwners { try retain(owner) }
         }

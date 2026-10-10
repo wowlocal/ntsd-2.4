@@ -21,8 +21,8 @@ public enum OriginalGraphEvents {
     public static func receive(_ input: OriginalWindowInput.Message,globals: OriginalStateRecord,
         local: inout OriginalStateRecord,request: (Request) throws -> Response,
         store: (Int,[UInt8]) throws -> Void = { _,_ in }) throws -> Int32 {
-        guard input.message == 0x400,globals.bytes.count == OriginalMatchPreparation.globalSize,
-              local.bytes.count == 64 else { throw error("Message/global/local extent") }
+        guard input.message == 0x400,globals.byteCount == OriginalMatchPreparation.globalSize,
+              local.byteCount == 64 else { throw error("Message/global/local extent") }
         var next = local
         func interface(_ address: Int) throws -> UInt32 {
             let token = try globals.integer(at: address-OriginalMatchPreparation.globalBase,as: UInt32.self)

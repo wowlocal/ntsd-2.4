@@ -1,0 +1,29 @@
+{
+  "study": "docs/research/CROSS_PLATFORM.md",
+  "phase": "P7: sockets for ONLINE GAME on Linux",
+  "date": "2026-10-04",
+  "change": "OriginalMacWinsock (BSD-socket Winsock 1.1, NETWORK_PLAY_PLAN.md N1) moved from NTSDMacPlatform to NTSDRuntime under its name and made portable (Darwin, Glibc, Musl); NTSDSDL uses it on every host and no longer needs --no-network",
+  "linuxDifferences": [
+    "errno numbering: WSAE codes are 10000 + BSD errno; Linux errno values are mapped to the BSD numbers (Darwin unchanged)",
+    "SIGPIPE: MSG_NOSIGNAL on send instead of SO_NOSIGPIPE; no sin_len",
+    "Glibc imports SOCK_STREAM/MSG_* as enum types; the Winsock argument check now compares Winsock's numbers (AF_INET 2, SOCK_STREAM 1, IPPROTO_TCP 6), equal to Darwin's",
+    "readiness: the game selects (WSAAsyncSelect) before listen(); Linux epoll reports such an unconnected socket as hung up, which first delivered a spurious FD_ACCEPT (the game's own 'Accpet() Error' box at iteration 23) and, once ignored, left Dispatch no longer watching the descriptor (strace: host listened, client connected, host never accepted). On non-Darwin hosts watching now starts when listen/connect/accept has made the socket listening or connected, and FD_ACCEPT also requires poll() to show a pending connection. Darwin path unchanged."
+  ],
+  "probe": {
+    "tool": "tools/crossplatform/pair_probe.py: the retained X5 network-app-client-20261002/pair_probe.py's UI scripts, names, seeds and assertions (roles 2/1, world 2, selectors 2/4, local address 127.0.0.1, 9 notification / 11 client requests, seats, names, identical 3001-byte RNG), run on a chosen host",
+    "linux": "two NTSDSDL processes in one ntsd-linux-runtime:noble container: PASS, rngSHA256 5352f941c619060669587370c1974685877d4899a6ad0d1b165f54ecd4aa89c7",
+    "macOS SDL": "two local NTSDSDL processes: PASS, same RNG hash",
+    "AppKit": "two local NTSDNative processes: PASS, same RNG hash",
+    "retained 2026-10-02 AppKit run": "pair1/job.json rngSHA256 5352f941c619060669587370c1974685877d4899a6ad0d1b165f54ecd4aa89c7 (identical)"
+  },
+  "tests": {
+    "OriginalMacWinsockTests": "moved to the portable suite (raw peer socket per platform): macOS release 8/8 within the 17 network tests (OriginalMacWinsockTests, OriginalApplicationNetworkHostTests, OriginalApplicationNetworkExitTests, OriginalMacRuntimeLoadingTests) 17/17; Linux glibc 8/8",
+    "listed": 703,
+    "appE2E": "9/10 = baseline"
+  },
+  "open": [
+    "Linux to macOS across machines (container loopback cannot be published to the Mac)",
+    "real LAN between a Linux desktop and another machine",
+    "the refused-connection and exit probes on Linux"
+  ]
+}

@@ -1,0 +1,106 @@
+{
+ "study": "docs/research/CORE_REALTIME.md",
+ "phase": "A3 L3 (the idle loop on an empty context)",
+ "date": "2026-10-07",
+ "design": "docs/research/CORE_REALTIME_A3.md (L3; the code uses an empty context rather than state.full)",
+ "change": "OriginalApplicationMenuSession.idleIteration ran the message loop with a copy of the whole State as its context (and the loop copied it again); on the idle path the loop reads only the speed flag of full and writes nothing into its context, so it runs on an empty context, the speed is read from the state at the same point, and checkMergeAliases runs on the state",
+ "phone": {
+  "before": [
+   {
+    "label": "rta3p0-run1",
+    "runSeconds": 305,
+    "peakResidentMB": 1495,
+    "ticksPerSecond": 25.93,
+    "busySeconds": 199.05,
+    "bodies": 1800,
+    "completeMsPerTick": 14.6,
+    "partAssembliesPerTick": 0.0,
+    "menuMsPerStep": 0.84,
+    "menuStepsPerTick": 4.12,
+    "idleMsPerStep": 0.658,
+    "idleIterationMs": 0.805,
+    "idleStepsPerTick": 3.12,
+    "tickStepMs": 1.392,
+    "mainCpuShare": 0.515,
+    "renderCpuShare": 0.424,
+    "mainMsPerTick": 19.9,
+    "renderMsPerTick": 16.4
+   },
+   {
+    "label": "rta3p0-run2",
+    "runSeconds": 299,
+    "peakResidentMB": 1535,
+    "ticksPerSecond": 26.02,
+    "busySeconds": 196.59,
+    "bodies": 1800,
+    "completeMsPerTick": 14.5,
+    "partAssembliesPerTick": 0.0,
+    "menuMsPerStep": 0.83,
+    "menuStepsPerTick": 4.12,
+    "idleMsPerStep": 0.66,
+    "idleIterationMs": 0.808,
+    "idleStepsPerTick": 3.12,
+    "tickStepMs": 1.364,
+    "mainCpuShare": 0.515,
+    "renderCpuShare": 0.408,
+    "mainMsPerTick": 19.8,
+    "renderMsPerTick": 15.7
+   }
+  ],
+  "after": [
+   {
+    "label": "rta3l3-run1",
+    "runSeconds": 305,
+    "peakResidentMB": 1486,
+    "ticksPerSecond": 25.99,
+    "busySeconds": 200.07,
+    "bodies": 1800,
+    "completeMsPerTick": 14.6,
+    "partAssembliesPerTick": 0.0,
+    "menuMsPerStep": 0.8,
+    "menuStepsPerTick": 4.12,
+    "idleMsPerStep": 0.631,
+    "idleIterationMs": 0.777,
+    "idleStepsPerTick": 3.12,
+    "tickStepMs": 1.327,
+    "mainCpuShare": 0.515,
+    "renderCpuShare": 0.408,
+    "mainMsPerTick": 19.8,
+    "renderMsPerTick": 15.7
+   },
+   {
+    "label": "rta3l3-run2",
+    "runSeconds": 300,
+    "peakResidentMB": 1521,
+    "ticksPerSecond": 25.93,
+    "busySeconds": 198.74,
+    "bodies": 1800,
+    "completeMsPerTick": 14.7,
+    "partAssembliesPerTick": 0.0,
+    "menuMsPerStep": 0.81,
+    "menuStepsPerTick": 4.12,
+    "idleMsPerStep": 0.631,
+    "idleIterationMs": 0.776,
+    "idleStepsPerTick": 3.12,
+    "tickStepMs": 1.374,
+    "mainCpuShare": 0.517,
+    "renderCpuShare": 0.429,
+    "mainMsPerTick": 19.9,
+    "renderMsPerTick": 16.6
+   }
+  ],
+  "result": "idle step 0.658/0.660 -> 0.631/0.631 ms, idle iteration 0.805/0.808 -> 0.777/0.776 ms; main 19.9/19.8 -> 19.8/19.9 ms per tick (within run variation)"
+ },
+ "mac": "idle step 0.033 -> 0.019 ms on the frozen headless vs (the copies cost more on the Mac)",
+ "gates": {
+  "headless": "vs equal, 1,832 frames identical (frozen L3 binary)",
+  "scenarios": "all 10 equal, frames identical (rt-a3l3-all)",
+  "emulator": "vs equal, 1,832 frames identical",
+  "AppKit": {
+   "result": "vs and playback equal, 3,960 frames identical to the P5a AppKit run, on a clean build of this tree (rt-a3l3c-appkit; 20 of 20 launches clean)",
+   "incident": "the gate's incrementally built app (frozen-app-rta3l3, UUID 2E3FB405) crashed at startup: AppKit vs SIGKILL after 0.9 s and playback milestones differing (rt-a3l3-appkit, 17:32), a rerun's playback SIGKILL (rt-a3l3r-appkit), 10 of 20 short launches. Crash reports: _os_unfair_lock_unowned_abort in malloc; Guard Malloc faulted every launch in OriginalRuntimeSession.init. Cause: the NTSDApp delegate inlined OriginalRuntimeSession's allocating init with the pre-A3 P0 size 448 (the class is 472 since A3 P0): the incremental build never recompiled NTSDApp, whose sources had not changed (cross-module optimization, 4k; fixed by 4u). The A3 P0 app had the same stale size (1 of 20 launches crashed); the headless binaries and the Android libraries used 472. The first clean-build attempt exported Git LFS pointer files instead of the music and catalog resources (exit 1, kAudioFileUnsupportedFileTypeError; rt-a3l3c-lfs-pointers-appkit); the bundles were replaced with the incremental freeze's, built from the same resource trees (dde95776, b7e8d123)."
+  },
+  "tests": "bundle C (native tree 56d9eeb8, the same as this commit's): all 173 suites, 504 tests, pass, incl. the idle kernel oracle (testIdleKernelMatchesTheWholeStep)"
+ },
+ "review": "independent read-only review: approve; on every idle path the context is only read through speed; speed is called at the same point with the same value and error; no observer sees the context; the only caller is HostSession.stepIdle. Open (optional): the oracle covers no undefined or nonzero speed byte (it cannot change the Host's committed state mid-run)."
+}

@@ -1,0 +1,25 @@
+{
+  "study": "docs/research/CROSS_PLATFORM.md",
+  "phase": "P7 groundwork: NTSDSDL on Linux, cross-built",
+  "date": "2026-10-04",
+  "deps": {
+    "script": "tools/crossplatform/build_linux_deps.sh (swift:6.4.0-noble container, linux/arm64)",
+    "sdl3": "3.4.16 shared, SHA-256 7322236cd12090c3eb40b9728be4d49c76f66ad17d04369584d4ecad5cf77c68 (GitHub release tarball); X11, Wayland (+libdecor), PulseAudio, PipeWire, ALSA (all loaded at run time), offscreen and dummy drivers ON",
+    "freetype": "2.13.3 static, no optional deps, SHA-256 0550350666d427c74daeb85d5ac7bb353acba5f76956395995311a9c6f063289 (savannah); built for the next step (glyph rasteriser)",
+    "reproduced": "the script rebuilt both from the checked tarballs (47 s)"
+  },
+  "build": "NTSD_PORTABLE=1 NTSD_SDL=1 NTSD_SDL_PREFIX=<sdl3 install> swift build --swift-sdk ntsd-6.4.0-ubuntu24.04-aarch64 -c release --product NTSDSDL (open-source Swift 6.4.0 on macOS), 110 s",
+  "run": "swift:6.4.0-noble container (test harness), SDL_VIDEO_DRIVER=offscreen, SDL_AUDIO_DRIVER=dummy, LD_LIBRARY_PATH to the SDL3 install; SDL reported 'SDL default output 44100 Hz' on the dummy device",
+  "results": {
+    "scenarios": "9/10 equal to the frozen AppKit references (playback as on main)",
+    "frames": "15,960/15,960 identical to the Linux headless run (15,909 per-body digests + 51 PNGs); both draw no text yet"
+  },
+  "open": [
+    "X11 under Xvfb and a real Linux desktop (window, input, audio) not exercised",
+    "glyph rasteriser",
+    "POSIX sockets",
+    "music decoding",
+    "x86_64 glibc SDK",
+    "packaging"
+  ]
+}

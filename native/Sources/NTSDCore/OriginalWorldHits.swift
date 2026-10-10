@@ -5,13 +5,27 @@ public enum OriginalWorldHits {
                              retainedSpawnSlot: Int32? = nil,itemSlot: OriginalRequestSlotWord? = nil,sse2: Bool = false,
                              observe: (OriginalHitEvent) throws -> Void = { _ in },
                              afterHit: (Int,OriginalStateRecord) throws -> Void = { _,_ in }) throws {
-        var pass = try OriginalActorHits.makePass(state: state,crt: crt,sse2: sse2)
+        // All or nothing: in place on copies, assigned when it completes.
+        var next = state,random = crt
+        try applyInPlace(state: &next,crt: &random,retainedSpawnSlot: retainedSpawnSlot,itemSlot: itemSlot,sse2: sse2,observe: observe,afterHit: afterHit)
+        state = next;crt = random
+    }
+    /// `apply` with the caller's records moved into the pass and published back
+    /// on every path (CORE_REALTIME B2 P4): for callers that drop the state
+    /// and CRT when this throws.
+    package static func applyInPlace(state: inout OriginalMatchPreparation,crt: inout OriginalCRTRandom,
+                                     retainedSpawnSlot: Int32? = nil,itemSlot: OriginalRequestSlotWord? = nil,sse2: Bool = false,
+                                     observe: (OriginalHitEvent) throws -> Void = { _ in },
+                                     afterHit: (Int,OriginalStateRecord) throws -> Void = { _,_ in }) throws {
+        // makePass(taking:) throws only before it takes anything, so the
+        // write-back is armed as soon as the records are in the pass.
+        var pass = try OriginalActorHits.makePass(taking: &state,crt: crt,sse2: sse2)
+        defer { OriginalActorHits.publish(pass,state: &state,crt: &crt) }
         let backgrounds = state.backgrounds
         try pass.advance(retainedSpawnSlot: retainedSpawnSlot,itemSlot: itemSlot,background: { n in
             guard backgrounds.indices.contains(Int(n)) else { throw OriginalStateError.invalidStorage("Hit item background binding") }
             return backgrounds[Int(n)]
         },observe: observe,afterHit: afterHit)
-        OriginalActorHits.publish(pass,state: &state,crt: &crt)
     }
 }
 extension OriginalHitPass {

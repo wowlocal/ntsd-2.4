@@ -35,7 +35,7 @@ public enum OriginalMatchPrelude {
     @discardableResult
     public static func apply(globals: inout OriginalStateRecord, readLocalTime: () throws -> OriginalLocalTime,
                              observe: (OriginalMatchPreludeEvent) throws -> Void = { _ in }) throws -> String {
-        guard globals.bytes.count == OriginalMatchPreparation.globalSize else { throw error("Global storage size") }
+        guard globals.byteCount == OriginalMatchPreparation.globalSize else { throw error("Global storage size") }
         var state = globals
         func read(_ address: Int) throws -> Int32 { try state.integer(at: address-OriginalMatchPreparation.globalBase, as: Int32.self) }
         func write(_ address: Int, _ value: Int32) throws { try state.write(value, at: address-OriginalMatchPreparation.globalBase) }

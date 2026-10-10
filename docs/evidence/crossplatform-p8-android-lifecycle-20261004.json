@@ -1,0 +1,16 @@
+{
+  "study": "docs/research/CROSS_PLATFORM.md",
+  "phase": "P8: Android app lifecycle and keys",
+  "date": "2026-10-04",
+  "keys (emulator, interactive)": "adb 'input keyevent --duration 150 KEYCODE_J' closed the controls dialog and joined Player 1 as Naruto at character select (labels drawn in Roboto); an instant injected press (down and up within a millisecond) did not register: the original reads key state across ticks, as on Windows, so the host adds no minimum hold for keys (real key presses last far longer)",
+  "lifecycle": {
+    "focus": "onWindowFocusChanged silences the effects mixer output (DirectSound silences the game's buffers without foreground; the SDL host follows the same rule)",
+    "background (declared Android convention)": "onPause pauses the effects stream and every live music player's AAudio stream (the game keeps running); onResume restarts them and a playing track continues; logcat: requestPause s#1/s#2 4->5 on Home, 5->3->4 on return",
+    "surface": "a crash on the first resume: the new surface came back at the same address with its default RGB_565 2560x1600 buffer, the cached geometry skipped setBuffersGeometry and draw wrote 32-bit pixels into it (SIGSEGV in NTSDAndroidWindowHost.draw); the app now clears the geometry on every surface change and draw refuses a buffer that is not 32-bit (and retries the geometry)",
+    "after the fix": "three and then two Home/return rounds: same process, no crash, the frame redrawn on return"
+  },
+  "regression": "vs scenario through the app: equal",
+  "open": [
+    "a real Android device"
+  ]
+}

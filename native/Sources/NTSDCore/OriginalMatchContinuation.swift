@@ -57,7 +57,7 @@ extension OriginalMatchPreparation {
         let count = try catalog.registry.records[0x4d82380]!.integer(at: 4, as: Int32.self)
         guard (0...99).contains(count) else { throw Self.error("Continuation BG count") }
         releasedBitmapOrder = []
-        var random = OriginalRandom(table: try (0..<3000).map { try globals.integer(at: 0x44ff90-Self.globalBase+$0, as: UInt8.self) },
+        var random = OriginalRandom(table: try OriginalRandom.table(globals, at: 0x44ff90-Self.globalBase),
                                     index: Int(try global(0x450bcc)), counter: Int(try global(0x450c34)),
                                     source: "supplied menu continuation", sourceSHA256: "")
         try random.validate()

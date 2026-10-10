@@ -171,6 +171,17 @@ outputs and partial/failure records; do not modify pinned running producers.
   with an explicit revision/new dated output. Range area is not completion or
   branch coverage; preserve historical reports and disclose planning assumptions.
 
+## Test devices
+
+User update, 2026-10-06: the Samsung Galaxy A12 (SM-A125F, adb serial
+`R58R36F7VFD`) is the user's dedicated test phone and has **no PIN**, only a swipe
+lock. A lock screen (`dumpsys window` shows `isKeyguardShowing=true`) is not a
+blocker and needs no user: run `adb -s R58R36F7VFD shell input keyevent
+KEYCODE_WAKEUP` and `adb -s R58R36F7VFD shell wm dismiss-keyguard`, then check
+again. Keep it awake with `svc power stayon usb` only while measuring and restore
+`svc power stayon false` when pausing. `tools/crossplatform/android_speed.py`
+does both.
+
 ## Implementation entry points
 
 `native/` contains Swift/AppKit/SpriteKit practice and recovered shared handlers.

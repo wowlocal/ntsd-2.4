@@ -1,0 +1,35 @@
+{
+  "study": "docs/research/CROSS_PLATFORM.md",
+  "phase": "ONLINE GAME across platforms: macOS host, Linux client",
+  "date": "2026-10-05",
+  "supersedes": "the open item in crossplatform-online-cross-20261005.json ('macOS host, Linux client: did not connect, cause undetermined'); that file is kept unchanged",
+  "cause (strace of the Linux client, NTSD_PAIR_STRACE=1)": "entering ONLINE GAME the client creates a TCP socket and binds 127.0.0.1:12345 itself (as the original does in either role); in the container's own port space that bind succeeds, so dialling 127.0.0.1:12345 connected to its own socket (connect returned 0 at once) and the client then waited in a blocking recv for a greeting that never came. In every other pairing the client's bind fails because the host or a forwarder (adb, OrbStack) already holds the port. Two machines on a network never meet this: a client dials the host's address, not its own",
+  "probe change": "a Linux client facing a host off Linux types the Mac's address as its container sees it (host.docker.internal, 0.250.250.254) instead of 127.0.0.1; the check expects the client's ready state to report the typed address as localAddress (the field holds the entered address). Port checks before a run now allow TIME_WAIT (SO_REUSEADDR still refuses a live listener)",
+  "results": {
+    "macOS host, Linux client": {
+      "result": "PASS",
+      "mode": "--cross",
+      "exitCodes": {
+        "host": 0,
+        "client": 0
+      },
+      "rngSHA256": "5352f941c619060669587370c1974685877d4899a6ad0d1b165f54ecd4aa89c7",
+      "roles": {
+        "host": "local",
+        "client": "linux"
+      },
+      "clientTyped": "0.250.250.254"
+    },
+    "regression, --local macOS headless": {
+      "result": "PASS",
+      "mode": "--local",
+      "exitCodes": {
+        "host": 0,
+        "client": 0
+      },
+      "rngSHA256": "5352f941c619060669587370c1974685877d4899a6ad0d1b165f54ecd4aa89c7"
+    }
+  },
+  "summary": "all six cross-platform pairings now pass with the retained RNG hash: macOS<->Android, Windows<->macOS, Windows->Android, Linux<->macOS",
+  "game change": "none"
+}

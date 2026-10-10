@@ -1,0 +1,103 @@
+{
+ "study": "docs/research/CORE_REALTIME.md",
+ "phase": "R3 stage 1 (the actor tier)",
+ "date": "2026-10-06",
+ "design": "docs/research/CORE_REALTIME_R3.md",
+ "change": "New OriginalAllocationTable replaces OriginalMenuPresentationMemory.allocations' [UInt32: Allocation] with the same dictionary-shaped API (subscript get/_modify, count, isEmpty, keys, values, iteration, filter returning a dictionary, removeValue, ==, literals, dictionary). While a match is loaded the 400 actor records live in an actor tier in match-model form, owned by the bindings' ActorShape (tokens, index, Object tokens, the pair memo): the logical entry of tokens[i] is records[i] converted back (Object token at +0x368), live. OriginalApplicationMatchBindings.read takes the tier's records when the state holds this bindings' tier; store keeps today's per-index checks in today's order with O(1) fast paths (the state's tier implies exists/live/size; equal tiers in context and state imply no conflict; the ordinal check or pair memo unchanged) and installs match.actors as the tier instead of writing 400 converted entries. Any other change to an actor entry first moves the tier back into the dictionary. The reference check FrontMenuLoopReference takes the table type.",
+ "probe": "scratch build counting tier operations over a computer-vs run: 7 fresh installs, 4,684 re-installs (two stores per cycle), 0 dissolves, 1,200 materializations (three whole-table iterations)",
+ "phone": {
+  "baseline": "phase 1f: 16.87 / 16.87 ticks/s",
+  "after": [
+   {
+    "label": "rtr3s1-run1",
+    "serial": "R58R36F7VFD",
+    "runSeconds": 334,
+    "peakResidentMB": 1288,
+    "ticksPerSecond": 19.09,
+    "busySeconds": 222.93,
+    "bodies": 1800
+   },
+   {
+    "label": "rtr3s1-run2",
+    "serial": "R58R36F7VFD",
+    "runSeconds": 339,
+    "peakResidentMB": 1245,
+    "ticksPerSecond": 19.26,
+    "busySeconds": 226.38,
+    "bodies": 1800
+   }
+  ],
+  "result": "19.09 / 19.26 ticks/s (+13.6%); busy seconds 233-237 -> 223-226",
+  "note": "apks/rtr3s1.apk built from native diff fed94739 (before the reference-check type fix and the debug assertion; the release code is the same)",
+  "ms_per_tick": "59.3 -> 52.2 ms per tick (1000 / ticks per second)"
+ },
+ "mac": {
+  "rows": [
+   {
+    "label": "rt1f",
+    "round": 0,
+    "exit": 0,
+    "cpuSeconds": 14.0,
+    "ticksPerSecond": 42.92,
+    "busySeconds": 8.63,
+    "bodies": 1800
+   },
+   {
+    "label": "rtr3s1",
+    "round": 0,
+    "exit": 0,
+    "cpuSeconds": 14.7,
+    "ticksPerSecond": 41.81,
+    "busySeconds": 8.91,
+    "bodies": 1800
+   },
+   {
+    "label": "rt1f",
+    "round": 1,
+    "exit": 0,
+    "cpuSeconds": 14.27,
+    "ticksPerSecond": 41.34,
+    "busySeconds": 8.91,
+    "bodies": 1800
+   },
+   {
+    "label": "rtr3s1",
+    "round": 1,
+    "exit": 0,
+    "cpuSeconds": 14.39,
+    "ticksPerSecond": 41.0,
+    "busySeconds": 8.73,
+    "bodies": 1800
+   },
+   {
+    "label": "rt1f",
+    "round": 2,
+    "exit": 0,
+    "cpuSeconds": 13.53,
+    "ticksPerSecond": 43.16,
+    "busySeconds": 8.43,
+    "bodies": 1800
+   },
+   {
+    "label": "rtr3s1",
+    "round": 2,
+    "exit": 0,
+    "cpuSeconds": 13.38,
+    "ticksPerSecond": 43.3,
+    "busySeconds": 8.18,
+    "bodies": 1800
+   }
+  ],
+  "result": "process CPU seconds median 14.00 (1f) vs 14.39 (stage 1): no gain on the Mac (reference counting and dictionary copies are cheap there); the phone gains."
+ },
+ "emulator": {
+  "result": "vs equal, 1,832 frames identical to the earlier Android app run"
+ },
+ "gates": {
+  "headless": "vs equal, 1,832 frames identical (frozen fa85a80c, rt-r3s1); all 10 scenarios equal, frames identical (rt-r3s1-all)",
+  "AppKit": "vs and playback equal; 3,960 frames identical to the 1f AppKit run (rt-r3s1-appkit)",
+  "tests": "OriginalAllocationTableTests (new): store and read against the per-entry algorithm kept in the test target, on a state with and without the tier, clean, with a changed actor, and under single and multiple faults (missing, dead and short actors, context conflicts, out-of-range and undefined ordinals, combinations at different indices): equal states or the same first error with the state unchanged; the table with a tier against a dictionary over 120 random operations (get, set, remove, optional mutation, copies): 3 tests, 0 failures",
+  "Core suites": "bundle A (build/swiftpm-test-release; tracked native diff 12dcc6af against e122049, the two new files unchanged since before the build): 162 suites, every suite using memory.allocations or the bindings plus the 154-suite record set, all pass (OriginalMacLoadingAudioTests 3,118 s); 17 of them were also run in a parallel lane from the same bundle (logs rtr3s1b-*), all pass"
+ },
+ "review": "independent read-only review: correct after one compile fix (NTSDReferenceChecks' FrontMenuLoopReference took the old dictionary type; the test bundle depends on it). The table behaves as the dictionary for every operation used in Sources and Tests, with or without a tier, and nothing depends on iteration order; the pair memo only holds valid model sides, so the conversion cannot trap; read returns exactly today's records with every check implied; store raises today's first error for any combination of faults and leaves the same logical memory; no production path dissolves the tier per tick or iterates the whole table on a hot path. Acted on: the reference check's type, a debug assertion of the tier invariant in installActors, the sameActors comment, the planned table and oracle tests."
+}

@@ -39,7 +39,7 @@ final class OriginalApplicationMenuReturnTests: XCTestCase {
             XCTAssertEqual(bp.count,expectedCounts.bodyParents);XCTAssertEqual(fp.count,expectedCounts.frontParents)
             indices = try c.cases.map { c in
                 let parent = try XCTUnwrap((c.parentKind == "body" ? bp : fp)[c.parent])
-                return try XCTUnwrap((c.parentKind == "body" ? body.rawCases : front.rawCases).firstIndex { NSDictionary(dictionary:$0).isEqual(to:parent) })
+                return try XCTUnwrap((c.parentKind == "body" ? body.rawCases : front.rawCases).firstIndex { sameJSONObject($0,parent) })
             }
         }
         func blob(_ key: String) throws -> [UInt8] {

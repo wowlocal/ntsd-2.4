@@ -1,7 +1,9 @@
 import Foundation
+#if canImport(CryptoKit)
 import CryptoKit
-import Compression
+#endif
 import NTSDCore
+@testable import NTSDReferenceChecks
 
 /// Test-only reader. Saved records/masks are comparison operands; only original
 /// asset bytes and separately declared numeric controls leave this reference.
@@ -377,8 +379,8 @@ final class OriginalApplicationCatalogSessionReference {
         var output = Data(count: count + 1)
         let actual = output.withUnsafeMutableBytes { destination in
             packed.withUnsafeBytes { source in
-                compression_decode_buffer(destination.bindMemory(to: UInt8.self).baseAddress!, destination.count,
-                    source.bindMemory(to: UInt8.self).baseAddress!, source.count, nil, COMPRESSION_ZLIB)
+                FixtureInflate.decode(destination.bindMemory(to: UInt8.self).baseAddress!, destination.count,
+                    source.bindMemory(to: UInt8.self).baseAddress!, source.count)
             }
         }
         guard actual == count else { throw Boundary.invalid("Inflated length") }

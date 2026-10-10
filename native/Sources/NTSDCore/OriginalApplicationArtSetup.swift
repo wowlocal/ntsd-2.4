@@ -26,7 +26,7 @@ public enum OriginalApplicationArtSetup {
         clear: (OriginalSurfaceClearRequest, inout Context) throws -> Int32,
         debug: ([UInt8], inout Context) throws -> Void,
         beforeCommit: (Result, Context) throws -> Void = { _, _ in }) throws -> Result {
-        guard queryBacking.bytes.count == 32 else {
+        guard queryBacking.byteCount == 32 else {
             throw OriginalStateError.invalidStorage("Art setup query extent")
         }
         var staged = context, local = queryBacking

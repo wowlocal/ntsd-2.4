@@ -1,0 +1,60 @@
+{
+  "study": "docs/research/MEMORY_FOOTPRINT.md",
+  "date": "2026-10-05",
+  "kind": "measurement",
+  "run": "macOS NTSDHeadless (1dbaacb), MallocStackLogging=lite, app_e2e computer-vs script, --virtual-clock 123456789 8; malloc_history -allBySize at a footprint of 3697 MB (footprint reported 3.6G)",
+  "live heap": "3.84 GiB in 2,856 distinct stacks",
+  "top holders (innermost game frames)": [
+    {
+      "MiB": 1113,
+      "allocations": 851,
+      "site": "OriginalMacDisplayBackend.Storage.init :68 (values calloc) <- performBitmap :535 <- OriginalMacRuntimeLoading.bitmap :148"
+    },
+    {
+      "MiB": 962,
+      "allocations": 1786,
+      "site": "OriginalDIBPixels.init :34 <- OriginalApplicationStartupInputs.Bitmap.init(dib:fileHeader:pixelOffset:) :57 <- Bitmap.init(bitmapFile:) <- catalog load"
+    },
+    {
+      "MiB": 604,
+      "allocations": 1330,
+      "site": "Array copy in Bitmap.init(bitmapFile:) :35 <- OriginalApplicationCatalogInputs.load"
+    },
+    {
+      "MiB": 283,
+      "allocations": 851,
+      "site": "OriginalMacDisplayBackend.Storage.init :69 (known calloc)"
+    },
+    {
+      "MiB": 181,
+      "allocations": 55417,
+      "site": "array growth in OriginalStateRecord.write"
+    },
+    {
+      "MiB": 161,
+      "allocations": 54800,
+      "site": "dictionary growth in OriginalFrameLoader.projected(at:record:)"
+    },
+    {
+      "MiB": 79,
+      "allocations": 144,
+      "site": "OriginalDIBPixels.init <- Bitmap.init <- OriginalApplicationStartupInputs.load"
+    },
+    {
+      "MiB": 62,
+      "allocations": 456,
+      "site": "Array copy in Bitmap.init(bitmapFile:) <- OriginalApplicationArenaInputs.load"
+    },
+    {
+      "MiB": 57,
+      "allocations": 88,
+      "site": "OriginalApplicationStartupInputs.load read"
+    },
+    {
+      "MiB": 60,
+      "allocations": 1672,
+      "site": "OriginalMacAudioBackend.perform :169/:170 (loading sounds)"
+    }
+  ],
+  "reading": "the images are held three times: file bytes (Bitmap.dib), decoded colours plus a definedness byte per pixel (Bitmap.pixels), and 32-bit surface values plus a known byte per pixel (display backend)"
+}

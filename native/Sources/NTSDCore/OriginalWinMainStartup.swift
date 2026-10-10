@@ -82,7 +82,7 @@ public struct OriginalWinMainStartup {
         platform p: any OriginalWinMainStartupPlatform,
         store: OriginalWindowInput.Store = { _,_ in },
         after: (OriginalWinMainStartup,OriginalStateRecord) throws -> Void = { _,_ in }) throws {
-        guard globals.bytes.count == OriginalMatchPreparation.globalSize else {
+        guard globals.byteCount == OriginalMatchPreparation.globalSize else {
             throw OriginalStateError.invalidStorage("WinMain startup globals extent")
         }
         var candidate = self,state = globals

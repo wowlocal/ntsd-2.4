@@ -1,4 +1,14 @@
+#if canImport(Darwin)
 import Darwin
+#elseif canImport(Glibc)
+import Glibc
+#elseif canImport(Musl)
+import Musl
+#elseif canImport(Android)
+import Android
+#elseif os(Windows)
+import WinSDK
+#endif
 
 /// Host IO boundary. Call only while servicing a returned startup permit, never
 /// from a Core transaction or its observers. macOS clock origin/resolution is not
@@ -13,6 +23,24 @@ public enum OriginalMacStartupClock {
             self.seconds = seconds; self.nanoseconds = nanoseconds
         }
     }
+    #if os(Windows)
+    /// Windows hosts: QueryPerformanceCounter and GetSystemTimePreciseAsFileTime
+    /// as the declared monotonic and wall clocks (not WinMM's timeGetTime).
+    public static func monotonicSample() throws -> Sample {
+        var frequency = LARGE_INTEGER(),counter = LARGE_INTEGER()
+        guard QueryPerformanceFrequency(&frequency) != false,QueryPerformanceCounter(&counter) != false,frequency.QuadPart > 0
+        else { throw Boundary.systemCall(Int32(bitPattern:GetLastError())) }
+        let f = frequency.QuadPart,c = counter.QuadPart
+        return .init(seconds:c/f,nanoseconds:(c%f)*1_000_000_000/f)
+    }
+    public static func realtimeSample() throws -> Sample {
+        var value = FILETIME(); GetSystemTimePreciseAsFileTime(&value)
+        // 100 ns ticks since 1601 to seconds and nanoseconds since 1970.
+        let ticks = Int64(bitPattern:UInt64(value.dwHighDateTime) << 32 | UInt64(value.dwLowDateTime))-116_444_736_000_000_000
+        let seconds = ticks >= 0 ? ticks/10_000_000 : (ticks-9_999_999)/10_000_000
+        return .init(seconds:seconds,nanoseconds:(ticks-seconds*10_000_000)*100)
+    }
+    #else
     private static func read(_ clock: clockid_t) throws -> Sample {
         var value = timespec()
         guard clock_gettime(clock,&value) == 0 else { throw Boundary.systemCall(errno) }
@@ -20,6 +48,7 @@ public enum OriginalMacStartupClock {
     }
     public static func monotonicSample() throws -> Sample { try read(CLOCK_MONOTONIC_RAW) }
     public static func realtimeSample() throws -> Sample { try read(CLOCK_REALTIME) }
+    #endif
     private static func validate(_ sample: Sample) throws {
         guard sample.nanoseconds >= 0 && sample.nanoseconds < 1_000_000_000 else { throw Boundary.invalidNanoseconds }
     }

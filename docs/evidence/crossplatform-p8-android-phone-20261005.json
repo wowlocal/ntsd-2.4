@@ -1,0 +1,15 @@
+{
+  "study": "docs/research/CROSS_PLATFORM.md",
+  "phase": "P8: Android on a real phone",
+  "date": "2026-10-05",
+  "device": "Samsung Galaxy A12 (SM-A125F), Android 12 (API 31), arm64-v8a, 720x1600 at 300 dpi, 2.8 GB RAM (MemTotal 2809044 kB), connected by the user over USB",
+  "install": "the debug APK installs (adb install, 221 MB); the first launch extracts the game data",
+  "finding 1: screen": "first vs run: boundary OriginalMacDisplayBackend.Boundary.geometry at the first front-screen blit (iteration 5): the host told the game a 853x384 dp screen, so the centred 794x550 window started at y=-83 and the blit's rectangle was partly above the screen. Fix: the Android host reports the surface in dp scaled up (same aspect) to at least 800x600, the desktop the original was made for (this phone: 1333x600; the 1280x800 tablet emulator unchanged)",
+  "finding 2: memory": "second run: no boundary; the game reached 'started' and its startup loading, then Android's low-memory killer ended it (lmkd: 'Reclaim local.ntsd.port ... to free 1311324kB rss, 2493324kB swap; reason: device is low on swap (0kB < 786428kB) and thrashing (272%)', then signal 9). Resident memory sampled every 4 s rose to 1.3 GB while available memory fell to ~50 MB",
+  "macOS comparison": "the same vs scenario in the macOS headless build: maximum resident 1,715,961,856 bytes, peak memory footprint 4,165,046,040 bytes (/usr/bin/time -l): the game currently needs about 4 GB everywhere, more than this phone has",
+  "regression": "emulator (tablet) with the new APK: vs equal; text in the same 446 of 1,826 frames as AppKit",
+  "open": [
+    "the game's memory footprint (~4 GB) on phones with 3 GB of RAM: needs a memory-reduction study (e.g. memory-mapping the read-only game data, releasing startup inputs once loaded)",
+    "a phone with 6 GB or more"
+  ]
+}

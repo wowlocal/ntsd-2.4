@@ -65,7 +65,7 @@ public struct OriginalCatalogRegistry: Equatable, Sendable {
                 onRequest: (OriginalCatalogLoadRequest) throws -> Void = { _ in },
                 onStore: (Store) throws -> Void = { _ in },
                 onLoad: (OriginalCatalogLoadRequest, UInt32) throws -> UInt32 = { _, checksum in checksum }) throws {
-        guard Set(backing.keys) == Set(Self.regionSizes.keys), Self.regionSizes.allSatisfy({ backing[$0.key]?.bytes.count == $0.value }) else {
+        guard Set(backing.keys) == Set(Self.regionSizes.keys), Self.regionSizes.allSatisfy({ backing[$0.key]?.byteCount == $0.value }) else {
             throw OriginalStateError.invalidStorage("Catalog parent region sizes differ")
         }
         guard !fileName.isEmpty, fileName.count < 32, !fileName.contains(0) else {

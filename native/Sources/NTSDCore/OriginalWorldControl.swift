@@ -5,6 +5,19 @@ public enum OriginalWorldControl {
     public static func apply(state: inout OriginalMatchPreparation, bundledLibrary: Bool = false,
                              observe: (Int,OriginalActorControlEvent) throws -> Void = { _,_ in },
                              afterActorControl: (Int,OriginalStateRecord) throws -> Void = { _,_ in }) throws {
+        try run(state: &state,bundledLibrary: bundledLibrary,observe: observe,afterActorControl: afterActorControl,inPlace: false)
+    }
+    /// `apply` with the caller's actors and globals moved into the pass and
+    /// written back on every path (CORE_REALTIME B2 P4): for callers that drop
+    /// the state when this throws.
+    package static func applyInPlace(state: inout OriginalMatchPreparation, bundledLibrary: Bool = false,
+                                     observe: (Int,OriginalActorControlEvent) throws -> Void = { _,_ in },
+                                     afterActorControl: (Int,OriginalStateRecord) throws -> Void = { _,_ in }) throws {
+        try run(state: &state,bundledLibrary: bundledLibrary,observe: observe,afterActorControl: afterActorControl,inPlace: true)
+    }
+    private static func run(state: inout OriginalMatchPreparation, bundledLibrary: Bool,
+                            observe: (Int,OriginalActorControlEvent) throws -> Void,
+                            afterActorControl: (Int,OriginalStateRecord) throws -> Void, inPlace: Bool) throws {
         let catalog = state.catalog
         guard try state.world.integer(at: 0x7d4,as: UInt32.self) == 0,
               let registry = catalog.registry.records[0x4d82380] else {
@@ -17,7 +30,7 @@ public enum OriginalWorldControl {
         },frame: { index,number in
             guard catalog.objects.indices.contains(index),catalog.objects[index].frameStorage.indices.contains(Int(number)) else { throw error("Frame binding") }
             return catalog.objects[index].frameStorage[Int(number)]
-        },precision: state.arithmeticPrecision,bundledLibrary: bundledLibrary,observe: observe,afterActorControl: afterActorControl)
+        },precision: state.arithmeticPrecision,bundledLibrary: bundledLibrary,observe: observe,afterActorControl: afterActorControl,inPlace: inPlace)
     }
 
     private static func error(_ text: String) -> OriginalStateError { .invalidStorage("World control: "+text) }
@@ -27,8 +40,17 @@ public enum OriginalWorldControl {
                       frame: (Int,Int32) throws -> OriginalStateRecord,
                       precision: OriginalArithmeticPrecision = .bits64, bundledLibrary: Bool = false,
                       observe: (Int,OriginalActorControlEvent) throws -> Void = { _,_ in },
-                      afterActorControl: (Int,OriginalStateRecord) throws -> Void = { _,_ in }) throws {
-        var pool = actors,owned = globals
+                      afterActorControl: (Int,OriginalStateRecord) throws -> Void = { _,_ in }, inPlace: Bool = false) throws {
+        guard inPlace else {
+            // All or nothing: in place on copies, assigned when it completes.
+            var copies = actors,owned = globals
+            try apply(world: world,actors: &copies,globals: &owned,objectCount: objectCount,header: header,frame: frame,precision: precision,
+                      bundledLibrary: bundledLibrary,observe: observe,afterActorControl: afterActorControl,inPlace: true)
+            actors = copies;globals = owned
+            return
+        }
+        var pool = inPlaceTake(&actors, leaving: []),owned = inPlaceTake(&globals, leaving: .vacant)
+        defer { actors = pool;globals = owned }
         func index(_ slot: Int) throws -> Int {
             let i = Int(try world.integer(at: 0x194+slot*4,as: UInt32.self))
             guard pool.indices.contains(i) else { throw error("Actor binding") };return i
@@ -40,12 +62,13 @@ public enum OriginalWorldControl {
         }
         for slot in 0..<400 where try active(slot) {
             let i = try index(slot),o = try object(i)
-            // Only this helper owns a detached Actor; commit it before the
+            // The helper runs on this pass's own Actor and globals (dropped with
+            // the pass on a throw; CORE_REALTIME B2 P4), done before the
             // surrounding World rules inspect or mutate any aliased allocation.
-            var actor = pool[i]
-            try OriginalActorControl.apply(actor: &actor,header: header(o),globals: &owned,
-                frame: { try frame(o,$0) },precision: precision,bundledLibrary: bundledLibrary,observe: { try observe(slot,$0) })
-            pool[i] = actor;try afterActorControl(slot,actor)
+            let actorHeader = try header(o)
+            try OriginalActorControl.apply(actor: &pool[i],header: actorHeader,globals: &owned,
+                frame: { try frame(o,$0) },precision: precision,bundledLibrary: bundledLibrary,observe: { try observe(slot,$0) },inPlace: true)
+            try afterActorControl(slot,pool[i])
             if try state(i) == 400,try owned.integer(at: 0x450bd8-0x44d000,as: Int32.self) == 0 {
                 try teleport(world: world,actors: &pool,slot: slot,kind: 1,header: header)
             }
@@ -75,7 +98,6 @@ public enum OriginalWorldControl {
                 }
             }
         }
-        actors = pool;globals = owned
     }
 
     /// Whole403270..4034d3. Strict comparisons preserve the first slot on ties.

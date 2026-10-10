@@ -15,7 +15,7 @@ public enum OriginalNetworkExit {
     public static func run(globals: inout OriginalStateRecord,local: inout OriginalStateRecord,
         request: (Request) throws -> Int32,store: (Region,Int,[UInt8]) throws -> Void = { _,_,_ in }) throws -> Int32 {
         let base = OriginalMatchPreparation.globalBase
-        guard globals.bytes.count == OriginalMatchPreparation.globalSize,local.bytes.count == 256 else { throw OriginalStateError.invalidStorage("Network exit storage extent") }
+        guard globals.byteCount == OriginalMatchPreparation.globalSize,local.byteCount == 256 else { throw OriginalStateError.invalidStorage("Network exit storage extent") }
         var state = globals,temporary = local
         func word(_ a: Int) throws -> UInt32 { try state.integer(at: a-base,as: UInt32.self) }
         func put(_ r: Region,_ o: Int,_ bytes: [UInt8]) throws {

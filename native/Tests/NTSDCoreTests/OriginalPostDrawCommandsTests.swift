@@ -191,6 +191,22 @@ final class OriginalPostDrawCommandsTests: XCTestCase {
         XCTAssertEqual(events.filter { if case .random = $0 { return true }; return false }.count, 8)
         XCTAssertEqual(world, beforeWorld); XCTAssertEqual(actors, beforeActors); XCTAssertEqual(globals, beforeGlobals)
         XCTAssertEqual(retained, 77)
+        // In place (CORE_REALTIME B2 P4): the same events up to the same error,
+        // the draws and the first construction kept, nothing left vacant.
+        let placedEvents = events; events = []
+        var word: OriginalRequestSlotWord? = .value(77)
+        XCTAssertThrowsError(try OriginalPostDrawCommands.apply(world: &world, actors: &actors, globals: &globals,
+            requestSlot: &word, sse2: false, objectCount: 2, header: { _ in header }, frame: { _, _ in frame },
+            background: { _ in bg }, observe: { event in
+                events.append(event)
+                if event == .reconstruct(slot: 51) { throw OriginalStateError.invalidStorage("Second construction") }
+            }, inPlace: true)) { XCTAssertEqual("\($0)", "\(OriginalStateError.invalidStorage("Second construction"))") }
+        XCTAssertEqual(events, placedEvents)
+        XCTAssertEqual(world.byteCount, beforeWorld.byteCount); XCTAssertEqual(globals.byteCount, beforeGlobals.byteCount)
+        XCTAssertEqual(actors.count, beforeActors.count); XCTAssertTrue(actors.allSatisfy { $0.byteCount == OriginalStateRecord.actorSize })
+        XCTAssertNotEqual(globals, beforeGlobals); XCTAssertNotEqual(actors[50], beforeActors[50])
+        XCTAssertEqual(try world.integer(at: 4+50, as: UInt8.self), 1, "the first construction's slot activated")
+        XCTAssertEqual(word, .value(51), "the slot word as the second candidate set it")
     }
 
     func testMusicObserverFailureRollsBackEarlierRecoveryAndCleanup() throws {

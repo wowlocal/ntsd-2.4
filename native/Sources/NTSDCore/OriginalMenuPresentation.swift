@@ -7,6 +7,15 @@ public struct OriginalMenuPresentationInput: Codable, Sendable {
     public let methodResult: Int32, queryResult: Int32, audioGetResult: Int32, audioSetResult: Int32
     public let queriedAudio: UInt32, audioVolume: Int32
     public let dcResult: Int32, dc: UInt32, postResult: Int32
+    /// The memberwise initializer, public so the runtime builds this input
+    /// directly (CORE_REALTIME 4f: it decoded it from JSON every tick).
+    public init(targetSurface: UInt32, methodResult: Int32, queryResult: Int32, audioGetResult: Int32,
+                audioSetResult: Int32, queriedAudio: UInt32, audioVolume: Int32, dcResult: Int32, dc: UInt32,
+                postResult: Int32) {
+        self.targetSurface = targetSurface; self.methodResult = methodResult; self.queryResult = queryResult
+        self.audioGetResult = audioGetResult; self.audioSetResult = audioSetResult; self.queriedAudio = queriedAudio
+        self.audioVolume = audioVolume; self.dcResult = dcResult; self.dc = dc; self.postResult = postResult
+    }
 }
 
 public struct OriginalMenuPresentationEvent: Codable, Equatable, Sendable {
@@ -31,7 +40,7 @@ public struct OriginalMenuPresentationMemory {
         public var live: Bool
         public init(storage: OriginalStateRecord, live: Bool = true) { self.storage = storage; self.live = live }
     }
-    public var allocations: [UInt32: Allocation] = [:]
+    public var allocations = OriginalAllocationTable()
     /// 4588a8 and 4588ac are outside the ordinary globals region.
     public var replayPointers: OriginalStateRecord
     public init(replayPointers: OriginalStateRecord) { self.replayPointers = replayPointers }
@@ -52,7 +61,7 @@ public enum OriginalMenuPresentation {
         let pointer = try state.integer(at: offset, as: UInt32.self)
         if pointer == 0 { return }
         guard var allocation = owned.allocations[pointer], allocation.live,
-              allocation.storage.bytes.count == 0x1f50 else {
+              allocation.storage.byteCount == 0x1f50 else {
             throw OriginalStateError.invalidStorage("Menu bitmap ownership")
         }
         let surface = try allocation.storage.integer(at: 0, as: UInt32.self)
@@ -79,7 +88,7 @@ public enum OriginalMenuPresentation {
         if try word(0x44eecc) != 0 {
             for (countAddress,arrayAddress) in [(0x458438,0x452948),(0x45843c,0x451db0)] {
                 let count = Int32(bitPattern: try word(countAddress))
-                guard count <= (OriginalMatchPreparation.globalBase+state.bytes.count-arrayAddress)/4 else { throw OriginalStateError.invalidStorage("Sound release list extent") }
+                guard count <= (OriginalMatchPreparation.globalBase+state.byteCount-arrayAddress)/4 else { throw OriginalStateError.invalidStorage("Sound release list extent") }
                 if count > 0 { for index in 0..<Int(count) { try method(word(arrayAddress+index*4)) } }
             }
             try method(word(0x44eecc)); try state.write(UInt32(0),at: 0x44eecc-OriginalMatchPreparation.globalBase)
@@ -121,7 +130,7 @@ public enum OriginalMenuPresentation {
     /// 43e940 is shared by startup, menus and the match display path.
     public static func presentSurface(globals: OriginalStateRecord,
                                       observe: (OriginalMenuPresentationEvent) throws -> Void = { _ in }) throws {
-        guard globals.bytes.count == OriginalMatchPreparation.globalSize else { throw OriginalStateError.invalidStorage("Present globals extent") }
+        guard globals.byteCount == OriginalMatchPreparation.globalSize else { throw OriginalStateError.invalidStorage("Present globals extent") }
         func word(_ address: Int) throws -> UInt32 { try globals.integer(at: address-OriginalMatchPreparation.globalBase, as: UInt32.self) }
         let mode = try word(0x458348)
         if mode == 1 || mode == 2 {
@@ -131,7 +140,8 @@ public enum OriginalMenuPresentation {
         } else if mode == 3 {
             let resource = try word(0x455634), start = 0x453ccc-OriginalMatchPreparation.globalBase
             guard resource != 0 else { throw OriginalStateError.invalidStorage("Null blit destination") }
-            try observe(.init(.method, [resource, 0x14, 0x453ccc, word(0x455608), 0, 0x1000000, 0], [Array(globals.bytes[start..<(start+16)])]))
+            // The 16 bytes in place, not a whole copy of the globals' bytes (e4).
+            try observe(.init(.method, [resource, 0x14, 0x453ccc, word(0x455608), 0, 0x1000000, 0], [globals.bytes(in: start..<(start+16))]))
         }
     }
     public static func apply(_ entry: OriginalMenuPresentationEntry, input: OriginalMenuPresentationInput,
@@ -164,7 +174,7 @@ public enum OriginalMenuPresentation {
         libraryText: inout OriginalLibSurfaceText, input: OriginalMenuPresentationInput,
         store: @escaping OriginalWindowInput.Store = { _,_ in },
         observe: (OriginalMenuPresentationEvent) throws -> Void = { _ in }) throws {
-        guard globals.bytes.count == OriginalMatchPreparation.globalSize else { throw OriginalStateError.invalidStorage("Overlay globals extent") }
+        guard globals.byteCount == OriginalMatchPreparation.globalSize else { throw OriginalStateError.invalidStorage("Overlay globals extent") }
         let unused = try OriginalStateRecord(bytes: [],defined: [])
         var execution = Execution(world: unused,globals: globals,memory: .init(replayPointers: unused),input: input,libraryText: libraryText)
         execution.store = store
@@ -296,9 +306,9 @@ public enum OriginalMenuPresentation {
             try OriginalMenuPresentation.shutdown(globals: &globals,memory: &memory,observe: observe)
         }
         mutating func run(_ entry: OriginalMenuPresentationEntry, _ observe: Observer) throws {
-            guard world.bytes.count == OriginalStateRecord.worldPrefixSize,
-                  globals.bytes.count == OriginalMatchPreparation.globalSize,
-                  memory.replayPointers.bytes.count == 8 else { throw error("Storage sizes") }
+            guard world.byteCount == OriginalStateRecord.worldPrefixSize,
+                  globals.byteCount == OriginalMatchPreparation.globalSize,
+                  memory.replayPointers.byteCount == 8 else { throw error("Storage sizes") }
             switch entry {
             case .epilogue: return
             case .overlay: try overlay(observe)

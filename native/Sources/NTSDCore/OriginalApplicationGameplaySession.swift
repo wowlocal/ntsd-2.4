@@ -48,11 +48,18 @@ public struct OriginalApplicationGameplaySession {
         music: @escaping (OriginalMusicEvent,inout Environment) throws -> OriginalMusicResponse = { _,_ in
             throw Menu.Boundary.dependency("Gameplay music request")
         },
-        observe: @escaping (Menu.Observation,inout Environment) throws -> Void = { _,_ in },
+        /// nil (production): nobody observes, so the session builds no
+        /// `.front`, `.gameplay` or checkpoint observations (CORE_REALTIME
+        /// tier 3 G3b); the checkpoint snapshots themselves are still taken,
+        /// and the Attempt's other observations go to a no-op as before.
+        observe: ((Menu.Observation,inout Environment) throws -> Void)? = nil,
         pausedObserve: @escaping (OriginalPausedGameplay.Stage,OriginalFrontScreenEvent,inout Environment) throws -> Void = { _,_,_ in },
         pausedCheckpoint: @escaping (OriginalPausedGameplay.Stage,Menu.Snapshot,inout Environment) throws -> Void = { _,_,_ in },
         checkpoints: Bool = true,
         transformBacking: ((OriginalApplicationMatchBindings) throws -> OriginalLibTransformBacking)? = nil,
+        /// false: the body builds no read, clip, draw or rectangle events, so `observe`
+        /// never sees them; the paused branch ignores the flag (CORE_REALTIME 4d).
+        detail: Bool = true,
         beforeCommit: (Menu.PendingReturn,inout Environment) throws -> Void = { _,_ in }) throws -> Menu.PendingReturn {
         guard pendingReturn == nil else { throw Menu.Boundary.alreadyPrepared }
         let a = try Menu.Attempt(entry,.init(bitmaps:[:]),environment,
@@ -61,11 +68,27 @@ public struct OriginalApplicationGameplaySession {
             { _,_,_ in throw Menu.Boundary.dependency("Unexpected gameplay bitmap allocation") },
             { _,_ in throw Menu.Boundary.dependency("Unexpected gameplay bitmap construction") },
             { _,_ in throw Menu.Boundary.dependency("Unexpected gameplay music selection") },
-            { _ in throw Menu.Boundary.dependency("Unexpected gameplay menu clock") },observe,{ _,_,_ in })
-        a.outputPhase = true
-        let catalog = entry.entry.entry
-        let soundBuffers = Set((catalog.startup.owner.loads + catalog.entry.common.sounds +
-            Array(catalog.snapshot.sounds.buffers.values)).map(\.output).filter { $0 != 0 })
+            { _ in throw Menu.Boundary.dependency("Unexpected gameplay menu clock") },observe ?? { _,_ in },{ _,_,_ in })
+        a.outputPhase = true;a.observesFront = observe != nil
+        let derived = entry.entry.derived
+        // Room for what the last tick appended (CORE_REALTIME tier 3 d1).
+        let hint = derived.appendedCounts(),startGraphics = a.graphics.count,startOperations = a.operations.count
+        a.graphics.reserveCapacity(startGraphics+hint.graphics);a.operations.reserveCapacity(startOperations+hint.operations)
+        // The same set as concatenating the three load lists and mapping
+        // `output`, without copying every load result each cycle
+        // (MOBILE_PERFORMANCE step 6b), built once per loaded session (4i).
+        let soundBuffers = derived.soundTokens {
+            // Read here, once per loaded session: binding it each tick copied
+            // the whole pending pool (CORE_REALTIME tier 3 L3).
+            let catalog = entry.entry.entry
+            var tokens = Set<UInt32>()
+            for loads in [catalog.startup.owner.loads,catalog.entry.common.sounds] {
+                for i in loads.indices where loads[i].output != 0 { tokens.insert(loads[i].output) }
+            }
+            let registered = catalog.snapshot.sounds.buffers
+            for i in registered.indices where registered[i].value.output != 0 { tokens.insert(registered[i].value.output) }
+            return tokens
+        }
         var drainingSound = false
         var model = entry.match,context = entry.inputContext,random = entry.state.random,local = caller
         // A state without destinations for lib.dll's Actor+7b4 write takes the
@@ -75,28 +98,32 @@ public struct OriginalApplicationGameplaySession {
         let library = OriginalGameplayBody.Library(text:entry.state.libraryText,hits:entry.state.libraryHits,transforms:transforms)
         func resource(_ token: UInt32) throws -> (OriginalStateRecord,UInt32) {
             var record: OriginalStateRecord
-            let surface: UInt32
+            let surface: UInt32,allocated: Bool
             if let allocation = a.state.memory.allocations[token] {
-                guard allocation.live,allocation.storage.bytes.count == 0x1f50 else { throw Menu.Boundary.owner(token) }
-                record = allocation.storage;surface = try record.integer(at:0,as:UInt32.self)
+                guard allocation.live,allocation.storage.byteCount == 0x1f50 else { throw Menu.Boundary.owner(token) }
+                record = allocation.storage;surface = try record.integer(at:0,as:UInt32.self);allocated = true
             } else {
                 guard let ordinal = a.model.bitmapOwners.first(where:{ $0.value == token })?.key,
                       a.model.bitmaps.indices.contains(ordinal),!a.model.releasedBitmaps.contains(ordinal),
                       let currentSurface = a.model.bitmapSurfaceOwners[ordinal] else { throw Menu.Boundary.owner(token) }
-                record = a.model.bitmaps[ordinal].storage;surface = currentSurface
+                record = a.model.bitmaps[ordinal].storage;surface = currentSurface;allocated = false
                 guard try record.integer(at:0,as:UInt32.self) == (surface == 0 ? 0 : 1) else { throw Menu.Boundary.owner(token) }
             }
             guard surface == 0 || a.state.graphics?.currentResources[surface]?.kind == "bitmapSurface" else {
                 throw Menu.Boundary.owner(surface)
             }
-            try record.write(UInt32(surface == 0 ? 0 : 1),at:0)
+            // The record with 0 or 1 at offset 0. A model bitmap already holds
+            // that value there (checked above, so those bytes are defined) and
+            // writing it would change nothing; an allocated one is written once
+            // per source record and kept for the session (phase 2c).
+            if allocated { record = try derived.resource(token,record,writing:UInt32(surface == 0 ? 0 : 1)) }
             return (record,surface)
         }
         func surface(_ ordinal: Int) throws -> UInt32 {
                 guard !a.model.releasedBitmaps.contains(ordinal),let token = a.model.bitmapOwners[ordinal],
                       a.model.bitmaps.indices.contains(ordinal) else { throw Menu.Boundary.dependency("Gameplay bitmap ordinal") }
                 let (record,surface) = try resource(token)
-                guard record == a.model.bitmaps[ordinal].storage else { throw Menu.Boundary.owner(token) }
+                guard derived.bitmapMatches(token,record,a.model.bitmaps[ordinal].storage) else { throw Menu.Boundary.owner(token) }
                 return surface
         }
         func sound(_ request: OriginalQueuedSound.Event) throws -> Int32 {
@@ -112,7 +139,7 @@ public struct OriginalApplicationGameplaySession {
             if output,event.kind == "stage",event.arguments == [0x419e60] { drainingSound = true }
             if drainingSound,event.kind == "method" {
                 // sound() stages this method exactly once after checking its owner.
-                try observe(.front(event),&a.environment)
+                try observe?(.front(event),&a.environment)
             } else { try a.front(event) }
         }
         func checkpoint(_ match: OriginalMatchPreparation,_ input: OriginalInputControlContext,
@@ -158,7 +185,7 @@ public struct OriginalApplicationGameplaySession {
             },
             soundRequest:sound,music:{ e in
                 let r = try music(e,&a.environment);a.operations.append(.music(e,r));return r
-            },observe:{ event in
+            },detail:detail,observe:{ event in
                 switch event {
                 case .drawing(let stage,let e):
                     try front(e,stage == .output)
@@ -169,10 +196,11 @@ public struct OriginalApplicationGameplaySession {
                     a.operations.append(.gameplayResume(control,value))
                 default:break
                 }
-                try observe(.gameplay(event),&a.environment)
+                try observe?(.gameplay(event),&a.environment)
             },ownedCheckpoint:{ stage,match,input,crt,library in
                 guard checkpoints else { return }
-                try observe(.gameplayCheckpoint(stage,checkpoint(match,input,crt,library)),&a.environment)
+                let snapshot = try checkpoint(match,input,crt,library)
+                try observe?(.gameplayCheckpoint(stage,snapshot),&a.environment)
             })
         }
         guard let installed else { throw Menu.Boundary.dependency("Lost gameplay library owners") }
@@ -184,6 +212,7 @@ public struct OriginalApplicationGameplaySession {
             backgrounds:a.backgrounds,local:a.local,operations:a.operations)
         let result = try OriginalApplicationDispatchEntry.finishWorldCall(globals:state.full)
         let pending = Menu.PendingReturn(entry:entry,snapshot:snapshot,exit:.returned,dispatcherResult:result,graphics:a.graphics)
+        derived.recordAppended(graphics:a.graphics.count-startGraphics,operations:a.operations.count-startOperations)
         try beforeCommit(pending,&a.environment)
         pendingReturn = pending;environment = a.environment;return pending
     }

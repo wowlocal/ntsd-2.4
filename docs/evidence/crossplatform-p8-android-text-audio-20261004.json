@@ -1,0 +1,25 @@
+{
+  "study": "docs/research/CROSS_PLATFORM.md",
+  "phase": "P8: Android app, all scenarios, text and audio",
+  "date": "2026-10-04",
+  "scenarios (07bc662 APK, textless)": {
+    "results": "crossplatform-p8-android-app-scenarios-20261004.jsonl",
+    "summary": "9/10 equal to the frozen references; playback differs (milestones, progress) as on main and every host",
+    "frames": "all 15,960 frames identical to the linux-headless matrix run"
+  },
+  "text": {
+    "change": "the Android host draws TextOutA with OriginalFreeTypeFace (af1f808): /system/fonts/Roboto-Regular.ttf at wght 700 (Android's system sans-serif is one variable font), else DroidSans-Bold.ttf; reported once as androidText (user decision 2026-10-01: platform font as declared stand-in for SYSTEM_FONT)",
+    "vs": "state equal; androidText Roboto-Regular.ttf weight 700; compare_text_frames.py against AppKit (CoreText) and linux-headless (textless): 1,826 frames, 446 with text, 0 disagree"
+  },
+  "audio": {
+    "change": "AAudio: the effects mixer on a float stereo stream at the device rate (low latency); each packaged track decoded by NTSDMusicDecoder (as on Linux) on its own 44.1 kHz Int16 stream, end reported once like AVAudioPlayer",
+    "declared harness guard": "scripted runs with --mute-sounds open no effects output and with --mute-music use the silent manifest players (the emulator runs -no-audio; the decoder is checked on Linux)",
+    "interactive (emulator, -no-audio)": "AAudio stream opened and started (logcat 'AAudioStream: setState ... to 4'); the app keeps running; a tap on START loads the mode menu with the TextOutA credits drawn in Roboto Bold"
+  },
+  "keyboard": "adb 'input keyevent' DPAD_DOWN reached the app but the mode menu did not move: the original's menus are driven by the mouse (the scripted scenarios use clicks there); key input in character select and gameplay is still to check",
+  "open": [
+    "key input in a match",
+    "audible output on a real device",
+    "a real Android device"
+  ]
+}

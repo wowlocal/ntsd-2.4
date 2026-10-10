@@ -1,0 +1,48 @@
+{
+  "date": "2026-10-03",
+  "request": "User asked to move build/research to the external T7 disk (\"по диску можем наверное research перенести на внешний диск T7?\"); internal data volume had 22 GiB free",
+  "tool": "tools/archive_to_t7.py",
+  "source": "build/research (internal APFS data volume)",
+  "destination": "/Volumes/T7/ntsd-2.4-artifacts/build-research-20261003",
+  "t7": {
+    "VolumeUUID": "7C9569C1-BC8F-3288-B3FD-8831A3F07FAA",
+    "FilesystemType": "exfat",
+    "freeAfterGiB": 1723
+  },
+  "preflight": [
+    "no process had files open under build/research (lsof)",
+    "only build/research/e2e changed after 2026-10-01 (app_e2e captures); it was excluded and stays in place",
+    "other worktrees live on X5; 137 symlinks (134 to /Volumes/X5/ntsd-2.4-research), no hardlinks"
+  ],
+  "archives": 159,
+  "entries": 3703,
+  "archiveBytes": 132219115520,
+  "format": "PAX tar via bsdtar --format pax --no-mac-metadata --no-xattrs --no-acls --no-fflags; entries >=64 MiB get their own archive, smaller ones are batched in ~2 GiB",
+  "verification": [
+    "each archive streamed to T7 with F_NOCACHE then F_FULLFSYNC while its SHA-256 was computed",
+    "per-member readback from T7 (F_NOCACHE): name, type, mode, nanosecond mtime from the PAX header, symlink target, SHA-256 body against the source; no extra or missing members",
+    "whole-file SHA-256 re-read from the device equal to the streamed digest",
+    "the source entry was removed only after these checks passed",
+    "final pass after all writes: 159 archives, 132,219,115,520 bytes re-read with F_NOCACHE in 350 s, 0 mismatches"
+  ],
+  "trial": "the first archive (active-gameplay-attempt2) was written before F_NOCACHE was added; its device SHA-256 matched immediately and again in the final pass",
+  "durationSeconds": 1084,
+  "internalFreeGiB": {
+    "before": 22,
+    "after": 118
+  },
+  "index": {
+    "repository_copy": "docs/evidence/t7-build-research-archive-20261003-index.jsonl",
+    "sha256": "577b65a8931bf024e8905f04effe0db52f116cd65e51d7f24d0f31105c8fbd18",
+    "also_at": [
+      "/Volumes/T7/ntsd-2.4-artifacts/build-research-20261003/index.jsonl",
+      "build/research/ARCHIVED_TO_T7.jsonl"
+    ]
+  },
+  "restore": "tar -xpf <archive> -C build/research (bsdtar restores modes, links and nanosecond mtimes from the PAX headers); the index maps each top-level entry to its archive",
+  "notes": [
+    "macOS created AppleDouble ._*.tar files next to archives on ExFAT for their extended attributes; they are not part of the archives",
+    "about 700 repository files (mostly historical docs and frozen tools) name build/research paths; those inputs must now be restored from T7 before reuse",
+    "66 small files under build/research were tracked by git; the move showed them as deleted. They were restored from HEAD (git checkout -- build/research) the same evening. They exist in git and in the archives, and tools/archive_to_t7.py now skips entries with tracked files unless --include-tracked is given."
+  ]
+}

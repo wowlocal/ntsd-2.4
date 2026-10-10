@@ -18,13 +18,21 @@ extension OriginalMatchPreparation {
                                             throw OriginalStateError.invalidStorage("Local-input AI/object child has not been supplied")
                                         }) throws {
         var candidate = self, output = commands
-        for i in 0..<21 { try candidate.globals.write(UInt8(i == 20 ? 0 : 1),at: 0x44d040-Self.globalBase+i) }
-        if !paused {
-            let phase = try candidate.globals.integer(at: 0x450b90-Self.globalBase,as: Int32.self)
-            let mode = try candidate.globals.integer(at: 0x451160-Self.globalBase,as: Int32.self)
-            try candidate.localInput(phase: phase,mode: mode,commands: &output,beforeDispatch: beforeDispatch,dispatch: dispatch)
-        }
+        try candidate.beginLocalInputInPlace(paused: paused,commands: &output,beforeDispatch: beforeDispatch,dispatch: dispatch)
         self = candidate; commands = output
+    }
+    /// `beginLocalInput` on this state and the commands in place (CORE_REALTIME
+    /// B2): the loaded match entry runs it on its own candidate, which it drops
+    /// when this throws.
+    mutating func beginLocalInputInPlace(paused: Bool, commands: inout [UInt8],
+                                         beforeDispatch: (Self, [UInt8]) throws -> Void,
+                                         dispatch: (OriginalLocalInputDispatch, inout Self) throws -> Void) throws {
+        for i in 0..<21 { try globals.write(UInt8(i == 20 ? 0 : 1),at: 0x44d040-Self.globalBase+i) }
+        if !paused {
+            let phase = try globals.integer(at: 0x450b90-Self.globalBase,as: Int32.self)
+            let mode = try globals.integer(at: 0x451160-Self.globalBase,as: Int32.self)
+            try localInputInPlace(phase: phase,mode: mode,commands: &commands,beforeDispatch: beforeDispatch,dispatch: dispatch)
+        }
     }
 
     /// Real419a60 caller rules. Keyboard/joystick bytes are already acquired
@@ -34,19 +42,28 @@ extension OriginalMatchPreparation {
                                     dispatch: (OriginalLocalInputDispatch, inout Self) throws -> Void = { _, _ in
                                         throw OriginalStateError.invalidStorage("Local-input AI/object child has not been supplied")
                                     }) throws {
-        guard commands.count == 10, world.bytes.count == OriginalStateRecord.worldPrefixSize,
-              actors.count == 400, actors.allSatisfy({ $0.bytes.count == OriginalStateRecord.actorSize }),
-              globals.bytes.count == Self.globalSize else { throw OriginalStateError.invalidStorage("Local-input storage") }
         var candidate = self, output = commands
-        func integer(_ address: Int) throws -> Int32 { try candidate.globals.integer(at: address-Self.globalBase,as: Int32.self) }
+        try candidate.localInputInPlace(phase: phase,mode: mode,commands: &output,beforeDispatch: beforeDispatch,dispatch: dispatch)
+        self = candidate; commands = output
+    }
+    /// `localInput` on this state and the commands in place (CORE_REALTIME B2;
+    /// callers that drop both when it throws). The storage check reads the
+    /// same values the copy held.
+    mutating func localInputInPlace(phase: Int32, mode: Int32, commands: inout [UInt8],
+                                    beforeDispatch: (Self, [UInt8]) throws -> Void,
+                                    dispatch: (OriginalLocalInputDispatch, inout Self) throws -> Void) throws {
+        guard commands.count == 10, world.byteCount == OriginalStateRecord.worldPrefixSize,
+              actors.count == 400, actors.allSatisfy({ $0.byteCount == OriginalStateRecord.actorSize }),
+              globals.byteCount == Self.globalSize else { throw OriginalStateError.invalidStorage("Local-input storage") }
+        func integer(_ address: Int) throws -> Int32 { try globals.integer(at: address-Self.globalBase,as: Int32.self) }
         func byte(_ address: UInt32) throws -> UInt8 {
             guard address >= Self.globalBase, address < Self.globalBase+Self.globalSize else {
                 throw OriginalStateError.invalidStorage("Input mapping points outside recovered globals")
             }
-            return try candidate.globals.integer(at: Int(address)-Self.globalBase,as: UInt8.self)
+            return try globals.integer(at: Int(address)-Self.globalBase,as: UInt8.self)
         }
         func actor(_ slot: Int) throws -> Int {
-            let index = try candidate.world.integer(at: 0x194+slot*4,as: UInt32.self)
+            let index = try world.integer(at: 0x194+slot*4,as: UInt32.self)
             guard index < 400 else { throw OriginalStateError.invalidStorage("Input Actor-table binding") }
             return Int(index)
         }
@@ -57,10 +74,10 @@ extension OriginalMatchPreparation {
                 guard status > 0 else { continue }
                 for button in 0..<7 {
                     let a = try actor(seat)
-                    try candidate.actors[a].write(candidate.actors[a].integer(at: 0xcd+button,as: UInt8.self),at: 0xc6+button)
+                    try actors[a].write(actors[a].integer(at: 0xcd+button,as: UInt8.self),at: 0xc6+button)
                 }
                 guard phase == 0 else { continue }
-                for button in (0..<7).reversed() { try candidate.actors[actor(seat)].write(UInt8(0),at: 0xcd+button) }
+                for button in (0..<7).reversed() { try actors[actor(seat)].write(UInt8(0),at: 0xcd+button) }
                 if (1...4).contains(status) {
                     let config = 0x44fb20+Int(status)*80, device = try integer(config)
                     if device >= 0 {
@@ -77,38 +94,37 @@ extension OriginalMatchPreparation {
                                 pressed = try byte(0x453ff0 &+ joystick &+ offset) != 0
                             }
                             if pressed {
-                                try candidate.actors[actor(seat)].write(UInt8(1),at: 0xcd+button)
-                                if try integer(0x450b80) != 0 { output[seat] |= masks[button] }
+                                try actors[actor(seat)].write(UInt8(1),at: 0xcd+button)
+                                if try integer(0x450b80) != 0 { commands[seat] |= masks[button] }
                             }
                         }
                     }
                 }
                 if Int8(bitPattern: try byte(0x44f1af)) > 0 {
-                    for button in 0..<7 where try candidate.actors[actor(seat)].integer(at: 0xcd+button,as: UInt8.self) != 0 {
+                    for button in 0..<7 where try actors[actor(seat)].integer(at: 0xcd+button,as: UInt8.self) != 0 {
                         let at = 0x44d040-Self.globalBase+seat
-                        try candidate.globals.write(candidate.globals.integer(at: at,as: UInt8.self) | masks[button],at: at)
+                        try globals.write(globals.integer(at: at,as: UInt8.self) | masks[button],at: at)
                     }
                 }
             }
         }
-        try beforeDispatch(candidate,output)
+        try beforeDispatch(self,commands)
         // The original tail runs in either phase and even during playback.
         // Read current state after each child, rather than queueing stale requests.
         for slot in 10..<400 {
-            guard try candidate.world.integer(at: 4+slot,as: UInt8.self) != 0 else { continue }
-            let a = try actor(slot), object = try candidate.actors[a].integer(at: 0x368,as: UInt32.self)
-            guard object < candidate.catalog.objects.count else { throw OriginalStateError.invalidStorage("Input Object binding") }
-            let source = candidate.catalog.objects[Int(object)]
+            guard try world.integer(at: 4+slot,as: UInt8.self) != 0 else { continue }
+            let a = try actor(slot), object = try actors[a].integer(at: 0x368,as: UInt32.self)
+            guard object < catalog.objects.count else { throw OriginalStateError.invalidStorage("Input Object binding") }
+            let source = catalog.objects[Int(object)]
             let kind: OriginalLocalInputDispatch.Kind
             if try source.header.integer(at: 0x6f8,as: Int32.self) == 0 { kind = .characterAI }
             else {
-                let frame = try candidate.actors[a].integer(at: 0x70,as: UInt32.self)
+                let frame = try actors[a].integer(at: 0x70,as: UInt32.self)
                 guard frame < 400 else { throw OriginalStateError.invalidStorage("Input Frame outside source storage") }
                 guard try source.frameStorage[Int(frame)].integer(at: 0x30,as: Int32.self) > 0 else { continue }
                 kind = .objectInput
             }
-            try dispatch(.init(kind,slot: slot,mode: mode),&candidate)
+            try dispatch(.init(kind,slot: slot,mode: mode),&self)
         }
-        self = candidate; commands = output
     }
 }

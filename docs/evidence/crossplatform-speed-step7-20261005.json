@@ -1,0 +1,22 @@
+{
+  "study": "docs/research/MOBILE_PERFORMANCE.md",
+  "step": 7,
+  "date": "2026-10-05",
+  "change": "performFront's front copy: a row whose whole source span is known, with no colour key and not mirrored, is copied with one UnsafeMutablePointer.update(from:count:) and its target bits are set by KnownMask.setRange (whole words at once)",
+  "why": {
+    "phone profile after step 6b (24,072 samples)": "performFront 26.1% inclusive, its own time in the per-pixel copy loop (OriginalMacDisplayBackend.swift lines 920-926 of that build)",
+    "temporary probe (macOS vs match, not committed)": "pixels copied by row kind: unkeyed, forward, fully known 1,675,764,708; keyed, forward, fully known 827,469,275; mirrored or partly known rows negligible. About two thirds of the copied pixels are whole-screen copies that need no key test"
+  },
+  "phone": {
+    "speed (vs script, no frame capture)": "9.9 -> 10.2 ticks per second"
+  },
+  "gates": {
+    "headless (frozen binary sha256 f32e7d9a…)": "all 10 scenarios equal; vs frames 1,832 identical to m1-frames-ref",
+    "AppKit": "vs and playback equal; 3,960 frames identical to the AppKit step-6b run",
+    "display suites (release test build of the tree with only this change)": "7 suites, 35 tests, 0 failures (OriginalMacLoadingAudioTests whole catalog 3,588 s)"
+  },
+  "review": {
+    "reviewer": "independent read-only agent",
+    "verdict": "OK: in the fast-path case the old loop wrote exactly out[b+k] = in[a+k] and set bit b+k; update(from:count:) is a plain copy and the storages are distinct (same-surface copies rejected, one Storage per surface); setRange sets exactly the range, partial words and short spans included, inside the allocation; no stale merge state; nothing else changes"
+  }
+}

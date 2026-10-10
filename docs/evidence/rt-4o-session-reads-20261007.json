@@ -1,0 +1,86 @@
+{
+ "study": "docs/research/CORE_REALTIME.md",
+ "phase": "4o (no read-only copies of the session in Host attempts)",
+ "date": "2026-10-07",
+ "profile_before": "the 4n review: Host.step bound a copy of the whole menu session only to read .state; prepareBoundary bound one only to test loadedOwners, as did Bootstrap.makeLoadedCycle; OriginalMacRuntimeLoading.run copied the whole committed Bootstrap under the Host lock (host.snapshot) only to read startup, on every loaded run",
+ "change": "those checks read in place after the same nil checks, in the same order and with the same errors (application.session != nil, then application.session!.state or .loadedOwners); Host gains committedStartup (the committed application's startup under the lock), which the loaded run reads",
+ "phone": {
+  "before": [
+   {
+    "label": "rt4n-run1",
+    "runSeconds": 310,
+    "peakResidentMB": 1376,
+    "ticksPerSecond": 23.81,
+    "busySeconds": 204.83,
+    "bodies": 1800,
+    "completeMsPerTick": 18.5,
+    "partAssembliesPerTick": 0.0,
+    "menuMsPerStep": 0.8,
+    "menuStepsPerTick": 4.12,
+    "mainCpuShare": 0.56,
+    "renderCpuShare": 0.382,
+    "mainMsPerTick": 23.5,
+    "renderMsPerTick": 16.0
+   },
+   {
+    "label": "rt4n-run2",
+    "runSeconds": 310,
+    "peakResidentMB": 1377,
+    "ticksPerSecond": 23.58,
+    "busySeconds": 206.24,
+    "bodies": 1800,
+    "completeMsPerTick": 18.5,
+    "partAssembliesPerTick": 0.0,
+    "menuMsPerStep": 0.83,
+    "menuStepsPerTick": 4.12,
+    "mainCpuShare": 0.561,
+    "renderCpuShare": 0.432,
+    "mainMsPerTick": 23.8,
+    "renderMsPerTick": 18.3
+   }
+  ],
+  "after": [
+   {
+    "label": "rt4o-run1",
+    "runSeconds": 311,
+    "peakResidentMB": 1465,
+    "ticksPerSecond": 23.54,
+    "busySeconds": 205.66,
+    "bodies": 1800,
+    "completeMsPerTick": 18.5,
+    "partAssembliesPerTick": 0.0,
+    "menuMsPerStep": 0.82,
+    "menuStepsPerTick": 4.12,
+    "mainCpuShare": 0.56,
+    "renderCpuShare": 0.413,
+    "mainMsPerTick": 23.8,
+    "renderMsPerTick": 17.5
+   },
+   {
+    "label": "rt4o-run2",
+    "runSeconds": 310,
+    "peakResidentMB": 1563,
+    "ticksPerSecond": 23.63,
+    "busySeconds": 205.06,
+    "bodies": 1800,
+    "completeMsPerTick": 18.4,
+    "partAssembliesPerTick": 0.0,
+    "menuMsPerStep": 0.82,
+    "menuStepsPerTick": 4.12,
+    "mainCpuShare": 0.56,
+    "renderCpuShare": 0.408,
+    "mainMsPerTick": 23.7,
+    "renderMsPerTick": 17.3
+   }
+  ],
+  "result": "main 23.5/23.8 -> 23.8/23.7 ms per tick (no measurable change; committed as strictly less work), render 17.5/17.3 ms"
+ },
+ "gates": {
+  "headless": "vs equal, 1,832 frames identical (frozen-rt4o)",
+  "scenarios": "all 10 equal, frames identical (rt-4o-all)",
+  "AppKit": "vs and playback equal, 3,960 frames identical to the 4n AppKit run",
+  "emulator": "vs equal, 1,832 frames identical",
+  "tests": "bundle A (native tree 85cd5e08, the same as this commit's): all 172 suites, 503 tests, pass"
+ },
+ "review": "not required (the same checks without binding copies; no storage-model change)"
+}
