@@ -35,6 +35,65 @@ final class NTSDAndroidCursor {}
         func withLock<T>(_ body: () -> T) -> T { lock.lock(); defer { lock.unlock() }; return body() }
     }
     let target = Target()
+    /// The surface draw (black bars, channel swap, post: ~3.4 ms per frame on
+    /// the A12) on its own thread, so the render thread rasterises the next
+    /// frame meanwhile (CORE_REALTIME tier 3 R2). One slot: the render thread
+    /// waits only while the previous frame has not been taken (never longer
+    /// than one draw), so every frame is drawn, in order, as soon as the
+    /// presenter is free; nothing is dropped. A synchronous present waits
+    /// until the presenter has drawn every frame handed to it, so it never
+    /// overtakes one. Counts go out every 300 frames (`androidPresent`).
+    final class Presenter: @unchecked Sendable {
+        private let condition = NSCondition()
+        private var pending: OriginalFramebuffer?
+        private var submitted = 0,drawn = 0,waits = 0
+        init(_ target: Target) {
+            let thread = Thread { [self] in
+                Thread.current.name = "NTSD.present"
+                // On the slowest tier, away from the main and render threads
+                // (which run on the faster cores, P0): sharing their cores cost
+                // the main thread ~0.5 ms per tick in the Demo (R2b). Equal
+                // cores or a refused mask leave it to the scheduler.
+                let slow = ntsd_cpu_cluster_mask(0)
+                if slow != 0 { _ = ntsd_pin_current_thread(slow) }
+                self.run(target)
+            }
+            thread.name = "NTSD.present"; thread.qualityOfService = .userInteractive; thread.start()
+        }
+        /// Returns once every submitted frame has been drawn (the caller
+        /// holds no lock the draw needs; the render queue is flushed first).
+        func waitUntilIdle() {
+            condition.lock()
+            while pending != nil || drawn != submitted { condition.wait() }
+            condition.unlock()
+        }
+        func submit(_ frame: OriginalFramebuffer) {
+            condition.lock()
+            if pending != nil { waits += 1 }
+            while pending != nil { condition.wait() }
+            pending = frame; submitted += 1
+            condition.broadcast(); condition.unlock()
+        }
+        private func run(_ target: Target) {
+            while true {
+                condition.lock()
+                while pending == nil { condition.wait() }
+                let frame = pending!; pending = nil
+                condition.broadcast(); condition.unlock()
+                NTSDAndroidWindowHost.show(frame,target)
+                condition.lock(); drawn += 1
+                let counts = drawn % 300 == 0 ? (submitted,drawn,waits) : nil
+                condition.broadcast(); condition.unlock()
+                if let counts {
+                    DispatchQueue.main.async {
+                        OriginalRuntimeSession.emit(["event":"androidPresent","submitted":counts.0,"drawn":counts.1,"waits":counts.2])
+                    }
+                }
+            }
+        }
+    }
+    /// Made on the first pipelined present (none under synchronous rendering).
+    private var presenter: Presenter?
     /// The app's surface came or went; drawing waits for any present in progress.
     func setSurface(_ surface: OpaquePointer?) { target.withLock { target.surface = surface; target.geometry = nil } }
     init(screen: CGSize) { self.screen = screen }
@@ -66,15 +125,20 @@ final class NTSDAndroidCursor {}
     }
     func present(_ frame: OriginalFramebuffer,in window: AnyObject) throws {
         shown = Self.window(window); shownSize = (frame.width,frame.height)
+        // After the render queue's flush, frames handed to the presenter may
+        // still be undrawn: they go first (R2's review).
+        presenter?.waitUntilIdle()
         Self.show(frame,target)
     }
     var presentsConcurrently: Bool { true }
-    /// Presents from the render thread; the window is recorded now, at the
-    /// replayed draw, as the synchronous present did.
+    /// Presents from the render thread through the presenter thread (R2); the
+    /// window is recorded now, at the replayed draw, as the synchronous
+    /// present did.
     func concurrentPresenter(_ window: AnyObject,width: Int,height: Int) -> (@Sendable (OriginalFramebuffer) -> Void)? {
         shown = Self.window(window); shownSize = (width,height)
-        let target = target
-        return { frame in Self.show(frame,target) }
+        let presenter = presenter ?? Presenter(target)
+        self.presenter = presenter
+        return { frame in presenter.submit(frame) }
     }
     private nonisolated static func show(_ frame: OriginalFramebuffer,_ target: Target) {
         target.withLock { target.frame = frame; if let surface = target.surface { draw(surface,frame,target) } }
