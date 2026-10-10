@@ -271,8 +271,11 @@ main thread; message-loop iterations 4.12 × 1.14 ms; render thread 18.7 ms,
   vs main 14.36 ms, Demo 14.04); S3 parked; d2, g and M1 done (vs main
   14.02 ms, Demo 13.80); e done (vs about 13.6 ms, Demo 13.59); L5a, e2,
   P2 (render: vs 12.62, Demo 10.52), L1, R0, L2, L3, e3, G4a, L4 done; G4b
-  parked. **Status (2026-10-10, 581896e):** A12 main about 12.8 ms per tick
-  in vs and 13.2 in the Demo, render about 12.3 and 10.4.
+  parked; then P0 (the main thread on the faster cores) and R2 (the
+  present on its own thread, on the slower cores) done. **Status
+  (2026-10-10, 60a16db):** A12 main about 12.0 ms per tick in vs and 12.4
+  in the Demo; render about 8.2 and 5.9 (the 8 ms goal for that thread is
+  met in the Demo and nearly in vs); the presenter thread about 5.8.
   **Where the rest is:** the largest remaining main-thread costs are the
   transactional copies themselves (each stage's first write to a record
   another stage still holds copies it: the loaded entry, the AI's globals,
