@@ -418,8 +418,50 @@ import XCTest
         // known source rows take the path without known-bit work; an unknown
         // source pixel then clears the flag and the bit-gathering path resumes.
         try wideSpriteCopies(fullTarget:true)
+        // CORE_REALTIME R4: spans that leave one to three pixels after the
+        // four-pixel groups of the fully known target's path.
+        try wideSpriteCopies(fullTarget:true,trim:6)
+        try wideSpriteCopies(fullTarget:true,trim:7)
+        try wideSpriteCopies(fullTarget:true,trim:8)
     }
-    func wideSpriteCopies(fullTarget: Bool) throws {
+    /// CORE_REALTIME R4: a key range with low < high (pixels below, at,
+    /// inside and above both bounds) and pixels whose top byte is set (laid by
+    /// fills) give the per-pixel model's result through the four-pixel path,
+    /// forward and mirrored, with a remainder after the groups.
+    func testKeyRangeAndTopByteFollowThePerPixelModel() throws {
+        let r = try D().run(late:false,freshSurfacesKnownBlack:true);defer { try? D().close(r) }
+        let b = r.setup.display,(device,_,back,_) = try D().ids(r)
+        let low: UInt32 = 0x101010,high: UInt32 = 0x202020,width = 38
+        let cycle: [UInt32] = [0x10100f,0x101010,0x151515,0x202020,0x202021,0,0xabcdef,0x101011,0x20201f]
+        let colors = (0..<width).map { cycle[$0 % cycle.count] }
+        let service = OriginalMacBitmapService(backend:b,inputs:.init(resources:["keyed":try bitmap(colors,width:width,height:1),
+            "plain":try bitmap([UInt32](repeating:0x404040,count:width),width:width,height:1)],files:["keyed":.missing,"plain":.missing]))
+        let (_,e1) = try M().construct(service,"keyed",device),source = try M().surface(e1)
+        let (_,e2) = try M().construct(service,"plain",device),filled = try M().surface(e2)
+        // The top byte set: inside the range once masked, above it unmasked.
+        _ = try perform(b,fill(filled,0xff151515,[0,0,13,1]))
+        _ = try perform(b,fill(filled,0xff303030,[13,0,26,1]))
+        let filledValues = try b.pixels(filled).values
+        XCTAssertEqual(filledValues[0],0xff151515,"a fill keeps the top byte")
+        var key = try OriginalStateRecord(bytes:Array(repeating:0,count:8),defined:Array(repeating:true,count:8))
+        try key.write(low,at:0);try key.write(high,at:4)
+        for surface in [source,filled] { _ = try M().call(service,.init("colorKey",[surface,8],strings:[key.bytes])) }
+        let stride = try b.pixels(back).width
+        var values = try b.pixels(back).values
+        var dy = 4
+        for (surface,pixels) in [(source,colors),(filled,filledValues)] { for mirror in [false,true] {
+            let span = width-1   // groups of four and a remainder of one
+            _ = try perform(b,blt(surface,back,[1,0,Int32(1+span),1],[3,Int32(dy),Int32(3+span),Int32(dy+1)],key:true,mirror:mirror))
+            for xx in 0..<span {
+                let v = pixels[mirror ? span-xx : 1+xx]
+                if v & 0xffffff < low || v & 0xffffff > high { values[dy*stride+3+xx] = v }
+            }
+            dy += 2
+        } }
+        XCTAssertEqual(try b.pixels(back).values,values)
+        withExtendedLifetime((e1,e2)) {}
+    }
+    func wideSpriteCopies(fullTarget: Bool,trim: Int = 5) throws {
         let r = try D().run(late:false,freshSurfacesKnownBlack:fullTarget);defer { try? D().close(r) }
         let b = r.setup.display,(device,_,back,_) = try D().ids(r)
         let width = 37,height = 1,noiseWidth = 64
@@ -433,7 +475,7 @@ import XCTest
         let (_,e2) = try M().construct(service,"noise",device),background = try M().surface(e2)
         let stride = try b.pixels(back).width
         var values = try b.pixels(back).values,defined = try b.pixels(back).defined
-        let sx0 = 2,span = width-5   // a source span that does not start at column 0
+        let sx0 = 2,span = width-trim   // a source span that does not start at column 0
         var dy = 10
         for patterned in [true,false] { for mirror in [false,true] { for key in [true,false] {
             for startBit in [0,1,2,3,4,56,57,58,59,60,61,62,63] {

@@ -1,0 +1,283 @@
+{
+ "study": "docs/research/CORE_REALTIME.md",
+ "phase": "R4a (render thread): four-pixel SIMD copies — parked",
+ "date": "2026-10-10",
+ "profile": "rte4-prof-vs: the render thread (DispatchWorker) is 88% OriginalMacDisplayBackend.copyPixels (71.5% in its own loops, 14.5% memcpy)",
+ "change": "copyPixels' fully-known-target branch processed four pixels at a time with SIMD4<UInt32> when source and target storages differ (little-endian only): unaligned loads, the 24-bit key test per lane, a lane select storing rejected lanes' target values back; mirrored copies reversed the lanes; the row's remainder and same-surface copies stayed scalar",
+ "patch": "diff --git a/native/Sources/NTSDRuntime/OriginalMacDisplayBackend.swift b/native/Sources/NTSDRuntime/OriginalMacDisplayBackend.swift\nindex dee1726..84d6078 100644\n--- a/native/Sources/NTSDRuntime/OriginalMacDisplayBackend.swift\n+++ b/native/Sources/NTSDRuntime/OriginalMacDisplayBackend.swift\n@@ -1320,6 +1320,7 @@ extension OriginalMacDisplayBackend {\n             // (MOBILE_PERFORMANCE steps 4-5). Same pixels and bits; the\n             // loop never reads the target's mask.\n             let keyed = copy.key != nil,low = copy.key?[0] ?? 0,high = copy.key?[1] ?? 0,step = copy.mirrored ? -1 : 1\n+            let separate = input !== output\n             let width = rect.right-rect.left\n             for y in rect.top..<rect.bottom {\n                 var a = copy.sourceIndex(rect.left,y),b = y*output.width+rect.left\n@@ -1339,14 +1340,44 @@ extension OriginalMacDisplayBackend {\n                     // and the store alone (the live app's targets are always\n                     // full; on the A12 40% less time per keyed sprite pixel;\n                     // CORE_REALTIME 1j).\n+                    // Four pixels at a time where the surfaces differ (no\n+                    // overlap, so reading four sources before writing four\n+                    // targets is the scalar order's result): the same key test\n+                    // per lane, and a lane the key rejects is stored back\n+                    // unchanged (CORE_REALTIME R4). The rest of the row, and\n+                    // every copy within one surface, stays scalar.\n+                    var done = 0\n+                    #if _endian(little)\n+                    if separate && width >= 4 {\n+                        let source = UnsafeRawPointer(inputValues),target = UnsafeMutableRawPointer(outputValues)\n+                        let rgb = SIMD4<UInt32>(repeating:0xffffff),below = SIMD4<UInt32>(repeating:low),above = SIMD4<UInt32>(repeating:high)\n+                        while done+4 <= width {\n+                            let pixels: SIMD4<UInt32>\n+                            if step > 0 { pixels = source.loadUnaligned(fromByteOffset:a*4,as:SIMD4<UInt32>.self) }\n+                            else {\n+                                let r = source.loadUnaligned(fromByteOffset:(a-3)*4,as:SIMD4<UInt32>.self)\n+                                pixels = SIMD4(r[3],r[2],r[1],r[0])\n+                            }\n+                            if keyed {\n+                                let value = pixels & rgb,take = (value .< below) .| (value .> above)\n+                                let old = target.loadUnaligned(fromByteOffset:b*4,as:SIMD4<UInt32>.self)\n+                                target.storeBytes(of:old.replacing(with:pixels,where:take),toByteOffset:b*4,as:SIMD4<UInt32>.self)\n+                            } else {\n+                                // Mirrored only: a forward unkeyed known row took the row copy above.\n+                                target.storeBytes(of:pixels,toByteOffset:b*4,as:SIMD4<UInt32>.self)\n+                            }\n+                            a += 4*step;b += 4;done += 4\n+                        }\n+                    }\n+                    #endif\n                     if keyed {\n-                        for _ in 0..<width {\n+                        for _ in done..<width {\n                             let pixel = inputValues[a],value = UInt32(littleEndian:pixel) & 0xffffff\n                             if value < low || value > high { outputValues[b] = pixel }\n                             a += step;b += 1\n                         }\n                     } else {\n-                        for _ in 0..<width { outputValues[b] = inputValues[a];a += step;b += 1 }\n+                        for _ in done..<width { outputValues[b] = inputValues[a];a += step;b += 1 }\n                     }\n                     continue\n                 }\n",
+ "result": {
+  "frames": "identical (all 10 scenarios, AppKit, shipping build); suites passed (12 raster tests incl. a new key-range/top-byte test that fails when the 24-bit mask is dropped)",
+  "phone": {
+   "demo": {
+    "rte4_same_session": [
+     {
+      "label": "rte4-for-rtr4-demo1",
+      "scenario": "demo",
+      "runSeconds": 188,
+      "peakResidentMB": 1430,
+      "ticksPerSecond": 33.75,
+      "busySeconds": 93.94,
+      "bodies": 900,
+      "completeMsPerTick": 8.2,
+      "partAssembliesPerTick": 0.0,
+      "menuMsPerStep": 0.59,
+      "menuStepsPerTick": 4.13,
+      "idleMsPerStep": 0.474,
+      "idleIterationMs": 0.533,
+      "idleStepsPerTick": 3.13,
+      "tickStepMs": 0.942,
+      "mainCpuShare": 0.395,
+      "renderCpuShare": 0.204,
+      "mainMsPerTick": 11.71,
+      "renderMsPerTick": 6.03,
+      "presentMsPerTick": 5.71,
+      "releaseMsPerTick": 1.7,
+      "presentCounts": {
+       "submitted": 1500,
+       "drawn": 1500,
+       "waits": 0
+      }
+     },
+     {
+      "label": "rte4-for-rtr4-demo2",
+      "scenario": "demo",
+      "runSeconds": 188,
+      "peakResidentMB": 1522,
+      "ticksPerSecond": 33.66,
+      "busySeconds": 93.8,
+      "bodies": 900,
+      "completeMsPerTick": 8.2,
+      "partAssembliesPerTick": 0.0,
+      "menuMsPerStep": 0.6,
+      "menuStepsPerTick": 4.13,
+      "idleMsPerStep": 0.483,
+      "idleIterationMs": 0.542,
+      "idleStepsPerTick": 3.13,
+      "tickStepMs": 0.954,
+      "mainCpuShare": 0.395,
+      "renderCpuShare": 0.205,
+      "mainMsPerTick": 11.74,
+      "renderMsPerTick": 6.08,
+      "presentMsPerTick": 5.69,
+      "releaseMsPerTick": 1.7,
+      "presentCounts": {
+       "submitted": 1500,
+       "drawn": 1500,
+       "waits": 0
+      }
+     }
+    ],
+    "after": [
+     {
+      "label": "rtr4-demo1",
+      "scenario": "demo",
+      "runSeconds": 188,
+      "peakResidentMB": 1468,
+      "ticksPerSecond": 33.74,
+      "busySeconds": 94.38,
+      "bodies": 900,
+      "completeMsPerTick": 8.2,
+      "partAssembliesPerTick": 0.0,
+      "menuMsPerStep": 0.59,
+      "menuStepsPerTick": 4.13,
+      "idleMsPerStep": 0.475,
+      "idleIterationMs": 0.535,
+      "idleStepsPerTick": 3.13,
+      "tickStepMs": 0.956,
+      "mainCpuShare": 0.395,
+      "renderCpuShare": 0.211,
+      "mainMsPerTick": 11.71,
+      "renderMsPerTick": 6.26,
+      "presentMsPerTick": 5.64,
+      "releaseMsPerTick": 1.72,
+      "presentCounts": {
+       "submitted": 1500,
+       "drawn": 1500,
+       "waits": 0
+      }
+     },
+     {
+      "label": "rtr4-demo2",
+      "scenario": "demo",
+      "runSeconds": 188,
+      "peakResidentMB": 1110,
+      "ticksPerSecond": 33.75,
+      "busySeconds": 93.94,
+      "bodies": 900,
+      "completeMsPerTick": 8.2,
+      "partAssembliesPerTick": 0.0,
+      "menuMsPerStep": 0.59,
+      "menuStepsPerTick": 4.13,
+      "idleMsPerStep": 0.473,
+      "idleIterationMs": 0.532,
+      "idleStepsPerTick": 3.13,
+      "tickStepMs": 0.964,
+      "mainCpuShare": 0.397,
+      "renderCpuShare": 0.214,
+      "mainMsPerTick": 11.77,
+      "renderMsPerTick": 6.33,
+      "presentMsPerTick": 5.67,
+      "releaseMsPerTick": 1.75,
+      "presentCounts": {
+       "submitted": 1500,
+       "drawn": 1500,
+       "waits": 0
+      }
+     },
+     {
+      "label": "rtr4-demo3",
+      "scenario": "demo",
+      "runSeconds": 189,
+      "peakResidentMB": 1365,
+      "ticksPerSecond": 33.68,
+      "busySeconds": 94.27,
+      "bodies": 900,
+      "completeMsPerTick": 8.2,
+      "partAssembliesPerTick": 0.0,
+      "menuMsPerStep": 0.6,
+      "menuStepsPerTick": 4.13,
+      "idleMsPerStep": 0.478,
+      "idleIterationMs": 0.539,
+      "idleStepsPerTick": 3.13,
+      "tickStepMs": 0.989,
+      "mainCpuShare": 0.398,
+      "renderCpuShare": 0.224,
+      "mainMsPerTick": 11.82,
+      "renderMsPerTick": 6.66,
+      "presentMsPerTick": 5.73,
+      "releaseMsPerTick": 1.66,
+      "presentCounts": {
+       "submitted": 1500,
+       "drawn": 1500,
+       "waits": 0
+      }
+     }
+    ],
+    "render": "6.05 -> 6.42"
+   },
+   "vs": {
+    "rte4_gate_runs": [
+     {
+      "label": "rte4-vs1",
+      "scenario": "vs",
+      "runSeconds": 207,
+      "peakResidentMB": 1429,
+      "ticksPerSecond": 33.94,
+      "busySeconds": 102.26,
+      "bodies": 1800,
+      "completeMsPerTick": 7.6,
+      "partAssembliesPerTick": 0.0,
+      "menuMsPerStep": 0.6,
+      "menuStepsPerTick": 4.12,
+      "idleMsPerStep": 0.478,
+      "idleIterationMs": 0.538,
+      "idleStepsPerTick": 3.12,
+      "tickStepMs": 0.98,
+      "mainCpuShare": 0.385,
+      "renderCpuShare": 0.277,
+      "mainMsPerTick": 11.33,
+      "renderMsPerTick": 8.15,
+      "presentMsPerTick": 5.74,
+      "releaseMsPerTick": 2.07,
+      "presentCounts": {
+       "submitted": 2100,
+       "drawn": 2100,
+       "waits": 0
+      }
+     },
+     {
+      "label": "rte4-vs2",
+      "scenario": "vs",
+      "runSeconds": 207,
+      "peakResidentMB": 1449,
+      "ticksPerSecond": 33.91,
+      "busySeconds": 102.54,
+      "bodies": 1800,
+      "completeMsPerTick": 7.6,
+      "partAssembliesPerTick": 0.0,
+      "menuMsPerStep": 0.61,
+      "menuStepsPerTick": 4.12,
+      "idleMsPerStep": 0.479,
+      "idleIterationMs": 0.541,
+      "idleStepsPerTick": 3.12,
+      "tickStepMs": 1.015,
+      "mainCpuShare": 0.385,
+      "renderCpuShare": 0.29,
+      "mainMsPerTick": 11.36,
+      "renderMsPerTick": 8.55,
+      "presentMsPerTick": 5.71,
+      "releaseMsPerTick": 2.05,
+      "presentCounts": {
+       "submitted": 2100,
+       "drawn": 2100,
+       "waits": 0
+      }
+     },
+     {
+      "label": "rte4-vs3",
+      "scenario": "vs",
+      "runSeconds": 207,
+      "peakResidentMB": 1549,
+      "ticksPerSecond": 33.95,
+      "busySeconds": 102.66,
+      "bodies": 1800,
+      "completeMsPerTick": 7.5,
+      "partAssembliesPerTick": 0.0,
+      "menuMsPerStep": 0.6,
+      "menuStepsPerTick": 4.12,
+      "idleMsPerStep": 0.475,
+      "idleIterationMs": 0.535,
+      "idleStepsPerTick": 3.12,
+      "tickStepMs": 0.993,
+      "mainCpuShare": 0.384,
+      "renderCpuShare": 0.275,
+      "mainMsPerTick": 11.31,
+      "renderMsPerTick": 8.09,
+      "presentMsPerTick": 5.69,
+      "releaseMsPerTick": 2.09,
+      "presentCounts": {
+       "submitted": 2100,
+       "drawn": 2100,
+       "waits": 0
+      }
+     }
+    ],
+    "after": [
+     {
+      "label": "rtr4-vs1",
+      "scenario": "vs",
+      "runSeconds": 207,
+      "peakResidentMB": 1392,
+      "ticksPerSecond": 33.86,
+      "busySeconds": 102.83,
+      "bodies": 1800,
+      "completeMsPerTick": 7.6,
+      "partAssembliesPerTick": 0.0,
+      "menuMsPerStep": 0.6,
+      "menuStepsPerTick": 4.12,
+      "idleMsPerStep": 0.477,
+      "idleIterationMs": 0.539,
+      "idleStepsPerTick": 3.12,
+      "tickStepMs": 0.974,
+      "mainCpuShare": 0.379,
+      "renderCpuShare": 0.295,
+      "mainMsPerTick": 11.18,
+      "renderMsPerTick": 8.72,
+      "presentMsPerTick": 5.74,
+      "releaseMsPerTick": 2.05,
+      "presentCounts": {
+       "submitted": 2100,
+       "drawn": 2100,
+       "waits": 0
+      }
+     }
+    ],
+    "render": "8.26 -> 8.72"
+   }
+  },
+  "verdict": "slower: the render thread +0.36 ms per tick in the Demo and ~+0.6 in vs; the gate was stopped after these runs"
+ },
+ "why": "the aarch64 code is vector (ldr q, bic, cmhi, orr, bif, str q) but each group carries overflow checks on the byte offsets (a*4), the keyed/mirrored branches and reloaded key constants, and always loads and stores the target where the scalar loop skips transparent pixels",
+ "next": "R4b: separate tight loops (pointer arithmetic, constants hoisted), a group the key rejects entirely skipped and one it accepts entirely stored without reading the target",
+ "review": "independent read-only review approved with nits (equivalence, no aliasing between storages, no race on the rejected lanes' write-back); nits applied (let, a comment, the key-range and top-byte test)"
+}

@@ -1320,6 +1320,7 @@ extension OriginalMacDisplayBackend {
             // (MOBILE_PERFORMANCE steps 4-5). Same pixels and bits; the
             // loop never reads the target's mask.
             let keyed = copy.key != nil,low = copy.key?[0] ?? 0,high = copy.key?[1] ?? 0,step = copy.mirrored ? -1 : 1
+            let separate = input !== output
             let width = rect.right-rect.left
             for y in rect.top..<rect.bottom {
                 var a = copy.sourceIndex(rect.left,y),b = y*output.width+rect.left
@@ -1339,14 +1340,53 @@ extension OriginalMacDisplayBackend {
                     // and the store alone (the live app's targets are always
                     // full; on the A12 40% less time per keyed sprite pixel;
                     // CORE_REALTIME 1j).
+                    // Four pixels at a time where the surfaces differ (no
+                    // overlap, so reading four sources before writing four
+                    // targets is the scalar order's result), with the same key
+                    // test per lane (CORE_REALTIME R4). A group the key
+                    // rejects entirely is skipped and one it accepts entirely
+                    // is stored as is; a mixed group stores the rejected
+                    // lanes' target values back unchanged. The rest of the
+                    // row, and every copy within one surface, stays scalar.
+                    var done = 0
+                    #if _endian(little)
+                    if separate && width >= 4 {
+                        let groups = width >> 2
+                        var source = UnsafeRawPointer(inputValues.advanced(by:step > 0 ? a : a &- 3))
+                        var target = UnsafeMutableRawPointer(outputValues.advanced(by:b))
+                        let advance = step > 0 ? 16 : -16
+                        if keyed {
+                            let rgb = SIMD4<UInt32>(repeating:0xffffff),below = SIMD4<UInt32>(repeating:low),above = SIMD4<UInt32>(repeating:high)
+                            for _ in 0..<groups {
+                                var pixels = source.loadUnaligned(as:SIMD4<UInt32>.self)
+                                if step < 0 { pixels = SIMD4(pixels[3],pixels[2],pixels[1],pixels[0]) }
+                                let value = pixels & rgb,take = (value .< below) .| (value .> above)
+                                if all(take) { target.storeBytes(of:pixels,as:SIMD4<UInt32>.self) }
+                                else if any(take) {
+                                    let old = target.loadUnaligned(as:SIMD4<UInt32>.self)
+                                    target.storeBytes(of:old.replacing(with:pixels,where:take),as:SIMD4<UInt32>.self)
+                                }
+                                source = source.advanced(by:advance);target = target.advanced(by:16)
+                            }
+                        } else {
+                            // Mirrored only: a forward unkeyed known row took the row copy above.
+                            for _ in 0..<groups {
+                                let r = source.loadUnaligned(as:SIMD4<UInt32>.self)
+                                target.storeBytes(of:SIMD4(r[3],r[2],r[1],r[0]),as:SIMD4<UInt32>.self)
+                                source = source.advanced(by:advance);target = target.advanced(by:16)
+                            }
+                        }
+                        done = groups << 2;a = a &+ done &* step;b = b &+ done
+                    }
+                    #endif
                     if keyed {
-                        for _ in 0..<width {
+                        for _ in done..<width {
                             let pixel = inputValues[a],value = UInt32(littleEndian:pixel) & 0xffffff
                             if value < low || value > high { outputValues[b] = pixel }
                             a += step;b += 1
                         }
                     } else {
-                        for _ in 0..<width { outputValues[b] = inputValues[a];a += step;b += 1 }
+                        for _ in done..<width { outputValues[b] = inputValues[a];a += step;b += 1 }
                     }
                     continue
                 }
