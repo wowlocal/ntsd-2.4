@@ -280,18 +280,25 @@ main thread; message-loop iterations 4.12 × 1.14 ms; render thread 18.7 ms,
   main about 11.3 ms per tick in vs and 11.85 in the Demo; render about 8.1
   and 6.0 (the 8 ms goal for that thread is met in the Demo and about met
   in vs); the presenter thread about 5.75, the release thread about 2.
-  **Where the rest is:** the largest remaining main-thread costs are the
-  transactional copies themselves (each stage's first write to a record
-  another stage still holds copies it: the loaded entry, the AI's globals,
-  the menu input, the hit pass, ~1.7% of the main thread in copy-on-write
-  alone, plus the State, Bootstrap and session copies) — what the user's
-  decisions Q1/Q2 (B, D: 0.6–1.2 ms) would remove; Q3 (L6b, 0.15–0.3) and
-  Q4 (P, 0.4–0.9) are the others. Without decisions: [H2](CORE_REALTIME_H2.md)
-  and [H3](CORE_REALTIME_H3.md), each about 0.15 ms with a large oracle; record copies through the passes' frame/header closures (~1%);
-  on the render thread the Android present (38%: channel swap, post) and the
-  two-thread row split, which help the 8 ms goal for that thread but, like
-  R2, may cost the main thread through memory contention. Left from 4aa's review: the other packagers'
-  opt-in (the macOS app build, Linux, Windows, iOS).
+  **Where the rest is** (profiles `rtr3-prof-vs`, `rte4-prof-vs`): the
+  largest remaining main-thread costs are the transactional copies
+  themselves: copy-on-write of the 400-actor array in the local input and
+  the control pass (~2.1%), the first writes to records another stage still
+  holds (the loaded entry 0.8%, the AI's globals 0.55%, the hit pass 0.5%,
+  the menu input 0.4%), and the State, Bootstrap and session copies — what
+  the user's decisions Q1/Q2 (B, D: 0.6–1.2 ms) would remove; Q3 (L6b,
+  0.15–0.3) and Q4 (P, 0.4–0.9: the replay's display checks, 7.8% of the
+  main thread, off it) are the others. **Input needed: the user's answers
+  to Q1–Q4** ([TIER3](CORE_REALTIME_TIER3.md#decisions-for-the-user)).
+  Without decisions, each remaining item is ~1% or less: L6 (a lazy idle
+  batch: the delivery context's Bootstrap copy and its free, ~0.6%), the
+  idle commit's State and session copies for `prepare` (~0.9%), the
+  runtime's `lastRequest` overwrite (~0.4%), [H2](CORE_REALTIME_H2.md) and
+  [H3](CORE_REALTIME_H3.md) (~0.15 ms each with a large oracle), and the
+  outlined optional copies spread over the passes (~1.8%, no single site).
+  Freeing is now off the main thread (R3: arrays 7.5 → 0.6%). Left from
+  4aa's review: the other packagers' opt-in (the macOS app build, Linux,
+  Windows, iOS).
 - **B2** ([plan](CORE_REALTIME_B2.md)): in-place nested passes under the first
   transactional copy; P1–P4 done (P4b–P4f: every gameplay-body pass that
   copied per tick); P4g the output and mode label. Left: the HUD, the
