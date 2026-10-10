@@ -200,7 +200,8 @@ def main():
         for run in range(1, o.runs + 1):
             for index, build in enumerate(builds):
                 name = Path(build).parent.name if o.local else (Path(build).stem if build else "installed")
-                label = f"{o.label}-{name}-{run}" if len(builds) > 1 or o.runs > 1 else o.label
+                # The run's position in the interleaved sequence keeps labels unique.
+                label = f"{o.label}-{len(rows) + 1:02d}-{name}" if len(builds) > 1 or o.runs > 1 else o.label
                 row = local_run(o, build, label) if o.local else android_run(o, build, label)
                 row["build"] = name; rows.append(row)
                 with open(out / "load_memory.jsonl", "a") as f:

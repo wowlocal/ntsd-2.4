@@ -11,8 +11,10 @@ public enum PortableSHA256 {
     }
 
     struct Hasher {
-        private var state: [UInt32] = [0x6a09e667, 0xbb67ae85, 0x3c6ef372, 0xa54ff53a,
-                                       0x510e527f, 0x9b05688c, 0x1f83d9ab, 0x5be0cd19]
+        // The eight state words as values: an array state was copied (allocated)
+        // for every 64-byte block (MEMORY_LOADING L3).
+        private var h0: UInt32 = 0x6a09e667, h1: UInt32 = 0xbb67ae85, h2: UInt32 = 0x3c6ef372, h3: UInt32 = 0xa54ff53a
+        private var h4: UInt32 = 0x510e527f, h5: UInt32 = 0x9b05688c, h6: UInt32 = 0x1f83d9ab, h7: UInt32 = 0x5be0cd19
         private var pending: [UInt8] = []
         private var length: UInt64 = 0
 
@@ -46,31 +48,30 @@ public enum PortableSHA256 {
             length = savedLength
             var digest: [UInt8] = []
             digest.reserveCapacity(32)
-            for word in state { for shift in stride(from: 24, through: 0, by: -8) { digest.append(UInt8(truncatingIfNeeded: word >> UInt32(shift))) } }
+            for word in [h0, h1, h2, h3, h4, h5, h6, h7] { for shift in stride(from: 24, through: 0, by: -8) { digest.append(UInt8(truncatingIfNeeded: word >> UInt32(shift))) } }
             return digest
         }
 
         private mutating func compress(_ block: UnsafeRawPointer) {
-            var next = state
-            withUnsafeTemporaryAllocation(of: UInt32.self, capacity: 64) { w in
-                for t in 0..<16 { w[t] = UInt32(bigEndian: block.loadUnaligned(fromByteOffset: t * 4, as: UInt32.self)) }
-                for t in 16..<64 {
-                    let s0 = Self.rotr(w[t - 15], 7) ^ Self.rotr(w[t - 15], 18) ^ (w[t - 15] >> 3)
-                    let s1 = Self.rotr(w[t - 2], 17) ^ Self.rotr(w[t - 2], 19) ^ (w[t - 2] >> 10)
-                    w[t] = w[t - 16] &+ s0 &+ w[t - 7] &+ s1
+            var a = h0, b = h1, c = h2, d = h3, e = h4, f = h5, g = h6, h = h7
+            PortableSHA256.k.withUnsafeBufferPointer { k in
+                withUnsafeTemporaryAllocation(of: UInt32.self, capacity: 64) { w in
+                    for t in 0..<16 { w[t] = UInt32(bigEndian: block.loadUnaligned(fromByteOffset: t * 4, as: UInt32.self)) }
+                    for t in 16..<64 {
+                        let s0 = Self.rotr(w[t - 15], 7) ^ Self.rotr(w[t - 15], 18) ^ (w[t - 15] >> 3)
+                        let s1 = Self.rotr(w[t - 2], 17) ^ Self.rotr(w[t - 2], 19) ^ (w[t - 2] >> 10)
+                        w[t] = w[t - 16] &+ s0 &+ w[t - 7] &+ s1
+                    }
+                    for t in 0..<64 {
+                        let t1 = h &+ (Self.rotr(e, 6) ^ Self.rotr(e, 11) ^ Self.rotr(e, 25)) &+ ((e & f) ^ (~e & g)) &+ k[t] &+ w[t]
+                        let t2 = (Self.rotr(a, 2) ^ Self.rotr(a, 13) ^ Self.rotr(a, 22)) &+ ((a & b) ^ (a & c) ^ (b & c))
+                        h = g; g = f; f = e; e = d &+ t1
+                        d = c; c = b; b = a; a = t1 &+ t2
+                    }
                 }
-                var a = next[0], b = next[1], c = next[2], d = next[3]
-                var e = next[4], f = next[5], g = next[6], h = next[7]
-                for t in 0..<64 {
-                    let t1 = h &+ (Self.rotr(e, 6) ^ Self.rotr(e, 11) ^ Self.rotr(e, 25)) &+ ((e & f) ^ (~e & g)) &+ PortableSHA256.k[t] &+ w[t]
-                    let t2 = (Self.rotr(a, 2) ^ Self.rotr(a, 13) ^ Self.rotr(a, 22)) &+ ((a & b) ^ (a & c) ^ (b & c))
-                    h = g; g = f; f = e; e = d &+ t1
-                    d = c; c = b; b = a; a = t1 &+ t2
-                }
-                next[0] &+= a; next[1] &+= b; next[2] &+= c; next[3] &+= d
-                next[4] &+= e; next[5] &+= f; next[6] &+= g; next[7] &+= h
             }
-            state = next
+            h0 &+= a; h1 &+= b; h2 &+= c; h3 &+= d
+            h4 &+= e; h5 &+= f; h6 &+= g; h7 &+= h
         }
 
         @inline(__always) private static func rotr(_ x: UInt32, _ n: UInt32) -> UInt32 { (x >> n) | (x << (32 - n)) }

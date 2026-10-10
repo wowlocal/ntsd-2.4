@@ -57,7 +57,7 @@ public struct OriginalApplicationCatalogInputs: Equatable {
             }
             return Array(try Data(contentsOf:url))
         }
-        func digest(_ bytes: [UInt8]) -> String { SHA256.hash(data:Data(bytes)).map { String(format:"%02x",$0) }.joined() }
+        func digest(_ bytes: [UInt8]) -> String { OriginalConcurrentInputs.hex(SHA256.hash(data:bytes)) }
         let raw = try read("manifest.json")
         guard digest(raw) == manifestSHA256 else { throw Boundary.invalid("Manifest digest") }
         let manifest = try JSONDecoder().decode(Manifest.self,from:Data(raw))
@@ -89,17 +89,25 @@ public struct OriginalApplicationCatalogInputs: Equatable {
         guard actualFiles == Set(manifest.entries.map(\.path)).union(["manifest.json"]),actualDirectories == expectedDirectories else {
             throw Boundary.invalid("Package composition")
         }
-        var files: [String:[UInt8]] = [:],bitmaps: [String:OriginalApplicationStartupInputs.Bitmap] = [:],music: [String:[UInt8]] = [:]
-        for e in manifest.entries {
+        enum Loaded { case file([UInt8]),bitmap(OriginalApplicationStartupInputs.Bitmap),music([UInt8]) }
+        let loaded = OriginalConcurrentInputs.map(manifest.entries) { e -> Loaded in
             guard (0...100_000_000).contains(e.count) else { throw Boundary.invalid("Input extent") }
             let bytes = try read(e.path,count:e.count)
             guard bytes.count == e.count,digest(bytes) == e.sha256 else { throw Boundary.invalid(e.name) }
             switch e.kind {
-            case "file": files[e.name] = bytes
-            case "bitmapFile": bitmaps[e.name] = try .init(bitmapFile:bytes)
-            case "dib": bitmaps[e.name] = try .init(dib:bytes)
-            case "music": music[e.name] = bytes
+            case "file": return .file(bytes)
+            case "bitmapFile": return .bitmap(try .init(bitmapFile:bytes))
+            case "dib": return .bitmap(try .init(dib:bytes))
+            case "music": return .music(bytes)
             default: throw Boundary.invalid("Input role")
+            }
+        }
+        var files: [String:[UInt8]] = [:],bitmaps: [String:OriginalApplicationStartupInputs.Bitmap] = [:],music: [String:[UInt8]] = [:]
+        for (e,result) in zip(manifest.entries,loaded) {
+            switch try result.get() {
+            case .file(let bytes): files[e.name] = bytes
+            case .bitmap(let bitmap): bitmaps[e.name] = bitmap
+            case .music(let bytes): music[e.name] = bytes
             }
         }
         guard files.count == 521,bitmaps.count == 669,music.count == 8 else { throw Boundary.invalid("Input roles") }
