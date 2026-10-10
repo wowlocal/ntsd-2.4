@@ -348,14 +348,33 @@ import NTSDCore
         /// dispatch, closure block and render-thread wake per batch instead of
         /// per draw (CORE_REALTIME 1k). Main thread only, as `submit`.
         var batching = false
-        private var pending: [@Sendable () throws -> Void] = []
-        func submit(_ work: @escaping @Sendable () throws -> Void) {
+        /// Queued work: a replay's copies and fills as values, so each draw
+        /// queues no closure of its own (CORE_REALTIME tier 3 G4a), and any
+        /// other work as a closure. Run on the render thread only.
+        enum Work: @unchecked Sendable {
+            case copy(CopyPlan,Storage,Storage,(Int,Int,Int,Int,UInt32?),OriginalPresentDelivery?,FramePool)
+            case fill(Storage,FrontRect?,UInt32,(Int,Int,Int,Int,UInt32?),OriginalPresentDelivery?,FramePool)
+            case closure(@Sendable () throws -> Void)
+            func perform() throws {
+                switch self {
+                case let .copy(plan,input,output,rect,present,pool):
+                    try OriginalMacDisplayBackend.presentCopy(plan,input,output,rect,present,pool)
+                case let .fill(data,region,color,rect,present,pool):
+                    OriginalMacDisplayBackend.fillPixels(data,region,color)
+                    if let present { present.deliver(try OriginalMacDisplayBackend.crop(data,rect,black:true,pool:pool)) }
+                case let .closure(work): try work()
+                }
+            }
+        }
+        private var pending: [Work] = []
+        func submit(_ work: @escaping @Sendable () throws -> Void) { submit(.closure(work)) }
+        func submit(_ work: Work) {
             queued = true
             if batching { pending.append(work); return }
             queue.async { self.run(work) }
         }
-        private func run(_ work: () throws -> Void) {
-            do { try work() } catch { lock.lock(); if failure == nil { failure = error }; lock.unlock() }
+        private func run(_ work: Work) {
+            do { try work.perform() } catch { lock.lock(); if failure == nil { failure = error }; lock.unlock() }
         }
         func dispatch() {
             guard !pending.isEmpty else { return }
@@ -1263,6 +1282,25 @@ extension OriginalMacDisplayBackend {
     /// Whether this copy writes the whole source, unkeyed and not mirrored,
     /// onto exactly the presented rectangle, every source pixel known: then
     /// the presented crop equals the source's bytes (R1).
+    /// A pipelined copy's render-thread work (`RenderExecutor.Work.copy`).
+    private nonisolated static func presentCopy(_ plan: CopyPlan,_ input: Storage,_ output: Storage,_ rect: (Int,Int,Int,Int,UInt32?),
+                                                    _ present: OriginalPresentDelivery?,_ pool: FramePool) throws {
+        if let present,presentsWholeSource(plan,input,rect) {
+            // A whole known source copied unkeyed onto exactly the
+            // presented rectangle: the crop would read back exactly
+            // the source's bytes, so the frame is cropped from the
+            // source and the target's copy is recorded, written at
+            // its next access (one full-frame pass fewer;
+            // CORE_REALTIME R1, CORE_REALTIME_RENDER_PASSES P1).
+            // The frame is the source's own buffer, lent (P2):
+            // the source's next write moves to another buffer.
+            let frame = input.lend()
+            output.deferCopy(left:rect.0,top:rect.1,frame:frame)
+            present.deliver(frame)
+        } else {
+            copyPixels(plan,input,output); if let present { present.deliver(try crop(output,rect,black:true,pool:pool)) }
+        }
+    }
     private nonisolated static func presentsWholeSource(_ copy: CopyPlan,_ input: Storage,_ rect: (Int,Int,Int,Int,UInt32?)) -> Bool {
         guard copy.key == nil,!copy.mirrored,let region = copy.region,region.left == copy.destination.left,region.top == copy.destination.top,
               region.right == copy.destination.right,region.bottom == copy.destination.bottom,
@@ -1371,7 +1409,7 @@ extension OriginalMacDisplayBackend {
             let data = target.surface.storage!,region = target.region,rect = target.delivery
             if let present = try pipeline(rect,pixels:{ Self.fillPixels(data,region,color) }) {
                 let pool = framePool
-                renderer.submit { Self.fillPixels(data,region,color); if let present { present.deliver(try Self.crop(data,rect,black:true,pool:pool)) } }
+                renderer.submit(.fill(data,region,color,rect,present,pool))
             } else {
                 Self.fillPixels(data,region,color)
                 if let window = rect.4 { try windows.present(framebuffer(data,rect),in:window) }
@@ -1380,24 +1418,7 @@ extension OriginalMacDisplayBackend {
         case .copy(let copy):
             let input = copy.source.storage!,output = copy.target.surface.storage!,rect = copy.target.delivery,plan = CopyPlan(copy)
             if let present = try pipeline(rect,pixels:{ Self.copyPixels(plan,input,output) }) {
-                let pool = framePool
-                renderer.submit {
-                    if let present,Self.presentsWholeSource(plan,input,rect) {
-                        // A whole known source copied unkeyed onto exactly the
-                        // presented rectangle: the crop would read back exactly
-                        // the source's bytes, so the frame is cropped from the
-                        // source and the target's copy is recorded, written at
-                        // its next access (one full-frame pass fewer;
-                        // CORE_REALTIME R1, CORE_REALTIME_RENDER_PASSES P1).
-                        // The frame is the source's own buffer, lent (P2):
-                        // the source's next write moves to another buffer.
-                        let frame = input.lend()
-                        output.deferCopy(left:rect.0,top:rect.1,frame:frame)
-                        present.deliver(frame)
-                    } else {
-                        Self.copyPixels(plan,input,output); if let present { present.deliver(try Self.crop(output,rect,black:true,pool:pool)) }
-                    }
-                }
+                renderer.submit(.copy(plan,input,output,rect,present,framePool))
             } else {
                 Self.copyPixels(plan,input,output)
                 if let window = rect.4 { try windows.present(framebuffer(output,rect),in:window) }
