@@ -11,7 +11,10 @@ public struct OriginalApplicationStartupInputs: Equatable {
         case missing(String), invalid(String), unsupportedName(String)
     }
     public struct Bitmap: Equatable {
-        public let dib: [UInt8]
+        /// The DIB bytes, kept compressed for a large image (OriginalBitmapBytes)
+        /// and decompressed on each read.
+        public var dib: [UInt8] { bytes.dib }
+        private let bytes: OriginalBitmapBytes
         /// Exact file header distinguishes a file image from an embedded DIB.
         public let bitmapFileHeader: [UInt8]?
         /// Where the pixel data starts in `dib`, as resolved when the bitmap loaded.
@@ -59,7 +62,7 @@ public struct OriginalApplicationStartupInputs: Equatable {
             }
             let stride = ((Int64(w)*Int64(bits)+31)/32)*4
             guard stride <= Int64(Int32.max) else { throw Boundary.invalid("DIB row extent") }
-            self.dib = dib;width = w;height = h;rowBytes = Int32(stride);self.planes = planes;bitsPerPixel = bits
+            width = w;height = h;rowBytes = Int32(stride);self.planes = planes;bitsPerPixel = bits
             bitmapFileHeader = fileHeader
             if let pixelOffset {
                 let colors = Int(word(32))
@@ -72,6 +75,13 @@ public struct OriginalApplicationStartupInputs: Equatable {
             // still fails at load with the decoder's error.
             self.pixelOffset = try OriginalDIBPixels.validate(dib:dib,pixelOffset:pixelOffset)
             declaredPixelOffset = pixelOffset
+            bytes = OriginalBitmapBytes(dib)
+        }
+        /// Every field as before; the bytes compare by content unless shared.
+        public static func == (a: Bitmap,b: Bitmap) -> Bool {
+            a.bitmapFileHeader == b.bitmapFileHeader && a.pixelOffset == b.pixelOffset && a.declaredPixelOffset == b.declaredPixelOffset
+                && a.width == b.width && a.height == b.height && a.rowBytes == b.rowBytes && a.planes == b.planes
+                && a.bitsPerPixel == b.bitsPerPixel && (a.bytes === b.bytes || a.dib == b.dib)
         }
         /// Win32 BITMAP fields at the declared image boundary, not pixels or a
         /// host graphics object. Source colors/masks remain separate from surfaces.
@@ -113,21 +123,38 @@ public struct OriginalApplicationStartupInputs: Equatable {
             guard values.isRegularFile == true,values.isSymbolicLink != true else { throw Boundary.invalid(path) }
             return Array(try Data(contentsOf:url))
         }
-        func digest(_ bytes: [UInt8]) -> String { SHA256.hash(data:Data(bytes)).map { String(format:"%02x",$0) }.joined() }
+        func digest(_ bytes: [UInt8]) -> String { OriginalConcurrentInputs.hex(SHA256.hash(data:bytes)) }
         let raw = try read("manifest.json")
         guard digest(raw) == manifestSHA256 else { throw Boundary.invalid("Manifest digest") }
         let manifest = try JSONDecoder().decode(Manifest.self,from:Data(raw))
         guard manifest.version == 1,manifest.globalAddress == 0x44d000,manifest.globalCount == 0xc3a8,
               manifest.exeSHA256 == "3f7ac67c5890ef979ee24a6dae5528056e7f631725c292cf9cb0a928ebeff71c",
               manifest.absentFiles == ["data/ad0.txt"],manifest.entries.count == 45 else { throw Boundary.invalid("Manifest contract") }
-        var payload: [String:[UInt8]] = [:]
-        for e in manifest.entries {
-            guard !e.path.hasPrefix("/"),!e.path.split(separator:"/").contains(".."),payload[e.path] == nil else {
-                throw Boundary.invalid("Manifest path")
-            }
+        // Entries are read and verified on all cores and taken in manifest
+        // order (MEMORY_LOADING L3, M1): the first failing entry in that order
+        // still fails first with its own error. A path the order check would
+        // refuse is never read.
+        // refuse is never read, and a file whose facts or size differ from the
+        // manifest's is read only in its turn, as before.
+        func permitted(_ path: String) -> Bool { !path.hasPrefix("/") && !path.split(separator:"/").contains("..") }
+        func declared(_ e: Manifest.Entry) -> Bool {
+            let url = directory.appendingPathComponent(e.path)
+            guard let values = try? OriginalFileFacts.of(url,[.isRegularFileKey,.isSymbolicLinkKey,.fileSizeKey]) else { return false }
+            return values.isRegularFile == true && values.isSymbolicLink != true && values.fileSize == e.count
+        }
+        func verified(_ e: Manifest.Entry) throws -> [UInt8] {
             let bytes = try read(e.path)
             guard bytes.count == e.count,digest(bytes) == e.sha256 else { throw Boundary.invalid(e.path) }
-            payload[e.path] = bytes
+            return bytes
+        }
+        let loaded = OriginalConcurrentInputs.map(manifest.entries) { e -> [UInt8]? in
+            guard permitted(e.path),declared(e) else { return nil }
+            return try verified(e)
+        }
+        var payload: [String:[UInt8]] = [:]
+        for (e,result) in zip(manifest.entries,loaded) {
+            guard permitted(e.path),payload[e.path] == nil else { throw Boundary.invalid("Manifest path") }
+            payload[e.path] = try result.get() ?? verified(e)
         }
         let rootPath = directory.standardizedFileURL.resolvingSymlinksInPath().path
         var actual = Set<String>()
@@ -147,9 +174,15 @@ public struct OriginalApplicationStartupInputs: Equatable {
               bytes.count == 0xc3a8,mask.count == bytes.count,mask.allSatisfy({ $0 == 1 }) else { throw Boundary.invalid("Package composition or PE masks") }
         let initial = try OriginalStateRecord(bytes:bytes,defined:mask.map { $0 == 1 })
         var bitmaps: [String:Bitmap] = [:],files: [String:[UInt8]] = [:]
-        for (path,bytes) in payload {
+        // The bitmaps decode (and compress, OriginalBitmapBytes) on all cores and
+        // are taken in the payload's own order, as the loop took them.
+        let entries = Array(payload)
+        let decoded = OriginalConcurrentInputs.map(entries) { entry -> Bitmap? in
+            entry.key.hasPrefix("bitmaps/") ? try Bitmap(entry.value) : nil
+        }
+        for ((path,bytes),bitmap) in zip(entries,decoded) {
             if path.hasPrefix("bitmaps/") {
-                let name = String(path.dropFirst(8).dropLast(4));bitmaps[name] = try Bitmap(bytes)
+                let name = String(path.dropFirst(8).dropLast(4));bitmaps[name] = try bitmap.get()!
             } else if path.hasPrefix("data/") { files[path.replacingOccurrences(of:"/",with:"\\")] = bytes }
         }
         return .init(initial:initial,bitmaps:bitmaps,files:files,fileNames:Set(files.keys).union(["data\\ad0.txt"]))

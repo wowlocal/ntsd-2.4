@@ -1,0 +1,128 @@
+import Foundation
+import XCTest
+@testable import NTSDCore
+
+/// MEMORY_LOADING M1: bitmap bytes kept compressed must read back exactly.
+final class OriginalLZ4Tests: XCTestCase {
+    struct Generator: RandomNumberGenerator {
+        var state: UInt64
+        // splitmix64: every output bit mixed (an LCG's low byte repeats every 256 values).
+        mutating func next() -> UInt64 {
+            state &+= 0x9e3779b97f4a7c15
+            var z = state
+            z = (z ^ (z >> 30)) &* 0xbf58476d1ce4e5b9; z = (z ^ (z >> 27)) &* 0x94d049bb133111eb
+            return z ^ (z >> 31)
+        }
+    }
+    func roundTrip(_ bytes: [UInt8], _ label: @autoclosure () -> String) throws {
+        let packed = bytes.withUnsafeBytes { OriginalLZ4.compress($0) }
+        XCTAssertEqual(try OriginalLZ4.decompress(packed, count: bytes.count), bytes, label())
+    }
+
+    func testEveryShapeOfInputReadsBackExactly() throws {
+        var random = Generator(state: 7)
+        for length in 0...300 {
+            try roundTrip((0..<length).map { _ in UInt8.random(in: 0...255, using: &random) }, "random \(length)")
+            try roundTrip([UInt8](repeating: UInt8(length & 255), count: length), "run \(length)")
+            try roundTrip((0..<length).map { UInt8(($0 % 3) * 40) }, "pixels \(length)")
+        }
+        // Sprite-like rows: a keyed background with sprites, repeated rows, noise.
+        var sheet: [UInt8] = []
+        for row in 0..<300 {
+            for x in 0..<400 {
+                let sprite = (x / 80 + row / 60) % 2 == 0 && (x % 80) > 10 && (x % 80) < 70
+                if sprite { sheet += [UInt8(x & 255), UInt8(row & 255), UInt8.random(in: 0...3, using: &random)] } else { sheet += [0, 0, 0] }
+            }
+        }
+        try roundTrip(sheet, "sheet")
+        let packed = sheet.withUnsafeBytes { OriginalLZ4.compress($0) }
+        XCTAssertLessThan(packed.count, sheet.count / 2)
+        try roundTrip((0..<300_000).map { _ in UInt8.random(in: 0...255, using: &random) }, "incompressible")
+        try roundTrip([UInt8](repeating: 9, count: 1_000_003), "long run")
+    }
+
+    func testDamagedDataIsRejectedNotRead() throws {
+        let bytes = (0..<5000).map { UInt8(($0 / 7) & 255) }
+        let packed = bytes.withUnsafeBytes { OriginalLZ4.compress($0) }
+        XCTAssertThrowsError(try OriginalLZ4.decompress(Array(packed.dropLast()), count: bytes.count))
+        XCTAssertThrowsError(try OriginalLZ4.decompress(packed, count: bytes.count + 1))
+        XCTAssertThrowsError(try OriginalLZ4.decompress(packed, count: bytes.count - 1))
+        XCTAssertThrowsError(try OriginalLZ4.decompress([0x0f, 0x00, 0x00], count: 100))   // a match length extension cut off
+        XCTAssertThrowsError(try OriginalLZ4.decompress([0x10, 0x41, 0x00, 0x00], count: 5))   // offset 0
+        XCTAssertThrowsError(try OriginalLZ4.decompress([0x10, 0x41, 0x05, 0x00], count: 20))   // offset beyond the output
+        XCTAssertThrowsError(try OriginalLZ4.decompress([0x10, 0x41, 0x01], count: 20))   // offset cut off
+        XCTAssertThrowsError(try OriginalLZ4.decompress([0x1f, 0x41, 0x01, 0x00, 0x10], count: 10))   // match past the output
+        XCTAssertThrowsError(try OriginalLZ4.decompress([], count: 0))
+        // The largest offset reaches back 65535 bytes.
+        var far = [UInt8](repeating: 0, count: 70_000)
+        for i in 0..<16 { far[i] = UInt8(i + 1); far[65535 + i] = UInt8(i + 1) }
+        for i in 16..<65535 { far[i] = UInt8(truncatingIfNeeded: i &* 2654435761 >> 13) }
+        try roundTrip(far, "offset 65535")
+    }
+
+    func testBitmapBytesCompressLargeImagesOnlyWhenSmaller() {
+        let small = [UInt8](repeating: 7, count: OriginalBitmapBytes.threshold - 1)
+        let large = [UInt8](repeating: 7, count: OriginalBitmapBytes.threshold)
+        var random = Generator(state: 3)
+        let noise = (0..<OriginalBitmapBytes.threshold * 2).map { _ in UInt8.random(in: 0...255, using: &random) }
+        XCTAssertFalse(OriginalBitmapBytes(small).isCompressed); XCTAssertEqual(OriginalBitmapBytes(small).dib, small)
+        XCTAssertTrue(OriginalBitmapBytes(large).isCompressed); XCTAssertEqual(OriginalBitmapBytes(large).dib, large)
+        XCTAssertFalse(OriginalBitmapBytes(noise).isCompressed); XCTAssertEqual(OriginalBitmapBytes(noise).dib, noise)
+    }
+
+    func testBitmapEqualityComparesEveryField() throws {
+        func file(width: Int32, pixel: UInt8) -> [UInt8] {
+            let stride = (Int(width) * 3 + 3) / 4 * 4, size = 54 + stride * 300
+            var b = [UInt8](repeating: pixel, count: size)
+            func put(_ v: UInt32, _ at: Int) { for i in 0..<4 { b[at + i] = UInt8(truncatingIfNeeded: v >> (8 * UInt32(i))) } }
+            b[0] = 0x42; b[1] = 0x4d; put(UInt32(size), 2); put(0, 6); put(54, 10); put(40, 14); put(UInt32(width), 18); put(300, 22)
+            b[26] = 1; b[27] = 0; b[28] = 24; b[29] = 0; put(0, 30); put(0, 34); put(0, 46)
+            return b
+        }
+        let a = try OriginalApplicationStartupInputs.Bitmap(bitmapFile: file(width: 300, pixel: 1))
+        XCTAssertEqual(a, try OriginalApplicationStartupInputs.Bitmap(bitmapFile: file(width: 300, pixel: 1)))
+        XCTAssertNotEqual(a, try OriginalApplicationStartupInputs.Bitmap(bitmapFile: file(width: 300, pixel: 2)))   // bytes
+        XCTAssertNotEqual(a, try OriginalApplicationStartupInputs.Bitmap(bitmapFile: file(width: 299, pixel: 1)))   // fields
+        XCTAssertNotEqual(a, try OriginalApplicationStartupInputs.Bitmap(dib: Array(file(width: 300, pixel: 1).dropFirst(14))))   // header, offset
+    }
+
+    /// The startup package now loads on all cores too (M1): the first failing
+    /// entry in manifest order still decides the error.
+    func testStartupPackageFailsAtItsFirstBadEntryInManifestOrder() throws {
+        struct Entry: Decodable { let path: String, count: Int }
+        struct Manifest: Decodable { let entries: [Entry] }
+        let fm = FileManager.default, source = try OriginalApplicationStartupInputs.bundledDirectory()
+        let entries = try JSONDecoder().decode(Manifest.self, from: Data(contentsOf: source.appendingPathComponent("manifest.json"))).entries
+        let bitmaps = entries.filter { $0.path.hasPrefix("bitmaps/") }.sorted { $0.count > $1.count }
+        let large = try XCTUnwrap(bitmaps.first), firstIndex = try XCTUnwrap(entries.firstIndex { $0.path == large.path })
+        let later = try XCTUnwrap(entries[(firstIndex + 1)...].last)
+        for truncateLater in [false, true] {
+            let folder = fm.temporaryDirectory.appendingPathComponent("ntsd-startup-\(UUID().uuidString)")
+            try fm.copyItem(at: source, to: folder); defer { try? fm.removeItem(at: folder) }
+            var bytes = try Data(contentsOf: folder.appendingPathComponent(large.path)); bytes[bytes.count / 2] ^= 1
+            try bytes.write(to: folder.appendingPathComponent(large.path))
+            let tail = folder.appendingPathComponent(later.path), tailBytes = try Data(contentsOf: tail)
+            try (truncateLater ? Data(tailBytes.dropLast()) : Data(tailBytes.map { $0 ^ 0xff })).write(to: tail)
+            XCTAssertThrowsError(try OriginalApplicationStartupInputs.load(directory: folder)) { error in
+                XCTAssertEqual(error as? OriginalApplicationStartupInputs.Boundary, .invalid(large.path))
+            }
+        }
+    }
+
+    func testPackagedBitmapsKeepTheirBytes() throws {
+        let directory = try OriginalApplicationCatalogInputs.bundledDirectory()
+        let inputs = try OriginalApplicationCatalogInputs.load(directory: directory)
+        struct Entry: Decodable { let name: String, kind: String, path: String }
+        struct Manifest: Decodable { let entries: [Entry] }
+        let manifest = try JSONDecoder().decode(Manifest.self, from: Data(contentsOf: directory.appendingPathComponent("manifest.json")))
+        var checked = 0, compressed = 0
+        for entry in manifest.entries where entry.kind == "bitmapFile" || entry.kind == "dib" {
+            let file = [UInt8](try Data(contentsOf: directory.appendingPathComponent(entry.path)))
+            let bitmap = try XCTUnwrap(inputs.bitmaps[entry.name])
+            XCTAssertEqual(bitmap.dib, entry.kind == "bitmapFile" ? Array(file.dropFirst(14)) : file, entry.name)
+            XCTAssertEqual(bitmap, entry.kind == "bitmapFile" ? try .init(bitmapFile: file) : try .init(dib: file), entry.name)
+            checked += 1; if OriginalBitmapBytes(bitmap.dib).isCompressed { compressed += 1 }
+        }
+        XCTAssertEqual(checked, 669); XCTAssertGreaterThan(compressed, 500)
+    }
+}
