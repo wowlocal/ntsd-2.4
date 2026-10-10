@@ -241,6 +241,7 @@ while measuring; restore `svc power stayon false` when the loop pauses or stops.
 | 2026-10-10 | R3b (main thread): the release thread wakes on its own | `retire` signalled the sleeping release thread for every value (a kernel call: 0.62% of the main thread, mostly menu steps' drivers). The thread now waits with a 16 ms timeout (signalled only at half the backlog). Profile: `retire` 0.68 → 0.11%, no signals left. A12 Demo main 11.76 → 11.69, vs within noise. Behaviour equal | [evidence](../evidence/rt-r3b-release-thread-polls-20261010.json) | 03c06a0 |
 | 2026-10-10 | e5 (main thread): `emit` takes its effect | Every caller passes a temporary that `emit` copied into the operations and the caller then destroyed; it now takes the effect (`consuming`). Profile: `emit` 4.67 → 3.66% of the main thread, the Effect copies 0.93 → 0.16% (~0.11 ms). Phone within resolution. Behaviour equal | [evidence](../evidence/rt-e5-emit-consumes-20261010.json) | 5f9e5b9 |
 | 2026-10-10 | F1 (main thread): physics frame fields read in place — **parked** | Read from a copies listing as the physics pass's frame-record copies (2.7%); in-place word readers changed nothing (the `Flat?` destroys 2.71 → 2.68%): that share is spread over every pass, the physics pass's own ~0.35%. Reverted; the listing now prints each caller's own share | [evidence](../evidence/rt-f1-frame-words-parked-20261010.json) | — |
+| 2026-10-10 | 4ac: the macOS app build drops dynamic exclusivity checks | 4aa's open item: `tools/build-native.sh` now builds the shipping app with `NTSD_UNCHECKED_EXCLUSIVITY=1`, as the APK. The unchecked app has no exclusivity call sites (the checked one 3,306); AppKit vs and playback equal, frames identical, 20 of 20 launches clean. Linux, Windows and iOS packagers still open (need their package builds) | [evidence](../evidence/rt-4ac-macos-app-unchecked-20261010.json) | this commit |
 
 ## Next task
 
@@ -312,8 +313,8 @@ main thread; message-loop iterations 4.12 × 1.14 ms; render thread 18.7 ms,
   [H3](CORE_REALTIME_H3.md) (~0.15 ms each with a large oracle), and the
   outlined optional copies spread over the passes (~1.8%, no single site).
   Freeing is now off the main thread (R3: arrays 7.5 → 0.6%). Left from
-  4aa's review: the other packagers' opt-in (the macOS app build, Linux,
-  Windows, iOS).
+  4aa's review: the Linux, Windows and iOS packagers' opt-in (the macOS app
+  build done in 4ac); they need their package builds to verify.
 - **B2** ([plan](CORE_REALTIME_B2.md)): in-place nested passes under the first
   transactional copy; P1–P4 done (P4b–P4f: every gameplay-body pass that
   copied per tick); P4g the output and mode label. Left: the HUD, the
