@@ -259,6 +259,9 @@ import XCTest
         let clock: () throws -> UInt32 = { now &+= 7; return now }
         let menu = try OriginalMacRuntimeMenu(started,inputs:package,clock:clock)
         var loadingRequested = false
+        // CORE_REALTIME R3: the steps' drivers and the tail's batches go to
+        // the release thread.
+        let retiredBefore = OriginalDeferredRelease.shared.retired
         func step() throws {
             do { if case .loading = try menu.step() { loadingRequested = true } }
             catch { print("Runtime menu stopped:",error,"at",String(describing:menu.lastRequest).prefix(600));throw error }
@@ -271,6 +274,7 @@ import XCTest
         menu.messages.mouse(0x201,x:350,y:230,buttons:1)
         for _ in 0..<300 where !loadingRequested { try step() }
         XCTAssertTrue(loadingRequested); XCTAssertNotNil(started.host.pendingLoading)
+        XCTAssertGreaterThan(OriginalDeferredRelease.shared.retired,retiredBefore,"menu steps retire their drivers")
         let loading = try OriginalMacRuntimeLoading.bundled(started,startupInputs:package,clock:clock)
         let begin = Date()
         let outcome: OriginalMacRuntimeLoading.Host.LoadedOutcome
@@ -282,8 +286,9 @@ import XCTest
         XCTAssertEqual(started.audio.bufferTokens.count,5+18+400)
         XCTAssertGreaterThan(c.bitmapRequests,12000); XCTAssertEqual(c.files,621)
         guard case .returned = outcome else { return XCTFail("loaded menu did not return: \(outcome)") }
-        let tail = Date()
+        let tail = Date(),retiredBeforeTail = OriginalDeferredRelease.shared.retired
         guard case .committed = try loading.finish() else { return XCTFail("Host tail") }
+        XCTAssertEqual(OriginalDeferredRelease.shared.retired,retiredBeforeTail+1,"the tail retires its drained batches once")
         print(String(format:"Runtime first tail+replay %.2fs, %d draws",Date().timeIntervalSince(tail),loading.counts.replayedDraws))
         XCTAssertNil(started.host.pendingLoading)
         while try started.host.takeCommitted() != nil {}

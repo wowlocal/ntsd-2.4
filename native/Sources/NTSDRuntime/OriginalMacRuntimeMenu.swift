@@ -135,8 +135,14 @@ import NTSDCore
     /// served, except sound methods, which have no permit and play on commit.
     public func step(maximumRequests: Int = 20000) throws -> Host.Outcome {
         // Made only when needed: a step whose first idle attempt commits needs
-        // no driver (CORE_REALTIME A3 L4b).
-        lazy var driver = Driver(host:host)
+        // no driver (CORE_REALTIME A3 L4b). One that was made is freed on the
+        // release thread (R3).
+        var made: Driver?
+        var driver: Driver {
+            if let made { return made }
+            let new = Driver(host:host);made = new;return new
+        }
+        defer { if let last = made { made = nil;OriginalDeferredRelease.shared.retire(consume last) } }
         // Message-queue requests and the window Blt are served inside the
         // attempt (CORE_REALTIME M2) instead of unwinding and re-running it for
         // each one; the same requests are counted and answered in the same

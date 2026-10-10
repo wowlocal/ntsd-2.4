@@ -233,7 +233,8 @@ while measuring; restore `svc power stayon false` when the loop pauses or stops.
 | 2026-10-10 | R2b: R2 re-measured — **not committed** | The parked present thread on L4's build: render −4.0 ms in vs and −4.3 ms in the Demo (both under 8 ms), the main thread unchanged in vs but +0.57 ms in the Demo. Sampling the threads then showed the scheduler running the main thread mostly on the A12's slower cluster (which led to P0) | [evidence](../evidence/rt-r2b-presenter-remeasured-20261010.json) | 7fe4d0e (record only) |
 | 2026-10-10 | P0 (Android): the main thread on the faster cores | With the render thread busy the scheduler ran the main thread mostly on the slower cluster (1.8 against 2.3 GHz); it is now pinned to the cores faster than the slowest tier (found from each CPU's maximum frequency; again on resume; equal or unreadable cores leave it alone). Placement changes only speed. A12 vs main 12.75 → 11.89 ms per tick, Demo 13.16 → 12.48; render unchanged. Behaviour equal; review OK (findings applied) | [evidence](../evidence/rt-p0-main-on-fast-cores-20261010.json) | 7fe4d0e |
 | 2026-10-10 | R2 (render thread): the Android present on its own thread, on the slower cores | The surface draw (bars, channel swap, post) moves to a presenter thread with a one-slot hand-off (every frame drawn in order), pinned to the slowest tier so it no longer slows the main thread on the faster cores (P0). A12 Demo render 10.59 → 5.90 ms per tick and main 12.53 → 12.40; vs render 11.88 → 8.24 and main 11.88 → 12.03 (one baseline run read low); presenter ~5.8 ms. The slower thread per tick: vs 12.35 → 12.03, Demo 12.48 → 12.40. Behaviour equal | [evidence](../evidence/rt-r2-presenter-thread-20261010.json) | 60a16db |
-| 2026-10-10 | A3 L4b (main thread): a step's first idle attempt without a driver or exchange | `resumeIdleDirect` runs `resumeIdleFirst`'s idle attempt with no Driver, exchange, claim or lock: the same direct server answers queue requests through a cursor of no exchange, and the publication makes `finish`'s cursor checks. A committed idle iteration needs no driver; otherwise a fresh driver of the same sequence takes the replies, inputs and declined request (`resumeAfterIdle`). A12 vs main 12.07 → 11.82 ms per tick, the Demo 12.38 → 12.32; render and presenter unchanged. Behaviour equal; review approved with nits (applied). The unit test works around a Swift optimizer crash in the release test build | [evidence](../evidence/rt-a3-l4b-driverless-idle-20261010.json) | this commit |
+| 2026-10-10 | A3 L4b (main thread): a step's first idle attempt without a driver or exchange | `resumeIdleDirect` runs `resumeIdleFirst`'s idle attempt with no Driver, exchange, claim or lock: the same direct server answers queue requests through a cursor of no exchange, and the publication makes `finish`'s cursor checks. A committed idle iteration needs no driver; otherwise a fresh driver of the same sequence takes the replies, inputs and declined request (`resumeAfterIdle`). A12 vs main 12.07 → 11.82 ms per tick, the Demo 12.38 → 12.32; render and presenter unchanged. Behaviour equal; review approved with nits (applied). The unit test works around a Swift optimizer crash in the release test build | [evidence](../evidence/rt-a3-l4b-driverless-idle-20261010.json) | 7091da1 |
+| 2026-10-10 | R3 (main thread): dead values freed on a release thread | Freeing ~10% of the main thread's game work (whole State copies freed element by element). A thread of its own (NTSD.release, on the slowest cores on Android) takes the last reference to the values the loaded cycle ends with (the cycle's outcome, the body's return, the drained batches) and to a menu step's driver, and frees them. A12 vs main 11.75 → 11.34 ms per tick, Demo 12.14 → 11.85; the release thread ~2 ms; render within noise. Behaviour equal; review approved with nits (applied); TSan clean. A `consume` from a `defer` double-released an array (debug crash, fixed) | [evidence](../evidence/rt-r3-release-thread-20261010.json) | this commit |
 
 ## Next task
 
@@ -273,11 +274,11 @@ main thread; message-loop iterations 4.12 × 1.14 ms; render thread 18.7 ms,
   14.02 ms, Demo 13.80); e done (vs about 13.6 ms, Demo 13.59); L5a, e2,
   P2 (render: vs 12.62, Demo 10.52), L1, R0, L2, L3, e3, G4a, L4 done; G4b
   parked; then P0 (the main thread on the faster cores) and R2 (the
-  present on its own thread, on the slower cores) and A3 L4b done.
-  **Status (2026-10-10, A3 L4b):** A12 main about 11.8 ms per tick in vs
-  and 12.3 in the Demo; render about 8.0 and 6.0 (the 8 ms goal for that
-  thread is met in the Demo and about met in vs); the presenter thread
-  about 5.8.
+  present on its own thread, on the slower cores), A3 L4b and R3 (dead
+  values freed on a release thread) done. **Status (2026-10-10, R3):** A12
+  main about 11.3 ms per tick in vs and 11.85 in the Demo; render about 8.1
+  and 6.0 (the 8 ms goal for that thread is met in the Demo and about met
+  in vs); the presenter thread about 5.75, the release thread about 2.
   **Where the rest is:** the largest remaining main-thread costs are the
   transactional copies themselves (each stage's first write to a record
   another stage still holds copies it: the loaded entry, the AI's globals,

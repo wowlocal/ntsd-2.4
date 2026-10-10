@@ -131,6 +131,12 @@ func ntsdAndroidOnCreate(_ activity: UnsafeMutablePointer<ANativeActivity>) {
     static func pinToFastCores() {
         let fast = ntsd_cpu_cluster_mask(1)
         if fast != 0 { _ = ntsd_pin_current_thread(fast) }
+        // The release thread frees on the slowest tier, as the presenter draws
+        // (CORE_REALTIME R3); threads otherwise inherit the main thread's mask.
+        OriginalDeferredRelease.threadStart = {
+            let slow = ntsd_cpu_cluster_mask(0)
+            if slow != 0 { _ = ntsd_pin_current_thread(slow) }
+        }
     }
     private func startIfReady() {
         guard session == nil,dataReady,let surface else { return }

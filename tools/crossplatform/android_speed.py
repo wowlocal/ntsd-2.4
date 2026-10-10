@@ -316,6 +316,9 @@ def main():
             # The Android presenter thread (CORE_REALTIME tier 3 R2), when present.
             if "NTSD.present" in share:
                 row["presentMsPerTick"] = round(1000 * share["NTSD.present"] / row["ticksPerSecond"], 2)
+            # The release thread (CORE_REALTIME R3), when present.
+            if "NTSD.release" in share:
+                row["releaseMsPerTick"] = round(1000 * share["NTSD.release"] / row["ticksPerSecond"], 2)
         presents = [e for e in events if e.get("event") == "androidPresent"]
         if presents:
             # Whole-run totals, sampled every 300 drawn frames.

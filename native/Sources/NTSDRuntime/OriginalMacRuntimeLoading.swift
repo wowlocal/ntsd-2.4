@@ -359,12 +359,18 @@ import NTSDCore
     public func complete(first: Bool) throws -> Completed {
         let outcome = first ? try run() : try runCycle()
         let completed: Completed
+        var returned: LoadedMenu.PendingReturn?
         switch outcome {
         case .returned: completed = .menu
-        case .matchPrelude: _ = try launch(); completed = .launched
-        case .gameplayInput: _ = try gameplay(); completed = .gameplay
+        case .matchPrelude: returned = try launch(); completed = .launched
+        case .gameplayInput: returned = try gameplay(); completed = .gameplay
         }
         guard case .committed = try finish() else { throw Boundary.unexpected("Host tail did not commit") }
+        // The cycle's input and the body's return hold the last references to
+        // their State copies once the Host's tail has committed: freed on the
+        // release thread (CORE_REALTIME R3).
+        OriginalDeferredRelease.shared.retire(consume outcome)
+        if let last = returned { returned = nil;OriginalDeferredRelease.shared.retire(consume last) }
         return completed
     }
     /// GetLocalTime from the macOS local calendar (declared runtime source).
@@ -469,7 +475,11 @@ import NTSDCore
         if case .committed = outcome,let exchange = controlDelivery?.exchange,let cursor = controlCursor {
             _ = try exchange.finish(cursor);controlCursor = nil;controlDelivery = nil
         }
+        // The drained batches are freed on the release thread (R3) once all
+        // were performed; after a throw they are freed here, as before.
+        var drained: [Host.Batch] = []
         while let batch = try started.host.takeCommitted() {
+            drained.append(batch)
             guard case .loaded(let commit) = batch.contents else { continue }
             var slept: UInt32 = 0
             // Both lists in order, read in place by index: iterating the joined
@@ -524,6 +534,7 @@ import NTSDCore
             } }
             try effects(parts.menu);try effects(parts.tail)
         }
+        if !drained.isEmpty { OriginalDeferredRelease.shared.retire(consume drained) }
         if case .committed = outcome, !pendingReplays.isEmpty {
             do {
                 try overlay?.apply(pendingReplays)
