@@ -21,6 +21,11 @@ public final class OriginalDeferredRelease: @unchecked Sendable {
     /// Values beyond this many waiting are freed by their caller instead: a
     /// starved release thread must not hold memory without bound.
     static let backlogLimit = 256
+    /// The release thread wakes on its own this often instead of being
+    /// signalled for every value: a signal to a sleeping thread is a kernel
+    /// call on the caller's thread (~0.6% of the A12's main thread, R3b). It
+    /// is still signalled once half the backlog is waiting.
+    static let interval: TimeInterval = 0.016
     private let condition = NSCondition()
     private var pending: [Any] = []
     private var started = false,count = 0
@@ -39,7 +44,8 @@ public final class OriginalDeferredRelease: @unchecked Sendable {
         guard pending.count < Self.backlogLimit else { condition.unlock(); return }
         pending.append(value); count += 1
         if !started { started = true; start() }
-        condition.signal(); condition.unlock()
+        if pending.count == Self.backlogLimit/2 { condition.signal() }
+        condition.unlock()
     }
     private func start() {
         let begin = self.begin ?? Self.threadStart
@@ -52,7 +58,7 @@ public final class OriginalDeferredRelease: @unchecked Sendable {
         var taken: [Any] = []
         while true {
             condition.lock()
-            while pending.isEmpty { condition.wait() }
+            while pending.isEmpty { _ = condition.wait(until:Date(timeIntervalSinceNow:Self.interval)) }
             swap(&taken,&pending)
             condition.unlock()
             taken.removeAll(keepingCapacity:true)
