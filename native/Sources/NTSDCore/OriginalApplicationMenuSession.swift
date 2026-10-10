@@ -908,6 +908,12 @@ extension OriginalApplicationMenuSession {
         public var orderedOperations: FlattenSequence<[[OriginalApplicationLoadedMenuSession.Operation]]> {
             [menu.snapshot.operations, tailOperations].joined()
         }
+        /// The same order as two lists, for walking by index without copying
+        /// each operation out (CORE_REALTIME tier 3 e3).
+        public var operationParts: (menu: [OriginalApplicationLoadedMenuSession.Operation],
+                                    tail: [OriginalApplicationLoadedMenuSession.Operation]) {
+            (menu.snapshot.operations, tailOperations)
+        }
     }
     /// Complete the exact suspended iteration once. A different session or any
     /// intervening committed iteration invalidates this child before platform

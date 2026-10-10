@@ -472,8 +472,11 @@ import NTSDCore
         while let batch = try started.host.takeCommitted() {
             guard case .loaded(let commit) = batch.contents else { continue }
             var slept: UInt32 = 0
-            let ordered = commit.orderedOperations
-            for case .front(let e,_,_) in ordered {
+            // Both lists in order, read in place by index: iterating the joined
+            // sequence copied and destroyed every operation (tier 3 e3).
+            let parts = commit.operationParts
+            func fronts(_ operations: [LoadedMenu.Operation]) throws { for index in operations.indices {
+                guard case .front(let e,_,_) = operations[index] else { continue }
                 switch e.kind {
                 case "postQuit": quitCodes.append(e.arguments[0])
                 // The screen's own Sleep (300 before a link or a mode) blocks the original's thread.
@@ -485,7 +488,8 @@ import NTSDCore
                     try shell?(e.strings[0],e.strings[1],slept)
                 default: break
                 }
-            }
+            } }
+            try fronts(parts.menu);try fronts(parts.tail)
             // Playback's Sleep(300) precedes its dialog and the open.
             for path in pendingDocuments {
                 openedDocuments.append(path)
@@ -500,7 +504,8 @@ import NTSDCore
             try replay(commit.graphics.dropFirst(continuationGraphics))
             // Preserve the recorded order across sound/music releases and the
             // final close post, as well as ordinary round and hotkey methods.
-            for operation in ordered {
+            func effects(_ operations: [LoadedMenu.Operation]) throws { for index in operations.indices {
+                let operation = operations[index]
                 // These effects already ran in source order in their receipts,
                 // including before a later dialog or a failed Core attempt.
                 if controlEffectsDelivered,case .preceding(.control(let q,_)) = operation,
@@ -516,7 +521,8 @@ import NTSDCore
                 if case .preceding(.control(let q,_)) = operation,q.kind == .postMessage {
                     postMessage?(q.arguments[1],q.arguments[2],q.arguments[3])
                 }
-            }
+            } }
+            try effects(parts.menu);try effects(parts.tail)
         }
         if case .committed = outcome, !pendingReplays.isEmpty {
             do {
