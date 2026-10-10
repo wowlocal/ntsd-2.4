@@ -74,7 +74,8 @@ def main():
     a.add_argument("--scratch", type=Path, default=X5 / "build-windows-x86_64")
     args = a.parse_args()
     sdl = X5 / "windows-deps/sdl3/install-x86_64"; runtime = X5 / "windows-sdk-extract/tree"
-    env = {**os.environ, "NTSD_PORTABLE": "1", "NTSD_SDL": "1", "NTSD_SDL_PREFIX": str(sdl)}
+    # The shipping build drops Swift's dynamic exclusivity checks (the user's decision, CORE_REALTIME 4aa).
+    env = {**os.environ, "NTSD_PORTABLE": "1", "NTSD_SDL": "1", "NTSD_UNCHECKED_EXCLUSIVITY": "1", "NTSD_SDL_PREFIX": str(sdl)}
     common = ["--package-path", str(ROOT / "native"), "--scratch-path", str(args.scratch), "--build-system", "native",
               "--swift-sdk", "ntsd-6.4.0-windows-x86_64", "-c", "release", "--product", "NTSDSDL"]
     subprocess.run([str(SWIFT), "build", *common], env=env, check=True)

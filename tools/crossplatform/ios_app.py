@@ -31,11 +31,13 @@ def run(cmd, **kw):
 def main():
     a = argparse.ArgumentParser(); a.add_argument("out", type=Path); a.add_argument("scenario", nargs="?", default="vs")
     a.add_argument("--device", default="iPad Air 13-inch (M4)")
+    a.add_argument("--scratch", type=Path, default=X5 / "build-ios-sim")
     args = a.parse_args(); out = args.out.resolve()
     sdk = run(["xcrun", "--sdk", "iphonesimulator", "--show-sdk-path"])
-    env = {**os.environ, "NTSD_PORTABLE": "1", "NTSD_IOS": "1"}
+    # The shipping build drops Swift's dynamic exclusivity checks (the user's decision, CORE_REALTIME 4aa).
+    env = {**os.environ, "NTSD_PORTABLE": "1", "NTSD_IOS": "1", "NTSD_UNCHECKED_EXCLUSIVITY": "1"}
     common = ["xcrun", "--toolchain", "XcodeDefault", "swift", "build", "--package-path", str(ROOT / "native"),
-              "--scratch-path", str(X5 / "build-ios-sim"), "--triple", "arm64-apple-ios17.0-simulator", "--sdk", sdk,
+              "--scratch-path", str(args.scratch), "--triple", "arm64-apple-ios17.0-simulator", "--sdk", sdk,
               "-c", "release", "--product", "NTSDiOS"]
     subprocess.run(common, env=env, check=True)
     products = Path(run(common + ["--show-bin-path"], env=env))

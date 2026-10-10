@@ -49,7 +49,8 @@ def main():
     args = a.parse_args(); arch = args.arch
     args.scratch = args.scratch or X5 / f"build-linux-glibc-static-{arch}"
     sdl, ft = args.deps / "sdl3", args.deps / "freetype"
-    env = {**os.environ, "NTSD_PORTABLE": "1", "NTSD_SDL": "1", "NTSD_SDL_PREFIX": str(sdl / f"install-{arch}"),
+    # The shipping build drops Swift's dynamic exclusivity checks (the user's decision, CORE_REALTIME 4aa).
+    env = {**os.environ, "NTSD_PORTABLE": "1", "NTSD_SDL": "1", "NTSD_UNCHECKED_EXCLUSIVITY": "1", "NTSD_SDL_PREFIX": str(sdl / f"install-{arch}"),
            "NTSD_FREETYPE_PREFIX": str(ft / f"install-{arch}")}
     common = ["--package-path", str(ROOT / "native"), "--scratch-path", str(args.scratch), "--swift-sdk", f"ntsd-6.4.0-ubuntu24.04-{arch}",
               "-c", "release", "--static-swift-stdlib", "--product", "NTSDSDL"]
