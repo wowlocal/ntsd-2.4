@@ -78,17 +78,20 @@ public struct OriginalLoadedObject: Equatable, Sendable {
 /// boundaries. Nothing here selects a character or changes the source data.
 public struct OriginalObjectLoader {
     var resources = OriginalLoaderResources()
+    // Mutated in place (`_modify`): with get/set alone every write into one
+    // bitmap record copied the whole array of loaded bitmaps and that record
+    // (MEMORY_LOADING L2).
     public private(set) var bitmaps: [OriginalLoadedBitmap] {
-        get { resources.bitmaps } set { resources.bitmaps = newValue }
+        get { resources.bitmaps } _modify { yield &resources.bitmaps } set { resources.bitmaps = newValue }
     }
     public private(set) var checksum: UInt32 {
         get { resources.checksum } set { resources.checksum = newValue }
     }
     private var sounds: OriginalSoundRegistry {
-        get { resources.sounds } set { resources.sounds = newValue }
+        get { resources.sounds } _modify { yield &resources.sounds } set { resources.sounds = newValue }
     }
     private var frameHeap: OriginalFrameHeap {
-        get { resources.frameHeap } set { resources.frameHeap = newValue }
+        get { resources.frameHeap } _modify { yield &resources.frameHeap } set { resources.frameHeap = newValue }
     }
     public var frameAllocations: [OriginalFrameAllocation] { frameHeap.allocations }
     public var soundCount: Int { sounds.count }

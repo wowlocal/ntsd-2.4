@@ -16,9 +16,10 @@ wall: "now lets do the loop for optimizing memory footprint and loading times.
 you can create a new branch and start developing. build strong methodology as
 you progress."
 **Status:** research and transfer.
-**Branch:** `exp/memory-loading`, from `exp/core-realtime` 0034e45. Local only:
-it has no upstream, so the post-commit hook's push fails harmlessly; pushing,
-merging into `dev/crossplatform`/`main`, CI and publishing wait for the user.
+**Branch:** `exp/memory-loading`, from `exp/core-realtime` 0034e45. It tracks
+`origin/exp/memory-loading`, created with its upstream at 22:12 on 2026-10-10
+outside this study's commands, so the post-commit hook pushes every commit.
+Merging into `dev/crossplatform`/`main`, CI and publishing wait for the user.
 **Game result:** unchanged by definition. Only how the port holds and prepares
 data changes, never what the game computes, shows or fails on.
 **Reference:** the pinned EXE (SHA-256 `3f7ac67c…ff71c`) is not touched. The
@@ -134,12 +135,15 @@ Profile first, then one mechanism per increment, measured before and after.
 | --- | --- | --- |
 | 0 | Harness (`load_memory.py`; `uptime` on the `started` and `loaded` events), baseline, noise floor, phone load profile | **done** |
 | L1 | Loading-file streams changed in place (A12 decodeDAT 16%) | **done** |
-| L2 | The object and background loaders' resource arrays mutated in place: `bitmaps`, `sounds`, `frameHeap` are computed get/set properties, so every write into one bitmap record copied the whole array of loaded bitmaps (A12 9.7%) | next |
-| L3 | Package entries read, verified and decoded on all cores, taken in manifest order (same first error); the portable SHA-256 without a per-block allocation; digests without a Data copy (A12 catalog package 25%, arena 2.5%) | drafted |
+| L2 | The object and background loaders' resource arrays mutated in place: `bitmaps`, `sounds`, `frameHeap` are computed get/set properties, so every write into one bitmap record copied the whole array of loaded bitmaps (A12 9.7%) | **done** |
+| L3 | Package entries read, verified and decoded on all cores, taken in manifest order (same first error); the portable SHA-256 without a per-block allocation; digests without a Data copy (A12 catalog package 25%, arena 2.5%) | next |
 | L4 | Bitmap headers read in place and images validated without decoding (`OriginalDIBPixels.validate`, the decoder's checks and errors; A12 Bitmap.init 8.8%) | drafted |
 | L5 | Frame heap lookups indexed by address (linear `contains`/`lastIndex` over ~15,000 allocations per allocation and write), scanner tokens without String building, projections once | queued |
 | L6 | Sounds: the audio backend's optional-record copies (A12 2.8%) | queued |
-| M | Memory: frame projections made on demand or compact, the bitmap files' bytes (M1 3b), the loading session's logs and file streams kept after the load, state-record definedness | queued |
+| S1 | Android first launch after an install or data change: the app extracts its 726 MB of assets from the APK to `files/ntsd-data` (~23 s on the A12, seen when the low-storage install path drops the data) and then holds them twice on a phone with ~1 GB free; read them in place from the APK instead (stored uncompressed, opened through the asset manager's file descriptor) | queued |
+| M1 | The sprite sheets' file bytes kept compressed in memory (LZ4 block format, ~13x on 24-bit sheets) and decompressed when a surface first needs its pixels (77 reads in a whole vs run); the largest resident holder, 678 MB of byte arrays | drafted |
+| M2 | Frame projections compact (54,800 `[String: Int32]` dictionaries, 161 MB) | queued |
+| M3 | Remaining holders by the attribution: stage records copied per stage (87 MB), the startup package's payload and replies (~90 MB), whole-definedness arrays (51 MB), the loading session's streams and logs kept after the load (~55 MB) | queued |
 
 ## Gates (every increment)
 
@@ -173,11 +177,11 @@ T7 above 40 GiB. Keep the phone awake only while measuring and restore
 | Date | Step | Result | Evidence | Commit |
 | --- | --- | --- | --- | --- |
 | 2026-10-10 | Phase 0: harness, baseline, noise floor | `load_memory.py` (Mac and A12, interleaved A/B, medians and ranges); `uptime` on the `started` and `loaded` events. A12: load 122.1–124.6 s, CPU-bound; footprint 1.6 GB of which ~0.2 GB swapped; Mac 5.1–5.4 s, 2.0 GB | [evidence](../evidence/ml-baseline-20261010.json) | with L1 |
-| 2026-10-10 | L1: loading-file streams in place | `character`, `scannerAccess` and `write` change their stream in place instead of copying the whole `Stream` (four byte arrays) out and back per character; `decodeDAT` runs on its two streams held locally; no one-element array per decoded byte. Same events, same values after success and every throw. **A12 load 123.9 → 101.8 s** (101.4–102.4 against 123.2–124.6), Mac 5.41 → 3.69 s; footprint unchanged. All 10 scenarios, AppKit, unchecked and emulator equal, frames identical; 13 suites incl. a new rollback test; review: no behavioural difference | [evidence](../evidence/ml-l1-file-streams-in-place-20261010.json) | this commit |
+| 2026-10-10 | Attribution probe (not committed) | A probe build counted the display surfaces touched and decoded-pixel reads: of 891 surfaces (1.14 GB allocated) only 65–77 (55–61 MB) are touched in a whole vs run, and `Bitmap.pixels` is read 77 times (31 MB). Live memory by allocation site at body 600 (malloc_history, 2.64 GB live including the untouched surfaces): sprite-sheet file bytes 613 MB (catalog) + 65 MB (arenas), frame projections 161 MB, stage records 87 MB, startup payload 57 + 35 MB, whole-definedness arrays 51 MB, the loading session's streams and logs ~55 MB | this card | — |
+| 2026-10-10 | L1: loading-file streams in place | `character`, `scannerAccess` and `write` change their stream in place instead of copying the whole `Stream` (four byte arrays) out and back per character; `decodeDAT` runs on its two streams held locally; no one-element array per decoded byte. Same events, same values after success and every throw. **A12 load 123.9 → 101.8 s** (101.4–102.4 against 123.2–124.6), Mac 5.41 → 3.69 s; footprint unchanged. All 10 scenarios, AppKit, unchecked and emulator equal, frames identical; 13 suites incl. a new rollback test; review: no behavioural difference | [evidence](../evidence/ml-l1-file-streams-in-place-20261010.json) | 17416cd |
+| 2026-10-10 | L2: loader arrays in place | The object and background loaders' `bitmaps` (and `sounds`, `frameHeap`) get a `_modify` accessor: each write into one bitmap record copied the whole array of ~1,800 loaded bitmaps and that record. **A12 load 102.3 → 79.0 s** (75.7–79.4 against 101.8–102.9), Mac 3.45 → 3.10 s; footprint unchanged. All 10 scenarios, AppKit, unchecked and emulator equal, frames identical; 15 suites; with L1's review follow-ups | [evidence](../evidence/ml-l2-loader-arrays-in-place-20261010.json) | this commit |
 
 ## Next task
 
-L2: the loaders' resource arrays mutated in place (with L1's review
-follow-ups), then L3 and L4 (drafted), then a new A12 load profile to rank
-what remains. Memory work (phase M) starts with an attribution probe of what
-is resident: surfaces, the bitmap files' bytes, records.
+L3 (package entries on all cores), then L4 and M1 (drafted), then a new A12
+load profile to rank what remains.

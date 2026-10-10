@@ -120,22 +120,22 @@ public struct OriginalLoadingFiles: Equatable, Sendable {
         // The same character, scanner and write steps on the two streams held
         // here, stored back before the closes (MEMORY_LOADING L1). Nothing
         // observes the candidate meanwhile; a throw discards it as before.
-        var source = candidate.streams[input]!, target = candidate.streams[output]!
+        var reader = candidate.streams[input]!, writer = candidate.streams[output]!
         for _ in 0..<123 {
-            guard try Self.read(&source, observe: observe) != nil else { throw Self.error("Truncated DAT header") }
+            guard try Self.read(&reader, observe: observe) != nil else { throw Self.error("Truncated DAT header") }
         }
         var position = 123
-        while let byte = try Self.read(&source, observe: observe) {
+        while let byte = try Self.read(&reader, observe: observe) {
             if scanfLookahead {
-                let next = source.position
-                try Self.scan(&source, to: next, observe: observe)
-                if source.eof && next == source.input.count { break }
+                let next = reader.position
+                try Self.scan(&reader, to: next, observe: observe)
+                if reader.eof && next == reader.input.count { break }
             }
-            try Self.append(OriginalDATDecoder.byte(byte, at: position), to: &target, files: &candidate.files,
+            try Self.append(OriginalDATDecoder.byte(byte, at: position), to: &writer, files: &candidate.files,
                             translation: translation, observe: observe)
             position += 1
         }
-        candidate.streams[input] = source; candidate.streams[output] = target
+        candidate.streams[input] = reader; candidate.streams[output] = writer
         try candidate.close(input, observe: observe)
         let result = try candidate.close(output, observe: observe)
         candidate.decoderReturns.append(result)

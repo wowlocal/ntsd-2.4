@@ -10,7 +10,7 @@ public struct OriginalBackgroundLoader {
         get { resources.checksum } set { resources.checksum = newValue }
     }
     public private(set) var bitmaps: [OriginalLoadedBitmap] {
-        get { resources.bitmaps } set { resources.bitmaps = newValue }
+        get { resources.bitmaps } _modify { yield &resources.bitmaps } set { resources.bitmaps = newValue }
     }
     /// Records remain available for evidence after their original release/free.
     public private(set) var releasedBitmaps: Set<Int> = []

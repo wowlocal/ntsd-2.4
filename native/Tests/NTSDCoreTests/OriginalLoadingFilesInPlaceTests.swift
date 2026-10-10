@@ -58,14 +58,18 @@ final class OriginalLoadingFilesInPlaceTests: XCTestCase {
         try files.scannerAccess(token, position: 4096 * 3 + 5)
         XCTAssertEqual(files.streams[token]?.loaded, 4096 * 4); XCTAssertEqual(files.streams[token]?.position, 4096 * 3 + 5)
         XCTAssertEqual(try files.character(token), raw[4096 * 3 + 5])
-        // A write that fills the buffer flushes before its byte; a rejected flush keeps the earlier bytes of that write.
+        // A write flushes a full buffer before storing its next byte. A rejected
+        // flush keeps the bytes of that write stored before it, as before L1.
         let output = try files.open("out.txt", mode: "w", source: { _ in [] }, allocate: allocate)
-        try files.write([UInt8](repeating: 1, count: 65536), to: output)
+        try files.write([UInt8](repeating: 1, count: 65535), to: output)
         prior = files
-        XCTAssertThrowsError(try files.write([2, 3], to: output, observe: { _ in throw Stop.at(0) }))
-        XCTAssertEqual(files, prior)
-        try files.write([2, 3], to: output)
+        XCTAssertThrowsError(try files.write([2, 3, 4], to: output, observe: { _ in throw Stop.at(0) }))
+        XCTAssertEqual(files.files["out.txt"], [])
+        XCTAssertEqual(files.streams[output]?.pending.count, 65536); XCTAssertEqual(files.streams[output]?.pending.last, 2)
+        XCTAssertEqual(files.streams[output]?.output.count, 65536)
+        files = prior
+        try files.write([2, 3, 4], to: output)
         XCTAssertEqual(files.files["out.txt"]?.count, 65536)
-        XCTAssertEqual(files.streams[output]?.pending, [2, 3]); XCTAssertEqual(files.streams[output]?.output.count, 65538)
+        XCTAssertEqual(files.streams[output]?.pending, [3, 4]); XCTAssertEqual(files.streams[output]?.output.count, 65538)
     }
 }
