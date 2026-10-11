@@ -50,7 +50,12 @@ and the process's CPU per tick (processMsPerTick). The gate's load A/B so
 measures loading, memory and frame time in the same interleaved runs. On
 Android it also takes the memory readings again at body B (ticksEnd*: RSS,
 its anonymous and file parts, swap, RSS + swap and PSS), so a longer match
-shows whether memory grows.
+shows whether memory grows. It also reports the CPU spent since launch by
+body B: the whole process (cpuToEndSeconds, from /proc/PID/stat, exited
+threads included) and each live thread (threadCpuToEndSeconds), so work that
+moved in time (a whole-track decode at its start against a decode as it
+plays) compares by its total; and the AAudio underruns the app reported
+(xruns, by stream kind).
 --sounds mixes the sound effects as in play (Android; media volume held at 0),
 --music plays the music too (the Android host decodes a whole track).
 --warmup first runs once, unmeasured (OUT_DIR/warmup.jsonl), the last build
@@ -205,6 +210,9 @@ def ticks_window(o, s, pid, row):
             if name not in cpu and bodies >= at:
                 cpu[name] = phone.thread_cpu(s, pid)
                 if name == "b":
+                    # The process's CPU since launch (utime + stime, clock ticks).
+                    fields = phone.shell(s, f"cat /proc/{pid}/stat").rsplit(")", 1)[-1].split()
+                    if len(fields) > 12: row["cpuToEndSeconds"] = round((int(fields[11]) + int(fields[12])) / 100, 2)
                     # The memory readings again at the window's end (after the CPU reading).
                     end_status = phone.shell(s, f"cat /proc/{pid}/status 2>/dev/null")
                     meminfo = phone.shell(s, f"dumpsys meminfo {pid}")
@@ -238,6 +246,9 @@ def ticks_window(o, s, pid, row):
     row["renderMsPerTick"] = round(per_tick.get("DispatchWorker", 0.0), 2)
     row["processMsPerTick"] = round(sum(per_tick.values()), 2)
     row["threadMsPerTick"] = {n: round(v, 2) for n, v in sorted(per_tick.items(), key=lambda kv: -kv[1]) if v >= 0.1}
+    row["threadCpuToEndSeconds"] = {n: round(v / 1e9, 2) for n, v in sorted(cpu["b"][1].items(), key=lambda kv: -kv[1]) if v >= 5e7}
+    presents = [e for e in phone.progress(s) if e.get("event") == "androidPresent" and "xruns" in e]
+    if presents: row["xruns"] = presents[-1]["xruns"]
 
 
 def cpu_seconds(pid):
@@ -358,7 +369,7 @@ def main():
             summary = {"build": name, "runs": len(mine)}
             for key in ("startupSeconds", "loadSeconds", "startToLoadedSeconds", "peakResidentMB", "peakFootprintMB",
                         "loadedResidentMB", "bodiesResidentMB", "mainMsPerTick", "renderMsPerTick", "processMsPerTick", "completeMsPerTick",
-                        "loadedSwapMB", "bodiesSwapMB", "ticksEndResidentMB", "ticksEndSwapMB", "ticksEndFootprintMB", "ticksEndPssMB"):
+                        "loadedSwapMB", "bodiesSwapMB", "ticksEndResidentMB", "ticksEndSwapMB", "ticksEndFootprintMB", "ticksEndPssMB", "cpuToEndSeconds"):
                 values = [r[key] for r in mine if r.get(key) is not None]
                 if values:
                     summary[key] = {"median": statistics.median(values), "min": min(values), "max": max(values)}
