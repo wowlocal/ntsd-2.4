@@ -79,6 +79,13 @@ counts as measured when its range does not overlap the previous build's; a
 memory reduction may also be shown deterministically (live bytes of the holder
 in `heap`, allocation counts) when it is below the phone's run-to-run spread.
 
+**Attribution.** `malloc_history`/`heap` report allocated bytes, not resident
+ones: an allocation's untouched capacity is not resident, and the allocator
+keeps freed memory resident. Rank memory holders by allocation stacks, but
+decide by the gate's interleaved footprint comparison (single probe runs
+are noisy); on the A12 the harness also keeps `dumpsys meminfo` (native heap
+allocated and free) and `smaps_rollup` at body N.
+
 **Profiling.** Mac: `sample` of the frozen unchecked headless binary during the
 load, read with an inclusive call-tree table; A12: `load_memory.py
 --profile-loading S` (simpleperf, DWARF call graphs, from launch). Profiles
@@ -144,8 +151,8 @@ Profile first, then one mechanism per increment, measured before and after.
 | L6 | Frame heap lookups by binary search over its address order (the linear overlap scan was A12 6.1%) | **done** |
 | L7 | Text: tokens and parsed files converted without building Strings scalar by scalar (A12 11% after L5) | **done** |
 | L8 | Sounds: the audio backend converted each WAV to float samples reading the record (a class property) per byte, copying it each time (A12 ~7.5% after L5) | **done** |
-| M3 | The compressed sprite sheets kept at their own size: the compressor's buffer kept its reserved capacity (130 MB held for 52 MB); the sound conversion reads its bytes without caching them (L8 follow-up) | next |
-| M4a | The 60 Stage slots in one record of shared pages: the loader writes a word into every slot, which copied each whole 1.35 MB slot (87 MB); with shared pages a write copies its 16 KB page | drafted |
+| M3 | The compressed sprite sheets kept at their own size: the compressor's buffer kept its reserved capacity (130 MB held for 52 MB); the sound conversion reads its bytes without caching them (L8 follow-up) | **done** |
+| M4a | The 60 Stage slots in one record of shared pages | **shelved**: the loader's initialisation writes every page of the ~52 stages the catalog defines (87 → 80 MB in a probe) |
 | M4 | Remaining holders by the attribution after L7 (~790 MB in use besides untouched surfaces): stage records (87 MB), whole-definedness caches (51 MB), the loading session's file streams and logs kept with the catalog (~55 MB), the catalog's file payloads (35 MB), startup replies (35 MB), PCM samples (32 MB) | queued |
 | S1 | Android first launch after an install or data change: the app extracts its 726 MB of assets from the APK to `files/ntsd-data` (~23 s on the A12, seen when the low-storage install path drops the data) and then holds them twice on a phone with ~1 GB free; read them in place from the APK instead (stored uncompressed, opened through the asset manager's file descriptor) | queued |
 
@@ -194,10 +201,11 @@ T7 above 40 GiB. Keep the phone awake only while measuring and restore
 | 2026-10-11 | A12 load profile after L5 | Load 31 s: catalog session 44% (frame bodies 26%, sounds 17%, bitmap construction 13%), the parallel package phase 14%, scalar-by-scalar Strings 11% | `ml-load/ml-l5-loadprof-profile` (X5) | — |
 | 2026-10-11 | L6: frame heap index | The frame heap finds allocations by binary search over its address order instead of scanning all ~15,000 for each allocation, write and lookup; same results and errors. **A12 load 31.3 → 26.7 s** (26.53–26.78 against 31.01–31.5), Mac 1.60 → 1.55 s. All 10 scenarios, AppKit, unchecked and emulator equal, frames identical; 11 suites incl. a test against the old scans (the gate's test bundle missed a type annotation; the suites passed on the corrected tree, sources unchanged); review: no problem | [evidence](../evidence/ml-l6-frame-heap-index-20261011.json) | e12472a |
 | 2026-10-11 | L7: Latin-1 text | Parsed files, scanner tokens and record strings convert between Latin-1 bytes and Strings directly (ASCII as UTF-8), not scalar by scalar; identical Strings and bytes. **A12 load 26.5 → 23.0 s** (22.9–23.0 against 26.39–26.68), Mac 1.59 → 1.12 s. All 10 scenarios, AppKit, unchecked and emulator equal, frames identical; 16 suites incl. a byte-for-byte equivalence test; review: no problem | [evidence](../evidence/ml-l7-latin1-text-20261011.json) | 961cd99 |
-| 2026-10-11 | L8: sound bytes read once | The audio backend's conversion of each WAV to float samples reads the record's bytes once instead of copying the record for every byte. **A12 load 22.6 → 19.4 s** (19.38–19.53 against 22.55–22.7), Mac 1.23 → 0.91 s; peak footprint about +12 MB (the bytes getter caches each record's array; M3 reads without caching). All 10 scenarios, AppKit, unchecked and emulator equal, frames identical; 8 suites incl. per-format sample equality | [evidence](../evidence/ml-l8-sound-bytes-once-20261011.json) | this commit |
+| 2026-10-11 | L8: sound bytes read once | The audio backend's conversion of each WAV to float samples reads the record's bytes once instead of copying the record for every byte. **A12 load 22.6 → 19.4 s** (19.38–19.53 against 22.55–22.7), Mac 1.23 → 0.91 s; peak footprint about +12 MB (the bytes getter caches each record's array; M3 reads without caching). All 10 scenarios, AppKit, unchecked and emulator equal, frames identical; 8 suites incl. per-format sample equality | [evidence](../evidence/ml-l8-sound-bytes-once-20261011.json) | e68da21 |
+| 2026-10-11 | M3: compressed sheets at their own size | The compressed sprite sheets are copied to their own size (the compressor's buffer kept its reserved capacity: 130 MB allocated for 52 MB) and the sound conversion reads without caching. **A12 peak footprint ~855 → ~790 MB** (789–792 against 850–858), Mac 1319 → 1254 MB; load unchanged (19.4 s). All 10 scenarios, AppKit, unchecked and emulator equal, frames identical; 10 suites. A worktree probe (with M4a) looked small and noisy: the interleaved gate decides. M4a (shared Stage pages) shelved: initialisation writes every page of the ~52 defined stages | [evidence](../evidence/ml-m3-compressed-sheets-trimmed-20261011.json) | this commit |
 
 ## Next task
 
-M3 (compressed sheets at their own size, ~−70 MB, with L8's cache-free read),
-then M4a (shared Stage pages, ~−85 MB), then the next A12 profile and the
-holders of M4.
+The next A12 load profile (19.4 s left) and the phone's memory split from the
+new meminfo capture (native heap allocated against free), then the holders of
+M4 by what is resident.

@@ -67,6 +67,10 @@ final class OriginalLZ4Tests: XCTestCase {
         let noise = (0..<OriginalBitmapBytes.threshold * 2).map { _ in UInt8.random(in: 0...255, using: &random) }
         XCTAssertFalse(OriginalBitmapBytes(small).isCompressed); XCTAssertEqual(OriginalBitmapBytes(small).dib, small)
         XCTAssertTrue(OriginalBitmapBytes(large).isCompressed); XCTAssertEqual(OriginalBitmapBytes(large).dib, large)
+        // A compressed image holds about its compressed size, not the buffer the compressor reserved (M3).
+        let packedCount = large.withUnsafeBytes { OriginalLZ4.compress($0) }.count
+        XCTAssertLessThanOrEqual(OriginalBitmapBytes(large).heldCapacity, packedCount + packedCount / 8 + 64)
+        XCTAssertLessThan(packedCount + packedCount / 8 + 64, large.count / 8)
         XCTAssertFalse(OriginalBitmapBytes(noise).isCompressed); XCTAssertEqual(OriginalBitmapBytes(noise).dib, noise)
     }
 

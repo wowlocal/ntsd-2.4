@@ -185,7 +185,9 @@ import NTSDCore
                 let frames = b.raw.byteCount/f.alignment
                 // The record's bytes, read once: `b.raw.byte(at:)` copied the
                 // record (a class property) for every byte (MEMORY_LOADING L8).
-                let raw = b.raw.bytes
+                // `bytes(in:)` copies them without caching the whole array in
+                // the record, as the `bytes` getter does (M3).
+                let raw = b.raw.bytes(in:0..<b.raw.byteCount)
                 for frame in 0..<frames { for channel in 0..<f.channels {
                     let index = frame*f.alignment+channel*(f.bits/8),value: Float
                     if f.bits == 8 { value = Float(Int(raw[index])-128)/128 }

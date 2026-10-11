@@ -111,8 +111,13 @@ final class OriginalBitmapBytes: Sendable {
     init(_ dib: [UInt8]) {
         count = dib.count
         let packed = dib.count >= Self.threshold ? dib.withUnsafeBytes { OriginalLZ4.compress($0) } : nil
-        if let packed, packed.count < dib.count { raw = nil; compressed = packed } else { raw = dib; compressed = [] }
+        // Kept at its own size: the compressor's buffer keeps the capacity it
+        // reserved (an eighth of the input, or more after growing), which held
+        // 130 MB for 52 MB of compressed sheets (MEMORY_LOADING M3).
+        if let packed, packed.count < dib.count { raw = nil; compressed = packed.withUnsafeBufferPointer { Array($0) } } else { raw = dib; compressed = [] }
     }
     var dib: [UInt8] { raw ?? (try! OriginalLZ4.decompress(compressed, count: count)) }
     var isCompressed: Bool { raw == nil }
+    /// The bytes held, for tests: the compressed array's capacity (M3).
+    var heldCapacity: Int { raw?.capacity ?? compressed.capacity }
 }

@@ -27,8 +27,11 @@ the game. Per run it reports:
   "loaded" event and at body N, with the anonymous, file and swapped parts on
   Android;
 - Android: mainLoadCpuSeconds (the game thread's on-CPU time by the "loaded"
-  event; against loadSeconds it tells CPU-bound from waiting), and the PSS
-  summary of `dumpsys meminfo` at body N;
+  event; against loadSeconds it tells CPU-bound from waiting), the PSS
+  summary of `dumpsys meminfo` at body N, its native heap's size, allocated
+  and free parts (nativeHeapMB; free is memory the allocator holds but the
+  game does not), and the whole report with /proc/PID/smaps_rollup in
+  OUT_DIR/<label>-meminfo.txt;
 - Mac --snapshots: `heap`'s live bytes by class at the "loaded" event and at
   body N in OUT_DIR/<label>-heap-{loaded,bodies}.txt (attribution, not a gate).
 
@@ -114,6 +117,14 @@ def android_run(o, apk, label):
                 row["bodiesFileMB"] = round(kib(status, "RssFile") / 1024)
                 row["bodiesSwapMB"] = round(kib(status, "VmSwap") / 1024)
                 meminfo = phone.shell(s, f"dumpsys meminfo {pid}")
+                # The whole report (heap size/allocated/free by category) and the
+                # kernel's per-process totals, kept for attribution.
+                rollup = phone.shell(s, f"run-as {PACKAGE} cat /proc/{pid}/smaps_rollup 2>/dev/null")
+                (Path(o.out) / f"{label}-meminfo.txt").write_text(meminfo + "\n--- smaps_rollup\n" + rollup)
+                native = re.search(r"^\s*Native Heap\s+(\d+)\s+(\d+)\s+(\d+)\s+(\d+)\s+(\d+)\s+(\d+)\s+(\d+)\s+(\d+)", meminfo, re.M)
+                if native:   # Pss, Private Dirty, Private Clean, Swapped Dirty, Rss, Heap Size, Heap Alloc, Heap Free (KB)
+                    row["nativeHeapMB"] = {k: round(int(native.group(i)) / 1024) for k, i in
+                                           (("size", 6), ("allocated", 7), ("free", 8), ("privateDirty", 2), ("swapped", 4))}
                 summary = {}
                 for key in ("Java Heap", "Native Heap", "Code", "Stack", "Graphics", "Private Other", "System", "TOTAL PSS", "TOTAL RSS"):
                     m = re.search(rf"^\s*{key}:\s+(\d+)", meminfo, re.M)
