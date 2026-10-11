@@ -1,0 +1,287 @@
+{
+ "study": "TVOS_WEB",
+ "step": "T1a: all 10 scenarios on the Apple TV simulator",
+ "tree": "exp/tvos-web a1f3ac0 (T0); NTSDiOS built by ios_app.py --platform tvos per scenario",
+ "reference": "the frozen AppKit app of ml-l20 (frozen-app-ml-l20, whose native tree differs from a1f3ac0 only in the iOS host's files) run on all 10 scenarios with run_headless_scenarios.py --local: every scenario equal",
+ "appkitReference": [
+  {
+   "scenario": "vs",
+   "exit": 0,
+   "seconds": 65.2,
+   "result": "equal",
+   "differs": []
+  },
+  {
+   "scenario": "mission",
+   "exit": 0,
+   "seconds": 63.6,
+   "result": "equal",
+   "differs": []
+  },
+  {
+   "scenario": "demo",
+   "exit": 0,
+   "seconds": 46.2,
+   "result": "equal",
+   "differs": []
+  },
+  {
+   "scenario": "war",
+   "exit": 0,
+   "seconds": 100.3,
+   "result": "equal",
+   "differs": []
+  },
+  {
+   "scenario": "playback",
+   "exit": 0,
+   "seconds": 71.6,
+   "result": "equal",
+   "differs": []
+  },
+  {
+   "scenario": "tournament",
+   "exit": 0,
+   "seconds": 93.3,
+   "result": "equal",
+   "differs": []
+  },
+  {
+   "scenario": "altenter",
+   "exit": 0,
+   "seconds": 62.1,
+   "result": "equal",
+   "differs": []
+  },
+  {
+   "scenario": "tournament-win",
+   "exit": 0,
+   "seconds": 97.1,
+   "result": "equal",
+   "differs": []
+  },
+  {
+   "scenario": "team-tournament",
+   "exit": 0,
+   "seconds": 75.4,
+   "result": "equal",
+   "differs": []
+  },
+  {
+   "scenario": "joystick",
+   "exit": 0,
+   "seconds": 20.3,
+   "result": "equal",
+   "differs": []
+  }
+ ],
+ "tvos": [
+  {
+   "scenario": "vs",
+   "compare": {
+    "result": "equal",
+    "differs": []
+   }
+  },
+  {
+   "scenario": "mission",
+   "compare": {
+    "result": "equal",
+    "differs": []
+   }
+  },
+  {
+   "scenario": "demo",
+   "compare": {
+    "result": "equal",
+    "differs": []
+   }
+  },
+  {
+   "scenario": "war",
+   "compare": {
+    "result": "equal",
+    "differs": []
+   }
+  },
+  {
+   "scenario": "playback",
+   "compare": {
+    "result": "equal",
+    "differs": []
+   }
+  },
+  {
+   "scenario": "tournament",
+   "compare": {
+    "result": "equal",
+    "differs": []
+   }
+  },
+  {
+   "scenario": "altenter",
+   "compare": {
+    "result": "equal",
+    "differs": []
+   }
+  },
+  {
+   "scenario": "tournament-win",
+   "compare": {
+    "result": "equal",
+    "differs": []
+   }
+  },
+  {
+   "scenario": "team-tournament",
+   "compare": {
+    "result": "equal",
+    "differs": []
+   }
+  },
+  {
+   "scenario": "joystick",
+   "compare": {
+    "result": "equal",
+    "differs": []
+   }
+  }
+ ],
+ "framesTvosAgainstAppKit": [
+  {
+   "scenario": "altenter",
+   "frames": 6,
+   "identical": 6,
+   "differ": [],
+   "missing": [],
+   "digests": {
+    "a": 1826,
+    "b": 1826,
+    "equal": true,
+    "firstDifferentBody": null
+   }
+  },
+  {
+   "scenario": "demo",
+   "frames": 3,
+   "identical": 3,
+   "differ": [],
+   "missing": [],
+   "digests": {
+    "a": 945,
+    "b": 945,
+    "equal": true,
+    "firstDifferentBody": null
+   }
+  },
+  {
+   "scenario": "joystick",
+   "frames": 0,
+   "identical": 0,
+   "differ": [],
+   "missing": [],
+   "digests": {
+    "a": 296,
+    "b": 296,
+    "equal": true,
+    "firstDifferentBody": null
+   }
+  },
+  {
+   "scenario": "mission",
+   "frames": 6,
+   "identical": 6,
+   "differ": [],
+   "missing": [],
+   "digests": {
+    "a": 1800,
+    "b": 1800,
+    "equal": true,
+    "firstDifferentBody": null
+   }
+  },
+  {
+   "scenario": "playback",
+   "frames": 7,
+   "identical": 7,
+   "differ": [],
+   "missing": [],
+   "digests": {
+    "a": 2121,
+    "b": 2121,
+    "equal": true,
+    "firstDifferentBody": null
+   }
+  },
+  {
+   "scenario": "team-tournament",
+   "frames": 6,
+   "identical": 6,
+   "differ": [],
+   "missing": [],
+   "digests": {
+    "a": 1856,
+    "b": 1856,
+    "equal": true,
+    "firstDifferentBody": null
+   }
+  },
+  {
+   "scenario": "tournament",
+   "frames": 6,
+   "identical": 6,
+   "differ": [],
+   "missing": [],
+   "digests": {
+    "a": 1832,
+    "b": 1832,
+    "equal": true,
+    "firstDifferentBody": null
+   }
+  },
+  {
+   "scenario": "tournament-win",
+   "frames": 8,
+   "identical": 8,
+   "differ": [],
+   "missing": [],
+   "digests": {
+    "a": 2520,
+    "b": 2520,
+    "equal": true,
+    "firstDifferentBody": null
+   }
+  },
+  {
+   "scenario": "vs",
+   "frames": 6,
+   "identical": 6,
+   "differ": [],
+   "missing": [],
+   "digests": {
+    "a": 1826,
+    "b": 1826,
+    "equal": true,
+    "firstDifferentBody": null
+   }
+  },
+  {
+   "scenario": "war",
+   "frames": 10,
+   "identical": 10,
+   "differ": [],
+   "missing": [],
+   "digests": {
+    "a": 3008,
+    "b": 3008,
+    "equal": true,
+    "firstDifferentBody": null
+   }
+  },
+  {
+   "frames": 18088,
+   "mismatched": 0,
+   "result": "identical"
+  }
+ ]
+}
