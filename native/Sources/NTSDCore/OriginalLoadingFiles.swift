@@ -80,7 +80,7 @@ public struct OriginalLoadingFiles: Equatable, Sendable {
         let allocation = try allocate(path, mode)
         guard allocation.token != 0 else { throw Self.error("NULL fopen continuation requires original CRT provenance") }
         guard streams[allocation.token] == nil, allocation.buffer != 0,
-              allocation.capacity > 0, allocation.capacity <= Int(UInt32.max),
+              allocation.capacity > 0, UInt64(allocation.capacity) <= UInt64(UInt32.max),
               allocation.readLimit > 0, allocation.readLimit <= allocation.capacity,
               allocation.closeResult == 0 || allocation.closeResult == -1 else {
             throw Self.error("Invalid or reused declared stream allocation")

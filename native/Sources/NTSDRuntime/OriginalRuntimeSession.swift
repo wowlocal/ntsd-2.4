@@ -51,13 +51,13 @@ import NTSDCore
     func exit(_ code: Int32) -> Never
     /// Runs `body` once on the main thread after `milliseconds`: the next
     /// message-loop iteration, which each iteration schedules (one at a time).
-    /// The default is the main dispatch queue's `asyncAfter`.
+    /// The default is the main dispatch queue's `asyncAfter` (`OriginalMainQueue`).
     func scheduleIteration(after milliseconds: UInt32,_ body: @escaping @MainActor () -> Void)
 }
 
 public extension OriginalRuntimeSessionHost {
     func scheduleIteration(after milliseconds: UInt32,_ body: @escaping @MainActor () -> Void) {
-        DispatchQueue.main.asyncAfter(deadline:.now() + .milliseconds(Int(milliseconds))) { MainActor.assumeIsolated { body() } }
+        OriginalMainQueue.after(milliseconds:Int(milliseconds),body)
     }
 }
 
@@ -294,7 +294,7 @@ public enum OriginalRuntimeSessionBoundary: Error, Equatable {
                 } else if let url = URL(string:text) { target = url } else { return }
                 // The original's Sleep before ShellExecuteA (the click sound plays meanwhile).
                 let host = self.host
-                DispatchQueue.main.asyncAfter(deadline:.now() + .milliseconds(Int(delay))) { MainActor.assumeIsolated { host.open(target) } }
+                OriginalMainQueue.after(milliseconds:Int(delay)) { host.open(target) }
             }
             menu.messages.destroyedWindow = { [unowned self] in
                 Self.emit(["event":"windowDestroyed","iterations":self.committed])
@@ -503,7 +503,7 @@ public enum OriginalRuntimeSessionBoundary: Error, Equatable {
             "rng":try bytes(0x44ff90,3001),"notificationRequests":menu.network?.notificationRequestCount ?? 0,
             "clientRequests":menu.network?.clientRequestCount ?? 0]
         let path = arguments[i+1]
-        try JSONSerialization.data(withJSONObject:value,options:[.sortedKeys]).write(to:URL(fileURLWithPath:path),options:.atomic)
+        try JSONSerialization.data(withJSONObject:value,options:[.sortedKeys]).writeReplacing(to:URL(fileURLWithPath:path))
         networkReadyRecorded = true
         Self.emit(["event":"networkReady","role":role,"path":path,"iterations":committed])
         if arguments.contains("--exit-after-network-ready") { stopped = true; flushBeforeExit(); host.terminate(); return true }
@@ -617,7 +617,7 @@ public enum OriginalRuntimeSessionBoundary: Error, Equatable {
         }
         let values = try Self.summaryValues(model)
         if let i = arguments.firstIndex(of:"--summary-json"),i+1 < arguments.count {
-            try JSONSerialization.data(withJSONObject:values,options:[.sortedKeys]).write(to:URL(fileURLWithPath:arguments[i+1]),options:.atomic)
+            try JSONSerialization.data(withJSONObject:values,options:[.sortedKeys]).writeReplacing(to:URL(fileURLWithPath:arguments[i+1]))
         }
         Self.emit(["event":"summary","cycles":cycles,"gameplayBodies":gameplayBodies,"values":values,
             "replayFiles":loading?.savedReplays.map { "\($0.path) \($0.bytes.count)" } ?? []])

@@ -1,3 +1,4 @@
+#if !os(WASI)   // no BSD sockets or Dispatch on WASI (TVOS_WEB W0)
 // BSD sockets only: Windows hosts will use real Winsock (a separate adapter).
 #if !os(Windows)
 #if canImport(Darwin)
@@ -535,4 +536,5 @@ public final class OriginalMacWinsock {
 
 extension OriginalMacWinsock: OriginalRuntimeSockets {}
 
+#endif
 #endif

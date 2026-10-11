@@ -31,7 +31,7 @@ public enum OriginalReplayCompression {
     /// Explicit allocator failure stimulus for the original-instruction corpus.
     static func compress(_ source: [UInt8], destination: inout OriginalStateRecord,
                          level: Int32, failureOrdinal: UInt32) throws -> Result {
-        guard source.count <= Int(UInt32.max), destination.byteCount <= Int(UInt32.max) else {
+        guard UInt64(source.count) <= UInt64(UInt32.max), UInt64(destination.byteCount) <= UInt64(UInt32.max) else {
             throw OriginalStateError.invalidStorage("Replay compression: original 32-bit length extent")
         }
         var output: OriginalStateRecord? = destination

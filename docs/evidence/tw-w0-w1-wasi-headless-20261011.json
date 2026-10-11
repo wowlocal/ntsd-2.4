@@ -1,0 +1,1135 @@
+{
+ "study": "docs/research/MEMORY_LOADING.md",
+ "increment": "tw-w0",
+ "previous": "ml-l20",
+ "phase": "W0 + W1: NTSDHeadless for wasm32-unknown-wasip1, every scenario under WASI",
+ "change": "Core: a WASI clock (__wasi_clock_time_get, ids 0/1), OriginalConcurrentInputs.map without Dispatch (bodies in turn) and Background computed at creation on WASI, five size checks compared in 64 bits (Int(UInt32.max) traps with a 32-bit Int). Runtime: OriginalMainQueue (DispatchQueue.main as before; on WASI a timer list served by run() in deadline then creation order) for the session's iterations, the shell and playback delays and TouchMouse; an inline render executor and an immediate release on WASI; OriginalMacWinsock left out on WASI with OriginalUnavailableSockets; the display budget clamped (3<<30 wrapped negative); Data.writeReplacing (.atomic, or a plain write on WASI). Headless: the WASI sockets stub and OriginalMainQueue.run(). Tools: wasi_run.mjs (Node WASI runner) and run_headless_scenarios.py --wasi.",
+ "review": "Independent review: OK, no defect; existing hosts run identical code paths. Low follow-ups (code-after-return warnings, a 32-bit timer counter, read-only preopens, node --disable-warning, recording the node version) and older code that traps on wasm32 where 64-bit hosts throw (OriginalWorldCPoints frame -6, OriginalReplayFileInput payload length with a high byte >= 0x80, ~60 Int(UInt32) table reads, BMP header words, Int overflows only reachable through corruption) are W1b.",
+ "notes": "WASI build: swift-6.4.0-RELEASE_wasm with the open-source 6.4.0 toolchain, NTSDHeadless.wasm 96 MB (with debug info); Node 20.19.5's V8 crashed compiling it (GC fatal error), Node 26.7.0 runs it. All 10 scenarios under WASI equal to their references and all 18,088 frames and digests identical to the Mac headless run of this gate (the none group); vs also identical to m1-frames-ref. Load under WASI ~0.9 s against 0.33 s natively (single-threaded, JIT). Existing hosts: all 10 scenarios, AppKit, unchecked and emulator equal with frames identical; 12 suites; phone A/B (music and sounds) overlapping in load (5.28-6.17 against 5.59-5.60 s), launch to loaded, peak, PSS, render, process, audio and CPU since launch; main 10.82-10.84 against 10.74-10.80 ms per tick (the L20 warm-up run 10.84), no W0 change running per tick on Android (its host schedules iterations itself; the rest are WASI-only branches or load-time code).",
+ "testedTrees": "native 11edcffeda9ef15d75b545934cfb40d128e09183 tools e39c66491fd07a2b10cd0ec927931fe177dc2a94",
+ "gate": [
+  "native 11edcffeda9ef15d75b545934cfb40d128e09183 tools e39c66491fd07a2b10cd0ec927931fe177dc2a94",
+  "headless built (checked: 3219 beginAccess)",
+  "app built (checked: 3333 beginAccess)",
+  "unchecked headless built (0 beginAccess)",
+  "apk saved",
+  "apk libraries kept",
+  "launches: crashes 0 of 20",
+  "bundle exit=0",
+  "suites_done",
+  "phone A/B exit=0",
+  "{\"summary\": {\"build\": \"tw-w0\", \"runs\": 3, \"startupSeconds\": {\"median\": 1.83, \"min\": 1.83, \"max\": 1.85}, \"loadSeconds\": {\"median\": 6.07, \"min\": 5.28, \"max\": 6.17}, \"startToLoadedSeconds\": {\"median\": 12.92, \"min\": 12.91, \"max\": 12.99}, \"peakResidentMB\": {\"median\": 595, \"min\": 593, \"max\": 637}, \"peakFootprintMB\": {\"median\": 610, \"min\": 594, \"max\": 639}, \"loadedResidentMB\": {\"median\": 566, \"min\": 559, \"max\": 610}, \"bodiesResidentMB\": {\"median\": 538, \"min\": 535, \"max\": 555}, \"mainMsPerTick\": {\"median\": 10.83, \"min\": 10.82, \"max\": 10.84}, \"renderMsPerTick\": {\"median\": 7.31, \"min\": 7.13, \"max\": 7.52}, \"processMsPerTick\": {\"median\": 27.25, \"min\": 27.07, \"max\": 27.58}, \"completeMsPerTick\": {\"median\": 7.31, \"min\": 7.29, \"max\": 7.33}, \"loadedSwapMB\": {\"median\": 22, \"min\": 22, \"max\": 22}, \"bodiesSwapMB\": {\"median\": 22, \"min\": 22, \"max\": 22}, \"ticksEndResidentMB\": {\"median\": 577, \"min\": 570, \"max\": 594}, \"ticksEndSwapMB\": {\"median\": 14, \"min\": 14, \"max\": 14}, \"ticksEndFootprintMB\": {\"median\": 591, ",
+  "{\"summary\": {\"build\": \"ml-l20\", \"runs\": 2, \"startupSeconds\": {\"median\": 1.84, \"min\": 1.83, \"max\": 1.85}, \"loadSeconds\": {\"median\": 5.595, \"min\": 5.59, \"max\": 5.6}, \"startToLoadedSeconds\": {\"median\": 13.004999999999999, \"min\": 12.92, \"max\": 13.09}, \"peakResidentMB\": {\"median\": 598.5, \"min\": 593, \"max\": 604}, \"peakFootprintMB\": {\"median\": 617.5, \"min\": 611, \"max\": 624}, \"loadedResidentMB\": {\"median\": 534.0, \"min\": 531, \"max\": 537}, \"bodiesResidentMB\": {\"median\": 544.0, \"min\": 531, \"max\": 557}, \"mainMsPerTick\": {\"median\": 10.77, \"min\": 10.74, \"max\": 10.8}, \"renderMsPerTick\": {\"median\": 7.23, \"min\": 7.18, \"max\": 7.28}, \"processMsPerTick\": {\"median\": 27.205, \"min\": 27.17, \"max\": 27.24}, \"completeMsPerTick\": {\"median\": 7.3, \"min\": 7.27, \"max\": 7.33}, \"loadedSwapMB\": {\"median\": 22.0, \"min\": 22, \"max\": 22}, \"bodiesSwapMB\": {\"median\": 22.0, \"min\": 22, \"max\": 22}, \"ticksEndResidentMB\": {\"median\": 576.0, \"min\": 570, \"max\": 582}, \"ticksEndSwapMB\": {\"median\": 14.0, \"min\": 14, \"max\": 14}, \"ticksEndF",
+  "phone_done",
+  "emu exit=0",
+  "{\"scenario\": \"vs\", \"seconds\": 58.8, \"result\": \"equal\", \"differs\": []}",
+  "{\"frames\": 1832, \"mismatched\": 0, \"result\": \"identical\"}",
+  "{\"scenario\": \"vs\", \"exit\": 0, \"seconds\": 61.8, \"result\": \"equal\", \"differs\": []}",
+  "{\"scenario\": \"mission\", \"exit\": 0, \"seconds\": 61.4, \"result\": \"equal\", \"differs\": []}",
+  "{\"scenario\": \"demo\", \"exit\": 0, \"seconds\": 45.7, \"result\": \"equal\", \"differs\": []}",
+  "{\"scenario\": \"war\", \"exit\": 0, \"seconds\": 100.9, \"result\": \"equal\", \"differs\": []}",
+  "{\"scenario\": \"playback\", \"exit\": 0, \"seconds\": 66.7, \"result\": \"equal\", \"differs\": []}",
+  "{\"scenario\": \"tournament\", \"exit\": 0, \"seconds\": 92.3, \"result\": \"equal\", \"differs\": []}",
+  "{\"scenario\": \"altenter\", \"exit\": 0, \"seconds\": 66.8, \"result\": \"equal\", \"differs\": []}",
+  "{\"scenario\": \"tournament-win\", \"exit\": 0, \"seconds\": 99.6, \"result\": \"equal\", \"differs\": []}",
+  "{\"scenario\": \"team-tournament\", \"exit\": 0, \"seconds\": 76.2, \"result\": \"equal\", \"differs\": []}",
+  "{\"scenario\": \"joystick\", \"exit\": 0, \"seconds\": 20.7, \"result\": \"equal\", \"differs\": []}",
+  "{\"frames\": 1832, \"mismatched\": 0, \"result\": \"identical\"}",
+  "{\"scenario\": \"vs\", \"exit\": 0, \"seconds\": 66.0, \"result\": \"equal\", \"differs\": []}",
+  "{\"scenario\": \"playback\", \"exit\": 0, \"seconds\": 71.5, \"result\": \"equal\", \"differs\": []}",
+  "{\"frames\": 3960, \"mismatched\": 0, \"result\": \"identical\"}",
+  "{\"scenario\": \"vs\", \"exit\": 0, \"seconds\": 66.9, \"result\": \"equal\", \"differs\": []}",
+  "{\"scenario\": \"demo\", \"exit\": 0, \"seconds\": 48.2, \"result\": \"equal\", \"differs\": []}",
+  "{\"frames\": 1832, \"mismatched\": 0, \"result\": \"identical\"}",
+  "scenarios_done",
+  "mac A/B exit=0",
+  "{\"summary\": {\"build\": \"frozen-unchecked-tw-w0\", \"runs\": 3, \"startupSeconds\": {\"median\": 0.049, \"min\": 0.048, \"max\": 0.052}, \"loadSeconds\": {\"median\": 0.309, \"min\": 0.307, \"max\": 0.31}, \"startToLoadedSeconds\": {\"median\": 0.678, \"min\": 0.678, \"max\": 0.68}, \"peakResidentMB\": {\"median\": 669, \"min\": 666, \"max\": 674}, \"loadedResidentMB\": {\"median\": 574, \"min\": 570, \"max\": 582}, \"bodiesResidentMB\": {\"median\": 623, \"min\": 612, \"max\": 633}, \"processMsPerTick\": {\"median\": 2.856, \"min\": 2.844, \"max\": 2.911}, \"completeMsPerTick\": {\"median\": 1.0958, \"min\": 1.0761, \"max\": 1.107}}}",
+  "{\"summary\": {\"build\": \"frozen-unchecked-ml-l20\", \"runs\": 3, \"startupSeconds\": {\"median\": 0.056, \"min\": 0.05, \"max\": 0.056}, \"loadSeconds\": {\"median\": 0.318, \"min\": 0.313, \"max\": 0.321}, \"startToLoadedSeconds\": {\"median\": 0.694, \"min\": 0.68, \"max\": 0.701}, \"peakResidentMB\": {\"median\": 672, \"min\": 665, \"max\": 682}, \"loadedResidentMB\": {\"median\": 581, \"min\": 581, \"max\": 600}, \"bodiesResidentMB\": {\"median\": 632, \"min\": 627, \"max\": 647}, \"processMsPerTick\": {\"median\": 2.967, \"min\": 2.911, \"max\": 2.967}, \"completeMsPerTick\": {\"median\": 1.1209, \"min\": 1.1161, \"max\": 1.1263}}}",
+  "gate_done"
+ ],
+ "suites": [
+  "OriginalExclusivityChecksTests: Executed 1 test, with 0 failures (0 unexpected) in 0.002 (0.019) seconds",
+  "OriginalConcurrentInputsTests: Executed 7 tests, with 0 failures (0 unexpected) in 1.644 (1.646) seconds",
+  "OriginalLoadingReadAheadTests: Executed 5 tests, with 0 failures (0 unexpected) in 1.550 (1.551) seconds",
+  "OriginalLoadingFilesTests: Executed 4 tests, with 0 failures (0 unexpected) in 0.428 (0.429) seconds",
+  "OriginalLoadingFilesInPlaceTests: Executed 2 tests, with 0 failures (0 unexpected) in 0.018 (0.019) seconds",
+  "OriginalLibSurfaceTextTests: Executed 2 tests, with 0 failures (0 unexpected) in 0.080 (0.081) seconds",
+  "OriginalMusicPlaybackTests: Executed 2 tests, with 0 failures (0 unexpected) in 50.477 (50.479) seconds",
+  "OriginalDemoMusicTests: Executed 1 test, with 0 failures (0 unexpected) in 0.005 (0.006) seconds",
+  "OriginalReplayCompressionTests: Executed 1 test, with 0 failures (0 unexpected) in 0.630 (0.631) seconds",
+  "OriginalApplicationObservedStartupTests: Executed 4 tests, with 0 failures (0 unexpected) in 12.271 (12.273) seconds",
+  "OriginalMacDisplayBackendTests: Executed 4 tests, with 0 failures (0 unexpected) in 3.036 (3.048) seconds",
+  "OriginalMacRuntimeStartupTests: Executed 5 tests, with 0 failures (0 unexpected) in 0.454 (0.455) seconds",
+  "OriginalMacRuntimeLoadingTests: Executed 7 tests, with 0 failures (0 unexpected) in 1.732 (1.734) seconds"
+ ],
+ "phone": {
+  "summary": {
+   "tw-w0": {
+    "runs": 3,
+    "loadSeconds": {
+     "median": 6.07,
+     "min": 5.28,
+     "max": 6.17
+    },
+    "startupSeconds": {
+     "median": 1.83,
+     "min": 1.83,
+     "max": 1.85
+    },
+    "startToLoadedSeconds": {
+     "median": 12.92,
+     "min": 12.91,
+     "max": 12.99
+    },
+    "peakFootprintMB": {
+     "median": 610,
+     "min": 594,
+     "max": 639
+    },
+    "peakResidentMB": {
+     "median": 595,
+     "min": 593,
+     "max": 637
+    },
+    "loadedResidentMB": {
+     "median": 566,
+     "min": 559,
+     "max": 610
+    },
+    "bodiesResidentMB": {
+     "median": 538,
+     "min": 535,
+     "max": 555
+    },
+    "bodiesSwapMB": {
+     "median": 22,
+     "min": 22,
+     "max": 22
+    },
+    "mainCpuToLoadedSeconds": {
+     "median": 9.89,
+     "min": 9.86,
+     "max": 10.05
+    },
+    "mainMsPerTick": {
+     "median": 10.83,
+     "min": 10.82,
+     "max": 10.84
+    },
+    "renderMsPerTick": {
+     "median": 7.31,
+     "min": 7.13,
+     "max": 7.52
+    },
+    "processMsPerTick": {
+     "median": 27.25,
+     "min": 27.07,
+     "max": 27.58
+    },
+    "completeMsPerTick": {
+     "median": 7.31,
+     "min": 7.29,
+     "max": 7.33
+    },
+    "loadedCounts": [
+     {
+      "allocations": 16105,
+      "audioRequests": 2072,
+      "bitmapRequests": 12817,
+      "files": 621
+     }
+    ]
+   },
+   "ml-l20": {
+    "runs": 2,
+    "loadSeconds": {
+     "median": 5.595,
+     "min": 5.59,
+     "max": 5.6
+    },
+    "startupSeconds": {
+     "median": 1.84,
+     "min": 1.83,
+     "max": 1.85
+    },
+    "startToLoadedSeconds": {
+     "median": 13.004999999999999,
+     "min": 12.92,
+     "max": 13.09
+    },
+    "peakFootprintMB": {
+     "median": 617.5,
+     "min": 611,
+     "max": 624
+    },
+    "peakResidentMB": {
+     "median": 598.5,
+     "min": 593,
+     "max": 604
+    },
+    "loadedResidentMB": {
+     "median": 534.0,
+     "min": 531,
+     "max": 537
+    },
+    "bodiesResidentMB": {
+     "median": 544.0,
+     "min": 531,
+     "max": 557
+    },
+    "bodiesSwapMB": {
+     "median": 22.0,
+     "min": 22,
+     "max": 22
+    },
+    "mainCpuToLoadedSeconds": {
+     "median": 10.195,
+     "min": 10.15,
+     "max": 10.24
+    },
+    "mainMsPerTick": {
+     "median": 10.77,
+     "min": 10.74,
+     "max": 10.8
+    },
+    "renderMsPerTick": {
+     "median": 7.23,
+     "min": 7.18,
+     "max": 7.28
+    },
+    "processMsPerTick": {
+     "median": 27.205,
+     "min": 27.17,
+     "max": 27.24
+    },
+    "completeMsPerTick": {
+     "median": 7.3,
+     "min": 7.27,
+     "max": 7.33
+    },
+    "loadedCounts": [
+     {
+      "allocations": 16105,
+      "audioRequests": 2072,
+      "bitmapRequests": 12817,
+      "files": 621
+     }
+    ]
+   }
+  },
+  "runs": [
+   {
+    "label": "tw-w0-ab-01-tw-w0",
+    "host": "android",
+    "serial": "R58R36F7VFD",
+    "scenario": "vs",
+    "bodies": 600,
+    "apk": "tw-w0.apk",
+    "sounds": true,
+    "music": true,
+    "loadedResidentMB": 566,
+    "loadedAnonMB": 519,
+    "loadedFileMB": 37,
+    "loadedSwapMB": 22,
+    "mainCpuToLoadedSeconds": 9.89,
+    "bodiesResidentMB": 555,
+    "bodiesAnonMB": 506,
+    "bodiesFileMB": 39,
+    "bodiesSwapMB": 22,
+    "nativeHeapMB": {
+     "size": 1668,
+     "allocated": 1626,
+     "free": 41,
+     "privateDirty": 481,
+     "swapped": 0
+    },
+    "pssMB": {
+     "Java Heap": 9,
+     "Native Heap": 481,
+     "Code": 18,
+     "Stack": 1,
+     "Graphics": 5,
+     "Private Other": 2,
+     "System": 9,
+     "TOTAL PSS": 525
+    },
+    "cpuToEndSeconds": 96.19,
+    "ticksEndNativeHeapMB": {
+     "size": 1689,
+     "allocated": 1644,
+     "free": 45,
+     "privateDirty": 509,
+     "swapped": 0
+    },
+    "ticksEndResidentMB": 594,
+    "ticksEndAnonMB": 545,
+    "ticksEndFileMB": 40,
+    "ticksEndSwapMB": 14,
+    "ticksEndFootprintMB": 608,
+    "ticksEndPssMB": 563,
+    "ticksPerSecond": 34.69,
+    "completeMsPerTick": 7.29,
+    "mainMsPerTick": 10.84,
+    "renderMsPerTick": 7.52,
+    "processMsPerTick": 27.58,
+    "threadMsPerTick": {
+     "local.ntsd.port": 10.84,
+     "DispatchWorker": 7.52,
+     "NTSD.present": 5.23,
+     "NTSD.release": 1.84,
+     "AudioTrack": 1.2,
+     "Binder": 0.95
+    },
+    "threadCpuToEndSeconds": {
+     "local.ntsd.port": 34.36,
+     "DispatchWorker": 15.45,
+     "NTSD.present": 12.03,
+     "Jit_thread_pool": 5.06,
+     "NTSD.release": 4.68,
+     "AudioTrack": 2.87,
+     "Binder": 2.39,
+     "InsetsAnimation": 0.06
+    },
+    "peakResidentMB": 593,
+    "peakFootprintMB": 594,
+    "startupSeconds": 1.85,
+    "sha256HostBlocks": true,
+    "loadSeconds": 5.28,
+    "packagesWaitSeconds": 0.4,
+    "startToLoadedSeconds": 12.92,
+    "loadedCounts": {
+     "allocations": 16105,
+     "audioRequests": 2072,
+     "bitmapRequests": 12817,
+     "files": 621
+    },
+    "build": "tw-w0"
+   },
+   {
+    "label": "tw-w0-ab-02-ml-l20",
+    "host": "android",
+    "serial": "R58R36F7VFD",
+    "scenario": "vs",
+    "bodies": 600,
+    "apk": "ml-l20.apk",
+    "sounds": true,
+    "music": true,
+    "loadedResidentMB": 537,
+    "loadedAnonMB": 496,
+    "loadedFileMB": 32,
+    "loadedSwapMB": 22,
+    "mainCpuToLoadedSeconds": 10.15,
+    "bodiesResidentMB": 531,
+    "bodiesAnonMB": 487,
+    "bodiesFileMB": 34,
+    "bodiesSwapMB": 22,
+    "nativeHeapMB": {
+     "size": 1647,
+     "allocated": 1625,
+     "free": 23,
+     "privateDirty": 462,
+     "swapped": 0
+    },
+    "pssMB": {
+     "Java Heap": 9,
+     "Native Heap": 462,
+     "Code": 17,
+     "Stack": 1,
+     "Graphics": 5,
+     "Private Other": 2,
+     "System": 9,
+     "TOTAL PSS": 505
+    },
+    "cpuToEndSeconds": 94.82,
+    "ticksEndNativeHeapMB": {
+     "size": 1668,
+     "allocated": 1642,
+     "free": 26,
+     "privateDirty": 489,
+     "swapped": 0
+    },
+    "ticksEndResidentMB": 570,
+    "ticksEndAnonMB": 526,
+    "ticksEndFileMB": 36,
+    "ticksEndSwapMB": 14,
+    "ticksEndFootprintMB": 584,
+    "ticksEndPssMB": 543,
+    "ticksPerSecond": 34.75,
+    "completeMsPerTick": 7.33,
+    "mainMsPerTick": 10.8,
+    "renderMsPerTick": 7.18,
+    "processMsPerTick": 27.24,
+    "threadMsPerTick": {
+     "local.ntsd.port": 10.8,
+     "DispatchWorker": 7.18,
+     "NTSD.present": 5.24,
+     "NTSD.release": 1.85,
+     "AudioTrack": 1.21,
+     "Binder": 0.96
+    },
+    "threadCpuToEndSeconds": {
+     "local.ntsd.port": 34.16,
+     "DispatchWorker": 14.64,
+     "NTSD.present": 11.97,
+     "Jit_thread_pool": 4.91,
+     "NTSD.release": 4.64,
+     "AudioTrack": 2.87,
+     "Binder": 2.37,
+     "InsetsAnimation": 0.06
+    },
+    "peakResidentMB": 604,
+    "peakFootprintMB": 624,
+    "startupSeconds": 1.85,
+    "sha256HostBlocks": true,
+    "loadSeconds": 5.6,
+    "packagesWaitSeconds": 0.66,
+    "startToLoadedSeconds": 12.92,
+    "loadedCounts": {
+     "allocations": 16105,
+     "audioRequests": 2072,
+     "bitmapRequests": 12817,
+     "files": 621
+    },
+    "build": "ml-l20"
+   },
+   {
+    "label": "tw-w0-ab-03-tw-w0",
+    "host": "android",
+    "serial": "R58R36F7VFD",
+    "scenario": "vs",
+    "bodies": 600,
+    "apk": "tw-w0.apk",
+    "sounds": true,
+    "music": true,
+    "loadedResidentMB": 559,
+    "loadedAnonMB": 512,
+    "loadedFileMB": 38,
+    "loadedSwapMB": 22,
+    "mainCpuToLoadedSeconds": 10.05,
+    "bodiesResidentMB": 535,
+    "bodiesAnonMB": 488,
+    "bodiesFileMB": 37,
+    "bodiesSwapMB": 22,
+    "nativeHeapMB": {
+     "size": 1648,
+     "allocated": 1625,
+     "free": 22,
+     "privateDirty": 463,
+     "swapped": 0
+    },
+    "pssMB": {
+     "Java Heap": 9,
+     "Native Heap": 463,
+     "Code": 20,
+     "Stack": 1,
+     "Graphics": 5,
+     "Private Other": 2,
+     "System": 9,
+     "TOTAL PSS": 508
+    },
+    "cpuToEndSeconds": 94.62,
+    "ticksEndNativeHeapMB": {
+     "size": 1668,
+     "allocated": 1642,
+     "free": 26,
+     "privateDirty": 489,
+     "swapped": 0
+    },
+    "ticksEndResidentMB": 570,
+    "ticksEndAnonMB": 525,
+    "ticksEndFileMB": 36,
+    "ticksEndSwapMB": 14,
+    "ticksEndFootprintMB": 584,
+    "ticksEndPssMB": 544,
+    "ticksPerSecond": 34.67,
+    "completeMsPerTick": 7.33,
+    "mainMsPerTick": 10.83,
+    "renderMsPerTick": 7.13,
+    "processMsPerTick": 27.07,
+    "threadMsPerTick": {
+     "local.ntsd.port": 10.83,
+     "DispatchWorker": 7.13,
+     "NTSD.present": 5.18,
+     "NTSD.release": 1.8,
+     "AudioTrack": 1.19,
+     "Binder": 0.94
+    },
+    "threadCpuToEndSeconds": {
+     "local.ntsd.port": 34.17,
+     "DispatchWorker": 14.59,
+     "NTSD.present": 11.97,
+     "Jit_thread_pool": 4.82,
+     "NTSD.release": 4.59,
+     "AudioTrack": 2.84,
+     "Binder": 2.35,
+     "InsetsAnimation": 0.05
+    },
+    "peakResidentMB": 595,
+    "peakFootprintMB": 610,
+    "startupSeconds": 1.83,
+    "sha256HostBlocks": true,
+    "loadSeconds": 6.17,
+    "packagesWaitSeconds": 1.29,
+    "startToLoadedSeconds": 12.99,
+    "loadedCounts": {
+     "allocations": 16105,
+     "audioRequests": 2072,
+     "bitmapRequests": 12817,
+     "files": 621
+    },
+    "build": "tw-w0"
+   },
+   {
+    "label": "tw-w0-ab-04-ml-l20",
+    "host": "android",
+    "serial": "R58R36F7VFD",
+    "scenario": "vs",
+    "bodies": 600,
+    "apk": "ml-l20.apk",
+    "sounds": true,
+    "music": true,
+    "loadedResidentMB": 531,
+    "loadedAnonMB": 480,
+    "loadedFileMB": 42,
+    "loadedSwapMB": 22,
+    "mainCpuToLoadedSeconds": 10.24,
+    "bodiesResidentMB": 557,
+    "bodiesAnonMB": 504,
+    "bodiesFileMB": 43,
+    "bodiesSwapMB": 22,
+    "nativeHeapMB": {
+     "size": 1664,
+     "allocated": 1625,
+     "free": 39,
+     "privateDirty": 479,
+     "swapped": 0
+    },
+    "pssMB": {
+     "Java Heap": 9,
+     "Native Heap": 479,
+     "Code": 22,
+     "Stack": 1,
+     "Graphics": 5,
+     "Private Other": 2,
+     "System": 10,
+     "TOTAL PSS": 527
+    },
+    "cpuToEndSeconds": 95.12,
+    "ticksEndNativeHeapMB": {
+     "size": 1673,
+     "allocated": 1642,
+     "free": 31,
+     "privateDirty": 493,
+     "swapped": 0
+    },
+    "ticksEndResidentMB": 582,
+    "ticksEndAnonMB": 529,
+    "ticksEndFileMB": 44,
+    "ticksEndSwapMB": 14,
+    "ticksEndFootprintMB": 596,
+    "ticksEndPssMB": 549,
+    "ticksPerSecond": 34.82,
+    "completeMsPerTick": 7.27,
+    "mainMsPerTick": 10.74,
+    "renderMsPerTick": 7.28,
+    "processMsPerTick": 27.17,
+    "threadMsPerTick": {
+     "local.ntsd.port": 10.74,
+     "DispatchWorker": 7.28,
+     "NTSD.present": 5.21,
+     "NTSD.release": 1.79,
+     "AudioTrack": 1.19,
+     "Binder": 0.97
+    },
+    "threadCpuToEndSeconds": {
+     "local.ntsd.port": 34.28,
+     "DispatchWorker": 14.87,
+     "NTSD.present": 12.0,
+     "Jit_thread_pool": 4.83,
+     "NTSD.release": 4.57,
+     "AudioTrack": 2.85,
+     "Binder": 2.36,
+     "InsetsAnimation": 0.06
+    },
+    "peakResidentMB": 593,
+    "peakFootprintMB": 611,
+    "startupSeconds": 1.83,
+    "sha256HostBlocks": true,
+    "loadSeconds": 5.59,
+    "packagesWaitSeconds": 0.57,
+    "startToLoadedSeconds": 13.09,
+    "loadedCounts": {
+     "allocations": 16105,
+     "audioRequests": 2072,
+     "bitmapRequests": 12817,
+     "files": 621
+    },
+    "build": "ml-l20"
+   },
+   {
+    "label": "tw-w0-ab-05-tw-w0",
+    "host": "android",
+    "serial": "R58R36F7VFD",
+    "scenario": "vs",
+    "bodies": 600,
+    "apk": "tw-w0.apk",
+    "sounds": true,
+    "music": true,
+    "loadedResidentMB": 610,
+    "loadedAnonMB": 561,
+    "loadedFileMB": 40,
+    "loadedSwapMB": 22,
+    "mainCpuToLoadedSeconds": 9.86,
+    "bodiesResidentMB": 538,
+    "bodiesAnonMB": 488,
+    "bodiesFileMB": 41,
+    "bodiesSwapMB": 22,
+    "nativeHeapMB": {
+     "size": 1647,
+     "allocated": 1625,
+     "free": 22,
+     "privateDirty": 463,
+     "swapped": 0
+    },
+    "pssMB": {
+     "Java Heap": 9,
+     "Native Heap": 463,
+     "Code": 21,
+     "Stack": 1,
+     "Graphics": 5,
+     "Private Other": 2,
+     "System": 10,
+     "TOTAL PSS": 510
+    },
+    "cpuToEndSeconds": 94.68,
+    "ticksEndNativeHeapMB": {
+     "size": 1668,
+     "allocated": 1642,
+     "free": 26,
+     "privateDirty": 489,
+     "swapped": 0
+    },
+    "ticksEndResidentMB": 577,
+    "ticksEndAnonMB": 526,
+    "ticksEndFileMB": 42,
+    "ticksEndSwapMB": 14,
+    "ticksEndFootprintMB": 591,
+    "ticksEndPssMB": 544,
+    "ticksPerSecond": 34.7,
+    "completeMsPerTick": 7.31,
+    "mainMsPerTick": 10.82,
+    "renderMsPerTick": 7.31,
+    "processMsPerTick": 27.25,
+    "threadMsPerTick": {
+     "local.ntsd.port": 10.82,
+     "DispatchWorker": 7.31,
+     "NTSD.present": 5.2,
+     "NTSD.release": 1.78,
+     "AudioTrack": 1.19,
+     "Binder": 0.94
+    },
+    "threadCpuToEndSeconds": {
+     "local.ntsd.port": 34.06,
+     "DispatchWorker": 14.91,
+     "NTSD.present": 11.96,
+     "Jit_thread_pool": 4.84,
+     "NTSD.release": 4.58,
+     "AudioTrack": 2.85,
+     "Binder": 2.33,
+     "InsetsAnimation": 0.05
+    },
+    "peakResidentMB": 637,
+    "peakFootprintMB": 639,
+    "startupSeconds": 1.83,
+    "sha256HostBlocks": true,
+    "loadSeconds": 6.07,
+    "packagesWaitSeconds": 1.15,
+    "startToLoadedSeconds": 12.91,
+    "loadedCounts": {
+     "allocations": 16105,
+     "audioRequests": 2072,
+     "bitmapRequests": 12817,
+     "files": 621
+    },
+    "build": "tw-w0"
+   }
+  ]
+ },
+ "mac": {
+  "summary": {
+   "frozen-unchecked-tw-w0": {
+    "runs": 3,
+    "loadSeconds": {
+     "median": 0.309,
+     "min": 0.307,
+     "max": 0.31
+    },
+    "startupSeconds": {
+     "median": 0.049,
+     "min": 0.048,
+     "max": 0.052
+    },
+    "startToLoadedSeconds": {
+     "median": 0.678,
+     "min": 0.678,
+     "max": 0.68
+    },
+    "peakResidentMB": {
+     "median": 669,
+     "min": 666,
+     "max": 674
+    },
+    "loadedResidentMB": {
+     "median": 574,
+     "min": 570,
+     "max": 582
+    },
+    "bodiesResidentMB": {
+     "median": 623,
+     "min": 612,
+     "max": 633
+    },
+    "processMsPerTick": {
+     "median": 2.856,
+     "min": 2.844,
+     "max": 2.911
+    },
+    "completeMsPerTick": {
+     "median": 1.0958,
+     "min": 1.0761,
+     "max": 1.107
+    },
+    "loadedCounts": [
+     {
+      "allocations": 16105,
+      "audioRequests": 2072,
+      "bitmapRequests": 12817,
+      "files": 621
+     }
+    ]
+   },
+   "frozen-unchecked-ml-l20": {
+    "runs": 3,
+    "loadSeconds": {
+     "median": 0.318,
+     "min": 0.313,
+     "max": 0.321
+    },
+    "startupSeconds": {
+     "median": 0.056,
+     "min": 0.05,
+     "max": 0.056
+    },
+    "startToLoadedSeconds": {
+     "median": 0.694,
+     "min": 0.68,
+     "max": 0.701
+    },
+    "peakResidentMB": {
+     "median": 672,
+     "min": 665,
+     "max": 682
+    },
+    "loadedResidentMB": {
+     "median": 581,
+     "min": 581,
+     "max": 600
+    },
+    "bodiesResidentMB": {
+     "median": 632,
+     "min": 627,
+     "max": 647
+    },
+    "processMsPerTick": {
+     "median": 2.967,
+     "min": 2.911,
+     "max": 2.967
+    },
+    "completeMsPerTick": {
+     "median": 1.1209,
+     "min": 1.1161,
+     "max": 1.1263
+    },
+    "loadedCounts": [
+     {
+      "allocations": 16105,
+      "audioRequests": 2072,
+      "bitmapRequests": 12817,
+      "files": 621
+     }
+    ]
+   }
+  },
+  "runs": [
+   {
+    "label": "tw-w0-mac-ab-01-frozen-unchecked-tw-w0",
+    "host": "mac",
+    "scenario": "vs",
+    "bodies": 600,
+    "binary": "/private/tmp/claude-501/-Users-michael-Developer-ntsd-2-4/1f9218ae-9d5d-4c4e-a8dd-d5254994839c/scratchpad/frozen-unchecked-tw-w0/NTSDHeadless",
+    "startupSeconds": 0.048,
+    "loadSeconds": 0.309,
+    "packagesWaitSeconds": 0.0,
+    "startToLoadedSeconds": 0.678,
+    "loadedCounts": {
+     "allocations": 16105,
+     "audioRequests": 2072,
+     "bitmapRequests": 12817,
+     "files": 621
+    },
+    "loadedResidentMB": 570,
+    "bodiesResidentMB": 612,
+    "peakResidentMB": 669,
+    "completeMsPerTick": 1.107,
+    "ticksPerSecond": 43.24,
+    "processMsPerTick": 2.911,
+    "build": "frozen-unchecked-tw-w0"
+   },
+   {
+    "label": "tw-w0-mac-ab-02-frozen-unchecked-ml-l20",
+    "host": "mac",
+    "scenario": "vs",
+    "bodies": 600,
+    "binary": "/private/tmp/claude-501/-Users-michael-Developer-ntsd-2-4/1f9218ae-9d5d-4c4e-a8dd-d5254994839c/scratchpad/frozen-unchecked-ml-l20/NTSDHeadless",
+    "startupSeconds": 0.056,
+    "loadSeconds": 0.313,
+    "packagesWaitSeconds": 0.0,
+    "startToLoadedSeconds": 0.68,
+    "loadedCounts": {
+     "allocations": 16105,
+     "audioRequests": 2072,
+     "bitmapRequests": 12817,
+     "files": 621
+    },
+    "loadedResidentMB": 600,
+    "bodiesResidentMB": 647,
+    "peakResidentMB": 682,
+    "completeMsPerTick": 1.1263,
+    "ticksPerSecond": 43.3,
+    "processMsPerTick": 2.967,
+    "build": "frozen-unchecked-ml-l20"
+   },
+   {
+    "label": "tw-w0-mac-ab-03-frozen-unchecked-tw-w0",
+    "host": "mac",
+    "scenario": "vs",
+    "bodies": 600,
+    "binary": "/private/tmp/claude-501/-Users-michael-Developer-ntsd-2-4/1f9218ae-9d5d-4c4e-a8dd-d5254994839c/scratchpad/frozen-unchecked-tw-w0/NTSDHeadless",
+    "startupSeconds": 0.049,
+    "loadSeconds": 0.307,
+    "packagesWaitSeconds": 0.0,
+    "startToLoadedSeconds": 0.68,
+    "loadedCounts": {
+     "allocations": 16105,
+     "audioRequests": 2072,
+     "bitmapRequests": 12817,
+     "files": 621
+    },
+    "loadedResidentMB": 574,
+    "bodiesResidentMB": 623,
+    "peakResidentMB": 666,
+    "completeMsPerTick": 1.0958,
+    "ticksPerSecond": 43.38,
+    "processMsPerTick": 2.856,
+    "build": "frozen-unchecked-tw-w0"
+   },
+   {
+    "label": "tw-w0-mac-ab-04-frozen-unchecked-ml-l20",
+    "host": "mac",
+    "scenario": "vs",
+    "bodies": 600,
+    "binary": "/private/tmp/claude-501/-Users-michael-Developer-ntsd-2-4/1f9218ae-9d5d-4c4e-a8dd-d5254994839c/scratchpad/frozen-unchecked-ml-l20/NTSDHeadless",
+    "startupSeconds": 0.05,
+    "loadSeconds": 0.321,
+    "packagesWaitSeconds": 0.0,
+    "startToLoadedSeconds": 0.701,
+    "loadedCounts": {
+     "allocations": 16105,
+     "audioRequests": 2072,
+     "bitmapRequests": 12817,
+     "files": 621
+    },
+    "loadedResidentMB": 581,
+    "bodiesResidentMB": 632,
+    "peakResidentMB": 665,
+    "completeMsPerTick": 1.1161,
+    "ticksPerSecond": 43.39,
+    "processMsPerTick": 2.967,
+    "build": "frozen-unchecked-ml-l20"
+   },
+   {
+    "label": "tw-w0-mac-ab-05-frozen-unchecked-tw-w0",
+    "host": "mac",
+    "scenario": "vs",
+    "bodies": 600,
+    "binary": "/private/tmp/claude-501/-Users-michael-Developer-ntsd-2-4/1f9218ae-9d5d-4c4e-a8dd-d5254994839c/scratchpad/frozen-unchecked-tw-w0/NTSDHeadless",
+    "startupSeconds": 0.052,
+    "loadSeconds": 0.31,
+    "packagesWaitSeconds": 0.0,
+    "startToLoadedSeconds": 0.678,
+    "loadedCounts": {
+     "allocations": 16105,
+     "audioRequests": 2072,
+     "bitmapRequests": 12817,
+     "files": 621
+    },
+    "loadedResidentMB": 582,
+    "bodiesResidentMB": 633,
+    "peakResidentMB": 674,
+    "completeMsPerTick": 1.0761,
+    "ticksPerSecond": 43.4,
+    "processMsPerTick": 2.844,
+    "build": "frozen-unchecked-tw-w0"
+   },
+   {
+    "label": "tw-w0-mac-ab-06-frozen-unchecked-ml-l20",
+    "host": "mac",
+    "scenario": "vs",
+    "bodies": 600,
+    "binary": "/private/tmp/claude-501/-Users-michael-Developer-ntsd-2-4/1f9218ae-9d5d-4c4e-a8dd-d5254994839c/scratchpad/frozen-unchecked-ml-l20/NTSDHeadless",
+    "startupSeconds": 0.056,
+    "loadSeconds": 0.318,
+    "packagesWaitSeconds": 0.0,
+    "startToLoadedSeconds": 0.694,
+    "loadedCounts": {
+     "allocations": 16105,
+     "audioRequests": 2072,
+     "bitmapRequests": 12817,
+     "files": 621
+    },
+    "loadedResidentMB": 581,
+    "bodiesResidentMB": 627,
+    "peakResidentMB": 672,
+    "completeMsPerTick": 1.1209,
+    "ticksPerSecond": 43.09,
+    "processMsPerTick": 2.911,
+    "build": "frozen-unchecked-ml-l20"
+   }
+  ]
+ },
+ "wasi": {
+  "results": [
+   {
+    "scenario": "vs",
+    "exit": 0,
+    "seconds": 61.1,
+    "result": "equal",
+    "differs": []
+   },
+   {
+    "scenario": "mission",
+    "exit": 0,
+    "seconds": 59.0,
+    "result": "equal",
+    "differs": []
+   },
+   {
+    "scenario": "demo",
+    "exit": 0,
+    "seconds": 45.1,
+    "result": "equal",
+    "differs": []
+   },
+   {
+    "scenario": "war",
+    "exit": 0,
+    "seconds": 97.3,
+    "result": "equal",
+    "differs": []
+   },
+   {
+    "scenario": "playback",
+    "exit": 0,
+    "seconds": 64.2,
+    "result": "equal",
+    "differs": []
+   },
+   {
+    "scenario": "tournament",
+    "exit": 0,
+    "seconds": 84.5,
+    "result": "equal",
+    "differs": []
+   },
+   {
+    "scenario": "altenter",
+    "exit": 0,
+    "seconds": 61.6,
+    "result": "equal",
+    "differs": []
+   },
+   {
+    "scenario": "tournament-win",
+    "exit": 0,
+    "seconds": 90.5,
+    "result": "equal",
+    "differs": []
+   },
+   {
+    "scenario": "team-tournament",
+    "exit": 0,
+    "seconds": 69.8,
+    "result": "equal",
+    "differs": []
+   },
+   {
+    "scenario": "joystick",
+    "exit": 0,
+    "seconds": 21.8,
+    "result": "equal",
+    "differs": []
+   }
+  ],
+  "framesAgainstMacHeadless": [
+   {
+    "scenario": "altenter",
+    "frames": 6,
+    "identical": 6,
+    "differ": [],
+    "missing": [],
+    "digests": {
+     "a": 1826,
+     "b": 1826,
+     "equal": true,
+     "firstDifferentBody": null
+    }
+   },
+   {
+    "scenario": "demo",
+    "frames": 3,
+    "identical": 3,
+    "differ": [],
+    "missing": [],
+    "digests": {
+     "a": 945,
+     "b": 945,
+     "equal": true,
+     "firstDifferentBody": null
+    }
+   },
+   {
+    "scenario": "joystick",
+    "frames": 0,
+    "identical": 0,
+    "differ": [],
+    "missing": [],
+    "digests": {
+     "a": 296,
+     "b": 296,
+     "equal": true,
+     "firstDifferentBody": null
+    }
+   },
+   {
+    "scenario": "mission",
+    "frames": 6,
+    "identical": 6,
+    "differ": [],
+    "missing": [],
+    "digests": {
+     "a": 1800,
+     "b": 1800,
+     "equal": true,
+     "firstDifferentBody": null
+    }
+   },
+   {
+    "scenario": "playback",
+    "frames": 7,
+    "identical": 7,
+    "differ": [],
+    "missing": [],
+    "digests": {
+     "a": 2121,
+     "b": 2121,
+     "equal": true,
+     "firstDifferentBody": null
+    }
+   },
+   {
+    "scenario": "team-tournament",
+    "frames": 6,
+    "identical": 6,
+    "differ": [],
+    "missing": [],
+    "digests": {
+     "a": 1856,
+     "b": 1856,
+     "equal": true,
+     "firstDifferentBody": null
+    }
+   },
+   {
+    "scenario": "tournament",
+    "frames": 6,
+    "identical": 6,
+    "differ": [],
+    "missing": [],
+    "digests": {
+     "a": 1832,
+     "b": 1832,
+     "equal": true,
+     "firstDifferentBody": null
+    }
+   },
+   {
+    "scenario": "tournament-win",
+    "frames": 8,
+    "identical": 8,
+    "differ": [],
+    "missing": [],
+    "digests": {
+     "a": 2520,
+     "b": 2520,
+     "equal": true,
+     "firstDifferentBody": null
+    }
+   },
+   {
+    "scenario": "vs",
+    "frames": 6,
+    "identical": 6,
+    "differ": [],
+    "missing": [],
+    "digests": {
+     "a": 1826,
+     "b": 1826,
+     "equal": true,
+     "firstDifferentBody": null
+    }
+   },
+   {
+    "scenario": "war",
+    "frames": 10,
+    "identical": 10,
+    "differ": [],
+    "missing": [],
+    "digests": {
+     "a": 3008,
+     "b": 3008,
+     "equal": true,
+     "firstDifferentBody": null
+    }
+   },
+   {
+    "frames": 18088,
+    "mismatched": 0,
+    "result": "identical"
+   }
+  ],
+  "node": "v26.7.0",
+  "load": {
+   "wasi": "vs 0.92 s, demo 0.92 s, war 0.90 s",
+   "macHeadless": "vs 0.34 s, demo 0.33 s, war 0.33 s"
+  }
+ },
+ "probeHistory": [
+  "probe1: NTSDCore stops at the startup clock and DispatchQueue.concurrentPerform",
+  "probe2-4: WASI clock ids are opaque struct addresses; read through __wasi_clock_time_get",
+  "probe5: Runtime stops at import Dispatch (Winsock)",
+  "probe7: Data.write(.atomic) unavailable on WASI",
+  "probe8: builds; Node 20 crashes, Node 26 runs: allocationBudget at iteration 0 (3<<30 negative with 32-bit Int)",
+  "probe9: trap in OriginalMusicPlayback (Int(UInt32.max)); five such checks fixed",
+  "probe10: vs equal, frames identical"
+ ]
+}

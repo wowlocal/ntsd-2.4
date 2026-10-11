@@ -36,5 +36,11 @@ nonisolated(unsafe) var retainedHost: AnyObject?
 // The session schedules its iterations on the main queue and asserts MainActor
 // isolation, so the main thread must drain that queue: a run loop does on macOS
 // and Linux (dispatchMain() would hand the queue to worker threads).
+#if os(WASI)
+// No main queue without threads: the runtime's own queue of deferred calls
+// (TVOS_WEB W0).
+MainActor.assumeIsolated { OriginalMainQueue.run() }
+#else
 RunLoop.main.add(Timer(timeInterval:86400,repeats:true) { _ in },forMode:.default)
 RunLoop.main.run()
+#endif

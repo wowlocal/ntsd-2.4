@@ -6,6 +6,8 @@ import Glibc
 import Musl
 #elseif canImport(Android)
 import Android
+#elseif canImport(WASILibc)
+import WASILibc
 #elseif os(Windows)
 import WinSDK
 #endif
@@ -40,6 +42,20 @@ public enum OriginalMacStartupClock {
         let seconds = ticks >= 0 ? ticks/10_000_000 : (ticks-9_999_999)/10_000_000
         return .init(seconds:seconds,nanoseconds:(ticks-seconds*10_000_000)*100)
     }
+    #elseif os(WASI)
+    /// WASI hosts (TVOS_WEB W0): wasi-libc's clock ids are the addresses of
+    /// opaque structs that Swift cannot name, so the clocks are read through
+    /// WASI's `clock_time_get` with preview 1's ids (0 realtime, 1 monotonic),
+    /// in nanoseconds. WASI has no raw monotonic clock: its monotonic clock
+    /// is the host's.
+    private static func read(_ clock: __wasi_clockid_t) throws -> Sample {
+        var time: __wasi_timestamp_t = 0
+        let status = __wasi_clock_time_get(clock,1,&time)
+        guard status == 0 else { throw Boundary.systemCall(Int32(status)) }
+        return .init(seconds:Int64(time/1_000_000_000),nanoseconds:Int64(time%1_000_000_000))
+    }
+    public static func monotonicSample() throws -> Sample { try read(1) }
+    public static func realtimeSample() throws -> Sample { try read(0) }
     #else
     private static func read(_ clock: clockid_t) throws -> Sample {
         var value = timespec()

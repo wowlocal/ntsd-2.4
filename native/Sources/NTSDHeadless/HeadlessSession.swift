@@ -27,6 +27,8 @@ import NTSDRuntime
     func makeSockets() -> any OriginalRuntimeSockets {
         #if os(Windows)
         return OriginalWindowsWinsock()
+        #elseif os(WASI)
+        return OriginalUnavailableSockets()
         #else
         return OriginalMacWinsock()
         #endif

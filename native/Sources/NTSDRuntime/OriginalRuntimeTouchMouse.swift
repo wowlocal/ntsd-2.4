@@ -19,7 +19,7 @@ import Foundation
         generation += 1; released = false; last = (x,y)
         send(0x200,x,y,0)
         let g = generation
-        DispatchQueue.main.asyncAfter(deadline:.now()+hover) { [weak self] in MainActor.assumeIsolated { self?.press(g) } }
+        OriginalMainQueue.after(seconds:hover) { [weak self] in self?.press(g) }
     }
     public func moved(x: Int32,y: Int32) { last = (x,y); send(0x200,x,y,pressed ? 1 : 0) }
     public func ended(x: Int32,y: Int32) {
@@ -33,8 +33,8 @@ import Foundation
     }
     private func release(_ g: Int) {
         let wait = max(0,hold-Date().timeIntervalSince(pressedAt))
-        DispatchQueue.main.asyncAfter(deadline:.now()+wait) { [weak self] in
-            MainActor.assumeIsolated {
+        OriginalMainQueue.after(seconds:wait) { [weak self] in
+            do {
                 guard let self,g == self.generation,self.pressed else { return }
                 self.pressed = false; self.send(0x202,self.last.0,self.last.1,0)
             }

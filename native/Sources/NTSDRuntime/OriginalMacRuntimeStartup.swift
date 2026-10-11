@@ -22,8 +22,21 @@ public struct OriginalMacRuntimeOverlay {
         for effect in effects {
             let url = try url(effect.path)
             try FileManager.default.createDirectory(at:url.deletingLastPathComponent(),withIntermediateDirectories:true)
-            try Data(effect.bytes).write(to:url,options:.atomic)
+            try Data(effect.bytes).writeReplacing(to:url)
         }
+    }
+}
+
+extension Data {
+    /// `write(to:options:.atomic)`. WASI has no temporary files to write
+    /// through, so there the file is written in place (TVOS_WEB W0): the same
+    /// bytes, without the protection against a crash mid-write.
+    func writeReplacing(to url: URL) throws {
+        #if os(WASI)
+        try write(to:url)
+        #else
+        try write(to:url,options:.atomic)
+        #endif
     }
 }
 
@@ -84,7 +97,9 @@ public struct OriginalMacRuntimeOverlay {
         let driver = try Driver(platform:Platform(inputs:inputs,prepared:prepared(inputs)),instance:0x400000,show:10,initial:inputs.initial)
         let windows = OriginalRuntimeWindowBackend(instance:0x400000,host:host.windows)
         let windowService = OriginalMacWindowStartupService(driver:driver,backend:windows)
-        let display = OriginalMacDisplayBackend(windows:windows,maximumBytes:3<<30,freshSurfacesKnownBlack:true,presentUnknownAsBlack:true,rleHolesReadPaletteZero:true,
+        // 3 GiB, clamped where Int has 32 bits (wasm32: 3<<30 wrapped negative
+        // and refused every allocation; TVOS_WEB W0).
+        let display = OriginalMacDisplayBackend(windows:windows,maximumBytes:Int(clamping:Int64(3) << 30),freshSurfacesKnownBlack:true,presentUnknownAsBlack:true,rleHolesReadPaletteZero:true,
                                                 keepsOperationLogs:false,textMask:host.textMask),displayService = OriginalMacDisplayStartupService(driver:driver,backend:display)
         windows.flushRendering = { [weak display] in try display?.flushRendering() }
         let audio = OriginalMacAudioBackend(windows:windows),audioService = OriginalMacAudioService(backend:audio)

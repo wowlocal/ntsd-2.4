@@ -30,6 +30,12 @@ public enum OriginalConcurrentInputs {
         private var compute: (@Sendable () throws -> Value)?
         private var result: Result<Value, Error>?
         public init(_ compute: @escaping @Sendable () throws -> Value) {
+            #if os(WASI)
+            // A host without threads (TVOS_WEB W0): computed here, at creation;
+            // `get` returns it or throws its error as it would after waiting.
+            result = Result { try compute() }
+            return
+            #endif
             self.compute = compute
             let thread = Thread { [self] in
                 OriginalConcurrentInputs.backgroundStart?()
@@ -53,11 +59,20 @@ public enum OriginalConcurrentInputs {
 
     static func map<Element, Value>(_ elements: [Element], _ transform: (Element) throws -> Value) -> [Result<Value, Error>] {
         var results = [Result<Value, Error>?](repeating: nil, count: elements.count)
-        results.withUnsafeMutableBufferPointer { slots in
+        results.withUnsafeMutableBufferPointer { buffer in
+            let slots = buffer   // the same buffer, captured by value
             withoutActuallyEscaping(transform) { transform in
                 let body: (Int) -> Void = { i in slots[i] = Result { try transform(elements[i]) } }
                 if let loop = parallelLoop { loop(elements.count, body) }
-                else { DispatchQueue.concurrentPerform(iterations: elements.count, execute: body) }
+                else {
+                    #if canImport(Dispatch)
+                    DispatchQueue.concurrentPerform(iterations: elements.count, execute: body)
+                    #else
+                    // A host without threads (WASI, TVOS_WEB W0): the same calls,
+                    // one after another; each result lands in its own slot.
+                    for i in 0..<elements.count { body(i) }
+                    #endif
+                }
             }
         }
         return results.map { $0! }

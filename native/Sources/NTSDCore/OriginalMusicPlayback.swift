@@ -191,7 +191,7 @@ public enum OriginalMusicPlayback {
         } else {
             _ = try request(.init(.helper,[0x401da0],[path]))
             let log = try string(state,0x44ef38)+Array("\\graph.log".utf8)
-            guard log.count < 260, path.count <= (Int(UInt32.max)/2)-1 else { throw error("Graph stack/path extent") }
+            guard log.count < 260, UInt64(path.count) <= UInt64(UInt32.max)/2-1 else { throw error("Graph stack/path extent") }
             _ = try request(.init(.format,[UInt32(log.count)],[Array("%s\\graph.log".utf8),log]))
             let file = try request(.init(.createFile,[0x40000000,0,0,2,0x80,0],[log]))
             let handle = UInt32(bitPattern: file.result)

@@ -340,7 +340,15 @@ import NTSDCore
     public func flushRendering() throws { try renderer.flush() }
     /// One serial render thread for pipelined pixel work.
     private final class RenderExecutor: @unchecked Sendable {
+        #if os(WASI)
+        /// A host without threads (TVOS_WEB W0) runs the work as it is
+        /// submitted, in the same order: the serial queue's order with a flush
+        /// after every submission.
+        private struct Inline { func async(_ work: () -> Void) { work() }; func sync(_ work: () -> Void) { work() } }
+        private let queue = Inline()
+        #else
         private let queue = DispatchQueue(label:"ntsd.render")
+        #endif
         private let lock = NSLock()
         private var failure: Error?, queued = false
         /// While set (a replay of one committed batch), submitted work is kept

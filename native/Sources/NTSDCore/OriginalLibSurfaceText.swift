@@ -41,7 +41,7 @@ public struct OriginalLibSurfaceText: Equatable {
         didRespond: (OriginalMenuPresentationEvent, Response) throws -> Void = { _,_ in },
         observe: (OriginalMenuPresentationEvent) throws -> Void) throws -> Int32 {
         guard target != 0 else { throw OriginalStateError.invalidStorage("Null library text surface") }
-        guard !bytes.contains(0), bytes.count <= Int(UInt32.max) else {
+        guard !bytes.contains(0), UInt64(bytes.count) <= UInt64(UInt32.max) else {
             throw OriginalStateError.invalidStorage("Library text string extent")
         }
         var next = self

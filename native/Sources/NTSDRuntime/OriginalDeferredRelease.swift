@@ -40,6 +40,11 @@ public final class OriginalDeferredRelease: @unchecked Sendable {
     /// that array at the scope's end, a double release (seen in a debug build,
     /// R3). A binding made inside the `defer` is fine.
     public func retire(_ value: consuming Any) {
+        #if os(WASI)
+        // A host without threads (TVOS_WEB W0): the caller frees it, as when
+        // the backlog is full.
+        return
+        #endif
         condition.lock()
         guard pending.count < Self.backlogLimit else { condition.unlock(); return }
         pending.append(value); count += 1

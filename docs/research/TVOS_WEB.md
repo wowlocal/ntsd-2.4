@@ -165,8 +165,9 @@ runner's bridge round-trips a frame byte for byte) before it judges a new host.
 | T0 | tvOS: simulator runtime; `NTSDiOS` builds for tvOS (`#if os(tvOS)`); vs in the Apple TV simulator equal, frames identical to `coretext` | **done** |
 | T1 | tvOS: all 10 scenarios (T1a done). **T1b (user, 2026-10-11: "надеюсь мы на apple tv сделаем поддержку джойстиков"):** Bluetooth gamepads (Xbox, PlayStation, MFi) as the game's joysticks through GameController, as the AppKit host does (the first two extended gamepads found at launch, sampled every 25 ms as joySetCapture, stick/d-pad to the WinMM axes, A/B/X/Y to buttons 1–4; one implementation shared with AppKit and the iPad rather than a copy); the Siri Remote (a micro gamepad, not a joystick) as keys for the menus (arrows, select, Menu as Esc, intercepted so Menu does not leave the app); the joystick scenario and a hand check with a controller connected to the Mac (the simulator takes it) | partly done |
 | T2 | tvOS: overlay storage tvOS keeps, 1080p/4K presentation, audio session, lifecycle (background/foreground) | queued |
-| W0 | WASI: `NTSDHeadless` builds for `wasm32-unknown-wasip1` — WASI branches for OS imports, single-threaded paths for the read-ahead, parallel loads, deferred release and the render queue, a scheduler without Dispatch; vs under a WASI runtime equal | queued |
-| W1 | WASI: all 10 scenarios equal, frames identical to `m1-frames-ref`; load time and memory measured | queued |
+| W0 | WASI: `NTSDHeadless` builds for `wasm32-unknown-wasip1` — WASI branches for OS imports, single-threaded paths for the read-ahead, parallel loads, deferred release and the render queue, a scheduler without Dispatch; vs under a WASI runtime equal | **done** |
+| W1 | WASI: all 10 scenarios equal, frames identical to the `none` group; load time measured (memory in the browser, W3) | **done** |
+| W1b | wasm32 error boundaries: older code traps with a 32-bit Int where 64-bit hosts throw (`Int(UInt32)` reads of values ≥ 2³¹: OriginalWorldCPoints frame −6, a playback file's payload length, ~60 table reads, BMP header words; overflows only reachable through corruption) — the same errors on every host, with tests; plus W0's low review follow-ups | queued |
 | W2 | Browser: `NTSDWeb` host (canvas presenter, keyboard and gamepad, Web Audio effects and music, data delivery); vs in headless Chromium equal | queued |
 | W3 | Browser: all scenarios; frame time per tick and memory in the browser; data delivery options measured for the user's decision | queued |
 
@@ -176,17 +177,20 @@ runner's bridge round-trips a frame byte for byte) before it judges a new host.
 | --- | --- | --- | --- | --- |
 | 2026-10-11 | Study and setup | Read the cross-platform work (hosts, packaging, harness, pitfalls); branch `exp/tvos-web`; wasm SDK installed (checksum verified; Foundation without Dispatch); tvOS simulator runtime download started; this card | this card | a16fe0d |
 | 2026-10-11 | T0 + H0 (tvOS runner): the iOS host on the Apple TV simulator | tvOS 27.0 simulator runtime installed (Apple, 3.76 GB). `NTSDiOS` builds for `arm64-apple-tvos17.0-simulator` once three iOS-only UIKit members are left out on tvOS; the default overlay is Caches there (no Documents; persistence is T2). `ios_app.py --platform tvos` (triple, SDK, bundle id, tvOS Info.plist, Apple TV 4K 1080p simulator, device lookup per platform) and a `tvos` row in `matrix.py` (`coretext`). **vs on the Apple TV simulator: equal, all 6 frames and 1,826 frame digests identical to AppKit**; the same runner reproduces the iPad (equal, frames identical). Core, Runtime and `Package.swift` unchanged (no `.tvOS` entry needed with the Swift Build backend: the triple sets the deployment target, tvOS 17.0; a `--build-system native` build would need it). On tvOS the touch handlers are left out (the Siri Remote's indirect touches must not become clicks; its input is T1); the runner reports a missing simulator, and a failing tvOS row is marked blocked instead of ending the matrix run (review follow-ups). First wasm32-wasip1 build: blocked in NTSDCore by the startup clock (`clock_gettime`/`CLOCK_MONOTONIC_RAW`) and `DispatchQueue.concurrentPerform` | [evidence](../evidence/tw-t0-tvos-simulator-20261011.json) | a1f3ac0 |
-| 2026-10-11 | T1a: all 10 scenarios on the Apple TV simulator | Every scenario equal to its reference; **all 18,088 frames and their digests identical to the AppKit app's** (the `coretext` reference, taken anew for all 10 scenarios from the frozen AppKit app of ml-l20, itself equal everywhere) | [evidence](../evidence/tw-t1a-tvos-all-scenarios-20261011.json) | this commit |
+| 2026-10-11 | T1a: all 10 scenarios on the Apple TV simulator | Every scenario equal to its reference; **all 18,088 frames and their digests identical to the AppKit app's** (the `coretext` reference, taken anew for all 10 scenarios from the frozen AppKit app of ml-l20, itself equal everywhere) | [evidence](../evidence/tw-t1a-tvos-all-scenarios-20261011.json) | 76c4043 |
+| 2026-10-11 | W0 + W1: the game under WASI | `NTSDHeadless` builds for `wasm32-unknown-wasip1` (swift.org's 6.4.0 SDK: Foundation without Dispatch, a 32-bit `Int`) after behaviour-neutral portability patches: a WASI clock, `OriginalMainQueue` (the main dispatch queue as before; on WASI a timer list in deadline then creation order), inline paths for the parallel loads, the read-ahead, the render queue and deferred releases, no BSD sockets (a stub), atomic writes as plain writes, and three 32-bit traps (the display budget's `3<<30`, `Int(UInt32.max)` in five checks). `run_headless_scenarios.py --wasi` with `wasi_run.mjs` (Node 26; Node 20's V8 crashed on the 96 MB module). **All 10 scenarios under WASI equal and all 18,088 frames identical to the Mac headless run**; load ~0.9 s against 0.33 s natively. Existing hosts: all scenarios, AppKit, unchecked and emulator equal, frames identical; 12 suites; A12 A/B with music and sounds within its spread (main 10.82–10.84 against 10.74–10.80 ms, L20's warm-up 10.84; no W0 change runs per tick on Android). Review OK; its findings of older 32-bit traps are W1b | [evidence](../evidence/tw-w0-w1-wasi-headless-20261011.json) | this commit |
 
 ## Next task
 
-(After W0 is committed: T1b, Bluetooth gamepads and the Siri Remote on tvOS.)
-
-T1a in the background: all 10 scenarios on the Apple TV simulator
-(`matrix.py --hosts tvos`, compared with the `coretext` group). Meanwhile W0a:
-the first WASI portability patches in NTSDCore — the startup clock on WASI
-(a monotonic and a real-time source with the same values the other hosts
-read) and `OriginalConcurrentInputs.map` without Dispatch (the same work in
-the same order, results in manifest order) — then build again to reach
-Runtime and the headless host and list their blockers. Core changes run the
-existing hosts' gates (`mlgate.sh`).
+T1b: Bluetooth gamepads and the Siri Remote on tvOS (the user's request).
+Move the AppKit host's GameController joystick sampler (two extended
+gamepads found at launch, a 25 ms joySetCapture sampling, stick/d-pad to
+WinMM axes, A/B/X/Y to buttons 1–4) into one implementation the AppKit, iPad
+and Apple TV hosts share; give the iOS/tvOS host `connectedJoysticks` and
+sampling from it; map the Siri Remote's presses (arrows, select, Menu as
+Esc, Menu intercepted so it does not leave the app) to keys on tvOS. Gates:
+the joystick scenario on tvOS and AppKit unchanged (equal, frames
+identical), AppKit's other scenarios, a hand check with a controller the
+simulator takes from the Mac, an independent review; the phone A/B runs as
+an A/A check (Android unchanged). Then W1b (wasm32 error boundaries) and W2
+(the browser host).

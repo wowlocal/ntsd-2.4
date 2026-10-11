@@ -14,7 +14,7 @@ public enum OriginalSurfaceText {
                             observe: (OriginalMenuPresentationEvent) throws -> Void) throws -> Int32 {
         if let renderer { return try renderer(bytes,target,background,color,x,y,dcResult,dc,observe) }
         guard target != 0 else { throw OriginalStateError.invalidStorage("Null text surface") }
-        guard !bytes.contains(0), bytes.count <= Int(UInt32.max) else { throw OriginalStateError.invalidStorage("Text string extent") }
+        guard !bytes.contains(0), UInt64(bytes.count) <= UInt64(UInt32.max) else { throw OriginalStateError.invalidStorage("Text string extent") }
         try observe(.init(.getDC,[target]))
         if dcResult >= 0 {
             try observe(.init(.setBackgroundColor,[dc,background]))

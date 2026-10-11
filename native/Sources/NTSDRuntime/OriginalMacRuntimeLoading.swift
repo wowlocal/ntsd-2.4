@@ -539,7 +539,7 @@ public struct OriginalRuntimeLoadingPackages {
                 openedDocuments.append(path)
                 if playbackInteractive {
                     let open = dialogs.open
-                    DispatchQueue.main.asyncAfter(deadline:.now() + .milliseconds(Int(slept))) { MainActor.assumeIsolated { open(path) } }
+                    OriginalMainQueue.after(milliseconds:Int(slept)) { open(path) }
                 }
             }
             pendingDocuments = []
