@@ -2,7 +2,7 @@ import Foundation
 import NTSDCore
 
 /// Native PCM storage. Device creation acquires an owner, not an audio endpoint.
-/// The original per-call records stay separate from the decoded float samples.
+/// The original per-call records stay separate from the unlocked PCM samples.
 @MainActor public final class OriginalMacAudioBackend {
     public enum Boundary: Error, Equatable {
         case unsupported(String), owner(UInt32), unknownSamples, allocationBudget
@@ -29,11 +29,11 @@ import NTSDCore
         fileprivate init(_ token: UInt32) { self.token = token }
     }
     private final class Device: Resource { var window: (any OriginalRuntimeWindowLease)? }
-    /// Decoded float PCM, one array per channel at the buffer's rate. Frames
-    /// count 0 until Unlock converts the locked bytes (the "ready" state).
+    /// The buffer's PCM as unlocked, kept as bytes (the mixer converts each
+    /// sample as it reads it; MEMORY_LOADING M5c). Frames count 0 until
+    /// Unlock (the "ready" state).
     private final class Samples {
-        var frameLength = 0, channels: [[Float]]
-        init(channels: Int,capacity: Int) { self.channels = Array(repeating:[Float](repeating:0,count:capacity),count:channels) }
+        var frameLength = 0, pcm: [UInt8] = []
     }
     private final class Buffer: Resource {
         let device: Device, binding: OriginalWaveBinding, format: Format, pcm: Samples
@@ -173,7 +173,7 @@ import NTSDCore
                 let (f,count) = try format(q),frames = count/f.alignment
                 let bytes = count*2+frames*f.channels*MemoryLayout<Float>.size
                 guard bytes <= maximumBytes-allocatedBytes else { throw Boundary.allocationBudget }
-                let pcm = Samples(channels:f.channels,capacity:frames)
+                let pcm = Samples()
                 let d = try device(binding.device),raw = try OriginalStateRecord(bytes:Array(repeating:0xa5,count:count),defined:Array(repeating:false,count:count))
                 let b = try Buffer(windows.identities.take(),d,binding,f,pcm,raw)
                 buffers[b.token] = b;allocatedBytes += bytes;retained = [d,b]
@@ -194,16 +194,7 @@ import NTSDCore
                 // record (a class property) for every byte (MEMORY_LOADING L8).
                 // `bytes(in:)` copies them without caching the whole array in
                 // the record, as the `bytes` getter does (M3).
-                let raw = b.raw.bytes(in:0..<b.raw.byteCount)
-                for frame in 0..<frames { for channel in 0..<f.channels {
-                    let index = frame*f.alignment+channel*(f.bits/8),value: Float
-                    if f.bits == 8 { value = Float(Int(raw[index])-128)/128 }
-                    else {
-                        let word = UInt16(raw[index]) | (UInt16(raw[index+1]) << 8)
-                        value = Float(Int16(bitPattern:word))/32768
-                    }
-                    b.pcm.channels[channel][frame] = value
-                } }
+                b.pcm.pcm = b.raw.bytes(in:0..<b.raw.byteCount)
                 b.pcm.frameLength = frames;retained = [b,regions[b.active!]!];b.active = nil
                 response = .waveAudio(.result(0))
             case .restore:retained = [try buffer(q.event.arguments[0],binding)];response = .waveAudio(.result(0))
@@ -298,8 +289,14 @@ import NTSDCore
     /// A consumer receives independent storage, not mutable access to our owner:
     /// one array of `frameLength` float samples per channel.
     public func samples(_ token: UInt32) throws -> (format: Format, channels: [[Float]]) {
+        let (format,pcm) = try self.pcm(token)
+        return (format,OriginalMacSoundEffects.Samples(pcm:pcm,bits:format.bits,channels:format.channels,rate:Double(format.rate),
+            blockAlign:format.alignment,volume:0).channels)
+    }
+    /// The buffer's unlocked PCM (`frameLength` frames of `alignment` bytes).
+    public func pcm(_ token: UInt32) throws -> (format: Format, bytes: [UInt8]) {
         guard let b = buffers[token] else { throw Boundary.owner(token) }
         guard b.pcm.frameLength > 0,b.raw.allDefined(in:0..<b.raw.byteCount) else { throw Boundary.unknownSamples }
-        return (b.format,b.pcm.channels.map { Array($0.prefix(b.pcm.frameLength)) })
+        return (b.format,Array(b.pcm.pcm.prefix(b.pcm.frameLength*b.format.alignment)))
     }
 }

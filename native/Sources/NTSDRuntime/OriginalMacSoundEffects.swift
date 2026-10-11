@@ -24,14 +24,38 @@ public final class OriginalMacSoundEffects: @unchecked Sendable {
             self.init(buffer:words[0],method:words[1],arguments:Array(words.dropFirst(2)))
         }
     }
-    /// A buffer's PCM (one array per channel), its rate and block alignment,
-    /// and the volume it was registered with.
+    /// A buffer's samples, its rate and block alignment, and the volume it
+    /// was registered with. The samples are floats per channel, or the
+    /// buffer's PCM (8-bit unsigned or 16-bit little-endian, channels
+    /// interleaved in frames of `blockAlign` bytes) converted while mixing
+    /// with the audio backend's own expressions: floats for every buffer took
+    /// two to four bytes per PCM byte (MEMORY_LOADING M5c).
     public struct Samples: Sendable {
-        public let channels: [[Float]], rate: Double, blockAlign: Int, volume: Int32
+        enum Storage: Sendable { case floats([[Float]]), pcm8([UInt8], channels: Int), pcm16([UInt8], channels: Int) }
+        let storage: Storage
+        public let rate: Double, blockAlign: Int, volume: Int32
         public init(channels: [[Float]], rate: Double, blockAlign: Int, volume: Int32) {
-            self.channels = channels; self.rate = rate; self.blockAlign = blockAlign; self.volume = volume
+            storage = .floats(channels); self.rate = rate; self.blockAlign = blockAlign; self.volume = volume
         }
-        var frames: Int { channels.first?.count ?? 0 }
+        public init(pcm: [UInt8], bits: Int, channels: Int, rate: Double, blockAlign: Int, volume: Int32) {
+            precondition([8, 16].contains(bits) && [1, 2].contains(channels) && blockAlign == channels * bits / 8, "PCM layout")
+            storage = bits == 8 ? .pcm8(pcm, channels: channels) : .pcm16(pcm, channels: channels)
+            self.rate = rate; self.blockAlign = blockAlign; self.volume = volume
+        }
+        /// One array per channel.
+        public var channels: [[Float]] {
+            switch storage {
+            case .floats(let c): return c
+            case .pcm8(let b, let n): let r = PCM8(bytes: b, alignment: blockAlign); return (0..<n).map { c in (0..<frames).map { r.value($0 * blockAlign + c) } }
+            case .pcm16(let b, let n): let r = PCM16(bytes: b, alignment: blockAlign); return (0..<n).map { c in (0..<frames).map { r.value($0 * blockAlign + c * 2) } }
+            }
+        }
+        var frames: Int {
+            switch storage {
+            case .floats(let c): return c.first?.count ?? 0
+            case .pcm8(let b, _), .pcm16(let b, _): return b.count / max(1, blockAlign)
+            }
+        }
     }
     public struct Voice: Equatable, Sendable {
         public var position = 0.0, playing = false, looping = false
@@ -136,20 +160,20 @@ public final class OriginalMacSoundEffects: @unchecked Sendable {
                     voice.playing = false; voice.position = 0; v.entries[k].voice = voice; continue
                 }
                 let (gl,gr) = Self.gains(volume:voice.volume,pan:voice.pan)
-                let step = s.rate/rate, l = s.channels[0], r = s.channels.count > 1 ? s.channels[1] : s.channels[0]
-                var position = voice.position
-                for i in 0..<frames {
-                    let index = Int(position), fraction = Float(position-Double(index))
-                    let next = index+1 < count ? index+1 : (voice.looping ? 0 : index)
-                    left[i] += (l[index]+(l[next]-l[index])*fraction)*gl
-                    right[i] += (r[index]+(r[next]-r[index])*fraction)*gr
-                    position += step
-                    if position >= Double(count) {
-                        if voice.looping { position -= Double(count) }
-                        else { position = 0; voice.playing = false; break }
-                    }
+                let step = s.rate/rate
+                var position = voice.position, playing = voice.playing
+                switch s.storage {
+                case .floats(let c):
+                    Self.mix(Floats(l: c[0], r: c.count > 1 ? c[1] : c[0]), count: count, step: step, looping: voice.looping, gl: gl, gr: gr,
+                             frames: frames, left: left, right: right, position: &position, playing: &playing)
+                case .pcm8(let b, let n):
+                    Self.mix(Interleaved(PCM8(bytes: b, alignment: s.blockAlign), right: n > 1 ? 1 : 0), count: count, step: step, looping: voice.looping,
+                             gl: gl, gr: gr, frames: frames, left: left, right: right, position: &position, playing: &playing)
+                case .pcm16(let b, let n):
+                    Self.mix(Interleaved(PCM16(bytes: b, alignment: s.blockAlign), right: n > 1 ? 2 : 0), count: count, step: step, looping: voice.looping,
+                             gl: gl, gr: gr, frames: frames, left: left, right: right, position: &position, playing: &playing)
                 }
-                voice.position = position; v.entries[k].voice = voice
+                voice.position = position; voice.playing = playing; v.entries[k].voice = voice
             }
             var audible = 0,peak = v.rendered.peak
             for i in 0..<frames {
@@ -158,6 +182,53 @@ public final class OriginalMacSoundEffects: @unchecked Sendable {
                 left[i] = max(-1,min(1,left[i])); right[i] = max(-1,min(1,right[i]))
             }
             v.rendered.frames += frames; v.rendered.audible += audible; v.rendered.peak = peak
+        }
+    }
+}
+
+/// Sample readers for the mixer (MEMORY_LOADING M5c). `value` reads the
+/// sample at a byte index with the audio backend's conversion.
+private protocol OriginalSampleSource { func left(_ frame: Int) -> Float; func right(_ frame: Int) -> Float }
+private protocol OriginalPCMReader { var alignment: Int { get }; func value(_ index: Int) -> Float }
+private struct Floats: OriginalSampleSource {
+    let l: [Float], r: [Float]
+    @inline(__always) func left(_ frame: Int) -> Float { l[frame] }
+    @inline(__always) func right(_ frame: Int) -> Float { r[frame] }
+}
+private struct PCM8: OriginalPCMReader {
+    let bytes: [UInt8], alignment: Int
+    @inline(__always) func value(_ index: Int) -> Float { Float(Int(bytes[index])-128)/128 }
+}
+private struct PCM16: OriginalPCMReader {
+    let bytes: [UInt8], alignment: Int
+    @inline(__always) func value(_ index: Int) -> Float {
+        let word = UInt16(bytes[index]) | (UInt16(bytes[index+1]) << 8)
+        return Float(Int16(bitPattern:word))/32768
+    }
+}
+/// Channel 0 on the left; on the right the byte offset of channel 1, or 0 for mono.
+private struct Interleaved<Reader: OriginalPCMReader>: OriginalSampleSource {
+    let reader: Reader, rightOffset: Int
+    init(_ reader: Reader, right: Int) { self.reader = reader; rightOffset = right }
+    @inline(__always) func left(_ frame: Int) -> Float { reader.value(frame*reader.alignment) }
+    @inline(__always) func right(_ frame: Int) -> Float { reader.value(frame*reader.alignment+rightOffset) }
+}
+extension OriginalMacSoundEffects {
+    /// One voice's frames, interpolated and accumulated: the same expressions,
+    /// in the same order, for every kind of sample source.
+    @inline(__always) fileprivate static func mix<Source: OriginalSampleSource>(_ s: Source, count: Int, step: Double, looping: Bool, gl: Float, gr: Float,
+        frames: Int, left: UnsafeMutablePointer<Float>, right: UnsafeMutablePointer<Float>, position: inout Double, playing: inout Bool) {
+        for i in 0..<frames {
+            let index = Int(position), fraction = Float(position-Double(index))
+            let next = index+1 < count ? index+1 : (looping ? 0 : index)
+            let l = s.left(index), r = s.right(index)
+            left[i] += (l+(s.left(next)-l)*fraction)*gl
+            right[i] += (r+(s.right(next)-r)*fraction)*gr
+            position += step
+            if position >= Double(count) {
+                if looping { position -= Double(count) }
+                else { position = 0; playing = false; break }
+            }
         }
     }
 }
@@ -220,8 +291,8 @@ extension OriginalMacSoundEffects {
     @MainActor public static func backed(by audio: OriginalMacAudioBackend) -> OriginalMacSoundEffects {
         OriginalMacSoundEffects { token in
             try MainActor.assumeIsolated {
-                let (format,channels) = try audio.samples(token)
-                return .init(channels:channels,rate:Double(format.rate),blockAlign:format.alignment,
+                let (format,pcm) = try audio.pcm(token)
+                return .init(pcm:pcm,bits:format.bits,channels:format.channels,rate:Double(format.rate),blockAlign:format.alignment,
                              volume:try audio.volumeObservation(token) ?? 0)
             }
         }

@@ -224,6 +224,7 @@ extension OriginalNetworkMenuTests { convenience init() { self.init(name: "helpe
 extension OriginalNetworkNotificationTests { convenience init() { self.init(name: "helper", testClosure: { _ in }) } }
 extension OriginalObjectInputTests { convenience init() { self.init(name: "helper", testClosure: { _ in }) } }
 extension OriginalObjectTests { convenience init() { self.init(name: "helper", testClosure: { _ in }) } }
+extension OriginalPCMSamplesTests { convenience init() { self.init(name: "helper", testClosure: { _ in }) } }
 extension OriginalPagedStageTests { convenience init() { self.init(name: "helper", testClosure: { _ in }) } }
 extension OriginalPausedGameplayTests { convenience init() { self.init(name: "helper", testClosure: { _ in }) } }
 extension OriginalPlaybackInformationTests { convenience init() { self.init(name: "helper", testClosure: { _ in }) } }
