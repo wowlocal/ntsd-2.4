@@ -376,7 +376,10 @@ public struct OriginalApplicationCatalogSession {
         func run() throws -> (catalog:OriginalLoadedCatalog,files:OriginalLoadingFiles) {
             let token = try allocate(.catalog,Int(entry.allocationBytes)),name = "data\\data.txt"
             try emit(.catalogEntry(token,name,entry.target))
-            let bg = try backing(OriginalBackgroundLoader.recordSize),stage = try backing(OriginalStageLoader.stageSize)
+            // The 60 stage slots share one paged backing: the loader writes a
+            // sentinel into every slot but fills only those stage.dat names,
+            // so the others copy one page instead of 1.35 MB each (MEMORY_LOADING M6).
+            let bg = try backing(OriginalBackgroundLoader.recordSize),stage = try backing(OriginalStageLoader.stageSize).paged()
             let result = try OriginalLoadedCatalog.loadWithFiles(files:.init(translation:.text,scanfLookahead:inputs.scanfLookahead),fileName:name,
                 initialChecksum:word(0x44f620),initialSoundBytes:state.full.bytes(in:(0x455638-0x44d000)..<(0x458438-0x44d000)),
                 fill:inputs.allocationFill,parentBacking:parent,backgroundBacking:Array(repeating:bg,count:101),stageBacking:Array(repeating:stage,count:60),

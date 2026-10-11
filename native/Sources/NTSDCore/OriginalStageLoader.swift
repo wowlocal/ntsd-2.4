@@ -100,6 +100,10 @@ public struct OriginalStageLoader {
     }
 
     private mutating func initialize(_ stage: Int) throws {
+        // A slot about to be filled is flat from here (the same contents): its
+        // writes reach every page, and a flat record writes in place, while
+        // slots left unfilled keep sharing a paged backing (MEMORY_LOADING M6).
+        records[stage] = records[stage].unpaged()
         // 40c9f5..40cb79: phase-major, entry-major sparse writes. The entry
         // stride is not proof of a disjoint 0xe0-byte C struct at this offset.
         for phase in 0..<100 {

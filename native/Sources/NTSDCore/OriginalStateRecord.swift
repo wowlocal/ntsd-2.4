@@ -26,6 +26,8 @@ public struct OriginalStateRecord: Equatable, Sendable {
     /// buffers) keep their bytes and masks in pages, so a copy that is then
     /// written duplicates one page instead of the whole record: each game cycle
     /// writes its replay packet into a rollback copy (MOBILE_PERFORMANCE step 3).
+    /// A smaller record is paged only when asked (`paged()`: the Stage slots'
+    /// shared backing, MEMORY_LOADING M6).
     /// Contents, errors and equality are those of the flat representation.
     static let pagedThreshold = 0x400000
     /// Pages of 16 KiB in groups of 16 pages (CORE_REALTIME tier 3 S1): a
@@ -346,9 +348,31 @@ public struct OriginalStateRecord: Equatable, Sendable {
     /// A parted record as one flat record with the same contents; any other
     /// record unchanged.
     func flattened() -> OriginalStateRecord {
+        // A paged record below the threshold (`paged()`, M6) can fit inside a
+        // parted one; overwrite reads only flat sources (M6 review).
+        if pages != nil { return unpaged() }
         guard parts != nil else { return self }
         let all = readOnce()
         return try! Self(bytes: all.bytes, defined: all.defined)
+    }
+    /// The same contents in pages, whatever the size (MEMORY_LOADING M6): a
+    /// copy that is then written duplicates one page instead of the whole
+    /// record. A parted or empty record is returned as it is.
+    func paged() -> OriginalStateRecord {
+        guard large == nil, flatCount > 0 else { return self }
+        let all = readOnce()
+        var record = self
+        record.large = .pages(Pages(bytes: all.bytes, defined: all.defined)); record.flat = nil; record.flatCount = 0
+        return record
+    }
+    /// The same contents flat (a paged record's pages assembled without filling
+    /// its cache, which copies may share); any other record as it is (M6).
+    func unpaged() -> OriginalStateRecord {
+        guard pages != nil, byteCount < Self.pagedThreshold else { return self }
+        let all = readOnce()
+        var record = self
+        record.flat = Flat.make(bytes: all.bytes, defined: all.defined); record.flatCount = all.bytes.count; record.large = nil
+        return record
     }
     /// The address of a non-empty flat record's storage, twice (the bytes and
     /// definedness share one buffer since S2b; nil for an empty, paged or
