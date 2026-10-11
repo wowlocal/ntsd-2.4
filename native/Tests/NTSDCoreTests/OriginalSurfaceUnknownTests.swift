@@ -19,12 +19,22 @@ final class OriginalSurfaceUnknownTests: XCTestCase {
         let pixels = try OriginalDIBPixels(dib: Self.dib(width: 2, height: 1, rgb: [[1, 2, 3], [4, 5, 6]]))
         try source.copy(pixels, width: 2, height: 1, x: 1, y: 1)
         XCTAssertEqual(try source.color(x: 1, y: 1), [1, 2, 3]); XCTAssertEqual(try source.color(x: 2, y: 1), [4, 5, 6])
-        XCTAssertThrowsError(try source.color(x: 0, y: 0))
+        XCTAssertThrowsError(try source.color(x: 0, y: 0)) { XCTAssertEqual($0 as? OriginalSurfaceSourceColors.Boundary, .undefinedPixel) }
         XCTAssertEqual(source.rgb, [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 2, 3, 4, 5, 6])
         XCTAssertEqual(source.defined, [false, false, false, false, true, true])
         XCTAssertNotEqual(source, fresh)
         try source.invalidate(x: 0, y: 0, width: 3, height: 2)
         XCTAssertEqual(source, fresh); XCTAssertEqual(fresh, source)
+        // A whole DIB copy over an untouched surface takes the image; a refused
+        // copy and a partial invalidation of an untouched surface leave it.
+        var whole = try OriginalSurfaceSourceColors(width: 2, height: 1)
+        try whole.copy(pixels, width: 2, height: 1)
+        XCTAssertEqual(whole.rgb, [1, 2, 3, 4, 5, 6]); XCTAssertEqual(whole.defined, [true, true])
+        var refused = try OriginalSurfaceSourceColors(width: 3, height: 2)
+        XCTAssertThrowsError(try refused.copy(pixels, width: 2, height: 1, x: 2, y: 0)) { XCTAssertEqual($0 as? OriginalSurfaceSourceColors.Boundary, .rectangle) }
+        XCTAssertEqual(refused, fresh)
+        try refused.invalidate(x: 1, y: 0, width: 2, height: 2)
+        XCTAssertEqual(refused, fresh)
     }
 
     /// A 24-bit DIB, rows bottom-up, BGR.

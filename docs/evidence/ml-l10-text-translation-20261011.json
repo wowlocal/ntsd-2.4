@@ -1,0 +1,620 @@
+{
+ "study": "docs/research/MEMORY_LOADING.md",
+ "increment": "ml-l10",
+ "previous": "ml-l9",
+ "phase": "L10 (loading time): text-mode translation into one array",
+ "change": "OriginalFileTranslation.write built its output with flatMap { /bin/zsh == 10 ? [13, 10] : [/bin/zsh] }, an array per byte; it appends into one reserved array (CR before each LF), and read reserves its output. Same bytes. With L9's review follow-up tests and the corelibs initializers of the study's new test classes.",
+ "profile": "A12 ml-m3-loadprof: OriginalFileTranslation.write 5.76% of the game thread",
+ "review": "not delegated: the same output by construction; a test compares both directions with the per-byte definitions on generated inputs",
+ "testedTrees": "native 772a62d9071c8ffcab2e84158d42a6be19ceb0eb tools 62ca21c43c4bd8f99c254b1f80697ebbe3cd5e03",
+ "gate": [
+  "native 772a62d9071c8ffcab2e84158d42a6be19ceb0eb tools 62ca21c43c4bd8f99c254b1f80697ebbe3cd5e03",
+  "headless built (checked: 3206 beginAccess)",
+  "app built (checked: 3320 beginAccess)",
+  "unchecked headless built (0 beginAccess)",
+  "apk saved",
+  "apk libraries kept",
+  "launches: crashes 0 of 20",
+  "phone A/B exit=0",
+  "{\"summary\": {\"build\": \"ml-l10\", \"runs\": 3, \"startupSeconds\": {\"median\": 1.88, \"min\": 1.84, \"max\": 2.06}, \"loadSeconds\": {\"median\": 17.35, \"min\": 17.23, \"max\": 17.66}, \"startToLoadedSeconds\": {\"median\": 23.1, \"min\": 23.01, \"max\": 23.24}, \"peakResidentMB\": {\"median\": 765, \"min\": 765, \"max\": 790}, \"peakFootprintMB\": {\"median\": 786, \"min\": 785, \"max\": 810}, \"loadedResidentMB\": {\"median\": 737, \"min\": 728, \"max\": 739}, \"bodiesResidentMB\": {\"median\": 762, \"min\": 750, \"max\": 788}}}",
+  "{\"summary\": {\"build\": \"ml-l9\", \"runs\": 2, \"startupSeconds\": {\"median\": 1.895, \"min\": 1.89, \"max\": 1.9}, \"loadSeconds\": {\"median\": 18.915, \"min\": 18.79, \"max\": 19.04}, \"startToLoadedSeconds\": {\"median\": 24.655, \"min\": 24.55, \"max\": 24.76}, \"peakResidentMB\": {\"median\": 771.5, \"min\": 768, \"max\": 775}, \"peakFootprintMB\": {\"median\": 790.0, \"min\": 784, \"max\": 796}, \"loadedResidentMB\": {\"median\": 746.5, \"min\": 745, \"max\": 748}, \"bodiesResidentMB\": {\"median\": 757.5, \"min\": 755, \"max\": 760}}}",
+  "phone_done",
+  "bundle exit=0",
+  "emu exit=0",
+  "{\"scenario\": \"vs\", \"seconds\": 66.9, \"result\": \"equal\", \"differs\": []}",
+  "{\"frames\": 1832, \"mismatched\": 0, \"result\": \"identical\"}",
+  "suites_done",
+  "{\"scenario\": \"vs\", \"exit\": 0, \"seconds\": 63.9, \"result\": \"equal\", \"differs\": []}",
+  "{\"scenario\": \"mission\", \"exit\": 0, \"seconds\": 61.2, \"result\": \"equal\", \"differs\": []}",
+  "{\"scenario\": \"demo\", \"exit\": 0, \"seconds\": 46.3, \"result\": \"equal\", \"differs\": []}",
+  "{\"scenario\": \"war\", \"exit\": 0, \"seconds\": 100.7, \"result\": \"equal\", \"differs\": []}",
+  "{\"scenario\": \"playback\", \"exit\": 0, \"seconds\": 68.7, \"result\": \"equal\", \"differs\": []}",
+  "{\"scenario\": \"tournament\", \"exit\": 0, \"seconds\": 95.1, \"result\": \"equal\", \"differs\": []}",
+  "{\"scenario\": \"altenter\", \"exit\": 0, \"seconds\": 63.5, \"result\": \"equal\", \"differs\": []}",
+  "{\"scenario\": \"tournament-win\", \"exit\": 0, \"seconds\": 96.3, \"result\": \"equal\", \"differs\": []}",
+  "{\"scenario\": \"team-tournament\", \"exit\": 0, \"seconds\": 79.5, \"result\": \"equal\", \"differs\": []}",
+  "{\"scenario\": \"joystick\", \"exit\": 0, \"seconds\": 21.6, \"result\": \"equal\", \"differs\": []}",
+  "{\"frames\": 1832, \"mismatched\": 0, \"result\": \"identical\"}",
+  "{\"scenario\": \"vs\", \"exit\": 0, \"seconds\": 67.0, \"result\": \"equal\", \"differs\": []}",
+  "{\"scenario\": \"playback\", \"exit\": 0, \"seconds\": 71.9, \"result\": \"equal\", \"differs\": []}",
+  "{\"frames\": 3960, \"mismatched\": 0, \"result\": \"identical\"}",
+  "{\"scenario\": \"vs\", \"exit\": 0, \"seconds\": 67.7, \"result\": \"equal\", \"differs\": []}",
+  "{\"scenario\": \"demo\", \"exit\": 0, \"seconds\": 48.7, \"result\": \"equal\", \"differs\": []}",
+  "{\"frames\": 1832, \"mismatched\": 0, \"result\": \"identical\"}",
+  "scenarios_done",
+  "mac A/B exit=0",
+  "{\"summary\": {\"build\": \"frozen-unchecked-ml-l10\", \"runs\": 3, \"startupSeconds\": {\"median\": 0.068, \"min\": 0.067, \"max\": 0.069}, \"loadSeconds\": {\"median\": 0.716, \"min\": 0.707, \"max\": 0.717}, \"startToLoadedSeconds\": {\"median\": 1.111, \"min\": 1.111, \"max\": 1.112}, \"peakResidentMB\": {\"median\": 920, \"min\": 918, \"max\": 929}, \"loadedResidentMB\": {\"median\": 919, \"min\": 917, \"max\": 924}, \"bodiesResidentMB\": {\"median\": 884, \"min\": 876, \"max\": 904}}}",
+  "{\"summary\": {\"build\": \"frozen-unchecked-ml-l9\", \"runs\": 3, \"startupSeconds\": {\"median\": 0.068, \"min\": 0.067, \"max\": 0.087}, \"loadSeconds\": {\"median\": 0.812, \"min\": 0.804, \"max\": 0.935}, \"startToLoadedSeconds\": {\"median\": 1.206, \"min\": 1.188, \"max\": 1.351}, \"peakResidentMB\": {\"median\": 932, \"min\": 885, \"max\": 941}, \"loadedResidentMB\": {\"median\": 917, \"min\": 884, \"max\": 931}, \"bodiesResidentMB\": {\"median\": 874, \"min\": 856, \"max\": 895}}}",
+  "gate_done"
+ ],
+ "suites": [
+  "OriginalExclusivityChecksTests: Executed 1 test, with 0 failures (0 unexpected) in 0.002 (0.004) seconds",
+  "OriginalFileTranslationTests: Executed 1 test, with 0 failures (0 unexpected) in 0.003 (0.004) seconds",
+  "OriginalSurfaceUnknownTests: Executed 1 test, with 0 failures (0 unexpected) in 0.001 (0.001) seconds",
+  "OriginalLoadingFilesTests: Executed 4 tests, with 0 failures (0 unexpected) in 0.454 (0.456) seconds",
+  "OriginalLoadingFilesInPlaceTests: Executed 2 tests, with 0 failures (0 unexpected) in 0.018 (0.019) seconds",
+  "OriginalLoadedCatalogFilesTests: Executed 5 tests, with 0 failures (0 unexpected) in 18.346 (18.348) seconds",
+  "OriginalCatalogChecksumTests: Executed 3 tests, with 0 failures (0 unexpected) in 0.984 (0.985) seconds",
+  "OriginalApplicationCatalogSessionTests: Executed 3 tests, with 0 failures (0 unexpected) in 128.482 (128.498) seconds",
+  "OriginalApplicationCatalogFullTests: Executed 3 tests, with 0 failures (0 unexpected) in 64.792 (64.796) seconds",
+  "OriginalLoadedCatalogTests: Executed 3 tests, with 0 failures (0 unexpected) in 17.013 (17.014) seconds",
+  "OriginalSettingsLoadingTests: Executed 2 tests, with 0 failures (0 unexpected) in 0.290 (0.291) seconds",
+  "OriginalMacRuntimeLoadingTests: Executed 7 tests, with 0 failures (0 unexpected) in 2.143 (2.145) seconds"
+ ],
+ "phone": {
+  "summary": {
+   "ml-l10": {
+    "runs": 3,
+    "loadSeconds": {
+     "median": 17.35,
+     "min": 17.23,
+     "max": 17.66
+    },
+    "startupSeconds": {
+     "median": 1.88,
+     "min": 1.84,
+     "max": 2.06
+    },
+    "startToLoadedSeconds": {
+     "median": 23.1,
+     "min": 23.01,
+     "max": 23.24
+    },
+    "peakFootprintMB": {
+     "median": 786,
+     "min": 785,
+     "max": 810
+    },
+    "peakResidentMB": {
+     "median": 765,
+     "min": 765,
+     "max": 790
+    },
+    "loadedResidentMB": {
+     "median": 737,
+     "min": 728,
+     "max": 739
+    },
+    "bodiesResidentMB": {
+     "median": 762,
+     "min": 750,
+     "max": 788
+    },
+    "bodiesSwapMB": {
+     "median": 22,
+     "min": 22,
+     "max": 22
+    },
+    "mainCpuToLoadedSeconds": {
+     "median": 21.37,
+     "min": 21.2,
+     "max": 21.46
+    },
+    "loadedCounts": [
+     {
+      "allocations": 16105,
+      "audioRequests": 2072,
+      "bitmapRequests": 12817,
+      "files": 621
+     }
+    ]
+   },
+   "ml-l9": {
+    "runs": 2,
+    "loadSeconds": {
+     "median": 18.915,
+     "min": 18.79,
+     "max": 19.04
+    },
+    "startupSeconds": {
+     "median": 1.895,
+     "min": 1.89,
+     "max": 1.9
+    },
+    "startToLoadedSeconds": {
+     "median": 24.655,
+     "min": 24.55,
+     "max": 24.76
+    },
+    "peakFootprintMB": {
+     "median": 790.0,
+     "min": 784,
+     "max": 796
+    },
+    "peakResidentMB": {
+     "median": 771.5,
+     "min": 768,
+     "max": 775
+    },
+    "loadedResidentMB": {
+     "median": 746.5,
+     "min": 745,
+     "max": 748
+    },
+    "bodiesResidentMB": {
+     "median": 757.5,
+     "min": 755,
+     "max": 760
+    },
+    "bodiesSwapMB": {
+     "median": 22.0,
+     "min": 22,
+     "max": 22
+    },
+    "mainCpuToLoadedSeconds": {
+     "median": 22.975,
+     "min": 22.93,
+     "max": 23.02
+    },
+    "loadedCounts": [
+     {
+      "allocations": 16105,
+      "audioRequests": 2072,
+      "bitmapRequests": 12817,
+      "files": 621
+     }
+    ]
+   }
+  },
+  "runs": [
+   {
+    "label": "ml-l10-ab-01-ml-l10",
+    "host": "android",
+    "serial": "R58R36F7VFD",
+    "scenario": "vs",
+    "bodies": 600,
+    "apk": "ml-l10.apk",
+    "loadedResidentMB": 737,
+    "loadedAnonMB": 696,
+    "loadedFileMB": 32,
+    "loadedSwapMB": 22,
+    "mainCpuToLoadedSeconds": 21.46,
+    "bodiesResidentMB": 750,
+    "bodiesAnonMB": 708,
+    "bodiesFileMB": 32,
+    "bodiesSwapMB": 22,
+    "nativeHeapMB": {
+     "size": 1873,
+     "allocated": 1842,
+     "free": 31,
+     "privateDirty": 683,
+     "swapped": 0
+    },
+    "pssMB": {
+     "Java Heap": 10,
+     "Native Heap": 683,
+     "Code": 16,
+     "Stack": 1,
+     "Graphics": 5,
+     "Private Other": 2,
+     "System": 9,
+     "TOTAL PSS": 726
+    },
+    "peakResidentMB": 765,
+    "peakFootprintMB": 786,
+    "startupSeconds": 1.84,
+    "loadSeconds": 17.66,
+    "startToLoadedSeconds": 23.24,
+    "loadedCounts": {
+     "allocations": 16105,
+     "audioRequests": 2072,
+     "bitmapRequests": 12817,
+     "files": 621
+    },
+    "build": "ml-l10"
+   },
+   {
+    "label": "ml-l10-ab-02-ml-l9",
+    "host": "android",
+    "serial": "R58R36F7VFD",
+    "scenario": "vs",
+    "bodies": 600,
+    "apk": "ml-l9.apk",
+    "loadedResidentMB": 745,
+    "loadedAnonMB": 693,
+    "loadedFileMB": 42,
+    "loadedSwapMB": 22,
+    "mainCpuToLoadedSeconds": 23.02,
+    "bodiesResidentMB": 760,
+    "bodiesAnonMB": 708,
+    "bodiesFileMB": 43,
+    "bodiesSwapMB": 22,
+    "nativeHeapMB": {
+     "size": 1876,
+     "allocated": 1845,
+     "free": 32,
+     "privateDirty": 683,
+     "swapped": 0
+    },
+    "pssMB": {
+     "Java Heap": 10,
+     "Native Heap": 683,
+     "Code": 23,
+     "Stack": 1,
+     "Graphics": 5,
+     "Private Other": 2,
+     "System": 11,
+     "TOTAL PSS": 733
+    },
+    "peakResidentMB": 775,
+    "peakFootprintMB": 796,
+    "startupSeconds": 1.89,
+    "loadSeconds": 19.04,
+    "startToLoadedSeconds": 24.76,
+    "loadedCounts": {
+     "allocations": 16105,
+     "audioRequests": 2072,
+     "bitmapRequests": 12817,
+     "files": 621
+    },
+    "build": "ml-l9"
+   },
+   {
+    "label": "ml-l10-ab-03-ml-l10",
+    "host": "android",
+    "serial": "R58R36F7VFD",
+    "scenario": "vs",
+    "bodies": 600,
+    "apk": "ml-l10.apk",
+    "loadedResidentMB": 739,
+    "loadedAnonMB": 689,
+    "loadedFileMB": 42,
+    "loadedSwapMB": 22,
+    "mainCpuToLoadedSeconds": 21.37,
+    "bodiesResidentMB": 788,
+    "bodiesAnonMB": 736,
+    "bodiesFileMB": 43,
+    "bodiesSwapMB": 22,
+    "nativeHeapMB": {
+     "size": 1897,
+     "allocated": 1841,
+     "free": 56,
+     "privateDirty": 705,
+     "swapped": 0
+    },
+    "pssMB": {
+     "Java Heap": 10,
+     "Native Heap": 705,
+     "Code": 23,
+     "Stack": 1,
+     "Graphics": 5,
+     "Private Other": 7,
+     "System": 11,
+     "TOTAL PSS": 761
+    },
+    "peakResidentMB": 790,
+    "peakFootprintMB": 810,
+    "startupSeconds": 1.88,
+    "loadSeconds": 17.35,
+    "startToLoadedSeconds": 23.01,
+    "loadedCounts": {
+     "allocations": 16105,
+     "audioRequests": 2072,
+     "bitmapRequests": 12817,
+     "files": 621
+    },
+    "build": "ml-l10"
+   },
+   {
+    "label": "ml-l10-ab-04-ml-l9",
+    "host": "android",
+    "serial": "R58R36F7VFD",
+    "scenario": "vs",
+    "bodies": 600,
+    "apk": "ml-l9.apk",
+    "loadedResidentMB": 748,
+    "loadedAnonMB": 701,
+    "loadedFileMB": 37,
+    "loadedSwapMB": 22,
+    "mainCpuToLoadedSeconds": 22.93,
+    "bodiesResidentMB": 755,
+    "bodiesAnonMB": 709,
+    "bodiesFileMB": 37,
+    "bodiesSwapMB": 22,
+    "nativeHeapMB": {
+     "size": 1876,
+     "allocated": 1845,
+     "free": 31,
+     "privateDirty": 684,
+     "swapped": 0
+    },
+    "pssMB": {
+     "Java Heap": 10,
+     "Native Heap": 684,
+     "Code": 19,
+     "Stack": 1,
+     "Graphics": 5,
+     "Private Other": 2,
+     "System": 9,
+     "TOTAL PSS": 730
+    },
+    "peakResidentMB": 768,
+    "peakFootprintMB": 784,
+    "startupSeconds": 1.9,
+    "loadSeconds": 18.79,
+    "startToLoadedSeconds": 24.55,
+    "loadedCounts": {
+     "allocations": 16105,
+     "audioRequests": 2072,
+     "bitmapRequests": 12817,
+     "files": 621
+    },
+    "build": "ml-l9"
+   },
+   {
+    "label": "ml-l10-ab-05-ml-l10",
+    "host": "android",
+    "serial": "R58R36F7VFD",
+    "scenario": "vs",
+    "bodies": 600,
+    "apk": "ml-l10.apk",
+    "loadedResidentMB": 728,
+    "loadedAnonMB": 678,
+    "loadedFileMB": 42,
+    "loadedSwapMB": 22,
+    "mainCpuToLoadedSeconds": 21.2,
+    "bodiesResidentMB": 762,
+    "bodiesAnonMB": 712,
+    "bodiesFileMB": 42,
+    "bodiesSwapMB": 22,
+    "nativeHeapMB": {
+     "size": 1872,
+     "allocated": 1841,
+     "free": 31,
+     "privateDirty": 682,
+     "swapped": 0
+    },
+    "pssMB": {
+     "Java Heap": 9,
+     "Native Heap": 682,
+     "Code": 22,
+     "Stack": 1,
+     "Graphics": 5,
+     "Private Other": 7,
+     "System": 11,
+     "TOTAL PSS": 736
+    },
+    "peakResidentMB": 765,
+    "peakFootprintMB": 785,
+    "startupSeconds": 2.06,
+    "loadSeconds": 17.23,
+    "startToLoadedSeconds": 23.1,
+    "loadedCounts": {
+     "allocations": 16105,
+     "audioRequests": 2072,
+     "bitmapRequests": 12817,
+     "files": 621
+    },
+    "build": "ml-l10"
+   }
+  ]
+ },
+ "mac": {
+  "summary": {
+   "frozen-unchecked-ml-l10": {
+    "runs": 3,
+    "loadSeconds": {
+     "median": 0.716,
+     "min": 0.707,
+     "max": 0.717
+    },
+    "startupSeconds": {
+     "median": 0.068,
+     "min": 0.067,
+     "max": 0.069
+    },
+    "startToLoadedSeconds": {
+     "median": 1.111,
+     "min": 1.111,
+     "max": 1.112
+    },
+    "peakResidentMB": {
+     "median": 920,
+     "min": 918,
+     "max": 929
+    },
+    "loadedResidentMB": {
+     "median": 919,
+     "min": 917,
+     "max": 924
+    },
+    "bodiesResidentMB": {
+     "median": 884,
+     "min": 876,
+     "max": 904
+    },
+    "loadedCounts": [
+     {
+      "allocations": 16105,
+      "audioRequests": 2072,
+      "bitmapRequests": 12817,
+      "files": 621
+     }
+    ]
+   },
+   "frozen-unchecked-ml-l9": {
+    "runs": 3,
+    "loadSeconds": {
+     "median": 0.812,
+     "min": 0.804,
+     "max": 0.935
+    },
+    "startupSeconds": {
+     "median": 0.068,
+     "min": 0.067,
+     "max": 0.087
+    },
+    "startToLoadedSeconds": {
+     "median": 1.206,
+     "min": 1.188,
+     "max": 1.351
+    },
+    "peakResidentMB": {
+     "median": 932,
+     "min": 885,
+     "max": 941
+    },
+    "loadedResidentMB": {
+     "median": 917,
+     "min": 884,
+     "max": 931
+    },
+    "bodiesResidentMB": {
+     "median": 874,
+     "min": 856,
+     "max": 895
+    },
+    "loadedCounts": [
+     {
+      "allocations": 16105,
+      "audioRequests": 2072,
+      "bitmapRequests": 12817,
+      "files": 621
+     }
+    ]
+   }
+  },
+  "runs": [
+   {
+    "label": "ml-l10-mac-ab-01-frozen-unchecked-ml-l10",
+    "host": "mac",
+    "scenario": "vs",
+    "bodies": 600,
+    "binary": "/private/tmp/claude-501/-Users-michael-Developer-ntsd-2-4/1f9218ae-9d5d-4c4e-a8dd-d5254994839c/scratchpad/frozen-unchecked-ml-l10/NTSDHeadless",
+    "startupSeconds": 0.067,
+    "loadSeconds": 0.717,
+    "startToLoadedSeconds": 1.112,
+    "loadedCounts": {
+     "allocations": 16105,
+     "audioRequests": 2072,
+     "bitmapRequests": 12817,
+     "files": 621
+    },
+    "loadedResidentMB": 917,
+    "bodiesResidentMB": 884,
+    "peakResidentMB": 918,
+    "build": "frozen-unchecked-ml-l10"
+   },
+   {
+    "label": "ml-l10-mac-ab-02-frozen-unchecked-ml-l9",
+    "host": "mac",
+    "scenario": "vs",
+    "bodies": 600,
+    "binary": "/private/tmp/claude-501/-Users-michael-Developer-ntsd-2-4/1f9218ae-9d5d-4c4e-a8dd-d5254994839c/scratchpad/frozen-unchecked-ml-l9/NTSDHeadless",
+    "startupSeconds": 0.087,
+    "loadSeconds": 0.935,
+    "startToLoadedSeconds": 1.351,
+    "loadedCounts": {
+     "allocations": 16105,
+     "audioRequests": 2072,
+     "bitmapRequests": 12817,
+     "files": 621
+    },
+    "loadedResidentMB": 884,
+    "bodiesResidentMB": 856,
+    "peakResidentMB": 885,
+    "build": "frozen-unchecked-ml-l9"
+   },
+   {
+    "label": "ml-l10-mac-ab-03-frozen-unchecked-ml-l10",
+    "host": "mac",
+    "scenario": "vs",
+    "bodies": 600,
+    "binary": "/private/tmp/claude-501/-Users-michael-Developer-ntsd-2-4/1f9218ae-9d5d-4c4e-a8dd-d5254994839c/scratchpad/frozen-unchecked-ml-l10/NTSDHeadless",
+    "startupSeconds": 0.069,
+    "loadSeconds": 0.707,
+    "startToLoadedSeconds": 1.111,
+    "loadedCounts": {
+     "allocations": 16105,
+     "audioRequests": 2072,
+     "bitmapRequests": 12817,
+     "files": 621
+    },
+    "loadedResidentMB": 919,
+    "bodiesResidentMB": 876,
+    "peakResidentMB": 920,
+    "build": "frozen-unchecked-ml-l10"
+   },
+   {
+    "label": "ml-l10-mac-ab-04-frozen-unchecked-ml-l9",
+    "host": "mac",
+    "scenario": "vs",
+    "bodies": 600,
+    "binary": "/private/tmp/claude-501/-Users-michael-Developer-ntsd-2-4/1f9218ae-9d5d-4c4e-a8dd-d5254994839c/scratchpad/frozen-unchecked-ml-l9/NTSDHeadless",
+    "startupSeconds": 0.067,
+    "loadSeconds": 0.804,
+    "startToLoadedSeconds": 1.188,
+    "loadedCounts": {
+     "allocations": 16105,
+     "audioRequests": 2072,
+     "bitmapRequests": 12817,
+     "files": 621
+    },
+    "loadedResidentMB": 917,
+    "bodiesResidentMB": 874,
+    "peakResidentMB": 941,
+    "build": "frozen-unchecked-ml-l9"
+   },
+   {
+    "label": "ml-l10-mac-ab-05-frozen-unchecked-ml-l10",
+    "host": "mac",
+    "scenario": "vs",
+    "bodies": 600,
+    "binary": "/private/tmp/claude-501/-Users-michael-Developer-ntsd-2-4/1f9218ae-9d5d-4c4e-a8dd-d5254994839c/scratchpad/frozen-unchecked-ml-l10/NTSDHeadless",
+    "startupSeconds": 0.068,
+    "loadSeconds": 0.716,
+    "startToLoadedSeconds": 1.111,
+    "loadedCounts": {
+     "allocations": 16105,
+     "audioRequests": 2072,
+     "bitmapRequests": 12817,
+     "files": 621
+    },
+    "loadedResidentMB": 924,
+    "bodiesResidentMB": 904,
+    "peakResidentMB": 929,
+    "build": "frozen-unchecked-ml-l10"
+   },
+   {
+    "label": "ml-l10-mac-ab-06-frozen-unchecked-ml-l9",
+    "host": "mac",
+    "scenario": "vs",
+    "bodies": 600,
+    "binary": "/private/tmp/claude-501/-Users-michael-Developer-ntsd-2-4/1f9218ae-9d5d-4c4e-a8dd-d5254994839c/scratchpad/frozen-unchecked-ml-l9/NTSDHeadless",
+    "startupSeconds": 0.068,
+    "loadSeconds": 0.812,
+    "startToLoadedSeconds": 1.206,
+    "loadedCounts": {
+     "allocations": 16105,
+     "audioRequests": 2072,
+     "bitmapRequests": 12817,
+     "files": 621
+    },
+    "loadedResidentMB": 931,
+    "bodiesResidentMB": 895,
+    "peakResidentMB": 932,
+    "build": "frozen-unchecked-ml-l9"
+   }
+  ]
+ }
+}

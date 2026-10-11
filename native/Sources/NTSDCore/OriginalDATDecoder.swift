@@ -9,15 +9,24 @@ public enum OriginalFileTranslation: String, Codable, Sendable {
     func read(_ bytes: [UInt8]) -> [UInt8] {
         guard self == .text else { return bytes }
         var output: [UInt8] = [], index = 0
+        output.reserveCapacity(bytes.count)
         while index < bytes.count, bytes[index] != 0x1a {
             if bytes[index] == 13, index + 1 < bytes.count, bytes[index + 1] == 10 { index += 1 }
             output.append(bytes[index]); index += 1
         }
         return output
     }
+    /// Each LF as CR LF, into one array: `flatMap` built an array per byte
+    /// (MEMORY_LOADING L10).
     func write(_ bytes: [UInt8]) -> [UInt8] {
         guard self == .text else { return bytes }
-        return bytes.flatMap { $0 == 10 ? [13, 10] : [$0] }
+        var output: [UInt8] = []
+        output.reserveCapacity(bytes.count + bytes.count / 8)
+        for byte in bytes {
+            if byte == 10 { output.append(13) }
+            output.append(byte)
+        }
+        return output
     }
 }
 
