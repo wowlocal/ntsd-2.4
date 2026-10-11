@@ -16,38 +16,64 @@ public struct OriginalFrameAllocation: Equatable, Sendable {
 /// Byte writes to a DAT name can affect a reference without unsafe Swift memory.
 struct OriginalFrameHeap {
     private(set) var allocations: [OriginalFrameAllocation] = []
+    /// The allocations' ranges in address order with their index. Ranges never
+    /// overlap (every allocation is checked), so a new range overlaps one exactly
+    /// when it overlaps its neighbours here, and an address starts or lies in at
+    /// most one: lookups by binary search give what the scans over all
+    /// allocations gave (~15,000 of them by the end of the catalog;
+    /// MEMORY_LOADING L6).
+    private var ordered: [(start: UInt64, end: UInt64, index: Int)] = []
     private var next: UInt32 = 0x10000
     var fill: UInt8 = 0xa5
+
+    /// The first position in `ordered` whose start is at least `address`.
+    private func position(_ address: UInt64) -> Int {
+        var low = 0, high = ordered.count
+        while low < high { let middle = (low + high) / 2; if ordered[middle].start < address { low = middle + 1 } else { high = middle } }
+        return low
+    }
+    private func index(startingAt address: UInt32) -> Int? {
+        let i = position(UInt64(address))
+        return i < ordered.count && ordered[i].start == UInt64(address) ? ordered[i].index : nil
+    }
 
     mutating func allocate(_ size: Int, kind: OriginalFrameAllocationKind,
                            address: UInt32?) throws -> UInt32 {
         let base = address ?? next
-        guard size > 0, size <= 400, base != 0, UInt64(base) + UInt64(size) + 15 <= UInt64(UInt32.max),
-              !allocations.contains(where: { UInt64(base) < UInt64($0.address) + UInt64($0.storage.byteCount) && UInt64($0.address) < UInt64(base) + UInt64(size) }) else {
+        guard size > 0, size <= 400, base != 0, UInt64(base) + UInt64(size) + 15 <= UInt64(UInt32.max) else {
+            throw OriginalStateError.invalidStorage("Overlapping or invalid Frame allocation")
+        }
+        let low = UInt64(base), high = low + UInt64(size), i = position(low)
+        guard !(i > 0 && ordered[i - 1].end > low), !(i < ordered.count && ordered[i].start < high) else {
             throw OriginalStateError.invalidStorage("Overlapping or invalid Frame allocation")
         }
         let record = try OriginalStateRecord(bytes: Array(repeating: fill, count: size), defined: Array(repeating: false, count: size))
+        ordered.insert((low, high, allocations.count), at: i)
         allocations.append(.init(address: base, kind: kind, storage: record))
         next = max(next, (base + UInt32(size) + 15) & ~15)
         return base
     }
 
     mutating func write<T: FixedWidthInteger>(_ value: T, at address: UInt32, offset: Int) throws {
-        guard let index = allocations.lastIndex(where: { $0.address == address }) else {
+        guard let index = index(startingAt: address) else {
             throw OriginalStateError.invalidStorage("Unknown Frame allocation")
         }
         try allocations[index].storage.write(value, at: offset)
     }
 
     func words(at address: UInt32, count: Int) throws -> [Int32] {
-        guard let record = allocations.last(where: { $0.address == address })?.storage else {
+        guard let index = index(startingAt: address) else {
             throw OriginalStateError.invalidStorage("Unknown Frame box reference")
         }
+        let record = allocations[index].storage
         return try (0..<count).map { try record.integer(at: $0*4, as: Int32.self) }
     }
 
     func string(at address: UInt32) throws -> String? {
-        guard let allocation = allocations.last(where: { $0.address <= address && UInt64(address) < UInt64($0.address) + UInt64($0.storage.byteCount) }) else { return nil }
+        // The last range starting at or before the address, if it contains it.
+        let i = position(UInt64(address) + 1)
+        guard i > 0, UInt64(address) < ordered[i - 1].end else { return nil }
+        let allocation = allocations[ordered[i - 1].index]
         return try Self.string(in: allocation.storage, at: Int(address - allocation.address))
     }
 
