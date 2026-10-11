@@ -81,7 +81,7 @@ struct OriginalFrameHeap {
         var bytes: [UInt8] = []
         for position in offset..<record.byteCount {
             let byte = try record.integer(at: position, as: UInt8.self)
-            if byte == 0 { return String(String.UnicodeScalarView(bytes.map { UnicodeScalar($0) })) }
+            if byte == 0 { return OriginalLatin1.string(bytes) }
             bytes.append(byte)
         }
         throw OriginalStateError.invalidStorage("Unterminated Frame string")

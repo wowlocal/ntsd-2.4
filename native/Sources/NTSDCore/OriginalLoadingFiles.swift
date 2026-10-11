@@ -202,7 +202,7 @@ public struct OriginalLoadingFiles: Equatable, Sendable {
             try candidate.decodeDAT(path, source: source, allocate: allocate, observe: observe)
             token = try candidate.open(Self.temporaryPath, mode: "r", source: source, allocate: allocate, observe: observe)
         } else { token = try candidate.openObject(path, source: source, allocate: allocate, observe: observe) }
-        let text = String(String.UnicodeScalarView(candidate.streams[token]!.input.map { UnicodeScalar($0) }))
+        let text = OriginalLatin1.string(candidate.streams[token]!.input)
         let result = try consume(text) { position in try candidate.scannerAccess(token, position: position, observe: observe) }
         try candidate.finishObject(token, source: source, allocate: allocate, observe: observe)
         self = candidate

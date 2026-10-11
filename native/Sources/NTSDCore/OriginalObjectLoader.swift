@@ -360,7 +360,7 @@ public struct OriginalObjectLoader {
         var bytes: [UInt8] = [], index = offset
         while true {
             let byte = try record.integer(at: index, as: UInt8.self)
-            if byte == 0 { return String(String.UnicodeScalarView(bytes.map { UnicodeScalar($0) })) }
+            if byte == 0 { return OriginalLatin1.string(bytes) }
             bytes.append(byte); index += 1
         }
     }

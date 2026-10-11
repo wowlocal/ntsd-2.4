@@ -332,10 +332,10 @@ struct OriginalFrameScanner {
     private(set) var eof = false
     private let observeRead: ((Int) throws -> Void)?
     init(_ text: String, observeRead: ((Int) throws -> Void)? = nil) throws {
-        guard text.unicodeScalars.allSatisfy({ $0.value <= 255 }) else {
+        guard let bytes = OriginalLatin1.bytes(text) else {
             throw OriginalLoaderError.outsideVerifiedDomain("Decoded DAT must contain Latin-1 bytes")
         }
-        bytes = text.unicodeScalars.map { UInt8($0.value) }
+        self.bytes = bytes
         self.observeRead = observeRead
     }
     private func whitespace(_ byte: UInt8) -> Bool { byte == 32 || (9...13).contains(byte) }
@@ -356,7 +356,7 @@ struct OriginalFrameScanner {
         while position < bytes.count && !whitespace(bytes[position]) { position += 1 }
         if position == bytes.count { eof = true }
         guard position > start else { return nil }
-        return String(String.UnicodeScalarView(bytes[start..<position].map { UnicodeScalar($0) }))
+        return OriginalLatin1.string(bytes[start..<position])
     }
     mutating func integer() throws -> Int32? {
         skipSpace()
