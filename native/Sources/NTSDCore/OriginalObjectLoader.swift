@@ -131,8 +131,16 @@ public struct OriginalObjectLoader {
                               onMessage: (_ checksum: UInt32) throws -> Void = { _ in },
                               onNewSound: (OriginalSoundRegistration) throws -> Void = { _ in },
                               onFrame: (OriginalFrameRecord) -> Void = { _ in },
-                              onFrameStorage: (Int, OriginalStateRecord) -> Void = { _, _ in }) throws -> OriginalLoadedObject {
-        var candidate = self
+                              onFrameStorage: (Int, OriginalStateRecord) -> Void = { _, _ in },
+                              rollback: Bool = true) throws -> OriginalLoadedObject {
+        // With `rollback` a failed load leaves this loader unchanged: it works on
+        // a copy, so its first write to each shared array copies the array.
+        // Without it (a caller that drops the loader when a load throws, as the
+        // loaded catalog does) the loader works in place and is left empty by a
+        // failure: each object's first Frame allocation copied every earlier
+        // one (~15,000 by the end of the catalog; MEMORY_LOADING L16).
+        var candidate = Self()
+        if rollback { candidate = self } else { swap(&candidate, &self) }
         let result = try candidate.consume(decoded: decoded, id: id, type: type, headerBacking: headerBacking,
                                            tailBacking: tailBacking, bitmapFill: bitmapFill, frameBacking: frameBacking, frameAllocation: frameAllocation, weaponSoundAllocation: weaponSoundAllocation,
                                            bitmapSource: bitmapSource, constructBitmap: constructBitmap, onMirror: onMirror, onProgress: onProgress, onRead: onRead, onChecksum: onChecksum, onSoundCache: onSoundCache, onMessage: onMessage, onNewSound: onNewSound, onFrame: onFrame, onFrameStorage: onFrameStorage)
@@ -159,8 +167,10 @@ public struct OriginalObjectLoader {
         var input = try OriginalFrameScanner(decoded, observeRead: onRead)
         var header = try OriginalStateRecord(bytes: headerBacking, defined: Array(repeating: false, count: 0x7a4))
         var tail = try OriginalStateRecord(bytes: tailBacking, defined: Array(repeating: false, count: 0x3c))
-        var frames = OriginalFrameLoader(); frames.sounds = sounds
-        frames.backing = frameBacking; frames.heap = frameHeap; frames.heap.fill = bitmapFill
+        // The sound registry and the Frame heap move to the Frame loader and
+        // come back below; nothing here reads them meanwhile (L16).
+        var frames = OriginalFrameLoader(); swap(&frames.sounds, &sounds)
+        frames.backing = frameBacking; swap(&frames.heap, &frameHeap); frames.heap.fill = bitmapFill
         var weaponPaths: [Int: String] = [:], weaponAllocations: [OriginalWeaponSoundPathAllocation] = []
         for offset in stride(from: 0x90, through: 0xa0, by: 4) { try header.write(Int32(0), at: offset) }
         for offset in [0xa4, 0xa8, 0xac] { try header.write(Int32(-1), at: offset) }

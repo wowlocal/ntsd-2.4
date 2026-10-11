@@ -140,6 +140,7 @@ extension OriginalGameplayResultLayoutTests { convenience init() { self.init(nam
 extension OriginalGameplayResultRecordingTests { convenience init() { self.init(name: "helper", testClosure: { _ in }) } }
 extension OriginalGameplayReturnTests { convenience init() { self.init(name: "helper", testClosure: { _ in }) } }
 extension OriginalGraphEventsTests { convenience init() { self.init(name: "helper", testClosure: { _ in }) } }
+extension OriginalInPlaceObjectLoadTests { convenience init() { self.init(name: "helper", testClosure: { _ in }) } }
 extension OriginalInitialInterfaceSurfaceTests { convenience init() { self.init(name: "helper", testClosure: { _ in }) } }
 extension OriginalInitialInterfaceTests { convenience init() { self.init(name: "helper", testClosure: { _ in }) } }
 extension OriginalInitializedGameplayTests { convenience init() { self.init(name: "helper", testClosure: { _ in }) } }

@@ -209,12 +209,18 @@ public struct OriginalLoadingFiles: Equatable, Sendable {
         return result
     }
 
-    private func index(_ token: UInt32, mode: String) throws -> [UInt32: Stream].Index {
-        guard let i = streams.index(forKey: token), !streams.values[i].closed, streams.values[i].mode == mode else {
+    /// The open stream `token` of `mode`. The stream is checked in place:
+    /// reading `streams.values[i]` copied the Stream out (retaining and
+    /// releasing its arrays) twice per character or scanner access, ~2% of the
+    /// A12's load, and every caller changes it in place right after
+    /// (MEMORY_LOADING L16).
+    private mutating func index(_ token: UInt32, mode: String) throws -> [UInt32: Stream].Index {
+        guard let i = streams.index(forKey: token), Self.isOpen(&streams.values[i], mode: mode) else {
             throw Self.error("Unknown, closed or wrong-mode stream")
         }
         return i
     }
+    private static func isOpen(_ stream: inout Stream, mode: String) -> Bool { !stream.closed && stream.mode == mode }
     /// One character from a read stream, refilling its buffer (the read event)
     /// when the loaded bytes are used up. Changes the stream in place, only after
     /// the observer returned: a throwing observer leaves it unchanged.

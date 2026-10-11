@@ -192,7 +192,9 @@ public struct OriginalLoadedCatalog {
                 let path = request.path!
                 try parseFile(path, kind: .object) { text, read in
                 guard request.index == objects.count else { throw OriginalStateError.invalidStorage("Object ordinal differs") }
-                var loader = OriginalObjectLoader(); loader.resources = resources
+                // The resources move into the loader and back: any error ends
+                // this load, so neither keeps a copy for a rollback (L16).
+                var loader = OriginalObjectLoader(); swap(&loader.resources, &resources)
                 objects.append(try loader.load(decoded: text, id: request.id!, type: request.objectType!,
                                                headerBacking: Array(repeating: fill, count: 0x7a4), tailBacking: Array(repeating: fill, count: 0x3c),
                                                bitmapFill: fill, frameBacking: Array(repeating: fill, count: 400*0x178),
@@ -205,8 +207,8 @@ public struct OriginalLoadedCatalog {
                                                onSoundCache: onSoundCache,
                                                onMessage: { try onMessage(path, $0) },
                                                onNewSound: { try onNewSound(path, $0) },
-                                               onFrame: { _ in occurrences += 1 }))
-                resources = loader.resources
+                                               onFrame: { _ in occurrences += 1 }, rollback: false))
+                swap(&loader.resources, &resources)
                 }
             case .background:
                 let path = request.path!, index = request.index!
