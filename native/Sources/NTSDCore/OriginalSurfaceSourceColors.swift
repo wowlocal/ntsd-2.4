@@ -12,7 +12,14 @@ public struct OriginalSurfaceSourceColors: Equatable {
     /// byte per pixel) held about 1 GB (MEMORY_FOOTPRINT step 1). The values read
     /// are the same: decoding is a pure function of the bitmap's bytes.
     private var content: Content
-    private enum Content { case pixels([UInt8],[Bool]), bitmap(Decoded) }
+    /// `unknown`: a new surface, every pixel unknown on zero backing, kept
+    /// implicit until something reads or partly writes it. Nearly every surface
+    /// is first written by a whole copy of its bitmap, and allocating and
+    /// zeroing its arrays first was 9% of the A12's load (MEMORY_LOADING L9).
+    private enum Content { case unknown, pixels([UInt8],[Bool]), bitmap(Decoded) }
+    private var unknownArrays: (rgb: [UInt8],defined: [Bool]) {
+        ([UInt8](repeating:0,count:width*height*3),[Bool](repeating:false,count:width*height))
+    }
     /// A copied bitmap and, once something reads its colours, their decoded
     /// arrays (so repeated reads decode once; the game itself never reads them).
     private final class Decoded {
@@ -26,6 +33,7 @@ public struct OriginalSurfaceSourceColors: Equatable {
     }
     private var materialized: (rgb: [UInt8],defined: [Bool]) {
         switch content {
+        case .unknown:return unknownArrays
         case let .pixels(rgb,defined):return (rgb,defined)
         case let .bitmap(d):return d.colors
         }
@@ -34,6 +42,7 @@ public struct OriginalSurfaceSourceColors: Equatable {
     /// cache (snapshots taken before the write keep only the bitmap).
     private var writable: (rgb: [UInt8],defined: [Bool]) {
         switch content {
+        case .unknown:return unknownArrays
         case let .pixels(rgb,defined):return (rgb,defined)
         case let .bitmap(d):let p = d.bitmap.pixels;return (p.rgb,p.defined)
         }
@@ -43,6 +52,7 @@ public struct OriginalSurfaceSourceColors: Equatable {
     public static func == (a: Self,b: Self) -> Bool {
         guard a.width == b.width,a.height == b.height else { return false }
         if case let .bitmap(x) = a.content,case let .bitmap(y) = b.content,x === y || x.bitmap == y.bitmap { return true }
+        if case .unknown = a.content,case .unknown = b.content { return true }
         let l = a.materialized,r = b.materialized
         return l.rgb == r.rgb && l.defined == r.defined
     }
@@ -53,7 +63,8 @@ public struct OriginalSurfaceSourceColors: Equatable {
         let (bytes,byteOverflow) = count.multipliedReportingOverflow(by:3)
         guard !overflow,!byteOverflow,maximumPixels > 0,count <= maximumPixels else { throw Boundary.pixelLimit }
         self.width = width;self.height = height
-        content = .pixels([UInt8](repeating:0,count:bytes),[Bool](repeating:false,count:count))
+        _ = bytes
+        content = .unknown
     }
 
     private static func rectangle(x: Int,y: Int,width: Int,height: Int,inWidth: Int,inHeight: Int) throws {
@@ -114,6 +125,7 @@ public struct OriginalSurfaceSourceColors: Equatable {
 
     public func color(x: Int,y: Int) throws -> [UInt8] {
         try Self.rectangle(x:x,y:y,width:1,height:1,inWidth:width,inHeight:height)
+        if case .unknown = content { throw Boundary.undefinedPixel }
         let pixel = y*width+x,(rgb,defined) = materialized
         guard defined[pixel] else { throw Boundary.undefinedPixel }
         return Array(rgb[pixel*3..<pixel*3+3])
