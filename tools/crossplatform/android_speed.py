@@ -82,7 +82,7 @@ def scenario_script(name):
     raise SystemExit(f"unknown scenario {name}")
 
 
-def arguments(real_clock=False, scenario="vs", sounds=False):
+def arguments(real_clock=False, scenario="vs", sounds=False, music=False):
     script = scenario_script(scenario)
     # The virtual clock advances 8 ms per message-loop iteration, so the game's
     # 33 ms timer takes about four iterations per tick and the three idle ones
@@ -90,8 +90,8 @@ def arguments(real_clock=False, scenario="vs", sounds=False):
     # whatever the compute time. --real-clock lets the game pace by real time
     # (it sleeps only while ahead of its 33 ms schedule).
     clock = [] if real_clock else ["--virtual-clock", "123456789", "8"]
-    return ["--events-file", f"{FILES}/speed/events.jsonl", "--tz", "Etc/GMT-1", "--original", "--mute-music",
-            *([] if sounds else ["--mute-sounds"]), "--no-network", "--overlay", f"{FILES}/speed/overlay", *clock,
+    return ["--events-file", f"{FILES}/speed/events.jsonl", "--tz", "Etc/GMT-1", "--original",
+            *([] if music else ["--mute-music"]), *([] if sounds else ["--mute-sounds"]), "--no-network", "--overlay", f"{FILES}/speed/overlay", *clock,
             "--script-clock", "gameplay", "--script", script]
 
 

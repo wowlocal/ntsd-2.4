@@ -51,7 +51,8 @@ measures loading, memory and frame time in the same interleaved runs. On
 Android it also takes the memory readings again at body B (ticksEnd*: RSS,
 its anonymous and file parts, swap, RSS + swap and PSS), so a longer match
 shows whether memory grows.
---sounds mixes the sound effects as in play (Android; media volume held at 0).
+--sounds mixes the sound effects as in play (Android; media volume held at 0),
+--music plays the music too (the Android host decodes a whole track).
 --warmup first runs once, unmeasured (OUT_DIR/warmup.jsonl), the last build
 that is not the first one:
 the first run of a phone sequence waited longest for the read-ahead whatever
@@ -76,9 +77,9 @@ import android_speed as phone   # noqa: E402  (the shared device helpers)
 PACKAGE, FILES = phone.PACKAGE, phone.FILES
 
 
-def arguments(scenario, overlay, events=None, sounds=False):
+def arguments(scenario, overlay, events=None, sounds=False, music=False):
     """android_speed.py's command line for SCENARIO with its overlay (and events file)."""
-    args = phone.arguments(False, scenario, sounds)
+    args = phone.arguments(False, scenario, sounds, music)
     i = args.index("--overlay"); args[i + 1] = overlay
     if events is None:
         j = args.index("--events-file"); del args[j:j + 2]
@@ -100,12 +101,13 @@ def android_run(o, apk, label):
     row = {"label": label, "host": "android", "serial": s, "scenario": o.scenario, "bodies": o.bodies,
            "apk": Path(apk).name if apk else None}
     if o.sounds: row["sounds"] = True
-    volume = phone.media_volume(s) if o.sounds else None
+    if o.music: row["music"] = True
+    volume = phone.media_volume(s) if o.sounds or o.music else None
     try:
         if volume: phone.media_volume(s, 0)
         phone.shell(s, f"am force-stop {PACKAGE}")
         phone.shell(s, f"run-as {PACKAGE} sh -c 'rm -rf files/speed && mkdir -p files/speed/overlay && cat > files/args.txt'",
-                    input="\n".join(arguments(o.scenario, f"{FILES}/speed/overlay", f"{FILES}/speed/events.jsonl", o.sounds)) + "\n")
+                    input="\n".join(arguments(o.scenario, f"{FILES}/speed/overlay", f"{FILES}/speed/events.jsonl", o.sounds, o.music)) + "\n")
         if o.fresh_data:
             # The next launch extracts the APK's assets again (MEMORY_LOADING S2).
             phone.shell(s, f"run-as {PACKAGE} rm -f files/ntsd-data/.extracted")
@@ -205,8 +207,14 @@ def ticks_window(o, s, pid, row):
                 if name == "b":
                     # The memory readings again at the window's end (after the CPU reading).
                     end_status = phone.shell(s, f"cat /proc/{pid}/status 2>/dev/null")
-                    m = re.search(r"TOTAL PSS:\s+(\d+)", phone.shell(s, f"dumpsys meminfo {pid}"))
+                    meminfo = phone.shell(s, f"dumpsys meminfo {pid}")
+                    (Path(o.out) / f"{row['label']}-meminfo-end.txt").write_text(meminfo)
+                    m = re.search(r"TOTAL PSS:\s+(\d+)", meminfo)
                     end_pss = round(int(m.group(1)) / 1024) if m else None
+                    native = re.search(r"^\s*Native Heap\s+(\d+)\s+(\d+)\s+(\d+)\s+(\d+)\s+(\d+)\s+(\d+)\s+(\d+)\s+(\d+)", meminfo, re.M)
+                    if native:
+                        row["ticksEndNativeHeapMB"] = {k: round(int(native.group(i)) / 1024) for k, i in
+                                                       (("size", 6), ("allocated", 7), ("free", 8), ("privateDirty", 2), ("swapped", 4))}
         if not phone.shell(s, f"pidof {PACKAGE}").strip():
             break
         time.sleep(0.5)
@@ -312,6 +320,7 @@ def main():
     a.add_argument("--fresh-data", action="store_true")
     a.add_argument("--ticks", type=lambda t: tuple(int(x) for x in t.split(",")), default=None, help="A,B: frame time between bodies A and B")
     a.add_argument("--sounds", action="store_true")
+    a.add_argument("--music", action="store_true", help="play the music as in play (Android; media volume held at 0)")
     a.add_argument("--warmup", action="store_true", help="one unmeasured run of the last build first")
     o = a.parse_args()
     if o.ticks and (len(o.ticks) != 2 or not o.bodies <= o.ticks[0] < o.ticks[1]):

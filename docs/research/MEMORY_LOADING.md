@@ -273,6 +273,12 @@ T7 above 40 GiB. Keep the phone awake only while measuring and restore
   comparison of absolute phone times suggested a regression in M5b that an
   interleaved A/B refuted. Suspected regressions are checked by an
   interleaved A/B of the two builds in one session, never by the ledger.
+- **Measure memory as in play.** Every run muted the music, and the Android
+  player holds a whole decoded track (+24–34 MiB in a match, up to +94 at
+  the peak): the largest holder in play was invisible. The phone A/B now
+  plays music and sounds (`--music --sounds`). `malloc_history -allBySize`
+  also counts mapped files (ICU's 34 MiB data file on the Mac): check an
+  allocation's stack before calling it heap.
 - **Measure where the cost lands.** M5c moved the sample conversion from
   load time into the mixer, which runs on the audio callback thread; every
   speed and load run muted the sounds (the Android feed then outputs zeros
@@ -324,8 +330,14 @@ T7 above 40 GiB. Keep the phone awake only while measuring and restore
 | 2026-10-11 | L20: the menu's bitmap inputs in place | `observed` runs without a rollback copy (its checks first, then `perform`, which throws only before its first change) and the menu session changes its bitmap inputs in place at its three call sites, instead of copying the image, surface and DC tables up to twice per bitmap request. Menu phase on the A12 5.35 → 5.15 s (medians, 4+4 A/B; ranges 5.24–5.52 and 4.92–5.30), but launch to loaded unchanged (12.67 against 12.62 s, overlapping): the loading step then waits longer for the read-ahead, which ends ~6 s after startup in both builds under the phone's memory pressure — the read-ahead is now the launch's critical path. Load, startup, frame time and memory overlapping; Mac neutral. Kept as strictly less work. All 10 scenarios, AppKit, unchecked and emulator equal, frames identical; 11 suites incl. observed's rejections and its equality with `response`; review: no defect | [evidence](../evidence/ml-l20-menu-bitmap-inputs-in-place-20261011.json) | e184b10 |
 | 2026-10-11 | Read-ahead off-CPU profile | `load_memory.py --profile-loading --offcpu`: the read-ahead's eight workers keep 4–5 cores busy and 2–3 blocked in `read()` from 1 to 6 s after launch (thread time: 12.5 s on CPU and 12.2 s blocked in `read`, LZ4 3.0 s, SHA-256 2.8 s, Data-to-array copies ~1.2 s); the game thread gets only 0.03–0.69 s of CPU per second in the menu phase, and in one second the whole process stalls (the phone reclaiming memory) | `ml-load/ml-ra-off-profile` (X5) | — |
 | 2026-10-11 | L21 (rejected): package files read straight into arrays | A POSIX reader (open, fstat, read into the array, EOF probe; `Data(contentsOf:)` answering any failure) for the catalog, startup and loading packages, so each file is no longer held as Data and then as its array copy. Behaviour equal (all 10 scenarios, AppKit, unchecked, emulator, frames identical; 11 suites), but no measurable gain: A12 launch to loaded 12.54–12.60 against 12.60–12.79 s, load and peak footprint overlapping, Mac load 0.326–0.330 against 0.318–0.330 s. It adds a code path, so it is reverted (diff kept on X5, `ml-rejected/`); the review's two unreachable traps were not fixed for the same reason | [evidence](../evidence/ml-l21-posix-file-bytes-rejected-20261011.json) | — |
+| 2026-10-11 | RAM audit (user priority) | A12, HEAD (L20), sounds mixed, vs and Demo interleaved: vs peak RSS + swap **565 MiB** (555–581), after loading RSS 529 (anon 476, swap 22), in the match RSS 517 → 555 from body 600 to 1800 (PSS 487–503 → 520–529); Demo 566 (551–579). Native heap: 1597 MiB allocated but 405–450 MiB dirty (≈1.15 GiB untouched surface pages), 19–46 MiB free in the allocator. A match adds 24–38 MiB of RSS (8–13 swap returning, ~17 new allocations); the Mac does not grow. **Music, muted in every earlier run, is the largest holder in play**: the Android player reads the whole ALAC file and decodes the whole track; music on against off, peak 607–630 against 536–567 MiB, end PSS +24–34 MiB. Mac attribution (live bytes by site, ICU's mapped data excluded): compressed sprites 67 MiB, filled Stage slots 36, catalog raw files 35, two journal buffers 18 + 19, wave storage 18, mixer PCM 16, replay pages 15 (zero, all defined). Candidates: streaming music (24–34 / 40–94 MiB at the peak, medium), shared uniform pages (~15, low), mixer PCM through the wave storage (~16, medium), journal copies (20–40, high), Stage page dedupe (unmeasured): ~55–90 MiB at reasonable complexity, so the loop continues | [evidence](../evidence/ml-ram-audit-20261011.json) | — |
 
 ## Next task
+
+**M8: stream the music on Android** (decode a packet at a time from the
+mapped file instead of the whole track; identical samples), measured with
+music on; then shared uniform pages, then the mixer's PCM through the wave
+storage.
 
 **User priority (2026-10-11, after L21):** reduce the RAM the game actually
 holds. A bounded audit (at most two hours): a fresh A12 baseline (peak RSS +
