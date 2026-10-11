@@ -164,8 +164,9 @@ Profile first, then one mechanism per increment, measured before and after.
 | L15 | Definedness masks packed and expanded eight bytes at a time (`Flat.make` packed bit by bit with a branch per byte, the whole and range readers expanded bit by bit; ~11% of the catalog window) | **done** (with L14) |
 | L16 | Objects loaded without rollback copies: the catalog hands each object loader a copy of its resources and the loader takes another for a rollback, so each object's first frame allocation copies every earlier one (~15,000); any error ends the catalog load. Also the file session's stream checks copied a `Stream` out twice per scanner access | **done** |
 | L17 | The read-ahead is the bound again (the loading step waits ~0.4 s): on its threads `URL.resourceValues` is 21% (~1.8 ms per packaged file on Android), LZ4 compression 26%, SHA-256 20%, reads and copies ~30%. First step: the loaders' file facts from lstat/stat on Linux and Android | **done** |
-| L18 | The catalog attempt's allocation overlap check by binary search (a scan over every earlier range per allocation, ~9% of the A12's catalog window) | next (one gate with L19; reviewed: no bug) |
-| L19 | Unwritten Frame slots share one record and projection (every object built a record and a projection for all 400 slots; ~28% of slots are written): ~6% of the catalog window, Mac heap −36 MB | next (with L18) |
+| L18 | The catalog attempt's allocation overlap check by binary search (a scan over every earlier range per allocation, ~9% of the A12's catalog window) | **done** (one gate with L19) |
+| L19 | Unwritten Frame slots share one record and projection (every object built a record and a projection for all 400 slots; ~28% of slots are written): ~6% of the catalog window, Mac heap −36 MB | **done** (with L18) |
+| S2 | The first launch after an install or a data change extracts the APK's 726 MB of assets one file after another (~20–40 s on the A12); on every core, each asset read once into a buffer of its length. Measured with `load_memory.py --fresh-data` (the extraction marker removed before each launch) | next (reviewed: no bug on success) |
 | M7 | Bulk data kept by logs after loading: the file session keeps every closed stream's arrays (tests read them), the catalog session's operation log every read and write chunk (~55 MB on the Mac) | queued (retention study) |
 | M5b | The audio path's remaining copies (~130 MB for 15 MB of PCM on the Mac heap after M6): float samples for every buffer (32 MB), the backend's raw records (18 MB), the loader's temporaries (17 MB), the lock replies' initial bytes and Bool masks (32 MB, kept by the wave results and the backend log), the copy requests' PCM and Bool masks (31 MB, one allocation each shared by the temporary's cached whole arrays and the backend log, so both holders must let go). Tests read only the log's counts and its create requests | queued (retention study) |
 | M5 | Sound data held about ten times over (~145 MB for 15 MB of WAV files: load-result copies, cached whole arrays, float samples); a first step (non-caching reads) saved only ~15 MB because the load results' values keep the arrays — needs the results' retention reviewed | parked |
@@ -199,6 +200,47 @@ complexity; otherwise record it here and revert. Keep X5 above 20 GiB free and
 T7 above 40 GiB. Keep the phone awake only while measuring and restore
 `svc power stayon false` when pausing.
 
+### Method notes (learned during the study)
+
+- **Critical path first.** A per-second timeline of the game thread by phase
+  (`phone_timeline.py`: samples per second under named frames, and the other
+  threads' samples beside them) showed what inclusive profiles hid: the menu
+  left every load thread idle while the loading step later waited for the
+  packages (L13). On Android new threads inherit the game thread's name, so
+  profiles are split by thread id.
+- **Probe a design's knob before its gate.** When a change has a free choice
+  (L13: the read-ahead on every core or on the slow cluster), single-run phone
+  probes of each variant pick it; the gate then measures the chosen one.
+- **Rollback copies.** A copy-on-write value taken for a rollback that an
+  outer layer already provides makes every mutation copy the whole structure
+  (L14, L16, earlier L2/L5). Before working in place, establish the outer
+  failure path from the code (nothing catches; the attempt or load is
+  discarded) and keep the public API's rollback as the default, opting out
+  only where the caller discards.
+- **Quadratic scans** show up as a few percent that grow with the content
+  (L6, L18). Replace them with a sorted structure that answers the exact
+  predicate, and test it against the scan on generated inputs, edge cases
+  (empty and overlapping ranges) included.
+- **Identical values built repeatedly** (sentinel-only Stage slots, unwritten
+  Frame slots) cost memory and time; build once and share (M6, L19), keeping
+  the value per slot exactly what it was.
+- **Memory attribution is deterministic, the phone's peak is not.** The A12's
+  peak footprint (RSS + zram swap) varies by ±25 MB between identical runs;
+  each memory change is attributed with a Mac heap snapshot by allocation
+  stack, and the phone's ranges are reported as measured, overlapping or not.
+- **One gate for two changes** only when one alone is below the noise floor
+  (L14 with L15, L18 with L19); profiles and heap snapshots attribute each.
+- **A test-only failure** (a test's own mistake, the sources unchanged) gets
+  its suites rerun from a scratch worktree holding the gated sources plus the
+  corrected test (`mltests.sh`, its own label); the gate's other branch keeps
+  running. The failed log stays in the evidence.
+- **Review before the gate.** Each storage, ownership, numeric or platform
+  change gets an independent read-only review of the draft; its follow-ups go
+  in before the gate starts.
+- **Platform paths** (Android file facts, asset extraction) are exercised by
+  the phone and emulator gates; a Mac test compares the new primitive with
+  the platform API it replaces.
+
 ## Ledger
 
 | Date | Step | Result | Evidence | Commit |
@@ -229,15 +271,16 @@ T7 above 40 GiB. Keep the phone awake only while measuring and restore
 | 2026-10-11 | M6: paged Stage slots | The 60 Stage slots share one paged backing; a slot the loader fills becomes flat first. Stage records on the Mac heap 87 → 41 MB (25 slots filled; M4a's ~52 was wrong). **A12 resident at loaded 673–679 → 640–663 MB**, peak footprint median 736 → 685 MB (one run at 731: the peak ranges overlap), Mac peak 866–928 → 836–841 MB. A12 load 9.9 → 10.1 s (assembling the filled slots with the per-bit packing L15 replaces). All 10 scenarios, AppKit, unchecked and emulator equal, frames identical; the gate's test bundle failed on the new test (nested assertion handlers), corrected and the 13 suites rerun as ml-m6b from the same sources, all passing; review: no bug | [evidence](../evidence/ml-m6-paged-stage-slots-20261011.json) | 5b35a9a |
 | 2026-10-11 | L14 + L15: sounds in place, definedness eight at a time | The catalog session registers sounds in the registry itself instead of a copy (each registration copied both dictionaries of every earlier sound); records pack and expand their definedness eight bytes per step. **A12 load 10.2 → 8.8 s** (8.74–8.93 against 10.05–10.27; the read-ahead wait grew to ~0.5 s as the menu got faster), Mac load 0.53 → 0.45 s, Mac startup 0.059 → 0.046 s; memory unchanged within noise. All 10 scenarios, AppKit, unchecked and emulator equal, frames identical; 14 suites incl. both formulas against the bit definitions; review: no bug | [evidence](../evidence/ml-l14-l15-sounds-in-place-defined-bits-20261011.json) | fa06d04 |
 | 2026-10-11 | L16: objects without rollback copies | The loaded catalog moves its resources into each object loader and loads without a rollback copy (any error ends the catalog load), and the object loader moves its heap and sounds to the Frame loader instead of copying them: each object's first Frame allocation copied every earlier one. Stream checks without copying the stream. **A12 load 8.7 → 6.7 s** (6.66–6.85 against 8.72–8.73), Mac load 0.45 → 0.39 s, Mac peak 827 → 780 MB; A12 peak footprint within noise (684–722 against 680–685). All 10 scenarios, AppKit, unchecked and emulator equal, frames identical; 10 suites; review: no bug | [evidence](../evidence/ml-l16-objects-in-place-20261011.json) | 5aa5250 |
-| 2026-10-11 | L17: file facts from lstat on Android | The package loaders' per-file checks use lstat/stat on Linux and Android (resourceValues built an attribute dictionary per call, ~1.8 ms per file there). **A12 load 7.0 → 6.5 s** (6.43–6.53 against 6.79–7.30): the loading step no longer waits for the read-ahead (0.0 s against 0.35–0.69 s) and the menu before it is ~0.2 s faster; the Mac runs the unchanged Darwin path; memory within noise. All 10 scenarios, AppKit, unchecked and emulator equal, frames identical; the new test compared error descriptions (they carry an address), corrected and the 8 suites rerun as ml-l17b, all passing; review: no bug | [evidence](../evidence/ml-l17-posix-file-facts-20261011.json) | this commit |
+| 2026-10-11 | L17: file facts from lstat on Android | The package loaders' per-file checks use lstat/stat on Linux and Android (resourceValues built an attribute dictionary per call, ~1.8 ms per file there). **A12 load 7.0 → 6.5 s** (6.43–6.53 against 6.79–7.30): the loading step no longer waits for the read-ahead (0.0 s against 0.35–0.69 s) and the menu before it is ~0.2 s faster; the Mac runs the unchanged Darwin path; memory within noise. All 10 scenarios, AppKit, unchecked and emulator equal, frames identical; the new test compared error descriptions (they carry an address), corrected and the 8 suites rerun as ml-l17b, all passing; review: no bug | [evidence](../evidence/ml-l17-posix-file-facts-20261011.json) | d5fee4d |
+| 2026-10-11 | L18 + L19: overlaps by binary search, unwritten Frame slots shared | The catalog attempt's allocation overlap check by binary search instead of a scan of every earlier range; slots no frame wrote share one record and one projection (Mac heap: Frame records and projections 50 → 14 MB). **A12 load 6.4 → 5.2 s** (5.20–5.28 against 6.43–6.44), **A12 peak footprint ~683 → ~656 MB** (643–680 against 681–685; in the match 612–657 against 659–662), Mac load 0.39 → 0.33 s, Mac peak 806 → 783 MB. All 10 scenarios, AppKit, unchecked and emulator equal, frames identical; 11 suites incl. both against their definitions; review: no bug | [evidence](../evidence/ml-l18-l19-ranges-shared-frame-slots-20261011.json) | this commit |
 
 ## Next task
 
-L18 (allocation overlaps by binary search) with L19 (unwritten Frame slots
-shared), one gate; both reviewed (no bug), follow-ups applied, in the working
-tree. A12 L16 profile of the catalog window (~7 s under the profiler): Frame
-bodies ~25%, bitmap construction ~15%, sounds ~14%, DAT decoding ~10%, the
-overlap check ~9%, dictionary copies in the bitmap and graphics owners ~5%. The catalog session is the load's
+S2 (parallel asset extraction on the first launch after an install;
+reviewed, follow-ups applied): its gate plus a `--fresh-data` A/B. Then
+memory: M5b (sound copies, ~130 MB on the Mac heap) and M7 (bulk data kept by
+logs). Remaining load (5.2 s on the A12): Frame bodies, bitmap construction,
+sounds and DAT decoding, each a few percent of the catalog window. The catalog session is the load's
 critical path (A12 L13 profile: frame bodies ~28%, sounds ~28%, file indexing
 and scanning ~16%, bitmap construction ~8% of its ~10 s). M5b (the audio
 logs' bulk copies, the float samples) needs a retention review. S1 (assets read in place

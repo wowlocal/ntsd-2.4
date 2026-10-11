@@ -5,7 +5,7 @@ import Foundation
 /// not initialized by the original constructor and must not acquire defaults.
 /// Pointers and name bytes are represented separately; no x86 code runs here.
 public struct OriginalFrameRecord: Codable, Equatable, Sendable {
-    public let number: Int
+    public internal(set) var number: Int
     public internal(set) var name: String
     /// The words by decimal byte offset. Kept compact (MEMORY_LOADING M2): the
     /// record's 94 four-byte offsets 0...0x174 as slots with a presence mask,

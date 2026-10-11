@@ -147,7 +147,7 @@ public struct OriginalApplicationCatalogSession {
         let audioDomain: OriginalWaveRegionDomain
         var globalStores: [GlobalStore] = [], observedGlobalWrites: [Bool]
         var operations: [Operation], graphics: [OriginalApplicationGraphics.Command]
-        var ranges: [(UInt64,UInt64)] = []
+        var ranges = OriginalAllocationRanges(base:[])
         var pendingSound: OriginalSoundRegistration?
         init(entry: Loading.PendingCatalog,startup: StartupSounds,inputs: Resources,controls: Controls,
             observe: @escaping (Observation,Session.State) throws -> Void,
@@ -160,9 +160,9 @@ public struct OriginalApplicationCatalogSession {
             guard inputs.presentation.targetSurface == entry.target else { throw Boundary.input("Catalog presentation target") }
             guard var images = state.bitmapInputs else { throw Boundary.missingOwners }
             try images.addResources(inputs.bitmaps); state.bitmapInputs = images
-            for (token,a) in state.memory.allocations where a.live {
-                ranges.append((UInt64(token),UInt64(token)+UInt64(a.storage.byteCount)))
-            }
+            ranges = OriginalAllocationRanges(base:state.memory.allocations.filter(\.value.live).map { token,a in
+                (UInt64(token),UInt64(token)+UInt64(a.storage.byteCount))
+            })
             let device = try word(0x44eecc)
             guard startup.owner.deviceReady,device != 0,
                   startup.owner.loads.count == OriginalMenuSoundStartup.paths.count else {
@@ -213,13 +213,15 @@ public struct OriginalApplicationCatalogSession {
         func put(_ address: Int,_ value: UInt32) throws {
             try store(address,(0..<4).map { UInt8(truncatingIfNeeded:value >> ($0*8)) })
         }
-        func range(_ token: UInt32,_ count: Int,checkingOverlap: Bool = true) throws {
+        func range(_ token: UInt32,_ count: Int) throws {
             guard count >= 0 else { throw Boundary.input("Negative allocation size") }
             if count == 0 { return }
             let lo = UInt64(token), hi = lo+UInt64(count)
             guard token != 0, hi <= UInt64(UInt32.max)+1 else { throw Boundary.input("Logical allocation extent") }
-            if checkingOverlap && ranges.contains(where:{ lo < $0.1 && $0.0 < hi }) { throw Boundary.overlap(token) }
-            ranges.append((lo,hi))
+            // Every range added here is checked and not
+            // empty, as OriginalAllocationRanges requires (MEMORY_LOADING L18).
+            if ranges.overlaps(lo,hi) { throw Boundary.overlap(token) }
+            ranges.insert(lo,hi)
         }
         func retainWave(_ owner: OriginalWaveOwnership) throws {
             guard owner.domain == audioDomain else { throw Boundary.input("WAV identity domain") }

@@ -17,6 +17,7 @@ extension OriginalActorHitsTests { convenience init() { self.init(name: "helper"
 extension OriginalActorInputTests { convenience init() { self.init(name: "helper", testClosure: { _ in }) } }
 extension OriginalActorPhysicsTests { convenience init() { self.init(name: "helper", testClosure: { _ in }) } }
 extension OriginalActorSchedulerTests { convenience init() { self.init(name: "helper", testClosure: { _ in }) } }
+extension OriginalAllocationRangesTests { convenience init() { self.init(name: "helper", testClosure: { _ in }) } }
 extension OriginalApplicationActiveBodyTests { convenience init() { self.init(name: "helper", testClosure: { _ in }) } }
 extension OriginalApplicationActiveCommandsTests { convenience init() { self.init(name: "helper", testClosure: { _ in }) } }
 extension OriginalApplicationActiveContactsTests { convenience init() { self.init(name: "helper", testClosure: { _ in }) } }
@@ -248,6 +249,7 @@ extension OriginalResultRecordingTests { convenience init() { self.init(name: "h
 extension OriginalRetainedHistoryTests { convenience init() { self.init(name: "helper", testClosure: { _ in }) } }
 extension OriginalSettingsLoadingTests { convenience init() { self.init(name: "helper", testClosure: { _ in }) } }
 extension OriginalSettingsWritingTests { convenience init() { self.init(name: "helper", testClosure: { _ in }) } }
+extension OriginalSharedFrameSlotTests { convenience init() { self.init(name: "helper", testClosure: { _ in }) } }
 extension OriginalStageEndingTests { convenience init() { self.init(name: "helper", testClosure: { _ in }) } }
 extension OriginalStageFinaleTests { convenience init() { self.init(name: "helper", testClosure: { _ in }) } }
 extension OriginalStageTests { convenience init() { self.init(name: "helper", testClosure: { _ in }) } }

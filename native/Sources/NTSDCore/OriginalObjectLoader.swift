@@ -274,9 +274,28 @@ public struct OriginalObjectLoader {
         }
         sounds = frames.sounds
         frameHeap = frames.heap
-        let rawFrames = try (0..<400).map { try frames.storage(at: $0) }
-        var object = OriginalLoadedObject(header: header, nameTail: tail,
-                                    frames: try (0..<400).map { try frames.projected(at: $0, record: rawFrames[$0]) },
+        // A slot no frame wrote is built from its backing slice alone (no heap
+        // reads: box counts 0, no sound pointer). Slots with the same slice get
+        // one record and, but for the number, one projection: the catalog's
+        // backing is the same for all 400 slots of every object, and most slots
+        // are never written (MEMORY_LOADING L19).
+        var unwritten: (slice: ArraySlice<UInt8>?, record: OriginalStateRecord, projected: OriginalFrameRecord?)?
+        let rawFrames = try (0..<400).map { index -> OriginalStateRecord in
+            if frames.storage[index] != nil { return try frames.storage(at: index) }
+            let slice = frames.backing.map { $0[index*0x178..<(index+1)*0x178] }
+            if let u = unwritten, u.slice == slice { return u.record }
+            let record = try frames.storage(at: index)
+            unwritten = (slice, record, nil); return record
+        }
+        let projected = try (0..<400).map { index -> OriginalFrameRecord in
+            guard frames.storage[index] == nil, let u = unwritten, rawFrames[index].sharesStorage(with: u.record) else {
+                return try frames.projected(at: index, record: rawFrames[index])
+            }
+            if var shared = u.projected { shared.number = index; return shared }
+            let made = try frames.projected(at: index, record: rawFrames[index])
+            unwritten!.projected = made; return made
+        }
+        var object = OriginalLoadedObject(header: header, nameTail: tail, frames: projected,
                                     frameStorage: rawFrames, weaponSoundPaths: weaponPaths)
         object.weaponSoundAllocations = weaponAllocations
         return object
