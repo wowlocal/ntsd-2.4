@@ -35,6 +35,25 @@ public struct OriginalLoadingFiles: Equatable, Sendable {
         public let raw: [UInt8], input: [UInt8]
         public fileprivate(set) var position = 0, loaded = 0, eof = false, closed = false
         public fileprivate(set) var output: [UInt8] = [], pending: [UInt8] = []
+        /// This stream without its contents (raw, input, output, pending).
+        fileprivate func withoutContents() -> Stream {
+            var stream = Stream(allocation: allocation, path: path, mode: mode, raw: [], input: [])
+            stream.position = position; stream.loaded = loaded; stream.eof = eof; stream.closed = closed
+            return stream
+        }
+    }
+    /// These files with every closed stream's contents (raw, input, output,
+    /// pending) released; its allocation, path, mode, position and flags, the
+    /// streams' order, the staged files and the decoder results stay. Nothing
+    /// reads a closed stream's arrays once the catalog load has returned, and
+    /// the loaded menu keeps the catalog's files for the rest of the run
+    /// (decoded text, translated inputs and flush buffers: ~30 MB on the Mac
+    /// heap; MEMORY_LOADING M7a). `mapValues` keeps the dictionary's layout,
+    /// so its iteration order is unchanged.
+    func releasingClosedContents() -> OriginalLoadingFiles {
+        var files = self
+        files.streams = streams.mapValues { $0.closed ? $0.withoutContents() : $0 }
+        return files
     }
     public typealias Source = (String) throws -> [UInt8]
     public typealias Allocate = (String, String) throws -> OriginalLoadingFileAllocation

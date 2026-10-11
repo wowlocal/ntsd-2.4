@@ -1,0 +1,329 @@
+{
+ "study": "docs/research/MEMORY_LOADING.md",
+ "increment": "ml-m7a",
+ "previous": "ml-m5b",
+ "phase": "M7a (memory): closed file streams keep no contents past the catalog load",
+ "change": "OriginalLoadingFiles.releasingClosedContents() empties every closed stream's raw, input, output and pending arrays and keeps its allocation, path, mode, position, loaded, eof and closed flag; open streams, the order, the staged files and the decoder results are unchanged; mapValues keeps the dictionary's layout and iteration order. The catalog session gives its PendingPool the released files right after the attempt returns: the loaded menu keeps the pool entry, and so these files, for the whole run, and nothing reads a closed stream's arrays after the load (the pool session reads allocations only).",
+ "attribution": "Mac malloc_history at body 600: OriginalLoadingFiles.decodeDAT 18.3 -> 10.2 MB, flush buffers 11.5 -> 0, translated inputs (OriginalFileTranslation.read) 11.1 -> 0.2 MB; what remains at these sites is the file events' bytes in the catalog operation log (M7b)",
+ "phone": {
+  "summary": {},
+  "runs": []
+ },
+ "review": "independent read-only reviewer: no bug (nothing in Sources reads closed-stream contents after the load; the tests that read stream contents use snapshots taken during the load; mapValues keeps the order; no released value is compared with an unreleased one); follow-ups applied before the gate: the comment's figure, the test registration",
+ "testedTrees": "native 1453db8eee44675b7e79e544574a08b1aab81a4e tools 6790b0d05b6a7dd89edb3c3588d37d42a3c120fd",
+ "gate": [
+  "native 1453db8eee44675b7e79e544574a08b1aab81a4e tools 6790b0d05b6a7dd89edb3c3588d37d42a3c120fd",
+  "headless built (checked: 3232 beginAccess)",
+  "app built (checked: 3346 beginAccess)",
+  "unchecked headless built (0 beginAccess)",
+  "apk saved",
+  "apk libraries kept",
+  "launches: crashes 0 of 20",
+  "phone A/B exit=1",
+  "phone_done",
+  "emu exit=0",
+  "{\"scenario\": \"vs\", \"seconds\": 58.9, \"result\": \"equal\", \"differs\": []}",
+  "{\"frames\": 1832, \"mismatched\": 0, \"result\": \"identical\"}",
+  "bundle exit=0",
+  "{\"scenario\": \"vs\", \"exit\": 0, \"seconds\": 62.5, \"result\": \"equal\", \"differs\": []}",
+  "{\"scenario\": \"mission\", \"exit\": 0, \"seconds\": 62.2, \"result\": \"equal\", \"differs\": []}",
+  "{\"scenario\": \"demo\", \"exit\": 0, \"seconds\": 47.8, \"result\": \"equal\", \"differs\": []}",
+  "{\"scenario\": \"war\", \"exit\": 0, \"seconds\": 104.3, \"result\": \"equal\", \"differs\": []}",
+  "{\"scenario\": \"playback\", \"exit\": 0, \"seconds\": 67.0, \"result\": \"equal\", \"differs\": []}",
+  "{\"scenario\": \"tournament\", \"exit\": 0, \"seconds\": 93.0, \"result\": \"equal\", \"differs\": []}",
+  "{\"scenario\": \"altenter\", \"exit\": 0, \"seconds\": 62.9, \"result\": \"equal\", \"differs\": []}",
+  "{\"scenario\": \"tournament-win\", \"exit\": 0, \"seconds\": 95.3, \"result\": \"equal\", \"differs\": []}",
+  "{\"scenario\": \"team-tournament\", \"exit\": 0, \"seconds\": 72.7, \"result\": \"equal\", \"differs\": []}",
+  "{\"scenario\": \"joystick\", \"exit\": 0, \"seconds\": 19.7, \"result\": \"equal\", \"differs\": []}",
+  "{\"frames\": 1832, \"mismatched\": 0, \"result\": \"identical\"}",
+  "suites_done",
+  "{\"scenario\": \"vs\", \"exit\": 0, \"seconds\": 66.1, \"result\": \"equal\", \"differs\": []}",
+  "{\"scenario\": \"playback\", \"exit\": 0, \"seconds\": 71.7, \"result\": \"equal\", \"differs\": []}",
+  "{\"frames\": 3960, \"mismatched\": 0, \"result\": \"identical\"}",
+  "{\"scenario\": \"vs\", \"exit\": 0, \"seconds\": 72.8, \"result\": \"equal\", \"differs\": []}",
+  "{\"scenario\": \"demo\", \"exit\": 0, \"seconds\": 51.0, \"result\": \"equal\", \"differs\": []}",
+  "{\"frames\": 1832, \"mismatched\": 0, \"result\": \"identical\"}",
+  "scenarios_done",
+  "mac A/B exit=0",
+  "{\"summary\": {\"build\": \"frozen-unchecked-ml-m7a\", \"runs\": 3, \"startupSeconds\": {\"median\": 0.044, \"min\": 0.043, \"max\": 0.048}, \"loadSeconds\": {\"median\": 0.337, \"min\": 0.336, \"max\": 0.34}, \"startToLoadedSeconds\": {\"median\": 0.716, \"min\": 0.712, \"max\": 0.728}, \"peakResidentMB\": {\"median\": 686, \"min\": 681, \"max\": 700}, \"loadedResidentMB\": {\"median\": 596, \"min\": 592, \"max\": 620}, \"bodiesResidentMB\": {\"median\": 644, \"min\": 639, \"max\": 668}}}",
+  "{\"summary\": {\"build\": \"frozen-unchecked-ml-m5b\", \"runs\": 3, \"startupSeconds\": {\"median\": 0.05, \"min\": 0.046, \"max\": 0.061}, \"loadSeconds\": {\"median\": 0.34, \"min\": 0.337, \"max\": 0.354}, \"startToLoadedSeconds\": {\"median\": 0.724, \"min\": 0.713, \"max\": 0.748}, \"peakResidentMB\": {\"median\": 699, \"min\": 662, \"max\": 709}, \"loadedResidentMB\": {\"median\": 636, \"min\": 625, \"max\": 661}, \"bodiesResidentMB\": {\"median\": 672, \"min\": 623, \"max\": 684}}}",
+  "gate_done"
+ ],
+ "suites": [
+  "OriginalExclusivityChecksTests: Executed 1 test, with 0 failures (0 unexpected) in 0.001 (0.003) seconds",
+  "OriginalClosedStreamContentsTests: Executed 1 test, with 0 failures (0 unexpected) in 0.001 (0.002) seconds",
+  "OriginalLoadingFilesTests: Executed 4 tests, with 0 failures (0 unexpected) in 0.424 (0.425) seconds",
+  "OriginalLoadingFilesInPlaceTests: Executed 2 tests, with 0 failures (0 unexpected) in 0.017 (0.018) seconds",
+  "OriginalApplicationCatalogFullTests: Executed 3 tests, with 0 failures (0 unexpected) in 63.812 (63.814) seconds",
+  "OriginalApplicationCatalogSessionTests: Executed 3 tests, with 0 failures (0 unexpected) in 128.081 (128.087) seconds",
+  "OriginalApplicationPoolTests: Executed 3 tests, with 0 failures (0 unexpected) in 70.597 (70.601) seconds",
+  "OriginalApplicationLoadedLaunchTests: Executed 2 tests, with 0 failures (0 unexpected) in 52.380 (52.385) seconds",
+  "OriginalMacRuntimeLoadingTests: Executed 7 tests, with 0 failures (0 unexpected) in 1.795 (1.800) seconds"
+ ],
+ "mac": {
+  "summary": {
+   "frozen-unchecked-ml-m7a": {
+    "runs": 3,
+    "loadSeconds": {
+     "median": 0.337,
+     "min": 0.336,
+     "max": 0.34
+    },
+    "startupSeconds": {
+     "median": 0.044,
+     "min": 0.043,
+     "max": 0.048
+    },
+    "startToLoadedSeconds": {
+     "median": 0.716,
+     "min": 0.712,
+     "max": 0.728
+    },
+    "peakResidentMB": {
+     "median": 686,
+     "min": 681,
+     "max": 700
+    },
+    "loadedResidentMB": {
+     "median": 596,
+     "min": 592,
+     "max": 620
+    },
+    "bodiesResidentMB": {
+     "median": 644,
+     "min": 639,
+     "max": 668
+    },
+    "loadedCounts": [
+     {
+      "allocations": 16105,
+      "audioRequests": 2072,
+      "bitmapRequests": 12817,
+      "files": 621
+     }
+    ]
+   },
+   "frozen-unchecked-ml-m5b": {
+    "runs": 3,
+    "loadSeconds": {
+     "median": 0.34,
+     "min": 0.337,
+     "max": 0.354
+    },
+    "startupSeconds": {
+     "median": 0.05,
+     "min": 0.046,
+     "max": 0.061
+    },
+    "startToLoadedSeconds": {
+     "median": 0.724,
+     "min": 0.713,
+     "max": 0.748
+    },
+    "peakResidentMB": {
+     "median": 699,
+     "min": 662,
+     "max": 709
+    },
+    "loadedResidentMB": {
+     "median": 636,
+     "min": 625,
+     "max": 661
+    },
+    "bodiesResidentMB": {
+     "median": 672,
+     "min": 623,
+     "max": 684
+    },
+    "loadedCounts": [
+     {
+      "allocations": 16105,
+      "audioRequests": 2072,
+      "bitmapRequests": 12817,
+      "files": 621
+     }
+    ]
+   }
+  },
+  "runs": [
+   {
+    "label": "ml-m7a-mac-ab-01-frozen-unchecked-ml-m7a",
+    "host": "mac",
+    "scenario": "vs",
+    "bodies": 600,
+    "binary": "/private/tmp/claude-501/-Users-michael-Developer-ntsd-2-4/1f9218ae-9d5d-4c4e-a8dd-d5254994839c/scratchpad/frozen-unchecked-ml-m7a/NTSDHeadless",
+    "startupSeconds": 0.044,
+    "loadSeconds": 0.34,
+    "packagesWaitSeconds": 0.0,
+    "startToLoadedSeconds": 0.716,
+    "loadedCounts": {
+     "allocations": 16105,
+     "audioRequests": 2072,
+     "bitmapRequests": 12817,
+     "files": 621
+    },
+    "loadedResidentMB": 620,
+    "bodiesResidentMB": 668,
+    "peakResidentMB": 700,
+    "build": "frozen-unchecked-ml-m7a"
+   },
+   {
+    "label": "ml-m7a-mac-ab-02-frozen-unchecked-ml-m5b",
+    "host": "mac",
+    "scenario": "vs",
+    "bodies": 600,
+    "binary": "/private/tmp/claude-501/-Users-michael-Developer-ntsd-2-4/1f9218ae-9d5d-4c4e-a8dd-d5254994839c/scratchpad/frozen-unchecked-ml-m5b/NTSDHeadless",
+    "startupSeconds": 0.061,
+    "loadSeconds": 0.34,
+    "packagesWaitSeconds": 0.001,
+    "startToLoadedSeconds": 0.713,
+    "loadedCounts": {
+     "allocations": 16105,
+     "audioRequests": 2072,
+     "bitmapRequests": 12817,
+     "files": 621
+    },
+    "loadedResidentMB": 661,
+    "bodiesResidentMB": 623,
+    "peakResidentMB": 662,
+    "build": "frozen-unchecked-ml-m5b"
+   },
+   {
+    "label": "ml-m7a-mac-ab-03-frozen-unchecked-ml-m7a",
+    "host": "mac",
+    "scenario": "vs",
+    "bodies": 600,
+    "binary": "/private/tmp/claude-501/-Users-michael-Developer-ntsd-2-4/1f9218ae-9d5d-4c4e-a8dd-d5254994839c/scratchpad/frozen-unchecked-ml-m7a/NTSDHeadless",
+    "startupSeconds": 0.043,
+    "loadSeconds": 0.337,
+    "packagesWaitSeconds": 0.0,
+    "startToLoadedSeconds": 0.712,
+    "loadedCounts": {
+     "allocations": 16105,
+     "audioRequests": 2072,
+     "bitmapRequests": 12817,
+     "files": 621
+    },
+    "loadedResidentMB": 592,
+    "bodiesResidentMB": 639,
+    "peakResidentMB": 681,
+    "build": "frozen-unchecked-ml-m7a"
+   },
+   {
+    "label": "ml-m7a-mac-ab-04-frozen-unchecked-ml-m5b",
+    "host": "mac",
+    "scenario": "vs",
+    "bodies": 600,
+    "binary": "/private/tmp/claude-501/-Users-michael-Developer-ntsd-2-4/1f9218ae-9d5d-4c4e-a8dd-d5254994839c/scratchpad/frozen-unchecked-ml-m5b/NTSDHeadless",
+    "startupSeconds": 0.046,
+    "loadSeconds": 0.337,
+    "packagesWaitSeconds": 0.0,
+    "startToLoadedSeconds": 0.724,
+    "loadedCounts": {
+     "allocations": 16105,
+     "audioRequests": 2072,
+     "bitmapRequests": 12817,
+     "files": 621
+    },
+    "loadedResidentMB": 625,
+    "bodiesResidentMB": 672,
+    "peakResidentMB": 699,
+    "build": "frozen-unchecked-ml-m5b"
+   },
+   {
+    "label": "ml-m7a-mac-ab-05-frozen-unchecked-ml-m7a",
+    "host": "mac",
+    "scenario": "vs",
+    "bodies": 600,
+    "binary": "/private/tmp/claude-501/-Users-michael-Developer-ntsd-2-4/1f9218ae-9d5d-4c4e-a8dd-d5254994839c/scratchpad/frozen-unchecked-ml-m7a/NTSDHeadless",
+    "startupSeconds": 0.048,
+    "loadSeconds": 0.336,
+    "packagesWaitSeconds": 0.0,
+    "startToLoadedSeconds": 0.728,
+    "loadedCounts": {
+     "allocations": 16105,
+     "audioRequests": 2072,
+     "bitmapRequests": 12817,
+     "files": 621
+    },
+    "loadedResidentMB": 596,
+    "bodiesResidentMB": 644,
+    "peakResidentMB": 686,
+    "build": "frozen-unchecked-ml-m7a"
+   },
+   {
+    "label": "ml-m7a-mac-ab-06-frozen-unchecked-ml-m5b",
+    "host": "mac",
+    "scenario": "vs",
+    "bodies": 600,
+    "binary": "/private/tmp/claude-501/-Users-michael-Developer-ntsd-2-4/1f9218ae-9d5d-4c4e-a8dd-d5254994839c/scratchpad/frozen-unchecked-ml-m5b/NTSDHeadless",
+    "startupSeconds": 0.05,
+    "loadSeconds": 0.354,
+    "packagesWaitSeconds": 0.0,
+    "startToLoadedSeconds": 0.748,
+    "loadedCounts": {
+     "allocations": 16105,
+     "audioRequests": 2072,
+     "bitmapRequests": 12817,
+     "files": 621
+    },
+    "loadedResidentMB": 636,
+    "bodiesResidentMB": 684,
+    "peakResidentMB": 709,
+    "build": "frozen-unchecked-ml-m5b"
+   }
+  ]
+ },
+ "phoneRerun": [
+  {
+   "label": "ml-m7a-ab2-01-ml-m7a",
+   "loadSeconds": 5.31,
+   "startupSeconds": 17.1,
+   "startToLoadedSeconds": 26.9,
+   "peakFootprintMB": 589,
+   "peakResidentMB": 567,
+   "loadedResidentMB": 554,
+   "bodiesResidentMB": 508
+  },
+  {
+   "label": "ml-m7a-ab2-02-ml-m5b",
+   "loadSeconds": 5.47,
+   "startupSeconds": 1.55,
+   "startToLoadedSeconds": 12.2,
+   "peakFootprintMB": 615,
+   "peakResidentMB": 595,
+   "loadedResidentMB": 592,
+   "bodiesResidentMB": 592
+  },
+  {
+   "label": "ml-m7a-ab2-03-ml-m7a",
+   "loadSeconds": 5.72,
+   "startupSeconds": 1.48,
+   "startToLoadedSeconds": 13.12,
+   "peakFootprintMB": 561,
+   "peakResidentMB": 551,
+   "loadedResidentMB": 524,
+   "bodiesResidentMB": 532
+  },
+  {
+   "label": "ml-m7a-ab2-04-ml-m5b",
+   "loadSeconds": 5.89,
+   "startupSeconds": 1.53,
+   "startToLoadedSeconds": 12.73,
+   "peakFootprintMB": 598,
+   "peakResidentMB": 579,
+   "loadedResidentMB": 533,
+   "bodiesResidentMB": 573
+  },
+  {
+   "label": "ml-m7a-ab2-05-ml-m7a",
+   "loadSeconds": 5.56,
+   "startupSeconds": 1.52,
+   "startToLoadedSeconds": 12.63,
+   "peakFootprintMB": 592,
+   "peakResidentMB": 570,
+   "loadedResidentMB": 507,
+   "bodiesResidentMB": 548
+  }
+ ]
+}

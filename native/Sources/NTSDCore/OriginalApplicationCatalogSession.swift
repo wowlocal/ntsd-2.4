@@ -129,7 +129,9 @@ public struct OriginalApplicationCatalogSession {
         guard pendingPool == nil else { throw Boundary.alreadyPrepared }
         let attempt = try Attempt(entry:entry,startup:startup,inputs:resources,controls:makeControls(),observe:observe,afterChild:afterChild)
         let loaded = try attempt.run()
-        let result = PendingPool(entry:entry,startup:startup,snapshot:attempt.snapshot(),catalog:loaded.catalog,files:loaded.files)
+        // Closed streams keep no contents past the load (MEMORY_LOADING M7a).
+        let result = PendingPool(entry:entry,startup:startup,snapshot:attempt.snapshot(),catalog:loaded.catalog,
+                                 files:loaded.files.releasingClosedContents())
         try beforeCommit(result)
         pendingPool = result
         return result
