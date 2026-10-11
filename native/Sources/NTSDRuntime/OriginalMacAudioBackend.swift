@@ -131,7 +131,9 @@ import NTSDCore
                 let b = try buffer(q.event.arguments[0],binding)
                 guard let active = b.active else { throw Boundary.owner(q.event.arguments[1]) }
                 try require(q.event.arguments == [b.token,active,UInt32(b.raw.byteCount),0,0],"WAV Unlock region")
-                guard b.raw.defined.allSatisfy({ $0 }) else { throw Boundary.unknownSamples }
+                // Without the whole definedness array, which the record would
+                // keep for the buffer's life (MEMORY_LOADING M5a).
+                guard b.raw.allDefined(in:0..<b.raw.byteCount) else { throw Boundary.unknownSamples }
             case .restore:_ = try buffer(q.event.arguments[0],binding)
             case .message:try require(diagnostic != nil,"WAV diagnostic")
             default:throw Boundary.unsupported("WAV request")
@@ -208,6 +210,9 @@ import NTSDCore
         operations.append(.init(request:prepared.request,response:response))
         return .init(response:response,resources:retained)
     }
+    /// `observation(token)`'s existence check without copying the buffer's
+    /// contents (Release paths; MEMORY_LOADING M5a): the same error.
+    public func requireBuffer(_ token: UInt32) throws { guard buffers[token] != nil else { throw Boundary.owner(token) } }
     public func observation(_ token: UInt32) throws -> Observation {
         guard let b = buffers[token] else { throw Boundary.owner(token) }
         return .init(token:token,device:b.device.token,binding:b.binding,format:b.format,raw:.init(b.raw),
@@ -289,7 +294,7 @@ import NTSDCore
     /// one array of `frameLength` float samples per channel.
     public func samples(_ token: UInt32) throws -> (format: Format, channels: [[Float]]) {
         guard let b = buffers[token] else { throw Boundary.owner(token) }
-        guard b.pcm.frameLength > 0,b.raw.defined.allSatisfy({ $0 }) else { throw Boundary.unknownSamples }
+        guard b.pcm.frameLength > 0,b.raw.allDefined(in:0..<b.raw.byteCount) else { throw Boundary.unknownSamples }
         return (b.format,b.pcm.channels.map { Array($0.prefix(b.pcm.frameLength)) })
     }
 }

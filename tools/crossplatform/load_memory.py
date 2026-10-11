@@ -144,6 +144,8 @@ def android_run(o, apk, label):
             row["sha256HostBlocks"] = started["sha256HostBlocks"]
         if loaded:
             row["loadSeconds"] = round(loaded["seconds"], 2)
+            if "packagesWaitSeconds" in loaded:
+                row["packagesWaitSeconds"] = round(loaded["packagesWaitSeconds"], 2)
             if "uptime" in loaded:
                 row["startToLoadedSeconds"] = round(loaded["uptime"] - started_at, 2)
             row["loadedCounts"] = {k: loaded[k] for k in ("allocations", "audioRequests", "bitmapRequests", "files")}
@@ -181,6 +183,7 @@ def local_run(o, binary, label):
                     row["startupSeconds"] = round(time.monotonic() - launched, 3)
                 elif kind == "loaded" and "loadSeconds" not in row:
                     row["loadSeconds"] = round(e["seconds"], 3)
+                    if "packagesWaitSeconds" in e: row["packagesWaitSeconds"] = round(e["packagesWaitSeconds"], 3)
                     row["startToLoadedSeconds"] = round(time.monotonic() - launched, 3)
                     row["loadedCounts"] = {k: e[k] for k in ("allocations", "audioRequests", "bitmapRequests", "files")}
                     row["loadedResidentMB"], _ = footprint(p.pid); snapshot("loaded")

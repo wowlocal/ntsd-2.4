@@ -703,6 +703,9 @@ public enum OriginalRuntimeSessionBoundary: Error, Equatable {
     private func flushBeforeExit() { try? started?.windows.flushPresents() }
     private func stop(_ error: Error) {
         stopped = true
+        // A session stopped before its loading step no longer needs the
+        // read-ahead packages (L13 review).
+        loadingPackages = nil
         Self.emit(["event":"boundary","error":String(reflecting:error),"iterations":committed,
             "objectInputs":loading?.counts.objectInputs ?? 0,"characterAI":loading?.counts.characterAI ?? 0,
             "replayFiles":loading?.savedReplays.map { "\($0.path) \($0.bytes.count)" } ?? [],"refusedReplays":loading?.refusedReplayOpens ?? [],

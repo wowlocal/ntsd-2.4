@@ -177,7 +177,11 @@ public enum OriginalWaveLoader {
         try event(.read, [p.stream, UInt32(data.count), UInt32(data.offset)])
         if p.dataReadResult > 0 {
             guard Int(p.dataReadResult) <= data.count else { throw error("Read wrote beyond requested payload") }
-            for i in 0..<Int(p.dataReadResult) { try result.temporary!.write(file[data.offset+i], at: i) }
+            // The bytes read, defined, over the start of the temporary: one
+            // overwrite instead of a checked write per byte (MEMORY_LOADING M5a).
+            let n = Int(p.dataReadResult)
+            result.temporary!.overwrite(at: 0, with: try OriginalStateRecord(bytes: Array(file[data.offset..<(data.offset+n)]),
+                                                                              defined: Array(repeating: true, count: n)))
         }
         try close()
         guard p.dataReadResult == data.count else {
@@ -240,6 +244,12 @@ public enum OriginalWaveLoader {
             guard let temporary = result.temporary,var region = result.regions[token] else { throw error("Copy storage") }
             let payload = Array(temporary.bytes[offset..<(offset+count)]),mask = Array(temporary.defined[offset..<(offset+count)])
             _ = try audio(.init(.init(.copy,[index,UInt32(offset),UInt32(count)]),target:token,bytes:payload,defined:mask))
+            if offset == 0,count == region.byteCount,count == temporary.byteCount {
+                // The whole region takes the whole temporary: it equals the
+                // temporary, so it is the temporary (one record of the PCM
+                // instead of two equal ones; MEMORY_LOADING M5a).
+                result.regions[token] = temporary; return
+            }
             var raw = region.bytes,known = region.defined
             raw.replaceSubrange(0..<count,with:payload);known.replaceSubrange(0..<count,with:mask)
             region = try .init(bytes:raw,defined:known);result.regions[token] = region

@@ -585,7 +585,7 @@ public struct OriginalRuntimeLoadingPackages {
         guard call.method == 8 else { try sounds.perform(call);return }
         guard call.arguments.isEmpty else { throw Boundary.unexpected("sound Release arguments") }
         if started.audio.deviceTokens.contains(call.buffer) { return }
-        _ = try started.audio.observation(call.buffer)
+        try started.audio.requireBuffer(call.buffer)
         sounds.release(call.buffer)
     }
     /// Methods on music interface tokens — the round's music stop and the

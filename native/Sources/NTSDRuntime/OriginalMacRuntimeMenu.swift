@@ -120,7 +120,7 @@ import NTSDCore
         let music = started.runtime.music,audio = started.audio
         messages.release = { [weak self] token in
             if music.interface(token) != nil { _ = try music.answer(.init(.method,[token,8])); return }
-            if (try? audio.observation(token)) != nil { self?.sounds?.release(token); return }
+            if (try? audio.requireBuffer(token)) != nil { self?.sounds?.release(token); return }
             guard audio.deviceTokens.contains(token) else { throw Boundary.unserved("Release \(token)") }
         }
     }

@@ -23,7 +23,8 @@ public enum OriginalConcurrentInputs {
     /// it, then returns it or throws its error, every time it is called: a
     /// caller that takes it where it used to compute it keeps that point and,
     /// taking several in their old order, which error comes first (MEMORY_LOADING
-    /// L13). The thread drops the computation once it has its result.
+    /// L13). The thread takes the computation out of the box before running it,
+    /// so only the result stays.
     public final class Background<Value>: @unchecked Sendable {
         private let condition = NSCondition()
         private var compute: (@Sendable () throws -> Value)?
