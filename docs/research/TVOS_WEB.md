@@ -163,7 +163,7 @@ runner's bridge round-trips a frame byte for byte) before it judges a new host.
 | --- | --- | --- |
 | H0 | Harness: `ios_app.py --platform tvos` and the `tvos` matrix row (done, T0), `run_headless_scenarios.py --wasi`, `web_app.py`; each first reproduces an existing host's result | partly done |
 | T0 | tvOS: simulator runtime; `NTSDiOS` builds for tvOS (`#if os(tvOS)`); vs in the Apple TV simulator equal, frames identical to `coretext` | **done** |
-| T1 | tvOS: all 10 scenarios (T1a done); GameController input (Siri Remote, extended gamepads) through the AppKit sampler's mapping; Menu button and focus | partly done |
+| T1 | tvOS: all 10 scenarios (T1a done). **T1b (user, 2026-10-11: "надеюсь мы на apple tv сделаем поддержку джойстиков"):** Bluetooth gamepads (Xbox, PlayStation, MFi) as the game's joysticks through GameController, as the AppKit host does (the first two extended gamepads found at launch, sampled every 25 ms as joySetCapture, stick/d-pad to the WinMM axes, A/B/X/Y to buttons 1–4; one implementation shared with AppKit and the iPad rather than a copy); the Siri Remote (a micro gamepad, not a joystick) as keys for the menus (arrows, select, Menu as Esc, intercepted so Menu does not leave the app); the joystick scenario and a hand check with a controller connected to the Mac (the simulator takes it) | partly done |
 | T2 | tvOS: overlay storage tvOS keeps, 1080p/4K presentation, audio session, lifecycle (background/foreground) | queued |
 | W0 | WASI: `NTSDHeadless` builds for `wasm32-unknown-wasip1` — WASI branches for OS imports, single-threaded paths for the read-ahead, parallel loads, deferred release and the render queue, a scheduler without Dispatch; vs under a WASI runtime equal | queued |
 | W1 | WASI: all 10 scenarios equal, frames identical to `m1-frames-ref`; load time and memory measured | queued |
@@ -179,6 +179,8 @@ runner's bridge round-trips a frame byte for byte) before it judges a new host.
 | 2026-10-11 | T1a: all 10 scenarios on the Apple TV simulator | Every scenario equal to its reference; **all 18,088 frames and their digests identical to the AppKit app's** (the `coretext` reference, taken anew for all 10 scenarios from the frozen AppKit app of ml-l20, itself equal everywhere) | [evidence](../evidence/tw-t1a-tvos-all-scenarios-20261011.json) | this commit |
 
 ## Next task
+
+(After W0 is committed: T1b, Bluetooth gamepads and the Siri Remote on tvOS.)
 
 T1a in the background: all 10 scenarios on the Apple TV simulator
 (`matrix.py --hosts tvos`, compared with the `coretext` group). Meanwhile W0a:
