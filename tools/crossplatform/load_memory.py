@@ -6,7 +6,7 @@ Usage: load_memory.py OUT_DIR (--android | --local BINARY [--local BINARY ...])
                       [--apk PATH ...] [--serial S] [--lib DIR] [--label L]
                       [--scenario vs|demo] [--bodies N] [--runs K]
                       [--profile-loading SECONDS] [--call-graph G] [--frequency HZ]
-                      [--fresh-data] [--ticks A,B] [--sounds]
+                      [--fresh-data] [--ticks A,B] [--sounds] [--warmup]
                       [--snapshots] [--restore-stayon]
 
 Runs the scenario's app_e2e script as android_speed.py does (virtual clock,
@@ -49,6 +49,11 @@ game thread's busy time per tick from the progress events (completeMsPerTick)
 and the process's CPU per tick (processMsPerTick). The gate's load A/B so
 measures loading, memory and frame time in the same interleaved runs.
 --sounds mixes the sound effects as in play (Android; media volume held at 0).
+--warmup first runs once, unmeasured (OUT_DIR/warmup.jsonl), the last build
+that is not the first one:
+the first run of a phone sequence waited longest for the read-ahead whatever
+its build (MEMORY_LOADING M5d), so every measured run follows another
+build's run.
 
 --fresh-data (Android) removes the asset-extraction marker before each launch,
 so startupSeconds includes extracting the APK's assets again.
@@ -289,6 +294,7 @@ def main():
     a.add_argument("--fresh-data", action="store_true")
     a.add_argument("--ticks", type=lambda t: tuple(int(x) for x in t.split(",")), default=None, help="A,B: frame time between bodies A and B")
     a.add_argument("--sounds", action="store_true")
+    a.add_argument("--warmup", action="store_true", help="one unmeasured run of the last build first")
     o = a.parse_args()
     if o.ticks and (len(o.ticks) != 2 or not o.bodies <= o.ticks[0] < o.ticks[1]):
         a.error("--ticks A,B needs N <= A < B")
@@ -296,6 +302,16 @@ def main():
     builds = [str(b) for b in o.local] if o.local else (o.apk or [None])
     rows = []
     try:
+        if o.warmup:
+            # A build other than the first measured one, so that run, like
+            # every other, follows another build's run (and install).
+            build = next((b for b in reversed(builds) if b != builds[0]), builds[0])
+            name = Path(build).parent.name if o.local else (Path(build).stem if build else "installed")
+            row = local_run(o, build, f"{o.label}-warmup") if o.local else android_run(o, build, f"{o.label}-warmup")
+            row["build"] = name; row["warmup"] = True
+            with open(out / "warmup.jsonl", "a") as f:
+                f.write(json.dumps(row) + "\n")
+            print(json.dumps(row), flush=True)
         for run in range(1, o.runs + 1):
             for index, build in enumerate(builds):
                 name = Path(build).parent.name if o.local else (Path(build).stem if build else "installed")
