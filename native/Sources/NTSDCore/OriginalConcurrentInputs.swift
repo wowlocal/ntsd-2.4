@@ -15,6 +15,40 @@ public enum OriginalConcurrentInputs {
     /// with threads allowed on every core: Dispatch's workers inherit the game
     /// thread's fast-cluster mask there (MEMORY_LOADING L12). Set before loading.
     nonisolated(unsafe) public static var parallelLoop: ((Int, (Int) -> Void) -> Void)?
+    /// Runs first on a `Background` value's thread (the Android host allows it
+    /// every core below the game thread's priority). Set before the first one.
+    nonisolated(unsafe) public static var backgroundStart: (@Sendable () -> Void)?
+
+    /// A value computed on a thread of its own from creation. `get` waits for
+    /// it, then returns it or throws its error, every time it is called: a
+    /// caller that takes it where it used to compute it keeps that point and,
+    /// taking several in their old order, which error comes first (MEMORY_LOADING
+    /// L13). The thread drops the computation once it has its result.
+    public final class Background<Value>: @unchecked Sendable {
+        private let condition = NSCondition()
+        private var compute: (@Sendable () throws -> Value)?
+        private var result: Result<Value, Error>?
+        public init(_ compute: @escaping @Sendable () throws -> Value) {
+            self.compute = compute
+            let thread = Thread { [self] in
+                OriginalConcurrentInputs.backgroundStart?()
+                condition.lock(); let body = self.compute!; self.compute = nil; condition.unlock()
+                let value = Result { try body() }
+                condition.lock(); result = value; condition.broadcast(); condition.unlock()
+            }
+            // The main thread's stack size: the loads ran there before.
+            thread.name = "NTSD.readahead"; thread.stackSize = 8 << 20; thread.start()
+        }
+        /// Whether the value is ready (`get` would not wait).
+        public var isReady: Bool { condition.lock(); defer { condition.unlock() }; return result != nil }
+        public func get() throws -> Value {
+            condition.lock()
+            while result == nil { condition.wait() }
+            let value = result!
+            condition.unlock()
+            return try value.get()
+        }
+    }
 
     static func map<Element, Value>(_ elements: [Element], _ transform: (Element) throws -> Value) -> [Result<Value, Error>] {
         var results = [Result<Value, Error>?](repeating: nil, count: elements.count)

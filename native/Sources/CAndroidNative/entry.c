@@ -3,6 +3,8 @@
 #include <sched.h>
 #include <stdio.h>
 #include <limits.h>
+#include <sys/resource.h>
+#include <unistd.h>
 #include "CAndroidNative.h"
 #include <jni.h>
 
@@ -49,6 +51,10 @@ int ntsd_pin_current_thread(unsigned long mask) {
         if (mask & (1UL << cpu)) { CPU_SET(cpu, &set); }
     }
     return sched_setaffinity(0, sizeof(set), &set);
+}
+
+int ntsd_set_current_thread_nice(int nice) {
+    return setpriority(PRIO_PROCESS, (id_t)gettid(), nice);
 }
 
 unsigned long ntsd_cpu_cluster_mask(int fast) {

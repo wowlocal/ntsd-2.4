@@ -24,6 +24,10 @@ int ntsd_pin_current_thread(unsigned long mask);
 /// only the slowest tier keeps every big and prime core on three-tier chips
 /// (CORE_REALTIME P0).
 unsigned long ntsd_cpu_cluster_mask(int fast);
+/// Sets the calling thread's nice value (setpriority on its thread id); 0, or
+/// -1 with errno. Threads it creates afterwards inherit it (MEMORY_LOADING L13:
+/// the read-ahead yields to the game and presenter threads).
+int ntsd_set_current_thread_nice(int nice);
 
 /// SHA-256 block compression with the ARMv8 SHA-2 instructions (MEMORY_LOADING
 /// L11): `state` the eight hash words, `data` `blocks` 64-byte blocks. Use only

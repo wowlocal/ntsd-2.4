@@ -109,9 +109,18 @@ public enum OriginalRuntimeSessionBoundary: Error, Equatable {
     private var started: OriginalMacRuntimeStartup.Started?
     private var menu: OriginalMacRuntimeMenu?
     private var loading: OriginalMacRuntimeLoading?
+    /// The startup package, read once: the loading phase takes the same value
+    /// instead of reading and verifying it again (MEMORY_LOADING L13).
+    private var startupPackage: OriginalApplicationStartupInputs?
+    /// The loading packages, read on a thread of their own from the end of
+    /// startup while the menu runs (MEMORY_LOADING L13); the loading phase takes
+    /// them, waiting if needed, where it read them, in the same order.
+    private var loadingPackages: OriginalConcurrentInputs.Background<OriginalRuntimeLoadingPackages>?
     private var captureAfter: (count: Int,path: String)?
     private var clickAt: (count: Int,x: Int32,y: Int32)?
     private var cycles = 0, gameplayBodies = 0
+    /// How long the first loading step waited for the read-ahead packages.
+    private var packagesWaitSeconds = 0.0
     private var networkReadyRecorded = false
     private var script: [Int:[[String]]] = [:]
     private var loadedScript: [Int:[[String]]] = [:]
@@ -236,6 +245,8 @@ public enum OriginalRuntimeSessionBoundary: Error, Equatable {
                 "backingScale":host.backingScale(started.window,in:started.windows),
                 "resources":[(try? OriginalApplicationCatalogInputs.bundledDirectory(in:resources).path) ?? "",host.musicDirectory]])
             if exitAfterStartup { flushBeforeExit(); host.terminate(); return }
+            startupPackage = package
+            loadingPackages = .init { OriginalRuntimeLoadingPackages(in:resources) }
             let menu = try OriginalMacRuntimeMenu(started,inputs:package,clock:{ [unowned self] in try self.clock() },
                                                   point:{ [unowned self] in self.cursor() },overlay:overlay,
                                                   capsLock:{ [unowned host] in host.capsLock() },messageBox:host.startupHost.messageBox)
@@ -354,8 +365,12 @@ public enum OriginalRuntimeSessionBoundary: Error, Equatable {
                 try runScript(cycles,menu,started,timeline:&loadedScript)
                 if first {
                     let resources = try resourceBundle()
-                    loading = try OriginalMacRuntimeLoading.bundled(started,startupInputs:try OriginalApplicationStartupInputs.bundled(in:resources),
-                                                                    clock:{ [unowned self] in try self.clock() },dialogs:host.loadingDialogs,in:resources)
+                    let startupInputs = try startupPackage ?? OriginalApplicationStartupInputs.bundled(in:resources)
+                    let waitBegin = Date()
+                    let packages = try loadingPackages?.get() ?? OriginalRuntimeLoadingPackages(in:resources)
+                    packagesWaitSeconds = Date().timeIntervalSince(waitBegin); loadingPackages = nil
+                    loading = try OriginalMacRuntimeLoading.bundled(started,startupInputs:startupInputs,packages:packages,
+                                                                    clock:{ [unowned self] in try self.clock() },dialogs:host.loadingDialogs)
                     loading?.overlay = try overlayRoot()
                     loading?.stageCheckpoints = arguments.contains("--stage-checkpoints")
                     loading?.pipelinesRendering = !arguments.contains("--synchronous-render")
@@ -450,7 +465,8 @@ public enum OriginalRuntimeSessionBoundary: Error, Equatable {
                 }
                 if first {
                     let c = loading.counts
-                    Self.emit(["event":"loaded","seconds":Date().timeIntervalSince(begin),"uptime":ProcessInfo.processInfo.systemUptime,"allocations":c.allocations,
+                    Self.emit(["event":"loaded","seconds":Date().timeIntervalSince(begin),"uptime":ProcessInfo.processInfo.systemUptime,
+                        "packagesWaitSeconds":packagesWaitSeconds,"allocations":c.allocations,
                         "bitmapRequests":c.bitmapRequests,"files":c.files,"audioRequests":c.audioRequests])
                 }
                 try presentMusic(started,menu)

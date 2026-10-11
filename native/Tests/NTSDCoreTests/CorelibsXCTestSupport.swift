@@ -182,6 +182,7 @@ extension OriginalLoadedCatalogTests { convenience init() { self.init(name: "hel
 extension OriginalLoadingAudioTests { convenience init() { self.init(name: "helper", testClosure: { _ in }) } }
 extension OriginalLoadingFilesInPlaceTests { convenience init() { self.init(name: "helper", testClosure: { _ in }) } }
 extension OriginalLoadingFilesTests { convenience init() { self.init(name: "helper", testClosure: { _ in }) } }
+extension OriginalLoadingReadAheadTests { convenience init() { self.init(name: "helper", testClosure: { _ in }) } }
 extension OriginalLocalInputTests { convenience init() { self.init(name: "helper", testClosure: { _ in }) } }
 extension OriginalMainMenuTests { convenience init() { self.init(name: "helper", testClosure: { _ in }) } }
 extension OriginalMatchContinuationTests { convenience init() { self.init(name: "helper", testClosure: { _ in }) } }

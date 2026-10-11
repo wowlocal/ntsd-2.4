@@ -76,6 +76,14 @@ func ntsdAndroidOnCreate(_ activity: UnsafeMutablePointer<ANativeActivity>) {
             OriginalConcurrentInputs.threadLoop(count,workers:ProcessInfo.processInfo.activeProcessorCount,
                 threadStart:{ if all != 0 { _ = ntsd_pin_current_thread(all) } },body)
         }
+        // The loading packages are read ahead while the menu runs (MEMORY_LOADING
+        // L13), on every core but below the game and presenter threads' priority
+        // (nice 10, which its package threads inherit), so the menu keeps its pace.
+        OriginalConcurrentInputs.backgroundStart = {
+            let all = ntsd_cpu_cluster_mask(1) | ntsd_cpu_cluster_mask(0)
+            if all != 0 { _ = ntsd_pin_current_thread(all) }
+            _ = ntsd_set_current_thread_nice(10)
+        }
         app.prepareData()
     }
 

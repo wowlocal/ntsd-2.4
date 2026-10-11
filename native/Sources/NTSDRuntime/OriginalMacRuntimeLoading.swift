@@ -28,6 +28,32 @@ import NTSDCore
     }
 }
 
+/// The packages the loading phase reads, in `OriginalMacRuntimeLoading.bundled`'s
+/// order, each with its own error, so they can be read before the loading phase
+/// (MEMORY_LOADING L13). Reading one has no effect but its value: all five are
+/// read even when an earlier one fails, which costs only time.
+public struct OriginalRuntimeLoadingPackages {
+    public let catalog: Result<OriginalApplicationCatalogInputs,Error>, loading: Result<OriginalApplicationLoadingInputs,Error>
+    public let interface: Result<OriginalApplicationInterfaceInputs,Error>, menu: Result<OriginalApplicationMenuInputs,Error>
+    public let arena: Result<OriginalApplicationArenaInputs,Error>
+    public init(in bundle: Bundle) {
+        self.init(catalog:Result { try .bundled(in:bundle) },loading:Result { try .bundled(in:bundle) },
+            interface:Result { try .bundled(in:bundle) },menu:Result { try .bundledWithWar(in:bundle) },arena:Result { try .bundled(in:bundle) })
+    }
+    init(catalog: Result<OriginalApplicationCatalogInputs,Error>,loading: Result<OriginalApplicationLoadingInputs,Error>,
+         interface: Result<OriginalApplicationInterfaceInputs,Error>,menu: Result<OriginalApplicationMenuInputs,Error>,
+         arena: Result<OriginalApplicationArenaInputs,Error>) {
+        self.catalog = catalog; self.loading = loading; self.interface = interface; self.menu = menu; self.arena = arena
+    }
+    /// The values in `bundled`'s order, or the first failing package's error.
+    func values() throws -> (OriginalApplicationCatalogInputs,OriginalApplicationLoadingInputs,OriginalApplicationInterfaceInputs,
+                             OriginalApplicationMenuInputs,OriginalApplicationArenaInputs) {
+        let catalog = try self.catalog.get(), loading = try self.loading.get(), interface = try self.interface.get()
+        let menu = try self.menu.get(), arena = try self.arena.get()
+        return (catalog,loading,interface,menu,arena)
+    }
+}
+
 @MainActor public final class OriginalMacRuntimeLoading {
     public typealias P = OriginalApplicationPreparedStartupPlatform
     public typealias Host = OriginalApplicationHostSession<P>
@@ -136,6 +162,14 @@ import NTSDCore
         clock: @escaping () throws -> UInt32,dialogs: OriginalRuntimeLoadingDialogs,in bundle: Bundle = .main) throws -> OriginalMacRuntimeLoading {
         try .init(started,startupInputs:startupInputs,catalogInputs:.bundled(in:bundle),loadingInputs:.bundled(in:bundle),
             interfaceInputs:.bundled(in:bundle),menuInputs:.bundledWithWar(in:bundle),arenaInputs:.bundled(in:bundle),clock:clock,dialogs:dialogs)
+    }
+    /// `bundled` with the packages already read (MEMORY_LOADING L13): the
+    /// first failing package in `bundled`'s order throws its error.
+    public static func bundled(_ started: OriginalMacRuntimeStartup.Started,startupInputs: OriginalApplicationStartupInputs,
+        packages: OriginalRuntimeLoadingPackages,clock: @escaping () throws -> UInt32,dialogs: OriginalRuntimeLoadingDialogs) throws -> OriginalMacRuntimeLoading {
+        let (catalog,loading,interface,menu,arena) = try packages.values()
+        return .init(started,startupInputs:startupInputs,catalogInputs:catalog,loadingInputs:loading,
+            interfaceInputs:interface,menuInputs:menu,arenaInputs:arena,clock:clock,dialogs:dialogs)
     }
     /// The host's interactive dialogs.
     public var dialogs: OriginalRuntimeLoadingDialogs
