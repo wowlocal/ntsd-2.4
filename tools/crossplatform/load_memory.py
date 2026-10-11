@@ -6,7 +6,7 @@ Usage: load_memory.py OUT_DIR (--android | --local BINARY [--local BINARY ...])
                       [--apk PATH ...] [--serial S] [--lib DIR] [--label L]
                       [--scenario vs|demo] [--bodies N] [--runs K]
                       [--profile-loading SECONDS] [--call-graph G] [--frequency HZ]
-                      [--fresh-data]
+                      [--fresh-data] [--ticks A,B] [--sounds]
                       [--snapshots] [--restore-stayon]
 
 Runs the scenario's app_e2e script as android_speed.py does (virtual clock,
@@ -41,6 +41,15 @@ them run by run (A B A B ...), K runs each, and prints the medians and ranges
 per build: the comparison protocol of MEMORY_LOADING. Rows are appended to
 OUT_DIR/load_memory.jsonl.
 
+--ticks A,B keeps each run going from body A to body B (A at least N) and
+reports its frame time there, as android_speed.py does: Android main, render
+and whole-process (all threads) compute per tick from schedstat
+(mainMsPerTick, renderMsPerTick, processMsPerTick, threadMsPerTick); Mac the
+game thread's busy time per tick from the progress events (completeMsPerTick)
+and the process's CPU per tick (processMsPerTick). The gate's load A/B so
+measures loading, memory and frame time in the same interleaved runs.
+--sounds mixes the sound effects as in play (Android; media volume held at 0).
+
 --fresh-data (Android) removes the asset-extraction marker before each launch,
 so startupSeconds includes extracting the APK's assets again.
 --profile-loading S records S seconds of simpleperf from the game's launch
@@ -57,9 +66,9 @@ import android_speed as phone   # noqa: E402  (the shared device helpers)
 PACKAGE, FILES = phone.PACKAGE, phone.FILES
 
 
-def arguments(scenario, overlay, events=None):
+def arguments(scenario, overlay, events=None, sounds=False):
     """android_speed.py's command line for SCENARIO with its overlay (and events file)."""
-    args = phone.arguments(False, scenario)
+    args = phone.arguments(False, scenario, sounds)
     i = args.index("--overlay"); args[i + 1] = overlay
     if events is None:
         j = args.index("--events-file"); del args[j:j + 2]
@@ -80,10 +89,13 @@ def android_run(o, apk, label):
     phone.wake(s)
     row = {"label": label, "host": "android", "serial": s, "scenario": o.scenario, "bodies": o.bodies,
            "apk": Path(apk).name if apk else None}
+    if o.sounds: row["sounds"] = True
+    volume = phone.media_volume(s) if o.sounds else None
     try:
+        if volume: phone.media_volume(s, 0)
         phone.shell(s, f"am force-stop {PACKAGE}")
         phone.shell(s, f"run-as {PACKAGE} sh -c 'rm -rf files/speed && mkdir -p files/speed/overlay && cat > files/args.txt'",
-                    input="\n".join(arguments(o.scenario, f"{FILES}/speed/overlay", f"{FILES}/speed/events.jsonl")) + "\n")
+                    input="\n".join(arguments(o.scenario, f"{FILES}/speed/overlay", f"{FILES}/speed/events.jsonl", o.sounds)) + "\n")
         if o.fresh_data:
             # The next launch extracts the APK's assets again (MEMORY_LOADING S2).
             phone.shell(s, f"run-as {PACKAGE} rm -f files/ntsd-data/.extracted")
@@ -141,6 +153,8 @@ def android_run(o, apk, label):
             if time.time() - launched > o.timeout:
                 row["error"] = "timeout"; break
             time.sleep(0.5)
+        if o.ticks and "error" not in row:
+            ticks_window(o, s, pid, row)
         row["peakResidentMB"] = round(peak / 1024)
         row["peakFootprintMB"] = round(footprint_peak / 1024)
         events = phone.progress(s)
@@ -161,7 +175,51 @@ def android_run(o, apk, label):
     finally:
         phone.shell(s, f"am force-stop {PACKAGE}")
         phone.shell(s, f"run-as {PACKAGE} rm -f files/args.txt")
+        if volume: phone.media_volume(s, volume)
     return row
+
+
+def ticks_window(o, s, pid, row):
+    """Android frame time between bodies A and B of a running game (--ticks):
+    each thread's on-CPU share of the wall time over the window, times the
+    wall time per tick (android_speed.py's measure)."""
+    first, last = o.ticks
+    marks, cpu = {}, {}
+    deadline = time.time() + o.timeout
+    while len(cpu) < 2 and time.time() < deadline:
+        bodies = max((e.get("gameplayBodies", 0) for e in phone.progress(s) if e.get("event") == "progress"), default=0)
+        for name, at in (("a", first), ("b", last)):
+            if name not in cpu and bodies >= at:
+                cpu[name] = phone.thread_cpu(s, pid)
+        if not phone.shell(s, f"pidof {PACKAGE}").strip():
+            break
+        time.sleep(0.5)
+    events = [e for e in phone.progress(s) if e.get("event") == "progress"]
+    a = next((e for e in events if e["gameplayBodies"] >= first), None)
+    b = next((e for e in events if e["gameplayBodies"] >= last), None)
+    if len(cpu) < 2 or not a or not b or b["uptime"] <= a["uptime"]:
+        row["ticksError"] = f"window {first}-{last} not reached"; return
+    tps = (b["gameplayBodies"] - a["gameplayBodies"]) / (b["uptime"] - a["uptime"])
+    wall = cpu["b"][0] - cpu["a"][0]
+    per_tick = {n: 1000 * (cpu["b"][1][n] - cpu["a"][1][n]) / 1e9 / wall / tps for n in cpu["b"][1]}
+    row["ticksPerSecond"] = round(tps, 2)
+    row["completeMsPerTick"] = round(1000 * (b["busySeconds"] - a["busySeconds"]) / (b["gameplayBodies"] - a["gameplayBodies"]), 2)
+    row["mainMsPerTick"] = round(per_tick.get(PACKAGE[:15], 0.0), 2)
+    row["renderMsPerTick"] = round(per_tick.get("DispatchWorker", 0.0), 2)
+    row["processMsPerTick"] = round(sum(per_tick.values()), 2)
+    row["threadMsPerTick"] = {n: round(v, 2) for n, v in sorted(per_tick.items(), key=lambda kv: -kv[1]) if v >= 0.1}
+
+
+def cpu_seconds(pid):
+    """The process's CPU time so far (user + system), from ps."""
+    text = subprocess.run(["ps", "-o", "time=", "-p", str(pid)], capture_output=True, text=True).stdout.strip()
+    if not text:
+        return None
+    parts = [float(x) for x in text.replace("-", ":").split(":")]
+    seconds = 0.0
+    for x in parts:
+        seconds = seconds * 60 + x
+    return seconds
 
 
 def footprint(pid):
@@ -173,6 +231,7 @@ def footprint(pid):
 def local_run(o, binary, label):
     out = Path(o.out)
     row = {"label": label, "host": "mac", "scenario": o.scenario, "bodies": o.bodies, "binary": str(binary)}
+    window = {}
     with tempfile.TemporaryDirectory(prefix="ntsd-load-") as overlay:
         launched = time.monotonic()
         p = subprocess.Popen([str(binary), *arguments(o.scenario, overlay)], stdout=subprocess.PIPE, text=True,
@@ -194,10 +253,22 @@ def local_run(o, binary, label):
                     row["startToLoadedSeconds"] = round(time.monotonic() - launched, 3)
                     row["loadedCounts"] = {k: e[k] for k in ("allocations", "audioRequests", "bitmapRequests", "files")}
                     row["loadedResidentMB"], _ = footprint(p.pid); snapshot("loaded")
-                elif kind == "progress" and e.get("gameplayBodies", 0) >= o.bodies:
+                elif kind == "progress" and e.get("gameplayBodies", 0) >= o.bodies and "bodiesResidentMB" not in row:
                     row["bodiesResidentMB"], row["peakResidentMB"] = footprint(p.pid); snapshot("bodies")
-                    break
-                elif kind == "boundary":
+                    if not o.ticks:
+                        break
+                if kind == "progress" and o.ticks:
+                    # Frame time between bodies A and B (--ticks).
+                    if e["gameplayBodies"] >= o.ticks[0] and "a" not in window:
+                        window["a"] = (e, cpu_seconds(p.pid))
+                    if e["gameplayBodies"] >= o.ticks[1]:
+                        a, cpu_a = window["a"]; cpu_b = cpu_seconds(p.pid); ticks = e["gameplayBodies"] - a["gameplayBodies"]
+                        row["completeMsPerTick"] = round(1000 * (e["busySeconds"] - a["busySeconds"]) / ticks, 4)
+                        row["ticksPerSecond"] = round(ticks / (e["uptime"] - a["uptime"]), 2)
+                        if cpu_a is not None and cpu_b is not None:
+                            row["processMsPerTick"] = round(1000 * (cpu_b - cpu_a) / ticks, 3)
+                        break
+                if kind == "boundary":
                     row["error"] = e.get("error"); break
         finally:
             p.terminate(); p.wait()
@@ -216,7 +287,11 @@ def main():
     a.add_argument("--call-graph", default="dwarf,8192"); a.add_argument("--frequency", type=int, default=200)
     a.add_argument("--snapshots", action="store_true"); a.add_argument("--restore-stayon", action="store_true")
     a.add_argument("--fresh-data", action="store_true")
+    a.add_argument("--ticks", type=lambda t: tuple(int(x) for x in t.split(",")), default=None, help="A,B: frame time between bodies A and B")
+    a.add_argument("--sounds", action="store_true")
     o = a.parse_args()
+    if o.ticks and (len(o.ticks) != 2 or not o.bodies <= o.ticks[0] < o.ticks[1]):
+        a.error("--ticks A,B needs N <= A < B")
     out = Path(o.out); out.mkdir(parents=True, exist_ok=True)
     builds = [str(b) for b in o.local] if o.local else (o.apk or [None])
     rows = []
@@ -239,7 +314,7 @@ def main():
             mine = [r for r in rows if r["build"] == name]
             summary = {"build": name, "runs": len(mine)}
             for key in ("startupSeconds", "loadSeconds", "startToLoadedSeconds", "peakResidentMB", "peakFootprintMB",
-                        "loadedResidentMB", "bodiesResidentMB"):
+                        "loadedResidentMB", "bodiesResidentMB", "mainMsPerTick", "renderMsPerTick", "processMsPerTick", "completeMsPerTick"):
                 values = [r[key] for r in mine if r.get(key) is not None]
                 if values:
                     summary[key] = {"median": statistics.median(values), "min": min(values), "max": max(values)}

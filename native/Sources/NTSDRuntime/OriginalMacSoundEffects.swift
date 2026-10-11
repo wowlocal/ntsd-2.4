@@ -166,6 +166,16 @@ public final class OriginalMacSoundEffects: @unchecked Sendable {
                 case .floats(let c):
                     Self.mix(Floats(l: c[0], r: c.count > 1 ? c[1] : c[0]), count: count, step: step, looping: voice.looping, gl: gl, gr: gr,
                              frames: frames, left: left, right: right, position: &position, playing: &playing)
+                case .pcm8(let b, let n) where Self.inBounds(count: count, step: step, looping: voice.looping):
+                    b.withUnsafeBytes { p in
+                        Self.mix(pcm: RawPCM8(base: p.baseAddress!, alignment: s.blockAlign), channels: n, rightOffset: 1, count: count, step: step, looping: voice.looping,
+                                 gl: gl, gr: gr, frames: frames, left: left, right: right, position: &position, playing: &playing)
+                    }
+                case .pcm16(let b, let n) where Self.inBounds(count: count, step: step, looping: voice.looping):
+                    b.withUnsafeBytes { p in
+                        Self.mix(pcm: RawPCM16(base: p.baseAddress!, alignment: s.blockAlign), channels: n, rightOffset: 2, count: count, step: step, looping: voice.looping,
+                                 gl: gl, gr: gr, frames: frames, left: left, right: right, position: &position, playing: &playing)
+                    }
                 case .pcm8(let b, let n):
                     Self.mix(Interleaved(PCM8(bytes: b, alignment: s.blockAlign), right: n > 1 ? 1 : 0), count: count, step: step, looping: voice.looping,
                              gl: gl, gr: gr, frames: frames, left: left, right: right, position: &position, playing: &playing)
@@ -206,6 +216,19 @@ private struct PCM16: OriginalPCMReader {
         return Float(Int16(bitPattern:word))/32768
     }
 }
+/// The same conversions through the buffer's address, without a bounds check
+/// per byte (the array readers made the mixer ~1.7 times slower per voice
+/// than the float samples before M5c); used only where `inBounds` holds.
+private struct RawPCM8: OriginalPCMReader {
+    let base: UnsafeRawPointer, alignment: Int
+    @inline(__always) func value(_ index: Int) -> Float { Float(Int(base.load(fromByteOffset:index,as:UInt8.self))-128)/128 }
+}
+private struct RawPCM16: OriginalPCMReader {
+    let base: UnsafeRawPointer, alignment: Int
+    @inline(__always) func value(_ index: Int) -> Float {
+        Float(Int16(littleEndian:base.loadUnaligned(fromByteOffset:index,as:Int16.self)))/32768
+    }
+}
 /// Channel 0 on the left; on the right the byte offset of channel 1, or 0 for mono.
 private struct Interleaved<Reader: OriginalPCMReader>: OriginalSampleSource {
     let reader: Reader, rightOffset: Int
@@ -224,6 +247,35 @@ extension OriginalMacSoundEffects {
             let l = s.left(index), r = s.right(index)
             left[i] += (l+(s.left(next)-l)*fraction)*gl
             right[i] += (r+(s.right(next)-r)*fraction)*gr
+            position += step
+            if position >= Double(count) {
+                if looping { position -= Double(count) }
+                else { position = 0; playing = false; break }
+            }
+        }
+    }
+    /// Whether the loop's frame indices stay in `0..<count`: positions start
+    /// there, a voice stops at `count`, and a looping one wraps below it
+    /// while its step is shorter than the buffer. A longer, negative or NaN
+    /// step keeps the bounds-checked readers.
+    @inline(__always) fileprivate static func inBounds(count: Int, step: Double, looping: Bool) -> Bool {
+        step >= 0 && (!looping || step < Double(count))
+    }
+    /// A PCM voice: a mono one reads each frame once for both channels (the
+    /// same values, so the same expressions give the same results).
+    @inline(__always) fileprivate static func mix<Reader: OriginalPCMReader>(pcm r: Reader, channels: Int, rightOffset: Int, count: Int, step: Double, looping: Bool,
+        gl: Float, gr: Float, frames: Int, left: UnsafeMutablePointer<Float>, right: UnsafeMutablePointer<Float>, position: inout Double, playing: inout Bool) {
+        guard channels == 1 else {
+            return mix(Interleaved(r, right: rightOffset), count: count, step: step, looping: looping, gl: gl, gr: gr,
+                       frames: frames, left: left, right: right, position: &position, playing: &playing)
+        }
+        let alignment = r.alignment
+        for i in 0..<frames {
+            let index = Int(position), fraction = Float(position-Double(index))
+            let next = index+1 < count ? index+1 : (looping ? 0 : index)
+            let l = r.value(index*alignment), n = r.value(next*alignment)
+            left[i] += (l+(n-l)*fraction)*gl
+            right[i] += (l+(n-l)*fraction)*gr
             position += step
             if position >= Double(count) {
                 if looping { position -= Double(count) }

@@ -1,0 +1,841 @@
+{
+ "study": "MEMORY_LOADING",
+ "step": "Frame-time audit of the branch (2026-10-11)",
+ "why": "User, 2026-10-11: \"we must not compromise on performance (loading speed and frame time) while we optimize memory footprint\"; then: \"suspicious of b8d1c9b... feels like we added cpu overhead\". The memory/loading gates had measured load time and memory only; the last per-tick check was after M1.",
+ "a12": {
+  "tool": "tools/crossplatform/android_speed.py (virtual clock, sounds muted, bodies 600-1500 vs, 300-900 Demo), interleaved per round: ml-p0 vs, ml-p0 demo, ml-m5c vs, ml-m5c demo; 3 rounds",
+  "builds": {
+   "ml-p0": "APK of the branch start 0034e45 (T7 ml-gate-artifacts-20261011/apks.tar)",
+   "ml-m5c": "APK of b8d1c9b (HEAD)"
+  },
+  "summary": {
+   "ml-p0 vs": {
+    "runs": 3,
+    "mainMsPerTick": {
+     "median": 11.05,
+     "min": 11.03,
+     "max": 11.26,
+     "n": 3
+    },
+    "renderMsPerTick": {
+     "median": 7.51,
+     "min": 7.5,
+     "max": 7.66,
+     "n": 3
+    },
+    "presentMsPerTick": {
+     "median": 5.74,
+     "min": 5.71,
+     "max": 5.78,
+     "n": 3
+    },
+    "releaseMsPerTick": {
+     "median": 1.94,
+     "min": 1.93,
+     "max": 1.97,
+     "n": 3
+    },
+    "completeMsPerTick": {
+     "median": 7.5,
+     "min": 7.5,
+     "max": 7.6,
+     "n": 3
+    },
+    "ticksPerSecond": {
+     "median": 34.09,
+     "min": 33.93,
+     "max": 34.11,
+     "n": 3
+    },
+    "processMsPerTick": {
+     "median": 27.41,
+     "min": 27.3,
+     "max": 27.52,
+     "n": 2
+    }
+   },
+   "ml-p0 demo": {
+    "runs": 3,
+    "mainMsPerTick": {
+     "median": 11.71,
+     "min": 11.7,
+     "max": 11.81,
+     "n": 3
+    },
+    "renderMsPerTick": {
+     "median": 6.08,
+     "min": 6.06,
+     "max": 6.19,
+     "n": 3
+    },
+    "presentMsPerTick": {
+     "median": 5.64,
+     "min": 5.64,
+     "max": 5.66,
+     "n": 3
+    },
+    "releaseMsPerTick": {
+     "median": 1.59,
+     "min": 1.58,
+     "max": 1.66,
+     "n": 3
+    },
+    "completeMsPerTick": {
+     "median": 8.3,
+     "min": 8.2,
+     "max": 8.3,
+     "n": 3
+    },
+    "ticksPerSecond": {
+     "median": 33.67,
+     "min": 33.66,
+     "max": 33.73,
+     "n": 3
+    },
+    "processMsPerTick": {
+     "median": 26.125,
+     "min": 26.04,
+     "max": 26.21,
+     "n": 2
+    }
+   },
+   "ml-m5c vs": {
+    "runs": 3,
+    "mainMsPerTick": {
+     "median": 11.27,
+     "min": 11.15,
+     "max": 11.27,
+     "n": 3
+    },
+    "renderMsPerTick": {
+     "median": 7.6,
+     "min": 7.6,
+     "max": 8.07,
+     "n": 3
+    },
+    "presentMsPerTick": {
+     "median": 5.68,
+     "min": 5.65,
+     "max": 5.69,
+     "n": 3
+    },
+    "releaseMsPerTick": {
+     "median": 2.0,
+     "min": 1.99,
+     "max": 2.02,
+     "n": 3
+    },
+    "completeMsPerTick": {
+     "median": 7.5,
+     "min": 7.5,
+     "max": 7.5,
+     "n": 3
+    },
+    "ticksPerSecond": {
+     "median": 34.08,
+     "min": 34.02,
+     "max": 34.13,
+     "n": 3
+    },
+    "processMsPerTick": {
+     "median": 27.88,
+     "min": 27.65,
+     "max": 28.11,
+     "n": 2
+    }
+   },
+   "ml-m5c demo": {
+    "runs": 3,
+    "mainMsPerTick": {
+     "median": 11.72,
+     "min": 11.71,
+     "max": 11.74,
+     "n": 3
+    },
+    "renderMsPerTick": {
+     "median": 6.15,
+     "min": 6.15,
+     "max": 6.23,
+     "n": 3
+    },
+    "presentMsPerTick": {
+     "median": 5.67,
+     "min": 5.66,
+     "max": 5.71,
+     "n": 3
+    },
+    "releaseMsPerTick": {
+     "median": 1.68,
+     "min": 1.67,
+     "max": 1.7,
+     "n": 3
+    },
+    "completeMsPerTick": {
+     "median": 8.3,
+     "min": 8.3,
+     "max": 8.3,
+     "n": 3
+    },
+    "ticksPerSecond": {
+     "median": 33.64,
+     "min": 33.62,
+     "max": 33.68,
+     "n": 3
+    },
+    "processMsPerTick": {
+     "median": 26.310000000000002,
+     "min": 26.27,
+     "max": 26.35,
+     "n": 2
+    }
+   }
+  },
+  "runs": [
+   {
+    "label": "ft-ml-p0-vs-1",
+    "serial": "R58R36F7VFD",
+    "scenario": "vs",
+    "runSeconds": 212,
+    "peakResidentMB": 1223,
+    "ticksPerSecond": 33.93,
+    "busySeconds": 104.27,
+    "bodies": 1800,
+    "completeMsPerTick": 7.6,
+    "partAssembliesPerTick": 0.0,
+    "menuMsPerStep": 0.59,
+    "menuStepsPerTick": 4.12,
+    "idleMsPerStep": 0.474,
+    "idleIterationMs": 0.535,
+    "idleStepsPerTick": 3.12,
+    "tickStepMs": 0.956,
+    "mainCpuShare": 0.382,
+    "renderCpuShare": 0.254,
+    "mainMsPerTick": 11.26,
+    "renderMsPerTick": 7.5,
+    "presentMsPerTick": 5.74,
+    "releaseMsPerTick": 1.97,
+    "presentCounts": {
+     "submitted": 2100,
+     "drawn": 2100,
+     "waits": 0
+    }
+   },
+   {
+    "label": "ft-ml-p0-demo-1",
+    "serial": "R58R36F7VFD",
+    "scenario": "demo",
+    "runSeconds": 188,
+    "peakResidentMB": 1525,
+    "ticksPerSecond": 33.73,
+    "busySeconds": 92.0,
+    "bodies": 900,
+    "completeMsPerTick": 8.2,
+    "partAssembliesPerTick": 0.0,
+    "menuMsPerStep": 0.58,
+    "menuStepsPerTick": 4.13,
+    "idleMsPerStep": 0.472,
+    "idleIterationMs": 0.532,
+    "idleStepsPerTick": 3.13,
+    "tickStepMs": 0.916,
+    "mainCpuShare": 0.395,
+    "renderCpuShare": 0.209,
+    "mainMsPerTick": 11.71,
+    "renderMsPerTick": 6.19,
+    "presentMsPerTick": 5.66,
+    "releaseMsPerTick": 1.59,
+    "presentCounts": {
+     "submitted": 1500,
+     "drawn": 1500,
+     "waits": 0
+    }
+   },
+   {
+    "label": "ft-ml-m5c-vs-1",
+    "serial": "R58R36F7VFD",
+    "scenario": "vs",
+    "runSeconds": 86,
+    "peakResidentMB": 593,
+    "ticksPerSecond": 34.08,
+    "busySeconds": 22.03,
+    "bodies": 1800,
+    "completeMsPerTick": 7.5,
+    "partAssembliesPerTick": 0.0,
+    "menuMsPerStep": 0.59,
+    "menuStepsPerTick": 4.12,
+    "idleMsPerStep": 0.474,
+    "idleIterationMs": 0.533,
+    "idleStepsPerTick": 3.12,
+    "tickStepMs": 0.949,
+    "mainCpuShare": 0.38,
+    "renderCpuShare": 0.259,
+    "mainMsPerTick": 11.15,
+    "renderMsPerTick": 7.6,
+    "presentMsPerTick": 5.65,
+    "releaseMsPerTick": 1.99,
+    "presentCounts": {
+     "submitted": 2100,
+     "drawn": 2100,
+     "waits": 0
+    }
+   },
+   {
+    "label": "ft-ml-m5c-demo-1",
+    "serial": "R58R36F7VFD",
+    "scenario": "demo",
+    "runSeconds": 66,
+    "peakResidentMB": 556,
+    "ticksPerSecond": 33.64,
+    "busySeconds": 13.44,
+    "bodies": 900,
+    "completeMsPerTick": 8.3,
+    "partAssembliesPerTick": 0.0,
+    "menuMsPerStep": 0.59,
+    "menuStepsPerTick": 4.13,
+    "idleMsPerStep": 0.479,
+    "idleIterationMs": 0.537,
+    "idleStepsPerTick": 3.13,
+    "tickStepMs": 0.923,
+    "mainCpuShare": 0.395,
+    "renderCpuShare": 0.207,
+    "mainMsPerTick": 11.74,
+    "renderMsPerTick": 6.15,
+    "presentMsPerTick": 5.66,
+    "releaseMsPerTick": 1.7,
+    "presentCounts": {
+     "submitted": 1500,
+     "drawn": 1500,
+     "waits": 0
+    }
+   },
+   {
+    "label": "ft-ml-p0-vs-2",
+    "serial": "R58R36F7VFD",
+    "scenario": "vs",
+    "runSeconds": 207,
+    "peakResidentMB": 1419,
+    "ticksPerSecond": 34.09,
+    "busySeconds": 102.78,
+    "bodies": 1800,
+    "completeMsPerTick": 7.5,
+    "partAssembliesPerTick": 0.0,
+    "menuMsPerStep": 0.58,
+    "menuStepsPerTick": 4.12,
+    "idleMsPerStep": 0.471,
+    "idleIterationMs": 0.532,
+    "idleStepsPerTick": 3.12,
+    "tickStepMs": 0.932,
+    "mainCpuShare": 0.377,
+    "renderCpuShare": 0.261,
+    "mainMsPerTick": 11.05,
+    "renderMsPerTick": 7.66,
+    "presentMsPerTick": 5.78,
+    "releaseMsPerTick": 1.94,
+    "processMsPerTick": 27.52,
+    "threadMsPerTick": {
+     "local.ntsd.port": 11.05,
+     "DispatchWorker": 7.66,
+     "NTSD.present": 5.78,
+     "NTSD.release": 1.94,
+     "Binder:6223_2": 0.35,
+     "Binder:6223_4": 0.33,
+     "Binder:6223_3": 0.33
+    },
+    "presentCounts": {
+     "submitted": 2100,
+     "drawn": 2100,
+     "waits": 0
+    }
+   },
+   {
+    "label": "ft-ml-p0-demo-2",
+    "serial": "R58R36F7VFD",
+    "scenario": "demo",
+    "runSeconds": 190,
+    "peakResidentMB": 1381,
+    "ticksPerSecond": 33.67,
+    "busySeconds": 93.67,
+    "bodies": 900,
+    "completeMsPerTick": 8.3,
+    "partAssembliesPerTick": 0.0,
+    "menuMsPerStep": 0.58,
+    "menuStepsPerTick": 4.13,
+    "idleMsPerStep": 0.475,
+    "idleIterationMs": 0.536,
+    "idleStepsPerTick": 3.13,
+    "tickStepMs": 0.928,
+    "mainCpuShare": 0.394,
+    "renderCpuShare": 0.205,
+    "mainMsPerTick": 11.7,
+    "renderMsPerTick": 6.08,
+    "presentMsPerTick": 5.64,
+    "releaseMsPerTick": 1.58,
+    "processMsPerTick": 26.04,
+    "threadMsPerTick": {
+     "local.ntsd.port": 11.7,
+     "DispatchWorker": 6.08,
+     "NTSD.present": 5.64,
+     "NTSD.release": 1.58,
+     "Binder:6913_4": 0.46,
+     "Binder:6913_3": 0.33,
+     "Binder:6913_1": 0.23
+    },
+    "presentCounts": {
+     "submitted": 1500,
+     "drawn": 1500,
+     "waits": 0
+    }
+   },
+   {
+    "label": "ft-ml-m5c-vs-2",
+    "serial": "R58R36F7VFD",
+    "scenario": "vs",
+    "runSeconds": 87,
+    "peakResidentMB": 632,
+    "ticksPerSecond": 34.02,
+    "busySeconds": 22.27,
+    "bodies": 1800,
+    "completeMsPerTick": 7.5,
+    "partAssembliesPerTick": 0.0,
+    "menuMsPerStep": 0.6,
+    "menuStepsPerTick": 4.12,
+    "idleMsPerStep": 0.479,
+    "idleIterationMs": 0.539,
+    "idleStepsPerTick": 3.12,
+    "tickStepMs": 0.991,
+    "mainCpuShare": 0.383,
+    "renderCpuShare": 0.275,
+    "mainMsPerTick": 11.27,
+    "renderMsPerTick": 8.07,
+    "presentMsPerTick": 5.68,
+    "releaseMsPerTick": 2.02,
+    "processMsPerTick": 28.11,
+    "threadMsPerTick": {
+     "local.ntsd.port": 11.27,
+     "DispatchWorker": 8.07,
+     "NTSD.present": 5.68,
+     "NTSD.release": 2.02,
+     "Binder:8797_3": 0.45,
+     "Binder:8797_4": 0.35,
+     "Binder:8797_2": 0.28
+    },
+    "presentCounts": {
+     "submitted": 2100,
+     "drawn": 2100,
+     "waits": 0
+    }
+   },
+   {
+    "label": "ft-ml-m5c-demo-2",
+    "serial": "R58R36F7VFD",
+    "scenario": "demo",
+    "runSeconds": 66,
+    "peakResidentMB": 563,
+    "ticksPerSecond": 33.62,
+    "busySeconds": 13.31,
+    "bodies": 900,
+    "completeMsPerTick": 8.3,
+    "partAssembliesPerTick": 0.0,
+    "menuMsPerStep": 0.59,
+    "menuStepsPerTick": 4.13,
+    "idleMsPerStep": 0.479,
+    "idleIterationMs": 0.538,
+    "idleStepsPerTick": 3.13,
+    "tickStepMs": 0.924,
+    "mainCpuShare": 0.394,
+    "renderCpuShare": 0.207,
+    "mainMsPerTick": 11.71,
+    "renderMsPerTick": 6.15,
+    "presentMsPerTick": 5.71,
+    "releaseMsPerTick": 1.67,
+    "processMsPerTick": 26.27,
+    "threadMsPerTick": {
+     "local.ntsd.port": 11.71,
+     "DispatchWorker": 6.15,
+     "NTSD.present": 5.71,
+     "NTSD.release": 1.67,
+     "Binder:9302_4": 0.44,
+     "Binder:9302_1": 0.29,
+     "Binder:9302_2": 0.29
+    },
+    "presentCounts": {
+     "submitted": 1500,
+     "drawn": 1500,
+     "waits": 0
+    }
+   },
+   {
+    "label": "ft-ml-p0-vs-3",
+    "serial": "R58R36F7VFD",
+    "scenario": "vs",
+    "runSeconds": 207,
+    "peakResidentMB": 1398,
+    "ticksPerSecond": 34.11,
+    "busySeconds": 101.66,
+    "bodies": 1800,
+    "completeMsPerTick": 7.5,
+    "partAssembliesPerTick": 0.0,
+    "menuMsPerStep": 0.58,
+    "menuStepsPerTick": 4.12,
+    "idleMsPerStep": 0.468,
+    "idleIterationMs": 0.529,
+    "idleStepsPerTick": 3.12,
+    "tickStepMs": 0.94,
+    "mainCpuShare": 0.376,
+    "renderCpuShare": 0.256,
+    "mainMsPerTick": 11.03,
+    "renderMsPerTick": 7.51,
+    "presentMsPerTick": 5.71,
+    "releaseMsPerTick": 1.93,
+    "processMsPerTick": 27.3,
+    "threadMsPerTick": {
+     "local.ntsd.port": 11.03,
+     "DispatchWorker": 7.51,
+     "NTSD.present": 5.71,
+     "NTSD.release": 1.93,
+     "Binder:10351_1": 0.46,
+     "Binder:10351_4": 0.33,
+     "Binder:10351_2": 0.33
+    },
+    "presentCounts": {
+     "submitted": 2100,
+     "drawn": 2100,
+     "waits": 0
+    }
+   },
+   {
+    "label": "ft-ml-p0-demo-3",
+    "serial": "R58R36F7VFD",
+    "scenario": "demo",
+    "runSeconds": 190,
+    "peakResidentMB": 1565,
+    "ticksPerSecond": 33.66,
+    "busySeconds": 94.22,
+    "bodies": 900,
+    "completeMsPerTick": 8.3,
+    "partAssembliesPerTick": 0.0,
+    "menuMsPerStep": 0.58,
+    "menuStepsPerTick": 4.13,
+    "idleMsPerStep": 0.475,
+    "idleIterationMs": 0.535,
+    "idleStepsPerTick": 3.13,
+    "tickStepMs": 0.916,
+    "mainCpuShare": 0.398,
+    "renderCpuShare": 0.204,
+    "mainMsPerTick": 11.81,
+    "renderMsPerTick": 6.06,
+    "presentMsPerTick": 5.64,
+    "releaseMsPerTick": 1.66,
+    "processMsPerTick": 26.21,
+    "threadMsPerTick": {
+     "local.ntsd.port": 11.81,
+     "DispatchWorker": 6.06,
+     "NTSD.present": 5.64,
+     "NTSD.release": 1.66,
+     "Binder:11334_1": 0.37,
+     "Binder:11334_2": 0.35,
+     "Binder:11334_4": 0.32
+    },
+    "presentCounts": {
+     "submitted": 1500,
+     "drawn": 1500,
+     "waits": 0
+    }
+   },
+   {
+    "label": "ft-ml-m5c-vs-3",
+    "serial": "R58R36F7VFD",
+    "scenario": "vs",
+    "runSeconds": 87,
+    "peakResidentMB": 590,
+    "ticksPerSecond": 34.13,
+    "busySeconds": 22.18,
+    "bodies": 1800,
+    "completeMsPerTick": 7.5,
+    "partAssembliesPerTick": 0.0,
+    "menuMsPerStep": 0.59,
+    "menuStepsPerTick": 4.12,
+    "idleMsPerStep": 0.478,
+    "idleIterationMs": 0.538,
+    "idleStepsPerTick": 3.12,
+    "tickStepMs": 0.955,
+    "mainCpuShare": 0.385,
+    "renderCpuShare": 0.26,
+    "mainMsPerTick": 11.27,
+    "renderMsPerTick": 7.6,
+    "presentMsPerTick": 5.69,
+    "releaseMsPerTick": 2.0,
+    "processMsPerTick": 27.65,
+    "threadMsPerTick": {
+     "local.ntsd.port": 11.27,
+     "DispatchWorker": 7.6,
+     "NTSD.present": 5.69,
+     "NTSD.release": 2.0,
+     "Binder:13220_4": 0.49,
+     "Binder:13220_3": 0.3,
+     "Binder:13220_1": 0.28
+    },
+    "presentCounts": {
+     "submitted": 2100,
+     "drawn": 2100,
+     "waits": 0
+    }
+   },
+   {
+    "label": "ft-ml-m5c-demo-3",
+    "serial": "R58R36F7VFD",
+    "scenario": "demo",
+    "runSeconds": 67,
+    "peakResidentMB": 559,
+    "ticksPerSecond": 33.68,
+    "busySeconds": 13.42,
+    "bodies": 900,
+    "completeMsPerTick": 8.3,
+    "partAssembliesPerTick": 0.0,
+    "menuMsPerStep": 0.59,
+    "menuStepsPerTick": 4.13,
+    "idleMsPerStep": 0.478,
+    "idleIterationMs": 0.536,
+    "idleStepsPerTick": 3.13,
+    "tickStepMs": 0.929,
+    "mainCpuShare": 0.395,
+    "renderCpuShare": 0.21,
+    "mainMsPerTick": 11.72,
+    "renderMsPerTick": 6.23,
+    "presentMsPerTick": 5.67,
+    "releaseMsPerTick": 1.68,
+    "processMsPerTick": 26.35,
+    "threadMsPerTick": {
+     "local.ntsd.port": 11.72,
+     "DispatchWorker": 6.23,
+     "NTSD.present": 5.67,
+     "NTSD.release": 1.68,
+     "Binder:13725_1": 0.41,
+     "Binder:13725_4": 0.3,
+     "Binder:13725_2": 0.24
+    },
+    "presentCounts": {
+     "submitted": 1500,
+     "drawn": 1500,
+     "waits": 0
+    }
+   }
+  ],
+  "reading": "All four pairs (vs/Demo main/render) overlap: no measured difference. vs main median 11.05 -> 11.27 ms (ranges 11.03-11.26 and 11.15-11.27), Demo main 11.71 -> 11.72. The sound mixer did not run in these runs: with --mute-sounds the Android feed outputs zeros without calling render."
+ },
+ "mac": {
+  "tool": "load_memory.py --local A --local B --runs 3 --ticks 600,1500 (frozen unchecked headless binaries ml-p0, 0034e45, against ml-m5c); the Mac was otherwise idle",
+  "summary": {
+   "frozen-unchecked-ml-p0": {
+    "runs": 3,
+    "completeMsPerTick": {
+     "median": 1.1273,
+     "min": 0.8191,
+     "max": 1.3507
+    },
+    "processMsPerTick": {
+     "median": 2.8,
+     "min": 2.0,
+     "max": 3.289
+    },
+    "loadSeconds": {
+     "median": 5.534,
+     "min": 5.312,
+     "max": 5.651
+    },
+    "peakResidentMB": {
+     "median": 2027,
+     "min": 1981,
+     "max": 2068
+    }
+   },
+   "frozen-unchecked-ml-m5c": {
+    "runs": 3,
+    "completeMsPerTick": {
+     "median": 1.18,
+     "min": 1.0758,
+     "max": 1.2824
+    },
+    "processMsPerTick": {
+     "median": 2.922,
+     "min": 2.644,
+     "max": 3.111
+    },
+    "loadSeconds": {
+     "median": 0.318,
+     "min": 0.312,
+     "max": 0.32
+    },
+    "peakResidentMB": {
+     "median": 644,
+     "min": 642,
+     "max": 648
+    }
+   }
+  },
+  "runs": [
+   {
+    "label": "ft-mac-p0-m5c-01-frozen-unchecked-ml-p0",
+    "host": "mac",
+    "scenario": "vs",
+    "bodies": 600,
+    "binary": "/private/tmp/claude-501/-Users-michael-Developer-ntsd-2-4/1f9218ae-9d5d-4c4e-a8dd-d5254994839c/scratchpad/frozen-unchecked-ml-p0/NTSDHeadless",
+    "startupSeconds": 0.125,
+    "loadSeconds": 5.651,
+    "startToLoadedSeconds": 6.15,
+    "loadedCounts": {
+     "allocations": 16105,
+     "audioRequests": 2072,
+     "bitmapRequests": 12817,
+     "files": 621
+    },
+    "loadedResidentMB": 1898,
+    "bodiesResidentMB": 1940,
+    "peakResidentMB": 1981,
+    "completeMsPerTick": 1.1273,
+    "ticksPerSecond": 43.8,
+    "processMsPerTick": 2.8,
+    "build": "frozen-unchecked-ml-p0"
+   },
+   {
+    "label": "ft-mac-p0-m5c-02-frozen-unchecked-ml-m5c",
+    "host": "mac",
+    "scenario": "vs",
+    "bodies": 600,
+    "binary": "/private/tmp/claude-501/-Users-michael-Developer-ntsd-2-4/1f9218ae-9d5d-4c4e-a8dd-d5254994839c/scratchpad/frozen-unchecked-ml-m5c/NTSDHeadless",
+    "startupSeconds": 0.057,
+    "loadSeconds": 0.32,
+    "packagesWaitSeconds": 0.0,
+    "startToLoadedSeconds": 0.689,
+    "loadedCounts": {
+     "allocations": 16105,
+     "audioRequests": 2072,
+     "bitmapRequests": 12817,
+     "files": 621
+    },
+    "loadedResidentMB": 647,
+    "bodiesResidentMB": 591,
+    "peakResidentMB": 648,
+    "completeMsPerTick": 1.0758,
+    "ticksPerSecond": 43.95,
+    "processMsPerTick": 2.644,
+    "build": "frozen-unchecked-ml-m5c"
+   },
+   {
+    "label": "ft-mac-p0-m5c-03-frozen-unchecked-ml-p0",
+    "host": "mac",
+    "scenario": "vs",
+    "bodies": 600,
+    "binary": "/private/tmp/claude-501/-Users-michael-Developer-ntsd-2-4/1f9218ae-9d5d-4c4e-a8dd-d5254994839c/scratchpad/frozen-unchecked-ml-p0/NTSDHeadless",
+    "startupSeconds": 0.141,
+    "loadSeconds": 5.312,
+    "startToLoadedSeconds": 5.829,
+    "loadedCounts": {
+     "allocations": 16105,
+     "audioRequests": 2072,
+     "bitmapRequests": 12817,
+     "files": 621
+    },
+    "loadedResidentMB": 1991,
+    "bodiesResidentMB": 2028,
+    "peakResidentMB": 2068,
+    "completeMsPerTick": 0.8191,
+    "ticksPerSecond": 44.43,
+    "processMsPerTick": 2.0,
+    "build": "frozen-unchecked-ml-p0"
+   },
+   {
+    "label": "ft-mac-p0-m5c-04-frozen-unchecked-ml-m5c",
+    "host": "mac",
+    "scenario": "vs",
+    "bodies": 600,
+    "binary": "/private/tmp/claude-501/-Users-michael-Developer-ntsd-2-4/1f9218ae-9d5d-4c4e-a8dd-d5254994839c/scratchpad/frozen-unchecked-ml-m5c/NTSDHeadless",
+    "startupSeconds": 0.059,
+    "loadSeconds": 0.312,
+    "packagesWaitSeconds": 0.0,
+    "startToLoadedSeconds": 0.69,
+    "loadedCounts": {
+     "allocations": 16105,
+     "audioRequests": 2072,
+     "bitmapRequests": 12817,
+     "files": 621
+    },
+    "loadedResidentMB": 554,
+    "bodiesResidentMB": 616,
+    "peakResidentMB": 644,
+    "completeMsPerTick": 1.2824,
+    "ticksPerSecond": 43.13,
+    "processMsPerTick": 3.111,
+    "build": "frozen-unchecked-ml-m5c"
+   },
+   {
+    "label": "ft-mac-p0-m5c-05-frozen-unchecked-ml-p0",
+    "host": "mac",
+    "scenario": "vs",
+    "bodies": 600,
+    "binary": "/private/tmp/claude-501/-Users-michael-Developer-ntsd-2-4/1f9218ae-9d5d-4c4e-a8dd-d5254994839c/scratchpad/frozen-unchecked-ml-p0/NTSDHeadless",
+    "startupSeconds": 0.137,
+    "loadSeconds": 5.534,
+    "startToLoadedSeconds": 6.045,
+    "loadedCounts": {
+     "allocations": 16105,
+     "audioRequests": 2072,
+     "bitmapRequests": 12817,
+     "files": 621
+    },
+    "loadedResidentMB": 1949,
+    "bodiesResidentMB": 1987,
+    "peakResidentMB": 2027,
+    "completeMsPerTick": 1.3507,
+    "ticksPerSecond": 41.93,
+    "processMsPerTick": 3.289,
+    "build": "frozen-unchecked-ml-p0"
+   },
+   {
+    "label": "ft-mac-p0-m5c-06-frozen-unchecked-ml-m5c",
+    "host": "mac",
+    "scenario": "vs",
+    "bodies": 600,
+    "binary": "/private/tmp/claude-501/-Users-michael-Developer-ntsd-2-4/1f9218ae-9d5d-4c4e-a8dd-d5254994839c/scratchpad/frozen-unchecked-ml-m5c/NTSDHeadless",
+    "startupSeconds": 0.049,
+    "loadSeconds": 0.318,
+    "packagesWaitSeconds": 0.0,
+    "startToLoadedSeconds": 0.675,
+    "loadedCounts": {
+     "allocations": 16105,
+     "audioRequests": 2072,
+     "bitmapRequests": 12817,
+     "files": 621
+    },
+    "loadedResidentMB": 551,
+    "bodiesResidentMB": 602,
+    "peakResidentMB": 642,
+    "completeMsPerTick": 1.18,
+    "ticksPerSecond": 43.34,
+    "processMsPerTick": 2.922,
+    "build": "frozen-unchecked-ml-m5c"
+   }
+  ],
+  "reading": "Game-thread time per tick overlaps (0.82-1.35 against 1.08-1.28 ms); Mac tick timing under the virtual clock is noisy (+-25%), the A12 decides. An earlier mac_tick.py series was taken while the Mac was building and is not used."
+ },
+ "mixer": {
+  "what": "M5c moved the int-to-float sample conversion into the mixer (audio callback thread). Benchmark scratchpad mixbench: the pre-M5c float loop, M5c's readers (verbatim), raw-pointer readers, raw readers with a mono path; 8 voices (6 x 16-bit mono 22,050 Hz, 16-bit stereo 44,100 Hz, 8-bit mono 11,025 Hz), output 48 kHz, outputs hashed bit for bit against the float loop",
+  "a12": [
+   "callback 192 frames",
+   "floatsBefore ns per voice-frame: median 37.20  range 36.74-37.26  output identical",
+   "m5c ns per voice-frame: median 48.72  range 48.58-48.73  output identical",
+   "raw ns per voice-frame: median 42.75  range 42.67-42.80  output identical",
+   "rawMono ns per voice-frame: median 36.20  range 36.15-36.21  output identical",
+   "M5c extra audio-thread time with 8 voices at 48 kHz: 4.423 ms per second of audio",
+   "callback 960 frames",
+   "floatsBefore ns per voice-frame: median 34.67  range 34.66-34.67  output identical",
+   "m5c ns per voice-frame: median 47.09  range 47.08-47.11  output identical",
+   "raw ns per voice-frame: median 41.08  range 41.06-41.14  output identical",
+   "rawMono ns per voice-frame: median 34.57  range 34.34-34.57  output identical",
+   "M5c extra audio-thread time with 8 voices at 48 kHz: 4.771 ms per second of audio"
+  ],
+  "mac": [
+   "callback 192: floatsBefore 1.67 ns per voice-frame (1.65-1.71), m5c 2.82 (2.71-2.88), raw 1.96 (1.95-1.97), rawMono 1.60 (1.59-1.60); all outputs identical"
+  ],
+  "reading": "M5c cost +31% per voice-frame on the A12 (48.7 against 37.2 ns), ~4.4-4.8 ms of audio-thread CPU per second of audio with 8 voices; raw readers with the mono path: 36.2 ns, below the float loop. Fixed in M5d."
+ }
+}

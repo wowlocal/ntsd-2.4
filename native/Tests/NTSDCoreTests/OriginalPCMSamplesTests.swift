@@ -73,6 +73,43 @@ final class OriginalPCMSamplesTests: XCTestCase {
         }
     }
 
+    /// The mixer reads PCM through the buffer's address while its indices stay
+    /// in the buffer; a looping voice whose step reaches the buffer's length
+    /// keeps the bounds-checked readers. Both render what the loop before M5c
+    /// rendered, mono (one read per frame for both channels) and stereo.
+    func testShortBuffersAndLongStepsMatchThePreviousLoop() throws {
+        var rng = SplitMix(state: 13)
+        // (frames, rate, output): steps of 1 and 2 on 1- and 2-frame buffers
+        // (bounds-checked when looping), and shorter steps (through the address).
+        for (frames, rate, output) in [(1, 22050.0, 22050.0), (2, 44100.0, 22050.0), (1, 11025.0, 22050.0), (2, 22050.0, 22050.0), (3, 22050.0, 48000.0)] {
+            for bits in [8, 16] { for channels in [1, 2] { for looping in [false, true] { for start in 0..<frames { for extra in 0..<channels * bits / 8 {
+                // `extra` bytes of a partial frame after the last whole one.
+                let alignment = channels * bits / 8
+                let pcm = (0..<frames * alignment + extra).map { _ in UInt8(truncatingIfNeeded: rng.next(256)) }
+                let volume = -Int32(rng.next(2500)), pan = Int32(rng.next(1601)) - 800
+                let fx = Effects { _ in Effects.Samples(pcm: pcm, bits: bits, channels: channels, rate: rate, blockAlign: alignment, volume: 0) }
+                for w: [UInt32] in [[7, 0x3c, UInt32(bitPattern: volume)], [7, 0x40, UInt32(bitPattern: pan)], [7, 0x34, UInt32(start * alignment)], [7, 0x30, 0, 0, looping ? 1 : 0]] {
+                    try fx.perform(try XCTUnwrap(Effects.Call(w)))
+                }
+                let n = 37
+                var l = [Float](repeating: 0, count: n), r = l
+                l.withUnsafeMutableBufferPointer { lp in r.withUnsafeMutableBufferPointer { rp in fx.render(frames: n, rate: output, left: lp.baseAddress!, right: rp.baseAddress!) } }
+                let expected = referenceRender(floats(pcm, bits: bits, channels: channels, alignment: alignment), rate: rate, output: output,
+                                               start: start, looping: looping, volume: volume, pan: pan, frames: n)
+                XCTAssertEqual(l.map(\.bitPattern) + r.map(\.bitPattern), expected, "frames \(frames) step \(rate/output) bits \(bits) channels \(channels) looping \(looping) start \(start) extra \(extra)")
+            } } } } }
+        }
+        // A voice moved to exactly its end renders nothing and stops.
+        for (bits, channels) in [(8, 1), (16, 1), (16, 2)] {
+            let alignment = channels * bits / 8, frames = 5
+            let fx = Effects { _ in Effects.Samples(pcm: Array(repeating: 200, count: frames * alignment), bits: bits, channels: channels, rate: 22050, blockAlign: alignment, volume: 0) }
+            for w: [UInt32] in [[7, 0x34, UInt32(frames * alignment)], [7, 0x30, 0, 0, 1]] { try fx.perform(try XCTUnwrap(Effects.Call(w))) }
+            var l = [Float](repeating: 1, count: 9), r = l
+            l.withUnsafeMutableBufferPointer { lp in r.withUnsafeMutableBufferPointer { rp in fx.render(frames: 9, rate: 48000, left: lp.baseAddress!, right: rp.baseAddress!) } }
+            XCTAssertEqual(l + r, Array(repeating: 0, count: 18), "bits \(bits) channels \(channels)")
+        }
+    }
+
     func testPCMRendersLikeItsFloats() throws {
         var rng = SplitMix(state: 5)
         for round in 0..<48 {

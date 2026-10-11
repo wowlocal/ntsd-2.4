@@ -4,7 +4,7 @@ own progress events (CORE_REALTIME phase 0; a test harness).
 
 Usage: android_speed.py OUT_DIR [--serial S] [--apk PATH] [--label L]
                         [--scenario vs|demo] [--profile SECONDS] [--lib DIR]
-                        [--call-graph fp|dwarf,N] [--frequency HZ] [--offcpu] [--real-clock]
+                        [--call-graph fp|dwarf,N] [--frequency HZ] [--offcpu] [--real-clock] [--sounds]
 
 Runs the debuggable build (local.ntsd.port; the release build cannot be
 scripted) with app_e2e's computer-vs script (or, with --scenario demo, its
@@ -12,6 +12,12 @@ Demo: many fighters at once), music, sounds and network off and no frame capture
 over the app's uptime. Also the busy seconds (the game thread's busy time: the
 measure where the game reaches its own paced rate, as on the emulator), the run time and the peak
 resident memory (VmHWM). Appends a JSON line to OUT_DIR/speed.jsonl.
+
+Per tick it reports each thread's compute (threadMsPerTick, threads above
+0.1 ms, by name) and the whole process's (processMsPerTick), so work moved to
+or added on another thread shows too. With --sounds the sound-effect voices
+are mixed as in play (without it the Android feed outputs zeros and never runs
+the mixer); the media volume is held at 0 for the run and then restored.
 
 With --profile it records that many seconds of simpleperf call graphs
 (`simpleperf record --app`, frame pointers) once gameplay reaches 300 bodies,
@@ -28,7 +34,7 @@ screen); --restore-stayon restores `svc power stayon false` afterwards. A
 swipe lock screen is dismissed (wm dismiss-keyguard); a device still showing its
 lock screen (a PIN) is refused at once.
 """
-import argparse, collections, importlib.util, json, os, subprocess, sys, time
+import argparse, collections, importlib.util, json, os, re, subprocess, sys, time
 from pathlib import Path
 
 ROOT = Path(__file__).resolve().parents[2]
@@ -76,7 +82,7 @@ def scenario_script(name):
     raise SystemExit(f"unknown scenario {name}")
 
 
-def arguments(real_clock=False, scenario="vs"):
+def arguments(real_clock=False, scenario="vs", sounds=False):
     script = scenario_script(scenario)
     # The virtual clock advances 8 ms per message-loop iteration, so the game's
     # 33 ms timer takes about four iterations per tick and the three idle ones
@@ -85,8 +91,17 @@ def arguments(real_clock=False, scenario="vs"):
     # (it sleeps only while ahead of its 33 ms schedule).
     clock = [] if real_clock else ["--virtual-clock", "123456789", "8"]
     return ["--events-file", f"{FILES}/speed/events.jsonl", "--tz", "Etc/GMT-1", "--original", "--mute-music",
-            "--mute-sounds", "--no-network", "--overlay", f"{FILES}/speed/overlay", *clock,
+            *([] if sounds else ["--mute-sounds"]), "--no-network", "--overlay", f"{FILES}/speed/overlay", *clock,
             "--script-clock", "gameplay", "--script", script]
+
+
+def media_volume(serial, value=None):
+    """The media stream's volume, or sets it (cmd media_session)."""
+    if value is None:
+        out = shell(serial, "cmd media_session volume --stream 3 --get 2>&1")
+        words = out.split("volume is ")[-1].split()
+        return int(words[0]) if words and words[0].isdigit() else None
+    shell(serial, f"cmd media_session volume --stream 3 --set {value} 2>&1")
 
 
 def thread_cpu(serial, pid):
@@ -96,7 +111,8 @@ def thread_cpu(serial, pid):
     for line in out.splitlines():
         part = line.split()
         if len(part) == 2 and part[1].isdigit():
-            cpu[part[0]] += int(part[1])
+            # Pool threads named by process and index (Binder:6223_2) count by pool.
+            cpu[re.sub(r":\d+_\d+$", "", part[0])] += int(part[1])
     return time.time(), cpu
 
 
@@ -247,16 +263,19 @@ def main():
     a.add_argument("--offcpu", action="store_true", help="also record off-CPU time (where threads block)")
     a.add_argument("--real-clock", action="store_true", help="pace by real time instead of the virtual clock")
     a.add_argument("--restore-stayon", action="store_true")
+    a.add_argument("--sounds", action="store_true", help="mix the sound effects as in play (media volume held at 0)")
     o = a.parse_args()
     out = Path(o.out); out.mkdir(parents=True, exist_ok=True)
     s = o.serial
     if o.apk:
         install(s, o.apk)
     wake(s)
+    volume = media_volume(s) if o.sounds else None
     try:
+        if volume: media_volume(s, 0)
         shell(s, f"am force-stop {PACKAGE}")
         shell(s, f"run-as {PACKAGE} sh -c 'rm -rf files/speed && mkdir -p files/speed/overlay && cat > files/args.txt'",
-              input="\n".join(arguments(o.real_clock, o.scenario)) + "\n")
+              input="\n".join(arguments(o.real_clock, o.scenario, o.sounds)) + "\n")
         start = time.time()
         shell(s, f"am start -n {PACKAGE}/android.app.NativeActivity")
         time.sleep(5)
@@ -282,10 +301,12 @@ def main():
         events = progress(s)
     finally:
         shell(s, f"run-as {PACKAGE} rm -f files/args.txt")
+        if volume: media_volume(s, volume)
         if o.restore_stayon:
             shell(s, "svc power stayon false")
     marks = [e for e in events if e.get("event") == "progress"]
     row = {"label": o.label, "serial": s, "scenario": o.scenario, "runSeconds": round(time.time() - start), "peakResidentMB": peak // 1024}
+    if o.sounds: row["sounds"] = True
     if len(marks) > 1:
         first, last = marks[0], marks[-1]
         row.update(ticksPerSecond=round((last["gameplayBodies"] - first["gameplayBodies"]) / (last["uptime"] - first["uptime"]), 2),
@@ -329,6 +350,11 @@ def main():
             # The release thread (CORE_REALTIME R3), when present.
             if "NTSD.release" in share:
                 row["releaseMsPerTick"] = round(1000 * share["NTSD.release"] / row["ticksPerSecond"], 2)
+            # Every thread (by name) and the whole process: work on any other
+            # thread (the audio callback, workers) counts too.
+            per_tick = {name: 1000 * v / row["ticksPerSecond"] for name, v in share.items()}
+            row["processMsPerTick"] = round(sum(per_tick.values()), 2)
+            row["threadMsPerTick"] = {name: round(v, 2) for name, v in sorted(per_tick.items(), key=lambda kv: -kv[1]) if v >= 0.1}
         presents = [e for e in events if e.get("event") == "androidPresent"]
         if presents:
             # Whole-run totals, sampled every 300 drawn frames.

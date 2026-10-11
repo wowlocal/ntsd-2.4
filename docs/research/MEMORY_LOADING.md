@@ -11,6 +11,11 @@ eMMC storage, ~1.3 GB free): the time from launch until the game is ready
 (its data loaded) and the memory the game holds while loading and playing,
 measured with `tools/crossplatform/load_memory.py`. Every host keeps exactly
 the same game.
+**Performance is not traded (user, 2026-10-11):** "we must not compromise on
+performance (loading speed and frame time) while we optimize memory
+footprint". A memory saving that measurably costs load time or frame time
+(on any thread, the audio callback included) is fixed in the same increment
+or dropped, never recovered later.
 **Reason:** user decision 2026-10-10, after the real-time work reached its
 wall: "now lets do the loop for optimizing memory footprint and loading times.
 you can create a new branch and start developing. build strong methodology as
@@ -64,6 +69,7 @@ where `android_speed.py` measures tick rates on Android only.
 | Resident when loaded / in the match | VmRSS (anonymous and file parts) at the `loaded` event and at body 600; Mac `phys_footprint` | A12 |
 | PSS | `dumpsys meminfo` summary at body 600 | A12 |
 | Attribution | Mac `heap -sortBySize` at both points (`--snapshots`), `sample` / simpleperf profiles of the load | Mac, A12 |
+| **Frame time** (`--ticks 600,1500`) | the same run kept going to body 1500: each thread's on-CPU share of the wall time over bodies 600–1500 times the wall time per tick (`mainMsPerTick`, `renderMsPerTick`, the whole process `processMsPerTick`, every thread `threadMsPerTick`), with the sound effects mixed as in play (`--sounds`, media volume held at 0); Mac: the game thread's busy time per tick from the progress events (`completeMsPerTick`) and the process's CPU per tick | A12 |
 
 The macOS footprint counts compressed memory and varies between identical runs
 (MEMORY_FOOTPRINT); it is used for attribution and as a cross-check, the
@@ -198,9 +204,21 @@ stages the native files of the tested tree, not the working copy, so the next
 increment can be developed once the gate's test bundle has compiled. Probes
 (single runs, profiles, attribution builds) never replace the gate.
 
-Commit an increment only when every gate passes and it is measurably faster or
-smaller by the protocol above, or strictly less work or memory without added
-complexity; otherwise record it here and revert. Keep X5 above 20 GiB free and
+**Frame time, in three tiers (since 2026-10-11).** (1) Every gate: the phone
+A/B's runs go on to body 1500 with sounds mixed and report main, render and
+whole-process ms per tick; the Mac A/B reports the game thread's and the
+process's ms per tick (about two minutes more, inside the phone branch's
+idle time; the Mac branch is the critical path). (2) When an increment touches
+a per-tick or per-sample path (mixing, records read during play, display), or
+tier 1 shows a difference beyond its ranges: the full interleaved
+`android_speed.py` vs and Demo A/B (three rounds, ~40 min) with `--sounds`,
+plus a microbenchmark of the changed loop on the Mac and the A12. (3) At each
+milestone: the full A/B against the branch start.
+
+Commit an increment only when every gate passes, it is measurably faster or
+smaller by the protocol above (or strictly less work or memory without added
+complexity), and neither load time nor frame time is measurably worse;
+otherwise record it here and revert. Keep X5 above 20 GiB free and
 T7 above 40 GiB. Keep the phone awake only while measuring and restore
 `svc power stayon false` when pausing.
 
@@ -244,6 +262,19 @@ T7 above 40 GiB. Keep the phone awake only while measuring and restore
 - **Platform paths** (Android file facts, asset extraction) are exercised by
   the phone and emulator gates; a Mac test compares the new primitive with
   the platform API it replaces.
+- **The first run of an A/B sequence is slow.** In three phone A/Bs the
+  build that went first waited longest for the read-ahead (3.1, 1.4, 1.4 s),
+  muted too, where the change under test never ran. The phone A/B gets a
+  warm-up run before its measured runs. Since the read-ahead (L13), `load`
+  alone depends on how long the menu ran (a faster menu waits longer for
+  the packages); launch to loaded is the user's time, so both are compared.
+- **Measure where the cost lands.** M5c moved the sample conversion from
+  load time into the mixer, which runs on the audio callback thread; every
+  speed and load run muted the sounds (the Android feed then outputs zeros
+  without mixing) and headless never mixes, so no gate saw it. A change that
+  moves work into a per-tick or per-sample path gets a microbenchmark of the
+  old and new loop (same inputs, outputs compared bit for bit) on the Mac and
+  the A12, and the in-play runs measure every thread with that path active.
 
 ## Ledger
 
@@ -280,10 +311,17 @@ T7 above 40 GiB. Keep the phone awake only while measuring and restore
 | 2026-10-11 | S2: assets extracted on every core | The Android host extracts the APK's assets on every core, each read once into a buffer of its length (one after another, in 64 KB chunks, before). **A12 first launch after an install 24.7 → 16.8 s** (`--fresh-data` A/B: 16.75–18.61 against 22.75–26.63 s; flash writes bound the rest); the load unchanged. All 10 scenarios, AppKit, unchecked and emulator equal, frames identical; review: no bug on success (a failing extraction can name a different file) | [evidence](../evidence/ml-s2-parallel-asset-extraction-20261011.json) | 1e0b93e |
 | 2026-10-11 | M5b: sound copies | The copy payload read without caching it in the temporary, the audio backend's request logs (tests only) off in the runtime session, a uniform sound buffer's lock reply kept as one value. **A12 peak footprint ~657 → ~587 MB** (585–598 against 649–665; in the match 547–553 against 624–630), Mac peak 758 → 679 MB; loads unchanged. All 10 scenarios, AppKit, unchecked and emulator equal, frames identical; the new test expected a one-byte buffer to stop being uniform when changed, corrected and the 11 suites rerun as ml-m5bb, all passing; review: no bug | [evidence](../evidence/ml-m5b-sound-copies-20261011.json) | ec84abd |
 | 2026-10-11 | M7a: closed streams without contents | After the catalog load, closed file streams keep their allocation, path, mode, position and flags but not their arrays (nothing reads them; the loaded menu kept them for the whole run). **A12 peak footprint ~607 → ~589 MB** (561–592 against 598–615; in the match 508–548 against 573–592), Mac heap −30 MB at the stream sites; loads unchanged. All 10 scenarios, AppKit, unchecked and emulator equal, frames identical; 8 suites; the gate's phone A/B stopped at a transient install failure, rerun as ml-m7a-ab2; review: no bug | [evidence](../evidence/ml-m7a-closed-stream-contents-20261011.json) | 49bf0bf |
-| 2026-10-11 | M5c: PCM kept, converted while mixing | Sound buffers keep their unlocked PCM instead of float arrays; the mixer converts each sample as it reads it with the backend's expressions. Mac heap: float samples 31.9 MB → PCM 15.8 MB; the A12's peak does not separate the builds (546–564 against 562–575 MB, within its spread); loads unchanged. Output bit for bit as the previous mixer loop (test copy) on generated buffers. All 10 scenarios, AppKit, unchecked and emulator equal, frames identical; 7 suites; review: no bug | [evidence](../evidence/ml-m5c-pcm-samples-20261011.json) | this commit |
+| 2026-10-11 | M5c: PCM kept, converted while mixing | Sound buffers keep their unlocked PCM instead of float arrays; the mixer converts each sample as it reads it with the backend's expressions. Mac heap: float samples 31.9 MB → PCM 15.8 MB; the A12's peak does not separate the builds (546–564 against 562–575 MB, within its spread); loads unchanged. Output bit for bit as the previous mixer loop (test copy) on generated buffers. All 10 scenarios, AppKit, unchecked and emulator equal, frames identical; 7 suites; review: no bug | [evidence](../evidence/ml-m5c-pcm-samples-20261011.json) | b8d1c9b |
+| 2026-10-11 | Frame-time audit of the branch | After the user's rule and their suspicion of M5c: the A12's per-tick compute, branch start (ml-p0) against HEAD (ml-m5c), `android_speed.py` vs and Demo, three interleaved rounds (sounds muted): main 11.05 against 11.27 ms (vs; ranges 11.03–11.26 and 11.15–11.27), 11.71 against 11.72 (Demo), render 7.51/7.60 and 6.08/6.15: every pair overlaps. Those runs never mixed: muted, the Android feed outputs zeros without calling the mixer, and headless never mixes. A benchmark of the mixer loop found M5c's cost: **+31% per voice-frame on the A12** (48.7 against 37.2 ns; ~4.5 ms of audio-thread CPU per second with 8 voices). The gates now measure frame time (three tiers, above) | [evidence](../evidence/ml-frame-time-audit-20261011.json) | — |
+| 2026-10-11 | M5d: the mixer through the buffer's address, mono read once | PCM read through raw pointers where the loop's indices provably stay in the buffer (step ≥ 0 and, looping, shorter than the buffer; otherwise M5c's checked readers), and a mono voice reads each frame once for both channels; same expressions, output bit for bit. **A12 mixer 48.7 → 36.2 ns per voice-frame, below the float loop before M5c (37.2)**; in play (sounds mixed) the audio thread 1.12 → 1.03–1.07 ms per tick, main 10.29 against 10.39, render 7.03 against 7.38, process 26.36 against 26.96 ms per tick (overlapping); memory unchanged (M5c's 16 MB kept). Load unchanged: the gate's first run waited 3.1 s for the read-ahead, an order effect the 4+4 A/B with sounds and a muted control (mixer not running) showed (5.42–5.86 against 5.27–5.86 s; launch to loaded 12.38–12.64 against 12.48–12.76 s). All 10 scenarios, AppKit, unchecked and emulator equal, frames identical; 5 suites incl. the short-buffer and long-step test; review: one unreachable negative-step case fixed before the gate | [evidence](../evidence/ml-m5d-mixer-raw-mono-20261011.json) | this commit |
 
 ## Next task
 
+Warm-up run in the phone A/B (`load_memory.py --warmup`). Then the read-ahead
+wait in play: with the sounds mixed (and on this day muted too) the load waits
+0.4–1.4 s for the read-ahead (0.0 s in the muted gates since L17); find what
+delays the read-ahead (thread placement against the audio callback, storage)
+by the phone timeline. Then, as before:
 M7b (the file events' bytes in the catalog operation log, kept by the loaded
 menu's retained input: ~22 MB on the Mac heap; every session level's tests
 compare those journals, so only the retained copy can be compacted, and
