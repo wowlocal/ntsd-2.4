@@ -4,6 +4,33 @@ import Foundation
 /// check packaged-input integrity; Apple builds keep CryptoKit, and a macOS
 /// test requires this digest to equal CryptoKit's on every packaged input.
 public enum PortableSHA256 {
+    public typealias BlockFunction = @convention(c) (UnsafeMutablePointer<UInt32>, UnsafePointer<UInt8>, Int) -> Void
+    /// A host's compression of whole blocks, the same function (the Android
+    /// host's ARMv8 SHA-2 instructions): the eight state words, the data and
+    /// its count of 64-byte blocks. Set only by `install` (MEMORY_LOADING L11).
+    nonisolated(unsafe) private(set) static var blockFunction: BlockFunction?
+    static func referenceBlocks(_ state: UnsafeMutablePointer<UInt32>, _ data: UnsafePointer<UInt8>, _ count: Int) {
+        Hasher.blocks(state, data, count)
+    }
+    /// Whether a host block function is installed (reported with the started
+    /// event, so a timing shows which path ran).
+    public static var usesHostBlocks: Bool { blockFunction != nil }
+    /// Installs `function` when it gives this file's digests on inputs across
+    /// block boundaries, else keeps the Swift compression; returns whether it
+    /// installed it. Call before anything hashes (it is read unsynchronized).
+    @discardableResult public static func install(_ function: BlockFunction?) -> Bool {
+        var state: UInt64 = 0x9e3779b97f4a7c15
+        let inputs = [0, 3, 55, 56, 63, 64, 65, 119, 120, 128, 1000, 70_000].map { length in
+            (0..<length).map { _ in state = state &* 6364136223846793005 &+ 1442695040888963407; return UInt8(truncatingIfNeeded: state >> 56) }
+        }
+        blockFunction = nil
+        guard let function else { return false }
+        let expected = inputs.map { hash(data: $0) }
+        blockFunction = function
+        if inputs.map({ hash(data: $0) }) != expected { blockFunction = nil; return false }
+        return true
+    }
+
     public static func hash<D: DataProtocol>(data: D) -> [UInt8] {
         var hasher = Hasher()
         for region in data.regions { region.withUnsafeBytes { hasher.update($0) } }
@@ -28,10 +55,11 @@ public enum PortableSHA256 {
                 offset = take
                 guard pending.count == 64 else { return }
                 let block = pending
-                block.withUnsafeBytes { compress($0.baseAddress!) }
+                block.withUnsafeBytes { compressBlocks($0.baseAddress!, 1) }
                 pending.removeAll(keepingCapacity: true)
             }
-            while bytes.count - offset >= 64 { compress(base + offset); offset += 64 }
+            let blocks = (bytes.count - offset) / 64
+            if blocks > 0 { compressBlocks(base + offset, blocks); offset += blocks * 64 }
             if offset < bytes.count {
                 pending.append(contentsOf: UnsafeRawBufferPointer(start: base + offset, count: bytes.count - offset))
             }
@@ -50,6 +78,19 @@ public enum PortableSHA256 {
             digest.reserveCapacity(32)
             for word in [h0, h1, h2, h3, h4, h5, h6, h7] { for shift in stride(from: 24, through: 0, by: -8) { digest.append(UInt8(truncatingIfNeeded: word >> UInt32(shift))) } }
             return digest
+        }
+
+        private mutating func compressBlocks(_ data: UnsafeRawPointer, _ count: Int) {
+            guard let function = PortableSHA256.blockFunction else {
+                for block in 0..<count { compress(data + block * 64) }
+                return
+            }
+            withUnsafeTemporaryAllocation(of: UInt32.self, capacity: 8) { words in
+                let s = words.baseAddress!
+                s[0] = h0; s[1] = h1; s[2] = h2; s[3] = h3; s[4] = h4; s[5] = h5; s[6] = h6; s[7] = h7
+                function(s, data.assumingMemoryBound(to: UInt8.self), count)
+                h0 = s[0]; h1 = s[1]; h2 = s[2]; h3 = s[3]; h4 = s[4]; h5 = s[5]; h6 = s[6]; h7 = s[7]
+            }
         }
 
         private mutating func compress(_ block: UnsafeRawPointer) {
@@ -72,6 +113,17 @@ public enum PortableSHA256 {
             }
             h0 &+= a; h1 &+= b; h2 &+= c; h3 &+= d
             h4 &+= e; h5 &+= f; h6 &+= g; h7 &+= h
+        }
+
+        /// The Swift compression of `count` blocks on caller-owned state words,
+        /// for tests of `install` (it is what a host function must equal).
+        static func blocks(_ state: UnsafeMutablePointer<UInt32>, _ data: UnsafePointer<UInt8>, _ count: Int) {
+            var hasher = Hasher()
+            hasher.h0 = state[0]; hasher.h1 = state[1]; hasher.h2 = state[2]; hasher.h3 = state[3]
+            hasher.h4 = state[4]; hasher.h5 = state[5]; hasher.h6 = state[6]; hasher.h7 = state[7]
+            for block in 0..<count { hasher.compress(UnsafeRawPointer(data) + block * 64) }
+            state[0] = hasher.h0; state[1] = hasher.h1; state[2] = hasher.h2; state[3] = hasher.h3
+            state[4] = hasher.h4; state[5] = hasher.h5; state[6] = hasher.h6; state[7] = hasher.h7
         }
 
         @inline(__always) private static func rotr(_ x: UInt32, _ n: UInt32) -> UInt32 { (x >> n) | (x << (32 - n)) }

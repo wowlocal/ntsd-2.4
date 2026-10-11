@@ -25,6 +25,12 @@ int ntsd_pin_current_thread(unsigned long mask);
 /// (CORE_REALTIME P0).
 unsigned long ntsd_cpu_cluster_mask(int fast);
 
+/// SHA-256 block compression with the ARMv8 SHA-2 instructions (MEMORY_LOADING
+/// L11): `state` the eight hash words, `data` `blocks` 64-byte blocks. Use only
+/// when ntsd_sha256_available() is nonzero (the CPU has them).
+int ntsd_sha256_available(void);
+void ntsd_sha256_blocks(uint32_t *_Nonnull state, const uint8_t *_Nonnull data, size_t blocks);
+
 // libdispatch's main-queue hooks, the ones CoreFoundation's run loop uses: the
 // host puts the main queue's eventfd on the main thread's ALooper and drains it.
 extern int _dispatch_get_main_queue_handle_4CF(void);

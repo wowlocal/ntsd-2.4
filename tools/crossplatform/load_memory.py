@@ -140,6 +140,8 @@ def android_run(o, apk, label):
         started = next((e for e in events if e.get("event") == "started"), None)
         if started and "uptime" in started:
             row["startupSeconds"] = round(started["uptime"] - started_at, 2)
+        if started and "sha256HostBlocks" in started:
+            row["sha256HostBlocks"] = started["sha256HostBlocks"]
         if loaded:
             row["loadSeconds"] = round(loaded["seconds"], 2)
             if "uptime" in loaded:

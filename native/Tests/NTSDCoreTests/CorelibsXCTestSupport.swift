@@ -271,5 +271,6 @@ extension OriginalWorldHUDTests { convenience init() { self.init(name: "helper",
 extension OriginalWorldImpulsesTests { convenience init() { self.init(name: "helper", testClosure: { _ in }) } }
 extension OriginalWorldLinksTests { convenience init() { self.init(name: "helper", testClosure: { _ in }) } }
 extension OriginalWorldPhysicsTests { convenience init() { self.init(name: "helper", testClosure: { _ in }) } }
+extension PortableSHA256BlockFunctionTests { convenience init() { self.init(name: "helper", testClosure: { _ in }) } }
 extension PortableSHA256Tests { convenience init() { self.init(name: "helper", testClosure: { _ in }) } }
 #endif

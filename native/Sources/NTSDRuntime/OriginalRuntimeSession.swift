@@ -229,7 +229,7 @@ public enum OriginalRuntimeSessionBoundary: Error, Equatable {
             catch { soundOutputError = String(reflecting:error) }
             let dates = started.host.snapshot.startup?.dates?.dates.map { String(decoding:$0.dropLast(),as:UTF8.self) } ?? []
             let owners = Dictionary(grouping:started.requests,by:\.owner).mapValues(\.count)
-            Self.emit(["event":"started","uptime":ProcessInfo.processInfo.systemUptime,"sequence":started.sequence,"window":started.window,"requests":started.requests.count,
+            Self.emit(["event":"started","uptime":ProcessInfo.processInfo.systemUptime,"sha256HostBlocks":PortableSHA256.usesHostBlocks,"sequence":started.sequence,"window":started.window,"requests":started.requests.count,
                 "owners":owners,"attempts":started.attempts,"dates":dates,"overlay":overlay.root.path,
                 "musicOutput":"packaged ALAC tracks; graph-event looping",
                 "soundOutput":soundOutputError ?? soundOutput ?? "",

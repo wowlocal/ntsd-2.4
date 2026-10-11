@@ -65,6 +65,9 @@ func ntsdAndroidOnCreate(_ activity: UnsafeMutablePointer<ANativeActivity>) {
         }
         callbacks.pointee.onDestroy = { _ in Foundation.exit(0) }
         ntsd_android_hide_system_bars(activity)
+        // The packaged inputs' SHA-256 with the CPU's SHA-2 instructions, after
+        // they give the Swift digests (MEMORY_LOADING L11).
+        if ntsd_sha256_available() != 0 { PortableSHA256.install(ntsd_sha256_blocks) }
         app.prepareData()
     }
 
