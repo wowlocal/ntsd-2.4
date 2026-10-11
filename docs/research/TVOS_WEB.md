@@ -11,10 +11,19 @@ work was merged into `main`: "теперь изучи как ты делал к�
 качественный харнес и запустил loop с сборкой поддержки apple tv и web (вроде
 как swift умеет компилироваться в wasm)".
 **Status:** research and transfer.
-**Branch:** `exp/tvos-web`, from `main` 6b4bffd. Local only: it has no
-upstream, so the post-commit hook's push fails harmlessly. Publishing it,
-merging into `dev/crossplatform`/`main`, enabling CI or publishing builds need
+**Branch:** `exp/tvos-web`, from `main` 6b4bffd. Pushed to GitHub with the
+user's approval (2026-10-11: "публикуй на github, без проблем"); it tracks
+`origin/exp/tvos-web` and the post-commit hook pushes every commit. Merging
+into `dev/crossplatform`/`main`, enabling CI or publishing builds still need
 the user.
+**Hosting (user, 2026-10-11):** test locally; for publishing later the user
+plans Vercel and wants it free or at minimal cost (no income from it). W3
+measures what a player must download (data after compression, what is
+needed before the first frame, the `.wasm` size) and compares free tiers
+(checked 2026-10-11: Vercel Hobby 100 GB/month, 100 MB per file; Cloudflare
+R2 10 GB with free egress; Cloudflare Pages 25 MiB per file). The data are
+the original game's files: publishing them is the user's call; a page that
+opens the player's own copy avoids distributing them.
 **Game result:** unchanged by definition. A new host answers the same
 `OriginalRequestExchange` requests as every other host; Core and Runtime
 changes are behaviour-neutral portability patches only.
