@@ -76,12 +76,16 @@ public struct OriginalStateRecord: Equatable, Sendable {
             let made = make(count: bytes.count)
             made.with { n, b, m in
                 bytes.withUnsafeBufferPointer { b.update(from: $0.baseAddress!, count: n) }
+                precondition(defined.count == n, "byte and definedness counts")
                 defined.withUnsafeBufferPointer { d in
+                    // Eight Bools (bytes 0 or 1) at a time (MEMORY_LOADING L15).
                     var i = 0
-                    while i < n {
+                    let raw = UnsafeRawPointer(d.baseAddress!)
+                    while i + 8 <= n { m[i >> 3] = OriginalStateRecord.packDefined(raw.loadUnaligned(fromByteOffset: i, as: UInt64.self)); i += 8 }
+                    if i < n {
                         var v: UInt8 = 0
-                        for k in 0..<min(8, n - i) where d[i + k] { v |= 1 << UInt8(k) }
-                        m[i >> 3] = v; i += 8
+                        for k in 0..<(n - i) where d[i + k] { v |= 1 << UInt8(k) }
+                        m[i >> 3] = v
                     }
                 }
             }
@@ -107,7 +111,7 @@ public struct OriginalStateRecord: Equatable, Sendable {
         func bytesArray(_ range: Range<Int>) -> [UInt8] {
             with { _, b, _ in Array(UnsafeBufferPointer(start: b + range.lowerBound, count: range.count)) }
         }
-        func definedArray(_ range: Range<Int>) -> [Bool] { with { _, _, m in range.map { Flat.bit(m, $0) } } }
+        func definedArray(_ range: Range<Int>) -> [Bool] { with { _, _, m in Flat.bools(m, range) } }
         /// The whole bytes and definedness, cached per written version.
         func wholeBytes() -> [UInt8] {
             OriginalStateRecord.flatWholeLock.lock(); defer { OriginalStateRecord.flatWholeLock.unlock() }
@@ -124,7 +128,7 @@ public struct OriginalStateRecord: Equatable, Sendable {
             return withUnsafeMutablePointers { header, elements in
                 if let made = header.pointee.whole?.defined { return made }
                 let n = header.pointee.count, mask = elements + n
-                let made = (0..<n).map { Flat.bit(mask, $0) }
+                let made = Flat.bools(mask, 0..<n)
                 if header.pointee.whole == nil { header.pointee.whole = FlatWhole() }
                 header.pointee.whole!.defined = made
                 return made
@@ -139,6 +143,20 @@ public struct OriginalStateRecord: Equatable, Sendable {
             return a.with { n, ab, _ in b.with { bn, bb, _ in n == bn && memcmp(ab, bb, n + (n + 7) / 8) == 0 } }
         }
         @inline(__always) static func bit(_ m: UnsafeMutablePointer<UInt8>, _ i: Int) -> Bool { m[i >> 3] & (1 << UInt8(i & 7)) != 0 }
+        /// `range.map { bit(m, $0) }`, eight at a time where the range is
+        /// aligned to a mask byte.
+        static func bools(_ m: UnsafeMutablePointer<UInt8>, _ range: Range<Int>) -> [Bool] {
+            let count = range.count
+            guard count > 0 else { return [] }
+            return [Bool](unsafeUninitializedCapacity: count) { buffer, initialized in
+                let out = buffer.baseAddress!, raw = UnsafeMutableRawPointer(out)
+                var i = range.lowerBound, k = 0
+                while i < range.upperBound && i & 7 != 0 { (out + k).initialize(to: bit(m, i)); i += 1; k += 1 }
+                while i + 8 <= range.upperBound { raw.storeBytes(of: OriginalStateRecord.spreadDefined(m[i >> 3]), toByteOffset: k, as: UInt64.self); i += 8; k += 8 }
+                while i < range.upperBound { (out + k).initialize(to: bit(m, i)); i += 1; k += 1 }
+                initialized = count
+            }
+        }
         @inline(__always) static func set(_ m: UnsafeMutablePointer<UInt8>, _ i: Int) { m[i >> 3] |= 1 << UInt8(i & 7) }
         @inline(__always) static func put(_ m: UnsafeMutablePointer<UInt8>, _ i: Int, _ on: Bool) {
             if on { m[i >> 3] |= 1 << UInt8(i & 7) } else { m[i >> 3] &= ~(1 << UInt8(i & 7)) }
@@ -1011,4 +1029,20 @@ public struct OriginalStateRecord: Equatable, Sendable {
     var taken = placeholder
     swap(&taken, &value)
     return taken
+}
+
+extension OriginalStateRecord {
+    /// Eight Bools loaded as one word (byte k is 0 or 1) as mask bits: the
+    /// multiply moves byte k's low bit to bit 56 + k, with no carries
+    /// (MEMORY_LOADING L15).
+    @inline(__always) static func packDefined(_ word: UInt64) -> UInt8 {
+        UInt8(truncatingIfNeeded: (UInt64(littleEndian: word) &* 0x0102040810204080) >> 56)
+    }
+    /// A mask byte as eight Bools in one word, little-endian (byte k is bit
+    /// k): each byte keeps its own bit, which `+ 0x7f` carries to the byte's
+    /// top bit without reaching the next byte.
+    @inline(__always) static func spreadDefined(_ bits: UInt8) -> UInt64 {
+        let kept = (UInt64(bits) &* 0x0101010101010101) & 0x8040201008040201
+        return (((kept &+ 0x7f7f7f7f7f7f7f7f) >> 7) & 0x0101010101010101).littleEndian
+    }
 }

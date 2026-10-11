@@ -352,16 +352,19 @@ public struct OriginalApplicationCatalogSession {
             let p = try controls.prepareWave(request,device),index = request.index
             let address = 0x452948+index*4,outputBefore = try word(address)
             try emit(.wave(index,.init(.load,[p.destination],[request.path.unicodeScalars.map { UInt8($0.value) }])))
-            var candidate = sounds
-            try candidate.load(request,device:device,outputBefore:outputBefore,preparation:p,fileSource:file,
+            // In place: the registry's load stores its entry only after its
+            // last throwing step, and any error here ends the attempt, which
+            // publishes nothing. A copy for a rollback made every registration
+            // copy both dictionaries of every earlier sound (MEMORY_LOADING L14).
+            try sounds.load(request,device:device,outputBefore:outputBefore,preparation:p,fileSource:file,
                 outputStored:{ try self.put(address,$0) },onWave:{ e in
                     if e.kind != .load { self.operations.append(.wave(index,e)) }; try self.emit(.wave(index,e))
                 },onVolume:{ args in
                     let result = try self.controls.setVolume(.init(index,request.path,p.destination,p.device),args)
                     self.operations.append(.volume(args,ignoredResult:result)); try self.emit(.volume(args,ignoredResult:result))
                 })
-            guard let owner = candidate.owners[index] else { throw Boundary.missingOwners }
-            try retainWave(owner);sounds = candidate;waveOwners.append(owner)
+            guard let owner = sounds.owners[index] else { throw Boundary.missingOwners }
+            try retainWave(owner);waveOwners.append(owner)
             if let legacy = p.legacyPlatform { waveInputs.append(legacy) }
         }
         func soundCache(_ bytes: [UInt8],_ count: Int) throws {

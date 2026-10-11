@@ -2,6 +2,9 @@ import Foundation
 
 /// Device portion shared by frame410a20..410a67 and weapon40be01..40be37.
 /// The caller's path cache is committed only after this method returns.
+/// `load` stores its buffer and owner only after its last throwing step, so
+/// a throwing load leaves the value unchanged (the catalog session loads in
+/// place on that basis, MEMORY_LOADING L14).
 public struct OriginalRegisteredSoundLoading {
     public private(set) var buffers: [Int: OriginalWaveLoadResult] = [:]
     public private(set) var owners: [Int: OriginalWaveOwnership] = [:]

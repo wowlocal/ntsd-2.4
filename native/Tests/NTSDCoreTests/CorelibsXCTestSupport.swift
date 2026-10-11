@@ -103,6 +103,7 @@ extension OriginalCRTTests { convenience init() { self.init(name: "helper", test
 extension OriginalDIBValidationTests { convenience init() { self.init(name: "helper", testClosure: { _ in }) } }
 extension OriginalDataTests { convenience init() { self.init(name: "helper", testClosure: { _ in }) } }
 extension OriginalDecimalMaterializationTests { convenience init() { self.init(name: "helper", testClosure: { _ in }) } }
+extension OriginalDefinedBitsTests { convenience init() { self.init(name: "helper", testClosure: { _ in }) } }
 extension OriginalDemoMusicTests { convenience init() { self.init(name: "helper", testClosure: { _ in }) } }
 extension OriginalDiagnosticNumberTests { convenience init() { self.init(name: "helper", testClosure: { _ in }) } }
 extension OriginalDIBPixelsTests { convenience init() { self.init(name: "helper", testClosure: { _ in }) } }
