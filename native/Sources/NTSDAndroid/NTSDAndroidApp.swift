@@ -123,12 +123,47 @@ func ntsdAndroidOnCreate(_ activity: UnsafeMutablePointer<ANativeActivity>) {
         if (try? Data(contentsOf:marker)) == list { return }
         let fm = FileManager.default
         try? fm.removeItem(at:data)
-        for line in String(decoding:list,as:UTF8.self).split(separator:"\n") {
-            let path = String(line.split(separator:"\t")[0]), target = data.appendingPathComponent(path)
-            try fm.createDirectory(at:target.deletingLastPathComponent(),withIntermediateDirectories:true)
-            try asset(manager,path).write(to:target)
+        let paths = String(decoding:list,as:UTF8.self).split(separator:"\n").map { String($0.split(separator:"\t")[0]) }
+        // The directories first, in the list's order; then the files on every
+        // core: one after another the A12 took ~25 s for the 726 MB (MEMORY_LOADING
+        // S2). The first failing file in the list's order is reported, as
+        // before, and the marker is still written last.
+        var made = Set<String>()
+        for path in paths {
+            let directory = data.appendingPathComponent(path).deletingLastPathComponent()
+            if made.insert(directory.path).inserted { try fm.createDirectory(at:directory,withIntermediateDirectories:true) }
         }
+        var results = [Result<Void,Error>?](repeating:nil,count:paths.count)
+        let all = ntsd_cpu_cluster_mask(1) | ntsd_cpu_cluster_mask(0)
+        results.withUnsafeMutableBufferPointer { slots in
+            OriginalConcurrentInputs.threadLoop(paths.count,workers:ProcessInfo.processInfo.activeProcessorCount,
+                threadStart:{ if all != 0 { _ = ntsd_pin_current_thread(all) } }) { i in
+                slots[i] = Result { try copyAsset(manager,paths[i],to:data.appendingPathComponent(paths[i])) }
+            }
+        }
+        for result in results { try result!.get() }
         try list.write(to:marker)
+    }
+    /// One asset to its file, read into a buffer of the asset's length: its
+    /// bytes up to that length or an earlier empty read (Android's reader
+    /// stops at the length; `asset` read until an empty read).
+    nonisolated private static func copyAsset(_ manager: OpaquePointer?,_ path: String,to target: URL) throws {
+        guard let asset = AAssetManager_open(manager,"ntsd/"+path,Int32(AASSET_MODE_STREAMING)) else { throw DataError(path:path) }
+        defer { AAsset_close(asset) }
+        let length = max(0,Int(AAsset_getLength64(asset)))
+        var bytes = try [UInt8](unsafeUninitializedCapacity:length) { buffer,count in
+            var filled = 0
+            while filled < length {
+                let n = AAsset_read(asset,buffer.baseAddress! + filled,length - filled)
+                if n < 0 { throw DataError(path:path) }
+                if n == 0 { break }
+                filled += Int(n)
+            }
+            count = filled
+        }
+        try bytes.withUnsafeMutableBytes { raw in
+            try (raw.isEmpty ? Data() : Data(bytesNoCopy:raw.baseAddress!,count:raw.count,deallocator:.none)).write(to:target)
+        }
     }
 
     // MARK: session

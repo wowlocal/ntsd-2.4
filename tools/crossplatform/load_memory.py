@@ -6,6 +6,7 @@ Usage: load_memory.py OUT_DIR (--android | --local BINARY [--local BINARY ...])
                       [--apk PATH ...] [--serial S] [--lib DIR] [--label L]
                       [--scenario vs|demo] [--bodies N] [--runs K]
                       [--profile-loading SECONDS] [--call-graph G] [--frequency HZ]
+                      [--fresh-data]
                       [--snapshots] [--restore-stayon]
 
 Runs the scenario's app_e2e script as android_speed.py does (virtual clock,
@@ -40,6 +41,8 @@ them run by run (A B A B ...), K runs each, and prints the medians and ranges
 per build: the comparison protocol of MEMORY_LOADING. Rows are appended to
 OUT_DIR/load_memory.jsonl.
 
+--fresh-data (Android) removes the asset-extraction marker before each launch,
+so startupSeconds includes extracting the APK's assets again.
 --profile-loading S records S seconds of simpleperf from the game's launch
 (the load) with android_speed.py's recorder; the profile lands in
 OUT_DIR/<label>-profile (perf.data, binary_cache, profile.json).
@@ -81,6 +84,10 @@ def android_run(o, apk, label):
         phone.shell(s, f"am force-stop {PACKAGE}")
         phone.shell(s, f"run-as {PACKAGE} sh -c 'rm -rf files/speed && mkdir -p files/speed/overlay && cat > files/args.txt'",
                     input="\n".join(arguments(o.scenario, f"{FILES}/speed/overlay", f"{FILES}/speed/events.jsonl")) + "\n")
+        if o.fresh_data:
+            # The next launch extracts the APK's assets again (MEMORY_LOADING S2).
+            phone.shell(s, f"run-as {PACKAGE} rm -f files/ntsd-data/.extracted")
+            row["freshData"] = True
         launched = time.time()
         phone.shell(s, f"am start -n {PACKAGE}/android.app.NativeActivity")
         pid = ""
@@ -208,6 +215,7 @@ def main():
     a.add_argument("--profile-loading", type=int, default=0)
     a.add_argument("--call-graph", default="dwarf,8192"); a.add_argument("--frequency", type=int, default=200)
     a.add_argument("--snapshots", action="store_true"); a.add_argument("--restore-stayon", action="store_true")
+    a.add_argument("--fresh-data", action="store_true")
     o = a.parse_args()
     out = Path(o.out); out.mkdir(parents=True, exist_ok=True)
     builds = [str(b) for b in o.local] if o.local else (o.apk or [None])
