@@ -47,7 +47,7 @@ public struct OriginalApplicationCatalogInputs: Equatable {
             }
             for (i,part) in parts.enumerated() {
                 url.appendPathComponent(String(part))
-                guard fm.fileExists(atPath:url.path) else { throw Boundary.missing(path) }
+                guard OriginalFileFacts.exists(url) else { throw Boundary.missing(path) }
                 let v = try OriginalFileFacts.of(url,[.isDirectoryKey,.isRegularFileKey,.isSymbolicLinkKey,.fileSizeKey])
                 guard v.isSymbolicLink != true else { throw Boundary.invalid(path) }
                 if i+1 == parts.count {

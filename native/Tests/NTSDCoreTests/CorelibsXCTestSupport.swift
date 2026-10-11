@@ -225,6 +225,7 @@ extension OriginalPagedStageTests { convenience init() { self.init(name: "helper
 extension OriginalPausedGameplayTests { convenience init() { self.init(name: "helper", testClosure: { _ in }) } }
 extension OriginalPlaybackInformationTests { convenience init() { self.init(name: "helper", testClosure: { _ in }) } }
 extension OriginalPlaybackPrologueTests { convenience init() { self.init(name: "helper", testClosure: { _ in }) } }
+extension OriginalPosixFileFactsTests { convenience init() { self.init(name: "helper", testClosure: { _ in }) } }
 extension OriginalPostDrawCommandsTests { convenience init() { self.init(name: "helper", testClosure: { _ in }) } }
 extension OriginalPostDrawLifecycleTests { convenience init() { self.init(name: "helper", testClosure: { _ in }) } }
 extension OriginalPostDrawOpointTests { convenience init() { self.init(name: "helper", testClosure: { _ in }) } }

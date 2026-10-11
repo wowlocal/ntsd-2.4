@@ -1,0 +1,653 @@
+{
+ "study": "docs/research/MEMORY_LOADING.md",
+ "increment": "ml-l17",
+ "previous": "ml-l16",
+ "phase": "L17 (loading time, Linux and Android): the package loaders' file facts from lstat and stat",
+ "change": "OriginalFileFacts.of answers on Linux and Android with lstat (directory, regular file and symbolic link from S_IFMT, the size of a regular file, nil for keys not asked), falling back to resourceValues when lstat fails so a failure throws resourceValues' own error; OriginalFileFacts.exists answers fileExists with stat. The loaders' per-file reads use it for every path component. Darwin keeps resourceValues and fileExists, Windows its own branch.",
+ "profile": "A12 L13 profile of the read-ahead threads: URL.resourceValues 21.4% of their samples (FileManager attribute dictionaries, fstatat, path strings), ~1.8 ms per packaged file",
+ "suites": [
+  "OriginalExclusivityChecksTests: Executed 1 test, with 0 failures (0 unexpected) in 0.002 (0.005) seconds",
+  "OriginalPosixFileFactsTests: Executed 1 test, with 3 failures (0 unexpected) in 0.686 (0.687) seconds",
+  "OriginalConcurrentInputsTests: Executed 7 tests, with 0 failures (0 unexpected) in 1.608 (1.609) seconds",
+  "OriginalApplicationCatalogInputsTests: Executed 4 tests, with 0 failures (0 unexpected) in 8.116 (8.117) seconds",
+  "OriginalApplicationStartupInputsTests: Executed 4 tests, with 0 failures (0 unexpected) in 0.279 (0.280) seconds",
+  "OriginalLoadingReadAheadTests: Executed 5 tests, with 0 failures (0 unexpected) in 1.455 (1.457) seconds",
+  "OriginalApplicationLoadedLaunchTests: Executed 2 tests, with 0 failures (0 unexpected) in 52.160 (52.161) seconds",
+  "OriginalMacRuntimeStartupTests: Executed 5 tests, with 0 failures (0 unexpected) in 0.572 (0.573) seconds",
+  "OriginalMacRuntimeLoadingTests: Executed 7 tests, with 0 failures (0 unexpected) in 1.797 (1.798) seconds"
+ ],
+ "review": "independent read-only reviewer: no bug (every loader decision and Boundary error unchanged on Linux and Android for regular, empty, directory, symlink, dangling, missing, unsearchable, FIFO and trailing-slash entries); follow-ups applied before the gate: lstat failures answered by resourceValues itself (an earlier corelibs maps ENAMETOOLONG differently), Int(exactly:) for the size, comments, test cases (FIFO, trailing slash, failures)",
+ "notes": "A12 peak footprint 688-734 against 685-694 MB (overlapping, within noise; L17 changes no storage). The Mac runs the unchanged Darwin path (load 0.397 against 0.399 s).",
+ "testedTrees": "native 36b1a699efbd0b89ff5466bd34f1383795f0ce3f tools 366be20610379cbb0f18032b61adb51c5d444193",
+ "gate": [
+  "native 36b1a699efbd0b89ff5466bd34f1383795f0ce3f tools 366be20610379cbb0f18032b61adb51c5d444193",
+  "headless built (checked: 3227 beginAccess)",
+  "app built (checked: 3341 beginAccess)",
+  "unchecked headless built (0 beginAccess)",
+  "apk saved",
+  "apk libraries kept",
+  "launches: crashes 0 of 20",
+  "phone A/B exit=0",
+  "{\"summary\": {\"build\": \"ml-l17\", \"runs\": 3, \"startupSeconds\": {\"median\": 1.51, \"min\": 1.4, \"max\": 1.58}, \"loadSeconds\": {\"median\": 6.46, \"min\": 6.43, \"max\": 6.53}, \"startToLoadedSeconds\": {\"median\": 12.35, \"min\": 12.18, \"max\": 12.41}, \"peakResidentMB\": {\"median\": 686, \"min\": 668, \"max\": 713}, \"peakFootprintMB\": {\"median\": 707, \"min\": 688, \"max\": 734}, \"loadedResidentMB\": {\"median\": 657, \"min\": 624, \"max\": 665}, \"bodiesResidentMB\": {\"median\": 685, \"min\": 664, \"max\": 712}}}",
+  "{\"summary\": {\"build\": \"ml-l16\", \"runs\": 2, \"startupSeconds\": {\"median\": 1.435, \"min\": 1.43, \"max\": 1.44}, \"loadSeconds\": {\"median\": 7.045, \"min\": 6.79, \"max\": 7.3}, \"startToLoadedSeconds\": {\"median\": 13.075, \"min\": 12.91, \"max\": 13.24}, \"peakResidentMB\": {\"median\": 670.0, \"min\": 665, \"max\": 675}, \"peakFootprintMB\": {\"median\": 689.5, \"min\": 685, \"max\": 694}, \"loadedResidentMB\": {\"median\": 633.0, \"min\": 630, \"max\": 636}, \"bodiesResidentMB\": {\"median\": 661.5, \"min\": 660, \"max\": 663}}}",
+  "phone_done",
+  "emu exit=0",
+  "{\"scenario\": \"vs\", \"seconds\": 62.2, \"result\": \"equal\", \"differs\": []}",
+  "{\"frames\": 1832, \"mismatched\": 0, \"result\": \"identical\"}",
+  "bundle exit=0",
+  "OriginalPosixFileFactsTests exit=1 0s \t Executed 1 test, with 3 failures (0 unexpected) in 0.686 (0.687) seconds",
+  "/Users/michael/Developer/ntsd-2.4/native/Tests/NTSDCoreTests/OriginalPosixFileFactsTests.swift:48: error: -[NTSDCoreTests.OriginalPosixFileFactsTests testPosixFactsMatchResourceValues] : XCTAssertEqual failed: (\"Error Domain=NSCocoaErrorDomain Code=260 \"The file \u201cmissing\u201d couldn\u2019t be opened because ",
+  "/Users/michael/Developer/ntsd-2.4/native/Tests/NTSDCoreTests/OriginalPosixFileFactsTests.swift:48: error: -[NTSDCoreTests.OriginalPosixFileFactsTests testPosixFactsMatchResourceValues] : XCTAssertEqual failed: (\"Error Domain=NSCocoaErrorDomain Code=256 \"The file \u201cx\u201d couldn\u2019t be opened.\" UserInfo={NS",
+  "/Users/michael/Developer/ntsd-2.4/native/Tests/NTSDCoreTests/OriginalPosixFileFactsTests.swift:48: error: -[NTSDCoreTests.OriginalPosixFileFactsTests testPosixFactsMatchResourceValues] : XCTAssertEqual failed: (\"Error Domain=NSCocoaErrorDomain Code=257 \"The file \u201cx\u201d couldn\u2019t be opened because you do",
+  "suites_done",
+  "{\"scenario\": \"vs\", \"exit\": 0, \"seconds\": 63.5, \"result\": \"equal\", \"differs\": []}",
+  "{\"scenario\": \"mission\", \"exit\": 0, \"seconds\": 61.4, \"result\": \"equal\", \"differs\": []}",
+  "{\"scenario\": \"demo\", \"exit\": 0, \"seconds\": 46.0, \"result\": \"equal\", \"differs\": []}",
+  "{\"scenario\": \"war\", \"exit\": 0, \"seconds\": 100.4, \"result\": \"equal\", \"differs\": []}",
+  "{\"scenario\": \"playback\", \"exit\": 0, \"seconds\": 71.3, \"result\": \"equal\", \"differs\": []}",
+  "{\"scenario\": \"tournament\", \"exit\": 0, \"seconds\": 91.7, \"result\": \"equal\", \"differs\": []}",
+  "{\"scenario\": \"altenter\", \"exit\": 0, \"seconds\": 64.9, \"result\": \"equal\", \"differs\": []}",
+  "{\"scenario\": \"tournament-win\", \"exit\": 0, \"seconds\": 95.6, \"result\": \"equal\", \"differs\": []}",
+  "{\"scenario\": \"team-tournament\", \"exit\": 0, \"seconds\": 72.2, \"result\": \"equal\", \"differs\": []}",
+  "{\"scenario\": \"joystick\", \"exit\": 0, \"seconds\": 19.6, \"result\": \"equal\", \"differs\": []}",
+  "{\"frames\": 1832, \"mismatched\": 0, \"result\": \"identical\"}",
+  "{\"scenario\": \"vs\", \"exit\": 0, \"seconds\": 61.8, \"result\": \"equal\", \"differs\": []}",
+  "{\"scenario\": \"playback\", \"exit\": 0, \"seconds\": 67.0, \"result\": \"equal\", \"differs\": []}",
+  "{\"frames\": 3960, \"mismatched\": 0, \"result\": \"identical\"}",
+  "{\"scenario\": \"vs\", \"exit\": 0, \"seconds\": 66.1, \"result\": \"equal\", \"differs\": []}",
+  "{\"scenario\": \"demo\", \"exit\": 0, \"seconds\": 48.0, \"result\": \"equal\", \"differs\": []}",
+  "{\"frames\": 1832, \"mismatched\": 0, \"result\": \"identical\"}",
+  "scenarios_done",
+  "mac A/B exit=0",
+  "{\"summary\": {\"build\": \"frozen-unchecked-ml-l17\", \"runs\": 3, \"startupSeconds\": {\"median\": 0.046, \"min\": 0.043, \"max\": 0.047}, \"loadSeconds\": {\"median\": 0.397, \"min\": 0.385, \"max\": 0.399}, \"startToLoadedSeconds\": {\"median\": 0.767, \"min\": 0.766, \"max\": 0.771}, \"peakResidentMB\": {\"median\": 809, \"min\": 807, \"max\": 820}, \"loadedResidentMB\": {\"median\": 767, \"min\": 759, \"max\": 775}, \"bodiesResidentMB\": {\"median\": 809, \"min\": 807, \"max\": 820}}}",
+  "{\"summary\": {\"build\": \"frozen-unchecked-ml-l16\", \"runs\": 3, \"startupSeconds\": {\"median\": 0.045, \"min\": 0.044, \"max\": 0.072}, \"loadSeconds\": {\"median\": 0.399, \"min\": 0.384, \"max\": 0.399}, \"startToLoadedSeconds\": {\"median\": 0.785, \"min\": 0.762, \"max\": 0.794}, \"peakResidentMB\": {\"median\": 811, \"min\": 783, \"max\": 829}, \"loadedResidentMB\": {\"median\": 768, \"min\": 733, \"max\": 777}, \"bodiesResidentMB\": {\"median\": 811, \"min\": 783, \"max\": 829}}}",
+  "gate_done"
+ ],
+ "phone": {
+  "summary": {
+   "ml-l17": {
+    "runs": 3,
+    "loadSeconds": {
+     "median": 6.46,
+     "min": 6.43,
+     "max": 6.53
+    },
+    "startupSeconds": {
+     "median": 1.51,
+     "min": 1.4,
+     "max": 1.58
+    },
+    "startToLoadedSeconds": {
+     "median": 12.35,
+     "min": 12.18,
+     "max": 12.41
+    },
+    "peakFootprintMB": {
+     "median": 707,
+     "min": 688,
+     "max": 734
+    },
+    "peakResidentMB": {
+     "median": 686,
+     "min": 668,
+     "max": 713
+    },
+    "loadedResidentMB": {
+     "median": 657,
+     "min": 624,
+     "max": 665
+    },
+    "bodiesResidentMB": {
+     "median": 685,
+     "min": 664,
+     "max": 712
+    },
+    "bodiesSwapMB": {
+     "median": 22,
+     "min": 22,
+     "max": 22
+    },
+    "mainCpuToLoadedSeconds": {
+     "median": 11.89,
+     "min": 11.75,
+     "max": 11.99
+    },
+    "loadedCounts": [
+     {
+      "allocations": 16105,
+      "audioRequests": 2072,
+      "bitmapRequests": 12817,
+      "files": 621
+     }
+    ]
+   },
+   "ml-l16": {
+    "runs": 2,
+    "loadSeconds": {
+     "median": 7.045,
+     "min": 6.79,
+     "max": 7.3
+    },
+    "startupSeconds": {
+     "median": 1.435,
+     "min": 1.43,
+     "max": 1.44
+    },
+    "startToLoadedSeconds": {
+     "median": 13.075,
+     "min": 12.91,
+     "max": 13.24
+    },
+    "peakFootprintMB": {
+     "median": 689.5,
+     "min": 685,
+     "max": 694
+    },
+    "peakResidentMB": {
+     "median": 670.0,
+     "min": 665,
+     "max": 675
+    },
+    "loadedResidentMB": {
+     "median": 633.0,
+     "min": 630,
+     "max": 636
+    },
+    "bodiesResidentMB": {
+     "median": 661.5,
+     "min": 660,
+     "max": 663
+    },
+    "bodiesSwapMB": {
+     "median": 22.0,
+     "min": 22,
+     "max": 22
+    },
+    "mainCpuToLoadedSeconds": {
+     "median": 11.85,
+     "min": 11.85,
+     "max": 11.85
+    },
+    "loadedCounts": [
+     {
+      "allocations": 16105,
+      "audioRequests": 2072,
+      "bitmapRequests": 12817,
+      "files": 621
+     }
+    ]
+   }
+  },
+  "runs": [
+   {
+    "label": "ml-l17-ab-01-ml-l17",
+    "host": "android",
+    "serial": "R58R36F7VFD",
+    "scenario": "vs",
+    "bodies": 600,
+    "apk": "ml-l17.apk",
+    "loadedResidentMB": 657,
+    "loadedAnonMB": 605,
+    "loadedFileMB": 42,
+    "loadedSwapMB": 22,
+    "mainCpuToLoadedSeconds": 11.75,
+    "bodiesResidentMB": 685,
+    "bodiesAnonMB": 632,
+    "bodiesFileMB": 44,
+    "bodiesSwapMB": 22,
+    "nativeHeapMB": {
+     "size": 1802,
+     "allocated": 1747,
+     "free": 56,
+     "privateDirty": 607,
+     "swapped": 0
+    },
+    "pssMB": {
+     "Java Heap": 9,
+     "Native Heap": 607,
+     "Code": 22,
+     "Stack": 1,
+     "Graphics": 5,
+     "Private Other": 2,
+     "System": 10,
+     "TOTAL PSS": 655
+    },
+    "peakResidentMB": 686,
+    "peakFootprintMB": 707,
+    "startupSeconds": 1.4,
+    "sha256HostBlocks": true,
+    "loadSeconds": 6.43,
+    "packagesWaitSeconds": 0.0,
+    "startToLoadedSeconds": 12.18,
+    "loadedCounts": {
+     "allocations": 16105,
+     "audioRequests": 2072,
+     "bitmapRequests": 12817,
+     "files": 621
+    },
+    "build": "ml-l17"
+   },
+   {
+    "label": "ml-l17-ab-02-ml-l16",
+    "host": "android",
+    "serial": "R58R36F7VFD",
+    "scenario": "vs",
+    "bodies": 600,
+    "apk": "ml-l16.apk",
+    "loadedResidentMB": 630,
+    "loadedAnonMB": 579,
+    "loadedFileMB": 42,
+    "loadedSwapMB": 22,
+    "mainCpuToLoadedSeconds": 11.85,
+    "bodiesResidentMB": 660,
+    "bodiesAnonMB": 608,
+    "bodiesFileMB": 42,
+    "bodiesSwapMB": 22,
+    "nativeHeapMB": {
+     "size": 1777,
+     "allocated": 1746,
+     "free": 31,
+     "privateDirty": 584,
+     "swapped": 0
+    },
+    "pssMB": {
+     "Java Heap": 9,
+     "Native Heap": 584,
+     "Code": 21,
+     "Stack": 1,
+     "Graphics": 5,
+     "Private Other": 2,
+     "System": 10,
+     "TOTAL PSS": 630
+    },
+    "peakResidentMB": 675,
+    "peakFootprintMB": 694,
+    "startupSeconds": 1.43,
+    "sha256HostBlocks": true,
+    "loadSeconds": 6.79,
+    "packagesWaitSeconds": 0.35,
+    "startToLoadedSeconds": 12.91,
+    "loadedCounts": {
+     "allocations": 16105,
+     "audioRequests": 2072,
+     "bitmapRequests": 12817,
+     "files": 621
+    },
+    "build": "ml-l16"
+   },
+   {
+    "label": "ml-l17-ab-03-ml-l17",
+    "host": "android",
+    "serial": "R58R36F7VFD",
+    "scenario": "vs",
+    "bodies": 600,
+    "apk": "ml-l17.apk",
+    "loadedResidentMB": 665,
+    "loadedAnonMB": 613,
+    "loadedFileMB": 43,
+    "loadedSwapMB": 22,
+    "mainCpuToLoadedSeconds": 11.99,
+    "bodiesResidentMB": 712,
+    "bodiesAnonMB": 658,
+    "bodiesFileMB": 44,
+    "bodiesSwapMB": 22,
+    "nativeHeapMB": {
+     "size": 1826,
+     "allocated": 1746,
+     "free": 79,
+     "privateDirty": 628,
+     "swapped": 0
+    },
+    "pssMB": {
+     "Java Heap": 9,
+     "Native Heap": 628,
+     "Code": 22,
+     "Stack": 1,
+     "Graphics": 5,
+     "Private Other": 7,
+     "System": 10,
+     "TOTAL PSS": 682
+    },
+    "peakResidentMB": 713,
+    "peakFootprintMB": 734,
+    "startupSeconds": 1.51,
+    "sha256HostBlocks": true,
+    "loadSeconds": 6.53,
+    "packagesWaitSeconds": 0.0,
+    "startToLoadedSeconds": 12.41,
+    "loadedCounts": {
+     "allocations": 16105,
+     "audioRequests": 2072,
+     "bitmapRequests": 12817,
+     "files": 621
+    },
+    "build": "ml-l17"
+   },
+   {
+    "label": "ml-l17-ab-04-ml-l16",
+    "host": "android",
+    "serial": "R58R36F7VFD",
+    "scenario": "vs",
+    "bodies": 600,
+    "apk": "ml-l16.apk",
+    "loadedResidentMB": 636,
+    "loadedAnonMB": 584,
+    "loadedFileMB": 43,
+    "loadedSwapMB": 22,
+    "mainCpuToLoadedSeconds": 11.85,
+    "bodiesResidentMB": 663,
+    "bodiesAnonMB": 612,
+    "bodiesFileMB": 42,
+    "bodiesSwapMB": 22,
+    "nativeHeapMB": {
+     "size": 1776,
+     "allocated": 1747,
+     "free": 29,
+     "privateDirty": 582,
+     "swapped": 0
+    },
+    "pssMB": {
+     "Java Heap": 9,
+     "Native Heap": 582,
+     "Code": 21,
+     "Stack": 1,
+     "Graphics": 5,
+     "Private Other": 7,
+     "System": 10,
+     "TOTAL PSS": 634
+    },
+    "peakResidentMB": 665,
+    "peakFootprintMB": 685,
+    "startupSeconds": 1.44,
+    "sha256HostBlocks": true,
+    "loadSeconds": 7.3,
+    "packagesWaitSeconds": 0.69,
+    "startToLoadedSeconds": 13.24,
+    "loadedCounts": {
+     "allocations": 16105,
+     "audioRequests": 2072,
+     "bitmapRequests": 12817,
+     "files": 621
+    },
+    "build": "ml-l16"
+   },
+   {
+    "label": "ml-l17-ab-05-ml-l17",
+    "host": "android",
+    "serial": "R58R36F7VFD",
+    "scenario": "vs",
+    "bodies": 600,
+    "apk": "ml-l17.apk",
+    "loadedResidentMB": 624,
+    "loadedAnonMB": 572,
+    "loadedFileMB": 43,
+    "loadedSwapMB": 22,
+    "mainCpuToLoadedSeconds": 11.89,
+    "bodiesResidentMB": 664,
+    "bodiesAnonMB": 613,
+    "bodiesFileMB": 42,
+    "bodiesSwapMB": 22,
+    "nativeHeapMB": {
+     "size": 1776,
+     "allocated": 1747,
+     "free": 29,
+     "privateDirty": 582,
+     "swapped": 0
+    },
+    "pssMB": {
+     "Java Heap": 9,
+     "Native Heap": 582,
+     "Code": 21,
+     "Stack": 1,
+     "Graphics": 5,
+     "Private Other": 7,
+     "System": 10,
+     "TOTAL PSS": 635
+    },
+    "peakResidentMB": 668,
+    "peakFootprintMB": 688,
+    "startupSeconds": 1.58,
+    "sha256HostBlocks": true,
+    "loadSeconds": 6.46,
+    "packagesWaitSeconds": 0.0,
+    "startToLoadedSeconds": 12.35,
+    "loadedCounts": {
+     "allocations": 16105,
+     "audioRequests": 2072,
+     "bitmapRequests": 12817,
+     "files": 621
+    },
+    "build": "ml-l17"
+   }
+  ]
+ },
+ "mac": {
+  "summary": {
+   "frozen-unchecked-ml-l17": {
+    "runs": 3,
+    "loadSeconds": {
+     "median": 0.397,
+     "min": 0.385,
+     "max": 0.399
+    },
+    "startupSeconds": {
+     "median": 0.046,
+     "min": 0.043,
+     "max": 0.047
+    },
+    "startToLoadedSeconds": {
+     "median": 0.767,
+     "min": 0.766,
+     "max": 0.771
+    },
+    "peakResidentMB": {
+     "median": 809,
+     "min": 807,
+     "max": 820
+    },
+    "loadedResidentMB": {
+     "median": 767,
+     "min": 759,
+     "max": 775
+    },
+    "bodiesResidentMB": {
+     "median": 809,
+     "min": 807,
+     "max": 820
+    },
+    "loadedCounts": [
+     {
+      "allocations": 16105,
+      "audioRequests": 2072,
+      "bitmapRequests": 12817,
+      "files": 621
+     }
+    ]
+   },
+   "frozen-unchecked-ml-l16": {
+    "runs": 3,
+    "loadSeconds": {
+     "median": 0.399,
+     "min": 0.384,
+     "max": 0.399
+    },
+    "startupSeconds": {
+     "median": 0.045,
+     "min": 0.044,
+     "max": 0.072
+    },
+    "startToLoadedSeconds": {
+     "median": 0.785,
+     "min": 0.762,
+     "max": 0.794
+    },
+    "peakResidentMB": {
+     "median": 811,
+     "min": 783,
+     "max": 829
+    },
+    "loadedResidentMB": {
+     "median": 768,
+     "min": 733,
+     "max": 777
+    },
+    "bodiesResidentMB": {
+     "median": 811,
+     "min": 783,
+     "max": 829
+    },
+    "loadedCounts": [
+     {
+      "allocations": 16105,
+      "audioRequests": 2072,
+      "bitmapRequests": 12817,
+      "files": 621
+     }
+    ]
+   }
+  },
+  "runs": [
+   {
+    "label": "ml-l17-mac-ab-01-frozen-unchecked-ml-l17",
+    "host": "mac",
+    "scenario": "vs",
+    "bodies": 600,
+    "binary": "/private/tmp/claude-501/-Users-michael-Developer-ntsd-2-4/1f9218ae-9d5d-4c4e-a8dd-d5254994839c/scratchpad/frozen-unchecked-ml-l17/NTSDHeadless",
+    "startupSeconds": 0.043,
+    "loadSeconds": 0.397,
+    "packagesWaitSeconds": 0.0,
+    "startToLoadedSeconds": 0.767,
+    "loadedCounts": {
+     "allocations": 16105,
+     "audioRequests": 2072,
+     "bitmapRequests": 12817,
+     "files": 621
+    },
+    "loadedResidentMB": 767,
+    "bodiesResidentMB": 809,
+    "peakResidentMB": 809,
+    "build": "frozen-unchecked-ml-l17"
+   },
+   {
+    "label": "ml-l17-mac-ab-02-frozen-unchecked-ml-l16",
+    "host": "mac",
+    "scenario": "vs",
+    "bodies": 600,
+    "binary": "/private/tmp/claude-501/-Users-michael-Developer-ntsd-2-4/1f9218ae-9d5d-4c4e-a8dd-d5254994839c/scratchpad/frozen-unchecked-ml-l16/NTSDHeadless",
+    "startupSeconds": 0.072,
+    "loadSeconds": 0.399,
+    "packagesWaitSeconds": 0.0,
+    "startToLoadedSeconds": 0.794,
+    "loadedCounts": {
+     "allocations": 16105,
+     "audioRequests": 2072,
+     "bitmapRequests": 12817,
+     "files": 621
+    },
+    "loadedResidentMB": 733,
+    "bodiesResidentMB": 783,
+    "peakResidentMB": 783,
+    "build": "frozen-unchecked-ml-l16"
+   },
+   {
+    "label": "ml-l17-mac-ab-03-frozen-unchecked-ml-l17",
+    "host": "mac",
+    "scenario": "vs",
+    "bodies": 600,
+    "binary": "/private/tmp/claude-501/-Users-michael-Developer-ntsd-2-4/1f9218ae-9d5d-4c4e-a8dd-d5254994839c/scratchpad/frozen-unchecked-ml-l17/NTSDHeadless",
+    "startupSeconds": 0.046,
+    "loadSeconds": 0.399,
+    "packagesWaitSeconds": 0.0,
+    "startToLoadedSeconds": 0.771,
+    "loadedCounts": {
+     "allocations": 16105,
+     "audioRequests": 2072,
+     "bitmapRequests": 12817,
+     "files": 621
+    },
+    "loadedResidentMB": 759,
+    "bodiesResidentMB": 807,
+    "peakResidentMB": 807,
+    "build": "frozen-unchecked-ml-l17"
+   },
+   {
+    "label": "ml-l17-mac-ab-04-frozen-unchecked-ml-l16",
+    "host": "mac",
+    "scenario": "vs",
+    "bodies": 600,
+    "binary": "/private/tmp/claude-501/-Users-michael-Developer-ntsd-2-4/1f9218ae-9d5d-4c4e-a8dd-d5254994839c/scratchpad/frozen-unchecked-ml-l16/NTSDHeadless",
+    "startupSeconds": 0.045,
+    "loadSeconds": 0.384,
+    "packagesWaitSeconds": 0.0,
+    "startToLoadedSeconds": 0.762,
+    "loadedCounts": {
+     "allocations": 16105,
+     "audioRequests": 2072,
+     "bitmapRequests": 12817,
+     "files": 621
+    },
+    "loadedResidentMB": 768,
+    "bodiesResidentMB": 811,
+    "peakResidentMB": 811,
+    "build": "frozen-unchecked-ml-l16"
+   },
+   {
+    "label": "ml-l17-mac-ab-05-frozen-unchecked-ml-l17",
+    "host": "mac",
+    "scenario": "vs",
+    "bodies": 600,
+    "binary": "/private/tmp/claude-501/-Users-michael-Developer-ntsd-2-4/1f9218ae-9d5d-4c4e-a8dd-d5254994839c/scratchpad/frozen-unchecked-ml-l17/NTSDHeadless",
+    "startupSeconds": 0.047,
+    "loadSeconds": 0.385,
+    "packagesWaitSeconds": 0.0,
+    "startToLoadedSeconds": 0.766,
+    "loadedCounts": {
+     "allocations": 16105,
+     "audioRequests": 2072,
+     "bitmapRequests": 12817,
+     "files": 621
+    },
+    "loadedResidentMB": 775,
+    "bodiesResidentMB": 820,
+    "peakResidentMB": 820,
+    "build": "frozen-unchecked-ml-l17"
+   },
+   {
+    "label": "ml-l17-mac-ab-06-frozen-unchecked-ml-l16",
+    "host": "mac",
+    "scenario": "vs",
+    "bodies": 600,
+    "binary": "/private/tmp/claude-501/-Users-michael-Developer-ntsd-2-4/1f9218ae-9d5d-4c4e-a8dd-d5254994839c/scratchpad/frozen-unchecked-ml-l16/NTSDHeadless",
+    "startupSeconds": 0.044,
+    "loadSeconds": 0.399,
+    "packagesWaitSeconds": 0.0,
+    "startToLoadedSeconds": 0.785,
+    "loadedCounts": {
+     "allocations": 16105,
+     "audioRequests": 2072,
+     "bitmapRequests": 12817,
+     "files": 621
+    },
+    "loadedResidentMB": 777,
+    "bodiesResidentMB": 829,
+    "peakResidentMB": 829,
+    "build": "frozen-unchecked-ml-l16"
+   }
+  ]
+ },
+ "suitesRerun": {
+  "label": "ml-l17b",
+  "trees": "native a21de2122a9d0f4f5cb9a21f71e00238117d0120 tools 366be20610379cbb0f18032b61adb51c5d444193",
+  "suites": [
+   "OriginalExclusivityChecksTests: Executed 1 test, with 0 failures (0 unexpected) in 0.001 (0.002) seconds",
+   "OriginalPosixFileFactsTests: Executed 1 test, with 0 failures (0 unexpected) in 0.005 (0.006) seconds",
+   "OriginalConcurrentInputsTests: Executed 7 tests, with 0 failures (0 unexpected) in 1.675 (1.677) seconds",
+   "OriginalApplicationCatalogInputsTests: Executed 4 tests, with 0 failures (0 unexpected) in 8.153 (8.155) seconds",
+   "OriginalApplicationStartupInputsTests: Executed 4 tests, with 0 failures (0 unexpected) in 0.288 (0.289) seconds",
+   "OriginalLoadingReadAheadTests: Executed 5 tests, with 0 failures (0 unexpected) in 1.511 (1.512) seconds",
+   "OriginalApplicationLoadedLaunchTests: Executed 2 tests, with 0 failures (0 unexpected) in 51.511 (51.514) seconds",
+   "OriginalMacRuntimeStartupTests: Executed 5 tests, with 0 failures (0 unexpected) in 0.470 (0.474) seconds",
+   "OriginalMacRuntimeLoadingTests: Executed 7 tests, with 0 failures (0 unexpected) in 1.805 (1.807) seconds"
+  ]
+ }
+}

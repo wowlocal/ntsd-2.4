@@ -118,7 +118,7 @@ public struct OriginalApplicationStartupInputs: Equatable {
     public static func load(directory: URL) throws -> Self {
         func read(_ path: String) throws -> [UInt8] {
             let url = directory.appendingPathComponent(path)
-            guard FileManager.default.fileExists(atPath:url.path) else { throw Boundary.missing(path) }
+            guard OriginalFileFacts.exists(url) else { throw Boundary.missing(path) }
             let values = try OriginalFileFacts.of(url,[.isRegularFileKey,.isSymbolicLinkKey])
             guard values.isRegularFile == true,values.isSymbolicLink != true else { throw Boundary.invalid(path) }
             return Array(try Data(contentsOf:url))
