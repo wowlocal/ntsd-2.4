@@ -125,7 +125,7 @@ input, TZ `Etc/GMT-1`, `--events-file` where stdout is not forwarded).
 | `ios_app.py --platform tvos` (extend, not a new script) | Apple TV simulator | Builds `NTSDiOS` for `arm64-apple-tvos17.0-simulator`, assembles the `.app` (Info.plist for tvOS, ad-hoc signed), boots an Apple TV 4K simulator, installs, launches with the scenario's arguments, copies events and frames out of the data container |
 | `run_headless_scenarios.py --wasi WASM` (a mode of the existing runner) | WASI runtime (test harness) | Runs the `.wasm` headless build with the scenario's arguments, the packaged data and overlay preopened; the same output as `--local` |
 | `web_app.py` (new: no runner drives a browser) | Headless Chromium (Playwright) | Builds the browser target, serves page, `.wasm` and data locally, opens the page with the scenario's arguments, collects events and frames through the page's bridge into the same layout |
-| `matrix.py` rows | all | Adds `tvos-sim` (`coretext`), `wasi` (`none`) and `browser` (its own text group, or `none` without text) |
+| `matrix.py` rows | all | Adds `tvos` (`coretext`, done), `wasi` (`none`) and `browser` (its own text group, or `none` without text) |
 
 Harness acceptance: each runner reproduces an existing host's result first
 (the tvOS runner and the iPad runner agree on the iPad; the WASI mode runs the
@@ -152,8 +152,8 @@ runner's bridge round-trips a frame byte for byte) before it judges a new host.
 
 | ID | Step | Status |
 | --- | --- | --- |
-| H0 | Harness: `ios_app.py --platform tvos`, `run_headless_scenarios.py --wasi`, `web_app.py`, `matrix.py` rows; each first reproduces an existing host's result | queued |
-| T0 | tvOS: simulator runtime; `.tvOS(.v17)` in `Package.swift`; `NTSDiOS` builds for tvOS (`#if os(tvOS)`: no touch, no Documents, presses only); vs in the Apple TV simulator equal, frames identical to `coretext` | queued |
+| H0 | Harness: `ios_app.py --platform tvos` and the `tvos` matrix row (done, T0), `run_headless_scenarios.py --wasi`, `web_app.py`; each first reproduces an existing host's result | partly done |
+| T0 | tvOS: simulator runtime; `NTSDiOS` builds for tvOS (`#if os(tvOS)`); vs in the Apple TV simulator equal, frames identical to `coretext` | **done** |
 | T1 | tvOS: all 10 scenarios; GameController input (Siri Remote, extended gamepads) through the AppKit sampler's mapping; Menu button and focus | queued |
 | T2 | tvOS: overlay storage tvOS keeps, 1080p/4K presentation, audio session, lifecycle (background/foreground) | queued |
 | W0 | WASI: `NTSDHeadless` builds for `wasm32-unknown-wasip1` — WASI branches for OS imports, single-threaded paths for the read-ahead, parallel loads, deferred release and the render queue, a scheduler without Dispatch; vs under a WASI runtime equal | queued |
@@ -165,15 +165,16 @@ runner's bridge round-trips a frame byte for byte) before it judges a new host.
 
 | Date | Step | Result | Evidence | Commit |
 | --- | --- | --- | --- | --- |
-| 2026-10-11 | Study and setup | Read the cross-platform work (hosts, packaging, harness, pitfalls); branch `exp/tvos-web`; wasm SDK installed (checksum verified; Foundation without Dispatch); tvOS simulator runtime download started; this card | this card | this commit |
+| 2026-10-11 | Study and setup | Read the cross-platform work (hosts, packaging, harness, pitfalls); branch `exp/tvos-web`; wasm SDK installed (checksum verified; Foundation without Dispatch); tvOS simulator runtime download started; this card | this card | a16fe0d |
+| 2026-10-11 | T0 + H0 (tvOS runner): the iOS host on the Apple TV simulator | tvOS 27.0 simulator runtime installed (Apple, 3.76 GB). `NTSDiOS` builds for `arm64-apple-tvos17.0-simulator` once three iOS-only UIKit members are left out on tvOS; the default overlay is Caches there (no Documents; persistence is T2). `ios_app.py --platform tvos` (triple, SDK, bundle id, tvOS Info.plist, Apple TV 4K 1080p simulator, device lookup per platform) and a `tvos` row in `matrix.py` (`coretext`). **vs on the Apple TV simulator: equal, all 6 frames and 1,826 frame digests identical to AppKit**; the same runner reproduces the iPad (equal, frames identical). Core, Runtime and `Package.swift` unchanged (no `.tvOS` entry needed with the Swift Build backend: the triple sets the deployment target, tvOS 17.0; a `--build-system native` build would need it). On tvOS the touch handlers are left out (the Siri Remote's indirect touches must not become clicks; its input is T1); the runner reports a missing simulator, and a failing tvOS row is marked blocked instead of ending the matrix run (review follow-ups). First wasm32-wasip1 build: blocked in NTSDCore by the startup clock (`clock_gettime`/`CLOCK_MONOTONIC_RAW`) and `DispatchQueue.concurrentPerform` | [evidence](../evidence/tw-t0-tvos-simulator-20261011.json) | this commit |
 
 ## Next task
 
-H0 + T0 together (the tvOS runner can only be accepted against a tvOS
-build): once the tvOS simulator runtime is installed, add `.tvOS(.v17)`,
-build `NTSDiOS` for `arm64-apple-tvos17.0-simulator` with the `#if os(tvOS)`
-changes it needs, extend `ios_app.py` with `--platform tvos` (Info.plist,
-device type, data container), check the runner still reproduces the iPad
-result, then run vs on an Apple TV 4K simulator and compare with the
-`coretext` group. In parallel (independent): try the first `wasm32-unknown-wasip1`
-build of `NTSDCore` to list the WASI blockers for W0.
+T1a in the background: all 10 scenarios on the Apple TV simulator
+(`matrix.py --hosts tvos`, compared with the `coretext` group). Meanwhile W0a:
+the first WASI portability patches in NTSDCore — the startup clock on WASI
+(a monotonic and a real-time source with the same values the other hosts
+read) and `OriginalConcurrentInputs.map` without Dispatch (the same work in
+the same order, results in manifest order) — then build again to reach
+Runtime and the headless host and list their blockers. Core changes run the
+existing hosts' gates (`mlgate.sh`).

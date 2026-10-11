@@ -1,0 +1,106 @@
+{
+ "study": "TVOS_WEB",
+ "step": "T0 + H0 (first part): the iOS host on tvOS; ios_app.py --platform tvos; matrix row",
+ "testedTrees": "native 6c3c6c3507564a2fdb8ce8c4b8813f358e217047 tools 4c8c9bb5bfdc8766bec48c4d165925d4e818e5ca",
+ "setup": {
+  "tvOSRuntime": "tvOS 27.0 (24J360) simulator runtime, xcodebuild -downloadPlatform tvOS (3.76 GB, Apple)",
+  "device": "Apple TV 4K (3rd generation) (at 1080p)",
+  "wasmSDK": "swift-6.4.0-RELEASE_wasm installed with the open-source 6.4.0 toolchain; archive checksum f07b7be3c586d92d7a07051fc6d303b87ebea67eadc40640ba59d5a8b79aa86d verified by swift sdk install; wasm32-unknown-wasip1; Foundation (Essentials, Internationalization, ICU, XML), Synchronization, XCTest, Testing; no Dispatch"
+ },
+ "build": "NTSD_PORTABLE=1 NTSD_IOS=1 NTSD_UNCHECKED_EXCLUSIVITY=1 swift build --triple arm64-apple-tvos17.0-simulator --sdk AppleTVSimulator27.0 -c release --product NTSDiOS: first attempt failed on three iOS-only UIKit members (prefersStatusBarHidden, prefersHomeIndicatorAutoHidden, isMultipleTouchEnabled); Core and Runtime compiled unchanged",
+ "tvos": {
+  "scenario": "vs",
+  "compare": {
+   "result": "equal",
+   "differs": []
+  },
+  "framesAgainstAppKit": [
+   {
+    "scenario": "vs",
+    "frames": 6,
+    "identical": 6,
+    "differ": [],
+    "missing": [],
+    "digests": {
+     "a": 1826,
+     "b": 1826,
+     "equal": true,
+     "firstDifferentBody": null
+    }
+   }
+  ],
+  "framesAgainstHeadless": [
+   {
+    "scenario": "vs",
+    "frames": 6,
+    "identical": 5,
+    "differ": [
+     "f001800.png"
+    ],
+    "missing": [],
+    "digests": {
+     "a": 1826,
+     "b": 1826,
+     "equal": false,
+     "firstDifferentBody": 1
+    }
+   }
+  ]
+ },
+ "ipadRerun": {
+  "scenario": "vs",
+  "compare": {
+   "result": "equal",
+   "differs": []
+  },
+  "framesAgainstAppKit": [
+   {
+    "scenario": "vs",
+    "frames": 6,
+    "identical": 6,
+    "differ": [],
+    "missing": [],
+    "digests": {
+     "a": 1826,
+     "b": 1826,
+     "equal": true,
+     "firstDifferentBody": null
+    }
+   }
+  ]
+ },
+ "wasiProbe": {
+  "log": "logs/tw-w0-probe1.log",
+  "blockers": [
+   "NTSDCore/OriginalMacStartupClock.swift: clock_gettime, timespec, clockid_t, CLOCK_MONOTONIC_RAW, CLOCK_REALTIME, errno not in WASILibc's Swift import",
+   "NTSDCore/OriginalConcurrentInputs.swift:60: DispatchQueue (no Dispatch on wasip1)"
+  ],
+  "note": "the build stops in NTSDCore; Runtime and the host are not reached yet"
+ },
+ "finalTree": {
+  "testedTrees": "native c7f4e0b98ee05182fee7582aef5600481be4a3c3 tools 7c94610737138390f1fdb05de76c91df1d2d764e",
+  "change": "review follow-ups: touch handlers left out on tvOS, comments, runner error for a missing simulator, matrix row blocked on failure",
+  "tvosRerun": {
+   "compare": {
+    "result": "equal",
+    "differs": []
+   },
+   "framesAgainstAppKit": [
+    {
+     "scenario": "vs",
+     "frames": 6,
+     "identical": 6,
+     "differ": [],
+     "missing": [],
+     "digests": {
+      "a": 1826,
+      "b": 1826,
+      "equal": true,
+      "firstDifferentBody": null
+     }
+    }
+   ]
+  }
+ },
+ "review": "Independent read-only review: OK; iOS code paths and Info.plist byte-identical; follow-ups applied (touch handlers on tvOS, comments, StopIteration, matrix blocking); .tvOS platform entry not needed with Swift Build (minos 17.0 from the triple), recorded"
+}

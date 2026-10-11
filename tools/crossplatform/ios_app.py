@@ -1,11 +1,12 @@
 #!/usr/bin/env python3
-"""Build NTSDiOS for the iPad simulator, wrap it into an app and run an
-app_e2e scenario in the simulator (P8; test harness: the simulator, not a
-device).
+"""Build NTSDiOS for the iPad or Apple TV simulator, wrap it into an app and
+run an app_e2e scenario in the simulator (P8, TVOS_WEB T0; test harness: the
+simulator, not a device).
 
-Usage: ios_app.py OUT_DIR [SCENARIO] [--device NAME]
+Usage: ios_app.py OUT_DIR [SCENARIO] [--platform ios|tvos] [--device NAME]
 
-Builds with SwiftPM for arm64-apple-ios17.0-simulator (NTSD_PORTABLE=1
+Builds with SwiftPM for arm64-apple-ios17.0-simulator, or with --platform tvos
+arm64-apple-tvos17.0-simulator (NTSD_PORTABLE=1
 NTSD_IOS=1), writes OUT_DIR/NTSDiOS.app (executable, the Original* resource
 folders at the app root as the macOS packaging installs them, OriginalMusic,
 Info.plist; ad-hoc signed), boots the simulator, installs it and
@@ -21,7 +22,19 @@ ROOT = Path(__file__).resolve().parents[2]
 spec = importlib.util.spec_from_file_location("app_e2e", ROOT / "tools/app_e2e.py")
 app_e2e = importlib.util.module_from_spec(spec); spec.loader.exec_module(app_e2e)
 X5 = Path("/Volumes/X5/ntsd-2.4-research/crossplatform")
-BUNDLE_ID = "local.ntsd.native.ios"
+# Per platform: target, SDK, default simulator, bundle identifier and the
+# platform's Info.plist keys.
+PLATFORMS = {
+    "ios": {"triple": "arm64-apple-ios17.0-simulator", "sdk": "iphonesimulator", "scratch": "build-ios-sim",
+            "device": "iPad Air 13-inch (M4)", "runtime": ".iOS-", "bundle": "local.ntsd.native.ios",
+            "plist": {"CFBundleSupportedPlatforms": ["iPhoneSimulator"], "LSRequiresIPhoneOS": True, "UIDeviceFamily": [2],
+                      "UIRequiresFullScreen": True,
+                      "UISupportedInterfaceOrientations~ipad": ["UIInterfaceOrientationLandscapeLeft", "UIInterfaceOrientationLandscapeRight"]}},
+    "tvos": {"triple": "arm64-apple-tvos17.0-simulator", "sdk": "appletvsimulator", "scratch": "build-tvos-sim",
+             "device": "Apple TV 4K (3rd generation) (at 1080p)", "runtime": ".tvOS-", "bundle": "local.ntsd.native.tvos",
+             "plist": {"CFBundleSupportedPlatforms": ["AppleTVSimulator"], "UIDeviceFamily": [3],
+                       "UIRequiredDeviceCapabilities": ["arm64"]}},
+}
 
 
 def run(cmd, **kw):
@@ -30,14 +43,15 @@ def run(cmd, **kw):
 
 def main():
     a = argparse.ArgumentParser(); a.add_argument("out", type=Path); a.add_argument("scenario", nargs="?", default="vs")
-    a.add_argument("--device", default="iPad Air 13-inch (M4)")
-    a.add_argument("--scratch", type=Path, default=X5 / "build-ios-sim")
-    args = a.parse_args(); out = args.out.resolve()
-    sdk = run(["xcrun", "--sdk", "iphonesimulator", "--show-sdk-path"])
+    a.add_argument("--platform", choices=sorted(PLATFORMS), default="ios")
+    a.add_argument("--device"); a.add_argument("--scratch", type=Path)
+    args = a.parse_args(); out = args.out.resolve(); p = PLATFORMS[args.platform]
+    args.device = args.device or p["device"]; args.scratch = args.scratch or X5 / p["scratch"]
+    sdk = run(["xcrun", "--sdk", p["sdk"], "--show-sdk-path"])
     # The shipping build drops Swift's dynamic exclusivity checks (the user's decision, CORE_REALTIME 4aa).
     env = {**os.environ, "NTSD_PORTABLE": "1", "NTSD_IOS": "1", "NTSD_UNCHECKED_EXCLUSIVITY": "1"}
     common = ["xcrun", "--toolchain", "XcodeDefault", "swift", "build", "--package-path", str(ROOT / "native"),
-              "--scratch-path", str(args.scratch), "--triple", "arm64-apple-ios17.0-simulator", "--sdk", sdk,
+              "--scratch-path", str(args.scratch), "--triple", p["triple"], "--sdk", sdk,
               "-c", "release", "--product", "NTSDiOS"]
     subprocess.run(common, env=env, check=True)
     products = Path(run(common + ["--show-bin-path"], env=env))
@@ -49,22 +63,22 @@ def main():
         if folder.is_dir() and folder.name.startswith("Original"):
             shutil.copytree(folder, app / folder.name)
     shutil.copytree(ROOT / "native/Sources/NTSDMacPlatform/Resources/OriginalMusic", app / "OriginalMusic")
-    plistlib.dump({"CFBundleIdentifier": BUNDLE_ID, "CFBundleExecutable": "NTSDiOS", "CFBundleName": "NTSD Native",
+    plistlib.dump({"CFBundleIdentifier": p["bundle"], "CFBundleExecutable": "NTSDiOS", "CFBundleName": "NTSD Native",
                    "CFBundlePackageType": "APPL", "CFBundleShortVersionString": "0.1", "CFBundleVersion": "1",
-                   "CFBundleSupportedPlatforms": ["iPhoneSimulator"], "MinimumOSVersion": "17.0", "LSRequiresIPhoneOS": True,
-                   "UIDeviceFamily": [2], "UIRequiresFullScreen": True, "UILaunchScreen": {},
-                   "UISupportedInterfaceOrientations~ipad": ["UIInterfaceOrientationLandscapeLeft", "UIInterfaceOrientationLandscapeRight"],
+                   "MinimumOSVersion": "17.0", "UILaunchScreen": {}, **p["plist"],
                    "UIApplicationSceneManifest": {"UIApplicationSupportsMultipleScenes": False, "UISceneConfigurations": {
                        "UIWindowSceneSessionRoleApplication": [{"UISceneConfigurationName": "Default",
                                                                "UISceneDelegateClassName": "NTSDiOS.NTSDSceneDelegate"}]}}},
                   (app / "Info.plist").open("wb"))
     run(["codesign", "--force", "--sign", "-", str(app)])
     devices = json.loads(run(["xcrun", "simctl", "list", "devices", "available", "-j"]))["devices"]
-    udid = next(d["udid"] for runtime in devices.values() for d in runtime if d["name"] == args.device)
+    udid = next((d["udid"] for runtime, listed in devices.items() if p["runtime"] in runtime for d in listed if d["name"] == args.device), None)
+    if udid is None:
+        sys.exit(f"no available {args.platform} simulator named {args.device!r} (is its runtime installed? xcrun simctl list devices)")
     subprocess.run(["xcrun", "simctl", "boot", udid], capture_output=True)
     run(["xcrun", "simctl", "bootstatus", udid, "-b"])
     run(["xcrun", "simctl", "install", udid, str(app)])
-    data = Path(run(["xcrun", "simctl", "get_app_container", udid, BUNDLE_ID, "data"]))
+    data = Path(run(["xcrun", "simctl", "get_app_container", udid, p["bundle"], "data"]))
     setup = app_e2e.SCENARIOS[args.scenario]
     work = data / "Documents" / args.scenario; shutil.rmtree(work, ignore_errors=True)
     for d in ("overlay", "captures", "frames"): (work / d).mkdir(parents=True)
@@ -72,7 +86,7 @@ def main():
     game = ["--events-file", str(work / "events.raw"), "--original", "--mute-music", "--mute-sounds", "--no-network", "--overlay", str(work / "overlay"),
             "--virtual-clock", "123456789", "8", "--script-clock", "gameplay", "--body-captures", str(work / "captures"),
             "--body-frames", str(work / "frames"), "--body-frame-digests", *extra, "--script", setup["script"](work / "captures")]
-    done = subprocess.run(["xcrun", "simctl", "launch", "--console", "--terminate-running-process", udid, BUNDLE_ID, *game],
+    done = subprocess.run(["xcrun", "simctl", "launch", "--console", "--terminate-running-process", udid, p["bundle"], *game],
                           capture_output=True, text=True, timeout=3600, env={**os.environ, "SIMCTL_CHILD_TZ": "Etc/GMT-1"})
     result = out / args.scenario; shutil.rmtree(result, ignore_errors=True); shutil.copytree(work, result)
     raw = (work / "events.raw").read_text() if (work / "events.raw").exists() else done.stdout

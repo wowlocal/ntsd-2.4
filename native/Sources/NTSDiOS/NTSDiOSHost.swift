@@ -80,7 +80,8 @@ final class NTSDiOSCursor {}
 /// The iPad session host: one view, touch and keyboard input, AVAudioEngine
 /// for the effects mixer, the packaged tracks through AVAudioPlayer (as on
 /// macOS), CoreText glyph masks with the iOS system font as macOS uses its
-/// system font, Darwin sockets, and the app's Documents folder as the overlay.
+/// system font, Darwin sockets, and the app's Documents folder as the overlay
+/// (Caches on tvOS). The same host runs on the Apple TV (TVOS_WEB T0).
 @MainActor final class NTSDiOSSessionHost: OriginalRuntimeSessionHost {
     let arguments: [String], windows: NTSDiOSWindowHost, musicDirectory: String
     weak var session: OriginalRuntimeSession?
@@ -136,8 +137,15 @@ final class NTSDiOSCursor {}
         .init(chooseRecording:{ _ in nil },alert:{ text in OriginalRuntimeSession.emit(["event":"iosAlert","text":text]) },open:{ _ in })
     }
     func standardOverlay() throws -> OriginalMacRuntimeOverlay {
-        let documents = try FileManager.default.url(for:.documentDirectory,in:.userDomainMask,appropriateFor:nil,create:true)
-        return .init(root:documents.appendingPathComponent("NTSD Native",isDirectory:true))
+        #if os(tvOS)
+        // Apple TV storage keeps no persistent Documents (the simulator has
+        // one); Caches holds the overlay for now, and the system may purge
+        // it: TVOS_WEB T2 settles where it persists.
+        let folder = try FileManager.default.url(for:.cachesDirectory,in:.userDomainMask,appropriateFor:nil,create:true)
+        #else
+        let folder = try FileManager.default.url(for:.documentDirectory,in:.userDomainMask,appropriateFor:nil,create:true)
+        #endif
+        return .init(root:folder.appendingPathComponent("NTSD Native",isDirectory:true))
     }
     func beginTimingActivity() {
         activity = ProcessInfo.processInfo.beginActivity(options:[.userInitiated,.latencyCritical],reason:"Original game loop timing")

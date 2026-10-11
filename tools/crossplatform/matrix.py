@@ -14,10 +14,11 @@ this Mac itself):
   windows         NTSDHeadless.exe in the CrossOver bottle ntsd-xplat-test
   windows-sdl     NTSDSDL.exe in the bottle (GDI text)
   ios             NTSDiOS in the iPad simulator (ios_app.py)
+  tvos            NTSDiOS built for tvOS in the Apple TV simulator (ios_app.py --platform tvos)
   android         NTSDHeadless for aarch64-unknown-linux-android28 (static Swift runtime,
                   NDK r30's libc++_shared.so beside it) in the arm64 emulator adb reaches
 
-Frames are grouped by glyph rasteriser: CoreText (appkit, macos-sdl, ios),
+Frames are grouped by glyph rasteriser: CoreText (appkit, macos-sdl, ios, tvos),
 none (linux-headless, linux-x86_64, windows), FreeType (linux-sdl), GDI
 (windows-sdl); android draws no text either. Within a group every frame digest must be equal; across groups
 the text-free frames must be equal and text must appear in the same frames
@@ -36,7 +37,7 @@ TOOLS = ROOT / "tools/crossplatform"
 X5 = Path("/Volumes/X5/ntsd-2.4-research/crossplatform")
 OSS = Path.home() / "Library/Developer/Toolchains/swift-6.4.0-RELEASE.xctoolchain/usr/bin/swift"
 XCODE_BUILD = "/Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/bin/swift-build"
-GROUPS = {"appkit": "coretext", "macos-sdl": "coretext", "ios": "coretext", "linux-headless": "none", "linux-x86_64": "none",
+GROUPS = {"appkit": "coretext", "macos-sdl": "coretext", "ios": "coretext", "tvos": "coretext", "linux-headless": "none", "linux-x86_64": "none",
           "windows": "none", "linux-sdl": "freetype", "windows-sdl": "gdi", "android": "none"}
 RUNNER = TOOLS / "run_headless_scenarios.py"
 ANDROID_SDK = Path("/opt/homebrew/share/android-commandlinetools")
@@ -119,12 +120,17 @@ def run(host, out):
            {"NTSD_WINE_EXE": "NTSDSDL.exe", "NTSD_WINE_ENV": "NTSD_SDL_VIDEO_DRIVER=offscreen NTSD_SDL_AUDIO_DRIVER=dummy"})
     elif host == "android":
         sh([sys.executable, str(RUNNER), str(target), "--android", str(X5 / "android-headless")], {"ADB": ADB})
-    elif host == "ios":
+    elif host in ("ios", "tvos"):
         target.mkdir(parents=True, exist_ok=True)
         rows = []
         for scenario in ("vs", "mission", "demo", "war", "playback", "tournament", "altenter", "tournament-win", "team-tournament", "joystick"):
-            line = subprocess.run([sys.executable, str(TOOLS / "ios_app.py"), str(target), scenario], capture_output=True, text=True).stdout.strip().splitlines()[-1]
-            rows.append({"scenario": scenario, **json.loads(line)})
+            r = subprocess.run([sys.executable, str(TOOLS / "ios_app.py"), str(target), scenario, "--platform", host],
+                               capture_output=True, text=True)
+            lines = r.stdout.strip().splitlines()
+            # A build failure or a missing simulator runtime blocks the row
+            # instead of ending the matrix run.
+            rows.append({"scenario": scenario, **json.loads(lines[-1])} if r.returncode == 0 and lines and lines[-1].startswith("{")
+                        else {"scenario": scenario, "result": "blocked", "error": (r.stderr or r.stdout).strip()[-300:]})
         (target / "results.jsonl").write_text("".join(json.dumps(r) + "\n" for r in rows))
 
 

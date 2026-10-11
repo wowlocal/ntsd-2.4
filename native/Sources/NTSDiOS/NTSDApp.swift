@@ -33,8 +33,10 @@ final class NTSDSceneDelegate: UIResponder, UIWindowSceneDelegate {
 final class NTSDGameViewController: UIViewController {
     let gameView = NTSDGameView()
     override func loadView() { view = gameView }
+    #if !os(tvOS)
     override var prefersStatusBarHidden: Bool { true }
     override var prefersHomeIndicatorAutoHidden: Bool { true }
+    #endif
     override var canBecomeFirstResponder: Bool { true }
     override func viewDidAppear(_ animated: Bool) { super.viewDidAppear(animated); becomeFirstResponder() }
     // Hardware keyboard presses reach the responder chain here.
@@ -57,7 +59,10 @@ final class NTSDGameView: UIView {
     weak var host: NTSDiOSSessionHost?
     private(set) var frameSize = CGSize.zero
     override init(frame: CGRect) {
-        super.init(frame:frame); backgroundColor = .black; isMultipleTouchEnabled = false
+        super.init(frame:frame); backgroundColor = .black
+        #if !os(tvOS)
+        isMultipleTouchEnabled = false
+        #endif
         layer.contentsGravity = .resizeAspect; layer.magnificationFilter = .nearest
     }
     required init?(coder: NSCoder) { fatalError("not used") }
@@ -69,6 +74,9 @@ final class NTSDGameView: UIView {
         let x0 = (bounds.width-frameSize.width*scale)/2,y0 = (bounds.height-frameSize.height*scale)/2
         return (Int32(((p.x-x0)/scale).rounded(.down)),Int32(((p.y-y0)/scale).rounded(.down)))
     }
+    // The Siri Remote's touch surface sends indirect touches: on tvOS they
+    // must not become mouse clicks (its input comes through GameController).
+    #if !os(tvOS)
     override func touchesBegan(_ touches: Set<UITouch>,with event: UIEvent?) { touch(touches) { $0.began(x:$1,y:$2) } }
     override func touchesMoved(_ touches: Set<UITouch>,with event: UIEvent?) { touch(touches) { $0.moved(x:$1,y:$2) } }
     override func touchesEnded(_ touches: Set<UITouch>,with event: UIEvent?) { touch(touches) { $0.ended(x:$1,y:$2) } }
@@ -78,6 +86,7 @@ final class NTSDGameView: UIView {
         let (x,y) = clientPoint(t.location(in:self))
         MainActor.assumeIsolated { phase(host.touch,x,y) }
     }
+    #endif
     func handle(_ presses: Set<UIPress>,down: Bool) -> Bool {
         var handled = false
         for press in presses {
