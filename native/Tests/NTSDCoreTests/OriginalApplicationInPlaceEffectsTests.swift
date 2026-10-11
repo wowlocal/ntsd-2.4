@@ -94,4 +94,57 @@ final class OriginalApplicationInPlaceEffectsTests: XCTestCase {
         try call("release", [10], 0)
         XCTAssertNotEqual(inputs, beforeInputs); XCTAssertNotEqual(g, beforeGraphics)
     }
+
+    /// MEMORY_LOADING L20: `observed` runs in place too (its own checks come
+    /// first, then `perform`). A rejected call leaves the inputs as they were;
+    /// an accepted one returns the observed response and leaves the inputs as
+    /// `response` with the same result and output does.
+    func testObservedRunsInPlace() throws {
+        let package = try OriginalApplicationStartupInputsTests.shared.get()
+        var inputs = OriginalApplicationBitmapInputs(resources: package.bitmaps)
+        let cs2 = [Array("CS2".utf8)]
+        func both(_ q: Request, _ actual: OriginalBitmapSurfaceLoading.Response, _ label: String) throws {
+            var viaResponse = inputs
+            _ = try viaResponse.response(q, control: .init(result: actual.result, output: actual.output))
+            XCTAssertEqual(try inputs.observed(q, response: actual), actual, label)
+            XCTAssertEqual(inputs, viaResponse, label)
+        }
+        try both(Request("image", [1, 0, 0, 0, 0x2000], strings: cs2), .init(result: 20), "image")
+        try both(Request("createSurface", [1, 0], structure: try descriptor()), .init(result: 0, output: 10), "createSurface")
+        let object = try inputs.bitmap(forImage: 20).objectBytes()
+        try both(Request("getObject", [20, 24]), .init(result: 24, writes: [.init(offset: 4, bytes: Array(object[4..<20]))]), "getObject")
+        try both(Request("description", [10]), .init(result: 0, writes: [.init(offset: 8, bytes: Array(try descriptor().bytes[8..<16]))]), "description")
+        try both(Request("createDC", [0]), .init(result: 30), "createDC")
+        try both(Request("selectObject", [30, 20]), .init(result: 1), "selectObject")
+        try both(Request("getDC", [10]), .init(result: 0, output: 31), "getDC")
+        try both(Request("stretch", [31, 0, 0, 2, 2, 30, 0, 0, 2, 2, 0xcc0020]), .init(result: 1), "stretch")
+        try both(Request("image", [1, 0, 0, 0, 0x2000], strings: cs2), .init(result: 21), "second image")
+        try both(Request("deleteObject", [21]), .init(result: 1), "deleteObject")
+
+        let rejected: [(String, Request, OriginalBitmapSurfaceLoading.Response)] = [
+            // The observed checks.
+            ("getObject extent", Request("getObject", [20, 24]), .init(result: 24, writes: [.init(offset: 2, bytes: [0, 0])])),
+            ("getObject conflict", Request("getObject", [20, 24]), .init(result: 24, writes: [.init(offset: 4, bytes: [object[4] ^ 1])])),
+            ("getObject owner", Request("getObject", [99, 24]), .init(result: 24)),
+            ("getObject deleted owner", Request("getObject", [21, 24]), .init(result: 24)),
+            ("description extent", Request("description", [10]), .init(result: 0, writes: [.init(offset: 12, bytes: [0, 0, 0, 0, 0, 0])])),
+            ("description owner", Request("description", [99]), .init(result: 0)),
+            ("other kinds take no writes", Request("createDC", [0]), .init(result: 32, writes: [.init(offset: 0, bytes: [1])])),
+            // perform's checks, reached through observed.
+            ("image live handle", Request("image", [1, 0, 0, 0, 0x2000], strings: cs2), .init(result: 20)),
+            ("getObject size", Request("getObject", [20, 23]), .init(result: 24)),
+            ("createSurface live", Request("createSurface", [1, 0], structure: try descriptor()), .init(result: 0, output: 10)),
+            ("createDC live", Request("createDC", [0]), .init(result: 30)),
+            ("selectObject failure", Request("selectObject", [30, 20]), .init(result: -1)),
+            ("getDC live token", Request("getDC", [10]), .init(result: 0, output: 30)),
+            ("stretch outside", Request("stretch", [31, 1, 1, 2, 2, 30, 0, 0, 2, 2, 0xcc0020]), .init(result: 1)),
+            ("releaseDC unknown", Request("releaseDC", [10, 99]), .init(result: 0)),
+            ("deleteObject deleted", Request("deleteObject", [21]), .init(result: 1)),
+        ]
+        for (label, q, actual) in rejected {
+            let before = inputs
+            XCTAssertThrowsError(try inputs.observed(q, response: actual), label)
+            XCTAssertEqual(inputs, before, label)
+        }
+    }
 }

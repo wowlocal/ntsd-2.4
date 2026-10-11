@@ -367,9 +367,10 @@ public struct OriginalApplicationMenuSession {
                 guard e.arguments.count >= 2 else { throw Boundary.dependency("Menu COM request") }
                 if e.arguments[1] == 8 {
                     let reply = try frontProvider?(stage,e),value = reply?.result ?? responses.release
-                    if var bindings = bitmapInputs {
-                        _ = try bindings.response(.init("release",[e.arguments[0]]),control:.init(result:value))
-                        bitmapInputs = bindings
+                    // In place: response leaves the inputs unchanged when it
+                    // throws (MEMORY_LOADING L5, L20).
+                    if bitmapInputs != nil {
+                        _ = try bitmapInputs!.response(.init("release",[e.arguments[0]]),control:.init(result:value))
                     }
                     if let reply { try emit(.frontAPI(e,reply)) }
                     else { try emit(.release(e,ignoredResult:value)) }
@@ -555,16 +556,18 @@ public struct OriginalApplicationMenuSession {
                                 let response: OriginalBitmapSurfaceLoading.Response
                                 if let provider = initializationBitmap {
                                     let actual = try provider(at,q)
-                                    guard var bindings = bitmapInputs else { throw Boundary.dependency("Observed bitmap input provenance") }
-                                    response = try bindings.observed(q,response:actual);bitmapInputs = bindings
+                                    // In place, as for release above: a copy here
+                                    // copied the inputs' tables per request (L20).
+                                    guard bitmapInputs != nil else { throw Boundary.dependency("Observed bitmap input provenance") }
+                                    response = try bitmapInputs!.observed(q,response:actual)
                                 } else {
                                     guard let input = initialization else { throw Boundary.dependency("Initial bitmap inputs") }
                                     let replies = at == .resources ? input.frontResponses : input.backgroundResponses
                                     let index = at == .resources ? frontAPIIndex : backgroundAPIIndex
                                     guard index < replies.count else { throw Boundary.dependency("Initial bitmap response") }
                                     let control = replies[index]
-                                    if var bindings = bitmapInputs {
-                                        response = try bindings.response(q,control:control);bitmapInputs = bindings
+                                    if bitmapInputs != nil {
+                                        response = try bitmapInputs!.response(q,control:control)
                                     } else { response = control }
                                     if at == .resources { frontAPIIndex += 1 } else { backgroundAPIIndex += 1 }
                                 }

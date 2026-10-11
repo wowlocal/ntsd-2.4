@@ -176,8 +176,10 @@ extension OriginalApplicationBitmapInputs {
     /// Record an actually served Native response without replacing its writes
     /// with the declared-input projection. Only our finite owned metadata fields
     /// are supported; private BITMAP pointers/type and descriptor tails stay unknown.
+    /// Its checks come first and `perform` throws only before its first
+    /// change, so it runs in place (a rollback copy copied the image, surface
+    /// and DC tables on every observed request of the menu's bitmaps; L20).
     public mutating func observed(_ q: API.Request,response: API.Response) throws -> API.Response {
-        var next = self
         let allowed: Range<Int>,bytes: [UInt8]
         switch q.kind {
         case "getObject":
@@ -203,7 +205,7 @@ extension OriginalApplicationBitmapInputs {
         }
         // Existing numeric/ownership semantics still validate/update all owners.
         // Its generated structure bytes are deliberately not returned to Core.
-        _ = try next.perform(q,control:.init(result:response.result,output:response.output))
-        self = next;return response
+        _ = try perform(q,control:.init(result:response.result,output:response.output))
+        return response
     }
 }
