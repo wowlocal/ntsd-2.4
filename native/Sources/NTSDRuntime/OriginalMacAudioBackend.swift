@@ -183,11 +183,14 @@ import NTSDCore
             case .unlock:
                 let b = try buffer(q.event.arguments[0],binding),f = b.format
                 let frames = b.raw.byteCount/f.alignment
+                // The record's bytes, read once: `b.raw.byte(at:)` copied the
+                // record (a class property) for every byte (MEMORY_LOADING L8).
+                let raw = b.raw.bytes
                 for frame in 0..<frames { for channel in 0..<f.channels {
                     let index = frame*f.alignment+channel*(f.bits/8),value: Float
-                    if f.bits == 8 { value = Float(Int(b.raw.byte(at: index))-128)/128 }
+                    if f.bits == 8 { value = Float(Int(raw[index])-128)/128 }
                     else {
-                        let word = UInt16(b.raw.byte(at: index)) | (UInt16(b.raw.byte(at: index+1)) << 8)
+                        let word = UInt16(raw[index]) | (UInt16(raw[index+1]) << 8)
                         value = Float(Int16(bitPattern:word))/32768
                     }
                     b.pcm.channels[channel][frame] = value
