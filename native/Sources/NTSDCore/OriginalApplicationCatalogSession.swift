@@ -195,7 +195,11 @@ public struct OriginalApplicationCatalogSession {
         func emit(_ event: Observation) throws { try observe(event,state) }
         func effect(_ effect: Session.Effect) throws {
             guard var owner = state.graphics else { throw Boundary.missingOwners }
-            let command = try owner.consume(effect,inputs:state.bitmapInputs); state.graphics = owner
+            // Held only here while it changes, so its tables change in place;
+            // consume leaves it unchanged when it throws (MEMORY_LOADING L5).
+            state.graphics = nil
+            defer { state.graphics = owner }
+            let command = try owner.consume(effect,inputs:state.bitmapInputs)
             if let command { graphics.append(command) }; operations.append(.menu(effect))
         }
         func word(_ address: Int) throws -> UInt32 { try state.full.integer(at:address-0x44d000,as:UInt32.self) }
@@ -259,7 +263,10 @@ public struct OriginalApplicationCatalogSession {
                 let control = try self.controls.bitmap(q)
                 guard control.writes.isEmpty else { throw Boundary.input("Captured bitmap writes") }
                 guard var owner = self.state.bitmapInputs else { throw Boundary.missingOwners }
-                let r = try owner.response(q,control:control); self.state.bitmapInputs = owner
+                // As in effect: the inputs change in place, unchanged on a throw.
+                self.state.bitmapInputs = nil
+                let r: API.Response
+                do { defer { self.state.bitmapInputs = owner }; r = try owner.response(q,control:control) }
                 if q.kind == "createSurface",let output = r.output { surface = output }
                 try self.effect(.bitmap(q,r)); try self.emit(.api(q,r)); return r
             }

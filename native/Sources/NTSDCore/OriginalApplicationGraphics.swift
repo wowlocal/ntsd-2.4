@@ -273,10 +273,11 @@ public struct OriginalApplicationGraphics: Equatable {
 
     /// Bitmap inputs already performed this request transactionally. Its own
     /// image/DC generations authorize these bindings; no expected state enters.
+    /// `performBitmap` throws only before its first change (`create` checks
+    /// before it stores; the owner updates follow every lookup), so it runs in
+    /// place and a throw leaves the graphics as they were (MEMORY_LOADING L5).
     public mutating func bitmap(_ q: Bitmap.Request,_ r: Bitmap.Response,inputs: OriginalApplicationBitmapInputs) throws -> Command {
-        var next = self
-        let command = try next.performBitmap(q,r,inputs:inputs)
-        self = next;return command
+        try performBitmap(q,r,inputs:inputs)
     }
     private mutating func performBitmap(_ q: Bitmap.Request,_ r: Bitmap.Response,inputs: OriginalApplicationBitmapInputs) throws -> Command {
         var bindings: [Binding] = []

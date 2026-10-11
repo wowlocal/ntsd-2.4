@@ -73,10 +73,12 @@ public struct OriginalApplicationBitmapInputs: Equatable {
         return surface.sourceColors
     }
 
+    /// `perform` throws only before its first change (every case checks, then
+    /// stores), so it runs in place and a throw leaves the inputs as they were.
+    /// A rollback copy here copied the image, surface and DC tables on every
+    /// call (MEMORY_LOADING L5).
     public mutating func response(_ q: API.Request,control: API.Response) throws -> API.Response {
-        var next = self
-        let result = try next.perform(q,control:control)
-        self = next;return result
+        try perform(q,control:control)
     }
     private mutating func perform(_ q: API.Request,control: API.Response) throws -> API.Response {
         func invalid(_ name: String) -> OriginalStateError { .invalidStorage("Bitmap input "+name) }
