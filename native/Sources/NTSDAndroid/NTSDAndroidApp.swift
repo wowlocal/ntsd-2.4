@@ -68,6 +68,14 @@ func ntsdAndroidOnCreate(_ activity: UnsafeMutablePointer<ANativeActivity>) {
         // The packaged inputs' SHA-256 with the CPU's SHA-2 instructions, after
         // they give the Swift digests (MEMORY_LOADING L11).
         if ntsd_sha256_available() != 0 { PortableSHA256.install(ntsd_sha256_blocks) }
+        // The packages load on every core: Dispatch's workers inherit the game
+        // thread's fast-cluster mask (pinToFastCores), which left half of the
+        // A12's cores idle while it read and verified them (MEMORY_LOADING L12).
+        OriginalConcurrentInputs.parallelLoop = { count,body in
+            let all = ntsd_cpu_cluster_mask(1) | ntsd_cpu_cluster_mask(0)
+            OriginalConcurrentInputs.threadLoop(count,workers:ProcessInfo.processInfo.activeProcessorCount,
+                threadStart:{ if all != 0 { _ = ntsd_pin_current_thread(all) } },body)
+        }
         app.prepareData()
     }
 

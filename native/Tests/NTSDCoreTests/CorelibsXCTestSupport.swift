@@ -96,6 +96,7 @@ extension OriginalCharacterMenuMusicSurfaceTests { convenience init() { self.ini
 extension OriginalCharacterMenuSurfaceTests { convenience init() { self.init(name: "helper", testClosure: { _ in }) } }
 extension OriginalCharacterScreenTests { convenience init() { self.init(name: "helper", testClosure: { _ in }) } }
 extension OriginalConcurrentInputsTests { convenience init() { self.init(name: "helper", testClosure: { _ in }) } }
+extension OriginalConcurrentLoopTests { convenience init() { self.init(name: "helper", testClosure: { _ in }) } }
 extension OriginalContinuousGameplayTests { convenience init() { self.init(name: "helper", testClosure: { _ in }) } }
 extension OriginalCoordinatePrecisionTests { convenience init() { self.init(name: "helper", testClosure: { _ in }) } }
 extension OriginalCRTTests { convenience init() { self.init(name: "helper", testClosure: { _ in }) } }
