@@ -5,7 +5,7 @@ a test harness).
 Usage: load_memory.py OUT_DIR (--android | --local BINARY [--local BINARY ...])
                       [--apk PATH ...] [--serial S] [--lib DIR] [--label L]
                       [--scenario vs|demo] [--bodies N] [--runs K]
-                      [--profile-loading SECONDS] [--call-graph G] [--frequency HZ]
+                      [--profile-loading SECONDS] [--call-graph G] [--frequency HZ] [--offcpu]
                       [--fresh-data] [--ticks A,B] [--sounds] [--warmup]
                       [--snapshots] [--restore-stayon]
 
@@ -47,7 +47,10 @@ and whole-process (all threads) compute per tick from schedstat
 (mainMsPerTick, renderMsPerTick, processMsPerTick, threadMsPerTick); Mac the
 game thread's busy time per tick from the progress events (completeMsPerTick)
 and the process's CPU per tick (processMsPerTick). The gate's load A/B so
-measures loading, memory and frame time in the same interleaved runs.
+measures loading, memory and frame time in the same interleaved runs. On
+Android it also takes the memory readings again at body B (ticksEnd*: RSS,
+its anonymous and file parts, swap, RSS + swap and PSS), so a longer match
+shows whether memory grows.
 --sounds mixes the sound effects as in play (Android; media volume held at 0).
 --warmup first runs once, unmeasured (OUT_DIR/warmup.jsonl), the last build
 that is not the first one:
@@ -59,7 +62,9 @@ build's run.
 so startupSeconds includes extracting the APK's assets again.
 --profile-loading S records S seconds of simpleperf from the game's launch
 (the load) with android_speed.py's recorder; the profile lands in
-OUT_DIR/<label>-profile (perf.data, binary_cache, profile.json).
+OUT_DIR/<label>-profile (perf.data, binary_cache, profile.json). With --offcpu
+it also records where threads block (cpu-clock with --trace-offcpu: sample
+periods are on- and off-CPU time).
 """
 import argparse, json, os, re, statistics, subprocess, sys, tempfile, time
 from pathlib import Path
@@ -116,7 +121,7 @@ def android_run(o, apk, label):
         started_at = int(stat[19]) / 100   # starttime (field 22): clock ticks since boot
         profiled = None
         if o.profile_loading:
-            profiled = phone.record_profile(s, o.profile_loading, Path(o.out), label, o.lib, o.call_graph, o.frequency)
+            profiled = phone.record_profile(s, o.profile_loading, Path(o.out), label, o.lib, o.call_graph, o.frequency, o.offcpu)
         loaded = None; peak = 0; footprint_peak = 0
         while True:
             status = phone.shell(s, f"cat /proc/{pid}/status 2>/dev/null")
@@ -190,12 +195,18 @@ def ticks_window(o, s, pid, row):
     wall time per tick (android_speed.py's measure)."""
     first, last = o.ticks
     marks, cpu = {}, {}
+    end_status, end_pss = None, None
     deadline = time.time() + o.timeout
     while len(cpu) < 2 and time.time() < deadline:
         bodies = max((e.get("gameplayBodies", 0) for e in phone.progress(s) if e.get("event") == "progress"), default=0)
         for name, at in (("a", first), ("b", last)):
             if name not in cpu and bodies >= at:
                 cpu[name] = phone.thread_cpu(s, pid)
+                if name == "b":
+                    # The memory readings again at the window's end (after the CPU reading).
+                    end_status = phone.shell(s, f"cat /proc/{pid}/status 2>/dev/null")
+                    m = re.search(r"TOTAL PSS:\s+(\d+)", phone.shell(s, f"dumpsys meminfo {pid}"))
+                    end_pss = round(int(m.group(1)) / 1024) if m else None
         if not phone.shell(s, f"pidof {PACKAGE}").strip():
             break
         time.sleep(0.5)
@@ -204,6 +215,12 @@ def ticks_window(o, s, pid, row):
     b = next((e for e in events if e["gameplayBodies"] >= last), None)
     if len(cpu) < 2 or not a or not b or b["uptime"] <= a["uptime"]:
         row["ticksError"] = f"window {first}-{last} not reached"; return
+    if end_status:
+        for key, name in (("VmRSS", "ResidentMB"), ("RssAnon", "AnonMB"), ("RssFile", "FileMB"), ("VmSwap", "SwapMB")):
+            if kib(end_status, key) is not None: row["ticksEnd" + name] = round(kib(end_status, key) / 1024)
+        if "ticksEndResidentMB" in row and "ticksEndSwapMB" in row:
+            row["ticksEndFootprintMB"] = row["ticksEndResidentMB"] + row["ticksEndSwapMB"]
+        if end_pss is not None: row["ticksEndPssMB"] = end_pss
     tps = (b["gameplayBodies"] - a["gameplayBodies"]) / (b["uptime"] - a["uptime"])
     wall = cpu["b"][0] - cpu["a"][0]
     per_tick = {n: 1000 * (cpu["b"][1][n] - cpu["a"][1][n]) / 1e9 / wall / tps for n in cpu["b"][1]}
@@ -291,6 +308,7 @@ def main():
     a.add_argument("--profile-loading", type=int, default=0)
     a.add_argument("--call-graph", default="dwarf,8192"); a.add_argument("--frequency", type=int, default=200)
     a.add_argument("--snapshots", action="store_true"); a.add_argument("--restore-stayon", action="store_true")
+    a.add_argument("--offcpu", action="store_true", help="with --profile-loading, record off-CPU time too")
     a.add_argument("--fresh-data", action="store_true")
     a.add_argument("--ticks", type=lambda t: tuple(int(x) for x in t.split(",")), default=None, help="A,B: frame time between bodies A and B")
     a.add_argument("--sounds", action="store_true")
@@ -330,7 +348,8 @@ def main():
             mine = [r for r in rows if r["build"] == name]
             summary = {"build": name, "runs": len(mine)}
             for key in ("startupSeconds", "loadSeconds", "startToLoadedSeconds", "peakResidentMB", "peakFootprintMB",
-                        "loadedResidentMB", "bodiesResidentMB", "mainMsPerTick", "renderMsPerTick", "processMsPerTick", "completeMsPerTick"):
+                        "loadedResidentMB", "bodiesResidentMB", "mainMsPerTick", "renderMsPerTick", "processMsPerTick", "completeMsPerTick",
+                        "loadedSwapMB", "bodiesSwapMB", "ticksEndResidentMB", "ticksEndSwapMB", "ticksEndFootprintMB", "ticksEndPssMB"):
                 values = [r[key] for r in mine if r.get(key) is not None]
                 if values:
                     summary[key] = {"median": statistics.median(values), "min": min(values), "max": max(values)}
