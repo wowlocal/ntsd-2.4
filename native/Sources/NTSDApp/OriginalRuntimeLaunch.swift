@@ -1,5 +1,4 @@
 import AppKit
-import GameController
 import NTSDCore
 import NTSDMacPlatform
 
@@ -47,39 +46,11 @@ final class OriginalRuntimeDelegate: NSObject, NSApplicationDelegate {
         activity = ProcessInfo.processInfo.beginActivity(options:[.userInitiatedAllowingIdleSystemSleep,.latencyCritical],
                                                           reason:"Original game loop timing")
     }
-    /// Joysticks connected at launch (APPLICATION_JOYSTICKS_PLAN.md): the first
-    /// two extended game controllers. The original probes its joysticks only at
-    /// startup, so this is fixed.
-    private lazy var controllers: [GCController] = {
-        // Already-connected controllers are enumerated asynchronously after launch;
-        // give GameController up to 0.5 s to report one before 43bf10's single probe.
-        func found() -> [GCController] { GCController.controllers().filter { $0.extendedGamepad != nil } }
-        let deadline = Date().addingTimeInterval(0.5)
-        while found().isEmpty && Date() < deadline { RunLoop.current.run(mode:.default,before:Date().addingTimeInterval(0.05)) }
-        return Array(found().prefix(2))
-    }()
-    func connectedJoysticks() -> Int { controllers.count }
-    func startJoystickSampling(_ session: OriginalRuntimeSession) {
-        // Common modes: sampling continues while a window is dragged or a menu tracks.
-        let timer = Timer(timeInterval:0.025,repeats:true) { [weak self] _ in
-            MainActor.assumeIsolated { self?.sampleControllers() }
-        }
-        RunLoop.main.add(timer,forMode:.common)
-    }
-    /// joySetCapture's 25 ms period: sample each controller and let the runtime
-    /// post the MM_JOY messages its threshold and button changes call for.
-    private func sampleControllers() {
-        guard let session,let messages = session.messages,!session.stopped else { return }
-        for (id,controller) in controllers.enumerated() {
-            guard let pad = controller.extendedGamepad else { continue }
-            var dx = pad.leftThumbstick.xAxis.value,dy = pad.leftThumbstick.yAxis.value
-            if pad.dpad.xAxis.value != 0 { dx = pad.dpad.xAxis.value }
-            if pad.dpad.yAxis.value != 0 { dy = pad.dpad.yAxis.value }
-            func axis(_ v: Float) -> UInt32 { UInt32(((max(-1,min(1,v))+1)/2*65535).rounded()) }
-            let buttons = [pad.buttonA,pad.buttonB,pad.buttonX,pad.buttonY].enumerated().reduce(UInt32(0)) { $0 | ($1.element.isPressed ? 1 << UInt32($1.offset) : 0) }
-            messages.joystick(UInt32(id),x:axis(dx),y:axis(-dy),buttons:buttons)
-        }
-    }
+    /// Joysticks connected at launch (APPLICATION_JOYSTICKS_PLAN.md), from
+    /// GameController: shared with the iPad and Apple TV hosts (TVOS_WEB T1b).
+    private let joysticks = OriginalGameControllerJoysticks()
+    func connectedJoysticks() -> Int { joysticks.count }
+    func startJoystickSampling(_ session: OriginalRuntimeSession) { joysticks.startSampling(session) }
     func makeMusicOutput() throws -> OriginalMacMusicOutput { try .bundled() }
     var musicDirectory: String { OriginalMacMusicOutput.directory()?.path ?? "" }
     func startSoundOutput(_ effects: OriginalMacSoundEffects,muted: Bool) throws -> String {

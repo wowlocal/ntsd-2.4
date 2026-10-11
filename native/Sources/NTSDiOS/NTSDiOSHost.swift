@@ -1,6 +1,9 @@
 import AVFoundation
 import CoreText
 import Foundation
+#if os(tvOS)
+import GameController
+#endif
 import UIKit
 import NTSDCore
 import NTSDRuntime
@@ -150,8 +153,11 @@ final class NTSDiOSCursor {}
     func beginTimingActivity() {
         activity = ProcessInfo.processInfo.beginActivity(options:[.userInitiated,.latencyCritical],reason:"Original game loop timing")
     }
-    func connectedJoysticks() -> Int { 0 }
-    func startJoystickSampling(_ session: OriginalRuntimeSession) {}
+    /// Bluetooth gamepads as the original's joysticks, as on macOS (TVOS_WEB
+    /// T1b): the first two extended gamepads connected at launch.
+    let joysticks = OriginalGameControllerJoysticks()
+    func connectedJoysticks() -> Int { joysticks.count }
+    func startJoystickSampling(_ session: OriginalRuntimeSession) { joysticks.startSampling(session) }
     func makeMusicOutput() throws -> OriginalMacMusicOutput {
         let directory = URL(fileURLWithPath:musicDirectory,isDirectory:true)
         guard let manifest = try JSONSerialization.jsonObject(with:Data(contentsOf:directory.appendingPathComponent("manifest.json"))) as? [String:Any],
@@ -192,7 +198,47 @@ final class NTSDiOSCursor {}
     }
     func backingScale(_ window: UInt32,in windows: OriginalRuntimeWindowBackend) -> Double { Double(UIScreen.main.scale) }
     func cursorPoint() -> (Int32,Int32) { cursor }
-    func attach(_ window: UInt32,in windows: OriginalRuntimeWindowBackend,session: OriginalRuntimeSession) throws {}
+    func attach(_ window: UInt32,in windows: OriginalRuntimeWindowBackend,session: OriginalRuntimeSession) throws {
+        #if os(tvOS)
+        if !scripted { startRemoteKeys() }
+        #endif
+    }
+    #if os(tvOS)
+    private var remoteTimer: Timer?
+    private var remoteHeld: Set<UInt32> = []
+    /// The Siri Remote as keys for the menus (TVOS_WEB T1b), sampled every
+    /// 25 ms: a swipe on the touch surface (relative to where it began) as
+    /// the arrow keys; on the second-generation remote (a directional gamepad)
+    /// a press of the outer ring's sides as the arrows and of its centre as
+    /// Enter, on the first a click of the surface as Enter. Gamepads are the
+    /// game's joysticks instead. Menu is not mapped: in this game Esc always
+    /// asks to quit; the TV button leaves the app.
+    func startRemoteKeys() {
+        guard remoteTimer == nil else { return }
+        let timer = Timer(timeInterval:0.025,repeats:true) { [weak self] _ in MainActor.assumeIsolated { self?.sampleRemote() } }
+        RunLoop.main.add(timer,forMode:.common); remoteTimer = timer
+    }
+    private func sampleRemote() {
+        var wanted: Set<UInt32> = []
+        for controller in GCController.controllers() where controller.extendedGamepad == nil {
+            guard let pad = controller.microGamepad else { continue }
+            let x = pad.dpad.xAxis.value,y = pad.dpad.yAxis.value
+            if x < -0.5 { wanted.insert(0x50) } else if x > 0.5 { wanted.insert(0x4f) }
+            if y > 0.5 { wanted.insert(0x52) } else if y < -0.5 { wanted.insert(0x51) }
+            let profile = controller.physicalInputProfile
+            if let ring = profile.dpads[GCInputDirectionalCardinalDpad] {
+                if ring.left.isPressed { wanted.insert(0x50) }
+                if ring.right.isPressed { wanted.insert(0x4f) }
+                if ring.up.isPressed { wanted.insert(0x52) }
+                if ring.down.isPressed { wanted.insert(0x51) }
+                if profile.buttons[GCInputDirectionalCenterButton]?.isPressed == true { wanted.insert(0x28) }
+            } else if pad.buttonA.isPressed { wanted.insert(0x28) }
+        }
+        for usage in remoteHeld.subtracting(wanted).sorted() { if let k = OriginalHIDKeys.key(usage:usage) { key(k,down:false,characters:nil) } }
+        for usage in wanted.subtracting(remoteHeld).sorted() { if let k = OriginalHIDKeys.key(usage:usage) { key(k,down:true,characters:nil) } }
+        remoteHeld = wanted
+    }
+    #endif
     func snapshotPNG(_ window: UInt32,in windows: OriginalRuntimeWindowBackend) throws -> Data { try windows.presentedPNG(window) }
     func viewPNG(_ window: UInt32,in windows: OriginalRuntimeWindowBackend) throws -> Data { try windows.presentedPNG(window) }
     func toggleFullScreen(_ window: UInt32,in windows: OriginalRuntimeWindowBackend) throws {

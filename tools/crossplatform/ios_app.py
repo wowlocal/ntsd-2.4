@@ -33,7 +33,12 @@ PLATFORMS = {
     "tvos": {"triple": "arm64-apple-tvos17.0-simulator", "sdk": "appletvsimulator", "scratch": "build-tvos-sim",
              "device": "Apple TV 4K (3rd generation) (at 1080p)", "runtime": ".tvOS-", "bundle": "local.ntsd.native.tvos",
              "plist": {"CFBundleSupportedPlatforms": ["AppleTVSimulator"], "UIDeviceFamily": [3],
-                       "UIRequiredDeviceCapabilities": ["arm64"]}},
+                       "UIRequiredDeviceCapabilities": ["arm64"],
+                       # Gamepads (the game's joysticks) and the Siri Remote (TVOS_WEB T1b):
+                       # the second-generation remote as a directional gamepad, with its ring.
+                       "GCSupportedGameControllers": [{"ProfileName": "ExtendedGamepad"}, {"ProfileName": "DirectionalGamepad"},
+                                                      {"ProfileName": "MicroGamepad"}],
+                       "GCSupportsMultipleMicroGamepads": True, "GCSupportsControllerUserInteraction": True}},
 }
 
 

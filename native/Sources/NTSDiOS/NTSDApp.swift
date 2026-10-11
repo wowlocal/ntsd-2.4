@@ -1,5 +1,17 @@
 import UIKit
 import NTSDRuntime
+#if os(tvOS)
+import GameController
+
+/// On tvOS controller input reaches the game only through GameController
+/// (TVOS_WEB T1b): with UIKit interaction off, a gamepad's buttons are not
+/// also delivered as presses (its B arrives as Menu there) and the Siri
+/// Remote's Menu does not send the app to the background; the remote is read
+/// as a micro gamepad (NTSDiOSSessionHost.startRemoteKeys).
+typealias NTSDRootViewController = GCEventViewController
+#else
+typealias NTSDRootViewController = UIViewController
+#endif
 
 final class NTSDAppDelegate: UIResponder, UIApplicationDelegate {
     func application(_ application: UIApplication,configurationForConnecting session: UISceneSession,
@@ -24,15 +36,22 @@ final class NTSDSceneDelegate: UIResponder, UIWindowSceneDelegate {
             host.session = game; controller.gameView.host = host
             self.host = host; self.session = game
             // Start once UIKit has finished connecting the scene: CoreAudio's
-            // setup needs the main thread free (it deadlocked inside this callback).
-            DispatchQueue.main.async { MainActor.assumeIsolated { game.start() } }
+            // setup needs the main thread free (it deadlocked inside this
+            // callback). A run-loop block rather than a main-queue block: the
+            // launch probe for gamepads waits in the run loop for
+            // GameController to report the paired ones, which it does on the
+            // main queue, and a main-queue block would hold that queue (T1b).
+            RunLoop.main.perform { MainActor.assumeIsolated { game.start() } }
         }
     }
 }
 
-final class NTSDGameViewController: UIViewController {
+final class NTSDGameViewController: NTSDRootViewController {
     let gameView = NTSDGameView()
     override func loadView() { view = gameView }
+    #if os(tvOS)
+    override func viewDidLoad() { super.viewDidLoad(); controllerUserInteractionEnabled = false }
+    #endif
     #if !os(tvOS)
     override var prefersStatusBarHidden: Bool { true }
     override var prefersHomeIndicatorAutoHidden: Bool { true }
@@ -96,4 +115,5 @@ final class NTSDGameView: UIView {
         }
         return handled
     }
+
 }
