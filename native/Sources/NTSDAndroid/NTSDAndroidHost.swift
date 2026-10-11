@@ -86,7 +86,7 @@ final class NTSDAndroidCursor {}
                 condition.broadcast(); condition.unlock()
                 if let counts {
                     DispatchQueue.main.async {
-                        OriginalRuntimeSession.emit(["event":"androidPresent","submitted":counts.0,"drawn":counts.1,"waits":counts.2])
+                        OriginalRuntimeSession.emit(["event":"androidPresent","submitted":counts.0,"drawn":counts.1,"waits":counts.2,"xruns":NTSDAndroidXRuns.counts()])
                     }
                 }
             }
@@ -336,7 +336,7 @@ final class NTSDAndroidCursor {}
         if muted && scripted { return "muted (no output: scripted)" }   // as on the iPad host
         let feed = NTSDAndroidEffectsFeed(effects:effects)
         var rate = 48000.0
-        let stream = try NTSDAndroidStream(float:true,rate:nil,lowLatency:true) { data,frames in feed.fill(data,frames:frames,rate:rate) }
+        let stream = try NTSDAndroidStream(kind:"effects",float:true,rate:nil,lowLatency:true) { data,frames in feed.fill(data,frames:frames,rate:rate) }
         rate = Double(stream.rate); self.effects = stream; self.feed = feed; effectsMuted = muted; applyGain(); stream.start()
         return muted ? "muted" : "AAudio \(stream.rate) Hz"
     }

@@ -11,7 +11,9 @@ final class NTSDAndroidStream {
     private let callback: Unmanaged<Callback>
     final class Callback { let fill: (UnsafeMutableRawPointer,Int) -> Void; init(_ fill: @escaping (UnsafeMutableRawPointer,Int) -> Void) { self.fill = fill } }
     /// float: interleaved Float32 at the device rate; otherwise Int16 at `rate`.
-    init(float: Bool,rate wanted: Int32?,lowLatency: Bool,fill: @escaping (UnsafeMutableRawPointer,Int) -> Void) throws {
+    let kind: String
+    init(kind: String,float: Bool,rate wanted: Int32?,lowLatency: Bool,fill: @escaping (UnsafeMutableRawPointer,Int) -> Void) throws {
+        self.kind = kind
         var builder: OpaquePointer?
         var result = AAudio_createStreamBuilder(&builder)
         guard result == AAUDIO_OK,let builder else { throw Failure.aaudio("createStreamBuilder",result) }
@@ -30,10 +32,33 @@ final class NTSDAndroidStream {
         result = AAudioStreamBuilder_openStream(builder,&stream)
         guard result == AAUDIO_OK,let stream else { callback.release(); throw Failure.aaudio("openStream",result) }
         self.stream = stream; self.callback = callback; rate = AAudioStream_getSampleRate(stream)
+        NTSDAndroidXRuns.opened(self)
     }
-    deinit { AAudioStream_close(stream); callback.release() }
+    deinit { NTSDAndroidXRuns.closed(self); AAudioStream_close(stream); callback.release() }
+    var xruns: Int { Int(max(0,AAudioStream_getXRunCount(stream))) }
     func start() { _ = AAudioStream_requestStart(stream) }
     func pause() { _ = AAudioStream_requestPause(stream) }
+}
+
+/// The streams' underruns (AAudioStream_getXRunCount), live and closed, by
+/// kind, reported with `androidPresent` (MEMORY_LOADING M8: the music now
+/// decodes on its stream's callback, so an underrun would show here).
+enum NTSDAndroidXRuns {
+    private static let lock = NSLock()
+    /// Kind and AAudio stream of each open stream (not the object: the
+    /// registry must not keep a stream alive); a stream leaves before it closes.
+    nonisolated(unsafe) private static var live: [ObjectIdentifier:(kind: String,stream: OpaquePointer)] = [:]
+    nonisolated(unsafe) private static var ended: [String:Int] = [:]
+    static func opened(_ s: NTSDAndroidStream) { lock.lock(); live[ObjectIdentifier(s)] = (s.kind,s.stream); lock.unlock() }
+    static func closed(_ s: NTSDAndroidStream) {
+        lock.lock(); live[ObjectIdentifier(s)] = nil; ended[s.kind,default:0] += s.xruns; lock.unlock()
+    }
+    static func counts() -> [String:Int] {
+        lock.lock(); defer { lock.unlock() }
+        var all = ended
+        for (kind,stream) in live.values { all[kind,default:0] += Int(max(0,AAudioStream_getXRunCount(stream))) }
+        return all
+    }
 }
 
 /// Feeds the sound-effect mixer (planar floats) to an interleaved stream;
@@ -56,35 +81,60 @@ final class NTSDAndroidEffectsFeed: @unchecked Sendable {
     }
 }
 
-/// A packaged track's PCM and play position, shared with AAudio's callback thread.
+/// A packaged track's play position, shared with AAudio's callback thread,
+/// which decodes the samples it plays a packet at a time from the mapped file
+/// (MEMORY_LOADING M8: the whole decoded track and a copy of the file took
+/// 24-94 MiB on the A12 while music played).
 final class NTSDAndroidMusicPCM: @unchecked Sendable {
     let frames: Int
     private let lock = NSLock()
-    private var samples: [Int16]?, position = 0, playing = false, gain: Float = 1
-    private let ended: @Sendable () -> Void
-    init(frames: Int,ended: @escaping @Sendable () -> Void) { self.frames = frames; self.ended = ended }
+    private var position = 0, playing = false, gain: Float = 1, failed = false, moves = 0
+    /// Only the callback thread reads; the lock is not held while it decodes,
+    /// so the main thread's position and state calls never wait for a packet.
+    private let reader: OriginalALACTrack.Reader?
+    private var scratch: [Int16] = []
+    private let ended: @Sendable () -> Void, failure: @Sendable (String) -> Void
+    init(reader: OriginalALACTrack.Reader?,frames: Int,ended: @escaping @Sendable () -> Void,failure: @escaping @Sendable (String) -> Void) {
+        self.reader = reader; self.frames = frames; self.ended = ended; self.failure = failure; failed = reader == nil
+    }
     func locked<T>(_ body: () -> T) -> T { lock.lock(); defer { lock.unlock() }; return body() }
-    func ready(_ decoded: [Int16]) { locked { samples = decoded } }
     var isPlaying: Bool { locked { playing } }
     func setPlaying(_ value: Bool) { locked { playing = value } }
     func setGain(_ value: Float) { locked { gain = value } }
     var frame: Int {
         get { locked { position } }
-        set { locked { position = max(0,min(frames,newValue)) } }
+        set { locked { position = max(0,min(frames,newValue)); moves &+= 1 } }
     }
-    /// Copies from the position (silence when paused or still decoding); the
-    /// end of the track stops playback and reports the end once, like AVAudioPlayer.
+    /// Copies from the position (silence when paused); the end of the track
+    /// stops playback and reports the end once, like AVAudioPlayer. The
+    /// samples are decoded outside the lock and committed only if the
+    /// position did not move meanwhile (else they are decoded again from the
+    /// new position).
     func fill(_ data: UnsafeMutableRawPointer,frames wanted: Int) {
         let out = data.assumingMemoryBound(to:Int16.self)
         var finished = false, written = 0
-        locked {
-            guard playing,let samples else { return }
-            let count = min(wanted,frames-position)
+        for _ in 0..<3 {
+            let (start,gain,active,move) = locked { (position,self.gain,playing && !failed,moves) }
+            guard active else { break }
+            let count = min(wanted,frames-start)
+            var got = 0
             if count > 0 {
-                for i in 0..<count*2 { out[i] = Int16(clamping:Int((Float(samples[position*2+i])*gain).rounded())) }
-                position += count; written = count
+                if scratch.count < count*2 { scratch = [Int16](repeating:0,count:count*2) }
+                guard let reader else { break }
+                do { got = try scratch.withUnsafeMutableBufferPointer { try reader.read(from:start,count:count,into:$0.baseAddress!) } }
+                catch {
+                    locked { failed = true }; let report = failure,text = "\(error)"
+                    DispatchQueue.main.async { report(text) }; break
+                }
+                for i in 0..<got*2 { out[i] = Int16(clamping:Int((Float(scratch[i])*gain).rounded())) }
             }
-            if position >= frames { playing = false; finished = true }
+            let committed = locked { () -> Bool in
+                guard moves == move,playing else { return false }
+                position += got
+                if position >= frames { playing = false; finished = true }
+                return true
+            }
+            if committed { written = got; break }
         }
         if written < wanted { (out+written*2).update(repeating:0,count:(wanted-written)*2) }
         if finished { DispatchQueue.main.async(execute:ended) }
@@ -98,20 +148,18 @@ final class NTSDAndroidMusicPCM: @unchecked Sendable {
     let duration: TimeInterval
     private static let rate = 44100.0
     init(_ url: URL,ended: @escaping () -> Void) throws {
-        let track = try OriginalALACTrack(contentsOf:url)
+        let track = try OriginalALACTrack(mapping:url)
         guard track.sampleRate == Self.rate,track.channels == 2 else { throw OriginalALACTrack.Failure.unsupported("\(track.sampleRate) Hz, \(track.channels) channels") }
-        let endBox = UncheckedSendableBox(ended)
-        let pcm = NTSDAndroidMusicPCM(frames:track.frames) { MainActor.assumeIsolated { endBox.value() } }
+        let endBox = UncheckedSendableBox(ended),name = url.lastPathComponent
+        let failure: @Sendable (String) -> Void = { text in MainActor.assumeIsolated { OriginalRuntimeSession.emit(["event":"androidMusicError","track":name,"error":text]) } }
+        // A track the decoder refuses plays silence and reports it once, as
+        // when the whole-track decode failed in the background.
+        let reader: OriginalALACTrack.Reader?
+        do { reader = try OriginalALACTrack.Reader(track) }
+        catch { reader = nil; let text = "\(error)"; DispatchQueue.main.async { failure(text) } }
+        let pcm = NTSDAndroidMusicPCM(reader:reader,frames:track.frames,ended:{ MainActor.assumeIsolated { endBox.value() } },failure:failure)
         self.pcm = pcm; duration = Double(track.frames)/Self.rate
-        output = try NTSDAndroidStream(float:false,rate:Int32(Self.rate),lowLatency:false) { data,frames in pcm.fill(data,frames:frames) }
-        let target = UncheckedSendableBox(pcm),name = url.lastPathComponent
-        DispatchQueue.global(qos:.userInitiated).async {
-            do { target.value.ready(try track.samples()) }
-            catch {
-                let text = "\(error)"
-                DispatchQueue.main.async { OriginalRuntimeSession.emit(["event":"androidMusicError","track":name,"error":text]) }
-            }
-        }
+        output = try NTSDAndroidStream(kind:"music",float:false,rate:Int32(Self.rate),lowLatency:false) { data,frames in pcm.fill(data,frames:frames) }
     }
     var currentTime: TimeInterval {
         get { Double(pcm.frame)/Self.rate }
