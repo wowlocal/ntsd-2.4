@@ -309,8 +309,10 @@ final class NTSDAndroidCursor {}
     }
     func standardOverlay() throws -> OriginalMacRuntimeOverlay { .init(root:files.appendingPathComponent("NTSD Native",isDirectory:true)) }
     func beginTimingActivity() {}
-    func connectedJoysticks() -> Int { 0 }
-    func startJoystickSampling(_ session: OriginalRuntimeSession) {}
+    /// Gamepads as the original's joysticks (TVOS_WEB T1c).
+    let gamepads = NTSDAndroidGamepads()
+    func connectedJoysticks() -> Int { NTSDAndroidApp.shared.map { gamepads.probe($0.activity) } ?? 0 }
+    func startJoystickSampling(_ session: OriginalRuntimeSession) { gamepads.startSampling(session) }
     var scripted: Bool { arguments.contains("--script") }
     func makeMusicOutput() throws -> OriginalMacMusicOutput {
         let directory = URL(fileURLWithPath:musicDirectory,isDirectory:true)
@@ -343,7 +345,7 @@ final class NTSDAndroidCursor {}
     /// DirectSound silences the game's buffers while its window is not
     /// foreground (as the SDL host follows).
     private func applyGain() { feed?.silent.store(effectsMuted || !focused,ordering:.relaxed) }
-    func setFocused(_ value: Bool) { focused = value; applyGain() }
+    func setFocused(_ value: Bool) { focused = value; applyGain(); if !value { gamepads.reset() } }
     /// Declared Android convention: in the background the app's audio output
     /// stops (the game keeps running); it resumes where it was.
     func setForeground(_ value: Bool) {

@@ -243,6 +243,7 @@ func ntsdAndroidOnCreate(_ activity: UnsafeMutablePointer<ANativeActivity>) {
     }
     private func handle(_ event: OpaquePointer) -> Bool {
         guard let host else { return false }
+        if host.gamepads.handle(event) { return true }
         switch AInputEvent_getType(event) {
         case Int32(AINPUT_EVENT_TYPE_MOTION):
             guard let surface,let (x,y) = host.windows.clientPoint(AMotionEvent_getX(event,0),AMotionEvent_getY(event,0),surface:surface) else { return true }

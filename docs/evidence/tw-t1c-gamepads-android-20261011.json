@@ -1,0 +1,644 @@
+{
+ "study": "docs/research/MEMORY_LOADING.md",
+ "increment": "tw-t1c",
+ "previous": "tw-t1b",
+ "phase": "T1c: gamepads on Android (the user's question 2026-10-11)",
+ "change": "NTSDAndroid only: NTSDAndroidGamepads finds the first two input devices with SOURCE_GAMEPAD at launch (InputDevice.getDeviceIds/getDevice/getSources through JNI on the activity thread, every call exception-checked, local references deleted), keeps each one's axes (X/Y, HAT_X/HAT_Y) and A/B/X/Y (BUTTON_1-4 on generic pads) and d-pad keys from the input queue, and samples every 25 ms on the main queue with the SDL host's mapping (hat or d-pad keys over the stick, y down, buttons 1-4). Joystick motion and gamepad buttons from any device are consumed; d-pad keys and Back only from a gamepad found at launch. A cancelled motion and focus loss put the pads at rest. Before: 0 joysticks; stick motion reached the touch path as mouse moves near the top-left; B fell back to Back = Esc.",
+ "review": "Independent review, round 1: defects - a cancelled joystick motion carries the last axes, so a direction could stick after focus loss or a disconnect (medium); generic pads' BUTTON_1-4 swallowed; a lone SOURCE_JOYSTICK node (a motion sensor) could take a slot; the d-pad/Back change to record. All fixed (cancel and focus loss reset, BUTTON_1-4 mapped, SOURCE_GAMEPAD required). Round 2: OK; a doc comment narrowed afterwards (comment only). Behaviour change recorded: a gamepad found at launch drives the joystick with its d-pad keys (as on macOS, SDL and the original) instead of arrow keys, and its Back no longer acts as Esc; system Back still does. Accepted gap: a button or stick held through a focus change reads as released until moved again.",
+ "notes": "Scripted runs never probe or sample, so results cannot change. Gate on native eb4a848e (final 703f1f25 differs by a doc comment only): clean APK; emulator vs, joystick and demo equal, vs frames identical (1832); phone A/B with music and sounds: load 5.56-6.32 against 6.28-6.41 s, main 10.80-10.91 against 10.86 ms, render 7.13-7.15 against 7.51-7.55, process 27.07-27.22 against 27.25-27.62 - no regression. Emulator behaviour: with the previous APK an injected 'input gamepad keyevent KEYCODE_BUTTON_B' at the main menu ended the game (B -> Back -> Esc -> the quit question answered Yes; home screen shown); with the new APK the menu stays; system Back ('input keyevent KEYCODE_BACK') still ends it as before. The A12's own input devices (sources 0x80000101, 0x101, 0x1103, 0x301) are not gamepads, so it still reports 0 joysticks without a controller. Not checked: a real controller (needs one paired with the A12). Core, Runtime and Package.swift unchanged, so the other hosts' gates do not apply.",
+ "testedTrees": "native eb4a848e96a3850416ab79f6a6aa008fb76e170f tools f3517b3005805eaff84052dd69a6518744d384a0",
+ "gate": [
+  "native eb4a848e96a3850416ab79f6a6aa008fb76e170f tools f3517b3005805eaff84052dd69a6518744d384a0",
+  "apk saved",
+  "apk libraries kept",
+  "emu exit=0",
+  "{\"scenario\": \"vs\", \"seconds\": 56.7, \"result\": \"equal\", \"differs\": []}",
+  "{\"scenario\": \"joystick\", \"seconds\": 19.5, \"result\": \"equal\", \"differs\": []}",
+  "{\"scenario\": \"demo\", \"seconds\": 44.0, \"result\": \"equal\", \"differs\": []}",
+  "{\"frames\": 1832, \"mismatched\": 0, \"result\": \"identical\"}",
+  "phone A/B exit=0",
+  "{\"summary\": {\"build\": \"tw-t1c\", \"runs\": 3, \"startupSeconds\": {\"median\": 1.81, \"min\": 1.75, \"max\": 1.91}, \"loadSeconds\": {\"median\": 5.84, \"min\": 5.56, \"max\": 6.32}, \"startToLoadedSeconds\": {\"median\": 13.01, \"min\": 12.87, \"max\": 13.32}, \"peakResidentMB\": {\"median\": 597, \"min\": 591, \"max\": 608}, \"peakFootprintMB\": {\"median\": 599, \"min\": 592, \"max\": 617}, \"loadedResidentMB\": {\"median\": 569, \"min\": 550, \"max\": 595}, \"bodiesResidentMB\": {\"median\": 538, \"min\": 533, \"max\": 545}, \"mainMsPerTick\": {\"median\": 10.83, \"min\": 10.8, \"max\": 10.91}, \"renderMsPerTick\": {\"median\": 7.14, \"min\": 7.13, \"max\": 7.15}, \"processMsPerTick\": {\"median\": 27.17, \"min\": 27.07, \"max\": 27.22}, \"completeMsPerTick\": {\"median\": 7.31, \"min\": 7.31, \"max\": 7.31}, \"loadedSwapMB\": {\"median\": 22, \"min\": 22, \"max\": 22}, \"bodiesSwapMB\": {\"median\": 22, \"min\": 22, \"max\": 22}, \"ticksEndResidentMB\": {\"median\": 576, \"min\": 571, \"max\": 580}, \"ticksEndSwapMB\": {\"median\": 14, \"min\": 14, \"max\": 14}, \"ticksEndFootprintMB\": {\"median\": 590, ",
+  "{\"summary\": {\"build\": \"tw-t1b\", \"runs\": 2, \"startupSeconds\": {\"median\": 1.8650000000000002, \"min\": 1.86, \"max\": 1.87}, \"loadSeconds\": {\"median\": 6.345000000000001, \"min\": 6.28, \"max\": 6.41}, \"startToLoadedSeconds\": {\"median\": 13.01, \"min\": 12.91, \"max\": 13.11}, \"peakResidentMB\": {\"median\": 587.5, \"min\": 583, \"max\": 592}, \"peakFootprintMB\": {\"median\": 599.0, \"min\": 598, \"max\": 600}, \"loadedResidentMB\": {\"median\": 556.5, \"min\": 541, \"max\": 572}, \"bodiesResidentMB\": {\"median\": 540.5, \"min\": 539, \"max\": 542}, \"mainMsPerTick\": {\"median\": 10.86, \"min\": 10.86, \"max\": 10.86}, \"renderMsPerTick\": {\"median\": 7.529999999999999, \"min\": 7.51, \"max\": 7.55}, \"processMsPerTick\": {\"median\": 27.435000000000002, \"min\": 27.25, \"max\": 27.62}, \"completeMsPerTick\": {\"median\": 7.305, \"min\": 7.3, \"max\": 7.31}, \"loadedSwapMB\": {\"median\": 22.0, \"min\": 22, \"max\": 22}, \"bodiesSwapMB\": {\"median\": 22.0, \"min\": 22, \"max\": 22}, \"ticksEndResidentMB\": {\"median\": 574.0, \"min\": 571, \"max\": 577}, \"ticksEndSwapMB\": {\"median\"",
+  "gate_done"
+ ],
+ "suites": [],
+ "phone": {
+  "summary": {
+   "tw-t1c": {
+    "runs": 3,
+    "loadSeconds": {
+     "median": 5.84,
+     "min": 5.56,
+     "max": 6.32
+    },
+    "startupSeconds": {
+     "median": 1.81,
+     "min": 1.75,
+     "max": 1.91
+    },
+    "startToLoadedSeconds": {
+     "median": 13.01,
+     "min": 12.87,
+     "max": 13.32
+    },
+    "peakFootprintMB": {
+     "median": 599,
+     "min": 592,
+     "max": 617
+    },
+    "peakResidentMB": {
+     "median": 597,
+     "min": 591,
+     "max": 608
+    },
+    "loadedResidentMB": {
+     "median": 569,
+     "min": 550,
+     "max": 595
+    },
+    "bodiesResidentMB": {
+     "median": 538,
+     "min": 533,
+     "max": 545
+    },
+    "bodiesSwapMB": {
+     "median": 22,
+     "min": 22,
+     "max": 22
+    },
+    "mainCpuToLoadedSeconds": {
+     "median": 10.07,
+     "min": 9.97,
+     "max": 10.07
+    },
+    "mainMsPerTick": {
+     "median": 10.83,
+     "min": 10.8,
+     "max": 10.91
+    },
+    "renderMsPerTick": {
+     "median": 7.14,
+     "min": 7.13,
+     "max": 7.15
+    },
+    "processMsPerTick": {
+     "median": 27.17,
+     "min": 27.07,
+     "max": 27.22
+    },
+    "completeMsPerTick": {
+     "median": 7.31,
+     "min": 7.31,
+     "max": 7.31
+    },
+    "loadedCounts": [
+     {
+      "allocations": 16105,
+      "audioRequests": 2072,
+      "bitmapRequests": 12817,
+      "files": 621
+     }
+    ]
+   },
+   "tw-t1b": {
+    "runs": 2,
+    "loadSeconds": {
+     "median": 6.345000000000001,
+     "min": 6.28,
+     "max": 6.41
+    },
+    "startupSeconds": {
+     "median": 1.8650000000000002,
+     "min": 1.86,
+     "max": 1.87
+    },
+    "startToLoadedSeconds": {
+     "median": 13.01,
+     "min": 12.91,
+     "max": 13.11
+    },
+    "peakFootprintMB": {
+     "median": 599.0,
+     "min": 598,
+     "max": 600
+    },
+    "peakResidentMB": {
+     "median": 587.5,
+     "min": 583,
+     "max": 592
+    },
+    "loadedResidentMB": {
+     "median": 556.5,
+     "min": 541,
+     "max": 572
+    },
+    "bodiesResidentMB": {
+     "median": 540.5,
+     "min": 539,
+     "max": 542
+    },
+    "bodiesSwapMB": {
+     "median": 22.0,
+     "min": 22,
+     "max": 22
+    },
+    "mainCpuToLoadedSeconds": {
+     "median": 9.975,
+     "min": 9.93,
+     "max": 10.02
+    },
+    "mainMsPerTick": {
+     "median": 10.86,
+     "min": 10.86,
+     "max": 10.86
+    },
+    "renderMsPerTick": {
+     "median": 7.529999999999999,
+     "min": 7.51,
+     "max": 7.55
+    },
+    "processMsPerTick": {
+     "median": 27.435000000000002,
+     "min": 27.25,
+     "max": 27.62
+    },
+    "completeMsPerTick": {
+     "median": 7.305,
+     "min": 7.3,
+     "max": 7.31
+    },
+    "loadedCounts": [
+     {
+      "allocations": 16105,
+      "audioRequests": 2072,
+      "bitmapRequests": 12817,
+      "files": 621
+     }
+    ]
+   }
+  },
+  "runs": [
+   {
+    "label": "tw-t1c-ab-01-tw-t1c",
+    "host": "android",
+    "serial": "R58R36F7VFD",
+    "scenario": "vs",
+    "bodies": 600,
+    "apk": "tw-t1c.apk",
+    "sounds": true,
+    "music": true,
+    "loadedResidentMB": 595,
+    "loadedAnonMB": 553,
+    "loadedFileMB": 33,
+    "loadedSwapMB": 22,
+    "mainCpuToLoadedSeconds": 9.97,
+    "bodiesResidentMB": 533,
+    "bodiesAnonMB": 489,
+    "bodiesFileMB": 35,
+    "bodiesSwapMB": 22,
+    "nativeHeapMB": {
+     "size": 1647,
+     "allocated": 1625,
+     "free": 22,
+     "privateDirty": 464,
+     "swapped": 0
+    },
+    "pssMB": {
+     "Java Heap": 9,
+     "Native Heap": 464,
+     "Code": 15,
+     "Stack": 1,
+     "Graphics": 5,
+     "Private Other": 2,
+     "System": 9,
+     "TOTAL PSS": 504
+    },
+    "cpuToEndSeconds": 94.23,
+    "ticksEndNativeHeapMB": {
+     "size": 1668,
+     "allocated": 1642,
+     "free": 26,
+     "privateDirty": 490,
+     "swapped": 0
+    },
+    "ticksEndResidentMB": 571,
+    "ticksEndAnonMB": 526,
+    "ticksEndFileMB": 35,
+    "ticksEndSwapMB": 14,
+    "ticksEndFootprintMB": 585,
+    "ticksEndPssMB": 537,
+    "ticksPerSecond": 34.72,
+    "completeMsPerTick": 7.31,
+    "mainMsPerTick": 10.91,
+    "renderMsPerTick": 7.14,
+    "processMsPerTick": 27.22,
+    "threadMsPerTick": {
+     "local.ntsd.port": 10.91,
+     "DispatchWorker": 7.14,
+     "NTSD.present": 5.2,
+     "NTSD.release": 1.81,
+     "AudioTrack": 1.21,
+     "Binder": 0.96
+    },
+    "threadCpuToEndSeconds": {
+     "local.ntsd.port": 34.35,
+     "DispatchWorker": 14.54,
+     "NTSD.present": 11.85,
+     "Jit_thread_pool": 4.72,
+     "NTSD.release": 4.58,
+     "AudioTrack": 2.88,
+     "Binder": 2.34,
+     "InsetsAnimation": 0.06
+    },
+    "peakResidentMB": 608,
+    "peakFootprintMB": 617,
+    "startupSeconds": 1.75,
+    "sha256HostBlocks": true,
+    "loadSeconds": 6.32,
+    "packagesWaitSeconds": 1.32,
+    "startToLoadedSeconds": 13.32,
+    "loadedCounts": {
+     "allocations": 16105,
+     "audioRequests": 2072,
+     "bitmapRequests": 12817,
+     "files": 621
+    },
+    "build": "tw-t1c"
+   },
+   {
+    "label": "tw-t1c-ab-02-tw-t1b",
+    "host": "android",
+    "serial": "R58R36F7VFD",
+    "scenario": "vs",
+    "bodies": 600,
+    "apk": "tw-t1b.apk",
+    "sounds": true,
+    "music": true,
+    "loadedResidentMB": 572,
+    "loadedAnonMB": 525,
+    "loadedFileMB": 38,
+    "loadedSwapMB": 22,
+    "mainCpuToLoadedSeconds": 10.02,
+    "bodiesResidentMB": 542,
+    "bodiesAnonMB": 494,
+    "bodiesFileMB": 39,
+    "bodiesSwapMB": 22,
+    "nativeHeapMB": {
+     "size": 1649,
+     "allocated": 1626,
+     "free": 23,
+     "privateDirty": 463,
+     "swapped": 0
+    },
+    "pssMB": {
+     "Java Heap": 9,
+     "Native Heap": 463,
+     "Code": 20,
+     "Stack": 1,
+     "Graphics": 5,
+     "Private Other": 7,
+     "System": 9,
+     "TOTAL PSS": 514
+    },
+    "cpuToEndSeconds": 95.81,
+    "ticksEndNativeHeapMB": {
+     "size": 1670,
+     "allocated": 1644,
+     "free": 26,
+     "privateDirty": 490,
+     "swapped": 0
+    },
+    "ticksEndResidentMB": 577,
+    "ticksEndAnonMB": 528,
+    "ticksEndFileMB": 40,
+    "ticksEndSwapMB": 14,
+    "ticksEndFootprintMB": 591,
+    "ticksEndPssMB": 545,
+    "ticksPerSecond": 34.67,
+    "completeMsPerTick": 7.31,
+    "mainMsPerTick": 10.86,
+    "renderMsPerTick": 7.55,
+    "processMsPerTick": 27.62,
+    "threadMsPerTick": {
+     "local.ntsd.port": 10.86,
+     "DispatchWorker": 7.55,
+     "NTSD.present": 5.23,
+     "NTSD.release": 1.8,
+     "AudioTrack": 1.22,
+     "Binder": 0.97
+    },
+    "threadCpuToEndSeconds": {
+     "local.ntsd.port": 34.28,
+     "DispatchWorker": 15.37,
+     "NTSD.present": 11.97,
+     "Jit_thread_pool": 4.94,
+     "NTSD.release": 4.57,
+     "AudioTrack": 2.9,
+     "Binder": 2.36,
+     "InsetsAnimation": 0.05
+    },
+    "peakResidentMB": 592,
+    "peakFootprintMB": 598,
+    "startupSeconds": 1.87,
+    "sha256HostBlocks": true,
+    "loadSeconds": 6.28,
+    "packagesWaitSeconds": 1.3,
+    "startToLoadedSeconds": 13.11,
+    "loadedCounts": {
+     "allocations": 16105,
+     "audioRequests": 2072,
+     "bitmapRequests": 12817,
+     "files": 621
+    },
+    "build": "tw-t1b"
+   },
+   {
+    "label": "tw-t1c-ab-03-tw-t1c",
+    "host": "android",
+    "serial": "R58R36F7VFD",
+    "scenario": "vs",
+    "bodies": 600,
+    "apk": "tw-t1c.apk",
+    "sounds": true,
+    "music": true,
+    "loadedResidentMB": 550,
+    "loadedAnonMB": 499,
+    "loadedFileMB": 41,
+    "loadedSwapMB": 22,
+    "mainCpuToLoadedSeconds": 10.07,
+    "bodiesResidentMB": 538,
+    "bodiesAnonMB": 488,
+    "bodiesFileMB": 41,
+    "bodiesSwapMB": 22,
+    "nativeHeapMB": {
+     "size": 1648,
+     "allocated": 1625,
+     "free": 23,
+     "privateDirty": 463,
+     "swapped": 0
+    },
+    "pssMB": {
+     "Java Heap": 9,
+     "Native Heap": 463,
+     "Code": 20,
+     "Stack": 1,
+     "Graphics": 5,
+     "Private Other": 2,
+     "System": 9,
+     "TOTAL PSS": 510
+    },
+    "cpuToEndSeconds": 94.92,
+    "ticksEndNativeHeapMB": {
+     "size": 1668,
+     "allocated": 1642,
+     "free": 26,
+     "privateDirty": 489,
+     "swapped": 0
+    },
+    "ticksEndResidentMB": 576,
+    "ticksEndAnonMB": 525,
+    "ticksEndFileMB": 42,
+    "ticksEndSwapMB": 14,
+    "ticksEndFootprintMB": 590,
+    "ticksEndPssMB": 542,
+    "ticksPerSecond": 34.72,
+    "completeMsPerTick": 7.31,
+    "mainMsPerTick": 10.83,
+    "renderMsPerTick": 7.15,
+    "processMsPerTick": 27.17,
+    "threadMsPerTick": {
+     "local.ntsd.port": 10.83,
+     "DispatchWorker": 7.15,
+     "NTSD.present": 5.22,
+     "NTSD.release": 1.8,
+     "AudioTrack": 1.2,
+     "Binder": 0.96
+    },
+    "threadCpuToEndSeconds": {
+     "local.ntsd.port": 34.29,
+     "DispatchWorker": 14.65,
+     "NTSD.present": 12.02,
+     "Jit_thread_pool": 4.87,
+     "NTSD.release": 4.6,
+     "AudioTrack": 2.87,
+     "Binder": 2.38,
+     "InsetsAnimation": 0.06
+    },
+    "peakResidentMB": 591,
+    "peakFootprintMB": 592,
+    "startupSeconds": 1.81,
+    "sha256HostBlocks": true,
+    "loadSeconds": 5.56,
+    "packagesWaitSeconds": 0.63,
+    "startToLoadedSeconds": 12.87,
+    "loadedCounts": {
+     "allocations": 16105,
+     "audioRequests": 2072,
+     "bitmapRequests": 12817,
+     "files": 621
+    },
+    "build": "tw-t1c"
+   },
+   {
+    "label": "tw-t1c-ab-04-tw-t1b",
+    "host": "android",
+    "serial": "R58R36F7VFD",
+    "scenario": "vs",
+    "bodies": 600,
+    "apk": "tw-t1b.apk",
+    "sounds": true,
+    "music": true,
+    "loadedResidentMB": 541,
+    "loadedAnonMB": 492,
+    "loadedFileMB": 40,
+    "loadedSwapMB": 22,
+    "mainCpuToLoadedSeconds": 9.93,
+    "bodiesResidentMB": 539,
+    "bodiesAnonMB": 490,
+    "bodiesFileMB": 39,
+    "bodiesSwapMB": 22,
+    "nativeHeapMB": {
+     "size": 1649,
+     "allocated": 1626,
+     "free": 22,
+     "privateDirty": 465,
+     "swapped": 0
+    },
+    "pssMB": {
+     "Java Heap": 9,
+     "Native Heap": 465,
+     "Code": 17,
+     "Stack": 1,
+     "Graphics": 5,
+     "Private Other": 2,
+     "System": 9,
+     "TOTAL PSS": 508
+    },
+    "cpuToEndSeconds": 92.34,
+    "ticksEndResidentMB": 571,
+    "ticksEndAnonMB": 522,
+    "ticksEndFileMB": 40,
+    "ticksEndSwapMB": 21,
+    "ticksEndFootprintMB": 592,
+    "ticksPerSecond": 34.72,
+    "completeMsPerTick": 7.3,
+    "mainMsPerTick": 10.86,
+    "renderMsPerTick": 7.51,
+    "processMsPerTick": 27.25,
+    "threadMsPerTick": {
+     "local.ntsd.port": 10.86,
+     "DispatchWorker": 7.51,
+     "NTSD.present": 5.01,
+     "NTSD.release": 1.75,
+     "AudioTrack": 1.21,
+     "Binder": 0.91
+    },
+    "threadCpuToEndSeconds": {
+     "local.ntsd.port": 33.66,
+     "DispatchWorker": 14.69,
+     "NTSD.present": 10.75,
+     "Jit_thread_pool": 4.92,
+     "NTSD.release": 4.03,
+     "AudioTrack": 2.75,
+     "Binder": 2.16,
+     "InsetsAnimation": 0.06
+    },
+    "peakResidentMB": 583,
+    "peakFootprintMB": 600,
+    "startupSeconds": 1.86,
+    "sha256HostBlocks": true,
+    "loadSeconds": 6.41,
+    "packagesWaitSeconds": 1.52,
+    "startToLoadedSeconds": 12.91,
+    "loadedCounts": {
+     "allocations": 16105,
+     "audioRequests": 2072,
+     "bitmapRequests": 12817,
+     "files": 621
+    },
+    "build": "tw-t1b"
+   },
+   {
+    "label": "tw-t1c-ab-05-tw-t1c",
+    "host": "android",
+    "serial": "R58R36F7VFD",
+    "scenario": "vs",
+    "bodies": 600,
+    "apk": "tw-t1c.apk",
+    "sounds": true,
+    "music": true,
+    "loadedResidentMB": 569,
+    "loadedAnonMB": 517,
+    "loadedFileMB": 43,
+    "loadedSwapMB": 22,
+    "mainCpuToLoadedSeconds": 10.07,
+    "bodiesResidentMB": 545,
+    "bodiesAnonMB": 491,
+    "bodiesFileMB": 44,
+    "bodiesSwapMB": 22,
+    "nativeHeapMB": {
+     "size": 1648,
+     "allocated": 1625,
+     "free": 23,
+     "privateDirty": 461,
+     "swapped": 0
+    },
+    "pssMB": {
+     "Java Heap": 9,
+     "Native Heap": 461,
+     "Code": 20,
+     "Stack": 1,
+     "Graphics": 5,
+     "Private Other": 7,
+     "System": 10,
+     "TOTAL PSS": 512
+    },
+    "cpuToEndSeconds": 95.01,
+    "ticksEndNativeHeapMB": {
+     "size": 1669,
+     "allocated": 1642,
+     "free": 26,
+     "privateDirty": 488,
+     "swapped": 0
+    },
+    "ticksEndResidentMB": 580,
+    "ticksEndAnonMB": 526,
+    "ticksEndFileMB": 45,
+    "ticksEndSwapMB": 14,
+    "ticksEndFootprintMB": 594,
+    "ticksEndPssMB": 546,
+    "ticksPerSecond": 34.74,
+    "completeMsPerTick": 7.31,
+    "mainMsPerTick": 10.8,
+    "renderMsPerTick": 7.13,
+    "processMsPerTick": 27.07,
+    "threadMsPerTick": {
+     "local.ntsd.port": 10.8,
+     "DispatchWorker": 7.13,
+     "NTSD.present": 5.18,
+     "NTSD.release": 1.82,
+     "AudioTrack": 1.19,
+     "Binder": 0.95
+    },
+    "threadCpuToEndSeconds": {
+     "local.ntsd.port": 34.25,
+     "DispatchWorker": 14.62,
+     "NTSD.present": 11.95,
+     "Jit_thread_pool": 5.01,
+     "NTSD.release": 4.67,
+     "AudioTrack": 2.84,
+     "Binder": 2.34,
+     "InsetsAnimation": 0.06
+    },
+    "peakResidentMB": 597,
+    "peakFootprintMB": 599,
+    "startupSeconds": 1.91,
+    "sha256HostBlocks": true,
+    "loadSeconds": 5.84,
+    "packagesWaitSeconds": 0.88,
+    "startToLoadedSeconds": 13.01,
+    "loadedCounts": {
+     "allocations": 16105,
+     "audioRequests": 2072,
+     "bitmapRequests": 12817,
+     "files": 621
+    },
+    "build": "tw-t1c"
+   }
+  ]
+ },
+ "mac": {
+  "summary": {},
+  "runs": []
+ },
+ "trees": {
+  "gate": "native eb4a848e96a3850416ab79f6a6aa008fb76e170f tools f3517b3005805eaff84052dd69a6518744d384a0",
+  "final": "native 703f1f25f728ecc7666622cba9a7b990e23781c3 tools f3517b3005805eaff84052dd69a6518744d384a0"
+ },
+ "buttonB": {
+  "device": "emulator-5554 (API 35)",
+  "before": {
+   "apk": "tw-t1b",
+   "pidBefore": "21159",
+   "pidAfterB": "(none: process died)",
+   "screen": "launcher"
+  },
+  "after": {
+   "apk": "incremental T1c build with the review fixes",
+   "pidBefore": "21281",
+   "pidAfterB": "21281",
+   "screen": "main menu"
+  },
+  "systemBack": "pid 21281 gone after KEYCODE_BACK (unchanged: Esc asks to quit)"
+ },
+ "phoneInputDevices": {
+  "sources": [
+   "0x80000101",
+   "0x00000101",
+   "0x00000101",
+   "0x00001103",
+   "0x00000301"
+  ],
+  "gamepads": 0
+ }
+}
