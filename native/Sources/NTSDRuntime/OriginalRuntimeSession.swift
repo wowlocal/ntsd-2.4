@@ -233,6 +233,8 @@ public enum OriginalRuntimeSessionBoundary: Error, Equatable {
             music.muted = arguments.contains("--mute-music"); self.music = music
             if virtualClock != nil { music.virtualSeconds = { [unowned self] in Double((try? self.clock()) ?? 0)/1000 } }
             try music.present(started.runtime.music.presented())
+            // The audio backend's request logs are for tests (MEMORY_LOADING M5b).
+            started.audio.recordsOperations = false
             let sounds = OriginalMacSoundEffects.backed(by:started.audio); self.sounds = sounds
             do { soundOutput = try host.startSoundOutput(sounds,muted:arguments.contains("--mute-sounds")) }
             catch { soundOutputError = String(reflecting:error) }

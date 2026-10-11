@@ -81,6 +81,7 @@ extension OriginalApplicationTimerTests { convenience init() { self.init(name: "
 extension OriginalApplicationWindowInspectionTests { convenience init() { self.init(name: "helper", testClosure: { _ in }) } }
 extension OriginalApplicationWindowStartupTests { convenience init() { self.init(name: "helper", testClosure: { _ in }) } }
 extension OriginalArithmeticPrecisionTests { convenience init() { self.init(name: "helper", testClosure: { _ in }) } }
+extension OriginalAudioBytesUniformTests { convenience init() { self.init(name: "helper", testClosure: { _ in }) } }
 extension OriginalBackgroundTests { convenience init() { self.init(name: "helper", testClosure: { _ in }) } }
 extension OriginalBitmapDrawingTests { convenience init() { self.init(name: "helper", testClosure: { _ in }) } }
 extension OriginalBitmapFontTests { convenience init() { self.init(name: "helper", testClosure: { _ in }) } }

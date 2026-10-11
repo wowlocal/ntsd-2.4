@@ -435,6 +435,19 @@ public struct OriginalStateRecord: Equatable, Sendable {
     /// An empty record that allocates nothing: what an in-place pass leaves in
     /// a caller's field while it holds the value (CORE_REALTIME B2).
     static let vacant = try! OriginalStateRecord(bytes: [], defined: [])
+    /// The byte value and definedness of a non-empty flat record whose bytes
+    /// are all that value and all defined or all undefined; nil otherwise
+    /// (MEMORY_LOADING M5b).
+    func uniformContents() -> (UInt8, Bool)? {
+        guard large == nil, let flat, flatCount > 0 else { return nil }
+        return flat.with { n, b, m in
+            let value = b[0]
+            for i in 1..<n where b[i] != value { return nil }
+            let defined = Flat.bit(m, 0)
+            if defined ? !Flat.allSet(m, 0..<n) : (0..<(n + 7) / 8).contains(where: { m[$0] != 0 }) { return nil }
+            return (value, defined)
+        }
+    }
     /// Whether both are flat and share their storage (two empty records do).
     func sharesStorage(with other: OriginalStateRecord) -> Bool {
         guard pages == nil, parts == nil, other.pages == nil, other.parts == nil, flatCount == other.flatCount else { return false }

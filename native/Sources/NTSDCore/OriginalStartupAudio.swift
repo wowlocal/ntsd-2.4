@@ -1,11 +1,43 @@
 import Foundation
 
 /// Value storage with explicit known bytes. No source-private or expected state.
+/// A buffer whose bytes are all one value and all defined or all undefined
+/// (a fresh sound buffer's: the lock reply of every buffer carries one) is
+/// kept as that value, its definedness and its count instead of two arrays
+/// of its size (MEMORY_LOADING M5b); `bytes` and `defined` give the arrays,
+/// equality and coding are the arrays'.
 public struct OriginalAudioBytes: Codable, Equatable, Sendable {
-    public let bytes: [UInt8], defined: [Bool]
-    public init(bytes: [UInt8],defined: [Bool]) { self.bytes = bytes;self.defined = defined }
-    public init(_ record: OriginalStateRecord) { self.init(bytes:record.bytes,defined:record.defined) }
+    private enum Storage: Sendable { case arrays([UInt8],[Bool]), uniform(UInt8,Bool,Int) }
+    private let storage: Storage
+    public var bytes: [UInt8] {
+        switch storage { case .arrays(let b,_): return b; case .uniform(let v,_,let n): return [UInt8](repeating:v,count:n) }
+    }
+    public var defined: [Bool] {
+        switch storage { case .arrays(_,let d): return d; case .uniform(_,let d,let n): return [Bool](repeating:d,count:n) }
+    }
+    /// `bytes.count`, without building the array.
+    public var count: Int { switch storage { case .arrays(let b,_): return b.count; case .uniform(_,_,let n): return n } }
+    public init(bytes: [UInt8],defined: [Bool]) { storage = .arrays(bytes,defined) }
+    public init(_ record: OriginalStateRecord) {
+        if let (value,defined) = record.uniformContents() { storage = .uniform(value,defined,record.byteCount) }
+        else { let all = record.readOnce(); storage = .arrays(all.bytes,all.defined) }
+    }
     public func record() throws -> OriginalStateRecord { try .init(bytes:bytes,defined:defined) }
+    public static func == (a: Self,b: Self) -> Bool {
+        if case let .uniform(x,dx,nx) = a.storage,case let .uniform(y,dy,ny) = b.storage {
+            return nx == ny && (nx == 0 || (x == y && dx == dy))
+        }
+        return a.count == b.count && a.bytes == b.bytes && a.defined == b.defined
+    }
+    private enum CodingKeys: String,CodingKey { case bytes,defined }
+    public init(from decoder: Decoder) throws {
+        let c = try decoder.container(keyedBy:CodingKeys.self)
+        storage = .arrays(try c.decode([UInt8].self,forKey:.bytes),try c.decode([Bool].self,forKey:.defined))
+    }
+    public func encode(to encoder: Encoder) throws {
+        var c = encoder.container(keyedBy:CodingKeys.self)
+        try c.encode(bytes,forKey:.bytes); try c.encode(defined,forKey:.defined)
+    }
 }
 
 /// Prior Native storage is independent of outputs from a later device Lock.

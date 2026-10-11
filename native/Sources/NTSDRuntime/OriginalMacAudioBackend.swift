@@ -65,6 +65,11 @@ import NTSDCore
     private var devices: [UInt32:Device] = [:], buffers: [UInt32:Buffer] = [:], regions: [UInt32:Region] = [:]
     public private(set) var allocatedBytes = 0
     public private(set) var operations: [Operation] = []
+    /// Whether `operations` and `loadingOperations` keep every request and
+    /// reply. Nothing in the game reads them; each copy request carries the
+    /// buffer's PCM and a Bool per byte, so the runtime session turns them off
+    /// (MEMORY_LOADING M5b). Tests keep them.
+    public var recordsOperations = true
     public var deviceTokens: [UInt32] { devices.keys.sorted() }
     public var bufferTokens: [UInt32] { buffers.keys.sorted() }
     public var retainedResources: [any OriginalApplicationStartupResource] {
@@ -207,7 +212,7 @@ import NTSDCore
         default:throw Boundary.unsupported("audio request family")
         }
         try require(prepared.request.accepts(response),"diagnostic reply family")
-        operations.append(.init(request:prepared.request,response:response))
+        if recordsOperations { operations.append(.init(request:prepared.request,response:response)) }
         return .init(response:response,resources:retained)
     }
     /// `observation(token)`'s existence check without copying the buffer's
@@ -270,7 +275,7 @@ import NTSDCore
             // Explicit Native scalar ownership, not DSP gain or endpoint output.
             result = .init(response:.volume(domain,0),resources:[b])
         }
-        loadingOperations.append(.init(request:prepared.request,response:result.response))
+        if recordsOperations { loadingOperations.append(.init(request:prepared.request,response:result.response)) }
         return result
     }
     public func volumeObservation(_ token: UInt32) throws -> Int32? {

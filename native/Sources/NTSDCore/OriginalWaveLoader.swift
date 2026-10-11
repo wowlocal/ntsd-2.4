@@ -102,7 +102,7 @@ public enum OriginalWaveLoader {
         request: OriginalWaveRequest.Handler,legacyFirstPointer: UInt32?,outputStored: (UInt32) throws -> Void,
         observe: (OriginalWaveEvent) throws -> Void) throws -> OriginalWaveLoadResult {
         guard !path.contains(0),path.count < 256,p.descendResults.count == 3,
-            p.storage.first.bytes.count <= 2_000_000,(p.storage.second?.bytes.count ?? 0) <= 2_000_000 else {
+            p.storage.first.count <= 2_000_000,(p.storage.second?.count ?? 0) <= 2_000_000 else {
             throw error("Platform input extent")
         }
         func backing(_ count: Int,_ origin: Int = 0) throws -> OriginalStateRecord { try p.storage.backing(count,origin) }
@@ -232,8 +232,8 @@ public enum OriginalWaveLoader {
             (0...2_000_000).contains(outputs.secondCount),outputs.firstCount <= data.count,
             outputs.secondCount <= data.count-outputs.firstCount else { throw error("Lock output extent") }
         func bind(_ token: UInt32,_ count: Int,_ region: OriginalWaveRegion?) throws {
-            guard let region,region.token == token,region.storage.bytes.count >= count,
-                region.storage.bytes.count <= 2_000_000 else { throw error("Lock region binding") }
+            guard let region,region.token == token,region.storage.count >= count,
+                region.storage.count <= 2_000_000 else { throw error("Lock region binding") }
             let record = try region.storage.record()
             if let earlier = result.regions[token],earlier != record { throw error("Conflicting Lock alias backing") }
             result.regions[token] = record
@@ -242,7 +242,10 @@ public enum OriginalWaveLoader {
         if outputs.secondPointer != 0 { try bind(outputs.secondPointer,outputs.secondCount,outputs.second) }
         func copy(_ index: UInt32,_ offset: Int,_ count: Int,_ token: UInt32) throws {
             guard let temporary = result.temporary,var region = result.regions[token] else { throw error("Copy storage") }
-            let payload = Array(temporary.bytes[offset..<(offset+count)]),mask = Array(temporary.defined[offset..<(offset+count)])
+            // Read once: the whole-array getters would keep both arrays in the
+            // temporary as caches for as long as the load result lives (M5b).
+            let whole = temporary.readOnce()
+            let payload = Array(whole.bytes[offset..<(offset+count)]),mask = Array(whole.defined[offset..<(offset+count)])
             _ = try audio(.init(.init(.copy,[index,UInt32(offset),UInt32(count)]),target:token,bytes:payload,defined:mask))
             if offset == 0,count == region.byteCount,count == temporary.byteCount {
                 // The whole region takes the whole temporary: it equals the
