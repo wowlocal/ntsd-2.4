@@ -20,7 +20,11 @@ or dropped, never recovered later.
 wall: "now lets do the loop for optimizing memory footprint and loading times.
 you can create a new branch and start developing. build strong methodology as
 you progress."
-**Status:** research and transfer.
+**Status:** stopped by the user on 2026-10-11 ("останавливаемся на
+достигнутом"), merged into `main` with the real-time work. Results: A12 load
+~124 s → ~5.5 s, peak footprint ~1.6 GB → ~565 MiB (sounds on, music off),
+launch to loaded ~12.6 s on the day's phone; Mac load 5.4 → 0.32 s, peak
+2.0 GB → ~675 MB; frame time unchanged (audit below).
 **Branch:** `exp/memory-loading`, from `exp/core-realtime` 0034e45. It tracks
 `origin/exp/memory-loading`, created with its upstream at 22:12 on 2026-10-10
 outside this study's commands, so the post-commit hook pushes every commit.
@@ -332,13 +336,19 @@ T7 above 40 GiB. Keep the phone awake only while measuring and restore
 | 2026-10-11 | L21 (rejected): package files read straight into arrays | A POSIX reader (open, fstat, read into the array, EOF probe; `Data(contentsOf:)` answering any failure) for the catalog, startup and loading packages, so each file is no longer held as Data and then as its array copy. Behaviour equal (all 10 scenarios, AppKit, unchecked, emulator, frames identical; 11 suites), but no measurable gain: A12 launch to loaded 12.54–12.60 against 12.60–12.79 s, load and peak footprint overlapping, Mac load 0.326–0.330 against 0.318–0.330 s. It adds a code path, so it is reverted (diff kept on X5, `ml-rejected/`); the review's two unreachable traps were not fixed for the same reason | [evidence](../evidence/ml-l21-posix-file-bytes-rejected-20261011.json) | — |
 | 2026-10-11 | RAM audit (user priority) | A12, HEAD (L20), sounds mixed, vs and Demo interleaved: vs peak RSS + swap **565 MiB** (555–581), after loading RSS 529 (anon 476, swap 22), in the match RSS 517 → 555 from body 600 to 1800 (PSS 487–503 → 520–529); Demo 566 (551–579). Native heap: 1597 MiB allocated but 405–450 MiB dirty (≈1.15 GiB untouched surface pages), 19–46 MiB free in the allocator. A match adds 24–38 MiB of RSS (8–13 swap returning, ~17 new allocations); the Mac does not grow. **Music, muted in every earlier run, is the largest holder in play**: the Android player reads the whole ALAC file and decodes the whole track; music on against off, peak 607–630 against 536–567 MiB, end PSS +24–34 MiB. Mac attribution (live bytes by site, ICU's mapped data excluded): compressed sprites 67 MiB, filled Stage slots 36, catalog raw files 35, two journal buffers 18 + 19, wave storage 18, mixer PCM 16, replay pages 15 (zero, all defined). Candidates: streaming music (24–34 / 40–94 MiB at the peak, medium), shared uniform pages (~15, low), mixer PCM through the wave storage (~16, medium), journal copies (20–40, high), Stage page dedupe (unmeasured): ~55–90 MiB at reasonable complexity, so the loop continues | [evidence](../evidence/ml-ram-audit-20261011.json) | — |
 | 2026-10-11 | M8 (held for the user): streaming music on Android | The decoder parses the CAF in place and maps the file; a Reader decodes the packet holding any frame on demand (the same samples, every packaged track, any frame, priming longer than a packet); the music callback decodes outside its lock. A12 with music and sounds against L20: **peak RSS + swap 560–573 against 615–621 MiB, end PSS 520–561 against 577–581 MiB**; load, launch to loaded, main and render overlapping; ~3 s less process CPU from launch to the match end; 0 underruns. But the music callback's threads take ~0.5 ms more per tick (1.69–1.72 against 1.16–1.22): the decode moves from a whole-track burst at each track's start to playback, and it is that or holding the decoded track. Under the user's rule that is the user's trade-off, so the commit is kept on the local branch `exp/memory-loading-m8` (f22270b, not pushed) and the loop continues without it. All 10 scenarios, AppKit, unchecked and emulator equal, frames identical; review OK (follow-ups in) | [evidence](../evidence/ml-m8-streaming-music-20261011.json) | exp/memory-loading-m8 |
+| 2026-10-11 | M8 rejected (user) | The user declined streaming music from storage: "эксперимент с стримингом звуков с диска я вижу рискованным из-за потенциальных хардверных ошибок и скорости чтения". The gated commit stays only on the local branch `exp/memory-loading-m8` as a record | this card | — |
+| 2026-10-11 | M9 (parked): shared uniform pages | Pages holding one value throughout share one array per value (copy-on-write on first write). Behaviour equal everywhere; **A12 end PSS 504–510 against 545–592 MiB** (music and sounds), load and frame time overlapping. But the Mac's footprint rose: 670–682 against 556–598 MiB at the loaded event, 698–711 against 605–644 at body 600 (gate and a repeat A/B), while its live heap fell 15 MB: macOS malloc kept ~48 MB of memory freed after the load dirty instead of marking it reusable (and 28 MB of empty large regions), the pages copied on first write being allocated scattered in time. Not merged when the loop stopped: a memory change that raises one host's footprint needs that avoided first (diff on X5, `ml-rejected/`) | [evidence](../evidence/ml-m9-shared-uniform-pages-parked-20261011.json) | — |
+| 2026-10-11 | Loop stopped (user) | "останавливаемся на достигнутом … пора вливаться в main всеми нашими доработками": the branch (with exp/core-realtime) fast-forwards `main` | this card | — |
 
 ## Next task
 
-**M9: shared uniform pages** (pages holding one value throughout share one
-array; the replay recording's zero-filled buffer), then the mixer's PCM
-through the wave storage. M8 (streaming music) waits for the user's
-decision on its branch.
+**The loop is stopped (user, 2026-10-11).** Open candidates, if it resumes:
+the mixer's PCM taken from the wave buffer records on demand instead of a
+copy of every buffer (~14–16 MiB, the mixer unchanged; draft in the
+session notes), M9 once the Mac allocator effect is avoided (e.g. copying
+the shared pages before the load ends), the journal copies (M7b and the
+session levels, 20–40 MiB, high complexity), Stage page dedupe (unmeasured).
+M8 (streaming music) was declined by the user.
 
 **User priority (2026-10-11, after L21):** reduce the RAM the game actually
 holds. A bounded audit (at most two hours): a fresh A12 baseline (peak RSS +
