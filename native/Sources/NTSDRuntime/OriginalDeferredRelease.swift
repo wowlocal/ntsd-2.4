@@ -43,14 +43,14 @@ public final class OriginalDeferredRelease: @unchecked Sendable {
         #if os(WASI)
         // A host without threads (TVOS_WEB W0): the caller frees it, as when
         // the backlog is full.
-        return
-        #endif
+        #else
         condition.lock()
         guard pending.count < Self.backlogLimit else { condition.unlock(); return }
         pending.append(value); count += 1
         if !started { started = true; start() }
         if pending.count == Self.backlogLimit/2 { condition.signal() }
         condition.unlock()
+        #endif
     }
     private func start() {
         let begin = self.begin ?? Self.threadStart

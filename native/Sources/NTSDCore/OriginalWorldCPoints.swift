@@ -77,10 +77,21 @@ struct OriginalCPointPass {
     static func outsideAllocation(_ number: Int32) -> Bool { number >= 401 || number <= -7 }
     static func headerFrame(_ number: Int32,header: OriginalStateRecord,object: Int,site: String) throws -> OriginalStateRecord {
         if outsideAllocation(number) { return beyondAllocation }
+        #if arch(wasm32)
+        // The unsigned offset compared in 64 bits: frame −6 wraps to ≥ 2^31,
+        // which a 32-bit Int cannot hold (TVOS_WEB W1b; 64-bit hosts keep the
+        // form below, unchanged).
+        let unsigned = Int64(UInt32(bitPattern: Int32(0x7a4) &+ number &* 0x178))
+        guard unsigned <= Int64(header.byteCount)-0x178 else {
+            throw OriginalStateError.invalidStorage("Cpoint Frame outside known Object storage (\(site): Object \(object), frame \(number), header \(header.byteCount) bytes)")
+        }
+        let offset = Int(unsigned)
+        #else
         let offset = Int(UInt32(bitPattern: Int32(0x7a4) &+ number &* 0x178))
         guard offset <= header.byteCount-0x178 else {
             throw OriginalStateError.invalidStorage("Cpoint Frame outside known Object storage (\(site): Object \(object), frame \(number), header \(header.byteCount) bytes)")
         }
+        #endif
         return try OriginalStateRecord(bytes: Array(header.bytes[offset..<offset+0x178]),defined: Array(header.defined[offset..<offset+0x178]))
     }
     func active(_ slot: Int) throws -> UInt8 { try world.integer(at: 4+slot,as: UInt8.self) }

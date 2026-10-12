@@ -34,8 +34,7 @@ public enum OriginalConcurrentInputs {
             // A host without threads (TVOS_WEB W0): computed here, at creation;
             // `get` returns it or throws its error as it would after waiting.
             result = Result { try compute() }
-            return
-            #endif
+            #else
             self.compute = compute
             let thread = Thread { [self] in
                 OriginalConcurrentInputs.backgroundStart?()
@@ -45,6 +44,7 @@ public enum OriginalConcurrentInputs {
             }
             // The main thread's stack size: the loads ran there before.
             thread.name = "NTSD.readahead"; thread.stackSize = 8 << 20; thread.start()
+            #endif
         }
         /// Whether the value is ready (`get` would not wait).
         public var isReady: Bool { condition.lock(); defer { condition.unlock() }; return result != nil }

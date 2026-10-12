@@ -65,8 +65,17 @@ public enum OriginalWaveLoader {
     }
     private static func chunk(_ raw: [UInt8], _ offset: Int, limit: Int) throws -> Chunk? {
         guard offset >= 0, limit <= raw.count, offset+8 <= limit else { return nil }
+        #if arch(wasm32)
+        // The size compared before the Int conversion, which a 32-bit Int
+        // cannot make for sizes of 2^31 and more (TVOS_WEB W1b; 64-bit hosts
+        // keep the form below, unchanged).
+        let id = try u32(raw, offset), declared = try u32(raw, offset+4)
+        guard UInt64(declared) <= UInt64(limit-offset-8) else { throw error("RIFF chunk extends beyond the supplied file/parent") }
+        let count = Int(declared)
+        #else
         let id = try u32(raw, offset), count = Int(try u32(raw, offset+4))
         guard count <= limit-offset-8 else { throw error("RIFF chunk extends beyond the supplied file/parent") }
+        #endif
         let typed = id == 0x46464952 || id == 0x5453494c
         guard !typed || count >= 4 else { return nil }
         return try .init(id: id, count: count, type: typed ? u32(raw, offset+8) : 0, offset: offset+8)

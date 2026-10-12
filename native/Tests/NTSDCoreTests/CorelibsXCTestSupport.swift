@@ -273,6 +273,7 @@ extension OriginalWindowInputTests { convenience init() { self.init(name: "helpe
 extension OriginalWindowLifecycleTests { convenience init() { self.init(name: "helper", testClosure: { _ in }) } }
 extension OriginalWindowRequestExchangeTests { convenience init() { self.init(name: "helper", testClosure: { _ in }) } }
 extension OriginalWinMainStartupTests { convenience init() { self.init(name: "helper", testClosure: { _ in }) } }
+extension OriginalWord32BoundaryTests { convenience init() { self.init(name: "helper", testClosure: { _ in }) } }
 extension OriginalWorldCameraTests { convenience init() { self.init(name: "helper", testClosure: { _ in }) } }
 extension OriginalWorldContactsTests { convenience init() { self.init(name: "helper", testClosure: { _ in }) } }
 extension OriginalWorldControlTests { convenience init() { self.init(name: "helper", testClosure: { _ in }) } }

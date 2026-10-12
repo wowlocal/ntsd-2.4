@@ -42,8 +42,19 @@ public enum OriginalBitmapDrawing {
                      observe: (OriginalBitmapDrawRead) throws -> Void) throws -> Int32 {
         // The raw word in place, without the whole byte array (CORE_REALTIME 4s).
         guard bitmap.byteCount == 0x1f50 else { throw OriginalStateError.invalidStorage("Bitmap draw extent") }
+        #if arch(wasm32)
+        // Compared in 64 bits: a negative glyph frame (a name byte of 0x80 and
+        // more) puts the offset at 2^31 and above, which a 32-bit Int cannot
+        // hold; it reaches the same boundary, reporting the word's bit pattern
+        // (TVOS_WEB W1b; 64-bit hosts keep the form below, unchanged).
+        guard UInt64(offset) <= UInt64(bitmap.byteCount-4) else {
+            throw OriginalStateError.outOfBounds(offset: Int(truncatingIfNeeded: offset),count: 4)
+        }
+        let i = Int(offset)
+        #else
         let i = Int(offset)
         guard i <= bitmap.byteCount-4 else { throw OriginalStateError.outOfBounds(offset: i,count: 4) }
+        #endif
         var value = bitmap.rawWord(at: i)
         if offset == 0 {
             guard value == (surface == 0 ? 0 : 1) else { throw OriginalStateError.invalidStorage("Bitmap surface binding") }

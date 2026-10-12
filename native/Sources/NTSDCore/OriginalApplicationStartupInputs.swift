@@ -40,10 +40,21 @@ public struct OriginalApplicationStartupInputs: Equatable {
                 UInt32(bitmapFile[at]) | UInt32(bitmapFile[at+1]) << 8 |
                     UInt32(bitmapFile[at+2]) << 16 | UInt32(bitmapFile[at+3]) << 24
             }
+            #if arch(wasm32)
+            // Header words compared in 64 bits: a 32-bit Int cannot hold every
+            // word, and reaches the same boundary (TVOS_WEB W1b; 64-bit hosts
+            // keep the form below, unchanged).
+            let pixels = word(10)
+            guard UInt64(word(2)) == UInt64(bitmapFile.count),word(6) == 0,pixels >= 54,UInt64(pixels) <= UInt64(bitmapFile.count) else {
+                throw Boundary.invalid("BMP file extent or reserved fields")
+            }
+            let offset = Int(pixels)
+            #else
             let offset = Int(word(10))
             guard Int(word(2)) == bitmapFile.count,word(6) == 0,offset >= 54,offset <= bitmapFile.count else {
                 throw Boundary.invalid("BMP file extent or reserved fields")
             }
+            #endif
             try self.init(dib:Array(bitmapFile.dropFirst(14)),fileHeader:Array(bitmapFile.prefix(14)),pixelOffset:offset-14)
         }
         private init(dib: [UInt8],fileHeader: [UInt8]?,pixelOffset: Int?) throws {
@@ -65,11 +76,19 @@ public struct OriginalApplicationStartupInputs: Equatable {
             width = w;height = h;rowBytes = Int32(stride);self.planes = planes;bitsPerPixel = bits
             bitmapFileHeader = fileHeader
             if let pixelOffset {
+                #if arch(wasm32)
+                let colors = UInt64(word(32))
+                let count = bits == 24 ? colors : (colors == 0 ? 1 << UInt64(bits) : colors)
+                guard count <= UInt64((dib.count-40)/4),pixelOffset >= 40+Int(count)*4 else {
+                    throw Boundary.invalid("BMP pixel offset or palette")
+                }
+                #else
                 let colors = Int(word(32))
                 let count = bits == 24 ? colors : (colors == 0 ? 1 << Int(bits) : colors)
                 guard count <= (dib.count-40)/4,pixelOffset >= 40+count*4 else {
                     throw Boundary.invalid("BMP pixel offset or palette")
                 }
+                #endif
             }
             // Validated here as the decoder would decode it, so an invalid image
             // still fails at load with the decoder's error.

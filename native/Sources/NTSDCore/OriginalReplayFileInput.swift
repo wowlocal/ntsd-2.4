@@ -46,8 +46,17 @@ public enum OriginalReplayFileInput {
         guard file.count >= 1000 else {
             events += [.close,.free(ordinal: 1),.destroy];return finish(0)
         }
+        #if arch(wasm32)
+        // Compared before the Int conversion, which a 32-bit Int cannot make
+        // for lengths of 2^31 and more (TVOS_WEB W1b; 64-bit hosts keep the
+        // form below, unchanged).
+        let declared = UInt32(file[0])|UInt32(file[1])<<8|UInt32(file[2])<<16|UInt32(file[3])<<24
+        guard UInt64(declared) <= UInt64(payloadBound) else { throw OriginalStateError.invalidStorage("Playback payload length beyond the declared bound") }
+        let n = Int(declared)
+        #else
         let n = Int(UInt32(file[0])|UInt32(file[1])<<8|UInt32(file[2])<<16|UInt32(file[3])<<24)
         guard n <= payloadBound else { throw OriginalStateError.invalidStorage("Playback payload length beyond the declared bound") }
+        #endif
         events.append(.allocate(ordinal: 2,count: n))
         // istream::read stops at the end of the file; the rest stays zero.
         var payload = [UInt8](repeating: 0,count: n)

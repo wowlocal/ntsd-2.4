@@ -77,6 +77,7 @@ def main():
         adb("push", str(Path(target).resolve()), f"{DEVICE}/app"); adb("push", str(MUSIC), f"{DEVICE}/music")
         adb("shell", f"chmod 755 {DEVICE}/app/NTSDHeadless")
     results = []
+    node_version = subprocess.run([node(), "--version"], capture_output=True, text=True).stdout.strip() if mode == "--wasi" else None
     for name in names:
         setup = app_e2e.SCENARIOS[name]
         base = out / name
@@ -107,7 +108,9 @@ def main():
             command = [ADB, "shell", f"cd {DEVICE}/app && TZ=Etc/GMT-1 HOME={DEVICE}/home TMPDIR={DEVICE}/home {line}"]
         elif mode == "--wasi":
             app = Path(target).resolve()
-            command = [node(), str(ROOT / "tools/crossplatform/wasi_run.mjs"), "--map", f"/app={app}", "--map", f"/music={MUSIC}",
+            # --disable-warning: Node's notice that WASI is experimental stays out of stderr.
+            command = [node(), "--disable-warning=ExperimentalWarning", str(ROOT / "tools/crossplatform/wasi_run.mjs"),
+                       "--map", f"/app={app}", "--map", f"/music={MUSIC}",
                        "--map", f"/out={out}", "--argv0", "/app/NTSDHeadless.wasm", "--", str(app / "NTSDHeadless.wasm"),
                        "--resources", "/app/NTSDNative_NTSDCore.bundle", "--music-dir", "/music", *args]
         elif mode == "--wine":
@@ -120,8 +123,6 @@ def main():
         wine_env = dict(kv.split("=", 1) for kv in os.environ.get("NTSD_WINE_ENV", "").split()) if mode == "--wine" else {}
         done = subprocess.run(command, capture_output=True, text=True, timeout=3600,
                               env={**app_e2e.APP_ENV, **wine_env} if mode not in ("--linux", "--android") else None)
-        if mode == "--wasi":   # Node's notice that WASI is experimental
-            done.stderr = "\n".join(l for l in done.stderr.splitlines() if "ExperimentalWarning" not in l and "--trace-warnings" not in l)
         (base / "events.jsonl").write_text(done.stdout.replace("\r\n", "\n")); (base / "stderr.txt").write_text(done.stderr)
         if mode == "--android":
             for d in ("captures", "overlay", "frames"):
@@ -132,6 +133,7 @@ def main():
         c = subprocess.run(compare, capture_output=True, text=True)
         verdict = json.loads(c.stdout.strip().splitlines()[-1]) if c.stdout.strip() else {"result": "error", "differs": [c.stderr[-300:]]}
         row = {"scenario": name, "exit": done.returncode, "seconds": round(time.time() - start, 1), **verdict}
+        if mode == "--wasi": row["node"] = node_version   # the WASI runtime is part of the result
         (base / "compare.txt").write_text(c.stdout + c.stderr)
         results.append(row); print(json.dumps(row), flush=True)
     (out / "results.jsonl").write_text("".join(json.dumps(r) + "\n" for r in results))

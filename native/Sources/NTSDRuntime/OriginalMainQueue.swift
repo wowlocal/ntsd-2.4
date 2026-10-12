@@ -45,7 +45,7 @@ public enum OriginalMainQueue {
             return Double(sample.seconds)+Double(sample.nanoseconds)/1e9
         }
         static func add(delay: Double,_ body: @escaping @MainActor () -> Void) {
-            made += 1; calls.append(.init(deadline:now()+max(0,delay),order:made,body:body))
+            made &+= 1; calls.append(.init(deadline:now()+max(0,delay),order:made,body:body))
         }
         static func takeNext() -> Call? {
             guard let i = calls.indices.min(by:{ (calls[$0].deadline,calls[$0].order) < (calls[$1].deadline,calls[$1].order) }) else { return nil }

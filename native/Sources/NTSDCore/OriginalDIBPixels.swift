@@ -25,15 +25,30 @@ public struct OriginalDIBPixels: Equatable {
         let (count,overflow) = width.multipliedReportingOverflow(by:height)
         let (byteCount,byteOverflow) = count.multipliedReportingOverflow(by:3)
         guard !overflow,!byteOverflow,maximumPixels > 0,count <= maximumPixels else { throw Boundary.pixelLimit }
+        #if arch(wasm32)
+        // Header words compared in 64 bits, as a 64-bit Int holds them: a
+        // 32-bit Int cannot, and reaches the same boundary (TVOS_WEB W1b).
+        // 64-bit hosts keep the form below: W1b's 64-bit form of these lines,
+        // with the same results, measurably shifted macOS malloc retention
+        // after load (about 80 MB of footprint, the same live bytes).
+        let imageSize = UInt64(word(20)),colors = UInt64(word(32))
+        let declared = bits == 24 ? colors : (colors == 0 ? 1 << UInt64(bits) : colors)
+        guard (bits == 24 || declared <= 1 << UInt64(bits)),
+              declared <= UInt64((dib.count-40)/4) else { throw Boundary.palette }
+        let paletteCount = Int(declared)
+        #else
         let imageSize = Int(word(20)),colors = Int(word(32))
         let paletteCount = bits == 24 ? colors : (colors == 0 ? 1 << bits : colors)
         guard (bits == 24 || paletteCount <= 1 << bits),
               paletteCount <= (dib.count-40)/4 else { throw Boundary.palette }
+        #endif
         let minimumOffset = 40+paletteCount*4,start = pixelOffset ?? minimumOffset
         guard start >= minimumOffset,start <= dib.count else { throw Boundary.extent }
         var rgb = [UInt8](repeating:0,count:byteCount),defined = [Bool](repeating:false,count:count)
         if compression == 0 {
-            // Width is positive Int32; these products fit Int on native macOS.
+            // Width is positive Int32 and width×height at most the pixel
+            // budget (16,777,216 by default), so these products fit a 32-bit
+            // Int too (wasm32).
             let stride = ((width*bits+31)/32)*4
             let (extent,extentOverflow) = stride.multipliedReportingOverflow(by:height)
             guard !extentOverflow,extent <= dib.count-start,imageSize == 0 || imageSize == extent else { throw Boundary.extent }
@@ -54,7 +69,11 @@ public struct OriginalDIBPixels: Equatable {
             }
         } else {
             guard imageSize > 0,imageSize <= dib.count-start else { throw Boundary.extent }
+            #if arch(wasm32)
+            let end = start+Int(imageSize)
+            #else
             let end = start+imageSize
+            #endif
             var position = start,x = 0,y = 0,finished = false
             func next() throws -> Int {
                 guard position < end else { throw Boundary.stream }
@@ -114,10 +133,23 @@ public struct OriginalDIBPixels: Equatable {
         let (count,overflow) = width.multipliedReportingOverflow(by:height)
         let (_,byteOverflow) = count.multipliedReportingOverflow(by:3)
         guard !overflow,!byteOverflow,maximumPixels > 0,count <= maximumPixels else { throw Boundary.pixelLimit }
+        #if arch(wasm32)
+        // Header words compared in 64 bits, as a 64-bit Int holds them: a
+        // 32-bit Int cannot, and reaches the same boundary (TVOS_WEB W1b).
+        // 64-bit hosts keep the form below: W1b's 64-bit form of these lines,
+        // with the same results, measurably shifted macOS malloc retention
+        // after load (about 80 MB of footprint, the same live bytes).
+        let imageSize = UInt64(word(20)),colors = UInt64(word(32))
+        let declared = bits == 24 ? colors : (colors == 0 ? 1 << UInt64(bits) : colors)
+        guard (bits == 24 || declared <= 1 << UInt64(bits)),
+              declared <= UInt64((dib.count-40)/4) else { throw Boundary.palette }
+        let paletteCount = Int(declared)
+        #else
         let imageSize = Int(word(20)),colors = Int(word(32))
         let paletteCount = bits == 24 ? colors : (colors == 0 ? 1 << bits : colors)
         guard (bits == 24 || paletteCount <= 1 << bits),
               paletteCount <= (dib.count-40)/4 else { throw Boundary.palette }
+        #endif
         let minimumOffset = 40+paletteCount*4,start = pixelOffset ?? minimumOffset
         guard start >= minimumOffset,start <= dib.count else { throw Boundary.extent }
         let stride = ((width*bits+31)/32)*4
