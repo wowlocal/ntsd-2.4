@@ -8,6 +8,29 @@ public typealias OriginalMacWindowBackend = OriginalRuntimeWindowBackend
 /// DirectDraw/raster backend or a Windows callback implementation.
 @MainActor public final class OriginalMacWindowHost: OriginalRuntimeWindowHost {
     typealias Boundary = OriginalRuntimeWindowBackend.Boundary
+    /// The scalable window (WINDOW_SCALING S3): the game's window resizes with
+    /// its aspect kept and the green button's full screen, while the game keeps
+    /// its own client (held from creation, the native full screen's mechanism);
+    /// it opens larger than one point per pixel where the screen allows. False
+    /// keeps the original fixed window. Set before the first window.
+    public static var scalable = false
+    /// The content size of the game's last scalable window when the game
+    /// destroyed it (Alt+Enter's recreation), reused for the next one.
+    static var lastContentSize: CGSize?
+    /// A scalable window's first size: the last one (no larger than the screen
+    /// allows), else the largest whole multiple of the client within 85% of the
+    /// visible screen when that is 2× or more, else the fraction that fits there
+    /// (down to half size on a small screen).
+    static func initialContentSize(_ client: CGSize,on screen: NSScreen?) -> CGSize {
+        guard let visible = screen?.visibleFrame,client.width > 0,client.height > 0 else { return lastContentSize ?? client }
+        let frame = NSWindow.frameRect(forContentRect:CGRect(origin:.zero,size:client),styleMask:OriginalMacWindowBackend.style)
+        let room = CGSize(width:visible.width-(frame.width-client.width),height:visible.height-(frame.height-client.height))
+        let fit = min(room.width/client.width,room.height/client.height)*0.85
+        var scale = fit >= 2 ? fit.rounded(.down) : max(0.5,fit)
+        if let last = lastContentSize { scale = max(0.5,min(last.width/client.width,room.width/client.width,room.height/client.height)) }
+        let width = (client.width*scale).rounded()
+        return CGSize(width:width,height:(width*client.height/client.width).rounded())
+    }
     /// Per-window AppKit state kept in the lease: full-screen observers and the
     /// close-button delegate.
     fileprivate final class State {
@@ -35,6 +58,16 @@ public typealias OriginalMacWindowBackend = OriginalRuntimeWindowBackend
         override func rightMouseUp(with event: NSEvent) { if input?(event) != true { super.rightMouseUp(with:event) } }
         override func mouseMoved(with event: NSEvent) { if input?(event) != true { super.mouseMoved(with:event) } }
         override func mouseDragged(with event: NSEvent) { if input?(event) != true { super.mouseDragged(with:event) } }
+        /// The scalable window shows the image as its layer's contents, scaled
+        /// by the compositor with nearest filtering: no window-sized backing
+        /// store and no scaling on the CPU. `draw` still renders view captures.
+        var layerScaled = false { didSet { if layerScaled { wantsLayer = true; needsDisplay = true } } }
+        override var wantsUpdateLayer: Bool { layerScaled }
+        override func updateLayer() {
+            guard let layer else { return }
+            layer.backgroundColor = NSColor.black.cgColor; layer.contentsGravity = .resizeAspect
+            layer.magnificationFilter = .nearest; layer.minificationFilter = .nearest; layer.contents = image
+        }
         override func draw(_ dirtyRect: NSRect) {
             guard let image else { return }
             NSGraphicsContext.saveGraphicsState(); defer { NSGraphicsContext.restoreGraphicsState() }
@@ -101,6 +134,19 @@ public typealias OriginalMacWindowBackend = OriginalRuntimeWindowBackend
         let state = State(); lease.platformState = state
         guard !popup else { return }
         let id = lease.token,window = Self.window(lease.window)
+        if Self.scalable,let client = window.contentView?.bounds.size,let geometry = try? displayGeometry(window) {
+            // The game's client is held from the start and through full screen
+            // and back; only the view scales. Only then may the window resize.
+            // (The backend registers the lease after this call, so the hold is
+            // set on the lease itself.)
+            lease.held = geometry; (window.contentView as? ContentView)?.layerScaled = true
+            window.styleMask.insert(.resizable); window.contentAspectRatio = client
+            window.contentMinSize = CGSize(width:(client.width/2).rounded(),height:(client.height/2).rounded())
+            window.setContentSize(Self.initialContentSize(client,on:window.screen)); window.center()
+            return
+        } else if Self.scalable {
+            FileHandle.standardError.write(Data("NTSD: no display geometry for the game's window; it stays the original fixed window\n".utf8))
+        }
         for (name,entering) in [(NSWindow.willEnterFullScreenNotification,true),(NSWindow.didExitFullScreenNotification,false)] {
             state.observers.append(NotificationCenter.default.addObserver(forName:name,object:window,queue:.main) { [weak backend] _ in
                 MainActor.assumeIsolated { try? backend?.holdForMacFullScreen(id,entering) }
@@ -208,14 +254,36 @@ extension OriginalRuntimeWindowBackend {
         guard !owner.closed,!owner.fullScreen else { throw Boundary.geometry }
         nsWindow(owner).toggleFullScreen(nil)
     }
-    /// DestroyWindow's visible effect: the window leaves the screen.
-    public func hide(_ token: UInt32) throws { nsWindow(try lease(token)).orderOut(nil) }
+    /// DestroyWindow's visible effect: the window leaves the screen. A scalable
+    /// window's size (dragged, zoomed or tiled) is kept for the next window.
+    public func hide(_ token: UInt32) throws {
+        let w = nsWindow(try lease(token))
+        if w.styleMask.contains(.resizable),!w.styleMask.contains(.fullScreen),let size = w.contentView?.bounds.size {
+            OriginalMacWindowHost.lastContentSize = size
+        }
+        w.orderOut(nil)
+    }
     /// Client-area point (top-left origin, logical points) of a window event.
     public func clientPoint(_ token: UInt32,_ event: NSEvent) throws -> (Int32,Int32) {
+        try clientPoint(token,windowLocation:event.locationInWindow)
+    }
+    /// GetMessagePos while the host holds the game's geometry (the scalable
+    /// window, macOS full screen): the held client's desktop origin plus the
+    /// screen point mapped back as clicks are; nil when the live window is the
+    /// game's geometry.
+    public func heldDesktopPoint(_ token: UInt32,screen point: CGPoint) throws -> (Int32,Int32)? {
+        let owner = try lease(token)
+        guard let held = owner.held,!owner.closed else { return nil }
+        let (x,y) = try clientPoint(token,windowLocation:nsWindow(owner).convertPoint(fromScreen:point))
+        let origin = held.clientInDesktop.origin
+        return (Int32(origin.x.rounded(.down))+x,Int32(origin.y.rounded(.down))+y)
+    }
+    private func clientPoint(_ token: UInt32,windowLocation: CGPoint) throws -> (Int32,Int32) {
         let owner = try lease(token)
         guard let view = nsWindow(owner).contentView else { throw Boundary.geometry }
-        var p = view.convert(event.locationInWindow,from:nil)
-        if owner.scaled,let size = owner.contentSize {
+        var p = view.convert(windowLocation,from:nil)
+        // Before the first present a held window maps through its held client.
+        if owner.scaled,let size = owner.contentSize ?? owner.held?.clientOnScreen.size {
             // Back through the aspect-kept scaling to the game's client points.
             let target = OriginalMacWindowHost.ContentView.fit(size,in:view.bounds)
             p = .init(x:(p.x-target.minX)*size.width/target.width,y:(p.y-target.minY)*size.height/target.height)

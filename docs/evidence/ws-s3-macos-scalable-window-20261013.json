@@ -1,0 +1,371 @@
+{
+ "study": "WINDOW_SCALING",
+ "step": "S3: the macOS app's scalable window",
+ "change": "NTSDMacPlatform OriginalMacWindowHost: a scalable game window by default — the game's client geometry is held from creation (WindowLease.held, the mechanism the native full screen uses; set on the lease because the backend registers it after windowCreated), then the window becomes resizable with contentAspectRatio 794:550 and a half-size minimum and opens at the largest whole multiple ≥2 within 85% of the visible screen, else the fraction that fits (down to 0.5×); the size the window had when the game destroyed it (Alt+Enter's recreation) is the next one's, clamped to the screen. The picture is the view layer's contents scaled by the compositor with nearest filtering (no window-sized backing store); draw(_:) still renders view captures. Clicks map back through the aspect-kept picture (the held client before the first present); GetMessagePos under any held geometry is the held client's desktop origin plus the mapped point. The green button's full screen only scales; the hold is never released. NTSDApp: --original-window or the NTSDOriginalWindow default keep the original fixed window; scripted (--script) runs keep it too unless --scalable-window, so their captures stay the AppKit view renders. The game's Alt+Enter is unchanged.",
+ "checks": {
+  "suite": {
+   "how": "release test build (-enable-testing), xctest NTSDCoreTests.OriginalMacWindowGeometryTests",
+   "result": "6 tests, 0 failures (rerun after the round-2 test change: the remembered size at 0.9×)",
+   "new": "testScalableWindowHoldsTheClientAtAnySize: resizable, aspect 794:550, the initial size, the held displayGeometry/clientRect/screenPoint at 5 sizes (initial, 2×, 1001×693, 397×275, 900×550), client-size frames accepted and window-size refused, 794×550 snapshots, clicks and GetMessagePos at client pixels (0,0), (350,230), (793,549), (1,548) mapped exactly at every size, the hold kept after a full-screen exit notification, the size kept through hide() (0.9×, 715×495)",
+   "firstRun": "the first run of the new test failed: the scalable branch never engaged because windowCreated runs before the backend registers the lease (holdForMacFullScreen(token) threw and the window silently stayed fixed); fixed by setting the hold on the lease; the scenario runs made on that build were stopped and discarded"
+  },
+  "scenarios": {
+   "fixed": {
+    "rows": [
+     {
+      "scenario": "vs",
+      "exit": 0,
+      "result": "equal"
+     },
+     {
+      "scenario": "mission",
+      "exit": 0,
+      "result": "equal"
+     },
+     {
+      "scenario": "demo",
+      "exit": 0,
+      "result": "equal"
+     },
+     {
+      "scenario": "war",
+      "exit": 0,
+      "result": "equal"
+     },
+     {
+      "scenario": "playback",
+      "exit": 0,
+      "result": "equal"
+     },
+     {
+      "scenario": "tournament",
+      "exit": 0,
+      "result": "equal"
+     },
+     {
+      "scenario": "altenter",
+      "exit": 0,
+      "result": "equal"
+     },
+     {
+      "scenario": "tournament-win",
+      "exit": 0,
+      "result": "equal"
+     },
+     {
+      "scenario": "team-tournament",
+      "exit": 0,
+      "result": "equal"
+     },
+     {
+      "scenario": "joystick",
+      "exit": 0,
+      "result": "equal"
+     }
+    ],
+    "frames_vs_S1_AppKit": {
+     "frames": 18088,
+     "mismatched": 0,
+     "result": "identical"
+    }
+   },
+   "scalable": {
+    "how": "the same frozen app through a wrapper adding --scalable-window",
+    "rows": [
+     {
+      "scenario": "vs",
+      "exit": 0,
+      "result": "equal"
+     },
+     {
+      "scenario": "mission",
+      "exit": 0,
+      "result": "equal"
+     },
+     {
+      "scenario": "demo",
+      "exit": 0,
+      "result": "equal"
+     },
+     {
+      "scenario": "war",
+      "exit": 0,
+      "result": "equal"
+     },
+     {
+      "scenario": "playback",
+      "exit": 0,
+      "result": "equal"
+     },
+     {
+      "scenario": "tournament",
+      "exit": 0,
+      "result": "equal"
+     },
+     {
+      "scenario": "altenter",
+      "exit": 0,
+      "result": "equal"
+     },
+     {
+      "scenario": "tournament-win",
+      "exit": 0,
+      "result": "equal"
+     },
+     {
+      "scenario": "team-tournament",
+      "exit": 0,
+      "result": "equal"
+     },
+     {
+      "scenario": "joystick",
+      "exit": 0,
+      "result": "equal"
+     }
+    ],
+    "frames_vs_S1_AppKit": {
+     "frames": 18088,
+     "mismatched": 0,
+     "result": "identical"
+    },
+    "captures": "794×550 (the presented frame under the hold) instead of 1588×1100 view renders; capture hashes are outside the comparison"
+   },
+   "reference": "WINDOW_SCALING S1's fresh AppKit run (all 10 scenarios, identical to TVOS_WEB T1a's pinned coretext reference), extracted from T7 ws-gate-artifacts-20261013/runs-20261013a.tar; vs and playback also identical to rt-4w-appkit"
+  },
+  "live": {
+   "display": "Apple 6K (6016×3384 px, 3008×1692 pt), awake",
+   "lines": [
+    "A window {\"bounds\": [710, 148, 1588, 1128], \"layer\": 0, \"name\": \"Little Fighter 2\", \"number\": 11282}",
+    "A click at global (1411.0,637.0), scale 2.0",
+    "B exit=0",
+    "{\"client\":[3008,1692],\"entered\":true,\"event\":\"macFullScreen\"}",
+    "{\"client\":[1588,1100],\"entered\":false,\"event\":\"macFullScreen\"}",
+    "C1 --original-window {\"bounds\": [1107, 286, 794, 578], \"layer\": 0, \"name\": \"Little Fighter 2\", \"number\": 11303}",
+    "C2 -NTSDOriginalWindow YES {\"bounds\": [1107, 286, 794, 578], \"layer\": 0, \"name\": \"Little Fighter 2\", \"number\": 11309}"
+   ],
+   "reading": [
+    "default launch: the window opens at 1588×1100 pt content (2×), 3176×2256 px screenshot; the real window is upright and nearest-scaled: 98.7% of 4×4 px blocks uniform when aligned under the 56 px title bar, 45.5% when shifted by 1 px",
+    "a pid-posted click (CGEvent postToPid, the real cursor untouched) at client (350,230) reached the game there: its cursor and the START hover at that pixel; START did not activate — the app reports NSEvent.pressedMouseButtons, which a pid-posted event does not set; the same in the original 1× window (control)",
+    "native full screen (the script's fullscreen = the green button's toggleFullScreen): entered with client 3008×1692, the picture 4886×3384 px centred (aspect 1.4439), left back to 1588×1100; view captures before, during and after",
+    "--original-window and -NTSDOriginalWindow YES: the fixed 794×578-point frame (794×550 client)"
+   ]
+  },
+  "performance": {
+   "how": "load_memory.py --local fixed --local scalable-wrapper, 3 interleaved runs after a warm-up; vs to body 1500 (--ticks 600,1500), the Demo to body 300; music and sounds off (the tool's default)",
+   "drawnIntoBackingStore_firstBuild": {
+    "vs": {
+     "frozen-app-ws-s3": {
+      "runs": 3,
+      "completeMsPerTick": {
+       "median": 1.9261,
+       "min": 1.7727,
+       "max": 2.0214
+      },
+      "processMsPerTick": {
+       "median": 4.444,
+       "min": 4.133,
+       "max": 4.689
+      },
+      "peakResidentMB": {
+       "median": 810,
+       "min": 809,
+       "max": 846
+      },
+      "startToLoadedSeconds": {
+       "median": 1.135,
+       "min": 1.129,
+       "max": 1.137
+      },
+      "loadSeconds": {
+       "median": 0.341,
+       "min": 0.34,
+       "max": 0.342
+      }
+     },
+     "ws3": {
+      "runs": 3,
+      "completeMsPerTick": {
+       "median": 1.7614,
+       "min": 1.5612,
+       "max": 1.828
+      },
+      "processMsPerTick": {
+       "median": 4.111,
+       "min": 3.822,
+       "max": 4.222
+      },
+      "peakResidentMB": {
+       "median": 888,
+       "min": 885,
+       "max": 903
+      },
+      "startToLoadedSeconds": {
+       "median": 1.142,
+       "min": 1.14,
+       "max": 1.166
+      },
+      "loadSeconds": {
+       "median": 0.351,
+       "min": 0.347,
+       "max": 0.356
+      }
+     }
+    },
+    "demo": {
+     "frozen-app-ws-s3": {
+      "runs": 3,
+      "completeMsPerTick": null,
+      "processMsPerTick": null,
+      "peakResidentMB": {
+       "median": 829,
+       "min": 820,
+       "max": 837
+      },
+      "startToLoadedSeconds": {
+       "median": 1.127,
+       "min": 1.126,
+       "max": 1.135
+      },
+      "loadSeconds": {
+       "median": 0.34,
+       "min": 0.338,
+       "max": 0.34
+      }
+     },
+     "ws3": {
+      "runs": 3,
+      "completeMsPerTick": null,
+      "processMsPerTick": null,
+      "peakResidentMB": {
+       "median": 902,
+       "min": 897,
+       "max": 915
+      },
+      "startToLoadedSeconds": {
+       "median": 1.141,
+       "min": 1.134,
+       "max": 1.145
+      },
+      "loadSeconds": {
+       "median": 0.345,
+       "min": 0.341,
+       "max": 0.352
+      }
+     }
+    },
+    "reading": "no frame-time cost, but +73..78 MB peak: window-sized backing stores; replaced by the layer path"
+   },
+   "layerContents_final": {
+    "vs": {
+     "frozen-app-ws-s3": {
+      "runs": 3,
+      "completeMsPerTick": {
+       "median": 2.0243,
+       "min": 1.8487,
+       "max": 2.0523
+      },
+      "processMsPerTick": {
+       "median": 4.656,
+       "min": 4.3,
+       "max": 4.767
+      },
+      "peakResidentMB": {
+       "median": 799,
+       "min": 797,
+       "max": 841
+      },
+      "startToLoadedSeconds": {
+       "median": 1.157,
+       "min": 1.15,
+       "max": 1.208
+      },
+      "loadSeconds": {
+       "median": 0.347,
+       "min": 0.339,
+       "max": 0.357
+      }
+     },
+     "ws3": {
+      "runs": 3,
+      "completeMsPerTick": {
+       "median": 1.7392,
+       "min": 0.8153,
+       "max": 1.9251
+      },
+      "processMsPerTick": {
+       "median": 3.3,
+       "min": 1.556,
+       "max": 3.6
+      },
+      "peakResidentMB": {
+       "median": 692,
+       "min": 661,
+       "max": 732
+      },
+      "startToLoadedSeconds": {
+       "median": 1.157,
+       "min": 1.11,
+       "max": 1.163
+      },
+      "loadSeconds": {
+       "median": 0.361,
+       "min": 0.342,
+       "max": 0.368
+      }
+     }
+    },
+    "demo": {
+     "frozen-app-ws-s3": {
+      "runs": 3,
+      "completeMsPerTick": null,
+      "processMsPerTick": null,
+      "peakResidentMB": {
+       "median": 813,
+       "min": 807,
+       "max": 844
+      },
+      "startToLoadedSeconds": {
+       "median": 1.116,
+       "min": 1.115,
+       "max": 1.131
+      },
+      "loadSeconds": {
+       "median": 0.346,
+       "min": 0.345,
+       "max": 0.346
+      }
+     },
+     "ws3": {
+      "runs": 3,
+      "completeMsPerTick": null,
+      "processMsPerTick": null,
+      "peakResidentMB": {
+       "median": 702,
+       "min": 696,
+       "max": 719
+      },
+      "startToLoadedSeconds": {
+       "median": 1.123,
+       "min": 1.095,
+       "max": 1.132
+      },
+      "loadSeconds": {
+       "median": 0.345,
+       "min": 0.344,
+       "max": 0.346
+      }
+     }
+    },
+    "reading": "the 2× window: ms per tick 1.74 vs 2.02 (no cost), process CPU 3.30 vs 4.66 ms per tick, peak 692 vs 799 MB (vs) and 702 vs 813 MB (Demo), load equal"
+   }
+  }
+ },
+ "review": "Round 1 (independent, read-only): OK, low only — GetMessagePos inconsistent with the held geometry (fixed: mapped), clicks before the first present (fixed: held client size), the remembered size not clamped and missing zoom/tiling (fixed: clamped, recorded at DestroyWindow), small screens (fixed: down to 0.5×), the silent fallback (fixed: a stderr line), option docs (S6), test formatting (fixed). Round 2: OK — all round-1 items fixed; the layer path keeps sRGB colour matching, aspect-fit placement equal to the click mapping, main-thread presents and draw-based captures; low: the remembered-size test assumed room for 1.5× (fixed: 0.9×, suite rerun); recorded, not changed: in the game's own Alt+Enter popup MSG.pt stays physical while clicks map (pre-existing, outside S3), updateLayer resets constant layer properties each frame (negligible), and heldDesktopPoint extrapolates outside the window (Windows clamps GetMessagePos to the screen).",
+ "boundaries": [
+  "Moving a scalable window off-screen or to another display no longer reaches the fixed window's 'screen changed'/geometry stops (the game keeps its creation geometry): recorded as a difference from the fixed window",
+  "Scales between 1 and 2 (and full screen) give uneven nearest pixels — the card's open question",
+  "A real hand click and a real green-button press remain hand checks (the user)",
+  "Two displays not tried",
+  "GetMessagePos for a cursor outside the scalable window is extrapolated (negative or off-screen values possible; Windows keeps it on the screen)"
+ ]
+}

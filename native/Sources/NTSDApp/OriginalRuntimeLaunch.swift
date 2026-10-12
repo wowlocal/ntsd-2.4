@@ -12,6 +12,13 @@ final class OriginalRuntimeDelegate: NSObject, NSApplicationDelegate {
     init(exitAfterStartup: Bool) { self.exitAfterStartup = exitAfterStartup }
     func applicationDidFinishLaunching(_ notification: Notification) {
         MainActor.assumeIsolated {
+            // A scalable window by default (WINDOW_SCALING S3); the original fixed
+            // window with --original-window or the NTSDOriginalWindow default
+            // (-NTSDOriginalWindow YES), and for scripted runs unless
+            // --scalable-window: their captures must not depend on the display.
+            OriginalMacWindowHost.scalable = !arguments.contains("--original-window")
+                && !UserDefaults.standard.bool(forKey:"NTSDOriginalWindow")
+                && (!arguments.contains("--script") || arguments.contains("--scalable-window"))
             let host = OriginalMacSessionHost(arguments:arguments)
             let session = OriginalRuntimeSession(arguments:arguments,host:host)
             host.session = session; self.host = host; self.session = session
@@ -29,6 +36,9 @@ final class OriginalRuntimeDelegate: NSObject, NSApplicationDelegate {
 @MainActor final class OriginalMacSessionHost: OriginalRuntimeSessionHost {
     let arguments: [String]
     weak var session: OriginalRuntimeSession?
+    /// The game's current window, for GetMessagePos under a held geometry.
+    private weak var gameWindows: OriginalRuntimeWindowBackend?
+    private var gameWindow: UInt32?
     private var pressedModifiers: Set<UInt16> = []
     /// Windows does not throttle a background game's Sleep loop; App Nap would
     /// stretch every scheduled iteration once the window is not frontmost.
@@ -68,14 +78,17 @@ final class OriginalRuntimeDelegate: NSObject, NSApplicationDelegate {
     func backingScale(_ window: UInt32,in windows: OriginalRuntimeWindowBackend) -> Double {
         Double((try? windows.observation(window).backingScale) ?? 0)
     }
-    /// GetMessagePos: desktop coordinates with the main screen's top-left origin.
+    /// GetMessagePos: desktop coordinates with the main screen's top-left origin;
+    /// under a held geometry, the held window's (as clicks are mapped).
     func cursorPoint() -> (Int32,Int32) {
         let p = NSEvent.mouseLocation,height = NSScreen.screens.first?.frame.maxY ?? 0
+        if let windows = gameWindows,let token = gameWindow,let held = try? windows.heldDesktopPoint(token,screen:p) { return held }
         return (Int32(p.x.rounded(.down)),Int32((height-p.y).rounded(.down)))
     }
     /// The original window's input and close handling: the close button is the
     /// game's WM_SYSCOMMAND(SC_CLOSE); after a boundary stop it closes the app.
     func attach(_ window: UInt32,in windows: OriginalRuntimeWindowBackend,session: OriginalRuntimeSession) throws {
+        gameWindows = windows; gameWindow = window
         try windows.setInput(window) { [weak self] event in self?.input(event,windows) ?? false }
         try windows.setCloseRequest(window) { [weak session] in session?.closeRequested() ?? true }
     }

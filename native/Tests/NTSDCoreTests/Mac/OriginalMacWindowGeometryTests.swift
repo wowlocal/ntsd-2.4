@@ -322,4 +322,57 @@ import XCTest
         XCTAssertEqual(live.response,.init(result:1,bytes:bytes([0,0,Int32(width*2),Int32(height*2)])))
         XCTAssertThrowsError(try backend.display(try image(width,height),in:token))
     }
+    /// The scalable window (WINDOW_SCALING S3): resizable with its aspect kept,
+    /// the game's client held from creation at any size, input (clicks and
+    /// GetMessagePos) mapped back through the aspect-kept picture; the hold is
+    /// kept after leaving full screen; the size is kept for the next window.
+    func testScalableWindowHoldsTheClientAtAnySize() throws {
+        OriginalMacWindowHost.scalable = true; OriginalMacWindowHost.lastContentSize = nil
+        defer { OriginalMacWindowHost.scalable = false; OriginalMacWindowHost.lastContentSize = nil }
+        let r = try ready(),backend = r.run.setup.window.backend,w = try window(r.run),token = r.run.setup.controls.window
+        defer { try? D().close(r.run) }
+        func image(_ width: Int,_ height: Int) throws -> CGImage {
+            let context = try XCTUnwrap(CGContext(data:nil,width:width,height:height,bitsPerComponent:8,bytesPerRow:0,
+                space:try XCTUnwrap(CGColorSpace(name:CGColorSpace.sRGB)),bitmapInfo:CGImageAlphaInfo.noneSkipFirst.rawValue))
+            context.setFillColor(red:0.2,green:0.4,blue:0.6,alpha:1); context.fill(CGRect(x:0,y:0,width:width,height:height))
+            return try XCTUnwrap(context.makeImage())
+        }
+        let held = try backend.displayGeometry(token),client = held.clientOnScreen.size
+        let width = Int(client.width),height = Int(client.height),view = try XCTUnwrap(w.contentView)
+        XCTAssertEqual([width,height],[794,550])
+        XCTAssertTrue(w.styleMask.contains(.resizable)); XCTAssertEqual(w.contentAspectRatio,client)
+        XCTAssertEqual(view.bounds.size,OriginalMacWindowHost.initialContentSize(client,on:w.screen))
+        for size in [view.bounds.size,CGSize(width:width*2,height:height*2),CGSize(width:1001,height:693),CGSize(width:397,height:275),CGSize(width:900,height:550)] {
+            w.setContentSize(size); XCTAssertEqual(view.bounds.size,size)
+            XCTAssertEqual(try backend.displayGeometry(token),held)
+            let rect = try backend.perform(backend.prepare(API.Request("clientRect",[token,0x453ccc],structure:try record([0,0,0,0],known:false))))
+            XCTAssertEqual(rect.response,.init(result:1,bytes:bytes([0,0,Int32(width),Int32(height)])))
+            let point = try backend.perform(backend.prepare(API.Request("screenPoint",[token,0x453ccc],structure:try record([5,7]))))
+            XCTAssertEqual(point.response,.init(result:1,bytes:bytes([Int32(held.clientInDesktop.minX)+5,Int32(held.clientInDesktop.minY)+7])))
+            try backend.display(try image(width,height),in:token)
+            if size != client { XCTAssertThrowsError(try backend.display(try image(Int(size.width),Int(size.height)),in:token)) }
+            let snapshot = try XCTUnwrap(NSBitmapImageRep(data:try backend.snapshotPNG(token)))
+            XCTAssertEqual([snapshot.pixelsWide,snapshot.pixelsHigh],[width,height])
+            // Independent of the host's fit: the aspect-kept picture, centred.
+            let scale = min(size.width/client.width,size.height/client.height)
+            let origin = CGPoint(x:(size.width-client.width*scale)/2,y:(size.height-client.height*scale)/2)
+            for (x,y) in [(0,0),(350,230),(793,549),(1,548)] {
+                let location = view.convert(NSPoint(x:origin.x+(CGFloat(x)+0.5)*scale,y:origin.y+(CGFloat(y)+0.5)*scale),to:nil)
+                let event = try XCTUnwrap(NSEvent.mouseEvent(with:.leftMouseDown,location:location,modifierFlags:[],timestamp:0,
+                    windowNumber:w.windowNumber,context:nil,eventNumber:0,clickCount:1,pressure:1))
+                let mapped = try backend.clientPoint(token,event)
+                XCTAssertEqual([mapped.0,mapped.1],[Int32(x),Int32(y)],"\(size)")
+                let desktop = try XCTUnwrap(try backend.heldDesktopPoint(token,screen:w.convertPoint(toScreen:location)))
+                XCTAssertEqual([desktop.0,desktop.1],[Int32(held.clientInDesktop.minX)+Int32(x),Int32(held.clientInDesktop.minY)+Int32(y)],"\(size)")
+            }
+        }
+        // Leaving full screen does not release a scalable window's hold.
+        NotificationCenter.default.post(name:NSWindow.didExitFullScreenNotification,object:w)
+        XCTAssertEqual(try backend.displayGeometry(token),held)
+        // The size the window had when the game destroyed it is the next one's.
+        let screen = w.screen
+        // 0.9× fits any test display (larger sizes are clamped to the screen).
+        w.setContentSize(.init(width:715,height:495)); try backend.hide(token)
+        XCTAssertEqual(OriginalMacWindowHost.initialContentSize(client,on:screen),CGSize(width:715,height:495))
+    }
 }

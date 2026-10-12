@@ -98,7 +98,7 @@ and scenarios unchanged — checked on that host as the gates say.
 | S0 | This card; the per-host survey | **done** |
 | S1 | Apple TV: verify and make the launch fill the TV at 1080p and 4K (the view, its scale, safe areas/overscan), the original-format flag (1:1 at the screen's centre) | **done** |
 | S2 | Browser: the original-format option (`?original`, config) beside today's fit and Full screen; integer or device-pixel snapping considered | **done** |
-| S3 | macOS app: a resizable window (aspect kept, the game's geometry held at any size), the green button's native full screen, a default size larger than 1× where the screen allows, `--original-window` for today's fixed window | queued |
+| S3 | macOS app: a resizable window (aspect kept, the game's geometry held at any size), the green button's native full screen, a default size larger than 1× where the screen allows, `--original-window` for today's fixed window | **done** |
 | S4 | SDL (Linux, Windows): a resizable, high-density window holding the game's geometry, the native full-screen toggle, the original flag | queued |
 | S5 | iPad and Android: the original flag, nearest filtering on Android, checks at several screens | queued |
 | S6 | All hosts: the flag's name and defaults documented in one place, launch notes for each app | queued |
@@ -115,23 +115,26 @@ blur them — also the user's choice.
 | --- | --- | --- | --- | --- |
 | 2026-10-12 | S0: card and survey | Branch `exp/window-scaling` from `main` 9d7beb8a (exp/tvos-web merged by fast-forward at the user's request); the survey above | this card | 1d39dd65 |
 | 2026-10-13 | S1: Apple TV fills the TV | Screenshots of the Apple TV 4K simulators: **the launch already fills the TV's height at 1080p (1560×1080 px) and 4K (3118×2160 px)**, 794:550 kept, bars at the sides. `--original-window` (or the NTSDOriginalWindow default) shows 794×550 points at the centre (794×550 px at 1080p, 1588×1100 px at 4K); the game's Alt+Enter popup still fills the screen in that mode (the review's medium finding, fixed). Safe area unchanged (the picture runs to the top and bottom edges; recorded). All 10 tvOS scenarios equal with all 18,088 frames identical to the AppKit reference, itself identical to T1a's pinned coretext reference; iPad vs equal, frames identical | [evidence](../evidence/ws-s1-tvos-full-screen-20261013.json) | f075d765 |
-| 2026-10-13 | S2: the browser's original window | `?original-window` (alias `?original`; `=0`, `=false`, `=no` off) or `config.originalWindow`: the frame at one CSS pixel per pixel, centred, **shrunk to fit a smaller window, never cut**; the browser's full screen and the game's Alt+Enter popup fill the page (the web host now passes the popup flag with each present). Checked at 1600×900, 800×600, 801×601 and 400×600 (clicks exact at every size), full screen on and off, Alt+Enter, and the static page's flags. One CSS pixel per frame pixel, no device-pixel snapping (recorded). Review round 1 found the crop in small windows and full screen staying 1:1, fixed; round 2 OK, two small items queued for S6. Scenarios equal with all 18,088 frames identical in both engines | [evidence](../evidence/ws-s2-browser-original-window-20261013.json) | this commit |
+| 2026-10-13 | S2: the browser's original window | `?original-window` (alias `?original`; `=0`, `=false`, `=no` off) or `config.originalWindow`: the frame at one CSS pixel per pixel, centred, **shrunk to fit a smaller window, never cut**; the browser's full screen and the game's Alt+Enter popup fill the page (the web host now passes the popup flag with each present). Checked at 1600×900, 800×600, 801×601 and 400×600 (clicks exact at every size), full screen on and off, Alt+Enter, and the static page's flags. One CSS pixel per frame pixel, no device-pixel snapping (recorded). Review round 1 found the crop in small windows and full screen staying 1:1, fixed; round 2 OK, two small items queued for S6. Scenarios equal with all 18,088 frames identical in both engines | [evidence](../evidence/ws-s2-browser-original-window-20261013.json) | 71e5243a |
+| 2026-10-13 | S3: the macOS scalable window | **By default the game window scales**: the game's 794×550 client is held from creation (the native full screen's mechanism, set on the lease since the backend registers it after `windowCreated`), the window resizes with its aspect kept (half size at least) and opens at the largest whole multiple ≥2 within 85% of the screen, else the fraction that fits (2× on the 6K test display); the size at the game's DestroyWindow (Alt+Enter) is the next window's. The picture is the layer's contents, scaled by the compositor, nearest. Clicks and GetMessagePos map through the picture. The green button's full screen fills (aspect kept) and returns. `--original-window` / `-NTSDOriginalWindow YES` keep the fixed window; scripted runs keep it unless `--scalable-window`. The new geometry test caught the hold silently failing on its first run (fixed). All 10 AppKit scenarios equal with 18,088 frames identical, fixed and scalable; live on the 6K display (upright, 98.7% of 4×4 px blocks uniform, a pid-posted click lands on its client pixel, full screen in and out, both flags). A/B fixed vs 2×: ms per tick 2.02 vs 1.74, process CPU 4.66 vs 3.30, peak 799 vs 692 MB (vs), 813 vs 702 MB (Demo); the first build's window-sized backing store cost +73..78 MB and was replaced. Two review rounds: round 1 found GetMessagePos inconsistent with the hold, clicks before the first frame, the remembered size and small screens (all fixed); round 2 OK. Boundaries: a moved window no longer reaches the fixed window's off-screen stops; MSG.pt in the game's own popup stays physical (pre-existing); hand checks of a real click and the green button open | [evidence](../evidence/ws-s3-macos-scalable-window-20261013.json) | this commit |
 
 ## Next task
 
-S3: the macOS app's scalable window. Make the AppKit window resizable with
-its content aspect locked to 794:550 (`contentAspectRatio`), holding the
-game's 794×550 client geometry at any size — the mechanism the native full
-screen already uses (`OriginalMacWindowBackend.swift` 104-108, 197-210; the
-shared backend's held geometry, `OriginalRuntimeWindowBackend.swift`
-362-372) — so the frame scales with nearest filtering and input maps back
-through the fit (214-224). The green button's native full screen works as
-today. Open at a larger size than 1× where the screen allows (the largest
-whole multiple, or a fraction of the visible frame, that fits — decide and
-record). `--original-window` (and the NTSDOriginalWindow default, as on
-Apple TV) keeps today's fixed 794×550-point window. The game's Alt+Enter
-stays the original's. Gates: the AppKit vs and playback scenarios and the
-headless scenarios unchanged; windowed screenshots at several sizes with
-clicks at known client pixels; the native full screen entered and left;
-the original flag; the existing hosts' gate only if Runtime changes;
-review.
+S4: SDL (Linux, Windows). The SDL host already keeps the game's client
+constant (`SDLWindows.swift` `w.client`) and letterboxes each present to the
+window's current size with nearest scaling (105-121), mapping input back
+through `drawn` (124-128). Add: `SDL_WINDOW_RESIZABLE` and
+`SDL_WINDOW_HIGH_PIXEL_DENSITY` for the game's window, its aspect kept
+(`SDL_SetWindowAspectRatio`), an initial size as on macOS (the largest whole
+multiple ≥2 within 85% of the usable display bounds, else the fraction, at
+least half), drawing in pixels (`SDL_GetWindowSizeInPixels`) while mouse
+events stay in window coordinates; the platform's full-screen control
+(`SDL_SetWindowFullscreen` desktop full screen on F11 and the window
+manager's maximise/full-screen button, `toggleFullScreen` instead of the
+unsupported boundary); `--original-window` (and `NTSD_ORIGINAL_WINDOW=1`)
+keeps today's fixed window; scripted runs stay fixed unless
+`--scalable-window`, as on macOS. Alt+Enter stays the game's popup. Gates:
+the SDL scenarios (`--linux-sdl` offscreen) equal with frames identical; a
+windowed check under a window manager (Linux in Docker with Xvfb and a
+window manager, or the Windows build under CrossOver) at several sizes with
+clicks; full screen in and out; the flag; review.
