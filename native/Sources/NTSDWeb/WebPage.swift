@@ -32,6 +32,23 @@ func ntsdAsk(_ text: UnsafeRawPointer, _ textCount: Int32, _ caption: UnsafeRawP
 @_extern(wasm, module: "ntsd", name: "open")
 func ntsdOpen(_ url: UnsafeRawPointer, _ count: Int32)
 
+/// The page's audio rate (the AudioContext's), 0 without sound output.
+@_extern(wasm, module: "ntsd", name: "audioRate")
+func ntsdAudioRate() -> Int32
+
+/// Frames the page's sound ring takes now, up to its target fill.
+@_extern(wasm, module: "ntsd", name: "audioSpace")
+func ntsdAudioSpace() -> Int32
+
+/// Appends `frames` interleaved stereo Float32 frames to the sound ring.
+@_extern(wasm, module: "ntsd", name: "audioWrite")
+func ntsdAudioWrite(_ samples: UnsafeRawPointer, _ frames: Int32)
+
+/// Frames the page played without the ring having them (the loop stalled)
+/// or could not play (a suspended context) since the last call.
+@_extern(wasm, module: "ntsd", name: "audioOwed")
+func ntsdAudioOwed() -> Int32
+
 /// Swift-side wrappers of the page functions.
 enum WebInput {
     /// kind 1, a key: a = USB HID usage, b = 1 down | 2 repeated, c = the
@@ -39,6 +56,8 @@ enum WebInput {
     /// kind 2, the mouse: a = window message (0x200-0x205), b, c = client
     /// x, y in the crop's pixels, d = MK_LBUTTON | MK_RBUTTON.
     /// kind 3, a modifier state: a = Caps Lock on.
+    /// kind 4, the page's focus: a = focused and visible (DirectSound's
+    /// foreground rule for the sound).
     struct Event { var kind: Int32, a: Int32, b: Int32, c: Int32, d: Int32 }
     static func drain() -> [Event] {
         var events = [Event](repeating:.init(kind:0,a:0,b:0,c:0,d:0),count:64)

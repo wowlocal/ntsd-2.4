@@ -83,7 +83,7 @@ let androidTargets: [Target] = android ? [
 let web = Context.environment["NTSD_WEB"] == "1"
 let webProducts: [Product] = web ? [.executable(name: "NTSDWeb", targets: ["NTSDWeb"])] : []
 let webTargets: [Target] = web ? [
-    .executableTarget(name: "NTSDWeb", dependencies: ["NTSDCore", "NTSDRuntime"],
+    .executableTarget(name: "NTSDWeb", dependencies: ["NTSDCore", "NTSDRuntime", "NTSDMusicDecoder"],
                       swiftSettings: [.enableExperimentalFeature("Extern")] + exclusivity)] : []
 
 // FreeType glyph masks for the SDL host off Apple platforms and the Android
@@ -117,10 +117,11 @@ let package = Package(
         .target(name: "NTSDRuntime", dependencies: ["NTSDCore"], swiftSettings: crossModule + exclusivity),
         // The vendored decoder learns the byte order from TargetConditionals.h
         // on Apple platforms and only for x86 elsewhere; every non-Apple target
-        // built here (aarch64, x86_64) is little-endian.
+        // built here (aarch64, x86_64, wasm32) is little-endian (without it the
+        // decoder byte-swapped every packet on wasm32, TVOS_WEB W2b-3).
         .target(name: "CALAC", exclude: ["README.md", "upstream.json", "vendor/LICENSE"],
-                cSettings: [.define("TARGET_RT_LITTLE_ENDIAN", to: "1", .when(platforms: [.linux, .android, .windows]))],
-                cxxSettings: [.define("TARGET_RT_LITTLE_ENDIAN", to: "1", .when(platforms: [.linux, .android, .windows]))]),
+                cSettings: [.define("TARGET_RT_LITTLE_ENDIAN", to: "1", .when(platforms: [.linux, .android, .windows, .wasi]))],
+                cxxSettings: [.define("TARGET_RT_LITTLE_ENDIAN", to: "1", .when(platforms: [.linux, .android, .windows, .wasi]))]),
         .target(name: "NTSDMusicDecoder", dependencies: ["CALAC"], swiftSettings: exclusivity),
         .executableTarget(name: "NTSDHeadless", dependencies: ["NTSDCore", "NTSDRuntime"], swiftSettings: exclusivity),
         .target(name: "NTSDReferenceChecks", dependencies: ["NTSDCore", "CZlib"]),

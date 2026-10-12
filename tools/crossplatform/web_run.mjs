@@ -265,7 +265,8 @@ server.listen(serve ?? 0, '127.0.0.1', () => {
                     { stdio: ['ignore', 'ignore', 'pipe'], env: { ...env, DYLD_FRAMEWORK_PATH: frameworks, DYLD_LIBRARY_PATH: frameworks } });
   } else {
     // --remote-debugging-port keeps the headless shell running (on 127.0.0.1).
-    browser = spawn(binary, ['--headless', '--no-first-run', '--disable-gpu', '--disable-extensions',
+    // Automated runs have no player's gesture to start an AudioContext.
+    browser = spawn(binary, ['--headless', '--no-first-run', '--disable-gpu', '--disable-extensions', '--autoplay-policy=no-user-gesture-required',
                              `--user-data-dir=${profile}`, '--remote-debugging-port=0', page], { stdio: ['ignore', 'ignore', 'pipe'] });
   }
   let log = '';

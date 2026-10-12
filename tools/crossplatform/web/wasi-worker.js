@@ -365,6 +365,10 @@ async function run(config) {
   const input = config.input ? new Int32Array(config.input) : null;
   const pads = config.pads ? new Int32Array(config.pads) : null;
   const dialog = config.dialog ? new Int32Array(config.dialog) : null;
+  const audioHeader = config.audio ? new Int32Array(config.audio.ring, 0, 8) : null;
+  const audioFrames = config.audio ? new Float32Array(config.audio.ring, 32) : null;
+  const audioTarget = config.audio ? Math.round(config.audio.rate * 0.15) : 0;
+  const audioMask = audioFrames ? audioFrames.length / 2 - 1 : 0;
   const ntsd = {
     input(ptr, capacity) {
       if (!input) return 0;
@@ -394,6 +398,23 @@ async function run(config) {
       return Atomics.load(dialog, 1);
     },
     open(ptr, count) { self.postMessage({ kind: 'open', url: text(ptr, count) }); },
+    // Sound (W2b-3): the page's ring (Int32 header [written, read, ...], then
+    // a power of two of stereo Float32 frames), kept about 150 ms ahead.
+    audioRate() { return config.audio ? config.audio.rate : 0; },
+    audioSpace() {
+      if (!audioHeader) return 0;
+      const pending = (Atomics.load(audioHeader, 0) - Atomics.load(audioHeader, 1)) | 0;
+      return Math.max(0, Math.min(audioTarget, audioMask + 1) - pending);
+    },
+    audioWrite(ptr, count) {
+      if (!audioHeader) return;
+      const source = new Float32Array(memory.buffer, ptr, count * 2), write = Atomics.load(audioHeader, 0);
+      for (let i = 0; i < count; i++) {
+        const at = ((write + i) & audioMask) * 2; audioFrames[at] = source[2 * i]; audioFrames[at + 1] = source[2 * i + 1];
+      }
+      Atomics.store(audioHeader, 0, (write + count) | 0);
+    },
+    audioOwed() { return audioHeader ? Atomics.exchange(audioHeader, 5, 0) : 0; },
     present(ptr, width, height) {
       presented.count++; presented.width = width; presented.height = height;
       if (!frames || width <= 0 || height <= 0) return;

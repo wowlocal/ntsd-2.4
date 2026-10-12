@@ -7,14 +7,18 @@ import NTSDRuntime
 /// (W2b-2): keyboard, mouse and gamepads come from the page, drained every
 /// 2 ms as the SDL host pumps its events, gamepads sampled at joySetCapture's
 /// 25 ms; message boxes and alerts are asked on the page. Scripted runs take
-/// input from their script only and answer as the headless host. Still to
-/// come: sound and music (silent), a glyph rasteriser (the `none` text group);
-/// no sockets (WASI has none); the overlay in /save when the page mounts one.
+/// input from their script only and answer as the headless host. Sound
+/// (W2b-3): the effects mixer and the packaged tracks rendered into the
+/// page's ring (`WebAudioMixer`). Still to come: a glyph rasteriser (the
+/// `none` text group); no sockets (WASI has none); the overlay in /save when
+/// the page mounts one.
 @MainActor final class WebSessionHost: OriginalRuntimeSessionHost {
     let arguments: [String], windows: WebWindowHost, musicDirectory: String
     weak var session: OriginalRuntimeSession?
     var scripted: Bool { arguments.contains("--script") }
     private var caps = false, cursor: (Int32,Int32) = (0,0), pumping = false, gamepadCount = -1
+    /// The page's sound output; none in a scripted run or without an AudioContext.
+    private lazy var mixer: WebAudioMixer? = scripted ? nil : WebAudioMixer()
     init(arguments: [String],screen: CGSize,caption: CGFloat,musicDirectory: String) {
         self.arguments = arguments; windows = WebWindowHost(screen:screen,caption:caption); self.musicDirectory = musicDirectory
     }
@@ -84,6 +88,7 @@ import NTSDRuntime
                 let characters = down && event.c > 0 ? Unicode.Scalar(UInt32(event.c)).map { String(Character($0)) } : nil
                 messages.key(key,down:down,repeated:event.b & 2 != 0,characters:characters)
             case 3: caps = event.a != 0   // a modifier-state report (pointer events carry it too)
+            case 4: mixer?.focused = event.a != 0
             case 2:
                 if let origin = WebWindowHost.presentedOrigin { cursor = (Int32(origin.x)+event.b,Int32(origin.y)+event.c) }
                 guard let messages = session.messages,!session.stopped,!session.scripted else { continue }
@@ -92,8 +97,29 @@ import NTSDRuntime
             }
         }
     }
-    func makeMusicOutput() throws -> OriginalMacMusicOutput { try .silent(directory:URL(fileURLWithPath:musicDirectory,isDirectory:true)) }
-    func startSoundOutput(_ effects: OriginalMacSoundEffects,muted: Bool) throws -> String { "web (no output yet)" }
+    /// The packaged tracks, decoded in the worker and mixed into the page's
+    /// sound ring; scripted runs and pages without sound use the silent
+    /// manifest players (the headless host's).
+    func makeMusicOutput() throws -> OriginalMacMusicOutput {
+        let directory = URL(fileURLWithPath:musicDirectory,isDirectory:true)
+        guard let mixer else { return try .silent(directory:directory) }
+        guard let manifest = try JSONSerialization.jsonObject(with:Data(contentsOf:directory.appendingPathComponent("manifest.json"))) as? [String:Any],
+              let entries = manifest["entries"] as? [[String:Any]] else { throw OriginalMacMusicOutput.Boundary.manifest }
+        var tracks: [String:URL] = [:]
+        for entry in entries {
+            guard let name = entry["name"] as? String,let resource = entry["resource"] as? String else { throw OriginalMacMusicOutput.Boundary.manifest }
+            let url = directory.appendingPathComponent(resource)
+            guard FileManager.default.fileExists(atPath:url.path) else { throw OriginalMacMusicOutput.Boundary.missingTrack(resource) }
+            tracks[name.lowercased()] = url
+        }
+        return .init(tracks:tracks) { url,ended in try WebMusicPlayer(url,mixer:mixer,ended:ended) }
+    }
+    func startSoundOutput(_ effects: OriginalMacSoundEffects,muted: Bool) throws -> String {
+        guard let mixer else { return scripted ? "web (no output: scripted)" : "web (no output: the page has no audio)" }
+        mixer.effects = effects; mixer.effectsMuted = muted
+        every(10) { [weak self] in self?.mixer?.fill() }
+        return muted ? "muted" : "web audio \(Int(mixer.rate)) Hz"
+    }
     func backingScale(_ window: UInt32,in windows: OriginalRuntimeWindowBackend) -> Double { 1 }
     /// The last mouse position on the page, in desktop coordinates.
     func cursorPoint() -> (Int32,Int32) { cursor }

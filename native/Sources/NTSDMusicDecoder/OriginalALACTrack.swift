@@ -7,7 +7,7 @@ import Foundation
 public struct OriginalALACTrack {
     public enum Failure: Error, Equatable { case notCAF, missingChunk(String), unsupported(String), corrupt(String) }
     public let sampleRate: Double, channels: Int, frames: Int
-    private let cookie: [UInt8], data: Data, packets: [(offset: Int,size: Int)], priming: Int
+    let cookie: [UInt8], data: Data, packets: [(offset: Int,size: Int)], priming: Int
 
     public init(contentsOf url: URL) throws { try self.init(data:Data(contentsOf:url,options:.mappedIfSafe)) }
     public init(data file: Data) throws {
@@ -72,3 +72,46 @@ public struct OriginalALACTrack {
         return out
     }
 }
+
+#if os(WASI)
+/// A track decoded packet by packet, for a host without threads that must
+/// spread the work (the browser host, TVOS_WEB W2b-3; WASI only, so the other
+/// hosts' libraries keep their code and layout): each `next` call
+/// delivers one packet's interleaved samples, priming and remainder frames
+/// removed, the same samples `OriginalALACTrack.decode` delivers in turn.
+public final class OriginalALACDecoder {
+    private let track: OriginalALACTrack, decoder: OpaquePointer, length: Int
+    private var buffer: [Int16], packet = 0, skip: Int, remaining: Int
+    public var finished: Bool { remaining == 0 || packet >= track.packets.count }
+    public init(_ track: OriginalALACTrack) throws {
+        guard let decoder = track.cookie.withUnsafeBufferPointer({ ntsd_alac_create($0.baseAddress,UInt32($0.count)) }) else {
+            throw OriginalALACTrack.Failure.unsupported("cookie")
+        }
+        guard ntsd_alac_bit_depth(decoder) == 16,Int(ntsd_alac_channels(decoder)) == track.channels else {
+            ntsd_alac_destroy(decoder); throw OriginalALACTrack.Failure.unsupported("bit depth or channels")
+        }
+        guard !track.packets.isEmpty || track.frames == 0 else {
+            ntsd_alac_destroy(decoder); throw OriginalALACTrack.Failure.corrupt("short by \(track.frames) frames")
+        }
+        self.track = track; self.decoder = decoder; length = Int(ntsd_alac_frame_length(decoder))
+        buffer = [Int16](repeating:0,count:length*track.channels); skip = track.priming; remaining = track.frames
+    }
+    deinit { ntsd_alac_destroy(decoder) }
+    /// Decodes the next packet into `body`; false once the track is complete.
+    @discardableResult
+    public func next(_ body: (UnsafeBufferPointer<Int16>) throws -> Void) throws -> Bool {
+        guard !finished else { return false }
+        let (offset,size) = track.packets[packet]; packet += 1
+        let channels = track.channels,length = length,decoder = decoder
+        let decoded = track.data.withUnsafeBytes { raw in
+            buffer.withUnsafeMutableBufferPointer { ntsd_alac_decode(decoder,raw.bindMemory(to:UInt8.self).baseAddress!+offset,UInt32(size),$0.baseAddress,UInt32(length)) }
+        }
+        guard decoded >= 0 else { throw OriginalALACTrack.Failure.corrupt("packet at \(offset)") }
+        let drop = min(skip,Int(decoded)); skip -= drop
+        let take = min(Int(decoded)-drop,remaining); remaining -= take
+        try buffer.withUnsafeBufferPointer { try body(UnsafeBufferPointer(rebasing:$0[drop*channels..<(drop+take)*channels])) }
+        if packet >= track.packets.count,remaining > 0 { throw OriginalALACTrack.Failure.corrupt("short by \(remaining) frames") }
+        return true
+    }
+}
+#endif

@@ -62,6 +62,7 @@
         draw();
         const png = await new Promise(ok => canvas.toBlob(ok, 'image/png'));
         if (png) await fetch('/canvas', { method: 'POST', body: png });
+        if (audio) report.audio = audioStats();
         await fetch('/page', { method: 'POST', body: JSON.stringify(report) });
       } finally { Atomics.store(header, 5, 1); Atomics.notify(header, 5); }
     }
@@ -70,6 +71,44 @@
     const input = new SharedArrayBuffer(4 * (2 + 256 * 5)), ring = new Int32Array(input);
     const pads = new SharedArrayBuffer(4 * 9), padState = new Int32Array(pads);
     const dialog = new SharedArrayBuffer(8), answer = new Int32Array(dialog);
+    // Sound (W2b-3): a ring of stereo Float32 frames the worker fills and
+    // web/audio.js plays, made on the player's gesture (browsers allow an
+    // AudioContext to run only after one). 44.1 kHz where the browser allows
+    // it: the tracks' own rate, and a quarter of the mixing work of a
+    // 192 kHz device rate. The ring holds a power of two of frames, at least
+    // 0.35 s.
+    let audio = null, soundRing = null, audioHeader = null;
+    const audioStats = () => audio && { rate: audio.sampleRate, state: audio.state, written: Atomics.load(audioHeader, 0),
+                                        played: Atomics.load(audioHeader, 3), underruns: Atomics.load(audioHeader, 2), peak: Atomics.load(audioHeader, 4) / 1e6 };
+    self.ntsdAudio = audioStats;   // for a --steps "log": "ntsdAudio()" 
+    async function startAudio() {
+      try {
+        try { audio = new AudioContext({ sampleRate: 44100 }); } catch { audio = new AudioContext(); }
+        let capacity = 1024; while (capacity < audio.sampleRate * 0.35) capacity *= 2;
+        soundRing = new SharedArrayBuffer(32 + capacity * 2 * 4); audioHeader = new Int32Array(soundRing, 0, 8);
+        await audio.audioWorklet.addModule('/web/audio.js');
+        const node = new AudioWorkletNode(audio, 'ntsd-ring', { outputChannelCount: [2], processorOptions: { ring: soundRing } });
+        node.connect(audio.destination);
+        // Never waited on: a gamepad button, a touch or Esc is no activation,
+        // and resume() would stay pending. The next click or key resumes it;
+        // meanwhile the frames it cannot play are owed to the worker, so the
+        // game's music clock keeps time.
+        if (audio.state !== 'running') audio.resume().catch(() => {});
+        const retry = () => { if (audio.state !== 'running') audio.resume().catch(() => {}); };
+        // A touch's pointerdown is no activation on WebKit: its release and click are.
+        for (const type of ['pointerdown', 'pointerup', 'touchend', 'click', 'keydown']) addEventListener(type, retry);
+        // Elapsed time while not running is owed (within one 20 ms tick of a
+        // state change, and on top of what the ring already held: bounded).
+        let before = performance.now();
+        setInterval(() => {
+          const now = performance.now();
+          if (audio.state !== 'running' && Atomics.load(audioHeader, 3) + Atomics.load(audioHeader, 0) > 0)
+            Atomics.add(audioHeader, 5, Math.round((now - before) / 1000 * audio.sampleRate));
+          before = now;
+        }, 20);
+        return audio.sampleRate;
+      } catch (e) { fetch('/stderr', { method: 'POST', body: `web_run: no sound: ${e}\n` }); audio = null; return 0; }
+    }
     function push(kind, a, b, c, d) {
       // Counters wrap as Int32 (& 255 indexes them either way). Near full, moves
       // give way so presses and releases are never the ones dropped.
@@ -107,7 +146,7 @@
       if (mouse & 2) push(2, 0x205, ...last, mouse &= ~2);
       released = true;
     }
-    function start() {
+    async function start() {
       canvas.tabIndex = 0; canvas.style.touchAction = 'none'; canvas.focus();
       const key = down => e => {
         if (asking || e.metaKey || !(e.code in usage)) return;   // Cmd: the browser's (macOS sends no key-up after it)
@@ -124,9 +163,11 @@
         push(1, u, (down ? 1 : 0) | (e.repeat ? 2 : 0), typed, caps ? 1 : 0);
       };
       addEventListener('keydown', key(true)); addEventListener('keyup', key(false));
-      addEventListener('blur', releaseAll); addEventListener('pagehide', releaseAll);
-      addEventListener('focus', () => { released = false; });
-      document.addEventListener('visibilitychange', () => { if (document.hidden) releaseAll(); else released = false; });
+      // The page's focus is DirectSound's foreground rule for the sound.
+      const focus = () => push(4, document.hasFocus() && !document.hidden ? 1 : 0, 0, 0, 0);
+      addEventListener('blur', () => { releaseAll(); focus(); }); addEventListener('pagehide', releaseAll);
+      addEventListener('focus', () => { released = false; focus(); });
+      document.addEventListener('visibilitychange', () => { if (document.hidden) releaseAll(); else released = false; focus(); });
       const point = e => {
         const r = canvas.getBoundingClientRect();
         return [Math.floor((e.clientX - r.left) * canvas.width / r.width), Math.floor((e.clientY - r.top) * canvas.height / r.height)];
@@ -161,7 +202,9 @@
         if (e.pointerType === 'mouse') buttons(e, state(e)); else setTimeout(() => buttons(e, 0), 80);
       });
       canvas.addEventListener('pointercancel', () => buttons(null, 0));
-      worker.postMessage({ ...config, frames, input, pads, dialog });
+      if (!config.autostart) focus();   // the state at the start (the host assumes focused; an automated page may lack focus)
+      const rate = await startAudio();
+      worker.postMessage({ ...config, frames, input, pads, dialog, ...(rate ? { audio: { ring: soundRing, rate } } : {}) });
     }
     // The first two gamepads, each kept in the slot it first took; d-pad over
     // the left stick (standard mapping), A/B/X/Y as buttons 1-4. A pad that
