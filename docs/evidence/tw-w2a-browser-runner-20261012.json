@@ -1,0 +1,329 @@
+{
+ "phase": "W2a: the WASI build of NTSDHeadless, unchanged, in headless browsers",
+ "harness": {
+  "files": [
+   "tools/crossplatform/web_run.mjs",
+   "tools/crossplatform/web/run.html",
+   "tools/crossplatform/web/wasi-worker.js",
+   "tools/crossplatform/run_headless_scenarios.py (--browser)"
+  ],
+  "design": "A node:http server on 127.0.0.1 (COOP/COEP/CORP headers, Host check, realpath-confined mounts) serves the page, the program and the mounts; the page starts a worker implementing all 34 WASI preview-1 imports the module uses (lazy files over synchronous XHR with folder listings, writes uploaded on close/sync/exit, mkdir/unlink/rmdir/rename at once, read-only /app and /music, poll_oneoff sleeping with Atomics.wait); output is posted and written by the runner with awaited writes; Playwright's cached chrome-headless-shell or WebKit (NTSD_BROWSER_ENGINE=webkit); no new dependency.",
+  "dependencies": "none installed: Node 26 built-ins, Playwright's already-cached browsers (chromium_headless_shell-1243, webkit-2336)"
+ },
+ "wasm": "build-wasm/release/NTSDHeadless.wasm built from d5cf2f0's sources (the W1b final tree)",
+ "results": {
+  "chromium": {
+   "userAgent": "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) HeadlessChrome/153.0.8010.12 Safari/537.36",
+   "scenarios": [
+    {
+     "scenario": "vs",
+     "exit": 0,
+     "seconds": 74.0,
+     "result": "equal",
+     "differs": [],
+     "node": "v26.7.0",
+     "browser": "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) HeadlessChrome/153.0.8010.12 Safari/537.36"
+    },
+    {
+     "scenario": "mission",
+     "exit": 0,
+     "seconds": 73.5,
+     "result": "equal",
+     "differs": [],
+     "node": "v26.7.0",
+     "browser": "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) HeadlessChrome/153.0.8010.12 Safari/537.36"
+    },
+    {
+     "scenario": "demo",
+     "exit": 0,
+     "seconds": 55.4,
+     "result": "equal",
+     "differs": [],
+     "node": "v26.7.0",
+     "browser": "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) HeadlessChrome/153.0.8010.12 Safari/537.36"
+    },
+    {
+     "scenario": "war",
+     "exit": 0,
+     "seconds": 119.2,
+     "result": "equal",
+     "differs": [],
+     "node": "v26.7.0",
+     "browser": "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) HeadlessChrome/153.0.8010.12 Safari/537.36"
+    },
+    {
+     "scenario": "playback",
+     "exit": 0,
+     "seconds": 80.2,
+     "result": "equal",
+     "differs": [],
+     "node": "v26.7.0",
+     "browser": "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) HeadlessChrome/153.0.8010.12 Safari/537.36"
+    },
+    {
+     "scenario": "tournament",
+     "exit": 0,
+     "seconds": 104.7,
+     "result": "equal",
+     "differs": [],
+     "node": "v26.7.0",
+     "browser": "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) HeadlessChrome/153.0.8010.12 Safari/537.36"
+    },
+    {
+     "scenario": "altenter",
+     "exit": 0,
+     "seconds": 75.8,
+     "result": "equal",
+     "differs": [],
+     "node": "v26.7.0",
+     "browser": "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) HeadlessChrome/153.0.8010.12 Safari/537.36"
+    },
+    {
+     "scenario": "tournament-win",
+     "exit": 0,
+     "seconds": 111.3,
+     "result": "equal",
+     "differs": [],
+     "node": "v26.7.0",
+     "browser": "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) HeadlessChrome/153.0.8010.12 Safari/537.36"
+    },
+    {
+     "scenario": "team-tournament",
+     "exit": 0,
+     "seconds": 86.6,
+     "result": "equal",
+     "differs": [],
+     "node": "v26.7.0",
+     "browser": "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) HeadlessChrome/153.0.8010.12 Safari/537.36"
+    },
+    {
+     "scenario": "joystick",
+     "exit": 0,
+     "seconds": 26.8,
+     "result": "equal",
+     "differs": [],
+     "node": "v26.7.0",
+     "browser": "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) HeadlessChrome/153.0.8010.12 Safari/537.36"
+    }
+   ],
+   "metrics": {
+    "altenter": {
+     "linearMemoryMB": 1604,
+     "seconds": 75.6,
+     "loadSeconds": 0.795
+    },
+    "demo": {
+     "linearMemoryMB": 1588,
+     "seconds": 55.2,
+     "loadSeconds": 0.813
+    },
+    "joystick": {
+     "linearMemoryMB": 1588,
+     "seconds": 26.6,
+     "loadSeconds": 0.76
+    },
+    "mission": {
+     "linearMemoryMB": 1617,
+     "seconds": 73.3,
+     "loadSeconds": 0.785
+    },
+    "playback": {
+     "linearMemoryMB": 1588,
+     "seconds": 80.0,
+     "loadSeconds": 0.773
+    },
+    "team-tournament": {
+     "linearMemoryMB": 1617,
+     "seconds": 86.4,
+     "loadSeconds": 0.772
+    },
+    "tournament-win": {
+     "linearMemoryMB": 1617,
+     "seconds": 111.0,
+     "loadSeconds": 0.782
+    },
+    "tournament": {
+     "linearMemoryMB": 1617,
+     "seconds": 104.5,
+     "loadSeconds": 0.779
+    },
+    "vs": {
+     "linearMemoryMB": 1617,
+     "seconds": 73.8,
+     "loadSeconds": 0.782
+    },
+    "war": {
+     "linearMemoryMB": 1617,
+     "seconds": 119.0,
+     "loadSeconds": 0.785
+    }
+   },
+   "framesAgainstWASI": {
+    "frames": 18088,
+    "mismatched": 0,
+    "result": "identical"
+   },
+   "vsAgainstNoneGroup": "6/6 frames, 1826 digests identical to m1-frames-ref"
+  },
+  "webkit": {
+   "userAgent": "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/605.1.15 (KHTML, like Gecko)",
+   "scenarios": [
+    {
+     "scenario": "vs",
+     "exit": 0,
+     "seconds": 78.5,
+     "result": "equal",
+     "differs": [],
+     "node": "v26.7.0",
+     "browser": "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/605.1.15 (KHTML, like Gecko)"
+    },
+    {
+     "scenario": "mission",
+     "exit": 0,
+     "seconds": 75.2,
+     "result": "equal",
+     "differs": [],
+     "node": "v26.7.0",
+     "browser": "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/605.1.15 (KHTML, like Gecko)"
+    },
+    {
+     "scenario": "demo",
+     "exit": 0,
+     "seconds": 59.3,
+     "result": "equal",
+     "differs": [],
+     "node": "v26.7.0",
+     "browser": "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/605.1.15 (KHTML, like Gecko)"
+    },
+    {
+     "scenario": "war",
+     "exit": 0,
+     "seconds": 124.1,
+     "result": "equal",
+     "differs": [],
+     "node": "v26.7.0",
+     "browser": "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/605.1.15 (KHTML, like Gecko)"
+    },
+    {
+     "scenario": "playback",
+     "exit": 0,
+     "seconds": 82.3,
+     "result": "equal",
+     "differs": [],
+     "node": "v26.7.0",
+     "browser": "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/605.1.15 (KHTML, like Gecko)"
+    },
+    {
+     "scenario": "tournament",
+     "exit": 0,
+     "seconds": 107.6,
+     "result": "equal",
+     "differs": [],
+     "node": "v26.7.0",
+     "browser": "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/605.1.15 (KHTML, like Gecko)"
+    },
+    {
+     "scenario": "altenter",
+     "exit": 0,
+     "seconds": 79.1,
+     "result": "equal",
+     "differs": [],
+     "node": "v26.7.0",
+     "browser": "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/605.1.15 (KHTML, like Gecko)"
+    },
+    {
+     "scenario": "tournament-win",
+     "exit": 0,
+     "seconds": 115.5,
+     "result": "equal",
+     "differs": [],
+     "node": "v26.7.0",
+     "browser": "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/605.1.15 (KHTML, like Gecko)"
+    },
+    {
+     "scenario": "team-tournament",
+     "exit": 0,
+     "seconds": 90.7,
+     "result": "equal",
+     "differs": [],
+     "node": "v26.7.0",
+     "browser": "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/605.1.15 (KHTML, like Gecko)"
+    },
+    {
+     "scenario": "joystick",
+     "exit": 0,
+     "seconds": 28.8,
+     "result": "equal",
+     "differs": [],
+     "node": "v26.7.0",
+     "browser": "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/605.1.15 (KHTML, like Gecko)"
+    }
+   ],
+   "metrics": {
+    "altenter": {
+     "linearMemoryMB": 1604,
+     "seconds": 78.3,
+     "loadSeconds": 0.573
+    },
+    "demo": {
+     "linearMemoryMB": 1588,
+     "seconds": 58.6,
+     "loadSeconds": 0.558
+    },
+    "joystick": {
+     "linearMemoryMB": 1588,
+     "seconds": 28.1,
+     "loadSeconds": 0.555
+    },
+    "mission": {
+     "linearMemoryMB": 1617,
+     "seconds": 74.5,
+     "loadSeconds": 0.562
+    },
+    "playback": {
+     "linearMemoryMB": 1588,
+     "seconds": 81.5,
+     "loadSeconds": 0.545
+    },
+    "team-tournament": {
+     "linearMemoryMB": 1617,
+     "seconds": 89.9,
+     "loadSeconds": 0.556
+    },
+    "tournament-win": {
+     "linearMemoryMB": 1617,
+     "seconds": 114.8,
+     "loadSeconds": 0.56
+    },
+    "tournament": {
+     "linearMemoryMB": 1617,
+     "seconds": 106.9,
+     "loadSeconds": 0.552
+    },
+    "vs": {
+     "linearMemoryMB": 1617,
+     "seconds": 77.7,
+     "loadSeconds": 0.564
+    },
+    "war": {
+     "linearMemoryMB": 1617,
+     "seconds": 123.4,
+     "loadSeconds": 0.552
+    }
+   },
+   "framesAgainstWASI": {
+    "frames": 18088,
+    "mismatched": 0,
+    "result": "identical"
+   },
+   "vsAgainstNoneGroup": "6/6 frames, 1826 digests identical to m1-frames-ref"
+  }
+ },
+ "smoke": {
+  "probe": "The W1b wasm32 probe gives output identical to Node WASI in Chromium and WebKit, also through a pipe.",
+  "trap": "A trapping program exits 134 within a second with the Swift fatal error and a wasm stack trace on stderr; no leftover browser processes or profiles."
+ },
+ "review": "Independent review round 1: defects in the harness, none affecting results (output tail could be lost at exit; worker/renderer failures waited for the 3600 s timeout and left Chrome running; a cleanup race could change the exit code; read file bytes kept beside the linear memory; failed listings looked empty; unlink/rename/poll_oneoff edge cases; fd_write growth; no Host check). All fixed; round 2: OK with five small items, fixed (watchdog from spawn, poll_oneoff overdue clocks, failed output delivery fails the run, lstat in the confinement walk, a 120 s watchdog).",
+ "incident": "Replacing async stdout writes with a synchronous write loop (round 1, finding 1) corrupted events.jsonl in a full run: Python gives node a non-blocking pipe, so the write stopped half-way with EAGAIN and the rest of the chunk was lost (9 of 10 scenarios' compare failed on JSON). Replaced by process.stdout.write awaited before the worker is answered, and an exit after both streams drain; the corrupted run is kept as tw-w2a2 (stopped) and the logs as tw-w2a2-browser.log.",
+ "notes": "Files dropped on close are fetched again when reopened, which is part of the measured load. A trap exits 134 where Node WASI exits 1. Folder listings are sorted (readdirSync); the Linux hosts already show the game does not depend on order. Result rows record the browser's user agent."
+}

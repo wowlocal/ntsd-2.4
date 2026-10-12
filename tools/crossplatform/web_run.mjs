@@ -1,0 +1,202 @@
+#!/usr/bin/env node
+// Runs a wasm32-unknown-wasip1 program in a headless browser: the Web host's
+// browser stage of the test harness (docs/research/TVOS_WEB.md W2a), with the
+// same interface as wasi_run.mjs.
+//
+// Usage: node web_run.mjs [--map GUEST=HOST ...] [--ro GUEST=HOST ...]
+//                         [--env KEY=VALUE ...] [--argv0 GUEST_PATH]
+//                         [--metrics FILE] -- PROGRAM.wasm [ARGS ...]
+//
+// A local node:http server serves web/run.html and web/wasi-worker.js with
+// cross-origin isolation headers, the program, and each mount under
+// /m/<index>/ (file bytes, or a folder listing with ?list); --map mounts take
+// the worker's writes (PUT, mkdir, unlink, rmdir, rename), --ro mounts refuse
+// them in the worker. The browser is Playwright's cached
+// chrome-headless-shell ($NTSD_BROWSER names another Chromium binary), or with
+// NTSD_BROWSER_ENGINE=webkit Playwright's cached WebKit (Safari's engine). The
+// program's stdout and stderr are this process's, its exit code this
+// process's exit code; --metrics writes the worker's report (linear memory
+// size, seconds, user agent) as JSON.
+import { createServer } from 'node:http';
+import { spawn } from 'node:child_process';
+import { mkdtempSync, readFileSync, writeFileSync, mkdirSync, statSync, lstatSync, readdirSync, rmSync, renameSync, unlinkSync, rmdirSync, existsSync, realpathSync } from 'node:fs';
+import { join, resolve, dirname, sep } from 'node:path';
+import { tmpdir, homedir } from 'node:os';
+import process, { argv, env, exit } from 'node:process';
+import { fileURLToPath } from 'node:url';
+
+const here = dirname(fileURLToPath(import.meta.url));
+const sepAt = argv.indexOf('--');
+if (sepAt < 0 || sepAt + 1 >= argv.length) {
+  console.error('usage: web_run.mjs [--map GUEST=HOST ...] [--ro GUEST=HOST ...] [--env KEY=VALUE ...] [--argv0 PATH] [--metrics FILE] -- PROGRAM.wasm [ARGS ...]');
+  exit(2);
+}
+const options = argv.slice(2, sepAt);
+const [program, ...args] = argv.slice(sepAt + 1);
+const mounts = [], guestEnv = { TZ: env.TZ ?? 'Etc/GMT-1' };
+let argv0 = program, metricsFile = null;
+for (let i = 0; i < options.length; i += 2) {
+  const [name, value] = [options[i], options[i + 1]];
+  const at = value?.indexOf('=') ?? -1;
+  if ((name === '--map' || name === '--ro') && at > 0)
+    mounts.push({ guest: value.slice(0, at), host: resolve(value.slice(at + 1)), writable: name === '--map' });
+  else if (name === '--env' && at > 0) guestEnv[value.slice(0, at)] = value.slice(at + 1);
+  else if (name === '--argv0' && value) argv0 = value;
+  else if (name === '--metrics' && value) metricsFile = value;
+  else { console.error(`web_run.mjs: bad option ${name} ${value}`); exit(2); }
+}
+
+const headers = { 'Cross-Origin-Opener-Policy': 'same-origin', 'Cross-Origin-Embedder-Policy': 'require-corp',
+                  'Cross-Origin-Resource-Policy': 'same-origin', 'Cache-Control': 'no-store' };
+const types = { '.html': 'text/html; charset=utf-8', '.js': 'text/javascript; charset=utf-8', '.wasm': 'application/wasm' };
+let browser = null, finished = false, profile = null, alive = 0;
+// The program's output: the worker hears back only once the write has
+// completed (a pipe from Python is non-blocking, so a synchronous write could
+// stop half-way), and the process exits only after both streams drain.
+const out = (fd, data) => new Promise(ok => (fd === 1 ? process.stdout : process.stderr).write(data, ok));
+const say = text => { process.stderr.write(text); };
+function finish(code) {
+  if (finished) return; finished = true;
+  server.close();
+  let leaving = false;
+  const done = () => {
+    if (leaving) return; leaving = true;
+    try { if (profile) rmSync(profile, { recursive: true, force: true, maxRetries: 5, retryDelay: 100 }); } catch {}
+    process.stdout.write('', () => process.stderr.write('', () => exit(code)));
+  };
+  if (!browser || browser.exitCode !== null || browser.signalCode !== null) return done();
+  browser.once('exit', done); browser.kill('SIGKILL');
+  setTimeout(done, 5000).unref();
+}
+process.on('SIGTERM', () => finish(143)); process.on('SIGINT', () => finish(130));
+function body(req) {
+  return new Promise(ok => { const parts = []; req.on('data', c => parts.push(c)); req.on('end', () => ok(Buffer.concat(parts))); });
+}
+// A mount-relative path inside the mount's folder, or null: checked as text
+// and again after resolving links in its nearest existing ancestor.
+function hostPath(mount, rel) {
+  const p = resolve(mount.host, rel), inside = q => q === root || q.startsWith(root + sep);
+  const root = realpathSync(mount.host);
+  if (!(p === mount.host || p.startsWith(mount.host + sep))) return null;
+  // lstat, not existsSync: a dangling link is an existing entry to check.
+  const present = q => { try { lstatSync(q); return true; } catch { return false; } };
+  let probe = p; while (!present(probe)) probe = dirname(probe);
+  return inside(realpathSync(probe)) ? p : null;
+}
+
+const server = createServer(async (req, res) => {
+  const url = new URL(req.url, 'http://local');
+  const send = (status, data = '', type = 'text/plain; charset=utf-8') => {
+    res.writeHead(status, { ...headers, 'Content-Type': type }); res.end(data);
+  };
+  // Only this machine's page: a rebound host name never reaches the mounts.
+  if (req.headers.host !== `127.0.0.1:${server.address().port}`) return send(403);
+  try {
+    if (req.method === 'GET' && url.pathname.startsWith('/web/')) {
+      const name = url.pathname.slice(5);
+      if (!/^[\w.-]+$/.test(name)) return send(404);
+      const file = join(here, 'web', name);
+      return existsSync(file) ? send(200, readFileSync(file), types[name.slice(name.lastIndexOf('.'))] ?? 'application/octet-stream') : send(404);
+    }
+    if (req.method === 'GET' && url.pathname === '/program.wasm') return send(200, readFileSync(program), types['.wasm']);
+    if (req.method === 'GET' && url.pathname === '/config')
+      return send(200, JSON.stringify({ program: '/program.wasm', args: [argv0, ...args], env: guestEnv,
+                                        mounts: mounts.map(m => ({ guest: m.guest, writable: m.writable })) }), 'application/json');
+    const m = url.pathname.match(/^\/m\/(\d+)\/?(.*)$/);
+    if (m) {
+      const mount = mounts[Number(m[1])]; if (!mount) return send(404);
+      const rel = m[2].split('/').map(decodeURIComponent).join('/');
+      const path = hostPath(mount, rel); if (!path) return send(403);
+      if (req.method === 'GET') {
+        if (!existsSync(path)) return send(404);
+        const st = statSync(path);
+        if (url.searchParams.has('list')) {
+          if (!st.isDirectory()) return send(404);
+          const entries = readdirSync(path).flatMap(name => {
+            try { const s = statSync(join(path, name)); return [{ n: name, d: s.isDirectory(), s: s.isDirectory() ? 0 : s.size }]; }
+            catch { return []; }   // a dangling link: not listed, as stat would fail in the guest too
+          });
+          return send(200, JSON.stringify(entries), 'application/json');
+        }
+        return st.isFile() ? send(200, readFileSync(path), 'application/octet-stream') : send(404);
+      }
+      if (!mount.writable) return send(403);
+      if (req.method === 'PUT') { mkdirSync(dirname(path), { recursive: true }); writeFileSync(path, await body(req)); return send(200); }
+      if (req.method === 'POST') {
+        const op = url.searchParams.get('op');
+        if (op === 'mkdir') mkdirSync(path, { recursive: true });
+        else if (op === 'unlink') { if (existsSync(path)) unlinkSync(path); }   // a file only the guest had seen
+        else if (op === 'rmdir') rmdirSync(path);
+        else if (op === 'rename') {
+          const to = hostPath(mount, url.searchParams.get('to') ?? ''); if (!to) return send(403);
+          mkdirSync(dirname(to), { recursive: true }); renameSync(path, to);
+        } else return send(400);
+        return send(200);
+      }
+      return send(405);
+    }
+    if (req.method === 'POST' && url.pathname === '/stdout') { await out(1, await body(req)); return send(200); }
+    if (req.method === 'POST' && url.pathname === '/stderr') { await out(2, await body(req)); return send(200); }
+    if (req.method === 'POST' && url.pathname === '/alive') { alive = Date.now(); return send(200); }
+    if (req.method === 'POST' && url.pathname === '/metrics') {
+      const data = await body(req); if (metricsFile) writeFileSync(metricsFile, data); return send(200);
+    }
+    if (req.method === 'POST' && url.pathname === '/exit') {
+      send(200); setTimeout(() => finish(Number(url.searchParams.get('code') ?? 1)), 10); return;
+    }
+    send(404);
+  } catch (e) { say(`web_run.mjs: ${req.method} ${req.url}: ${e}\n`); send(500, String(e)); }
+});
+
+const engine = env.NTSD_BROWSER_ENGINE ?? 'chromium';
+if (!['chromium', 'webkit'].includes(engine)) { console.error(`web_run.mjs: unknown NTSD_BROWSER_ENGINE ${engine}`); exit(2); }
+// The newest WebKit build in Playwright's cache (its Playwright.app needs its
+// frameworks on the dyld paths, as Playwright's pw_run.sh sets them).
+function webkitFolder() {
+  const cache = join(homedir(), 'Library/Caches/ms-playwright');
+  const builds = existsSync(cache) ? readdirSync(cache).filter(d => /^webkit-\d+$/.test(d))
+    .sort((a, b) => Number(a.split('-')[1]) - Number(b.split('-')[1])) : [];
+  const last = builds.reverse().map(d => join(cache, d)).find(d => existsSync(join(d, 'Playwright.app')));
+  if (!last) { console.error('web_run.mjs: no WebKit in the Playwright cache'); exit(2); }
+  return last;
+}
+function browserPath() {
+  if (env.NTSD_BROWSER) return env.NTSD_BROWSER;
+  if (engine === 'webkit') return join(webkitFolder(), 'Playwright.app/Contents/MacOS/Playwright');
+  const cache = join(homedir(), 'Library/Caches/ms-playwright');
+  const shells = existsSync(cache) ? readdirSync(cache).filter(d => d.startsWith('chromium_headless_shell-'))
+    .sort((a, b) => Number(a.split('-')[1]) - Number(b.split('-')[1])) : [];
+  for (const d of shells.reverse()) {
+    const p = join(cache, d, 'chrome-headless-shell-mac-arm64', 'chrome-headless-shell');
+    if (existsSync(p)) return p;
+  }
+  console.error('web_run.mjs: no chrome-headless-shell in the Playwright cache; set NTSD_BROWSER'); exit(2);
+}
+
+server.listen(0, '127.0.0.1', () => {
+  const { port } = server.address(), binary = browserPath();
+  profile = mkdtempSync(join(tmpdir(), 'ntsd-web-'));
+  const page = `http://127.0.0.1:${port}/web/run.html`;
+  if (engine === 'webkit') {
+    const frameworks = dirname(dirname(dirname(dirname(binary))));
+    browser = spawn(binary, ['--headless', `--user-data-dir=${profile}`, page],
+                    { stdio: ['ignore', 'ignore', 'pipe'], env: { ...env, DYLD_FRAMEWORK_PATH: frameworks, DYLD_LIBRARY_PATH: frameworks } });
+  } else {
+    // --remote-debugging-port keeps the headless shell running (on 127.0.0.1).
+    browser = spawn(binary, ['--headless', '--no-first-run', '--disable-gpu', '--disable-extensions',
+                             `--user-data-dir=${profile}`, '--remote-debugging-port=0', page], { stdio: ['ignore', 'ignore', 'pipe'] });
+  }
+  let log = '';
+  browser.stderr.on('data', d => { log += d; if (log.length > 1 << 16) log = log.slice(-1 << 15); });
+  browser.on('exit', code => {
+    if (!finished) { say(`web_run.mjs: the browser exited (${code}) before the program\n${log.slice(-2000)}`); finish(134); }
+  });
+  // The page reports every 5 s while the worker runs: a crashed renderer, or
+  // a page that never loads, goes quiet (120 s leaves room for throttled timers).
+  alive = Date.now();
+  setInterval(() => {
+    if (Date.now() - alive > 120_000) { say('web_run.mjs: the page stopped responding\n'); finish(134); }
+  }, 5000).unref();
+  // Under run_headless_scenarios.py's 3600 s, so this process cleans up first.
+  setTimeout(() => { say('web_run.mjs: timed out\n'); finish(124); }, 3300 * 1000).unref();
+});

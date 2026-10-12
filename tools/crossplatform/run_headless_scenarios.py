@@ -4,7 +4,7 @@ reference (tools/crossplatform/compare_headless.py).
 
 Usage: run_headless_scenarios.py OUT_DIR (--linux BUILD_DIR | --linux-amd64 BUILD_DIR | --linux-sdl BUILD_DIR
                                          | --local BINARY | --wine RUN_DIR | --android RUN_DIR
-                                         | --wasi BUILD_DIR) [SCENARIO ...]
+                                         | --wasi BUILD_DIR | --browser BUILD_DIR) [SCENARIO ...]
 
 The command line is app_e2e's own (`run`): --original --mute-music
 --mute-sounds --overlay --virtual-clock 123456789 8 --script-clock gameplay
@@ -32,6 +32,11 @@ adb reaches (an emulator: a test harness), runs each scenario there with
 its NTSDNative_NTSDCore.bundle beside it) under Node's WASI through
 wasi_run.mjs, a test harness (TVOS_WEB W0): BUILD_DIR, the music and OUT_DIR
 are preopened as /app, /music and /out, and --resources names the bundle.
+`--browser` runs the same BUILD_DIR/NTSDHeadless.wasm in headless Chromium
+through web_run.mjs (a page, a worker with a WASI shim, a local node:http
+server; TVOS_WEB W2a): /app and /music are read-only there, and each
+scenario's browser-metrics.json records the module's linear memory, seconds
+and the browser. $NTSD_BROWSER names another Chromium binary.
 $NTSD_NODE names the node binary (Node 20's V8 crashed compiling the module;
 Node 26 runs it), default the newest node fnm installed, else `node`.
 $NTSD_LINUX_PLATFORM sets the container platform (e.g. linux/amd64) and
@@ -77,16 +82,16 @@ def main():
         adb("push", str(Path(target).resolve()), f"{DEVICE}/app"); adb("push", str(MUSIC), f"{DEVICE}/music")
         adb("shell", f"chmod 755 {DEVICE}/app/NTSDHeadless")
     results = []
-    node_version = subprocess.run([node(), "--version"], capture_output=True, text=True).stdout.strip() if mode == "--wasi" else None
+    node_version = subprocess.run([node(), "--version"], capture_output=True, text=True).stdout.strip() if mode in ("--wasi", "--browser") else None
     for name in names:
         setup = app_e2e.SCENARIOS[name]
         base = out / name
         shutil.rmtree(base, ignore_errors=True); (base / "captures").mkdir(parents=True); (base / "overlay").mkdir(); (base / "frames").mkdir()
-        inner = Path("/out") / name if mode in ("--linux", "--wasi") else DEVICE / "out" / name if mode == "--android" else base
+        inner = Path("/out") / name if mode in ("--linux", "--wasi", "--browser") else DEVICE / "out" / name if mode == "--android" else base
         def host(path):   # the path as the game process sees it
             return "Z:" + str(path).replace("/", "\\") if mode == "--wine" else str(path)
         extra = setup["extra"](base) if callable(setup["extra"]) else list(setup["extra"])
-        if mode in ("--linux", "--android", "--wasi"):   # files the scenario placed under base are seen under /out
+        if mode in ("--linux", "--android", "--wasi", "--browser"):   # files the scenario placed under base are seen under /out
             extra = [str(inner / Path(a).relative_to(base)) if a.startswith(str(base)) else a for a in extra]
         if mode == "--wine":
             extra = [host(a) if a.startswith("/") else a for a in extra]
@@ -106,6 +111,12 @@ def main():
             adb("shell", f"mkdir -p {inner}/captures {inner}/overlay {inner}/frames")   # push skips empty folders
             line = " ".join(shlex.quote(a) for a in [f"{DEVICE}/app/NTSDHeadless", "--music-dir", f"{DEVICE}/music", *args])
             command = [ADB, "shell", f"cd {DEVICE}/app && TZ=Etc/GMT-1 HOME={DEVICE}/home TMPDIR={DEVICE}/home {line}"]
+        elif mode == "--browser":   # the same module in headless Chromium (TVOS_WEB W2a)
+            app = Path(target).resolve()
+            command = [node(), str(ROOT / "tools/crossplatform/web_run.mjs"), "--ro", f"/app={app}", "--ro", f"/music={MUSIC}",
+                       "--map", f"/out={out}", "--argv0", "/app/NTSDHeadless.wasm", "--metrics", str(base / "browser-metrics.json"),
+                       "--", str(app / "NTSDHeadless.wasm"),
+                       "--resources", "/app/NTSDNative_NTSDCore.bundle", "--music-dir", "/music", *args]
         elif mode == "--wasi":
             app = Path(target).resolve()
             # --disable-warning: Node's notice that WASI is experimental stays out of stderr.
@@ -128,12 +139,14 @@ def main():
             for d in ("captures", "overlay", "frames"):
                 shutil.rmtree(base / d); adb("pull", str(inner / d), str(base))
         compare = [sys.executable, str(COMPARE), str(base / "events.jsonl"), str(base / "captures"), str(base / "overlay"),
-                   str(done.returncode), str(setup["reference"])] + ([f"/out={out}"] if mode in ("--linux", "--wasi") else
+                   str(done.returncode), str(setup["reference"])] + ([f"/out={out}"] if mode in ("--linux", "--wasi", "--browser") else
                                                                       [f"{DEVICE}/out={out}"] if mode == "--android" else [])
         c = subprocess.run(compare, capture_output=True, text=True)
         verdict = json.loads(c.stdout.strip().splitlines()[-1]) if c.stdout.strip() else {"result": "error", "differs": [c.stderr[-300:]]}
         row = {"scenario": name, "exit": done.returncode, "seconds": round(time.time() - start, 1), **verdict}
-        if mode == "--wasi": row["node"] = node_version   # the WASI runtime is part of the result
+        if mode in ("--wasi", "--browser"): row["node"] = node_version   # the WASI runtime is part of the result
+        if mode == "--browser" and (base / "browser-metrics.json").exists():
+            row["browser"] = json.loads((base / "browser-metrics.json").read_text()).get("userAgent")
         (base / "compare.txt").write_text(c.stdout + c.stderr)
         results.append(row); print(json.dumps(row), flush=True)
     (out / "results.jsonl").write_text("".join(json.dumps(r) + "\n" for r in results))

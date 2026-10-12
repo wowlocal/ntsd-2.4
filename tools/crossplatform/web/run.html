@@ -1,0 +1,19 @@
+<!doctype html>
+<meta charset="utf-8">
+<title>NTSD WASI runner</title>
+<!-- The browser runner's page (docs/research/TVOS_WEB.md W2a): fetches the
+     run's configuration from web_run.mjs and starts the WASI worker. The
+     server sends COOP/COEP headers, so the worker can sleep on a
+     SharedArrayBuffer. The page reports to the runner every 5 s, so a
+     crashed renderer is noticed, and reports a worker that fails to start. -->
+<script>
+  const fail = text => fetch('/stderr', { method: 'POST', body: `web_run: ${text}\n` })
+    .finally(() => fetch('/exit?code=134', { method: 'POST' }));
+  setInterval(() => fetch('/alive', { method: 'POST' }), 5000);
+  fetch('/config').then(r => r.json()).then(config => {
+    if (!self.crossOriginIsolated) return fail('page is not cross-origin isolated');
+    const worker = new Worker('/web/wasi-worker.js');
+    worker.onerror = e => fail(`worker: ${e.message || e}`);
+    worker.postMessage(config);
+  }).catch(e => fail(`config: ${e}`));
+</script>
