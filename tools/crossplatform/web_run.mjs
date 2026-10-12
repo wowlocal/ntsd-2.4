@@ -32,9 +32,11 @@
 // {"at": seconds after the page loaded, then "key": KeyboardEvent.code,
 // "click": [x, y] in canvas pixels, "capture": NAME (the canvas saved as
 // NAME.png beside the report), "log": a page expression to print,
-// "viewport": [width, height] (the page's window size, W2b-4b) or "press": a
-// CSS selector (a player's click on that page element)}. The page's own
-// dialogs (confirm) are accepted and logged.
+// "viewport": [width, height] (the page's window size, W2b-4b), "press": a
+// CSS selector (a player's click on that page element) or "profile":
+// "start" | NAME (the worker's CPU profile from start to here, saved as
+// NAME.cpuprofile beside the report, W3c)}. The page's own dialogs (confirm)
+// are accepted and logged.
 // An interactive page waits for a player's click, key or gamepad button
 // unless --answer automates it (a --steps click can be that gesture).
 // --serve PORT starts no browser: it serves the page on 127.0.0.1:PORT (or
@@ -79,6 +81,7 @@ const options = argv.slice(2, sepAt);
 const [program, ...args] = argv.slice(sepAt + 1);
 const mounts = [], guestEnv = { TZ: env.TZ ?? 'Etc/GMT-1' };
 let holdFor = null, precompressed = false;
+const served = { br: 0, gzip: 0, plain: 0 };   // --precompressed: responses by encoding
 let argv0 = program, metricsFile = null, canvas = false, interactive = false, answer = null, steps = null, timeout = 3300, serve = null, kept = null, port = 0;
 for (let i = 0; i < options.length; i += 2) {
   if (options[i] === '--canvas') { canvas = true; i--; continue; }
@@ -155,14 +158,15 @@ const server = createServer(async (req, res) => {
     res.writeHead(status, { ...headers, 'Content-Type': type, ...extra }); res.end(data);
   };
   // A file's bytes, or with --precompressed its .br/.gz form the request accepts (q > 0).
-  const file = (path, type) => {
-    if (precompressed) {
+  const file = (path, type, forms = true) => {   // forms: read-only files only (a writable one may be rewritten)
+    if (precompressed && forms) {
       const accepted = new Set((req.headers['accept-encoding'] ?? '').split(',').map(p => p.trim().split(';'))
         .filter(([, q]) => !q || Number(q.trim().replace(/^q=/, '')) > 0).map(([c]) => c.trim().toLowerCase()));
       for (const [suffix, coding] of [['br', 'br'], ['gz', 'gzip']])
         if (accepted.has(coding) && existsSync(`${path}.${suffix}`))
-          return send(200, readFileSync(`${path}.${suffix}`), type, { 'Content-Encoding': coding, Vary: 'Accept-Encoding' });
+          { served[coding]++; return send(200, readFileSync(`${path}.${suffix}`), type, { 'Content-Encoding': coding, Vary: 'Accept-Encoding' }); }
     }
+    served.plain++;
     return send(200, readFileSync(path), type);
   };
   // Only this machine's page: a rebound host name never reaches the mounts.
@@ -197,14 +201,14 @@ const server = createServer(async (req, res) => {
           if (!st.isDirectory()) return send(404);
           const names = readdirSync(path);
           // --precompressed: a file's .br/.gz forms are its encodings, not files of the folder.
-          const form = name => precompressed && /\.(br|gz)$/.test(name) && names.includes(name.slice(0, -3));
+          const form = name => precompressed && !mount.writable && /\.(br|gz)$/.test(name) && names.includes(name.slice(0, -3));
           const entries = names.filter(name => !form(name)).flatMap(name => {
             try { const s = statSync(join(path, name)); return [{ n: name, d: s.isDirectory(), s: s.isDirectory() ? 0 : s.size }]; }
             catch { return []; }   // a dangling link: not listed, as stat would fail in the guest too
           });
           return send(200, JSON.stringify(entries), 'application/json');
         }
-        return st.isFile() ? file(path, 'application/octet-stream') : send(404);
+        return st.isFile() ? file(path, 'application/octet-stream', !mount.writable) : send(404);
       }
       if (!mount.writable) return send(403);
       if (req.method === 'PUT') { mkdirSync(dirname(path), { recursive: true }); writeFileSync(path, await body(req)); return send(200); }
@@ -231,7 +235,10 @@ const server = createServer(async (req, res) => {
       const data = await body(req); if (metricsFile) writeFileSync(join(dirname(metricsFile), 'canvas-last.png'), data); return send(200);
     }
     if (req.method === 'POST' && url.pathname === '/metrics') {
-      const data = await body(req); if (metricsFile) writeFileSync(metricsFile, data); return send(200);
+      const data = await body(req);
+      // With --precompressed, how the runner served the program and mounts' files (a run's own proof of the encodings).
+      if (metricsFile) writeFileSync(metricsFile, precompressed ? JSON.stringify({ ...JSON.parse(data), served }) : data);
+      return send(200);
     }
     if (req.method === 'POST' && url.pathname === '/exit') {
       if (serve !== null) { send(200); say(`web_run.mjs: the game ended (code ${url.searchParams.get('code')}); reload the page to play again\n`); return; }
@@ -266,6 +273,12 @@ async function runSteps() {
   await new Promise((ok, no) => { socket.onopen = ok; socket.onerror = no; });
   let next = 1; const pending = new Map();
   const call = (method, params = {}) => new Promise(ok => { const id = next++; pending.set(id, ok); socket.send(JSON.stringify({ id, method, params })); });
+  // The worker's session, once attached (profiles; an external page's console).
+  let worker = null;
+  const profiling = steps.some(step => step.profile === 'start');
+  const callWorker = (method, params = {}) => new Promise(ok => {
+    const id = next++; pending.set(id, ok); socket.send(JSON.stringify({ id, sessionId: worker, method, params }));
+  });
   socket.onmessage = ({ data }) => {
     const m = JSON.parse(data);
     if (pending.has(m.id)) { pending.get(m.id)(m); pending.delete(m.id); }
@@ -273,13 +286,16 @@ async function runSteps() {
       say(`web_run.mjs: the page asked ${JSON.stringify(m.params.message)}, accepted\n`); call('Page.handleJavaScriptDialog', { accept: true });
     }
     // An external page's output is the console's: the worker's, printed here.
-    if (m.method === 'Target.attachedToTarget' && m.params.targetInfo.type === 'worker')
-      socket.send(JSON.stringify({ id: next++, sessionId: m.params.sessionId, method: 'Runtime.enable' }));
+    if (m.method === 'Target.attachedToTarget' && m.params.targetInfo.type === 'worker') {
+      worker = m.params.sessionId;
+      if (external) socket.send(JSON.stringify({ id: next++, sessionId: worker, method: 'Runtime.enable' }));
+      if (profiling) callWorker('Profiler.enable').then(() => callWorker('Profiler.start'));
+    }
     if (m.method === 'Runtime.consoleAPICalled' && m.sessionId)
       say(`web_run.mjs: console ${m.params.args.map(a => a.value ?? a.description ?? '').join(' ').slice(0, 4000)}\n`);
   };
   await call('Page.enable');
-  if (external) await call('Target.setAutoAttach', { autoAttach: true, waitForDebuggerOnStart: false, flatten: true });
+  if (external || profiling) await call('Target.setAutoAttach', { autoAttach: true, waitForDebuggerOnStart: false, flatten: true });
   const evaluate = async expression => (await call('Runtime.evaluate', { expression, returnByValue: true })).result?.result?.value;
   const started = Date.now();
   for (const step of steps) {
@@ -304,6 +320,10 @@ async function runSteps() {
       if (!at) say(`web_run.mjs: no ${step.press} to press\n`);
       else for (const type of ['mouseMoved', 'mousePressed', 'mouseReleased'])
         await call('Input.dispatchMouseEvent', { type, x: at[0], y: at[1], button: type === 'mouseMoved' ? 'none' : 'left', buttons: type === 'mousePressed' ? 1 : 0, clickCount: 1 });
+    } else if (step.profile && step.profile !== 'start') {   // started when the worker attached
+      const result = worker ? (await callWorker('Profiler.stop')).result : null;
+      if (result && result.profile && metricsFile) writeFileSync(join(dirname(metricsFile), `${step.profile}.cpuprofile`), JSON.stringify(result.profile));
+      else say(`web_run.mjs: no worker profile for ${step.profile}\n`);
     } else if (step.viewport) {
       const [width, height] = step.viewport;
       await call('Emulation.setDeviceMetricsOverride', { width, height, deviceScaleFactor: 1, mobile: false });

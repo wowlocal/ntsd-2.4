@@ -215,7 +215,7 @@ def serve(folder, port, log, rate=None, plain=False, broken=False):
                     self.send_response(200); self.send_header("Content-Type", self.guess_type(path))
                     if not (broken and path.endswith(BROKEN)): self.send_header("Content-Encoding", name)
                     self.send_header("Content-Length", str(os.fstat(body.fileno()).st_size)); self.end_headers()
-                    self.encoding = name
+                    self.encoding = f"stripped:{name}" if broken and path.endswith(BROKEN) else name
                     return body
             return super().send_head()
 
