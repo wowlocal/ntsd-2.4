@@ -97,7 +97,7 @@ and scenarios unchanged — checked on that host as the gates say.
 | --- | --- | --- |
 | S0 | This card; the per-host survey | **done** |
 | S1 | Apple TV: verify and make the launch fill the TV at 1080p and 4K (the view, its scale, safe areas/overscan), the original-format flag (1:1 at the screen's centre) | **done** |
-| S2 | Browser: the original-format option (`?original`, config) beside today's fit and Full screen; integer or device-pixel snapping considered | queued |
+| S2 | Browser: the original-format option (`?original`, config) beside today's fit and Full screen; integer or device-pixel snapping considered | **done** |
 | S3 | macOS app: a resizable window (aspect kept, the game's geometry held at any size), the green button's native full screen, a default size larger than 1× where the screen allows, `--original-window` for today's fixed window | queued |
 | S4 | SDL (Linux, Windows): a resizable, high-density window holding the game's geometry, the native full-screen toggle, the original flag | queued |
 | S5 | iPad and Android: the original flag, nearest filtering on Android, checks at several screens | queued |
@@ -114,17 +114,24 @@ blur them — also the user's choice.
 | Date | Step | Result | Evidence | Commit |
 | --- | --- | --- | --- | --- |
 | 2026-10-12 | S0: card and survey | Branch `exp/window-scaling` from `main` 9d7beb8a (exp/tvos-web merged by fast-forward at the user's request); the survey above | this card | 1d39dd65 |
-| 2026-10-13 | S1: Apple TV fills the TV | Screenshots of the Apple TV 4K simulators: **the launch already fills the TV's height at 1080p (1560×1080 px) and 4K (3118×2160 px)**, 794:550 kept, bars at the sides. `--original-window` (or the NTSDOriginalWindow default) shows 794×550 points at the centre (794×550 px at 1080p, 1588×1100 px at 4K); the game's Alt+Enter popup still fills the screen in that mode (the review's medium finding, fixed). Safe area unchanged (the picture runs to the top and bottom edges; recorded). All 10 tvOS scenarios equal with all 18,088 frames identical to the AppKit reference, itself identical to T1a's pinned coretext reference; iPad vs equal, frames identical | [evidence](../evidence/ws-s1-tvos-full-screen-20261013.json) | this commit |
+| 2026-10-13 | S1: Apple TV fills the TV | Screenshots of the Apple TV 4K simulators: **the launch already fills the TV's height at 1080p (1560×1080 px) and 4K (3118×2160 px)**, 794:550 kept, bars at the sides. `--original-window` (or the NTSDOriginalWindow default) shows 794×550 points at the centre (794×550 px at 1080p, 1588×1100 px at 4K); the game's Alt+Enter popup still fills the screen in that mode (the review's medium finding, fixed). Safe area unchanged (the picture runs to the top and bottom edges; recorded). All 10 tvOS scenarios equal with all 18,088 frames identical to the AppKit reference, itself identical to T1a's pinned coretext reference; iPad vs equal, frames identical | [evidence](../evidence/ws-s1-tvos-full-screen-20261013.json) | f075d765 |
+| 2026-10-13 | S2: the browser's original window | `?original-window` (alias `?original`; `=0`, `=false`, `=no` off) or `config.originalWindow`: the frame at one CSS pixel per pixel, centred, **shrunk to fit a smaller window, never cut**; the browser's full screen and the game's Alt+Enter popup fill the page (the web host now passes the popup flag with each present). Checked at 1600×900, 800×600, 801×601 and 400×600 (clicks exact at every size), full screen on and off, Alt+Enter, and the static page's flags. One CSS pixel per frame pixel, no device-pixel snapping (recorded). Review round 1 found the crop in small windows and full screen staying 1:1, fixed; round 2 OK, two small items queued for S6. Scenarios equal with all 18,088 frames identical in both engines | [evidence](../evidence/ws-s2-browser-original-window-20261013.json) | this commit |
 
 ## Next task
 
-S2: the browser's original format. The page already fits the canvas to the
-window (aspect kept, nearest) and has a Full screen button (W2b-4b). Add the
-original format: `?original` on the page URL or `"original": true` in
-config.json — the canvas at the frame's size in CSS pixels, centred, no
-fitting — while the game's own full-screen popup (Alt+Enter, if the web host
-ever presents one) would fill as elsewhere; a page-bar toggle between fit
-and original is optional. Input already maps through the canvas's on-screen
-box (check it in both modes with the runner's click steps). Gates: the web
-scenarios unchanged in both engines; clicks exact in both modes at several
-window sizes; the static page with `?original`; review.
+S3: the macOS app's scalable window. Make the AppKit window resizable with
+its content aspect locked to 794:550 (`contentAspectRatio`), holding the
+game's 794×550 client geometry at any size — the mechanism the native full
+screen already uses (`OriginalMacWindowBackend.swift` 104-108, 197-210; the
+shared backend's held geometry, `OriginalRuntimeWindowBackend.swift`
+362-372) — so the frame scales with nearest filtering and input maps back
+through the fit (214-224). The green button's native full screen works as
+today. Open at a larger size than 1× where the screen allows (the largest
+whole multiple, or a fraction of the visible frame, that fits — decide and
+record). `--original-window` (and the NTSDOriginalWindow default, as on
+Apple TV) keeps today's fixed 794×550-point window. The game's Alt+Enter
+stays the original's. Gates: the AppKit vs and playback scenarios and the
+headless scenarios unchanged; windowed screenshots at several sizes with
+clicks at known client pixels; the native full screen entered and left;
+the original flag; the existing hosts' gate only if Runtime changes;
+review.

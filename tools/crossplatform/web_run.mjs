@@ -32,6 +32,8 @@
 // {"at": seconds after the page loaded, then "key": KeyboardEvent.code,
 // "click": [x, y] in canvas pixels, "capture": NAME (the canvas saved as
 // NAME.png beside the report), "log": a page expression to print,
+// "chord": [codes] (keys held together by their codes only, no modifier flags
+// or characters: e.g. ["AltLeft", "Enter"]),
 // "viewport": [width, height] (the page's window size, W2b-4b), "press": a
 // CSS selector (a player's click on that page element) or "profile":
 // "start" | NAME (the worker's CPU profile from start to here, saved as
@@ -52,7 +54,8 @@
 // or (any engine) keeps it open --for SECONDS (no program, no reports: the
 // page's and the worker's output is the browser console's; with --steps the
 // worker's console is printed on stderr).
-// --precompressed serves a file's NAME.br or NAME.gz form (web_app.py build
+// --original-window shows the original window (the frame at one CSS pixel per
+// pixel, WINDOW_SCALING S2). --precompressed serves a file's NAME.br or NAME.gz form (web_app.py build
 // --compress) with Content-Encoding when the browser accepts it, as a host
 // would (W3b), so scenarios run from the delivered files.
 // the browser keeps storage per origin, port included (else a free port); a
@@ -80,7 +83,7 @@ if (sepAt < 0 || sepAt + 1 >= argv.length) {
 const options = argv.slice(2, sepAt);
 const [program, ...args] = argv.slice(sepAt + 1);
 const mounts = [], guestEnv = { TZ: env.TZ ?? 'Etc/GMT-1' };
-let holdFor = null, precompressed = false;
+let holdFor = null, precompressed = false, originalWindow = false;
 const served = { br: 0, gzip: 0, plain: 0 };   // --precompressed: responses by encoding
 let argv0 = program, metricsFile = null, canvas = false, interactive = false, answer = null, steps = null, timeout = 3300, serve = null, kept = null, port = 0;
 for (let i = 0; i < options.length; i += 2) {
@@ -95,6 +98,7 @@ for (let i = 0; i < options.length; i += 2) {
   if (options[i] === '--url') continue;
   if (options[i] === '--for') { holdFor = Number(options[i + 1]); continue; }
   if (options[i] === '--precompressed') { precompressed = true; i--; continue; }
+  if (options[i] === '--original-window') { originalWindow = true; i--; continue; }
   if (options[i] === '--port') {
     port = Number(options[i + 1]);
     if (!Number.isInteger(port) || port < 0 || port > 65535) { console.error(`web_run.mjs: bad port ${options[i + 1]}`); exit(2); }
@@ -179,7 +183,7 @@ const server = createServer(async (req, res) => {
     if (req.method === 'GET' && (url.pathname === '/web/config.json' || url.pathname === '/config')) {   // the page's config.json (before the /web/ files)
       if (steps && !stepsStarted) { stepsStarted = true; runSteps().catch(e => say(`web_run.mjs: steps: ${e}\n`)); }
       return send(200, JSON.stringify({ runner: true, program: '/program.wasm', args: [argv0, ...args], env: guestEnv, canvas, frameBytes: 32 << 20,
-                                        interactive, autostart: answer !== null, ...(answer === null ? {} : { answer }), report: metricsFile !== null,
+                                        interactive, autostart: answer !== null, ...(answer === null ? {} : { answer }), report: metricsFile !== null, originalWindow,
                                         mounts: mounts.map(m => ({ guest: m.guest, writable: m.writable, ...(m.persist ? { persist: true } : {}) })) }), 'application/json');
     }
     if (req.method === 'GET' && url.pathname.startsWith('/web/')) {
@@ -322,6 +326,10 @@ async function runSteps() {
         if (type === 'mouseReleased') await new Promise(ok => setTimeout(ok, 120));
         await call('Input.dispatchMouseEvent', { type, x: at[0], y: at[1], button: type === 'mouseMoved' ? 'none' : 'left', buttons: type === 'mousePressed' ? 1 : 0, clickCount: 1 });
       }
+    } else if (step.chord) {   // keys pressed in order, held 120 ms, released in reverse (e.g. Alt+Enter)
+      for (const code of step.chord) await call('Input.dispatchKeyEvent', { type: 'keyDown', code, key: code });
+      await new Promise(ok => setTimeout(ok, 120));
+      for (const code of [...step.chord].reverse()) await call('Input.dispatchKeyEvent', { type: 'keyUp', code, key: code });
     } else if (step.press) {
       const at = await evaluate(`(() => { const e = document.querySelector(${JSON.stringify(step.press)}); if (!e) return null;
         const r = e.getBoundingClientRect(); return [r.left + r.width / 2, r.top + r.height / 2]; })()`);

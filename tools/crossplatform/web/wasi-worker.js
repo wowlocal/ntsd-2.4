@@ -447,7 +447,7 @@ async function run(config) {
   // cannot draw on the page itself: present copies the crop into the page's
   // shared frame buffer under a sequence lock, and the page draws it.
   const frames = config.frames ?? null;   // SharedArrayBuffer: Int32 header[8], then pixels
-  const header = frames ? new Int32Array(frames, 0, 8) : null, presented = { count: 0, width: 0, height: 0, skipped: 0 };
+  const header = frames ? new Int32Array(frames, 0, 8) : null, presented = { count: 0, width: 0, height: 0, skipped: 0, popup: false };
   // Input and questions (W2b-2), all in shared memory the page fills:
   // config.input: Int32 [write, read, then 256 events of 5 Int32 (kind, a, b, c, d)];
   // config.pads: Int32 [count, then 2 × (x, y, buttons, connected)];
@@ -505,8 +505,11 @@ async function run(config) {
       Atomics.store(audioHeader, 0, (write + count) | 0);
     },
     audioOwed() { return audioHeader ? Atomics.exchange(audioHeader, 5, 0) : 0; },
-    present(ptr, width, height) {
+    present(ptr, width, height, popup) {
       presented.count++; presented.width = width; presented.height = height;
+      // Whether the game's full-screen popup presents (it fills the page in the
+      // original format, WINDOW_SCALING S2); told to the page when it changes.
+      if (((popup | 0) !== 0) !== presented.popup) { presented.popup = (popup | 0) !== 0; postMessage({ kind: 'popup', popup: presented.popup }); }
       if (!frames || width <= 0 || height <= 0) return;
       const n = width * height * 4;
       if (32 + n > frames.byteLength) { presented.skipped++; return; }

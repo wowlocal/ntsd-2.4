@@ -4,9 +4,11 @@
 // so page-to-worker traffic goes through shared memory the page fills.
 
 /// Shows a finished crop: `width × height` XRGB8888 words (little-endian
-/// 0x00RRGGBB, `OriginalFramebuffer`'s layout) at `pixels`.
+/// 0x00RRGGBB, `OriginalFramebuffer`'s layout) at `pixels`; `popup` 1 when
+/// it is the game's full-screen popup's (Alt+Enter), which fills the page
+/// even in the original format (WINDOW_SCALING S2).
 @_extern(wasm, module: "ntsd", name: "present")
-func ntsdPresent(_ pixels: UnsafeRawPointer, _ width: Int32, _ height: Int32)
+func ntsdPresent(_ pixels: UnsafeRawPointer, _ width: Int32, _ height: Int32, _ popup: Int32)
 
 /// Copies up to `capacity` pending input events from the page, five Int32
 /// each (`WebInput.Event`), to `events`; returns how many it copied.

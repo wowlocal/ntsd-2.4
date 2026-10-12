@@ -59,21 +59,23 @@ final class WebCursor {}
     }
     /// The crop goes to the page, which draws it on its canvas (the backend
     /// also keeps it as the window's presented frame).
-    func present(_ frame: OriginalFramebuffer,in window: AnyObject) throws { Self.show(frame,origin:Self.window(window).origin) }
+    func present(_ frame: OriginalFramebuffer,in window: AnyObject) throws {
+        let w = Self.window(window); Self.show(frame,origin:w.origin,popup:w.popup)
+    }
     /// The headless host's presentation path (presents pipelined, which on
     /// WASI run inline), so `--web` and `--browser` differ only in the page:
     /// the page copies the crop before the call returns, so a reused frame is
     /// safe.
     var presentsConcurrently: Bool { true }
     func concurrentPresenter(_ window: AnyObject,width: Int,height: Int) -> (@Sendable (OriginalFramebuffer) -> Void)? {
-        let origin = Self.window(window).origin
-        return { Self.show($0,origin:origin) }
+        let w = Self.window(window),origin = w.origin,popup = w.popup
+        return { Self.show($0,origin:origin,popup:popup) }
     }
-    nonisolated static func show(_ frame: OriginalFramebuffer,origin: CGPoint) {
+    nonisolated static func show(_ frame: OriginalFramebuffer,origin: CGPoint,popup: Bool) {
         presentedOrigin = origin
         frame.pixels.withUnsafeBytes { bytes in
             guard let base = bytes.baseAddress else { return }
-            ntsdPresent(base,Int32(frame.width),Int32(frame.height))
+            ntsdPresent(base,Int32(frame.width),Int32(frame.height),popup ? 1 : 0)
         }
     }
 }

@@ -1,0 +1,513 @@
+{
+ "study": "WINDOW_SCALING",
+ "step": "S2: the browser's original window",
+ "change": "NTSDWeb: the present import gains `popup` (1 for the game's full-screen popup window); both present paths pass it. wasi-worker.js tells the page when it changes ({kind:'popup'}). run.html: the original window — ?original-window (alias ?original; =0, =false, =no turn it off) or config.originalWindow (config.original accepted) — shows the frame at one CSS pixel per pixel, centred, shrunk only to fit a smaller window (never cut, never enlarged); the browser's full screen and the game's popup (Alt+Enter) fill the page as on the other hosts; the default fit unchanged. web_run.mjs: --original-window; a 'chord' step (keys by code, held together).",
+ "checks": {
+  "runner": {
+   "how": "web_run.mjs --original-window, interactive --answer 0, steps: viewports 1600×900, 800×600, 801×601, 400×600 with clicks at canvas pixels (0,0), (350,230), (793,549) and ntsdPage.pointer(); the bar's Full screen on and off; Alt+Enter (chord)",
+   "logs": [
+    "(() => { const r = document.querySelector('canvas').getBoundingClientRect(); return [Math.round(r.width*10)/10, Math.round(r.height*10)/10, Math.round(r.left*10)/10, Math.round(r.top*10)/10, innerWidth, innerHeight]; })() = [794,550,403,175,1600,900]",
+    "ntsdPage.pointer() = [0,0]",
+    "ntsdPage.pointer() = [350,230]",
+    "ntsdPage.pointer() = [793,549]",
+    "(() => { const r = document.querySelector('canvas').getBoundingClientRect(); return [Math.round(r.width*10)/10, Math.round(r.height*10)/10, Math.round(r.left*10)/10, Math.round(r.top*10)/10, innerWidth, innerHeight]; })() = [794,550,3,25,800,600]",
+    "ntsdPage.pointer() = [0,0]",
+    "ntsdPage.pointer() = [350,230]",
+    "ntsdPage.pointer() = [793,549]",
+    "(() => { const r = document.querySelector('canvas').getBoundingClientRect(); return [Math.round(r.width*10)/10, Math.round(r.height*10)/10, Math.round(r.left*10)/10, Math.round(r.top*10)/10, innerWidth, innerHeight]; })() = [794,550,3.5,25.5,801,601]",
+    "ntsdPage.pointer() = [0,0]",
+    "ntsdPage.pointer() = [350,230]",
+    "ntsdPage.pointer() = [793,549]",
+    "(() => { const r = document.querySelector('canvas').getBoundingClientRect(); return [Math.round(r.width*10)/10, Math.round(r.height*10)/10, Math.round(r.left*10)/10, Math.round(r.top*10)/10, innerWidth, innerHeight]; })() = [400,277.1,0,161.5,400,600]",
+    "ntsdPage.pointer() = [0,0]",
+    "ntsdPage.pointer() = [350,230]",
+    "ntsdPage.pointer() = [793,549]",
+    "(() => { const r = document.querySelector('canvas').getBoundingClientRect(); return [Math.round(r.width*10)/10, Math.round(r.height*10)/10, Math.round(r.left*10)/10, Math.round(r.top*10)/10, innerWidth, innerHeight]; })() = [794,550,403,175,1600,900]",
+    "[!!document.fullscreenElement, (() => { const r = document.querySelector('canvas').getBoundingClientRect(); return [Math.round(r.width*10)/10, Math.round(r.height*10)/10, Math.round(r.left*10)/10, Math.round(r.top*10)/10, innerWidth, innerHeight]; })()] = [true,[1299.3,900,150.4,0,1600,900]]",
+    "[!!document.fullscreenElement, (() => { const r = document.querySelector('canvas').getBoundingClientRect(); return [Math.round(r.width*10)/10, Math.round(r.height*10)/10, Math.round(r.left*10)/10, Math.round(r.top*10)/10, innerWidth, innerHeight]; })()] = [false,[794,550,403,175,1600,900]]",
+    "(() => { const r = document.querySelector('canvas').getBoundingClientRect(); return [Math.round(r.width*10)/10, Math.round(r.height*10)/10, Math.round(r.left*10)/10, Math.round(r.top*10)/10, innerWidth, innerHeight]; })() = [1299.3,900,150.4,0,1600,900]"
+   ],
+   "reading": "794×550 CSS px centred at 1600×900, 800×600 and 801×601 (offset 3.5 px); 400×277 at 400×600 (shrunk, nothing cut); every click mapped to its exact canvas pixel at every size; full screen 1299×900 (filled), back to 794×550 on leaving; after Alt+Enter the popup fills 1299×900"
+  },
+  "staticPage": {
+   "how": "web_app.py build (the new program) served by web_app.py serve, Chromium through --url",
+   "results": {
+    "?original-window": [
+     true,
+     794,
+     550,
+     800,
+     600
+    ],
+    "?original=false": [
+     false,
+     800,
+     554,
+     800,
+     600
+    ],
+    "?": [
+     false,
+     800,
+     554,
+     800,
+     600
+    ]
+   },
+   "reading": "?original-window: 794×550 at 800×600; ?original=false and no flag: the default fit (800×554)"
+  }
+ },
+ "web": {
+  "scenarios": {
+   "chromium": {
+    "rows": [
+     {
+      "scenario": "vs",
+      "exit": 0,
+      "seconds": 73.9,
+      "result": "equal",
+      "differs": [],
+      "node": "v26.7.0",
+      "page": {
+       "presents": 2341,
+       "skipped": 0,
+       "draws": 2340,
+       "torn": 0,
+       "check": {
+        "width": 794,
+        "height": 550,
+        "pixels": 436700,
+        "mismatchedPixels": 0,
+        "presentsBefore": 1
+       }
+      }
+     },
+     {
+      "scenario": "mission",
+      "exit": 0,
+      "seconds": 73.4,
+      "result": "equal",
+      "differs": [],
+      "node": "v26.7.0",
+      "page": {
+       "presents": 2170,
+       "skipped": 0,
+       "draws": 2170,
+       "torn": 0,
+       "check": {
+        "width": 794,
+        "height": 550,
+        "pixels": 436700,
+        "mismatchedPixels": 0,
+        "presentsBefore": 1
+       }
+      }
+     },
+     {
+      "scenario": "demo",
+      "exit": 0,
+      "seconds": 55.2,
+      "result": "equal",
+      "differs": [],
+      "node": "v26.7.0",
+      "page": {
+       "presents": 1784,
+       "skipped": 0,
+       "draws": 1783,
+       "torn": 0,
+       "check": {
+        "width": 794,
+        "height": 550,
+        "pixels": 436700,
+        "mismatchedPixels": 0,
+        "presentsBefore": 1
+       }
+      }
+     },
+     {
+      "scenario": "war",
+      "exit": 0,
+      "seconds": 119.4,
+      "result": "equal",
+      "differs": [],
+      "node": "v26.7.0",
+      "page": {
+       "presents": 3611,
+       "skipped": 0,
+       "draws": 3611,
+       "torn": 0,
+       "check": {
+        "width": 794,
+        "height": 550,
+        "pixels": 436700,
+        "mismatchedPixels": 0,
+        "presentsBefore": 1
+       }
+      }
+     },
+     {
+      "scenario": "playback",
+      "exit": 0,
+      "seconds": 80.8,
+      "result": "equal",
+      "differs": [],
+      "node": "v26.7.0",
+      "page": {
+       "presents": 2368,
+       "skipped": 0,
+       "draws": 2368,
+       "torn": 0,
+       "check": {
+        "width": 794,
+        "height": 550,
+        "pixels": 436700,
+        "mismatchedPixels": 0,
+        "presentsBefore": 1
+       }
+      }
+     },
+     {
+      "scenario": "tournament",
+      "exit": 0,
+      "seconds": 104.7,
+      "result": "equal",
+      "differs": [],
+      "node": "v26.7.0",
+      "page": {
+       "presents": 3414,
+       "skipped": 0,
+       "draws": 3414,
+       "torn": 0,
+       "check": {
+        "width": 794,
+        "height": 550,
+        "pixels": 436700,
+        "mismatchedPixels": 0,
+        "presentsBefore": 1
+       }
+      }
+     },
+     {
+      "scenario": "altenter",
+      "exit": 0,
+      "seconds": 75.3,
+      "result": "equal",
+      "differs": [],
+      "node": "v26.7.0",
+      "page": {
+       "presents": 2390,
+       "skipped": 0,
+       "draws": 2389,
+       "torn": 0,
+       "check": {
+        "width": 794,
+        "height": 550,
+        "pixels": 436700,
+        "mismatchedPixels": 0,
+        "presentsBefore": 1
+       }
+      }
+     },
+     {
+      "scenario": "tournament-win",
+      "exit": 0,
+      "seconds": 110.7,
+      "result": "equal",
+      "differs": [],
+      "node": "v26.7.0",
+      "page": {
+       "presents": 3655,
+       "skipped": 0,
+       "draws": 3655,
+       "torn": 0,
+       "check": {
+        "width": 794,
+        "height": 550,
+        "pixels": 436700,
+        "mismatchedPixels": 0,
+        "presentsBefore": 1
+       }
+      }
+     },
+     {
+      "scenario": "team-tournament",
+      "exit": 0,
+      "seconds": 86.6,
+      "result": "equal",
+      "differs": [],
+      "node": "v26.7.0",
+      "page": {
+       "presents": 2686,
+       "skipped": 0,
+       "draws": 2686,
+       "torn": 0,
+       "check": {
+        "width": 794,
+        "height": 550,
+        "pixels": 436700,
+        "mismatchedPixels": 0,
+        "presentsBefore": 1
+       }
+      }
+     },
+     {
+      "scenario": "joystick",
+      "exit": 0,
+      "seconds": 27.2,
+      "result": "equal",
+      "differs": [],
+      "node": "v26.7.0",
+      "page": {
+       "presents": 766,
+       "skipped": 0,
+       "draws": 766,
+       "torn": 0,
+       "check": {
+        "width": 794,
+        "height": 550,
+        "pixels": 436700,
+        "mismatchedPixels": 0,
+        "presentsBefore": 1
+       }
+      }
+     }
+    ],
+    "frames": {
+     "frames": 18088,
+     "mismatched": 0,
+     "result": "identical"
+    }
+   },
+   "webkit": {
+    "rows": [
+     {
+      "scenario": "vs",
+      "exit": 0,
+      "seconds": 78.1,
+      "result": "equal",
+      "differs": [],
+      "node": "v26.7.0",
+      "page": {
+       "presents": 2341,
+       "skipped": 0,
+       "draws": 2341,
+       "torn": 0,
+       "check": {
+        "width": 794,
+        "height": 550,
+        "pixels": 436700,
+        "mismatchedPixels": 0,
+        "presentsBefore": 1
+       }
+      }
+     },
+     {
+      "scenario": "mission",
+      "exit": 0,
+      "seconds": 76.3,
+      "result": "equal",
+      "differs": [],
+      "node": "v26.7.0",
+      "page": {
+       "presents": 2170,
+       "skipped": 0,
+       "draws": 2170,
+       "torn": 0,
+       "check": {
+        "width": 794,
+        "height": 550,
+        "pixels": 436700,
+        "mismatchedPixels": 0,
+        "presentsBefore": 1
+       }
+      }
+     },
+     {
+      "scenario": "demo",
+      "exit": 0,
+      "seconds": 57.0,
+      "result": "equal",
+      "differs": [],
+      "node": "v26.7.0",
+      "page": {
+       "presents": 1784,
+       "skipped": 0,
+       "draws": 1782,
+       "torn": 1,
+       "check": {
+        "width": 794,
+        "height": 550,
+        "pixels": 436700,
+        "mismatchedPixels": 0,
+        "presentsBefore": 1
+       }
+      }
+     },
+     {
+      "scenario": "war",
+      "exit": 0,
+      "seconds": 120.5,
+      "result": "equal",
+      "differs": [],
+      "node": "v26.7.0",
+      "page": {
+       "presents": 3611,
+       "skipped": 0,
+       "draws": 3611,
+       "torn": 0,
+       "check": {
+        "width": 794,
+        "height": 550,
+        "pixels": 436700,
+        "mismatchedPixels": 0,
+        "presentsBefore": 1
+       }
+      }
+     },
+     {
+      "scenario": "playback",
+      "exit": 0,
+      "seconds": 84.9,
+      "result": "equal",
+      "differs": [],
+      "node": "v26.7.0",
+      "page": {
+       "presents": 2368,
+       "skipped": 0,
+       "draws": 2368,
+       "torn": 0,
+       "check": {
+        "width": 794,
+        "height": 550,
+        "pixels": 436700,
+        "mismatchedPixels": 0,
+        "presentsBefore": 1
+       }
+      }
+     },
+     {
+      "scenario": "tournament",
+      "exit": 0,
+      "seconds": 106.5,
+      "result": "equal",
+      "differs": [],
+      "node": "v26.7.0",
+      "page": {
+       "presents": 3414,
+       "skipped": 0,
+       "draws": 3413,
+       "torn": 0,
+       "check": {
+        "width": 794,
+        "height": 550,
+        "pixels": 436700,
+        "mismatchedPixels": 0,
+        "presentsBefore": 1
+       }
+      }
+     },
+     {
+      "scenario": "altenter",
+      "exit": 0,
+      "seconds": 79.2,
+      "result": "equal",
+      "differs": [],
+      "node": "v26.7.0",
+      "page": {
+       "presents": 2390,
+       "skipped": 0,
+       "draws": 2387,
+       "torn": 1,
+       "check": {
+        "width": 794,
+        "height": 550,
+        "pixels": 436700,
+        "mismatchedPixels": 0,
+        "presentsBefore": 1
+       }
+      }
+     },
+     {
+      "scenario": "tournament-win",
+      "exit": 0,
+      "seconds": 112.2,
+      "result": "equal",
+      "differs": [],
+      "node": "v26.7.0",
+      "page": {
+       "presents": 3655,
+       "skipped": 0,
+       "draws": 3655,
+       "torn": 0,
+       "check": {
+        "width": 794,
+        "height": 550,
+        "pixels": 436700,
+        "mismatchedPixels": 0,
+        "presentsBefore": 1
+       }
+      }
+     },
+     {
+      "scenario": "team-tournament",
+      "exit": 0,
+      "seconds": 87.1,
+      "result": "equal",
+      "differs": [],
+      "node": "v26.7.0",
+      "page": {
+       "presents": 2686,
+       "skipped": 0,
+       "draws": 2686,
+       "torn": 0,
+       "check": {
+        "width": 794,
+        "height": 550,
+        "pixels": 436700,
+        "mismatchedPixels": 0,
+        "presentsBefore": 1
+       }
+      }
+     },
+     {
+      "scenario": "joystick",
+      "exit": 0,
+      "seconds": 29.4,
+      "result": "equal",
+      "differs": [],
+      "node": "v26.7.0",
+      "page": {
+       "presents": 766,
+       "skipped": 0,
+       "draws": 765,
+       "torn": 0,
+       "check": {
+        "width": 794,
+        "height": 550,
+        "pixels": 436700,
+        "mismatchedPixels": 0,
+        "presentsBefore": 1
+       }
+      }
+     }
+    ],
+    "frames": {
+     "frames": 18088,
+     "mismatched": 0,
+     "result": "identical"
+    }
+   }
+  },
+  "note": "--web scripted pages on the rebuilt program in Chromium and WebKit; frames compared with tw-w1b3/wasi (the none group); the files unchanged during the run (SHA-256 checked)"
+ },
+ "decisions": [
+  "One CSS pixel per frame pixel (one point per pixel at 100% zoom, two device pixels on Retina, as macOS and tvOS); no snapping to device pixels (browser zoom or 125/150% system scaling gives uneven nearest pixels)",
+  "Smaller windows shrink the original window rather than crop it",
+  "The browser's full screen fills even in the original window, as the macOS native full screen does"
+ ],
+ "review": "Round 1 (independent, read-only): OK; medium: a smaller window cut the original window off with no way to reach the clipped parts (fixed: shrunk to fit); low: full screen stayed 1:1 (fixed: fills), pixel ratio (recorded), odd window sizes untested (801×601 added), chord documented, ?original=false parsed as on (fixed), one flag name everywhere (original-window). Round 2: OK; queued for S6: the real name should win over the alias when both are given, and webkitfullscreenchange for older Safari.",
+ "boundaries": [
+  "No real Safari or Firefox tried; WebKit is Playwright's build",
+  "Uneven nearest pixels at fractional browser zoom"
+ ]
+}

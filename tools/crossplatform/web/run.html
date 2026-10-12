@@ -19,7 +19,9 @@
      pixels (as the iOS and SDL hosts scale), shows a loading notice until
      the first frame and, when interactive, a corner bar: full screen (the
      browser's; the game's Alt+Enter stays the game's) and the saves' state
-     with a reset. -->
+     with a reset. ?original-window (or config.originalWindow) keeps the
+     original window: the frame at one CSS pixel per pixel, centred, shrunk
+     only to fit a smaller window (WINDOW_SCALING S2). -->
 <style>
   html, body { margin: 0; height: 100%; background: #000; overflow: hidden; touch-action: none; }
   body { display: flex; align-items: center; justify-content: center; }
@@ -63,6 +65,10 @@
     }
     // An automated start of a static folder: ?autostart, ?answer=N (every question answered N).
     if (query.has('autostart')) config.autostart = true;
+    // The original window (WINDOW_SCALING S2): ?original-window (or ?original); =0, =false or =no turn it off.
+    for (const name of ['original-window', 'original'])
+      if (query.has(name)) config.originalWindow = !['0', 'false', 'no'].includes(query.get(name).toLowerCase());
+    if (config.original !== undefined && config.originalWindow === undefined) config.originalWindow = !!config.original;
     if (query.has('answer')) { config.autostart = true; config.answer = Number(query.get('answer')); }
     if (!self.crossOriginIsolated)
       return fail('the page is not cross-origin isolated (the host must send Cross-Origin-Opener-Policy: same-origin and Cross-Origin-Embedder-Policy: require-corp)');
@@ -74,9 +80,17 @@
     const context = canvas.getContext('2d', { alpha: false });
     // The canvas's box: the whole frame in the window, aspect kept (its pixels
     // stay the frame's; input maps through this box).
+    // The original window (WINDOW_SCALING S2: ?original-window, alias
+    // ?original, or config.originalWindow) keeps the frame at one CSS pixel per
+    // pixel, centred — shrunk to a smaller window, never cut — except in the
+    // browser's full screen and while the game's own full-screen popup
+    // (Alt+Enter) presents, which fill the page as on the other hosts.
+    let popupShown = false;
     function fit() {
       if (!canvas.width || !canvas.height) return;
-      const scale = Math.min(innerWidth / canvas.width, innerHeight / canvas.height);
+      const whole = Math.min(innerWidth / canvas.width, innerHeight / canvas.height);
+      const full = popupShown || document.fullscreenElement || document.webkitFullscreenElement;
+      const scale = config.originalWindow && !full ? Math.min(1, whole) : whole;
       canvas.style.width = `${canvas.width * scale}px`; canvas.style.height = `${canvas.height * scale}px`;
     }
     addEventListener('resize', fit);
@@ -84,7 +98,7 @@
       fit(); if (!document.fullscreenElement && navigator.keyboard && navigator.keyboard.unlock) navigator.keyboard.unlock();
     });
     const report = { draws: 0, torn: 0, check: null };
-    self.ntsdPage = { report, header };   // for the runner's DevTools steps
+    self.ntsdPage = { report, header, originalWindow: !!config.originalWindow };   // for the runner's DevTools steps
     let shown = 0, image = null, reported = false;   // sequence 0: nothing presented yet
     let loading = null;   // the notice until the first frame
     function draw() {
@@ -498,6 +512,7 @@
     }
     worker.onmessage = ({ data: m }) => {
       if (m.kind === 'store') { received++; keep(m); return; }
+      if (m.kind === 'popup') { popupShown = m.popup; fit(); return; }   // the game's full-screen popup presents or not
       if (m.kind === 'exit') {   // without the runner
         if (m.text) { (self.ntsdPage ??= {}).exit = m.code; shout(`The game stopped: ${m.text}`); }
         return;
