@@ -1,0 +1,671 @@
+{
+ "phase": "W2b-1: the browser host NTSDWeb draws on the page",
+ "change": "native/Sources/NTSDWeb (main, WebSession, WebWindows, WebPage): a wasm32-only executable behind NTSD_WEB=1 with the headless host's services (scripted input only, silent music and sound, no glyphs = the none text group, no sockets, headless geometry with a 3008x1692 screen and a 32-point caption) whose present (and concurrent presenter, the headless pipelined path) calls the wasm import ntsd.present (@_extern(wasm), experimental Extern). The page allocates a SharedArrayBuffer (an Int32 header and 32 MB of pixels); the worker copies each XRGB8888 crop into it under a sequence lock; the page draws the newest frame on each animation frame (a 50 ms interval fallback), swizzled to RGBA, on its own canvas; the first non-black frame drawn is read back from the page canvas and compared with its source pixels; at exit the worker waits up to 5 s for the page to post page.json and the canvas PNG. run_headless_scenarios.py --web fails a scenario without a page report, without a checked frame, with differing canvas pixels, skipped presents, nothing drawn or a page timeout.",
+ "design": "The worker never yields while the game runs (its main loop sleeps in Atomics.wait), so a transferred OffscreenCanvas would never reach the page (review round 1); everything between the worker and the page goes through shared memory, which is also how input, audio and message boxes will travel.",
+ "results": {
+  "chromium": {
+   "userAgent": "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) HeadlessChrome/153.0.8010.12 Safari/537.36",
+   "scenarios": [
+    {
+     "scenario": "vs",
+     "exit": 0,
+     "seconds": 73.3,
+     "result": "equal",
+     "differs": [],
+     "node": "v26.7.0",
+     "browser": "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) HeadlessChrome/153.0.8010.12 Safari/537.36",
+     "page": {
+      "presents": 2341,
+      "skipped": 0,
+      "draws": 2340,
+      "torn": 0,
+      "check": {
+       "width": 794,
+       "height": 550,
+       "pixels": 436700,
+       "mismatchedPixels": 0,
+       "presentsBefore": 1
+      }
+     }
+    },
+    {
+     "scenario": "mission",
+     "exit": 0,
+     "seconds": 72.6,
+     "result": "equal",
+     "differs": [],
+     "node": "v26.7.0",
+     "browser": "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) HeadlessChrome/153.0.8010.12 Safari/537.36",
+     "page": {
+      "presents": 2170,
+      "skipped": 0,
+      "draws": 2170,
+      "torn": 0,
+      "check": {
+       "width": 794,
+       "height": 550,
+       "pixels": 436700,
+       "mismatchedPixels": 0,
+       "presentsBefore": 1
+      }
+     }
+    },
+    {
+     "scenario": "demo",
+     "exit": 0,
+     "seconds": 54.4,
+     "result": "equal",
+     "differs": [],
+     "node": "v26.7.0",
+     "browser": "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) HeadlessChrome/153.0.8010.12 Safari/537.36",
+     "page": {
+      "presents": 1784,
+      "skipped": 0,
+      "draws": 1783,
+      "torn": 0,
+      "check": {
+       "width": 794,
+       "height": 550,
+       "pixels": 436700,
+       "mismatchedPixels": 0,
+       "presentsBefore": 1
+      }
+     }
+    },
+    {
+     "scenario": "war",
+     "exit": 0,
+     "seconds": 118.2,
+     "result": "equal",
+     "differs": [],
+     "node": "v26.7.0",
+     "browser": "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) HeadlessChrome/153.0.8010.12 Safari/537.36",
+     "page": {
+      "presents": 3611,
+      "skipped": 0,
+      "draws": 3611,
+      "torn": 0,
+      "check": {
+       "width": 794,
+       "height": 550,
+       "pixels": 436700,
+       "mismatchedPixels": 0,
+       "presentsBefore": 1
+      }
+     }
+    },
+    {
+     "scenario": "playback",
+     "exit": 0,
+     "seconds": 79.5,
+     "result": "equal",
+     "differs": [],
+     "node": "v26.7.0",
+     "browser": "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) HeadlessChrome/153.0.8010.12 Safari/537.36",
+     "page": {
+      "presents": 2368,
+      "skipped": 0,
+      "draws": 2368,
+      "torn": 0,
+      "check": {
+       "width": 794,
+       "height": 550,
+       "pixels": 436700,
+       "mismatchedPixels": 0,
+       "presentsBefore": 1
+      }
+     }
+    },
+    {
+     "scenario": "tournament",
+     "exit": 0,
+     "seconds": 103.3,
+     "result": "equal",
+     "differs": [],
+     "node": "v26.7.0",
+     "browser": "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) HeadlessChrome/153.0.8010.12 Safari/537.36",
+     "page": {
+      "presents": 3414,
+      "skipped": 0,
+      "draws": 3414,
+      "torn": 0,
+      "check": {
+       "width": 794,
+       "height": 550,
+       "pixels": 436700,
+       "mismatchedPixels": 0,
+       "presentsBefore": 1
+      }
+     }
+    },
+    {
+     "scenario": "altenter",
+     "exit": 0,
+     "seconds": 74.2,
+     "result": "equal",
+     "differs": [],
+     "node": "v26.7.0",
+     "browser": "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) HeadlessChrome/153.0.8010.12 Safari/537.36",
+     "page": {
+      "presents": 2390,
+      "skipped": 0,
+      "draws": 2390,
+      "torn": 0,
+      "check": {
+       "width": 794,
+       "height": 550,
+       "pixels": 436700,
+       "mismatchedPixels": 0,
+       "presentsBefore": 1
+      }
+     }
+    },
+    {
+     "scenario": "tournament-win",
+     "exit": 0,
+     "seconds": 110.0,
+     "result": "equal",
+     "differs": [],
+     "node": "v26.7.0",
+     "browser": "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) HeadlessChrome/153.0.8010.12 Safari/537.36",
+     "page": {
+      "presents": 3655,
+      "skipped": 0,
+      "draws": 3655,
+      "torn": 0,
+      "check": {
+       "width": 794,
+       "height": 550,
+       "pixels": 436700,
+       "mismatchedPixels": 0,
+       "presentsBefore": 1
+      }
+     }
+    },
+    {
+     "scenario": "team-tournament",
+     "exit": 0,
+     "seconds": 85.5,
+     "result": "equal",
+     "differs": [],
+     "node": "v26.7.0",
+     "browser": "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) HeadlessChrome/153.0.8010.12 Safari/537.36",
+     "page": {
+      "presents": 2686,
+      "skipped": 0,
+      "draws": 2686,
+      "torn": 0,
+      "check": {
+       "width": 794,
+       "height": 550,
+       "pixels": 436700,
+       "mismatchedPixels": 0,
+       "presentsBefore": 1
+      }
+     }
+    },
+    {
+     "scenario": "joystick",
+     "exit": 0,
+     "seconds": 26.4,
+     "result": "equal",
+     "differs": [],
+     "node": "v26.7.0",
+     "browser": "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) HeadlessChrome/153.0.8010.12 Safari/537.36",
+     "page": {
+      "presents": 766,
+      "skipped": 0,
+      "draws": 766,
+      "torn": 0,
+      "check": {
+       "width": 794,
+       "height": 550,
+       "pixels": 436700,
+       "mismatchedPixels": 0,
+       "presentsBefore": 1
+      }
+     }
+    }
+   ],
+   "framesAgainstWASI": {
+    "frames": 18088,
+    "mismatched": 0,
+    "result": "identical"
+   },
+   "metrics": {
+    "altenter": {
+     "linearMemoryMB": 1604,
+     "loadSeconds": 0.783
+    },
+    "demo": {
+     "linearMemoryMB": 1588,
+     "loadSeconds": 0.776
+    },
+    "joystick": {
+     "linearMemoryMB": 1588,
+     "loadSeconds": 0.79
+    },
+    "mission": {
+     "linearMemoryMB": 1617,
+     "loadSeconds": 0.781
+    },
+    "playback": {
+     "linearMemoryMB": 1588,
+     "loadSeconds": 0.787
+    },
+    "team-tournament": {
+     "linearMemoryMB": 1617,
+     "loadSeconds": 0.785
+    },
+    "tournament-win": {
+     "linearMemoryMB": 1617,
+     "loadSeconds": 0.778
+    },
+    "tournament": {
+     "linearMemoryMB": 1617,
+     "loadSeconds": 0.776
+    },
+    "vs": {
+     "linearMemoryMB": 1617,
+     "loadSeconds": 0.813
+    },
+    "war": {
+     "linearMemoryMB": 1617,
+     "loadSeconds": 0.784
+    }
+   }
+  },
+  "webkit": {
+   "userAgent": "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/605.1.15 (KHTML, like Gecko)",
+   "scenarios": [
+    {
+     "scenario": "vs",
+     "exit": 0,
+     "seconds": 80.4,
+     "result": "equal",
+     "differs": [],
+     "node": "v26.7.0",
+     "browser": "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/605.1.15 (KHTML, like Gecko)",
+     "page": {
+      "presents": 2341,
+      "skipped": 0,
+      "draws": 2339,
+      "torn": 0,
+      "check": {
+       "width": 794,
+       "height": 550,
+       "pixels": 436700,
+       "mismatchedPixels": 0,
+       "presentsBefore": 1
+      }
+     }
+    },
+    {
+     "scenario": "mission",
+     "exit": 0,
+     "seconds": 81.6,
+     "result": "equal",
+     "differs": [],
+     "node": "v26.7.0",
+     "browser": "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/605.1.15 (KHTML, like Gecko)",
+     "page": {
+      "presents": 2170,
+      "skipped": 0,
+      "draws": 2170,
+      "torn": 0,
+      "check": {
+       "width": 794,
+       "height": 550,
+       "pixels": 436700,
+       "mismatchedPixels": 0,
+       "presentsBefore": 1
+      }
+     }
+    },
+    {
+     "scenario": "demo",
+     "exit": 0,
+     "seconds": 59.3,
+     "result": "equal",
+     "differs": [],
+     "node": "v26.7.0",
+     "browser": "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/605.1.15 (KHTML, like Gecko)",
+     "page": {
+      "presents": 1784,
+      "skipped": 0,
+      "draws": 1784,
+      "torn": 0,
+      "check": {
+       "width": 794,
+       "height": 550,
+       "pixels": 436700,
+       "mismatchedPixels": 0,
+       "presentsBefore": 1
+      }
+     }
+    },
+    {
+     "scenario": "war",
+     "exit": 0,
+     "seconds": 133.0,
+     "result": "equal",
+     "differs": [],
+     "node": "v26.7.0",
+     "browser": "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/605.1.15 (KHTML, like Gecko)",
+     "page": {
+      "presents": 3611,
+      "skipped": 0,
+      "draws": 3611,
+      "torn": 0,
+      "check": {
+       "width": 794,
+       "height": 550,
+       "pixels": 436700,
+       "mismatchedPixels": 0,
+       "presentsBefore": 1
+      }
+     }
+    },
+    {
+     "scenario": "playback",
+     "exit": 0,
+     "seconds": 86.5,
+     "result": "equal",
+     "differs": [],
+     "node": "v26.7.0",
+     "browser": "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/605.1.15 (KHTML, like Gecko)",
+     "page": {
+      "presents": 2368,
+      "skipped": 0,
+      "draws": 2368,
+      "torn": 0,
+      "check": {
+       "width": 794,
+       "height": 550,
+       "pixels": 436700,
+       "mismatchedPixels": 0,
+       "presentsBefore": 1
+      }
+     }
+    },
+    {
+     "scenario": "tournament",
+     "exit": 0,
+     "seconds": 112.7,
+     "result": "equal",
+     "differs": [],
+     "node": "v26.7.0",
+     "browser": "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/605.1.15 (KHTML, like Gecko)",
+     "page": {
+      "presents": 3414,
+      "skipped": 0,
+      "draws": 3413,
+      "torn": 0,
+      "check": {
+       "width": 794,
+       "height": 550,
+       "pixels": 436700,
+       "mismatchedPixels": 0,
+       "presentsBefore": 1
+      }
+     }
+    },
+    {
+     "scenario": "altenter",
+     "exit": 0,
+     "seconds": 83.3,
+     "result": "equal",
+     "differs": [],
+     "node": "v26.7.0",
+     "browser": "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/605.1.15 (KHTML, like Gecko)",
+     "page": {
+      "presents": 2390,
+      "skipped": 0,
+      "draws": 2388,
+      "torn": 0,
+      "check": {
+       "width": 794,
+       "height": 550,
+       "pixels": 436700,
+       "mismatchedPixels": 0,
+       "presentsBefore": 1
+      }
+     }
+    },
+    {
+     "scenario": "tournament-win",
+     "exit": 0,
+     "seconds": 120.4,
+     "result": "equal",
+     "differs": [],
+     "node": "v26.7.0",
+     "browser": "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/605.1.15 (KHTML, like Gecko)",
+     "page": {
+      "presents": 3655,
+      "skipped": 0,
+      "draws": 3655,
+      "torn": 0,
+      "check": {
+       "width": 794,
+       "height": 550,
+       "pixels": 436700,
+       "mismatchedPixels": 0,
+       "presentsBefore": 1
+      }
+     }
+    },
+    {
+     "scenario": "team-tournament",
+     "exit": 0,
+     "seconds": 94.6,
+     "result": "equal",
+     "differs": [],
+     "node": "v26.7.0",
+     "browser": "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/605.1.15 (KHTML, like Gecko)",
+     "page": {
+      "presents": 2686,
+      "skipped": 0,
+      "draws": 2686,
+      "torn": 0,
+      "check": {
+       "width": 794,
+       "height": 550,
+       "pixels": 436700,
+       "mismatchedPixels": 0,
+       "presentsBefore": 1
+      }
+     }
+    },
+    {
+     "scenario": "joystick",
+     "exit": 0,
+     "seconds": 29.8,
+     "result": "equal",
+     "differs": [],
+     "node": "v26.7.0",
+     "browser": "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/605.1.15 (KHTML, like Gecko)",
+     "page": {
+      "presents": 766,
+      "skipped": 0,
+      "draws": 766,
+      "torn": 0,
+      "check": {
+       "width": 794,
+       "height": 550,
+       "pixels": 436700,
+       "mismatchedPixels": 0,
+       "presentsBefore": 1
+      }
+     }
+    }
+   ],
+   "framesAgainstWASI": {
+    "frames": 18088,
+    "mismatched": 0,
+    "result": "identical"
+   },
+   "metrics": {
+    "altenter": {
+     "linearMemoryMB": 1604,
+     "loadSeconds": 0.566
+    },
+    "demo": {
+     "linearMemoryMB": 1588,
+     "loadSeconds": 0.557
+    },
+    "joystick": {
+     "linearMemoryMB": 1588,
+     "loadSeconds": 0.552
+    },
+    "mission": {
+     "linearMemoryMB": 1617,
+     "loadSeconds": 0.558
+    },
+    "playback": {
+     "linearMemoryMB": 1588,
+     "loadSeconds": 0.556
+    },
+    "team-tournament": {
+     "linearMemoryMB": 1617,
+     "loadSeconds": 0.551
+    },
+    "tournament-win": {
+     "linearMemoryMB": 1617,
+     "loadSeconds": 0.547
+    },
+    "tournament": {
+     "linearMemoryMB": 1617,
+     "loadSeconds": 0.557
+    },
+    "vs": {
+     "linearMemoryMB": 1617,
+     "loadSeconds": 0.58
+    },
+    "war": {
+     "linearMemoryMB": 1617,
+     "loadSeconds": 0.551
+    }
+   }
+  }
+ },
+ "existingHosts": {
+  "gate": "tw-w2b vs tw-w1b on native 967095af (the later changes: NTSDWeb sources, which the gate does not build, and a Package.swift comment): all 10 scenarios, AppKit vs and playback, unchecked vs and Demo, emulator vs equal with frames identical; 0 crashes in 20 launches; 3 suites; phone A/B within spread.",
+  "phoneAB": [
+   {
+    "label": "tw-w2b-ab-01-tw-w2b",
+    "loadSeconds": 5.42,
+    "loadedResidentMB": 527,
+    "peakResidentMB": 592,
+    "bodiesResidentMB": 556,
+    "mainMsPerTick": 10.87,
+    "renderMsPerTick": 7.1,
+    "processMsPerTick": 27.12
+   },
+   {
+    "label": "tw-w2b-ab-02-tw-w1b",
+    "loadSeconds": 6.17,
+    "loadedResidentMB": 543,
+    "peakResidentMB": 609,
+    "bodiesResidentMB": 573,
+    "mainMsPerTick": 10.62,
+    "renderMsPerTick": 7.12,
+    "processMsPerTick": 26.73
+   },
+   {
+    "label": "tw-w2b-ab-03-tw-w2b",
+    "loadSeconds": 6.16,
+    "loadedResidentMB": 578,
+    "peakResidentMB": 596,
+    "bodiesResidentMB": 539,
+    "mainMsPerTick": 10.8,
+    "renderMsPerTick": 7.15,
+    "processMsPerTick": 27.13
+   },
+   {
+    "label": "tw-w2b-ab-04-tw-w1b",
+    "loadSeconds": 5.51,
+    "loadedResidentMB": 588,
+    "peakResidentMB": 588,
+    "bodiesResidentMB": 542,
+    "mainMsPerTick": 10.82,
+    "renderMsPerTick": 7.14,
+    "processMsPerTick": 27.15
+   },
+   {
+    "label": "tw-w2b-ab-05-tw-w2b",
+    "loadSeconds": 6.18,
+    "loadedResidentMB": 564,
+    "peakResidentMB": 589,
+    "bodiesResidentMB": 540,
+    "mainMsPerTick": 10.8,
+    "renderMsPerTick": 7.09,
+    "processMsPerTick": 26.96
+   }
+  ],
+  "macAB": [
+   {
+    "label": "tw-w2b-mac-ab-01-frozen-unchecked-tw-w2b",
+    "loadSeconds": 0.344,
+    "loadedResidentMB": 647,
+    "peakResidentMB": 686,
+    "bodiesResidentMB": 686,
+    "mainMsPerTick": null,
+    "renderMsPerTick": null,
+    "processMsPerTick": 1.189
+   },
+   {
+    "label": "tw-w2b-mac-ab-02-frozen-unchecked-tw-w1b",
+    "loadSeconds": 0.333,
+    "loadedResidentMB": 564,
+    "peakResidentMB": 641,
+    "bodiesResidentMB": 615,
+    "mainMsPerTick": null,
+    "renderMsPerTick": null,
+    "processMsPerTick": 1.422
+   },
+   {
+    "label": "tw-w2b-mac-ab-03-frozen-unchecked-tw-w2b",
+    "loadSeconds": 0.339,
+    "loadedResidentMB": 655,
+    "peakResidentMB": 697,
+    "bodiesResidentMB": 697,
+    "mainMsPerTick": null,
+    "renderMsPerTick": null,
+    "processMsPerTick": 1.989
+   },
+   {
+    "label": "tw-w2b-mac-ab-04-frozen-unchecked-tw-w1b",
+    "loadSeconds": 0.353,
+    "loadedResidentMB": 570,
+    "peakResidentMB": 660,
+    "bodiesResidentMB": 616,
+    "mainMsPerTick": null,
+    "renderMsPerTick": null,
+    "processMsPerTick": 1.256
+   },
+   {
+    "label": "tw-w2b-mac-ab-05-frozen-unchecked-tw-w2b",
+    "loadSeconds": 0.329,
+    "loadedResidentMB": 648,
+    "peakResidentMB": 695,
+    "bodiesResidentMB": 695,
+    "mainMsPerTick": null,
+    "renderMsPerTick": null,
+    "processMsPerTick": 1.2
+   },
+   {
+    "label": "tw-w2b-mac-ab-06-frozen-unchecked-tw-w1b",
+    "loadSeconds": 0.323,
+    "loadedResidentMB": 550,
+    "peakResidentMB": 624,
+    "bodiesResidentMB": 601,
+    "mainMsPerTick": null,
+    "renderMsPerTick": null,
+    "processMsPerTick": 1.422
+   }
+  ],
+  "macNote": "The Mac A/B ran while the browser runs loaded the machine (process ms per tick 1.19-1.99 against the usual 2.9), so its timing is not valid; its footprint split is the allocator's: the Mac unchecked binary's code and data sections are identical to W1b's (__text, __cstring, __const, __DATA_CONST __const, __DATA __data; 6,590 differing bytes: UUID, signature, symbols)."
+ },
+ "review": "Round 1 (host layer): no result-changing defect; high: a transferred OffscreenCanvas never updates the page while the worker blocks, and the in-worker read-back compared converted bytes (a red/blue swap would pass); low: presentsConcurrently differed from headless, the headless guard was dropped, per-present JS cost. Reworked: page-side drawing through a shared frame buffer, a page-canvas read-back against the source pixels, the headless presentation path, the guard kept until input exists. Round 2: OK; medium: the page report did not gate the row (fixed); low: the seqlock re-check with Atomics.load only acquires (now compareExchange), a torn size could throw (clamped; draw inside the finishing try; the next animation frame scheduled first).",
+ "notes": "Linear memory 1.59-1.62 GB as with the headless module. Page draws track presents (rAF fires in headless WebKit too)."
+}

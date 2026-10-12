@@ -75,6 +75,17 @@ let androidTargets: [Target] = android ? [
     .target(name: "NTSDAndroid", dependencies: ["NTSDCore", "NTSDRuntime", "NTSDMusicDecoder", "CAndroidNative"] + (freetypePrefix == nil ? [] : ["NTSDFreeTypeText"]),
             swiftSettings: [.unsafeFlags(freetypePrefix.map { ["-Xcc", "-I\($0)/include/freetype2"] } ?? [])] + exclusivity)] : []
 
+// NTSD_WEB=1 (with NTSD_PORTABLE=1) adds the browser host (TVOS_WEB W2b),
+// built for wasm32-unknown-wasip1 only (it uses the WASI-only main queue and
+// sockets stub) and run in a page's worker by tools/crossplatform/web_run.mjs;
+// its page functions are wasm imports (@_extern(wasm), the experimental Extern
+// feature).
+let web = Context.environment["NTSD_WEB"] == "1"
+let webProducts: [Product] = web ? [.executable(name: "NTSDWeb", targets: ["NTSDWeb"])] : []
+let webTargets: [Target] = web ? [
+    .executableTarget(name: "NTSDWeb", dependencies: ["NTSDCore", "NTSDRuntime"],
+                      swiftSettings: [.enableExperimentalFeature("Extern")] + exclusivity)] : []
+
 // FreeType glyph masks for the SDL host off Apple platforms and the Android
 // host, from the static FreeType at NTSD_FREETYPE_PREFIX.
 let freetypeTargets: [Target] = (sdl || android) && freetypePrefix != nil ? [
@@ -86,7 +97,7 @@ let freetypeTargets: [Target] = (sdl || android) && freetypePrefix != nil ? [
 let package = Package(
     name: "NTSDNative",
     platforms: [.macOS(.v14), .iOS(.v17)],
-    products: macProducts + sdlProducts + iosProducts + androidProducts + [
+    products: macProducts + sdlProducts + iosProducts + androidProducts + webProducts + [
                .executable(name: "NTSDFrameCheck", targets: ["NTSDFrameCheck"]),
                .executable(name: "NTSDMovementCheck", targets: ["NTSDMovementCheck"]),
                .executable(name: "NTSDCombatCheck", targets: ["NTSDCombatCheck"]),
@@ -97,7 +108,7 @@ let package = Package(
                .executable(name: "NTSDBGCheck", targets: ["NTSDBGCheck"]),
                .executable(name: "NTSDStageCheck", targets: ["NTSDStageCheck"]),
                .executable(name: "NTSDHeadless", targets: ["NTSDHeadless"])],
-    targets: macTargets + sdlTargets + iosTargets + androidTargets + freetypeTargets + [
+    targets: macTargets + sdlTargets + iosTargets + androidTargets + webTargets + freetypeTargets + [
         .target(name: "NTSDReplayCodec", exclude: ["README.md", "upstream.json"],
                 publicHeadersPath: "include", cSettings: [.unsafeFlags(["-Wno-deprecated-non-prototype"])]),
         .target(name: "NTSDCore", dependencies: ["NTSDReplayCodec"], resources: [.copy("Resources/OriginalStartup"), .copy("Resources/OriginalCommonSounds"), .copy("Resources/OriginalLoadingInterface"), .copy("Resources/OriginalCharacterMenu"), .copy("Resources/OriginalWarMenu"), .copy("Resources/OriginalMatchArenas"), .copy("Resources/OriginalCatalog")],

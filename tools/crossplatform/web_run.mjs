@@ -5,7 +5,7 @@
 //
 // Usage: node web_run.mjs [--map GUEST=HOST ...] [--ro GUEST=HOST ...]
 //                         [--env KEY=VALUE ...] [--argv0 GUEST_PATH]
-//                         [--metrics FILE] -- PROGRAM.wasm [ARGS ...]
+//                         [--metrics FILE] [--canvas] -- PROGRAM.wasm [ARGS ...]
 //
 // A local node:http server serves web/run.html and web/wasi-worker.js with
 // cross-origin isolation headers, the program, and each mount under
@@ -16,7 +16,11 @@
 // NTSD_BROWSER_ENGINE=webkit Playwright's cached WebKit (Safari's engine). The
 // program's stdout and stderr are this process's, its exit code this
 // process's exit code; --metrics writes the worker's report (linear memory
-// size, seconds, user agent) as JSON.
+// size, seconds, user agent) as JSON. --canvas gives the browser host's
+// present a page canvas (TVOS_WEB W2b); the worker's report then counts the
+// presents, and beside it page.json holds what the page drew (draws, torn
+// reads, the first non-black frame read back and compared with its source)
+// and canvas-last.png the page canvas at exit.
 import { createServer } from 'node:http';
 import { spawn } from 'node:child_process';
 import { mkdtempSync, readFileSync, writeFileSync, mkdirSync, statSync, lstatSync, readdirSync, rmSync, renameSync, unlinkSync, rmdirSync, existsSync, realpathSync } from 'node:fs';
@@ -34,8 +38,9 @@ if (sepAt < 0 || sepAt + 1 >= argv.length) {
 const options = argv.slice(2, sepAt);
 const [program, ...args] = argv.slice(sepAt + 1);
 const mounts = [], guestEnv = { TZ: env.TZ ?? 'Etc/GMT-1' };
-let argv0 = program, metricsFile = null;
+let argv0 = program, metricsFile = null, canvas = false;
 for (let i = 0; i < options.length; i += 2) {
+  if (options[i] === '--canvas') { canvas = true; i--; continue; }
   const [name, value] = [options[i], options[i + 1]];
   const at = value?.indexOf('=') ?? -1;
   if ((name === '--map' || name === '--ro') && at > 0)
@@ -100,7 +105,7 @@ const server = createServer(async (req, res) => {
     }
     if (req.method === 'GET' && url.pathname === '/program.wasm') return send(200, readFileSync(program), types['.wasm']);
     if (req.method === 'GET' && url.pathname === '/config')
-      return send(200, JSON.stringify({ program: '/program.wasm', args: [argv0, ...args], env: guestEnv,
+      return send(200, JSON.stringify({ program: '/program.wasm', args: [argv0, ...args], env: guestEnv, canvas, frameBytes: 32 << 20,
                                         mounts: mounts.map(m => ({ guest: m.guest, writable: m.writable })) }), 'application/json');
     const m = url.pathname.match(/^\/m\/(\d+)\/?(.*)$/);
     if (m) {
@@ -138,6 +143,12 @@ const server = createServer(async (req, res) => {
     if (req.method === 'POST' && url.pathname === '/stdout') { await out(1, await body(req)); return send(200); }
     if (req.method === 'POST' && url.pathname === '/stderr') { await out(2, await body(req)); return send(200); }
     if (req.method === 'POST' && url.pathname === '/alive') { alive = Date.now(); return send(200); }
+    if (req.method === 'POST' && url.pathname === '/page') {
+      const data = await body(req); if (metricsFile) writeFileSync(join(dirname(metricsFile), 'page.json'), data); return send(200);
+    }
+    if (req.method === 'POST' && url.pathname === '/canvas') {
+      const data = await body(req); if (metricsFile) writeFileSync(join(dirname(metricsFile), 'canvas-last.png'), data); return send(200);
+    }
     if (req.method === 'POST' && url.pathname === '/metrics') {
       const data = await body(req); if (metricsFile) writeFileSync(metricsFile, data); return send(200);
     }

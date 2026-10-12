@@ -4,7 +4,7 @@ reference (tools/crossplatform/compare_headless.py).
 
 Usage: run_headless_scenarios.py OUT_DIR (--linux BUILD_DIR | --linux-amd64 BUILD_DIR | --linux-sdl BUILD_DIR
                                          | --local BINARY | --wine RUN_DIR | --android RUN_DIR
-                                         | --wasi BUILD_DIR | --browser BUILD_DIR) [SCENARIO ...]
+                                         | --wasi BUILD_DIR | --browser BUILD_DIR | --web BUILD_DIR) [SCENARIO ...]
 
 The command line is app_e2e's own (`run`): --original --mute-music
 --mute-sounds --overlay --virtual-clock 123456789 8 --script-clock gameplay
@@ -82,16 +82,16 @@ def main():
         adb("push", str(Path(target).resolve()), f"{DEVICE}/app"); adb("push", str(MUSIC), f"{DEVICE}/music")
         adb("shell", f"chmod 755 {DEVICE}/app/NTSDHeadless")
     results = []
-    node_version = subprocess.run([node(), "--version"], capture_output=True, text=True).stdout.strip() if mode in ("--wasi", "--browser") else None
+    node_version = subprocess.run([node(), "--version"], capture_output=True, text=True).stdout.strip() if mode in ("--wasi", "--browser", "--web") else None
     for name in names:
         setup = app_e2e.SCENARIOS[name]
         base = out / name
         shutil.rmtree(base, ignore_errors=True); (base / "captures").mkdir(parents=True); (base / "overlay").mkdir(); (base / "frames").mkdir()
-        inner = Path("/out") / name if mode in ("--linux", "--wasi", "--browser") else DEVICE / "out" / name if mode == "--android" else base
+        inner = Path("/out") / name if mode in ("--linux", "--wasi", "--browser", "--web") else DEVICE / "out" / name if mode == "--android" else base
         def host(path):   # the path as the game process sees it
             return "Z:" + str(path).replace("/", "\\") if mode == "--wine" else str(path)
         extra = setup["extra"](base) if callable(setup["extra"]) else list(setup["extra"])
-        if mode in ("--linux", "--android", "--wasi", "--browser"):   # files the scenario placed under base are seen under /out
+        if mode in ("--linux", "--android", "--wasi", "--browser", "--web"):   # files the scenario placed under base are seen under /out
             extra = [str(inner / Path(a).relative_to(base)) if a.startswith(str(base)) else a for a in extra]
         if mode == "--wine":
             extra = [host(a) if a.startswith("/") else a for a in extra]
@@ -111,11 +111,12 @@ def main():
             adb("shell", f"mkdir -p {inner}/captures {inner}/overlay {inner}/frames")   # push skips empty folders
             line = " ".join(shlex.quote(a) for a in [f"{DEVICE}/app/NTSDHeadless", "--music-dir", f"{DEVICE}/music", *args])
             command = [ADB, "shell", f"cd {DEVICE}/app && TZ=Etc/GMT-1 HOME={DEVICE}/home TMPDIR={DEVICE}/home {line}"]
-        elif mode == "--browser":   # the same module in headless Chromium (TVOS_WEB W2a)
+        elif mode in ("--browser", "--web"):   # in headless Chromium or WebKit (TVOS_WEB W2a, W2b)
             app = Path(target).resolve()
+            program = "NTSDWeb.wasm" if mode == "--web" else "NTSDHeadless.wasm"
             command = [node(), str(ROOT / "tools/crossplatform/web_run.mjs"), "--ro", f"/app={app}", "--ro", f"/music={MUSIC}",
-                       "--map", f"/out={out}", "--argv0", "/app/NTSDHeadless.wasm", "--metrics", str(base / "browser-metrics.json"),
-                       "--", str(app / "NTSDHeadless.wasm"),
+                       "--map", f"/out={out}", "--argv0", f"/app/{program}", "--metrics", str(base / "browser-metrics.json"),
+                       *(["--canvas"] if mode == "--web" else []), "--", str(app / program),
                        "--resources", "/app/NTSDNative_NTSDCore.bundle", "--music-dir", "/music", *args]
         elif mode == "--wasi":
             app = Path(target).resolve()
@@ -139,14 +140,29 @@ def main():
             for d in ("captures", "overlay", "frames"):
                 shutil.rmtree(base / d); adb("pull", str(inner / d), str(base))
         compare = [sys.executable, str(COMPARE), str(base / "events.jsonl"), str(base / "captures"), str(base / "overlay"),
-                   str(done.returncode), str(setup["reference"])] + ([f"/out={out}"] if mode in ("--linux", "--wasi", "--browser") else
+                   str(done.returncode), str(setup["reference"])] + ([f"/out={out}"] if mode in ("--linux", "--wasi", "--browser", "--web") else
                                                                       [f"{DEVICE}/out={out}"] if mode == "--android" else [])
         c = subprocess.run(compare, capture_output=True, text=True)
         verdict = json.loads(c.stdout.strip().splitlines()[-1]) if c.stdout.strip() else {"result": "error", "differs": [c.stderr[-300:]]}
         row = {"scenario": name, "exit": done.returncode, "seconds": round(time.time() - start, 1), **verdict}
-        if mode in ("--wasi", "--browser"): row["node"] = node_version   # the WASI runtime is part of the result
-        if mode == "--browser" and (base / "browser-metrics.json").exists():
+        if mode in ("--wasi", "--browser", "--web"): row["node"] = node_version   # the WASI runtime is part of the result
+        if mode in ("--browser", "--web") and (base / "browser-metrics.json").exists():
             row["browser"] = json.loads((base / "browser-metrics.json").read_text()).get("userAgent")
+        if mode == "--web":   # the page must have drawn the frames and passed its read-back check
+            metrics = json.loads((base / "browser-metrics.json").read_text()) if (base / "browser-metrics.json").exists() else {}
+            page = json.loads((base / "page.json").read_text()) if (base / "page.json").exists() else None
+            presented = metrics.get("presented", {})
+            row["page"] = {"presents": presented.get("count"), "skipped": presented.get("skipped"),
+                           **({k: page.get(k) for k in ("draws", "torn")} if page else {}),
+                           "check": (page or {}).get("check")}
+            problems = ([] if page else ["no page report"]) + \
+                (["no checked frame"] if page and page.get("check") is None else []) + \
+                (["canvas pixels differ"] if page and (page.get("check") or {}).get("mismatchedPixels") else []) + \
+                (["presents skipped"] if presented.get("skipped") else []) + \
+                (["nothing drawn"] if page and not page.get("draws") else []) + \
+                (["page report timed out"] if "did not report its canvas" in done.stderr else [])
+            if problems and row.get("result") == "equal":
+                row["result"] = "differs"; row["differs"] = problems
         (base / "compare.txt").write_text(c.stdout + c.stderr)
         results.append(row); print(json.dumps(row), flush=True)
     (out / "results.jsonl").write_text("".join(json.dumps(r) + "\n" for r in results))

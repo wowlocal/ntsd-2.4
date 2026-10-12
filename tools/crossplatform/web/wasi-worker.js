@@ -9,6 +9,11 @@
 // removed and renames go at once. Read-only mounts refuse every change with
 // EROFS. stdout and stderr are buffered and posted in order. poll_oneoff
 // sleeps with Atomics.wait, which needs a cross-origin-isolated page.
+//
+// With a frame buffer (config.frames, a SharedArrayBuffer from the page), the
+// worker also provides the browser host's "ntsd" imports (TVOS_WEB W2b):
+// present hands an XRGB8888 crop to the page, which draws it. At exit the
+// worker waits up to 5 s for the page to report what it drew.
 'use strict';
 
 const ERR = { SUCCESS: 0, ACCES: 2, BADF: 8, EXIST: 20, INVAL: 28, IO: 29, ISDIR: 31, NOENT: 44, NOSYS: 52,
@@ -347,10 +352,30 @@ async function run(config) {
       catch (e) { if (e instanceof Exit) throw e; stderr.push(encoder.encode(`web_run: ${name}: ${e && e.message || e}\n`)); return ERR.IO; }
     };
   }
+  // The browser host's page functions (NTSDWeb's "ntsd" imports). The worker
+  // never yields while the game runs (its loop sleeps in Atomics.wait), so it
+  // cannot draw on the page itself: present copies the crop into the page's
+  // shared frame buffer under a sequence lock, and the page draws it.
+  const frames = config.frames ?? null;   // SharedArrayBuffer: Int32 header[8], then pixels
+  const header = frames ? new Int32Array(frames, 0, 8) : null, presented = { count: 0, width: 0, height: 0, skipped: 0 };
+  const ntsd = {
+    present(ptr, width, height) {
+      presented.count++; presented.width = width; presented.height = height;
+      if (!frames || width <= 0 || height <= 0) return;
+      const n = width * height * 4;
+      if (32 + n > frames.byteLength) { presented.skipped++; return; }
+      Atomics.add(header, 0, 1);   // odd: being written
+      header[1] = width; header[2] = height;
+      new Uint8Array(frames, 32, n).set(new Uint8Array(memory.buffer, ptr, n));
+      Atomics.add(header, 0, 1);   // even: complete
+      Atomics.add(header, 3, 1);
+    },
+  };
+
   let code = 0;
   const started = performance.now();
   try {
-    const { instance } = await WebAssembly.instantiateStreaming(fetch(config.program), { wasi_snapshot_preview1: wasi });
+    const { instance } = await WebAssembly.instantiateStreaming(fetch(config.program), { wasi_snapshot_preview1: wasi, ntsd });
     memory = instance.exports.memory;
     instance.exports._start();
   } catch (e) {
@@ -360,7 +385,13 @@ async function run(config) {
   try { for (const f of fds) if (f && f.kind === 'node' && f.node.kind === 'file') upload(f.node); }
   catch (e) { stderr.push(encoder.encode(`web_run: upload ${e}\n`)); code = code || 134; }
   try { flush(); } catch (e) { request('POST', '/stderr', `web_run: ${e.message}\n`); code = code || 134; }
+  if (frames) {   // the page reports its canvas, then acknowledges
+    Atomics.store(header, 4, 1); Atomics.notify(header, 4);
+    if (Atomics.wait(header, 5, 0, 5000) === 'timed-out')
+      request('POST', '/stderr', 'web_run: the page did not report its canvas within 5 s\n');
+  }
   request('POST', `/metrics`, JSON.stringify({ memoryBytes: memory ? memory.buffer.byteLength : 0,
-                                               seconds: (performance.now() - started) / 1000, userAgent: navigator.userAgent }));
+                                               seconds: (performance.now() - started) / 1000, userAgent: navigator.userAgent,
+                                               ...(frames ? { presented } : {}) }));
   request('POST', `/exit?code=${code}`);
 }

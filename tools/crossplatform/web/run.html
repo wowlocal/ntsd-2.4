@@ -1,11 +1,20 @@
 <!doctype html>
 <meta charset="utf-8">
 <title>NTSD WASI runner</title>
-<!-- The browser runner's page (docs/research/TVOS_WEB.md W2a): fetches the
-     run's configuration from web_run.mjs and starts the WASI worker. The
+<!-- The browser runner's page (docs/research/TVOS_WEB.md W2a, W2b): fetches
+     the run's configuration from web_run.mjs and starts the WASI worker. The
      server sends COOP/COEP headers, so the worker can sleep on a
      SharedArrayBuffer. The page reports to the runner every 5 s, so a
-     crashed renderer is noticed, and reports a worker that fails to start. -->
+     crashed renderer is noticed, and reports a worker that fails to start.
+     With a canvas (the browser host), the worker writes each presented crop
+     (XRGB8888) into a shared frame buffer under a sequence lock and the page
+     draws the newest one on every animation frame. The first non-black frame
+     drawn is read back from the canvas and compared with its source pixels;
+     at exit the page posts what it drew and the canvas as a PNG. -->
+<style>
+  html, body { margin: 0; height: 100%; background: #000; }
+  canvas { display: block; margin: auto; max-width: 100vw; max-height: 100vh; image-rendering: pixelated; }
+</style>
 <script>
   const fail = text => fetch('/stderr', { method: 'POST', body: `web_run: ${text}\n` })
     .finally(() => fetch('/exit?code=134', { method: 'POST' }));
@@ -14,6 +23,47 @@
     if (!self.crossOriginIsolated) return fail('page is not cross-origin isolated');
     const worker = new Worker('/web/wasi-worker.js');
     worker.onerror = e => fail(`worker: ${e.message || e}`);
-    worker.postMessage(config);
+    if (!config.canvas) return worker.postMessage(config);
+    const frames = new SharedArrayBuffer(32 + config.frameBytes), header = new Int32Array(frames, 0, 8);
+    const canvas = document.createElement('canvas'); document.body.append(canvas);
+    const context = canvas.getContext('2d', { alpha: false });
+    const report = { draws: 0, torn: 0, check: null };
+    let shown = 0, image = null, reported = false;   // sequence 0: nothing presented yet
+    function draw() {
+      const seq = Atomics.load(header, 0);
+      if (seq & 1 || seq === shown) return;
+      const width = header[1], height = header[2], n = width * height * 4;
+      // A size read mid-change can be torn too: never copy past the buffer.
+      if (width <= 0 || height <= 0 || 32 + n > frames.byteLength) { report.torn++; return; }
+      const source = new Uint8Array(frames, 32, n).slice();   // copy, then confirm it was not overwritten
+      // A read-modify-write orders the copy before the re-check (Atomics.load only acquires).
+      if (Atomics.compareExchange(header, 0, seq, seq) !== seq) { report.torn++; return; }
+      if (canvas.width !== width || canvas.height !== height) { canvas.width = width; canvas.height = height; }
+      if (!image || image.width !== width || image.height !== height) image = new ImageData(width, height);
+      const target = image.data;   // 0x00RRGGBB little-endian words: bytes B, G, R, 0
+      for (let i = 0; i < n; i += 4) { target[i] = source[i + 2]; target[i + 1] = source[i + 1]; target[i + 2] = source[i]; target[i + 3] = 255; }
+      context.putImageData(image, 0, 0);
+      shown = seq; report.draws++;
+      if (report.check === null && source.some((v, i) => (i & 3) !== 3 && v !== 0)) {
+        // Read the page canvas back and compare with the source pixels themselves.
+        const back = context.getImageData(0, 0, width, height).data;
+        let wrong = 0;
+        for (let i = 0; i < n; i += 4) if (back[i] !== source[i + 2] || back[i + 1] !== source[i + 1] || back[i + 2] !== source[i]) wrong++;
+        report.check = { width, height, pixels: n / 4, mismatchedPixels: wrong, presentsBefore: Atomics.load(header, 3) };
+      }
+    }
+    async function finish() {
+      reported = true;
+      try {
+        draw();
+        const png = await new Promise(ok => canvas.toBlob(ok, 'image/png'));
+        if (png) await fetch('/canvas', { method: 'POST', body: png });
+        await fetch('/page', { method: 'POST', body: JSON.stringify(report) });
+      } finally { Atomics.store(header, 5, 1); Atomics.notify(header, 5); }
+    }
+    function tick() { if (reported) return; draw(); if (Atomics.load(header, 4) === 1) finish(); }
+    (function frame() { if (!reported) requestAnimationFrame(frame); tick(); })();
+    setInterval(tick, 50);   // where animation frames are throttled
+    worker.postMessage({ ...config, frames });
   }).catch(e => fail(`config: ${e}`));
 </script>
