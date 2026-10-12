@@ -20,9 +20,9 @@ HASH is the first 12 hex digits of a SHA-256 over every data file, so the
 data folder's names change with its contents and a host can let browsers
 keep it (Cache-Control immutable for /data-*), while the page, config and
 scripts are checked on each visit. The page fetches a session's files in
-parallel before the program starts (the /app mount's prefetch; the music
-tracks load when they play), showing progress, so the program's
-one-at-a-time reads come from the browser's cache.
+parallel while the program starts (the /app mount's prefetch, the startup
+package first; the music tracks load when they play; W3f), showing progress,
+so the program's one-at-a-time reads come from the browser's cache.
 
 The page needs cross-origin isolation (SharedArrayBuffer): the host must send
 Cross-Origin-Opener-Policy: same-origin and Cross-Origin-Embedder-Policy:

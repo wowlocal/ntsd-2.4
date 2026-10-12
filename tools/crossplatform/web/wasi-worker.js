@@ -47,7 +47,12 @@ function request(method, url, body, type = 'text') {
 // a stalled connection or a server error is tried again after 0.5 then 1 s;
 // then the game sees the failure).
 const pause = new Int32Array(new SharedArrayBuffer(4));
+let reading = null;   // the page's fetch gate (W3f): raised while the program waits on a read
 function read(url, type = 'text') {
+  if (reading) Atomics.add(reading, 0, 1);
+  try { return readOnce(url, type); } finally { if (reading) Atomics.sub(reading, 0, 1); }
+}
+function readOnce(url, type) {
   let x = null;
   for (let attempt = 0; attempt < 3; attempt++) {
     if (attempt) Atomics.wait(pause, 0, 0, 500 * attempt);   // a moment before trying again
@@ -121,6 +126,7 @@ function flush() {
 function say(text) { if (runner) request('POST', '/stderr', text); else console.warn(text); }
 self.onmessage = async ({ data: config }) => {
   runner = config.runner !== false;
+  if (config.fetchGate) reading = new Int32Array(config.fetchGate);
   try { await run(config); }
   catch (e) {
     const text = `web_run: worker: ${e && e.stack || e}\n`;
@@ -515,7 +521,7 @@ async function run(config) {
   async function prefetch(listed) {
     const files = listed.flatMap(m => m.entries.filter(e => !e.dir && !e.path.endsWith('.wasm'))
       .map(e => ({ url: `${m.url}/${e.path.split('/').map(encodeURIComponent).join('/')}`, size: e.size || 0 })));
-    if (!files.length) return;
+    if (!files.length) return null;
     // Only where the browser's cache serves the program's synchronous reads
     // afterwards (Chromium's does; Playwright's WebKit fetched every file
     // twice): one file fetched, then read as the program reads, and its
@@ -525,30 +531,26 @@ async function run(config) {
     if (performance.clearResourceTimings) performance.clearResourceTimings();
     read(probe.url, 'arraybuffer');
     const seen = performance.getEntriesByName ? performance.getEntriesByName(probe.url).pop() : null;
-    if (!seen || seen.transferSize !== 0) { postMessage({ kind: 'progress', loaded: 0, total: 0, skipped: true }); return; }
-    const total = files.reduce((n, f) => n + f.size, 0);
-    let loaded = 0, next = 0, told = 0;
-    const tell = () => postMessage({ kind: 'progress', loaded, total });
-    async function lane() {
-      while (next < files.length) {
-        const f = files[next++];
-        for (let attempt = 0; attempt < 3; attempt++) {
-          try { const r = await fetch(f.url); if (r.ok) { await r.arrayBuffer(); break; } } catch {}
-        }
-        loaded += f.size;
-        if (performance.now() - told > 200) { told = performance.now(); tell(); }
-      }
-    }
-    await Promise.all(Array.from({ length: 8 }, lane)); tell();
+    if (!seen || seen.transferSize !== 0) { postMessage({ kind: 'progress', loaded: 0, total: 0, skipped: true }); return null; }
+    // The page fetches the rest while the program runs (TVOS_WEB W3f: this
+    // worker never yields once it does): the startup package first, which
+    // the menu reads, then the others in listing order. A file the program
+    // reads before its turn it fetches itself; the other request then finds
+    // it in the cache or waits for the one under way.
+    // Handed over once the module is in: before, the prefetch shared the
+    // bandwidth with the 96 MB module, which the program waits for.
+    const first = f => (/\/OriginalStartup\//.test(f.url) ? 0 : 1);
+    return files.map((f, i) => ({ ...f, i })).sort((a, b) => first(a) - first(b) || a.i - b.i).map(({ url, size }) => ({ url, size }));
   }
   let code = 0;
   const started = performance.now();
   try {
     const imports = { wasi_snapshot_preview1: wasi, ntsd };
-    // A static folder's files fetched in parallel while the module compiles
-    // (a mount's prefetch: the host caches them, web_app.py), so the program's
-    // one-at-a-time reads come from the browser's cache; progress to the page.
-    const warm = prefetch(mounts.filter(m => m.listed && m.prefetch));   // music tracks load when they play
+    // A static folder's files fetched in parallel by the page (a mount's
+    // prefetch: the host caches them, web_app.py), so the program's
+    // one-at-a-time reads come from the browser's cache; the probe runs while
+    // the module compiles. Music tracks load when they play.
+    const warm = prefetch(mounts.filter(m => m.listed && m.prefetch));
     let instance;
     try { ({ instance } = await WebAssembly.instantiateStreaming(fetch(config.program), imports)); }
     catch (e) {
@@ -556,7 +558,8 @@ async function run(config) {
       const r = await fetch(config.program); if (!r.ok) throw new Error(`program: ${r.status}`);
       ({ instance } = await WebAssembly.instantiate(await r.arrayBuffer(), imports));
     }
-    await warm;
+    const prefetching = await warm;
+    if (prefetching) postMessage({ kind: 'prefetch', files: prefetching });
     memory = instance.exports.memory;
     instance.exports._start();
   } catch (e) {

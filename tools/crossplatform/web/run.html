@@ -29,6 +29,7 @@
   .bar button { background: #ece9d8e0; color: #000; border: 1px solid #0a246a; padding: 3px 9px; font: inherit; cursor: pointer; }
   .panel { position: fixed; top: 40px; right: 8px; max-width: 320px; background: #ece9d8; color: #000; border: 1px solid #0a246a;
            padding: 10px 12px; font: 13px system-ui; z-index: 1; }
+  .fetching { position: fixed; left: 8px; bottom: 6px; color: #fffb; font: 12px system-ui; pointer-events: none; text-shadow: 0 0 3px #000; }
   .notice { position: fixed; inset: 0; display: flex; align-items: center; justify-content: center; color: #fff; font: 18px system-ui; pointer-events: none; }
 </style>
 <script>
@@ -136,6 +137,7 @@
     const input = new SharedArrayBuffer(4 * (2 + 256 * 5)), ring = new Int32Array(input);
     const pads = new SharedArrayBuffer(4 * 9), padState = new Int32Array(pads);
     const dialog = new SharedArrayBuffer(8), answer = new Int32Array(dialog);
+    const gate = new SharedArrayBuffer(4), fetchGate = new Int32Array(gate);   // W3f: the program's reads first
     // Sound (W2b-3): a ring of stereo Float32 frames the worker fills and
     // web/audio.js plays, made on the player's gesture (browsers allow an
     // AudioContext to run only after one). 44.1 kHz where the browser allows
@@ -334,7 +336,7 @@
         ready = withoutKept(config); notice(`Saves are not available in this browser (${e && e.name || e}): playing without saving`);
       }
       savesButton();
-      worker.postMessage({ ...ready, frames, input, pads, dialog, ...(rate ? { audio: { ring: soundRing, rate } } : {}) });
+      worker.postMessage({ ...ready, frames, input, pads, dialog, fetchGate: gate, ...(rate ? { audio: { ring: soundRing, rate } } : {}) });
     }
     // The first two gamepads, each kept in the slot it first took; d-pad over
     // the left stick (standard mapping), A/B/X/Y as buttons 1-4. A pad that
@@ -447,6 +449,46 @@
       }
       return out;
     }
+    // A static page's data (W3f): fetched here while the program runs (the
+    // worker never yields), the files it reads first first, into the cache its
+    // synchronous reads use; progress on the loading notice, then in a corner
+    // until done. The program comes first until its first frame: no new fetch
+    // starts while it waits on a read (the fetch gate) — else the menu's music
+    // waited behind the whole download; afterwards two of the 4 lanes go on
+    // regardless, so a program reading ahead of them is not left fetching file
+    // by file. 4 at a time leave connections free for its reads (6 per host
+    // over HTTP/1.1 in Chromium; tuned on that). They stop when the game ends.
+    async function fetchAll(files) {
+      const total = files.reduce((n, f) => n + f.size, 0), mb = n => Math.round(n / 1e6);
+      let loaded = 0, next = 0, failed = 0;
+      const status = document.createElement('div'); status.className = 'fetching'; document.body.append(status);
+      const show = () => {
+        if (loading) { loading.textContent = `Loading… ${mb(loaded)} / ${mb(total)} MB`; status.textContent = ''; }
+        else status.textContent = `Game data ${mb(loaded)} / ${mb(total)} MB`;
+        self.ntsdPage.prefetch = `${loaded}/${total}`; report.prefetchFailed = failed;
+      };
+      const timer = setInterval(show, 200); show();
+      const sleep = ms => new Promise(ok => setTimeout(ok, ms));
+      async function lane(index) {
+        while (next < files.length && !reported) {
+          while (Atomics.load(fetchGate, 0) > 0 && (index >= 2 || !report.draws) && !reported) await sleep(20);
+          if (next >= files.length || reported) break;   // taken meanwhile, or the game is over
+          const f = files[next++];
+          let ok = false;
+          for (let attempt = 0; attempt < 3 && !ok; attempt++) {
+            if (attempt) await sleep(500 * attempt);
+            try {
+              const r = await fetch(f.url);
+              if (r.ok) { await r.arrayBuffer(); ok = true; }
+              else { if (r.body) r.body.cancel().catch(() => {}); if (r.status < 500 && r.status !== 408 && r.status !== 429) break; }
+            } catch {}
+          }
+          if (ok) loaded += f.size; else failed++;   // the program fetches it when it reads it
+        }
+      }
+      await Promise.all(Array.from({ length: 4 }, (_, i) => lane(i)));
+      clearInterval(timer); show(); status.remove(); report.prefetchDoneMs = Math.round(performance.now());
+    }
     // Questions from the worker; an automated run answers config.answer at once.
     function reply(index) { asking = false; released = false; Atomics.store(answer, 1, index); Atomics.store(answer, 0, 1); Atomics.notify(answer, 0); }
     function notice(content) {
@@ -460,11 +502,8 @@
         if (m.text) { (self.ntsdPage ??= {}).exit = m.code; shout(`The game stopped: ${m.text}`); }
         return;
       }
-      if (m.kind === 'progress') {   // a static folder's files arriving (W2b-4c)
-        if (loading && !m.skipped) loading.textContent = `Loading… ${Math.round(m.loaded / 1e6)} / ${Math.round(m.total / 1e6)} MB`;
-        self.ntsdPage.prefetch = m.skipped ? 'skipped' : `${m.loaded}/${m.total}`;
-        return;
-      }
+      if (m.kind === 'progress') { if (m.skipped) self.ntsdPage.prefetch = 'skipped'; return; }   // the worker's probe found no cache hit
+      if (m.kind === 'prefetch') { fetchAll(m.files); return; }
       if (m.kind === 'open') {   // a popup not tied to a click is blocked: the player opens it
         const a = document.createElement('a'); a.href = m.url; a.target = '_blank'; a.rel = 'noopener'; a.textContent = `Open ${m.url}`;
         notice(a); return;
@@ -493,19 +532,19 @@
     function tick() { if (reported) return; if (config.interactive) samplePads(); draw(); if (Atomics.load(header, 4) === 1) finish(); }
     (function frame() { if (!reported) requestAnimationFrame(frame); tick(); })();
     setInterval(tick, 50);   // where animation frames are throttled
-    if (!config.interactive) withKept(config).then(ready => worker.postMessage({ ...ready, frames, input, pads, dialog }), e => fail(`saves: ${e}`));
+    if (!config.interactive) withKept(config).then(ready => worker.postMessage({ ...ready, frames, input, pads, dialog, fetchGate: gate }), e => fail(`saves: ${e}`));
     else if (config.autostart) start();
     else {
       // A player's gesture first: browsers show gamepads only after one of
       // their buttons is pressed (the game counts its joysticks once, at
       // launch), and allow sound only after a click or a key.
-      const gate = document.createElement('div');
-      gate.textContent = 'Press a gamepad button to play with gamepads, or click or press a key to start';
-      gate.style.cssText = 'position:fixed;inset:0;display:flex;align-items:center;justify-content:center;color:#fff;font:18px system-ui;cursor:pointer';
-      document.body.append(gate);
+      const cover = document.createElement('div');
+      cover.textContent = 'Press a gamepad button to play with gamepads, or click or press a key to start';
+      cover.style.cssText = 'position:fixed;inset:0;display:flex;align-items:center;justify-content:center;color:#fff;font:18px system-ui;cursor:pointer';
+      document.body.append(cover);
       let begun = false;
-      const go = e => { if (begun) return; begun = true; if (e) e.preventDefault(); gate.remove(); start(); };
-      gate.addEventListener('pointerdown', go); addEventListener('keydown', go, { once: true });
+      const go = e => { if (begun) return; begun = true; if (e) e.preventDefault(); cover.remove(); start(); };
+      cover.addEventListener('pointerdown', go); addEventListener('keydown', go, { once: true });
       (function wait() {
         if (begun) return;
         const pressed = navigator.getGamepads && [...navigator.getGamepads()].some(p => p && p.buttons.some(b => b.pressed));
