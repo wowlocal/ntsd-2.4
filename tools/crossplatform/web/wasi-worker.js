@@ -10,7 +10,10 @@
 // EROFS. A mount the page keeps (persist, TVOS_WEB W2b-4a: the saves, in the
 // browser's IndexedDB) arrives whole with the config, and its changes go to
 // the page as messages, which stores them in order (the worker never yields,
-// so it cannot wait on the browser's asynchronous storage itself).
+// so it cannot wait on the browser's asynchronous storage itself). The
+// browser host also gets a /tmp in memory (memory, never stored), as WASI
+// programs expect one: without /save its overlay goes there (W2b-4b; before,
+// Foundation trapped creating a folder outside every mount).
 // stdout and stderr are buffered and posted in order. poll_oneoff
 // sleeps with Atomics.wait, which needs a cross-origin-isolated page.
 //
@@ -48,7 +51,7 @@ class Node {
   url(extra = '') { return `${this.mount.url}/${this.path.split('/').map(encodeURIComponent).join('/')}${extra}`; }
   list() {
     if (this.kind !== 'dir') return null;
-    if (this.mount.persist) return this.children ??= new Map();
+    if (this.mount.persist || this.mount.memory) return this.children ??= new Map();
     if (this.children === null) {
       const x = request('GET', this.url('?list'));
       if (x.status !== 200 && x.status !== 404) throw new Error(`list ${this.path}: ${x.status}`);
@@ -61,7 +64,7 @@ class Node {
     return this.children;
   }
   bytes() {
-    if (this.mount.persist) return this.data ??= new Uint8Array(0);
+    if (this.mount.persist || this.mount.memory) return this.data ??= new Uint8Array(0);
     if (this.data === null) {
       const x = request('GET', this.url(), null, 'arraybuffer');
       if (x.status !== 200) throw new Error(`read ${this.path}: ${x.status}`);
@@ -97,7 +100,8 @@ self.onmessage = async ({ data: config }) => {
 
 async function run(config) {
   const sleeper = new Int32Array(new SharedArrayBuffer(4));
-  const mounts = config.mounts.map((m, i) => ({ ...m, url: `/m/${i}` }));
+  const given = config.frames && !config.mounts.some(m => m.guest === '/tmp') ? [{ guest: '/tmp', writable: true, memory: true }] : [];
+  const mounts = [...config.mounts, ...given].map((m, i) => ({ ...m, url: `/m/${i}` }));
   // A kept mount's tree as the page loaded it (entries: path, dir, data);
   // folders on the way to an entry exist even without their own record.
   function seed(root, entries) {
@@ -150,11 +154,13 @@ async function run(config) {
   // kept mount a message the page stores (in the order sent).
   let stores = 0;   // store messages sent: the page applies that many before it reports
   function change(node, op, to) {
+    if (node.mount.memory) return true;
     if (node.mount.persist) { postMessage({ kind: 'store', guest: node.mount.guest, op, path: node.path, to }); stores++; return true; }
     return request('POST', node.url(op === 'rename' ? `?op=rename&to=${encodeURIComponent(to)}` : `?op=${op}`)).status === 200;
   }
   function upload(node) {
     if (!node.dirty || node.deleted) return;
+    if (node.mount.memory) { node.dirty = false; return; }
     if (node.mount.persist) {
       const data = (node.data ?? new Uint8Array(0)).slice();
       postMessage({ kind: 'store', guest: node.mount.guest, op: 'put', path: node.path, data }, [data.buffer]);
@@ -241,7 +247,7 @@ async function run(config) {
         // An unchanged file's bytes go when no other descriptor has it open:
         // they would otherwise stay in the worker beside the linear memory.
         // A kept mount's stay: nothing could read them back.
-        if (!f.node.mount.persist && !f.node.dirty && !fds.some((g, i) => i !== fd && g && g.node === f.node)) f.node.data = null;
+        if (!f.node.mount.persist && !f.node.mount.memory && !f.node.dirty && !fds.some((g, i) => i !== fd && g && g.node === f.node)) f.node.data = null;
       }
       fds[fd] = undefined; return 0;
     },

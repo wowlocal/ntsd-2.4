@@ -29,7 +29,10 @@
 // FILE (Chromium) drives the page over the DevTools protocol: a JSON list of
 // {"at": seconds after the page loaded, then "key": KeyboardEvent.code,
 // "click": [x, y] in canvas pixels, "capture": NAME (the canvas saved as
-// NAME.png beside the report) or "log": a page expression to print}.
+// NAME.png beside the report), "log": a page expression to print,
+// "viewport": [width, height] (the page's window size, W2b-4b) or "press": a
+// CSS selector (a player's click on that page element)}. The page's own
+// dialogs (confirm) are accepted and logged.
 // An interactive page waits for a player's click, key or gamepad button
 // unless --answer automates it (a --steps click can be that gesture).
 // --serve PORT starts no browser: it serves the page on 127.0.0.1:PORT (or
@@ -230,8 +233,15 @@ async function runSteps() {
   const socket = new WebSocket(target.webSocketDebuggerUrl);
   await new Promise((ok, no) => { socket.onopen = ok; socket.onerror = no; });
   let next = 1; const pending = new Map();
-  socket.onmessage = ({ data }) => { const m = JSON.parse(data); if (pending.has(m.id)) { pending.get(m.id)(m); pending.delete(m.id); } };
   const call = (method, params = {}) => new Promise(ok => { const id = next++; pending.set(id, ok); socket.send(JSON.stringify({ id, method, params })); });
+  socket.onmessage = ({ data }) => {
+    const m = JSON.parse(data);
+    if (pending.has(m.id)) { pending.get(m.id)(m); pending.delete(m.id); }
+    if (m.method === 'Page.javascriptDialogOpening') {
+      say(`web_run.mjs: the page asked ${JSON.stringify(m.params.message)}, accepted\n`); call('Page.handleJavaScriptDialog', { accept: true });
+    }
+  };
+  await call('Page.enable');
   const evaluate = async expression => (await call('Runtime.evaluate', { expression, returnByValue: true })).result?.result?.value;
   const started = Date.now();
   for (const step of steps) {
@@ -250,6 +260,15 @@ async function runSteps() {
         if (type === 'mouseReleased') await new Promise(ok => setTimeout(ok, 120));
         await call('Input.dispatchMouseEvent', { type, x: at[0], y: at[1], button: type === 'mouseMoved' ? 'none' : 'left', buttons: type === 'mousePressed' ? 1 : 0, clickCount: 1 });
       }
+    } else if (step.press) {
+      const at = await evaluate(`(() => { const e = document.querySelector(${JSON.stringify(step.press)}); if (!e) return null;
+        const r = e.getBoundingClientRect(); return [r.left + r.width / 2, r.top + r.height / 2]; })()`);
+      if (!at) say(`web_run.mjs: no ${step.press} to press\n`);
+      else for (const type of ['mouseMoved', 'mousePressed', 'mouseReleased'])
+        await call('Input.dispatchMouseEvent', { type, x: at[0], y: at[1], button: type === 'mouseMoved' ? 'none' : 'left', buttons: type === 'mousePressed' ? 1 : 0, clickCount: 1 });
+    } else if (step.viewport) {
+      const [width, height] = step.viewport;
+      await call('Emulation.setDeviceMetricsOverride', { width, height, deviceScaleFactor: 1, mobile: false });
     } else if (step.log) {
       say(`web_run.mjs: log ${step.log} = ${JSON.stringify(await evaluate(step.log))}\n`);
     } else if (step.capture && metricsFile) {
