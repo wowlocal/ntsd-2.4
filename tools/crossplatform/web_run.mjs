@@ -5,7 +5,9 @@
 //
 // Usage: node web_run.mjs [--map GUEST=HOST ...] [--ro GUEST=HOST ...]
 //                         [--env KEY=VALUE ...] [--argv0 GUEST_PATH]
-//                         [--metrics FILE] [--canvas] -- PROGRAM.wasm [ARGS ...]
+//                         [--metrics FILE] [--canvas] [--interactive]
+//                         [--answer N] [--steps FILE] [--timeout SECONDS]
+//                         [--serve PORT] -- PROGRAM.wasm [ARGS ...]
 //
 // A local node:http server serves web/run.html and web/wasi-worker.js with
 // cross-origin isolation headers, the program, and each mount under
@@ -20,7 +22,20 @@
 // present a page canvas (TVOS_WEB W2b); the worker's report then counts the
 // presents, and beside it page.json holds what the page drew (draws, torn
 // reads, the first non-black frame read back and compared with its source)
-// and canvas-last.png the page canvas at exit.
+// and canvas-last.png the page canvas at exit. --interactive lets the page
+// send keyboard, mouse and gamepad input (W2b-2); --answer N answers every
+// question the game asks with button N at once (logged on stderr). --steps
+// FILE (Chromium) drives the page over the DevTools protocol: a JSON list of
+// {"at": seconds after the page loaded, then "key": KeyboardEvent.code,
+// "click": [x, y] in canvas pixels, "capture": NAME (the canvas saved as
+// NAME.png beside the report) or "log": a page expression to print}.
+// An interactive page waits for a player's click, key or gamepad button
+// unless --answer automates it (a --steps click can be that gesture).
+// --serve PORT starts no browser: it serves the page on 127.0.0.1:PORT (or
+// localhost) for a player's own browser and keeps serving after the game
+// ends, so reloading the page plays again.
+// --timeout ends the run (exit 124) after SECONDS (default 3300); a run ended
+// by a signal also closes its browser, so none is left running.
 import { createServer } from 'node:http';
 import { spawn } from 'node:child_process';
 import { mkdtempSync, readFileSync, writeFileSync, mkdirSync, statSync, lstatSync, readdirSync, rmSync, renameSync, unlinkSync, rmdirSync, existsSync, realpathSync } from 'node:fs';
@@ -38,9 +53,14 @@ if (sepAt < 0 || sepAt + 1 >= argv.length) {
 const options = argv.slice(2, sepAt);
 const [program, ...args] = argv.slice(sepAt + 1);
 const mounts = [], guestEnv = { TZ: env.TZ ?? 'Etc/GMT-1' };
-let argv0 = program, metricsFile = null, canvas = false;
+let argv0 = program, metricsFile = null, canvas = false, interactive = false, answer = null, steps = null, timeout = 3300, serve = null;
 for (let i = 0; i < options.length; i += 2) {
   if (options[i] === '--canvas') { canvas = true; i--; continue; }
+  if (options[i] === '--interactive') { interactive = true; i--; continue; }
+  if (options[i] === '--answer') { answer = Number(options[i + 1]); continue; }
+  if (options[i] === '--steps') { steps = JSON.parse(readFileSync(options[i + 1], 'utf8')); continue; }
+  if (options[i] === '--timeout') { timeout = Number(options[i + 1]); continue; }
+  if (options[i] === '--serve') { serve = Number(options[i + 1]); continue; }
   const [name, value] = [options[i], options[i + 1]];
   const at = value?.indexOf('=') ?? -1;
   if ((name === '--map' || name === '--ro') && at > 0)
@@ -74,6 +94,7 @@ function finish(code) {
   setTimeout(done, 5000).unref();
 }
 process.on('SIGTERM', () => finish(143)); process.on('SIGINT', () => finish(130));
+process.on('SIGHUP', () => finish(129)); process.on('SIGALRM', () => finish(142));
 function body(req) {
   return new Promise(ok => { const parts = []; req.on('data', c => parts.push(c)); req.on('end', () => ok(Buffer.concat(parts))); });
 }
@@ -92,10 +113,12 @@ function hostPath(mount, rel) {
 const server = createServer(async (req, res) => {
   const url = new URL(req.url, 'http://local');
   const send = (status, data = '', type = 'text/plain; charset=utf-8') => {
+    if (env.NTSD_WEB_DEBUG) say(`web_run.mjs: ${req.method} ${req.url.slice(0, 120)} -> ${status}\n`);
     res.writeHead(status, { ...headers, 'Content-Type': type }); res.end(data);
   };
   // Only this machine's page: a rebound host name never reaches the mounts.
-  if (req.headers.host !== `127.0.0.1:${server.address().port}`) return send(403);
+  const port = server.address().port;
+  if (req.headers.host !== `127.0.0.1:${port}` && req.headers.host !== `localhost:${port}`) return send(403);
   try {
     if (req.method === 'GET' && url.pathname.startsWith('/web/')) {
       const name = url.pathname.slice(5);
@@ -104,9 +127,12 @@ const server = createServer(async (req, res) => {
       return existsSync(file) ? send(200, readFileSync(file), types[name.slice(name.lastIndexOf('.'))] ?? 'application/octet-stream') : send(404);
     }
     if (req.method === 'GET' && url.pathname === '/program.wasm') return send(200, readFileSync(program), types['.wasm']);
-    if (req.method === 'GET' && url.pathname === '/config')
+    if (req.method === 'GET' && url.pathname === '/config') {
+      if (steps && !stepsStarted) { stepsStarted = true; runSteps().catch(e => say(`web_run.mjs: steps: ${e}\n`)); }
       return send(200, JSON.stringify({ program: '/program.wasm', args: [argv0, ...args], env: guestEnv, canvas, frameBytes: 32 << 20,
+                                        interactive, autostart: answer !== null, ...(answer === null ? {} : { answer }),
                                         mounts: mounts.map(m => ({ guest: m.guest, writable: m.writable })) }), 'application/json');
+    }
     const m = url.pathname.match(/^\/m\/(\d+)\/?(.*)$/);
     if (m) {
       const mount = mounts[Number(m[1])]; if (!mount) return send(404);
@@ -153,6 +179,7 @@ const server = createServer(async (req, res) => {
       const data = await body(req); if (metricsFile) writeFileSync(metricsFile, data); return send(200);
     }
     if (req.method === 'POST' && url.pathname === '/exit') {
+      if (serve !== null) { send(200); say(`web_run.mjs: the game ended (code ${url.searchParams.get('code')}); reload the page to play again\n`); return; }
       send(200); setTimeout(() => finish(Number(url.searchParams.get('code') ?? 1)), 10); return;
     }
     send(404);
@@ -171,6 +198,49 @@ function webkitFolder() {
   if (!last) { console.error('web_run.mjs: no WebKit in the Playwright cache'); exit(2); }
   return last;
 }
+// --steps: the DevTools protocol over the headless shell's debugging port
+// (Node's built-in WebSocket), from the moment the page asked for its config.
+let stepsStarted = false;
+async function runSteps() {
+  const portFile = join(profile, 'DevToolsActivePort');
+  for (let i = 0; i < 100 && !existsSync(portFile); i++) await new Promise(ok => setTimeout(ok, 100));
+  const debugPort = readFileSync(portFile, 'utf8').split('\n')[0];
+  const targets = await (await fetch(`http://127.0.0.1:${debugPort}/json/list`)).json();
+  const target = targets.find(t => t.type === 'page' && t.url.includes('/web/run.html'));
+  const socket = new WebSocket(target.webSocketDebuggerUrl);
+  await new Promise((ok, no) => { socket.onopen = ok; socket.onerror = no; });
+  let next = 1; const pending = new Map();
+  socket.onmessage = ({ data }) => { const m = JSON.parse(data); if (pending.has(m.id)) { pending.get(m.id)(m); pending.delete(m.id); } };
+  const call = (method, params = {}) => new Promise(ok => { const id = next++; pending.set(id, ok); socket.send(JSON.stringify({ id, method, params })); });
+  const evaluate = async expression => (await call('Runtime.evaluate', { expression, returnByValue: true })).result?.result?.value;
+  const started = Date.now();
+  for (const step of steps) {
+    const wait = step.at * 1000 - (Date.now() - started); if (wait > 0) await new Promise(ok => setTimeout(ok, wait));
+    if (step.key) {
+      for (const type of ['keyDown', 'keyUp']) {
+        if (type === 'keyUp') await new Promise(ok => setTimeout(ok, 120));
+        await call('Input.dispatchKeyEvent', { type, code: step.key, key: step.key });
+      }
+    } else if (step.click) {
+      const [x, y] = step.click;
+      const at = await evaluate(`(() => { const c = document.querySelector('canvas'), r = c.getBoundingClientRect();
+        return [r.left + (${x} + 0.5) * r.width / c.width, r.top + (${y} + 0.5) * r.height / c.height]; })()`);
+      // Held for 120 ms, as a player's click is: the game reads the mouse once a tick.
+      for (const type of ['mouseMoved', 'mousePressed', 'mouseReleased']) {
+        if (type === 'mouseReleased') await new Promise(ok => setTimeout(ok, 120));
+        await call('Input.dispatchMouseEvent', { type, x: at[0], y: at[1], button: type === 'mouseMoved' ? 'none' : 'left', buttons: type === 'mousePressed' ? 1 : 0, clickCount: 1 });
+      }
+    } else if (step.log) {
+      say(`web_run.mjs: log ${step.log} = ${JSON.stringify(await evaluate(step.log))}\n`);
+    } else if (step.capture && metricsFile) {
+      const url = await evaluate(`document.querySelector('canvas').toDataURL('image/png')`);
+      if (url) writeFileSync(join(dirname(metricsFile), `${step.capture}.png`), Buffer.from(url.split(',')[1], 'base64'));
+    }
+    say(`web_run.mjs: step ${JSON.stringify(step)}\n`);
+  }
+  socket.close();
+}
+
 function browserPath() {
   if (env.NTSD_BROWSER) return env.NTSD_BROWSER;
   if (engine === 'webkit') return join(webkitFolder(), 'Playwright.app/Contents/MacOS/Playwright');
@@ -184,7 +254,8 @@ function browserPath() {
   console.error('web_run.mjs: no chrome-headless-shell in the Playwright cache; set NTSD_BROWSER'); exit(2);
 }
 
-server.listen(0, '127.0.0.1', () => {
+server.listen(serve ?? 0, '127.0.0.1', () => {
+  if (serve !== null) { say(`web_run.mjs: open http://127.0.0.1:${server.address().port}/web/run.html\n`); return; }
   const { port } = server.address(), binary = browserPath();
   profile = mkdtempSync(join(tmpdir(), 'ntsd-web-'));
   const page = `http://127.0.0.1:${port}/web/run.html`;
@@ -208,6 +279,6 @@ server.listen(0, '127.0.0.1', () => {
   setInterval(() => {
     if (Date.now() - alive > 120_000) { say('web_run.mjs: the page stopped responding\n'); finish(134); }
   }, 5000).unref();
-  // Under run_headless_scenarios.py's 3600 s, so this process cleans up first.
-  setTimeout(() => { say('web_run.mjs: timed out\n'); finish(124); }, 3300 * 1000).unref();
+  // By default under run_headless_scenarios.py's 3600 s, so this process cleans up first.
+  setTimeout(() => { say('web_run.mjs: timed out\n'); finish(124); }, timeout * 1000).unref();
 });

@@ -10,7 +10,10 @@
      (XRGB8888) into a shared frame buffer under a sequence lock and the page
      draws the newest one on every animation frame. The first non-black frame
      drawn is read back from the canvas and compared with its source pixels;
-     at exit the page posts what it drew and the canvas as a PNG. -->
+     at exit the page posts what it drew and the canvas as a PNG. In an
+     interactive run (W2b-2) the page also writes keyboard and mouse events
+     and gamepad state into shared memory, and answers the game's questions
+     (config.answer answers at once, for automated runs). -->
 <style>
   html, body { margin: 0; height: 100%; background: #000; }
   canvas { display: block; margin: auto; max-width: 100vw; max-height: 100vh; image-rendering: pixelated; }
@@ -28,6 +31,7 @@
     const canvas = document.createElement('canvas'); document.body.append(canvas);
     const context = canvas.getContext('2d', { alpha: false });
     const report = { draws: 0, torn: 0, check: null };
+    self.ntsdPage = { report, header };   // for the runner's DevTools steps
     let shown = 0, image = null, reported = false;   // sequence 0: nothing presented yet
     function draw() {
       const seq = Atomics.load(header, 0);
@@ -61,9 +65,181 @@
         await fetch('/page', { method: 'POST', body: JSON.stringify(report) });
       } finally { Atomics.store(header, 5, 1); Atomics.notify(header, 5); }
     }
-    function tick() { if (reported) return; draw(); if (Atomics.load(header, 4) === 1) finish(); }
+    // Input (W2b-2): the page is the only place with DOM events and the Gamepad
+    // API; it writes them into shared memory the worker drains.
+    const input = new SharedArrayBuffer(4 * (2 + 256 * 5)), ring = new Int32Array(input);
+    const pads = new SharedArrayBuffer(4 * 9), padState = new Int32Array(pads);
+    const dialog = new SharedArrayBuffer(8), answer = new Int32Array(dialog);
+    function push(kind, a, b, c, d) {
+      // Counters wrap as Int32 (& 255 indexes them either way). Near full, moves
+      // give way so presses and releases are never the ones dropped.
+      const write = Atomics.load(ring, 0), pending = (write - Atomics.load(ring, 1)) | 0;
+      if (pending >= 256 || (pending >= 192 && kind === 2 && a === 0x200)) return;
+      const at = 2 + (write & 255) * 5; ring[at] = kind; ring[at + 1] = a; ring[at + 2] = b; ring[at + 3] = c; ring[at + 4] = d;
+      Atomics.store(ring, 0, (write + 1) | 0);
+    }
+    // KeyboardEvent.code as USB HID usages (OriginalHIDKeys' keys).
+    const usage = {};
+    for (let i = 0; i < 26; i++) usage['Key' + String.fromCharCode(65 + i)] = 4 + i;
+    for (let i = 1; i <= 9; i++) usage['Digit' + i] = 29 + i; usage.Digit0 = 39;
+    for (let i = 1; i <= 12; i++) usage['F' + i] = 57 + i;
+    for (let i = 1; i <= 9; i++) usage['Numpad' + i] = 88 + i; usage.Numpad0 = 98;
+    Object.assign(usage, { Enter: 40, Escape: 41, Backspace: 42, Tab: 43, Space: 44, Minus: 45, Equal: 46, BracketLeft: 47,
+      BracketRight: 48, Backslash: 49, Semicolon: 51, Quote: 52, Backquote: 53, Comma: 54, Period: 55, Slash: 56, CapsLock: 57,
+      Insert: 73, Home: 74, PageUp: 75, Delete: 76, End: 77, PageDown: 78, ArrowRight: 79, ArrowLeft: 80, ArrowDown: 81, ArrowUp: 82,
+      NumpadDivide: 84, NumpadMultiply: 85, NumpadSubtract: 86, NumpadAdd: 87, NumpadEnter: 88, NumpadDecimal: 99,
+      ControlLeft: 224, ShiftLeft: 225, AltLeft: 226, ControlRight: 228, ShiftRight: 229, AltRight: 230 });
+    const mac = /Mac/.test(navigator.platform);
+    let asking = false, caps = false, mouse = 0, last = [0, 0], released = false;
+    const held = new Set();   // usages the game was told are down
+    function capsFrom(e) {   // true when the Caps Lock state changed
+      const on = !!(e.getModifierState && e.getModifierState('CapsLock'));
+      if (on === caps) return false;
+      caps = on; push(3, on ? 1 : 0, 0, 0, 0); return true;
+    }
+    // Everything the game holds goes up when the page stops hearing the
+    // releases (focus lost, hidden, a question shown), as SDL releases its keys
+    // on focus loss: no Alt stuck after Alt+Tab, no character still walking.
+    function releaseAll() {
+      for (const u of held) push(1, u, 0, 0, caps ? 1 : 0);
+      held.clear();
+      if (mouse & 1) push(2, 0x202, ...last, mouse &= ~1);
+      if (mouse & 2) push(2, 0x205, ...last, mouse &= ~2);
+      released = true;
+    }
+    function start() {
+      canvas.tabIndex = 0; canvas.style.touchAction = 'none'; canvas.focus();
+      const key = down => e => {
+        if (asking || e.metaKey || !(e.code in usage)) return;   // Cmd: the browser's (macOS sends no key-up after it)
+        e.preventDefault();
+        const changed = capsFrom(e), u = usage[e.code];
+        if (mac && e.code === 'CapsLock') {   // one event per toggle there: a whole press, as the SDL host sends
+          if (changed) { push(1, u, 1, 0, caps ? 1 : 0); push(1, u, 0, 0, caps ? 1 : 0); }
+          return;
+        }
+        if (!down && !held.has(u)) return;   // a release the game never saw pressed (SDL drops those too)
+        let typed = down && e.key.length === 1 ? e.key.codePointAt(0) : 0;
+        if (down && e.ctrlKey && !e.altKey && /^[a-z]$/i.test(e.key)) typed = e.key.toUpperCase().charCodeAt(0) & 0x1f;   // Ctrl+letter: its control code
+        if (down) held.add(u); else held.delete(u);
+        push(1, u, (down ? 1 : 0) | (e.repeat ? 2 : 0), typed, caps ? 1 : 0);
+      };
+      addEventListener('keydown', key(true)); addEventListener('keyup', key(false));
+      addEventListener('blur', releaseAll); addEventListener('pagehide', releaseAll);
+      addEventListener('focus', () => { released = false; });
+      document.addEventListener('visibilitychange', () => { if (document.hidden) releaseAll(); else released = false; });
+      const point = e => {
+        const r = canvas.getBoundingClientRect();
+        return [Math.floor((e.clientX - r.left) * canvas.width / r.width), Math.floor((e.clientY - r.top) * canvas.height / r.height)];
+      };
+      // Button changes as WM_xBUTTONDOWN/UP: browsers report a second button's
+      // press or release only in a move's `buttons`. From a move, a press
+      // counts only while a press began on the canvas (dragging in from the
+      // page with a button held is a move, as on Windows).
+      function buttons(e, now, fromMove = false) {
+        for (const [bit, down, up] of [[1, 0x201, 0x202], [2, 0x204, 0x205]]) {
+          if ((now & bit) === (mouse & bit)) continue;
+          if (fromMove && (now & bit) && mouse === 0) continue;
+          mouse = (mouse & ~bit) | (now & bit); push(2, now & bit ? down : up, ...last, mouse);
+        }
+      }
+      const state = e => (e.buttons & 1 ? 1 : 0) | (e.buttons & 2 ? 2 : 0);
+      canvas.addEventListener('contextmenu', e => e.preventDefault());
+      canvas.addEventListener('pointermove', e => {
+        if (asking) return; capsFrom(e); last = point(e);
+        push(2, 0x200, ...last, mouse); buttons(e, state(e), true);
+      });
+      canvas.addEventListener('pointerdown', e => {
+        canvas.focus(); if (asking) return; capsFrom(e); last = point(e);
+        if (e.button === 0 || e.button === 2) canvas.setPointerCapture(e.pointerId);
+        push(2, 0x200, ...last, mouse);   // a touch or pen tap moves there first: the game's cursor comes from moves
+        buttons(e, state(e));
+      });
+      canvas.addEventListener('pointerup', e => {
+        if (asking) return; last = point(e);
+        // A tap's release can come within one game tick of its press: held a
+        // little, as the iOS host holds a touch's press.
+        if (e.pointerType === 'mouse') buttons(e, state(e)); else setTimeout(() => buttons(e, 0), 80);
+      });
+      canvas.addEventListener('pointercancel', () => buttons(null, 0));
+      worker.postMessage({ ...config, frames, input, pads, dialog });
+    }
+    // The first two gamepads, each kept in the slot it first took; d-pad over
+    // the left stick (standard mapping), A/B/X/Y as buttons 1-4. A pad that
+    // goes away reads not connected (the host centres it), as SDL's does.
+    const slots = [null, null];
+    function samplePads() {
+      try {
+        const list = navigator.getGamepads ? [...navigator.getGamepads()].filter(p => p && p.connected) : [];
+        for (const p of list) if (!slots.includes(p.index) && slots.includes(null)) slots[slots.indexOf(null)] = p.index;
+        Atomics.store(padState, 0, slots.filter(s => s !== null).length);
+        slots.forEach((index, i) => {
+          const p = list.find(q => q.index === index), base = 1 + i * 4;
+          if (!p || released || document.hidden) { for (let k = 0; k < 4; k++) Atomics.store(padState, base + k, 0); return; }
+          const on = b => !!(p.buttons[b] && p.buttons[b].pressed), standard = p.mapping === 'standard';
+          let x = p.axes[0] || 0, y = p.axes[1] || 0;
+          if (standard && on(14) !== on(15)) x = on(14) ? -1 : 1;
+          if (standard && on(12) !== on(13)) y = on(12) ? -1 : 1;
+          const bits = (on(0) ? 1 : 0) | (on(1) ? 2 : 0) | (on(2) ? 4 : 0) | (on(3) ? 8 : 0);
+          Atomics.store(padState, base, Math.round(Math.max(-1, Math.min(1, x)) * 32767));
+          Atomics.store(padState, base + 1, Math.round(Math.max(-1, Math.min(1, y)) * 32767));
+          Atomics.store(padState, base + 2, bits); Atomics.store(padState, base + 3, 1);
+        });
+      } catch {}
+    }
+    // Questions from the worker; an automated run answers config.answer at once.
+    function reply(index) { asking = false; released = false; Atomics.store(answer, 1, index); Atomics.store(answer, 0, 1); Atomics.notify(answer, 0); }
+    function notice(content) {
+      const bar = document.createElement('div'); bar.append(content);
+      bar.style.cssText = 'position:fixed;left:50%;bottom:16px;transform:translateX(-50%);background:#ece9d8;padding:8px 14px;font:14px system-ui;border:1px solid #0a246a';
+      document.body.append(bar); setTimeout(() => bar.remove(), 15000);
+    }
+    worker.onmessage = ({ data: m }) => {
+      if (m.kind === 'open') {   // a popup not tied to a click is blocked: the player opens it
+        const a = document.createElement('a'); a.href = m.url; a.target = '_blank'; a.rel = 'noopener'; a.textContent = `Open ${m.url}`;
+        notice(a); return;
+      }
+      if (m.kind !== 'ask') return;
+      releaseAll(); asking = true;
+      if (typeof config.answer === 'number') {
+        fetch('/stderr', { method: 'POST', body: `web_run: asked ${JSON.stringify(m)}, answered ${config.answer}\n` });
+        return reply(config.answer);
+      }
+      const box = document.createElement('div');
+      box.style.cssText = 'position:fixed;inset:0;display:flex;align-items:center;justify-content:center;background:#0008;font:14px system-ui';
+      const panel = document.createElement('div');
+      panel.style.cssText = 'background:#ece9d8;color:#000;min-width:260px;max-width:480px;border:1px solid #0a246a;box-shadow:2px 2px 8px #000a';
+      const title = document.createElement('div'); title.textContent = m.caption;
+      title.style.cssText = 'background:#0a246a;color:#fff;padding:4px 8px;font-weight:bold';
+      const body = document.createElement('div'); body.textContent = m.text; body.style.cssText = 'padding:16px;white-space:pre-wrap';
+      const row = document.createElement('div'); row.style.cssText = 'display:flex;gap:8px;justify-content:center;padding:0 16px 12px';
+      m.buttons.forEach((label, i) => {
+        const button = document.createElement('button'); button.textContent = label; button.style.minWidth = '72px';
+        button.onclick = () => { box.remove(); canvas.focus(); reply(i); };
+        row.append(button); if (i === 0) setTimeout(() => button.focus());
+      });
+      panel.append(title, body, row); box.append(panel); document.body.append(box);
+    };
+    function tick() { if (reported) return; if (config.interactive) samplePads(); draw(); if (Atomics.load(header, 4) === 1) finish(); }
     (function frame() { if (!reported) requestAnimationFrame(frame); tick(); })();
     setInterval(tick, 50);   // where animation frames are throttled
-    worker.postMessage({ ...config, frames });
+    if (!config.interactive) worker.postMessage({ ...config, frames, input, pads, dialog });
+    else if (config.autostart) start();
+    else {
+      // A player's gesture first: browsers show gamepads only after one of
+      // their buttons is pressed (the game counts its joysticks once, at
+      // launch), and allow sound only after a click or a key.
+      const gate = document.createElement('div');
+      gate.textContent = 'Press a gamepad button to play with gamepads, or click or press a key to start';
+      gate.style.cssText = 'position:fixed;inset:0;display:flex;align-items:center;justify-content:center;color:#fff;font:18px system-ui;cursor:pointer';
+      document.body.append(gate);
+      let begun = false;
+      const go = e => { if (begun) return; begun = true; if (e) e.preventDefault(); gate.remove(); start(); };
+      gate.addEventListener('pointerdown', go); addEventListener('keydown', go, { once: true });
+      (function wait() {
+        if (begun) return;
+        const pressed = navigator.getGamepads && [...navigator.getGamepads()].some(p => p && p.buttons.some(b => b.pressed));
+        if (pressed) go(); else requestAnimationFrame(wait);
+      })();
+    }
   }).catch(e => fail(`config: ${e}`));
 </script>

@@ -358,7 +358,42 @@ async function run(config) {
   // shared frame buffer under a sequence lock, and the page draws it.
   const frames = config.frames ?? null;   // SharedArrayBuffer: Int32 header[8], then pixels
   const header = frames ? new Int32Array(frames, 0, 8) : null, presented = { count: 0, width: 0, height: 0, skipped: 0 };
+  // Input and questions (W2b-2), all in shared memory the page fills:
+  // config.input: Int32 [write, read, then 256 events of 5 Int32 (kind, a, b, c, d)];
+  // config.pads: Int32 [count, then 2 × (x, y, buttons, connected)];
+  // config.dialog: Int32 [answered, answer]; the question itself is posted.
+  const input = config.input ? new Int32Array(config.input) : null;
+  const pads = config.pads ? new Int32Array(config.pads) : null;
+  const dialog = config.dialog ? new Int32Array(config.dialog) : null;
   const ntsd = {
+    input(ptr, capacity) {
+      if (!input) return 0;
+      const write = Atomics.load(input, 0);   // a 256-event ring; counters wrap as Int32
+      let read = Atomics.load(input, 1), n = 0;
+      const out = new Int32Array(memory.buffer, ptr, capacity * 5);
+      while (read !== write && n < capacity) {
+        const at = 2 + (read & 255) * 5;
+        for (let k = 0; k < 5; k++) out[n * 5 + k] = input[at + k];
+        read = (read + 1) | 0; n++;
+      }
+      Atomics.store(input, 1, read);
+      return n;
+    },
+    gamepads() { return pads ? Atomics.load(pads, 0) : 0; },
+    gamepad(id, ptr) {
+      const out = new Int32Array(memory.buffer, ptr, 4);
+      for (let k = 0; k < 4; k++) out[k] = pads && id >= 0 && id < 2 ? Atomics.load(pads, 1 + id * 4 + k) : 0;
+    },
+    ask(textPtr, textCount, captionPtr, captionCount, buttonsPtr, buttonsCount) {
+      const buttons = text(buttonsPtr, buttonsCount).split('\0').slice(0, -1);
+      flush();   // the program's output so far reaches the runner before the wait
+      if (!dialog) return 0;
+      Atomics.store(dialog, 0, 0);
+      self.postMessage({ kind: 'ask', text: text(textPtr, textCount), caption: text(captionPtr, captionCount), buttons });
+      Atomics.wait(dialog, 0, 0);   // until the player answers
+      return Atomics.load(dialog, 1);
+    },
+    open(ptr, count) { self.postMessage({ kind: 'open', url: text(ptr, count) }); },
     present(ptr, width, height) {
       presented.count++; presented.width = width; presented.height = height;
       if (!frames || width <= 0 || height <= 0) return;

@@ -1,0 +1,482 @@
+{
+ "phase": "W2b-2: input in the browser host",
+ "change": "NTSDWeb: page functions for input (a 256-event shared ring: keys as USB HID usages with the typed character, repeat and Caps Lock; mouse messages in canvas pixels with MK buttons; a Caps Lock report), gamepads (the first two, kept in their slots, the d-pad over the left stick, A/B/X/Y; a pad that goes away reads centred), questions (MessageBoxA, alerts, unsupported-boundary stops: the worker posts the question and waits on a shared flag; the page shows a modal) and links (http(s) only, as a notice the player clicks). The host drains input every 2 ms on the main queue (the SDL host's pump), samples gamepads every 25 ms, keeps the overlay in /save when the page mounts one, and ends with code 1 after a stop. The page releases every held key and button on blur, pagehide, hiding and a question; syncs mouse buttons from every pointer event; moves before a tap's press and holds a tap's release; leaves Cmd to the browser; sends macOS Caps Lock as a whole press per change; types Ctrl+letter's control code; waits for a player's gesture before starting (browsers show gamepads and allow sound only after one). web_run.mjs: --interactive, --answer N, --steps (DevTools-protocol keys and clicks held 120 ms, canvas captures, page logs), --timeout, --serve PORT (a player's own browser), signal cleanup.",
+ "interactive": {
+  "how": "web_run.mjs --interactive --answer 0 --steps in headless Chromium (keys and clicks over the DevTools protocol; captures kept in X5 tw-w2b2/interactive)",
+  "results": [
+   "a held click on START opened the mode menu (captures a-menu.png, b-after-start.png)",
+   "Escape reached the game: 'Are you sure to quit?' with buttons Yes/No asked on the page; Yes quit with code 0, No kept playing",
+   "the overlay was written under /save (data/adinfo.txt)",
+   "the start gate: canvas 300x150 (not started) before a click, 794x550 frames after it",
+   "no browser left running"
+  ],
+  "notTested": "gamepads (no virtual gamepad in headless browsers; a player's check), WebKit interactive (no DevTools protocol on its build), touch on a real device"
+ },
+ "bugsFoundInTesting": [
+  "web_run.mjs: a brace-less if after adding --steps answered every request with the config (programs got the config instead of their files and ended at once); found by request logging, fixed",
+  "WebInput.ask: an untyped buttons.flatMap { Array($0.utf8) + [0] } inferred [[Any]] (the deprecated optional flatMap), so the buttons arrived empty; typed loop",
+  "killed runs (perl alarm) left 28 headless browsers running; web_run.mjs now has --timeout and closes its browser on SIGTERM/SIGINT/SIGHUP/SIGALRM"
+ ],
+ "review": "Round 1: high: keys stuck after focus loss (Alt+Tab left Alt down, making every key a system key and F4 a quit); medium: a second mouse button's press missed, gamepads invisible without a gesture before launch; low: disconnected pads held, Cmd keys stuck, Caps Lock, Ctrl+letter characters, timers keeping a stopped worker alive, ring counter wrap, window.open blocked, touch. All fixed. Round 2: OK; low: taps pressed at the previous point, drags from the margin made clicks, releases of unseen keys, the gate text, macOS Caps Lock doubling, a stop exiting 0, the explore link. All fixed.",
+ "scenarios": {
+  "chromium": {
+   "rows": [
+    {
+     "scenario": "vs",
+     "exit": 0,
+     "seconds": 73.4,
+     "result": "equal",
+     "differs": [],
+     "node": "v26.7.0",
+     "browser": "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) HeadlessChrome/153.0.8010.12 Safari/537.36",
+     "page": {
+      "presents": 2341,
+      "skipped": 0,
+      "draws": 2341,
+      "torn": 0,
+      "check": {
+       "width": 794,
+       "height": 550,
+       "pixels": 436700,
+       "mismatchedPixels": 0,
+       "presentsBefore": 1
+      }
+     }
+    },
+    {
+     "scenario": "mission",
+     "exit": 0,
+     "seconds": 73.0,
+     "result": "equal",
+     "differs": [],
+     "node": "v26.7.0",
+     "browser": "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) HeadlessChrome/153.0.8010.12 Safari/537.36",
+     "page": {
+      "presents": 2170,
+      "skipped": 0,
+      "draws": 2170,
+      "torn": 0,
+      "check": {
+       "width": 794,
+       "height": 550,
+       "pixels": 436700,
+       "mismatchedPixels": 0,
+       "presentsBefore": 1
+      }
+     }
+    },
+    {
+     "scenario": "demo",
+     "exit": 0,
+     "seconds": 55.0,
+     "result": "equal",
+     "differs": [],
+     "node": "v26.7.0",
+     "browser": "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) HeadlessChrome/153.0.8010.12 Safari/537.36",
+     "page": {
+      "presents": 1784,
+      "skipped": 0,
+      "draws": 1783,
+      "torn": 1,
+      "check": {
+       "width": 794,
+       "height": 550,
+       "pixels": 436700,
+       "mismatchedPixels": 0,
+       "presentsBefore": 1
+      }
+     }
+    },
+    {
+     "scenario": "war",
+     "exit": 0,
+     "seconds": 119.2,
+     "result": "equal",
+     "differs": [],
+     "node": "v26.7.0",
+     "browser": "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) HeadlessChrome/153.0.8010.12 Safari/537.36",
+     "page": {
+      "presents": 3611,
+      "skipped": 0,
+      "draws": 3611,
+      "torn": 0,
+      "check": {
+       "width": 794,
+       "height": 550,
+       "pixels": 436700,
+       "mismatchedPixels": 0,
+       "presentsBefore": 1
+      }
+     }
+    },
+    {
+     "scenario": "playback",
+     "exit": 0,
+     "seconds": 80.4,
+     "result": "equal",
+     "differs": [],
+     "node": "v26.7.0",
+     "browser": "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) HeadlessChrome/153.0.8010.12 Safari/537.36",
+     "page": {
+      "presents": 2368,
+      "skipped": 0,
+      "draws": 2368,
+      "torn": 0,
+      "check": {
+       "width": 794,
+       "height": 550,
+       "pixels": 436700,
+       "mismatchedPixels": 0,
+       "presentsBefore": 1
+      }
+     }
+    },
+    {
+     "scenario": "tournament",
+     "exit": 0,
+     "seconds": 103.9,
+     "result": "equal",
+     "differs": [],
+     "node": "v26.7.0",
+     "browser": "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) HeadlessChrome/153.0.8010.12 Safari/537.36",
+     "page": {
+      "presents": 3414,
+      "skipped": 0,
+      "draws": 3414,
+      "torn": 0,
+      "check": {
+       "width": 794,
+       "height": 550,
+       "pixels": 436700,
+       "mismatchedPixels": 0,
+       "presentsBefore": 1
+      }
+     }
+    },
+    {
+     "scenario": "altenter",
+     "exit": 0,
+     "seconds": 75.0,
+     "result": "equal",
+     "differs": [],
+     "node": "v26.7.0",
+     "browser": "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) HeadlessChrome/153.0.8010.12 Safari/537.36",
+     "page": {
+      "presents": 2390,
+      "skipped": 0,
+      "draws": 2390,
+      "torn": 0,
+      "check": {
+       "width": 794,
+       "height": 550,
+       "pixels": 436700,
+       "mismatchedPixels": 0,
+       "presentsBefore": 1
+      }
+     }
+    },
+    {
+     "scenario": "tournament-win",
+     "exit": 0,
+     "seconds": 110.2,
+     "result": "equal",
+     "differs": [],
+     "node": "v26.7.0",
+     "browser": "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) HeadlessChrome/153.0.8010.12 Safari/537.36",
+     "page": {
+      "presents": 3655,
+      "skipped": 0,
+      "draws": 3655,
+      "torn": 0,
+      "check": {
+       "width": 794,
+       "height": 550,
+       "pixels": 436700,
+       "mismatchedPixels": 0,
+       "presentsBefore": 1
+      }
+     }
+    },
+    {
+     "scenario": "team-tournament",
+     "exit": 0,
+     "seconds": 86.2,
+     "result": "equal",
+     "differs": [],
+     "node": "v26.7.0",
+     "browser": "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) HeadlessChrome/153.0.8010.12 Safari/537.36",
+     "page": {
+      "presents": 2686,
+      "skipped": 0,
+      "draws": 2686,
+      "torn": 0,
+      "check": {
+       "width": 794,
+       "height": 550,
+       "pixels": 436700,
+       "mismatchedPixels": 0,
+       "presentsBefore": 1
+      }
+     }
+    },
+    {
+     "scenario": "joystick",
+     "exit": 0,
+     "seconds": 26.6,
+     "result": "equal",
+     "differs": [],
+     "node": "v26.7.0",
+     "browser": "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) HeadlessChrome/153.0.8010.12 Safari/537.36",
+     "page": {
+      "presents": 766,
+      "skipped": 0,
+      "draws": 766,
+      "torn": 0,
+      "check": {
+       "width": 794,
+       "height": 550,
+       "pixels": 436700,
+       "mismatchedPixels": 0,
+       "presentsBefore": 1
+      }
+     }
+    }
+   ],
+   "framesAgainstWASI": {
+    "frames": 18088,
+    "mismatched": 0,
+    "result": "identical"
+   }
+  },
+  "webkit": {
+   "rows": [
+    {
+     "scenario": "vs",
+     "exit": 0,
+     "seconds": 76.5,
+     "result": "equal",
+     "differs": [],
+     "node": "v26.7.0",
+     "browser": "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/605.1.15 (KHTML, like Gecko)",
+     "page": {
+      "presents": 2341,
+      "skipped": 0,
+      "draws": 2340,
+      "torn": 0,
+      "check": {
+       "width": 794,
+       "height": 550,
+       "pixels": 436700,
+       "mismatchedPixels": 0,
+       "presentsBefore": 1
+      }
+     }
+    },
+    {
+     "scenario": "mission",
+     "exit": 0,
+     "seconds": 76.9,
+     "result": "equal",
+     "differs": [],
+     "node": "v26.7.0",
+     "browser": "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/605.1.15 (KHTML, like Gecko)",
+     "page": {
+      "presents": 2170,
+      "skipped": 0,
+      "draws": 2170,
+      "torn": 0,
+      "check": {
+       "width": 794,
+       "height": 550,
+       "pixels": 436700,
+       "mismatchedPixels": 0,
+       "presentsBefore": 1
+      }
+     }
+    },
+    {
+     "scenario": "demo",
+     "exit": 0,
+     "seconds": 57.6,
+     "result": "equal",
+     "differs": [],
+     "node": "v26.7.0",
+     "browser": "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/605.1.15 (KHTML, like Gecko)",
+     "page": {
+      "presents": 1784,
+      "skipped": 0,
+      "draws": 1784,
+      "torn": 0,
+      "check": {
+       "width": 794,
+       "height": 550,
+       "pixels": 436700,
+       "mismatchedPixels": 0,
+       "presentsBefore": 1
+      }
+     }
+    },
+    {
+     "scenario": "war",
+     "exit": 0,
+     "seconds": 124.0,
+     "result": "equal",
+     "differs": [],
+     "node": "v26.7.0",
+     "browser": "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/605.1.15 (KHTML, like Gecko)",
+     "page": {
+      "presents": 3611,
+      "skipped": 0,
+      "draws": 3611,
+      "torn": 0,
+      "check": {
+       "width": 794,
+       "height": 550,
+       "pixels": 436700,
+       "mismatchedPixels": 0,
+       "presentsBefore": 1
+      }
+     }
+    },
+    {
+     "scenario": "playback",
+     "exit": 0,
+     "seconds": 84.3,
+     "result": "equal",
+     "differs": [],
+     "node": "v26.7.0",
+     "browser": "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/605.1.15 (KHTML, like Gecko)",
+     "page": {
+      "presents": 2368,
+      "skipped": 0,
+      "draws": 2368,
+      "torn": 0,
+      "check": {
+       "width": 794,
+       "height": 550,
+       "pixels": 436700,
+       "mismatchedPixels": 0,
+       "presentsBefore": 1
+      }
+     }
+    },
+    {
+     "scenario": "tournament",
+     "exit": 0,
+     "seconds": 108.4,
+     "result": "equal",
+     "differs": [],
+     "node": "v26.7.0",
+     "browser": "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/605.1.15 (KHTML, like Gecko)",
+     "page": {
+      "presents": 3414,
+      "skipped": 0,
+      "draws": 3413,
+      "torn": 0,
+      "check": {
+       "width": 794,
+       "height": 550,
+       "pixels": 436700,
+       "mismatchedPixels": 0,
+       "presentsBefore": 1
+      }
+     }
+    },
+    {
+     "scenario": "altenter",
+     "exit": 0,
+     "seconds": 79.4,
+     "result": "equal",
+     "differs": [],
+     "node": "v26.7.0",
+     "browser": "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/605.1.15 (KHTML, like Gecko)",
+     "page": {
+      "presents": 2390,
+      "skipped": 0,
+      "draws": 2389,
+      "torn": 0,
+      "check": {
+       "width": 794,
+       "height": 550,
+       "pixels": 436700,
+       "mismatchedPixels": 0,
+       "presentsBefore": 1
+      }
+     }
+    },
+    {
+     "scenario": "tournament-win",
+     "exit": 0,
+     "seconds": 116.8,
+     "result": "equal",
+     "differs": [],
+     "node": "v26.7.0",
+     "browser": "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/605.1.15 (KHTML, like Gecko)",
+     "page": {
+      "presents": 3655,
+      "skipped": 0,
+      "draws": 3654,
+      "torn": 0,
+      "check": {
+       "width": 794,
+       "height": 550,
+       "pixels": 436700,
+       "mismatchedPixels": 0,
+       "presentsBefore": 1
+      }
+     }
+    },
+    {
+     "scenario": "team-tournament",
+     "exit": 0,
+     "seconds": 94.5,
+     "result": "equal",
+     "differs": [],
+     "node": "v26.7.0",
+     "browser": "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/605.1.15 (KHTML, like Gecko)",
+     "page": {
+      "presents": 2686,
+      "skipped": 0,
+      "draws": 2686,
+      "torn": 0,
+      "check": {
+       "width": 794,
+       "height": 550,
+       "pixels": 436700,
+       "mismatchedPixels": 0,
+       "presentsBefore": 1
+      }
+     }
+    },
+    {
+     "scenario": "joystick",
+     "exit": 0,
+     "seconds": 30.5,
+     "result": "equal",
+     "differs": [],
+     "node": "v26.7.0",
+     "browser": "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/605.1.15 (KHTML, like Gecko)",
+     "page": {
+      "presents": 766,
+      "skipped": 0,
+      "draws": 766,
+      "torn": 0,
+      "check": {
+       "width": 794,
+       "height": 550,
+       "pixels": 436700,
+       "mismatchedPixels": 0,
+       "presentsBefore": 1
+      }
+     }
+    }
+   ],
+   "framesAgainstWASI": {
+    "frames": 18088,
+    "mismatched": 0,
+    "result": "identical"
+   }
+  }
+ },
+ "manual": "Served with web_run.mjs --serve 8123 for the user's own browser (started on 2026-10-12; the server log shows a session started and a match loaded in 0.72 s)."
+}
