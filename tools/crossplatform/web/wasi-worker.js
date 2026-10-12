@@ -44,11 +44,13 @@ function request(method, url, body, type = 'text') {
   return x;
 }
 // A file or a listing read: up to three tries of 60 s each (a network error,
-// a stalled connection or a server error is tried again; then the game sees
-// the failure).
+// a stalled connection or a server error is tried again after 0.5 then 1 s;
+// then the game sees the failure).
+const pause = new Int32Array(new SharedArrayBuffer(4));
 function read(url, type = 'text') {
   let x = null;
   for (let attempt = 0; attempt < 3; attempt++) {
+    if (attempt) Atomics.wait(pause, 0, 0, 500 * attempt);   // a moment before trying again
     x = new XMLHttpRequest(); x.open('GET', url, false); x.timeout = 60000;   // allowed for a worker's synchronous request
     if (type === 'arraybuffer') x.responseType = 'arraybuffer';
     try { x.send(); } catch { continue; }

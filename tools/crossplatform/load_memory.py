@@ -2,12 +2,13 @@
 """Loading time and memory footprint of the native game (MEMORY_LOADING phase 0;
 a test harness).
 
-Usage: load_memory.py OUT_DIR (--android | --local BINARY [--local BINARY ...])
+Usage: load_memory.py OUT_DIR (--android | --local BINARY [--local BINARY ...]
+                               | --web BUILD_DIR [...] | --wasi BUILD_DIR [...])
                       [--apk PATH ...] [--serial S] [--lib DIR] [--label L]
                       [--scenario vs|demo] [--bodies N] [--runs K]
                       [--profile-loading SECONDS] [--call-graph G] [--frequency HZ] [--offcpu]
                       [--fresh-data] [--ticks A,B] [--sounds] [--warmup]
-                      [--snapshots] [--restore-stayon]
+                      [--snapshots] [--restore-stayon] [--game-arg=ARG ...]
 
 Runs the scenario's app_e2e script as android_speed.py does (virtual clock,
 music, sounds and network off, no frame capture) until the progress event of
@@ -63,6 +64,28 @@ that is not the first one:
 the first run of a phone sequence waited longest for the read-ahead whatever
 its build (MEMORY_LOADING M5d), so every measured run follows another
 build's run.
+
+--web BUILD_DIR runs the browser host (BUILD_DIR's NTSDWeb.wasm through
+web_run.mjs, in NTSD_BROWSER_ENGINE's engine) and --wasi BUILD_DIR the
+headless build under Node's WASI (NTSDHeadless.wasm through wasi_run.mjs)
+with the same arguments (TVOS_WEB W3a): load and frame time from the same
+events (loadSeconds; startedToLoadedSeconds, the game's own clock from the
+"started" to the "loaded" event, which includes the loading packages WASI
+computes inline before the load; completeMsPerTick: the game's busy time per
+tick from the progress events, rendering included there as it runs inline;
+ticksPerSecond from their uptime, mostly the virtual clock's pacing;
+windowCycles, the cycles at A and B, the same on every host when the run is
+deterministic; exitCode, informational: the harness ends the runner), no
+wall-clock startup (the worker buffers its output and flushes it at 64 KiB
+or at exit, so a browser run plays to its script's exit before its events
+arrive), no process memory or CPU readings (the runner's process is not the
+game's; the module's linear memory is in each scenario run's metrics).
+local_run reports startedToLoadedSeconds too. --ticks A and B are multiples
+of 300 (progress events come every 300 bodies). --game-arg=ARG adds ARG to
+the game's command line on the Mac, browser and WASI hosts (not Android),
+e.g. --synchronous-render: the Mac
+renders on its game thread, as WASI does, for a like-for-like
+completeMsPerTick).
 
 --fresh-data (Android) removes the asset-extraction marker before each launch,
 so startupSeconds includes extracting the APK's assets again.
@@ -272,10 +295,10 @@ def footprint(pid):
 def local_run(o, binary, label):
     out = Path(o.out)
     row = {"label": label, "host": "mac", "scenario": o.scenario, "bodies": o.bodies, "binary": str(binary)}
-    window = {}
+    window, started_uptime = {}, None
     with tempfile.TemporaryDirectory(prefix="ntsd-load-") as overlay:
         launched = time.monotonic()
-        p = subprocess.Popen([str(binary), *arguments(o.scenario, overlay)], stdout=subprocess.PIPE, text=True,
+        p = subprocess.Popen([str(binary), *arguments(o.scenario, overlay), *o.game_arg], stdout=subprocess.PIPE, text=True,
                              env={**os.environ, "TZ": "Etc/GMT-1"})
         def snapshot(tag):
             if o.snapshots:
@@ -287,9 +310,11 @@ def local_run(o, binary, label):
                     continue
                 e = json.loads(line); kind = e.get("event")
                 if kind == "started" and "startupSeconds" not in row:
-                    row["startupSeconds"] = round(time.monotonic() - launched, 3)
+                    row["startupSeconds"] = round(time.monotonic() - launched, 3); started_uptime = e.get("uptime")
                 elif kind == "loaded" and "loadSeconds" not in row:
                     row["loadSeconds"] = round(e["seconds"], 3)
+                    if started_uptime is not None and "uptime" in e:   # the game's clock: "started" to "loaded"
+                        row["startedToLoadedSeconds"] = round(e["uptime"] - started_uptime, 3)
                     if "packagesWaitSeconds" in e: row["packagesWaitSeconds"] = round(e["packagesWaitSeconds"], 3)
                     row["startToLoadedSeconds"] = round(time.monotonic() - launched, 3)
                     row["loadedCounts"] = {k: e[k] for k in ("allocations", "audioRequests", "bitmapRequests", "files")}
@@ -316,10 +341,75 @@ def local_run(o, binary, label):
     return row
 
 
+def script_run(o, kind, build, label):
+    """--web or --wasi: the game in the browser host or under Node's WASI, read as local_run reads it."""
+    build = Path(build).resolve()
+    row = {"label": label, "host": kind, "scenario": o.scenario, "bodies": o.bodies, "binary": str(build)}
+    if kind == "web":
+        row["engine"] = os.environ.get("NTSD_BROWSER_ENGINE", "chromium")
+    found = sorted((Path.home() / ".local/share/fnm/node-versions").glob("v26.*/installation/bin/node"))
+    node = os.environ.get("NTSD_NODE") or (str(found[-1]) if found else "node")
+    music = ROOT / "native/Sources/NTSDMacPlatform/Resources/OriginalMusic"
+    window, started_uptime = {}, None
+    with tempfile.TemporaryDirectory(prefix="ntsd-load-") as out:
+        Path(out, "overlay").mkdir()
+        game = ["--resources", "/app/NTSDNative_NTSDCore.bundle", "--music-dir", "/music", *arguments(o.scenario, "/out/overlay"), *o.game_arg]
+        if kind == "web":
+            command = [node, str(ROOT / "tools/crossplatform/web_run.mjs"), "--ro", f"/app={build}", "--ro", f"/music={music}",
+                       "--map", f"/out={out}", "--argv0", "/app/NTSDWeb.wasm", "--canvas", "--", str(build / "NTSDWeb.wasm"), *game]
+        else:
+            command = [node, "--disable-warning=ExperimentalWarning", str(ROOT / "tools/crossplatform/wasi_run.mjs"), "--map", f"/app={build}",
+                       "--map", f"/music={music}", "--map", f"/out={out}", "--argv0", "/app/NTSDHeadless.wasm", "--",
+                       str(build / "NTSDHeadless.wasm"), *game]
+        p = subprocess.Popen(command, stdout=subprocess.PIPE, text=True, env={**os.environ, "TZ": "Etc/GMT-1"})
+        try:
+            for line in p.stdout:
+                if not line.startswith("{"):
+                    continue
+                e = json.loads(line); kind_ = e.get("event")
+                # Only the game's own clocks: the worker buffers its output, so
+                # an event's arrival time here says nothing (no startupSeconds).
+                # "started" to "loaded" includes what WASI does before the load
+                # (the loading packages, inline there; the Mac overlaps them).
+                if kind_ == "started" and started_uptime is None:
+                    started_uptime = e.get("uptime")
+                elif kind_ == "loaded" and "loadSeconds" not in row:
+                    row["loadSeconds"] = round(e["seconds"], 3)
+                    if started_uptime is not None and "uptime" in e:
+                        row["startedToLoadedSeconds"] = round(e["uptime"] - started_uptime, 3)
+                    if "packagesWaitSeconds" in e: row["packagesWaitSeconds"] = round(e["packagesWaitSeconds"], 3)
+                    row["loadedCounts"] = {k: e[k] for k in ("allocations", "audioRequests", "bitmapRequests", "files") if k in e}
+                elif kind_ == "progress" and e.get("gameplayBodies", 0) >= o.bodies and not o.ticks:
+                    break
+                if kind_ == "progress" and o.ticks:
+                    if e["gameplayBodies"] >= o.ticks[0] and "a" not in window:
+                        window["a"] = e
+                    if e["gameplayBodies"] >= o.ticks[1]:
+                        a = window["a"]; ticks = e["gameplayBodies"] - a["gameplayBodies"]
+                        row["completeMsPerTick"] = round(1000 * (e["busySeconds"] - a["busySeconds"]) / ticks, 4)
+                        row["ticksPerSecond"] = round(ticks / (e["uptime"] - a["uptime"]), 2)   # mostly the virtual clock's pacing
+                        row["windowCycles"] = [a.get("cycles"), e.get("cycles")]   # the same on every host if deterministic
+                        break
+                if kind_ == "boundary":
+                    row["error"] = e.get("error"); break
+        finally:
+            p.terminate()
+            try: p.wait(timeout=30)
+            except subprocess.TimeoutExpired: p.kill(); p.wait()
+            row["exitCode"] = p.returncode
+    if "loadSeconds" not in row and "error" not in row:
+        row["error"] = f"no loaded event (runner exit {p.returncode})"
+    if o.ticks and "completeMsPerTick" not in row and "error" not in row:
+        row["ticksError"] = f"window {o.ticks[0]}-{o.ticks[1]} not reached"
+    return row
+
+
 def main():
     a = argparse.ArgumentParser(description=__doc__, formatter_class=argparse.RawDescriptionHelpFormatter)
     a.add_argument("out")
     a.add_argument("--android", action="store_true"); a.add_argument("--local", action="append", type=Path, default=[])
+    a.add_argument("--web", action="append", type=Path, default=[]); a.add_argument("--wasi", action="append", type=Path, default=[])
+    a.add_argument("--game-arg", action="append", default=[], help="an argument added to the game's command line (--game-arg=--synchronous-render)")
     a.add_argument("--apk", action="append", default=[]); a.add_argument("--serial", default=os.environ.get("ANDROID_SERIAL", "R58R36F7VFD"))
     a.add_argument("--lib", type=Path, default=phone.DEFAULT_LIB); a.add_argument("--label", default=time.strftime("%Y%m%d-%H%M%S"))
     a.add_argument("--scenario", choices=["vs", "demo"], default="vs"); a.add_argument("--bodies", type=int, default=600)
@@ -336,26 +426,39 @@ def main():
     o = a.parse_args()
     if o.ticks and (len(o.ticks) != 2 or not o.bodies <= o.ticks[0] < o.ticks[1]):
         a.error("--ticks A,B needs N <= A < B")
+    if o.ticks and (o.ticks[0] % 300 or o.ticks[1] % 300):
+        a.error("--ticks A,B: progress events come every 300 bodies, so A and B are multiples of 300")
+    if o.local and (o.web or o.wasi):
+        a.error("--local and --web/--wasi measure in separate runs")
     out = Path(o.out); out.mkdir(parents=True, exist_ok=True)
-    builds = [str(b) for b in o.local] if o.local else (o.apk or [None])
+    # Each build is (kind, path): kind "web" or "wasi" (W3a), else None (a Mac binary or an APK).
+    scripted = [("web", str(b)) for b in o.web] + [("wasi", str(b)) for b in o.wasi]
+    builds = [(None, str(b)) for b in o.local] if o.local else scripted if scripted else [(None, b) for b in (o.apk or [None])]
+    def measure(build, label):
+        kind, path = build
+        if kind: return script_run(o, kind, path, label)
+        return local_run(o, path, label) if o.local else android_run(o, path, label)
+    def name_of(build):
+        kind, path = build
+        return f"{kind}-{Path(path).name}" if kind else Path(path).parent.name if o.local else (Path(path).stem if path else "installed")
     rows = []
     try:
         if o.warmup:
             # A build other than the first measured one, so that run, like
             # every other, follows another build's run (and install).
             build = next((b for b in reversed(builds) if b != builds[0]), builds[0])
-            name = Path(build).parent.name if o.local else (Path(build).stem if build else "installed")
-            row = local_run(o, build, f"{o.label}-warmup") if o.local else android_run(o, build, f"{o.label}-warmup")
+            name = name_of(build)
+            row = measure(build, f"{o.label}-warmup")
             row["build"] = name; row["warmup"] = True
             with open(out / "warmup.jsonl", "a") as f:
                 f.write(json.dumps(row) + "\n")
             print(json.dumps(row), flush=True)
         for run in range(1, o.runs + 1):
             for index, build in enumerate(builds):
-                name = Path(build).parent.name if o.local else (Path(build).stem if build else "installed")
+                name = name_of(build)
                 # The run's position in the interleaved sequence keeps labels unique.
                 label = f"{o.label}-{len(rows) + 1:02d}-{name}" if len(builds) > 1 or o.runs > 1 else o.label
-                row = local_run(o, build, label) if o.local else android_run(o, build, label)
+                row = measure(build, label)
                 row["build"] = name; rows.append(row)
                 with open(out / "load_memory.jsonl", "a") as f:
                     f.write(json.dumps(row) + "\n")
@@ -367,7 +470,7 @@ def main():
         for name in dict.fromkeys(r["build"] for r in rows):
             mine = [r for r in rows if r["build"] == name]
             summary = {"build": name, "runs": len(mine)}
-            for key in ("startupSeconds", "loadSeconds", "startToLoadedSeconds", "peakResidentMB", "peakFootprintMB",
+            for key in ("startupSeconds", "loadSeconds", "startToLoadedSeconds", "startedToLoadedSeconds", "peakResidentMB", "peakFootprintMB",
                         "loadedResidentMB", "bodiesResidentMB", "mainMsPerTick", "renderMsPerTick", "processMsPerTick", "completeMsPerTick",
                         "loadedSwapMB", "bodiesSwapMB", "ticksEndResidentMB", "ticksEndSwapMB", "ticksEndFootprintMB", "ticksEndPssMB", "cpuToEndSeconds"):
                 values = [r[key] for r in mine if r.get(key) is not None]

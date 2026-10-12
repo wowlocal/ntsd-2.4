@@ -33,7 +33,8 @@
 </style>
 <script>
   // A folder's page asked for without its slash (/games/ntsd): its relative URLs need it.
-  if (!/\/$|\.html?$/.test(location.pathname)) location.replace(location.pathname + '/' + location.search);
+  const moving = !/\/$|\.html?$/.test(location.pathname);   // nothing else runs before the browser moves
+  if (moving) location.replace(location.pathname + '/' + location.search + location.hash);
   // The run's configuration is config.json beside the page: the runner
   // (web_run.mjs) serves one and takes the page's reports (config.runner); a
   // static folder (web_app.py, W2b-4c) holds one, and then messages go to the
@@ -45,11 +46,12 @@
     box.textContent = text; document.body.append(box);
   }
   const fail = text => {
+    (self.ntsdPage ??= {}).exit = 134;   // for the runner's --url steps
     shout(`The game could not start: ${text}`);
     if (runner) fetch('/stderr', { method: 'POST', body: `web_run: ${text}\n` }).finally(() => fetch('/exit?code=134', { method: 'POST' }));
   };
   const query = new URLSearchParams(location.search);
-  fetch('config.json').then(r => { if (!r.ok) throw new Error(`config.json: ${r.status}`); return r.json(); }).then(config => {
+  if (!moving) fetch('config.json').then(r => { if (!r.ok) throw new Error(`config.json: ${r.status}`); return r.json(); }).then(config => {
     runner = config.runner = config.runner === true;   // the worker reports where the page does
     if (runner) setInterval(() => fetch('/alive', { method: 'POST' }), 5000);
     // URLs relative to the page, made absolute for the worker (its own URL is elsewhere).
@@ -453,7 +455,10 @@
     }
     worker.onmessage = ({ data: m }) => {
       if (m.kind === 'store') { received++; keep(m); return; }
-      if (m.kind === 'exit') { if (m.text) shout(`The game stopped: ${m.text}`); return; }   // without the runner
+      if (m.kind === 'exit') {   // without the runner
+        if (m.text) { (self.ntsdPage ??= {}).exit = m.code; shout(`The game stopped: ${m.text}`); }
+        return;
+      }
       if (m.kind === 'progress') {   // a static folder's files arriving (W2b-4c)
         if (loading && !m.skipped) loading.textContent = `Loading… ${Math.round(m.loaded / 1e6)} / ${Math.round(m.total / 1e6)} MB`;
         self.ntsdPage.prefetch = m.skipped ? 'skipped' : `${m.loaded}/${m.total}`;

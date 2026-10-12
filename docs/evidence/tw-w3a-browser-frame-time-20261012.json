@@ -1,0 +1,1479 @@
+{
+ "phase": "W3a: frame time and memory of the browser host",
+ "change": "load_memory.py --web BUILD_DIR (the browser host through web_run.mjs in NTSD_BROWSER_ENGINE's engine) and --wasi BUILD_DIR (the headless build under Node's WASI through wasi_run.mjs): the Mac run's arguments (the scenario's app_e2e script, virtual clock 123456789 8, music, sounds and network off) and events, reporting the game's own clocks only: loadSeconds, startedToLoadedSeconds ('started' to 'loaded' by the game's uptime, added to the Mac runs too), completeMsPerTick (busy time per tick between the progress events at bodies A and B), ticksPerSecond, windowCycles, exitCode; builds as (kind, path); --ticks multiples of 300. W2b-4c's queued page/worker items: the slash redirect stops the script (hash kept), ntsdPage.exit on a failed start, pauses before read retries. No game, Core, Runtime or Swift change.",
+ "how": "Per scenario and host, 3 runs: vs over bodies 600–1500, the Demo over 300–900 (--bodies 300); Chromium 153 headless shell and Playwright's WebKit with build-wasm-web's NTSDWeb.wasm, Node 26 WASI with build-wasm's NTSDHeadless.wasm, macOS with the frozen unchecked NTSDHeadless of the tw-w2b3 gate; one host at a time on this Mac",
+ "comparison": "completeMsPerTick on the browser and WASI is wall time on the one game thread with the frame's rendering inline (WASI has no render thread). On the Mac by default it is the game thread only, its pixel work running on the render thread alongside, and processMsPerTick is CPU summed over all threads (thread hops and queues included) — neither is like for like. The like-for-like Mac figure is 'macsync': the same binary with --synchronous-render (load_memory.py --game-arg), rendering on its game thread as WASI does. ticksPerSecond is mostly the virtual clock's pacing, not compute",
+ "medians": {
+  "vs": {
+   "chromium": {
+    "completeMsPerTick": 2.2402,
+    "processMsPerTick": null,
+    "loadSeconds": 0.807,
+    "startedToLoadedSeconds": 5.61
+   },
+   "webkit": {
+    "completeMsPerTick": 3.2691,
+    "processMsPerTick": null,
+    "loadSeconds": 0.571,
+    "startedToLoadedSeconds": 5.468
+   },
+   "wasi": {
+    "completeMsPerTick": 3.6683,
+    "processMsPerTick": null,
+    "loadSeconds": 0.897,
+    "startedToLoadedSeconds": 4.282
+   },
+   "mac": {
+    "completeMsPerTick": 1.3332,
+    "processMsPerTick": 3.233,
+    "loadSeconds": 0.315,
+    "startedToLoadedSeconds": 0.631
+   },
+   "macsync": {
+    "completeMsPerTick": 1.9088,
+    "processMsPerTick": 2.711,
+    "loadSeconds": 0.33,
+    "startedToLoadedSeconds": 0.664
+   }
+  },
+  "demo": {
+   "chromium": {
+    "completeMsPerTick": 2.1965,
+    "processMsPerTick": null,
+    "loadSeconds": 0.805,
+    "startedToLoadedSeconds": 5.48
+   },
+   "webkit": {
+    "completeMsPerTick": 3.0306,
+    "processMsPerTick": null,
+    "loadSeconds": 0.58,
+    "startedToLoadedSeconds": 5.265
+   },
+   "wasi": {
+    "completeMsPerTick": 3.4853,
+    "processMsPerTick": null,
+    "loadSeconds": 0.908,
+    "startedToLoadedSeconds": 4.154
+   },
+   "mac": {
+    "completeMsPerTick": 1.5468,
+    "processMsPerTick": 3.267,
+    "loadSeconds": 0.316,
+    "startedToLoadedSeconds": 0.646
+   },
+   "macsync": {
+    "completeMsPerTick": 1.9702,
+    "processMsPerTick": 2.75,
+    "loadSeconds": 0.329,
+    "startedToLoadedSeconds": 0.652
+   }
+  }
+ },
+ "linearMemoryMiB": {
+  "values": {
+   "vs-chromium": 1617,
+   "demo-chromium": 1588,
+   "vs-webkit": 1617,
+   "demo-webkit": 1588
+  },
+  "note": "the module's linear memory at the scenario's exit (it never shrinks, so its peak), from the W2b-4c regression runs' metrics"
+ },
+ "measurements": {
+  "demo-chromium": {
+   "runs": [
+    {
+     "label": "w3a-demo-chromium-01-web-release",
+     "host": "web",
+     "engine": "chromium",
+     "scenario": "demo",
+     "loadSeconds": 0.823,
+     "startedToLoadedSeconds": 5.684,
+     "packagesWaitSeconds": 0.0,
+     "loadedCounts": {
+      "allocations": 16105,
+      "audioRequests": 2072,
+      "bitmapRequests": 12817,
+      "files": 621
+     },
+     "completeMsPerTick": 2.294,
+     "ticksPerSecond": 41.27,
+     "windowCycles": [
+      365,
+      965
+     ]
+    },
+    {
+     "label": "w3a-demo-chromium-02-web-release",
+     "host": "web",
+     "engine": "chromium",
+     "scenario": "demo",
+     "loadSeconds": 0.805,
+     "startedToLoadedSeconds": 5.287,
+     "packagesWaitSeconds": 0.0,
+     "loadedCounts": {
+      "allocations": 16105,
+      "audioRequests": 2072,
+      "bitmapRequests": 12817,
+      "files": 621
+     },
+     "completeMsPerTick": 2.1762,
+     "ticksPerSecond": 41.53,
+     "windowCycles": [
+      365,
+      965
+     ]
+    },
+    {
+     "label": "w3a-demo-chromium-03-web-release",
+     "host": "web",
+     "engine": "chromium",
+     "scenario": "demo",
+     "loadSeconds": 0.791,
+     "startedToLoadedSeconds": 5.48,
+     "packagesWaitSeconds": 0.0,
+     "loadedCounts": {
+      "allocations": 16105,
+      "audioRequests": 2072,
+      "bitmapRequests": 12817,
+      "files": 621
+     },
+     "completeMsPerTick": 2.1965,
+     "ticksPerSecond": 41.43,
+     "windowCycles": [
+      365,
+      965
+     ]
+    }
+   ],
+   "summary": {
+    "build": "web-release",
+    "runs": 3,
+    "loadSeconds": {
+     "median": 0.805,
+     "min": 0.791,
+     "max": 0.823
+    },
+    "startedToLoadedSeconds": {
+     "median": 5.48,
+     "min": 5.287,
+     "max": 5.684
+    },
+    "completeMsPerTick": {
+     "median": 2.1965,
+     "min": 2.1762,
+     "max": 2.294
+    }
+   }
+  },
+  "demo-mac": {
+   "runs": [
+    {
+     "label": "w3a-demo-mac-01-frozen-unchecked-tw-w2b3",
+     "host": "mac",
+     "scenario": "demo",
+     "loadSeconds": 0.322,
+     "startedToLoadedSeconds": 0.638,
+     "packagesWaitSeconds": 0.0,
+     "loadedCounts": {
+      "allocations": 16105,
+      "audioRequests": 2072,
+      "bitmapRequests": 12817,
+      "files": 621
+     },
+     "completeMsPerTick": 1.5685,
+     "processMsPerTick": 3.35,
+     "ticksPerSecond": 41.8,
+     "peakResidentMB": 640
+    },
+    {
+     "label": "w3a-demo-mac-02-frozen-unchecked-tw-w2b3",
+     "host": "mac",
+     "scenario": "demo",
+     "loadSeconds": 0.315,
+     "startedToLoadedSeconds": 0.646,
+     "packagesWaitSeconds": 0.0,
+     "loadedCounts": {
+      "allocations": 16105,
+      "audioRequests": 2072,
+      "bitmapRequests": 12817,
+      "files": 621
+     },
+     "completeMsPerTick": 1.5468,
+     "processMsPerTick": 3.267,
+     "ticksPerSecond": 42.1,
+     "peakResidentMB": 692
+    },
+    {
+     "label": "w3a-demo-mac-03-frozen-unchecked-tw-w2b3",
+     "host": "mac",
+     "scenario": "demo",
+     "loadSeconds": 0.316,
+     "startedToLoadedSeconds": 0.676,
+     "packagesWaitSeconds": 0.0,
+     "loadedCounts": {
+      "allocations": 16105,
+      "audioRequests": 2072,
+      "bitmapRequests": 12817,
+      "files": 621
+     },
+     "completeMsPerTick": 1.5286,
+     "processMsPerTick": 3.233,
+     "ticksPerSecond": 42.29,
+     "peakResidentMB": 672
+    }
+   ],
+   "summary": {
+    "build": "frozen-unchecked-tw-w2b3",
+    "runs": 3,
+    "startupSeconds": {
+     "median": 0.056,
+     "min": 0.054,
+     "max": 0.062
+    },
+    "loadSeconds": {
+     "median": 0.316,
+     "min": 0.315,
+     "max": 0.322
+    },
+    "startToLoadedSeconds": {
+     "median": 0.7,
+     "min": 0.7,
+     "max": 0.732
+    },
+    "startedToLoadedSeconds": {
+     "median": 0.646,
+     "min": 0.638,
+     "max": 0.676
+    },
+    "peakResidentMB": {
+     "median": 672,
+     "min": 640,
+     "max": 692
+    },
+    "loadedResidentMB": {
+     "median": 580,
+     "min": 560,
+     "max": 605
+    },
+    "bodiesResidentMB": {
+     "median": 609,
+     "min": 594,
+     "max": 633
+    },
+    "processMsPerTick": {
+     "median": 3.267,
+     "min": 3.233,
+     "max": 3.35
+    },
+    "completeMsPerTick": {
+     "median": 1.5468,
+     "min": 1.5286,
+     "max": 1.5685
+    }
+   }
+  },
+  "demo-macsync": {
+   "runs": [
+    {
+     "label": "w3a-demo-macsync-01-frozen-unchecked-tw-w2b3",
+     "host": "mac",
+     "scenario": "demo",
+     "loadSeconds": 0.337,
+     "startedToLoadedSeconds": 0.652,
+     "packagesWaitSeconds": 0.0,
+     "loadedCounts": {
+      "allocations": 16105,
+      "audioRequests": 2072,
+      "bitmapRequests": 12817,
+      "files": 621
+     },
+     "completeMsPerTick": 1.9632,
+     "processMsPerTick": 2.75,
+     "ticksPerSecond": 41.8,
+     "peakResidentMB": 664
+    },
+    {
+     "label": "w3a-demo-macsync-02-frozen-unchecked-tw-w2b3",
+     "host": "mac",
+     "scenario": "demo",
+     "loadSeconds": 0.327,
+     "startedToLoadedSeconds": 0.652,
+     "packagesWaitSeconds": 0.0,
+     "loadedCounts": {
+      "allocations": 16105,
+      "audioRequests": 2072,
+      "bitmapRequests": 12817,
+      "files": 621
+     },
+     "completeMsPerTick": 1.9702,
+     "processMsPerTick": 2.717,
+     "ticksPerSecond": 41.74,
+     "peakResidentMB": 689
+    },
+    {
+     "label": "w3a-demo-macsync-03-frozen-unchecked-tw-w2b3",
+     "host": "mac",
+     "scenario": "demo",
+     "loadSeconds": 0.329,
+     "startedToLoadedSeconds": 0.673,
+     "packagesWaitSeconds": 0.0,
+     "loadedCounts": {
+      "allocations": 16105,
+      "audioRequests": 2072,
+      "bitmapRequests": 12817,
+      "files": 621
+     },
+     "completeMsPerTick": 1.9897,
+     "processMsPerTick": 2.75,
+     "ticksPerSecond": 41.8,
+     "peakResidentMB": 668
+    }
+   ],
+   "summary": {
+    "build": "frozen-unchecked-tw-w2b3",
+    "runs": 3,
+    "startupSeconds": {
+     "median": 0.048,
+     "min": 0.046,
+     "max": 0.049
+    },
+    "loadSeconds": {
+     "median": 0.329,
+     "min": 0.327,
+     "max": 0.337
+    },
+    "startToLoadedSeconds": {
+     "median": 0.701,
+     "min": 0.697,
+     "max": 0.721
+    },
+    "startedToLoadedSeconds": {
+     "median": 0.652,
+     "min": 0.652,
+     "max": 0.673
+    },
+    "peakResidentMB": {
+     "median": 668,
+     "min": 664,
+     "max": 689
+    },
+    "loadedResidentMB": {
+     "median": 589,
+     "min": 582,
+     "max": 601
+    },
+    "bodiesResidentMB": {
+     "median": 623,
+     "min": 614,
+     "max": 632
+    },
+    "processMsPerTick": {
+     "median": 2.75,
+     "min": 2.717,
+     "max": 2.75
+    },
+    "completeMsPerTick": {
+     "median": 1.9702,
+     "min": 1.9632,
+     "max": 1.9897
+    }
+   }
+  },
+  "demo-wasi": {
+   "runs": [
+    {
+     "label": "w3a-demo-wasi-01-wasi-release",
+     "host": "wasi",
+     "scenario": "demo",
+     "loadSeconds": 0.908,
+     "startedToLoadedSeconds": 4.709,
+     "packagesWaitSeconds": 0.0,
+     "loadedCounts": {
+      "allocations": 16105,
+      "audioRequests": 2072,
+      "bitmapRequests": 12817,
+      "files": 621
+     },
+     "completeMsPerTick": 2.5993,
+     "ticksPerSecond": 47.0,
+     "windowCycles": [
+      365,
+      965
+     ]
+    },
+    {
+     "label": "w3a-demo-wasi-02-wasi-release",
+     "host": "wasi",
+     "scenario": "demo",
+     "loadSeconds": 0.93,
+     "startedToLoadedSeconds": 4.154,
+     "packagesWaitSeconds": 0.0,
+     "loadedCounts": {
+      "allocations": 16105,
+      "audioRequests": 2072,
+      "bitmapRequests": 12817,
+      "files": 621
+     },
+     "completeMsPerTick": 3.4902,
+     "ticksPerSecond": 44.82,
+     "windowCycles": [
+      365,
+      965
+     ]
+    },
+    {
+     "label": "w3a-demo-wasi-03-wasi-release",
+     "host": "wasi",
+     "scenario": "demo",
+     "loadSeconds": 0.905,
+     "startedToLoadedSeconds": 4.111,
+     "packagesWaitSeconds": 0.0,
+     "loadedCounts": {
+      "allocations": 16105,
+      "audioRequests": 2072,
+      "bitmapRequests": 12817,
+      "files": 621
+     },
+     "completeMsPerTick": 3.4853,
+     "ticksPerSecond": 44.9,
+     "windowCycles": [
+      365,
+      965
+     ]
+    }
+   ],
+   "summary": {
+    "build": "wasi-release",
+    "runs": 3,
+    "loadSeconds": {
+     "median": 0.908,
+     "min": 0.905,
+     "max": 0.93
+    },
+    "startedToLoadedSeconds": {
+     "median": 4.154,
+     "min": 4.111,
+     "max": 4.709
+    },
+    "completeMsPerTick": {
+     "median": 3.4853,
+     "min": 2.5993,
+     "max": 3.4902
+    }
+   }
+  },
+  "demo-webkit": {
+   "runs": [
+    {
+     "label": "w3a-demo-webkit-01-web-release",
+     "host": "web",
+     "engine": "webkit",
+     "scenario": "demo",
+     "loadSeconds": 0.561,
+     "startedToLoadedSeconds": 5.467,
+     "packagesWaitSeconds": 0,
+     "loadedCounts": {
+      "allocations": 16105,
+      "audioRequests": 2072,
+      "bitmapRequests": 12817,
+      "files": 621
+     },
+     "completeMsPerTick": 2.9452,
+     "ticksPerSecond": 39.95,
+     "windowCycles": [
+      365,
+      965
+     ]
+    },
+    {
+     "label": "w3a-demo-webkit-02-web-release",
+     "host": "web",
+     "engine": "webkit",
+     "scenario": "demo",
+     "loadSeconds": 0.58,
+     "startedToLoadedSeconds": 5.265,
+     "packagesWaitSeconds": 0.0,
+     "loadedCounts": {
+      "allocations": 16105,
+      "audioRequests": 2072,
+      "bitmapRequests": 12817,
+      "files": 621
+     },
+     "completeMsPerTick": 3.0368,
+     "ticksPerSecond": 39.71,
+     "windowCycles": [
+      365,
+      965
+     ]
+    },
+    {
+     "label": "w3a-demo-webkit-03-web-release",
+     "host": "web",
+     "engine": "webkit",
+     "scenario": "demo",
+     "loadSeconds": 0.586,
+     "startedToLoadedSeconds": 5.206,
+     "packagesWaitSeconds": 0.0,
+     "loadedCounts": {
+      "allocations": 16105,
+      "audioRequests": 2072,
+      "bitmapRequests": 12817,
+      "files": 621
+     },
+     "completeMsPerTick": 3.0306,
+     "ticksPerSecond": 39.81,
+     "windowCycles": [
+      365,
+      965
+     ]
+    }
+   ],
+   "summary": {
+    "build": "web-release",
+    "runs": 3,
+    "loadSeconds": {
+     "median": 0.58,
+     "min": 0.561,
+     "max": 0.586
+    },
+    "startedToLoadedSeconds": {
+     "median": 5.265,
+     "min": 5.206,
+     "max": 5.467
+    },
+    "completeMsPerTick": {
+     "median": 3.0306,
+     "min": 2.9452,
+     "max": 3.0368
+    }
+   }
+  },
+  "vs-chromium": {
+   "runs": [
+    {
+     "label": "w3a-vs-chromium-01-web-release",
+     "host": "web",
+     "engine": "chromium",
+     "scenario": "vs",
+     "loadSeconds": 0.813,
+     "startedToLoadedSeconds": 5.715,
+     "packagesWaitSeconds": 0.0,
+     "loadedCounts": {
+      "allocations": 16105,
+      "audioRequests": 2072,
+      "bitmapRequests": 12817,
+      "files": 621
+     },
+     "completeMsPerTick": 2.1871,
+     "ticksPerSecond": 41.75,
+     "windowCycles": [
+      1064,
+      1964
+     ]
+    },
+    {
+     "label": "w3a-vs-chromium-02-web-release",
+     "host": "web",
+     "engine": "chromium",
+     "scenario": "vs",
+     "loadSeconds": 0.791,
+     "startedToLoadedSeconds": 5.61,
+     "packagesWaitSeconds": 0.0,
+     "loadedCounts": {
+      "allocations": 16105,
+      "audioRequests": 2072,
+      "bitmapRequests": 12817,
+      "files": 621
+     },
+     "completeMsPerTick": 2.2799,
+     "ticksPerSecond": 41.56,
+     "windowCycles": [
+      1064,
+      1964
+     ]
+    },
+    {
+     "label": "w3a-vs-chromium-03-web-release",
+     "host": "web",
+     "engine": "chromium",
+     "scenario": "vs",
+     "loadSeconds": 0.807,
+     "startedToLoadedSeconds": 5.328,
+     "packagesWaitSeconds": 0.0,
+     "loadedCounts": {
+      "allocations": 16105,
+      "audioRequests": 2072,
+      "bitmapRequests": 12817,
+      "files": 621
+     },
+     "completeMsPerTick": 2.2402,
+     "ticksPerSecond": 41.58,
+     "windowCycles": [
+      1064,
+      1964
+     ]
+    }
+   ],
+   "summary": {
+    "build": "web-release",
+    "runs": 3,
+    "loadSeconds": {
+     "median": 0.807,
+     "min": 0.791,
+     "max": 0.813
+    },
+    "startedToLoadedSeconds": {
+     "median": 5.61,
+     "min": 5.328,
+     "max": 5.715
+    },
+    "completeMsPerTick": {
+     "median": 2.2402,
+     "min": 2.1871,
+     "max": 2.2799
+    }
+   }
+  },
+  "vs-mac": {
+   "runs": [
+    {
+     "label": "w3a-vs-mac-01-frozen-unchecked-tw-w2b3",
+     "host": "mac",
+     "scenario": "vs",
+     "loadSeconds": 0.316,
+     "startedToLoadedSeconds": 0.631,
+     "packagesWaitSeconds": 0.0,
+     "loadedCounts": {
+      "allocations": 16105,
+      "audioRequests": 2072,
+      "bitmapRequests": 12817,
+      "files": 621
+     },
+     "completeMsPerTick": 1.3128,
+     "processMsPerTick": 3.233,
+     "ticksPerSecond": 42.61,
+     "peakResidentMB": 633
+    },
+    {
+     "label": "w3a-vs-mac-02-frozen-unchecked-tw-w2b3",
+     "host": "mac",
+     "scenario": "vs",
+     "loadSeconds": 0.315,
+     "startedToLoadedSeconds": 0.631,
+     "packagesWaitSeconds": 0.0,
+     "loadedCounts": {
+      "allocations": 16105,
+      "audioRequests": 2072,
+      "bitmapRequests": 12817,
+      "files": 621
+     },
+     "completeMsPerTick": 1.3332,
+     "processMsPerTick": 3.222,
+     "ticksPerSecond": 42.62,
+     "peakResidentMB": 683
+    },
+    {
+     "label": "w3a-vs-mac-03-frozen-unchecked-tw-w2b3",
+     "host": "mac",
+     "scenario": "vs",
+     "loadSeconds": 0.315,
+     "startedToLoadedSeconds": 0.645,
+     "packagesWaitSeconds": 0.0,
+     "loadedCounts": {
+      "allocations": 16105,
+      "audioRequests": 2072,
+      "bitmapRequests": 12817,
+      "files": 621
+     },
+     "completeMsPerTick": 1.3733,
+     "processMsPerTick": 3.322,
+     "ticksPerSecond": 42.34,
+     "peakResidentMB": 678
+    }
+   ],
+   "summary": {
+    "build": "frozen-unchecked-tw-w2b3",
+    "runs": 3,
+    "startupSeconds": {
+     "median": 0.06,
+     "min": 0.053,
+     "max": 0.061
+    },
+    "loadSeconds": {
+     "median": 0.315,
+     "min": 0.315,
+     "max": 0.316
+    },
+    "startToLoadedSeconds": {
+     "median": 0.691,
+     "min": 0.684,
+     "max": 0.706
+    },
+    "startedToLoadedSeconds": {
+     "median": 0.631,
+     "min": 0.631,
+     "max": 0.645
+    },
+    "peakResidentMB": {
+     "median": 678,
+     "min": 633,
+     "max": 683
+    },
+    "loadedResidentMB": {
+     "median": 580,
+     "min": 555,
+     "max": 592
+    },
+    "bodiesResidentMB": {
+     "median": 627,
+     "min": 606,
+     "max": 634
+    },
+    "processMsPerTick": {
+     "median": 3.233,
+     "min": 3.222,
+     "max": 3.322
+    },
+    "completeMsPerTick": {
+     "median": 1.3332,
+     "min": 1.3128,
+     "max": 1.3733
+    }
+   }
+  },
+  "vs-macsync": {
+   "runs": [
+    {
+     "label": "w3a-vs-macsync-01-frozen-unchecked-tw-w2b3",
+     "host": "mac",
+     "scenario": "vs",
+     "loadSeconds": 0.33,
+     "startedToLoadedSeconds": 0.654,
+     "packagesWaitSeconds": 0.0,
+     "loadedCounts": {
+      "allocations": 16105,
+      "audioRequests": 2072,
+      "bitmapRequests": 12817,
+      "files": 621
+     },
+     "completeMsPerTick": 1.9088,
+     "processMsPerTick": 2.711,
+     "ticksPerSecond": 42.28,
+     "peakResidentMB": 638
+    },
+    {
+     "label": "w3a-vs-macsync-02-frozen-unchecked-tw-w2b3",
+     "host": "mac",
+     "scenario": "vs",
+     "loadSeconds": 0.33,
+     "startedToLoadedSeconds": 0.689,
+     "packagesWaitSeconds": 0.0,
+     "loadedCounts": {
+      "allocations": 16105,
+      "audioRequests": 2072,
+      "bitmapRequests": 12817,
+      "files": 621
+     },
+     "completeMsPerTick": 1.8917,
+     "processMsPerTick": 2.633,
+     "ticksPerSecond": 42.2,
+     "peakResidentMB": 660
+    },
+    {
+     "label": "w3a-vs-macsync-03-frozen-unchecked-tw-w2b3",
+     "host": "mac",
+     "scenario": "vs",
+     "loadSeconds": 0.341,
+     "startedToLoadedSeconds": 0.664,
+     "packagesWaitSeconds": 0.0,
+     "loadedCounts": {
+      "allocations": 16105,
+      "audioRequests": 2072,
+      "bitmapRequests": 12817,
+      "files": 621
+     },
+     "completeMsPerTick": 1.9429,
+     "processMsPerTick": 2.767,
+     "ticksPerSecond": 42.01,
+     "peakResidentMB": 682
+    }
+   ],
+   "summary": {
+    "build": "frozen-unchecked-tw-w2b3",
+    "runs": 3,
+    "startupSeconds": {
+     "median": 0.05,
+     "min": 0.049,
+     "max": 0.061
+    },
+    "loadSeconds": {
+     "median": 0.33,
+     "min": 0.33,
+     "max": 0.341
+    },
+    "startToLoadedSeconds": {
+     "median": 0.714,
+     "min": 0.714,
+     "max": 0.738
+    },
+    "startedToLoadedSeconds": {
+     "median": 0.664,
+     "min": 0.654,
+     "max": 0.689
+    },
+    "peakResidentMB": {
+     "median": 660,
+     "min": 638,
+     "max": 682
+    },
+    "loadedResidentMB": {
+     "median": 589,
+     "min": 574,
+     "max": 638
+    },
+    "bodiesResidentMB": {
+     "median": 620,
+     "min": 580,
+     "max": 635
+    },
+    "processMsPerTick": {
+     "median": 2.711,
+     "min": 2.633,
+     "max": 2.767
+    },
+    "completeMsPerTick": {
+     "median": 1.9088,
+     "min": 1.8917,
+     "max": 1.9429
+    }
+   }
+  },
+  "vs-wasi": {
+   "runs": [
+    {
+     "label": "w3a-vs-wasi-01-wasi-release",
+     "host": "wasi",
+     "scenario": "vs",
+     "loadSeconds": 0.892,
+     "startedToLoadedSeconds": 4.686,
+     "packagesWaitSeconds": 0.0,
+     "loadedCounts": {
+      "allocations": 16105,
+      "audioRequests": 2072,
+      "bitmapRequests": 12817,
+      "files": 621
+     },
+     "completeMsPerTick": 3.6683,
+     "ticksPerSecond": 44.57,
+     "windowCycles": [
+      1064,
+      1964
+     ]
+    },
+    {
+     "label": "w3a-vs-wasi-02-wasi-release",
+     "host": "wasi",
+     "scenario": "vs",
+     "loadSeconds": 1.092,
+     "startedToLoadedSeconds": 4.282,
+     "packagesWaitSeconds": 0.0,
+     "loadedCounts": {
+      "allocations": 16105,
+      "audioRequests": 2072,
+      "bitmapRequests": 12817,
+      "files": 621
+     },
+     "completeMsPerTick": 3.5423,
+     "ticksPerSecond": 44.94,
+     "windowCycles": [
+      1064,
+      1964
+     ]
+    },
+    {
+     "label": "w3a-vs-wasi-03-wasi-release",
+     "host": "wasi",
+     "scenario": "vs",
+     "loadSeconds": 0.897,
+     "startedToLoadedSeconds": 4.105,
+     "packagesWaitSeconds": 0.0,
+     "loadedCounts": {
+      "allocations": 16105,
+      "audioRequests": 2072,
+      "bitmapRequests": 12817,
+      "files": 621
+     },
+     "completeMsPerTick": 3.6977,
+     "ticksPerSecond": 44.48,
+     "windowCycles": [
+      1064,
+      1964
+     ]
+    }
+   ],
+   "summary": {
+    "build": "wasi-release",
+    "runs": 3,
+    "loadSeconds": {
+     "median": 0.897,
+     "min": 0.892,
+     "max": 1.092
+    },
+    "startedToLoadedSeconds": {
+     "median": 4.282,
+     "min": 4.105,
+     "max": 4.686
+    },
+    "completeMsPerTick": {
+     "median": 3.6683,
+     "min": 3.5423,
+     "max": 3.6977
+    }
+   }
+  },
+  "vs-webkit": {
+   "runs": [
+    {
+     "label": "w3a-vs-webkit-01-web-release",
+     "host": "web",
+     "engine": "webkit",
+     "scenario": "vs",
+     "loadSeconds": 0.571,
+     "startedToLoadedSeconds": 5.759,
+     "packagesWaitSeconds": 0,
+     "loadedCounts": {
+      "allocations": 16105,
+      "audioRequests": 2072,
+      "bitmapRequests": 12817,
+      "files": 621
+     },
+     "completeMsPerTick": 3.1542,
+     "ticksPerSecond": 39.84,
+     "windowCycles": [
+      1064,
+      1964
+     ]
+    },
+    {
+     "label": "w3a-vs-webkit-02-web-release",
+     "host": "web",
+     "engine": "webkit",
+     "scenario": "vs",
+     "loadSeconds": 0.562,
+     "startedToLoadedSeconds": 5.427,
+     "packagesWaitSeconds": 0.0,
+     "loadedCounts": {
+      "allocations": 16105,
+      "audioRequests": 2072,
+      "bitmapRequests": 12817,
+      "files": 621
+     },
+     "completeMsPerTick": 3.3549,
+     "ticksPerSecond": 39.44,
+     "windowCycles": [
+      1064,
+      1964
+     ]
+    },
+    {
+     "label": "w3a-vs-webkit-03-web-release",
+     "host": "web",
+     "engine": "webkit",
+     "scenario": "vs",
+     "loadSeconds": 0.573,
+     "startedToLoadedSeconds": 5.468,
+     "packagesWaitSeconds": 0.0,
+     "loadedCounts": {
+      "allocations": 16105,
+      "audioRequests": 2072,
+      "bitmapRequests": 12817,
+      "files": 621
+     },
+     "completeMsPerTick": 3.2691,
+     "ticksPerSecond": 39.58,
+     "windowCycles": [
+      1064,
+      1964
+     ]
+    }
+   ],
+   "summary": {
+    "build": "web-release",
+    "runs": 3,
+    "loadSeconds": {
+     "median": 0.571,
+     "min": 0.562,
+     "max": 0.573
+    },
+    "startedToLoadedSeconds": {
+     "median": 5.468,
+     "min": 5.427,
+     "max": 5.759
+    },
+    "completeMsPerTick": {
+     "median": 3.2691,
+     "min": 3.1542,
+     "max": 3.3549
+    }
+   }
+  }
+ },
+ "findings": [
+  "Like for like (one thread, rendering inline): the Mac 1.91 ms per tick (vs) and 1.97 ms (Demo); Chromium 2.24 and 2.20 ms (1.12–1.17× the native build); WebKit 3.27 and 3.03 ms (1.5–1.7×); Node WASI 3.67 and 3.49 ms (1.8–1.9×). The native build is faster; every host is far inside the 60 fps budget (16.67 ms per tick; the game ticks every 33 ms). The Mac's default figures (1.33/1.55 ms on its game thread with rendering on a second thread; 3.2–3.3 ms CPU over all threads) are not comparable with the single-thread hosts",
+  "The windows cover the same cycles on every browser and WASI run (vs 1064→1964, Demo 365→965) and the loaded counts match the Mac's (16,105 allocations, 12,817 bitmap requests, 2,072 audio requests, 621 files): the same work",
+  "Startup: 'started' to 'loaded' takes 5.3–5.7 s in the browser and 4.1–4.7 s under Node WASI against 0.63–0.65 s on the Mac; the load itself (loadSeconds) is 0.57–0.81 s against 0.32 s. The difference lies before the load — where WASI computes the loading packages inline (every packaged file read and digested, ~726 MB, PortableSHA256 in wasm against CommonCrypto on the Mac; the Mac overlaps them with the menu) — not yet attributed between reads and digests (W3c)",
+  "Memory: the module's linear memory reaches 1,617 MiB (vs) and 1,588 MiB (Demo) in both engines; whether a phone browser allows that (iOS Safari) needs a device"
+ ],
+ "web": {
+  "scenarios": {
+   "chromium": {
+    "browser": "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) HeadlessChrome/153.0.8010.12 Safari/537.36",
+    "rows": [
+     {
+      "scenario": "vs",
+      "exit": 0,
+      "seconds": 74.0,
+      "result": "equal",
+      "differs": [],
+      "node": "v26.7.0",
+      "page": {
+       "presents": 2341,
+       "skipped": 0,
+       "draws": 2338,
+       "torn": 0,
+       "check": {
+        "width": 794,
+        "height": 550,
+        "pixels": 436700,
+        "mismatchedPixels": 0,
+        "presentsBefore": 1
+       }
+      }
+     },
+     {
+      "scenario": "mission",
+      "exit": 0,
+      "seconds": 73.5,
+      "result": "equal",
+      "differs": [],
+      "node": "v26.7.0",
+      "page": {
+       "presents": 2170,
+       "skipped": 0,
+       "draws": 2170,
+       "torn": 0,
+       "check": {
+        "width": 794,
+        "height": 550,
+        "pixels": 436700,
+        "mismatchedPixels": 0,
+        "presentsBefore": 1
+       }
+      }
+     },
+     {
+      "scenario": "demo",
+      "exit": 0,
+      "seconds": 54.7,
+      "result": "equal",
+      "differs": [],
+      "node": "v26.7.0",
+      "page": {
+       "presents": 1784,
+       "skipped": 0,
+       "draws": 1784,
+       "torn": 0,
+       "check": {
+        "width": 794,
+        "height": 550,
+        "pixels": 436700,
+        "mismatchedPixels": 0,
+        "presentsBefore": 1
+       }
+      }
+     },
+     {
+      "scenario": "war",
+      "exit": 0,
+      "seconds": 118.9,
+      "result": "equal",
+      "differs": [],
+      "node": "v26.7.0",
+      "page": {
+       "presents": 3611,
+       "skipped": 0,
+       "draws": 3611,
+       "torn": 0,
+       "check": {
+        "width": 794,
+        "height": 550,
+        "pixels": 436700,
+        "mismatchedPixels": 0,
+        "presentsBefore": 1
+       }
+      }
+     },
+     {
+      "scenario": "playback",
+      "exit": 0,
+      "seconds": 80.6,
+      "result": "equal",
+      "differs": [],
+      "node": "v26.7.0",
+      "page": {
+       "presents": 2368,
+       "skipped": 0,
+       "draws": 2368,
+       "torn": 0,
+       "check": {
+        "width": 794,
+        "height": 550,
+        "pixels": 436700,
+        "mismatchedPixels": 0,
+        "presentsBefore": 1
+       }
+      }
+     },
+     {
+      "scenario": "tournament",
+      "exit": 0,
+      "seconds": 103.9,
+      "result": "equal",
+      "differs": [],
+      "node": "v26.7.0",
+      "page": {
+       "presents": 3414,
+       "skipped": 0,
+       "draws": 3414,
+       "torn": 0,
+       "check": {
+        "width": 794,
+        "height": 550,
+        "pixels": 436700,
+        "mismatchedPixels": 0,
+        "presentsBefore": 1
+       }
+      }
+     },
+     {
+      "scenario": "altenter",
+      "exit": 0,
+      "seconds": 75.7,
+      "result": "equal",
+      "differs": [],
+      "node": "v26.7.0",
+      "page": {
+       "presents": 2390,
+       "skipped": 0,
+       "draws": 2389,
+       "torn": 0,
+       "check": {
+        "width": 794,
+        "height": 550,
+        "pixels": 436700,
+        "mismatchedPixels": 0,
+        "presentsBefore": 1
+       }
+      }
+     },
+     {
+      "scenario": "tournament-win",
+      "exit": 0,
+      "seconds": 111.0,
+      "result": "equal",
+      "differs": [],
+      "node": "v26.7.0",
+      "page": {
+       "presents": 3655,
+       "skipped": 0,
+       "draws": 3655,
+       "torn": 0,
+       "check": {
+        "width": 794,
+        "height": 550,
+        "pixels": 436700,
+        "mismatchedPixels": 0,
+        "presentsBefore": 1
+       }
+      }
+     },
+     {
+      "scenario": "team-tournament",
+      "exit": 0,
+      "seconds": 86.2,
+      "result": "equal",
+      "differs": [],
+      "node": "v26.7.0",
+      "page": {
+       "presents": 2686,
+       "skipped": 0,
+       "draws": 2686,
+       "torn": 0,
+       "check": {
+        "width": 794,
+        "height": 550,
+        "pixels": 436700,
+        "mismatchedPixels": 0,
+        "presentsBefore": 1
+       }
+      }
+     },
+     {
+      "scenario": "joystick",
+      "exit": 0,
+      "seconds": 27.1,
+      "result": "equal",
+      "differs": [],
+      "node": "v26.7.0",
+      "page": {
+       "presents": 766,
+       "skipped": 0,
+       "draws": 766,
+       "torn": 0,
+       "check": {
+        "width": 794,
+        "height": 550,
+        "pixels": 436700,
+        "mismatchedPixels": 0,
+        "presentsBefore": 1
+       }
+      }
+     }
+    ],
+    "frames": {
+     "frames": 18088,
+     "mismatched": 0,
+     "result": "identical"
+    }
+   },
+   "webkit": {
+    "browser": "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/605.1.15 (KHTML, like Gecko)",
+    "rows": [
+     {
+      "scenario": "vs",
+      "exit": 0,
+      "seconds": 75.9,
+      "result": "equal",
+      "differs": [],
+      "node": "v26.7.0",
+      "page": {
+       "presents": 2341,
+       "skipped": 0,
+       "draws": 2340,
+       "torn": 0,
+       "check": {
+        "width": 794,
+        "height": 550,
+        "pixels": 436700,
+        "mismatchedPixels": 0,
+        "presentsBefore": 1
+       }
+      }
+     },
+     {
+      "scenario": "mission",
+      "exit": 0,
+      "seconds": 76.3,
+      "result": "equal",
+      "differs": [],
+      "node": "v26.7.0",
+      "page": {
+       "presents": 2170,
+       "skipped": 0,
+       "draws": 2170,
+       "torn": 0,
+       "check": {
+        "width": 794,
+        "height": 550,
+        "pixels": 436700,
+        "mismatchedPixels": 0,
+        "presentsBefore": 1
+       }
+      }
+     },
+     {
+      "scenario": "demo",
+      "exit": 0,
+      "seconds": 59.2,
+      "result": "equal",
+      "differs": [],
+      "node": "v26.7.0",
+      "page": {
+       "presents": 1784,
+       "skipped": 0,
+       "draws": 1784,
+       "torn": 0,
+       "check": {
+        "width": 794,
+        "height": 550,
+        "pixels": 436700,
+        "mismatchedPixels": 0,
+        "presentsBefore": 1
+       }
+      }
+     },
+     {
+      "scenario": "war",
+      "exit": 0,
+      "seconds": 123.1,
+      "result": "equal",
+      "differs": [],
+      "node": "v26.7.0",
+      "page": {
+       "presents": 3611,
+       "skipped": 0,
+       "draws": 3611,
+       "torn": 0,
+       "check": {
+        "width": 794,
+        "height": 550,
+        "pixels": 436700,
+        "mismatchedPixels": 0,
+        "presentsBefore": 1
+       }
+      }
+     },
+     {
+      "scenario": "playback",
+      "exit": 0,
+      "seconds": 83.9,
+      "result": "equal",
+      "differs": [],
+      "node": "v26.7.0",
+      "page": {
+       "presents": 2368,
+       "skipped": 0,
+       "draws": 2368,
+       "torn": 0,
+       "check": {
+        "width": 794,
+        "height": 550,
+        "pixels": 436700,
+        "mismatchedPixels": 0,
+        "presentsBefore": 1
+       }
+      }
+     },
+     {
+      "scenario": "tournament",
+      "exit": 0,
+      "seconds": 108.8,
+      "result": "equal",
+      "differs": [],
+      "node": "v26.7.0",
+      "page": {
+       "presents": 3414,
+       "skipped": 0,
+       "draws": 3414,
+       "torn": 0,
+       "check": {
+        "width": 794,
+        "height": 550,
+        "pixels": 436700,
+        "mismatchedPixels": 0,
+        "presentsBefore": 1
+       }
+      }
+     },
+     {
+      "scenario": "altenter",
+      "exit": 0,
+      "seconds": 78.6,
+      "result": "equal",
+      "differs": [],
+      "node": "v26.7.0",
+      "page": {
+       "presents": 2390,
+       "skipped": 0,
+       "draws": 2390,
+       "torn": 0,
+       "check": {
+        "width": 794,
+        "height": 550,
+        "pixels": 436700,
+        "mismatchedPixels": 0,
+        "presentsBefore": 1
+       }
+      }
+     },
+     {
+      "scenario": "tournament-win",
+      "exit": 0,
+      "seconds": 114.6,
+      "result": "equal",
+      "differs": [],
+      "node": "v26.7.0",
+      "page": {
+       "presents": 3655,
+       "skipped": 0,
+       "draws": 3655,
+       "torn": 0,
+       "check": {
+        "width": 794,
+        "height": 550,
+        "pixels": 436700,
+        "mismatchedPixels": 0,
+        "presentsBefore": 1
+       }
+      }
+     },
+     {
+      "scenario": "team-tournament",
+      "exit": 0,
+      "seconds": 91.1,
+      "result": "equal",
+      "differs": [],
+      "node": "v26.7.0",
+      "page": {
+       "presents": 2686,
+       "skipped": 0,
+       "draws": 2686,
+       "torn": 0,
+       "check": {
+        "width": 794,
+        "height": 550,
+        "pixels": 436700,
+        "mismatchedPixels": 0,
+        "presentsBefore": 1
+       }
+      }
+     },
+     {
+      "scenario": "joystick",
+      "exit": 0,
+      "seconds": 29.1,
+      "result": "equal",
+      "differs": [],
+      "node": "v26.7.0",
+      "page": {
+       "presents": 766,
+       "skipped": 0,
+       "draws": 766,
+       "torn": 0,
+       "check": {
+        "width": 794,
+        "height": 550,
+        "pixels": 436700,
+        "mismatchedPixels": 0,
+        "presentsBefore": 1
+       }
+      }
+     }
+    ],
+    "frames": {
+     "frames": 18088,
+     "mismatched": 0,
+     "result": "identical"
+    }
+   }
+  },
+  "note": "--web scripted pages after the page/worker fixes, Chromium and WebKit; frames compared with tw-w1b3/wasi (the none group)"
+ },
+ "existingHosts": "No Core, Runtime, Package.swift or Swift change; load_memory.py's Mac path unchanged but for the added startedToLoadedSeconds (a two-build Mac A/B run checked)",
+ "review": "Round 1 (independent, read-only): --web X --wasi X on one folder would have run WASI twice (builds keyed by path); completeMsPerTick is not the same quantity on the Mac (render thread) as on WASI/browser (inline) — compare with the Mac's processMsPerTick; loadSeconds misses what WASI does before the load (record started→loaded); runs play to the script's exit (stdout buffering); failures unflagged; a window inside one progress event divided by zero. Fixed (and the first measurement, whose Demo runs failed on a --bodies/--ticks error of mine, redone). Round 2: OK; docstring completed after the remeasurement (text only); exitCode informational. The page/worker items checked correct.",
+ "boundaries": [
+  "Headless browsers on one Mac; a phone browser is not measured (needs the user's device)",
+  "WebKit is Playwright's build, not Safari",
+  "The startup cost is located, not attributed (W3c)"
+ ]
+}
