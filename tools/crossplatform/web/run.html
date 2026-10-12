@@ -32,12 +32,38 @@
   .notice { position: fixed; inset: 0; display: flex; align-items: center; justify-content: center; color: #fff; font: 18px system-ui; pointer-events: none; }
 </style>
 <script>
-  const fail = text => fetch('/stderr', { method: 'POST', body: `web_run: ${text}\n` })
-    .finally(() => fetch('/exit?code=134', { method: 'POST' }));
-  setInterval(() => fetch('/alive', { method: 'POST' }), 5000);
-  fetch('/config').then(r => r.json()).then(config => {
-    if (!self.crossOriginIsolated) return fail('page is not cross-origin isolated');
-    const worker = new Worker('/web/wasi-worker.js');
+  // A folder's page asked for without its slash (/games/ntsd): its relative URLs need it.
+  if (!/\/$|\.html?$/.test(location.pathname)) location.replace(location.pathname + '/' + location.search);
+  // The run's configuration is config.json beside the page: the runner
+  // (web_run.mjs) serves one and takes the page's reports (config.runner); a
+  // static folder (web_app.py, W2b-4c) holds one, and then messages go to the
+  // console and the page. Scripts load relative to the page.
+  let runner = true;
+  const log = text => { if (runner) fetch('/stderr', { method: 'POST', body: text }); else console.warn(text); };
+  function shout(text) {   // on the page, for a player
+    const box = document.createElement('div'); box.className = 'notice'; box.style.cssText = 'background:#000c;padding:24px;text-align:center';
+    box.textContent = text; document.body.append(box);
+  }
+  const fail = text => {
+    shout(`The game could not start: ${text}`);
+    if (runner) fetch('/stderr', { method: 'POST', body: `web_run: ${text}\n` }).finally(() => fetch('/exit?code=134', { method: 'POST' }));
+  };
+  const query = new URLSearchParams(location.search);
+  fetch('config.json').then(r => { if (!r.ok) throw new Error(`config.json: ${r.status}`); return r.json(); }).then(config => {
+    runner = config.runner = config.runner === true;   // the worker reports where the page does
+    if (runner) setInterval(() => fetch('/alive', { method: 'POST' }), 5000);
+    // URLs relative to the page, made absolute for the worker (its own URL is elsewhere).
+    config.program = new URL(config.program, location.href).href;
+    for (const m of config.mounts) {
+      if (m.url) m.url = new URL(m.url, location.href).href.replace(/\/+$/, '');
+      if (m.manifest) m.manifest = new URL(m.manifest, location.href).href;
+    }
+    // An automated start of a static folder: ?autostart, ?answer=N (every question answered N).
+    if (query.has('autostart')) config.autostart = true;
+    if (query.has('answer')) { config.autostart = true; config.answer = Number(query.get('answer')); }
+    if (!self.crossOriginIsolated)
+      return fail('the page is not cross-origin isolated (the host must send Cross-Origin-Opener-Policy: same-origin and Cross-Origin-Embedder-Policy: require-corp)');
+    const worker = new Worker('wasi-worker.js');
     worker.onerror = e => fail(`worker: ${e.message || e}`);
     if (!config.canvas) return worker.postMessage(config);
     const frames = new SharedArrayBuffer(32 + config.frameBytes), header = new Int32Array(frames, 0, 8);
@@ -86,7 +112,7 @@
       reported = true;
       try {
         draw();
-        const png = await new Promise(ok => canvas.toBlob(ok, 'image/png'));
+        const png = runner ? await new Promise(ok => canvas.toBlob(ok, 'image/png')) : null;
         if (png) await fetch('/canvas', { method: 'POST', body: png });
         if (audio) report.audio = audioStats();
         if (kept.length) {   // every change the worker sent, stored (within the worker's 5 s), then for a report what the browser keeps
@@ -95,7 +121,11 @@
           await Promise.race([storing, sleep(Math.max(0, until - performance.now()))]);
           if (config.report && saving) report.kept = await keptSummary().catch(e => ({ error: String(e) }));
         }
-        await fetch('/page', { method: 'POST', body: JSON.stringify(report) });
+        if (runner) await fetch('/page', { method: 'POST', body: JSON.stringify(report) });
+        const code = self.ntsdPage.exit = Atomics.load(header, 7);   // the program's exit code
+        if (config.interactive && typeof config.answer !== 'number')
+          shout(code === 0 ? 'The game has ended. Reload the page to play again.'
+                           : `The game stopped (exit code ${code}; details in the browser's console). Reload the page to try again.`);
       } finally { Atomics.store(header, 5, 1); Atomics.notify(header, 5); }
     }
     // Input (W2b-2): the page is the only place with DOM events and the Gamepad
@@ -118,7 +148,7 @@
         try { audio = new AudioContext({ sampleRate: 44100 }); } catch { audio = new AudioContext(); }
         let capacity = 1024; while (capacity < audio.sampleRate * 0.35) capacity *= 2;
         soundRing = new SharedArrayBuffer(32 + capacity * 2 * 4); audioHeader = new Int32Array(soundRing, 0, 8);
-        await audio.audioWorklet.addModule('/web/audio.js');
+        await audio.audioWorklet.addModule('audio.js');
         const node = new AudioWorkletNode(audio, 'ntsd-ring', { outputChannelCount: [2], processorOptions: { ring: soundRing } });
         node.connect(audio.destination);
         // Never waited on: a gamepad button, a touch or Esc is no activation,
@@ -139,7 +169,7 @@
           before = now;
         }, 20);
         return audio.sampleRate;
-      } catch (e) { fetch('/stderr', { method: 'POST', body: `web_run: no sound: ${e}\n` }); audio = null; return 0; }
+      } catch (e) { log(`web_run: no sound: ${e}\n`); audio = null; return 0; }
     }
     function push(kind, a, b, c, d) {
       // Counters wrap as Int32 (& 255 indexes them either way). Near full, moves
@@ -402,7 +432,7 @@
         try { await apply(await opened(), m); }
         catch (e) { if (e && e.name === 'QuotaExceededError') throw e; database = null; await apply(await opened(), m); }
       }).catch(e => {
-        fetch('/stderr', { method: 'POST', body: `web_run: storing ${m.op} ${m.path}: ${e}\n` });
+        log(`web_run: storing ${m.op} ${m.path}: ${e}\n`);
         if (!warned) { warned = true; savesState = `Saving failed (${e && e.name || e}): the saves may be incomplete.`; notice(`Saving failed (${e && e.name || e}): the game's saves in this browser may be incomplete`); }
       });
     }
@@ -423,6 +453,12 @@
     }
     worker.onmessage = ({ data: m }) => {
       if (m.kind === 'store') { received++; keep(m); return; }
+      if (m.kind === 'exit') { if (m.text) shout(`The game stopped: ${m.text}`); return; }   // without the runner
+      if (m.kind === 'progress') {   // a static folder's files arriving (W2b-4c)
+        if (loading && !m.skipped) loading.textContent = `Loading… ${Math.round(m.loaded / 1e6)} / ${Math.round(m.total / 1e6)} MB`;
+        self.ntsdPage.prefetch = m.skipped ? 'skipped' : `${m.loaded}/${m.total}`;
+        return;
+      }
       if (m.kind === 'open') {   // a popup not tied to a click is blocked: the player opens it
         const a = document.createElement('a'); a.href = m.url; a.target = '_blank'; a.rel = 'noopener'; a.textContent = `Open ${m.url}`;
         notice(a); return;
@@ -430,7 +466,7 @@
       if (m.kind !== 'ask') return;
       releaseAll(); asking = true;
       if (typeof config.answer === 'number') {
-        fetch('/stderr', { method: 'POST', body: `web_run: asked ${JSON.stringify(m)}, answered ${config.answer}\n` });
+        log(`web_run: asked ${JSON.stringify(m)}, answered ${config.answer}\n`);
         return reply(config.answer);
       }
       const box = document.createElement('div');

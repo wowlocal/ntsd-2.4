@@ -2,7 +2,11 @@
 // harness (docs/research/TVOS_WEB.md W2a), as wasi_run.mjs is Node's.
 //
 // The page posts {program, args, env, mounts}; each mount is a guest folder
-// served by the runner (web_run.mjs) under /m/<index>/. Files load lazily
+// served by the runner (web_run.mjs) under /m/<index>/, or from a static
+// folder (W2b-4c: the mount's url, listed by its manifest, a JSON list of
+// {path, dir, size}, instead of the runner's ?list). Without the runner
+// (config.runner false) stdout and stderr go to the console and the end is
+// a message to the page. Files load lazily
 // with synchronous XHR (allowed in a worker), so the 700 MB app bundle is
 // never copied whole; a folder is listed once (?list). Writes stay in memory
 // and reach the runner when the file closes (PUT); folders made, files
@@ -39,6 +43,19 @@ function request(method, url, body, type = 'text') {
   x.send(body ?? null);
   return x;
 }
+// A file or a listing read: up to three tries of 60 s each (a network error,
+// a stalled connection or a server error is tried again; then the game sees
+// the failure).
+function read(url, type = 'text') {
+  let x = null;
+  for (let attempt = 0; attempt < 3; attempt++) {
+    x = new XMLHttpRequest(); x.open('GET', url, false); x.timeout = 60000;   // allowed for a worker's synchronous request
+    if (type === 'arraybuffer') x.responseType = 'arraybuffer';
+    try { x.send(); } catch { continue; }
+    if (x.status > 0 && x.status < 500) return x;
+  }
+  return x;
+}
 
 let nextInode = 1n;
 class Node {
@@ -51,9 +68,9 @@ class Node {
   url(extra = '') { return `${this.mount.url}/${this.path.split('/').map(encodeURIComponent).join('/')}${extra}`; }
   list() {
     if (this.kind !== 'dir') return null;
-    if (this.mount.persist || this.mount.memory) return this.children ??= new Map();
+    if (this.mount.persist || this.mount.memory || this.mount.listed) return this.children ??= new Map();
     if (this.children === null) {
-      const x = request('GET', this.url('?list'));
+      const x = read(this.url('?list'));
       if (x.status !== 200 && x.status !== 404) throw new Error(`list ${this.path}: ${x.status}`);
       this.children = new Map();
       if (x.status === 200) for (const e of JSON.parse(x.responseText)) {
@@ -66,7 +83,7 @@ class Node {
   bytes() {
     if (this.mount.persist || this.mount.memory) return this.data ??= new Uint8Array(0);
     if (this.data === null) {
-      const x = request('GET', this.url(), null, 'arraybuffer');
+      const x = read(this.url(), 'arraybuffer');
       if (x.status !== 200) throw new Error(`read ${this.path}: ${x.status}`);
       this.data = new Uint8Array(x.response); this.size = this.data.length;
     }
@@ -74,7 +91,7 @@ class Node {
   }
 }
 
-let memory = null, stdout = [], stderr = [], buffered = 0;
+let memory = null, stdout = [], stderr = [], buffered = 0, runner = true;
 const decoder = new TextDecoder(), encoder = new TextEncoder();
 const view = () => new DataView(memory.buffer);
 const bytesAt = (ptr, len) => new Uint8Array(memory.buffer, ptr, len);
@@ -85,23 +102,33 @@ function flush() {
     if (!chunks.length) continue;
     const total = chunks.reduce((n, c) => n + c.length, 0), all = new Uint8Array(total);
     let at = 0; for (const c of chunks) { all.set(c, at); at += c.length; }
+    if (!runner) { (name === 'stdout' ? console.log : console.warn)(decoder.decode(all)); chunks.length = 0; continue; }
     const x = request('POST', `/${name}`, all); chunks.length = 0;
     if (x.status !== 200) throw new Error(`${name} not delivered: ${x.status}`);
   }
   buffered = 0;
 }
 
+// A message for the runner's stderr, or the console without one.
+function say(text) { if (runner) request('POST', '/stderr', text); else console.warn(text); }
 self.onmessage = async ({ data: config }) => {
+  runner = config.runner !== false;
   try { await run(config); }
   catch (e) {
-    try { request('POST', '/stderr', `web_run: worker: ${e && e.stack || e}\n`); } finally { request('POST', '/exit?code=134'); }
+    const text = `web_run: worker: ${e && e.stack || e}\n`;
+    if (!runner) { console.error(text); postMessage({ kind: 'exit', code: 134, text }); return; }
+    try { request('POST', '/stderr', text); } finally { request('POST', '/exit?code=134'); }
   }
 };
 
 async function run(config) {
   const sleeper = new Int32Array(new SharedArrayBuffer(4));
   const given = config.frames && !config.mounts.some(m => m.guest === '/tmp') ? [{ guest: '/tmp', writable: true, memory: true }] : [];
-  const mounts = [...config.mounts, ...given].map((m, i) => ({ ...m, url: `/m/${i}` }));
+  const mounts = [...config.mounts, ...given].map((m, i) => ({ ...m, url: m.url ?? `/m/${i}` }));
+  for (const m of mounts) if (m.manifest) {   // a static folder's listing
+    const r = await fetch(m.manifest); if (!r.ok) throw new Error(`manifest ${m.manifest}: ${r.status}`);
+    m.entries = await r.json(); m.listed = true;
+  }
   // A kept mount's tree as the page loaded it (entries: path, dir, data);
   // folders on the way to an entry exist even without their own record.
   function seed(root, entries) {
@@ -112,7 +139,8 @@ async function run(config) {
         let node = kids.get(parts[i]);
         if (!node) {
           node = new Node(last && !e.dir ? 'file' : 'dir', root.mount, parts.slice(0, i + 1).join('/'));
-          if (node.kind === 'file') { node.data = e.data ?? new Uint8Array(0); node.size = node.data.length; }
+          if (node.kind === 'file' && e.data) { node.data = e.data; node.size = e.data.length; }
+          else if (node.kind === 'file') node.size = e.size ?? 0;   // a listed file: its bytes on first read
           kids.set(parts[i], node);
         }
         dir = node;
@@ -122,7 +150,7 @@ async function run(config) {
   }
   const fds = [
     { kind: 'stdin' }, { kind: 'stdout' }, { kind: 'stderr' },
-    ...mounts.map(m => ({ kind: 'node', node: m.persist ? seed(new Node('dir', m, ''), m.entries ?? []) : new Node('dir', m, ''), pos: 0, preopen: m.guest })),
+    ...mounts.map(m => ({ kind: 'node', node: m.persist || m.listed ? seed(new Node('dir', m, ''), m.entries ?? []) : new Node('dir', m, ''), pos: 0, preopen: m.guest })),
   ];
   const args = config.args.map(a => encoder.encode(a + '\0'));
   const env = Object.entries(config.env).map(([k, v]) => encoder.encode(`${k}=${v}\0`));
@@ -476,10 +504,51 @@ async function run(config) {
     },
   };
 
+  async function prefetch(listed) {
+    const files = listed.flatMap(m => m.entries.filter(e => !e.dir && !e.path.endsWith('.wasm'))
+      .map(e => ({ url: `${m.url}/${e.path.split('/').map(encodeURIComponent).join('/')}`, size: e.size || 0 })));
+    if (!files.length) return;
+    // Only where the browser's cache serves the program's synchronous reads
+    // afterwards (Chromium's does; Playwright's WebKit fetched every file
+    // twice): one file fetched, then read as the program reads, and its
+    // timing entry must show no transfer. Else the program fetches as it reads.
+    const probe = files.shift();
+    try { const r = await fetch(probe.url); if (r.ok) await r.arrayBuffer(); } catch {}
+    if (performance.clearResourceTimings) performance.clearResourceTimings();
+    read(probe.url, 'arraybuffer');
+    const seen = performance.getEntriesByName ? performance.getEntriesByName(probe.url).pop() : null;
+    if (!seen || seen.transferSize !== 0) { postMessage({ kind: 'progress', loaded: 0, total: 0, skipped: true }); return; }
+    const total = files.reduce((n, f) => n + f.size, 0);
+    let loaded = 0, next = 0, told = 0;
+    const tell = () => postMessage({ kind: 'progress', loaded, total });
+    async function lane() {
+      while (next < files.length) {
+        const f = files[next++];
+        for (let attempt = 0; attempt < 3; attempt++) {
+          try { const r = await fetch(f.url); if (r.ok) { await r.arrayBuffer(); break; } } catch {}
+        }
+        loaded += f.size;
+        if (performance.now() - told > 200) { told = performance.now(); tell(); }
+      }
+    }
+    await Promise.all(Array.from({ length: 8 }, lane)); tell();
+  }
   let code = 0;
   const started = performance.now();
   try {
-    const { instance } = await WebAssembly.instantiateStreaming(fetch(config.program), { wasi_snapshot_preview1: wasi, ntsd });
+    const imports = { wasi_snapshot_preview1: wasi, ntsd };
+    // A static folder's files fetched in parallel while the module compiles
+    // (a mount's prefetch: the host caches them, web_app.py), so the program's
+    // one-at-a-time reads come from the browser's cache; progress to the page.
+    const warm = prefetch(mounts.filter(m => m.listed && m.prefetch));   // music tracks load when they play
+    let instance;
+    try { ({ instance } = await WebAssembly.instantiateStreaming(fetch(config.program), imports)); }
+    catch (e) {
+      if (!(e instanceof TypeError)) throw e;   // e.g. a host that does not send application/wasm: compile from the bytes
+      const r = await fetch(config.program); if (!r.ok) throw new Error(`program: ${r.status}`);
+      ({ instance } = await WebAssembly.instantiate(await r.arrayBuffer(), imports));
+    }
+    await warm;
     memory = instance.exports.memory;
     instance.exports._start();
   } catch (e) {
@@ -488,12 +557,13 @@ async function run(config) {
   }
   try { for (const f of fds) if (f && f.kind === 'node' && f.node.kind === 'file') upload(f.node); }
   catch (e) { stderr.push(encoder.encode(`web_run: upload ${e}\n`)); code = code || 134; }
-  try { flush(); } catch (e) { request('POST', '/stderr', `web_run: ${e.message}\n`); code = code || 134; }
+  try { flush(); } catch (e) { say(`web_run: ${e.message}\n`); code = code || 134; }
   if (frames) {   // the page stores what it was sent and reports its canvas, then acknowledges
-    Atomics.store(header, 6, stores); Atomics.store(header, 4, 1); Atomics.notify(header, 4);
+    Atomics.store(header, 6, stores); Atomics.store(header, 7, code); Atomics.store(header, 4, 1); Atomics.notify(header, 4);
     if (Atomics.wait(header, 5, 0, 5000) === 'timed-out')
-      request('POST', '/stderr', 'web_run: the page did not report its canvas within 5 s\n');
+      say('web_run: the page did not report its canvas within 5 s\n');
   }
+  if (!runner) { postMessage({ kind: 'exit', code }); return; }
   request('POST', `/metrics`, JSON.stringify({ memoryBytes: memory ? memory.buffer.byteLength : 0,
                                                seconds: (performance.now() - started) / 1000, userAgent: navigator.userAgent,
                                                ...(frames ? { presented } : {}) }));

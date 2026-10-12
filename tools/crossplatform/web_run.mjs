@@ -9,6 +9,7 @@
 //                         [--answer N] [--steps FILE] [--timeout SECONDS]
 //                         [--serve PORT] [--persist GUEST] [--profile DIR] [--port PORT]
 //                         -- PROGRAM.wasm [ARGS ...]
+//        node web_run.mjs --url URL [--steps FILE | --for SECONDS] [--profile DIR] [--timeout SECONDS]
 //
 // A local node:http server serves web/run.html and web/wasi-worker.js with
 // cross-origin isolation headers, the program, and each mount under
@@ -42,6 +43,11 @@
 // TVOS_WEB W2b-4a); the page's report then lists what it keeps. --profile DIR
 // runs the browser on a profile folder kept after the run (else a temporary
 // one), so a second run sees what the first one stored — on the same --port:
+// --url URL (Chromium) opens a page served elsewhere (a static folder,
+// web_app.py, W2b-4c) instead of this runner's, runs --steps on it and ends
+// after the last step (1 when the page's program ended with a non-zero code),
+// or (any engine) keeps it open --for SECONDS (no program, no reports: the
+// page's and the worker's output is the browser console's, not captured).
 // the browser keeps storage per origin, port included (else a free port); a
 // profile serves one run at a time. For the same reason the page is served on
 // 127.0.0.1 only: localhost is sent there, so a player's saves stay in one
@@ -57,6 +63,8 @@ import process, { argv, env, exit } from 'node:process';
 import { fileURLToPath } from 'node:url';
 
 const here = dirname(fileURLToPath(import.meta.url));
+const external = argv.includes('--url') ? argv[argv.indexOf('--url') + 1] : null;
+if (external) argv.push('--', '');   // no program
 const sepAt = argv.indexOf('--');
 if (sepAt < 0 || sepAt + 1 >= argv.length) {
   console.error('usage: web_run.mjs [--map GUEST=HOST ...] [--ro GUEST=HOST ...] [--env KEY=VALUE ...] [--argv0 PATH] [--metrics FILE] -- PROGRAM.wasm [ARGS ...]');
@@ -65,6 +73,7 @@ if (sepAt < 0 || sepAt + 1 >= argv.length) {
 const options = argv.slice(2, sepAt);
 const [program, ...args] = argv.slice(sepAt + 1);
 const mounts = [], guestEnv = { TZ: env.TZ ?? 'Etc/GMT-1' };
+let holdFor = null;
 let argv0 = program, metricsFile = null, canvas = false, interactive = false, answer = null, steps = null, timeout = 3300, serve = null, kept = null, port = 0;
 for (let i = 0; i < options.length; i += 2) {
   if (options[i] === '--canvas') { canvas = true; i--; continue; }
@@ -75,6 +84,8 @@ for (let i = 0; i < options.length; i += 2) {
   if (options[i] === '--serve') { serve = Number(options[i + 1]); continue; }
   if (options[i] === '--persist' && options[i + 1]?.startsWith('/')) { mounts.push({ guest: options[i + 1], writable: true, persist: true }); continue; }
   if (options[i] === '--profile' && options[i + 1]) { kept = resolve(options[i + 1]); continue; }
+  if (options[i] === '--url') continue;
+  if (options[i] === '--for') { holdFor = Number(options[i + 1]); continue; }
   if (options[i] === '--port') {
     port = Number(options[i + 1]);
     if (!Number.isInteger(port) || port < 0 || port > 65535) { console.error(`web_run.mjs: bad port ${options[i + 1]}`); exit(2); }
@@ -89,6 +100,7 @@ for (let i = 0; i < options.length; i += 2) {
   else if (name === '--metrics' && value) metricsFile = value;
   else { console.error(`web_run.mjs: bad option ${name} ${value}`); exit(2); }
 }
+if (external && steps && holdFor !== null) { console.error('web_run.mjs: --url takes --steps or --for, not both'); exit(2); }
 if (mounts.some(m => m.persist) && !canvas) { console.error('web_run.mjs: --persist needs --canvas (the page keeps it)'); exit(2); }
 
 const headers = { 'Cross-Origin-Opener-Policy': 'same-origin', 'Cross-Origin-Embedder-Policy': 'require-corp',
@@ -143,6 +155,12 @@ const server = createServer(async (req, res) => {
   }
   if (req.headers.host !== `127.0.0.1:${port}`) return send(403);
   try {
+    if (req.method === 'GET' && (url.pathname === '/web/config.json' || url.pathname === '/config')) {   // the page's config.json (before the /web/ files)
+      if (steps && !stepsStarted) { stepsStarted = true; runSteps().catch(e => say(`web_run.mjs: steps: ${e}\n`)); }
+      return send(200, JSON.stringify({ runner: true, program: '/program.wasm', args: [argv0, ...args], env: guestEnv, canvas, frameBytes: 32 << 20,
+                                        interactive, autostart: answer !== null, ...(answer === null ? {} : { answer }), report: metricsFile !== null,
+                                        mounts: mounts.map(m => ({ guest: m.guest, writable: m.writable, ...(m.persist ? { persist: true } : {}) })) }), 'application/json');
+    }
     if (req.method === 'GET' && url.pathname.startsWith('/web/')) {
       const name = url.pathname.slice(5);
       if (!/^[\w.-]+$/.test(name)) return send(404);
@@ -150,12 +168,6 @@ const server = createServer(async (req, res) => {
       return existsSync(file) ? send(200, readFileSync(file), types[name.slice(name.lastIndexOf('.'))] ?? 'application/octet-stream') : send(404);
     }
     if (req.method === 'GET' && url.pathname === '/program.wasm') return send(200, readFileSync(program), types['.wasm']);
-    if (req.method === 'GET' && url.pathname === '/config') {
-      if (steps && !stepsStarted) { stepsStarted = true; runSteps().catch(e => say(`web_run.mjs: steps: ${e}\n`)); }
-      return send(200, JSON.stringify({ program: '/program.wasm', args: [argv0, ...args], env: guestEnv, canvas, frameBytes: 32 << 20,
-                                        interactive, autostart: answer !== null, ...(answer === null ? {} : { answer }), report: metricsFile !== null,
-                                        mounts: mounts.map(m => ({ guest: m.guest, writable: m.writable, ...(m.persist ? { persist: true } : {}) })) }), 'application/json');
-    }
     const m = url.pathname.match(/^\/m\/(\d+)\/?(.*)$/);
     if (m) {
       const mount = mounts[Number(m[1])]; if (!mount || mount.persist) return send(404);   // a kept mount is the page's
@@ -229,7 +241,7 @@ async function runSteps() {
   for (let i = 0; i < 100 && !existsSync(portFile); i++) await new Promise(ok => setTimeout(ok, 100));
   const debugPort = readFileSync(portFile, 'utf8').split('\n')[0];
   const targets = await (await fetch(`http://127.0.0.1:${debugPort}/json/list`)).json();
-  const target = targets.find(t => t.type === 'page' && t.url.includes('/web/run.html'));
+  const target = targets.find(t => t.type === 'page' && (external ? t.url.startsWith(external.split('?')[0]) : t.url.includes('/web/run.html')));
   const socket = new WebSocket(target.webSocketDebuggerUrl);
   await new Promise((ok, no) => { socket.onopen = ok; socket.onerror = no; });
   let next = 1; const pending = new Map();
@@ -277,7 +289,10 @@ async function runSteps() {
     }
     say(`web_run.mjs: step ${JSON.stringify(step)}\n`);
   }
+  // An external page reports nothing: its program's exit code, if it ended (W2b-4c).
+  const ended = external ? await evaluate('self.ntsdPage ? self.ntsdPage.exit : undefined') : undefined;
   socket.close();
+  if (external) finish(typeof ended === 'number' && ended !== 0 ? 1 : 0);
 }
 
 function browserPath() {
@@ -299,7 +314,10 @@ server.listen(serve ?? port, '127.0.0.1', () => {
   const { port } = server.address(), binary = browserPath();
   if (kept) { mkdirSync(kept, { recursive: true }); rmSync(join(kept, 'DevToolsActivePort'), { force: true }); }   // the last run's port is stale
   profile = kept ?? mkdtempSync(join(tmpdir(), 'ntsd-web-'));
-  const page = `http://127.0.0.1:${port}/web/run.html`;
+  const page = external ?? `http://127.0.0.1:${port}/web/run.html`;
+  if (external && steps && engine !== 'chromium') { console.error('web_run.mjs: --url with --steps needs Chromium (the DevTools protocol)'); exit(2); }
+  if (external && holdFor !== null) setTimeout(() => finish(0), holdFor * 1000).unref();
+  if (external && steps && !stepsStarted) { stepsStarted = true; runSteps().catch(e => { say(`web_run.mjs: steps: ${e}\n`); finish(1); }); }
   if (engine === 'webkit') {
     const frameworks = dirname(dirname(dirname(dirname(binary))));
     browser = spawn(binary, ['--headless', `--user-data-dir=${profile}`, page],
@@ -318,7 +336,7 @@ server.listen(serve ?? port, '127.0.0.1', () => {
   // The page reports every 5 s while the worker runs: a crashed renderer, or
   // a page that never loads, goes quiet (120 s leaves room for throttled timers).
   alive = Date.now();
-  setInterval(() => {
+  if (!external) setInterval(() => {
     if (Date.now() - alive > 120_000) { say('web_run.mjs: the page stopped responding\n'); finish(134); }
   }, 5000).unref();
   // By default under run_headless_scenarios.py's 3600 s, so this process cleans up first.

@@ -1,0 +1,682 @@
+{
+ "phase": "W2b-4c: the browser host from a static host",
+ "change": "web_app.py build assembles a folder any static host serves without the runner: index.html (the page), wasi-worker.js, audio.js, config.json, and data-<12 hex of a SHA-256 over every data file>/ with app/NTSDWeb.wasm (the build's, byte for byte), app/NTSDNative_NTSDCore.bundle, music/ and each mount's listing (app.json, music.json: [{path, dir, size}]); _headers (Netlify, Cloudflare Pages) and vercel.json with the isolation headers (COOP same-origin, COEP require-corp, CORP same-origin) and Cache-Control immutable for /data-*; files cloned (cp -c) on APFS. web_app.py serve is a test static server with those headers and a JSON request log; measure reports a session's requests, bytes and compressed sizes. The page reads config.json beside it (the runner serves /web/config.json with runner: true), loads its scripts relative to itself, makes the config's URLs absolute for the worker, and without the runner sends nothing to it: output to the console, a failure, the end or a stop (with the exit code, passed in the frame header) shown to the player, load progress on the notice; a folder path without its slash is redirected. The worker lists a static mount from its manifest and reads files by URL with three tries of 60 s each, falls back to compiling from the bytes when a host does not send application/wasm, and prefetches the /app mount's files 8 at a time while the module compiles — only after a probe shows that the browser's cache serves its synchronous reads (one file fetched, then read; its timing entry must show no transfer). web_run.mjs: config route first; --url URL opens an external page (with --steps in Chromium, ending with 1 when the page's program exited non-zero; or --for SECONDS in any engine).",
+ "build": {
+  "data": "data-93491c703e70",
+  "files": 1538,
+  "bytes": 970885956,
+  "programBytes": 96018179,
+  "config": {
+   "program": "data-93491c703e70/app/NTSDWeb.wasm",
+   "args": [
+    "/app/NTSDWeb.wasm",
+    "--resources",
+    "/app/NTSDNative_NTSDCore.bundle",
+    "--music-dir",
+    "/music"
+   ],
+   "env": {},
+   "canvas": true,
+   "frameBytes": 33554432,
+   "interactive": true,
+   "autostart": false,
+   "mounts": [
+    {
+     "guest": "/app",
+     "writable": false,
+     "url": "data-93491c703e70/app",
+     "manifest": "data-93491c703e70/app.json",
+     "prefetch": true
+    },
+    {
+     "guest": "/music",
+     "writable": false,
+     "url": "data-93491c703e70/music",
+     "manifest": "data-93491c703e70/music.json"
+    },
+    {
+     "guest": "/save",
+     "writable": true,
+     "persist": true
+    }
+   ]
+  }
+ },
+ "staticServing": {
+  "chromium": {
+   "how": "web_app.py serve + web_run.mjs --url http://127.0.0.1:PORT/?answer=0 --steps (load progress, draws, START, capture, Escape → Yes, exit code)",
+   "logs": [
+    "document.querySelector('.notice') && document.querySelector('.notice').textContent = \"Loading… 758 / 758 MB\"",
+    "document.querySelector('.notice') && document.querySelector('.notice').textContent = \"Loading… 758 / 758 MB\"",
+    "ntsdPage.report.draws = 265",
+    "!!document.querySelector('.notice') = false",
+    "[ntsdPage.exit, ntsdPage.prefetch] = [0,\"757705350/757705350\"]"
+   ],
+   "requests": {
+    "requests": 1530,
+    "uniquePaths": 1529,
+    "bytes": 881501217,
+    "byFolder": {
+     "page": 239930,
+     "app": 853724033,
+     "music": 27537254
+    },
+    "not200": []
+   },
+   "result": "crossOriginIsolated; 'Loading… 758 / 758 MB' (the prefetch done); frames drawn; a click on START opened the mode menu; the program exited 0; each file downloaded once (the program's reads came from the browser's cache)"
+  },
+  "webkit": {
+   "how": "NTSD_BROWSER_ENGINE=webkit web_run.mjs --url ... --for 40 (no DevTools protocol: the request log is the observation)",
+   "requests": {
+    "requests": 1530,
+    "uniquePaths": 1529,
+    "bytes": 881501217,
+    "byFolder": {
+     "page": 239930,
+     "app": 853724033,
+     "music": 27537254
+    },
+    "not200": []
+   },
+   "result": "the same 1,529 paths as Chromium, all 200, each once: the probe found no cache hit and skipped the prefetch (without the probe, an earlier run downloaded the app files twice: 3,045 requests, 1,635 MB)"
+  },
+  "firstRunWithoutPrefetch": {
+   "requests": 1530,
+   "uniquePaths": 1529,
+   "bytes": 881497170,
+   "byFolder": {
+    "page": 235883,
+    "app": 853724033,
+    "music": 27537254
+   },
+   "not200": []
+  }
+ },
+ "firstLoad": {
+  "note": "what a first visit downloads (a session reads every app file at startup, as the original loads all its data; the music tracks load when they play). Compressed sizes are what a host compressing on the fly (brotli 5) or pre-compressed files (brotli 11; gzip 6) would send",
+  "measure": {
+   "requests": 1530,
+   "bytesTransferred": 881501217,
+   "files": 1529,
+   "total": {
+    "files": 1529,
+    "bytes": 881500574,
+    "gzip6": 122966135,
+    "brotli5": 113264091,
+    "brotli11": 99187122
+   },
+   "byKind": {
+    ".bmp": {
+     "files": 893,
+     "bytes": 691314496,
+     "gzip6": 28487282,
+     "brotli5": 24244995,
+     "brotli11": 18972506
+    },
+    "program": {
+     "files": 1,
+     "bytes": 96018179,
+     "gzip6": 30206211,
+     "brotli5": 25706301,
+     "brotli11": 20084450
+    },
+    ".dib": {
+     "files": 63,
+     "bytes": 31381948,
+     "gzip6": 8094159,
+     "brotli5": 7632863,
+     "brotli11": 6354229
+    },
+    ".caf": {
+     "files": 1,
+     "bytes": 27533049,
+     "gzip6": 27535755,
+     "brotli5": 27533102,
+     "brotli11": 27533098
+    },
+    ".wav": {
+     "files": 388,
+     "bytes": 14858850,
+     "gzip6": 12818083,
+     "brotli5": 12532769,
+     "brotli11": 10855252
+    },
+    ".wma": {
+     "files": 8,
+     "bytes": 14455318,
+     "gzip6": 13795106,
+     "brotli5": 13797222,
+     "brotli11": 13687299
+    },
+    ".dat": {
+     "files": 155,
+     "bytes": 5228841,
+     "gzip6": 1901373,
+     "brotli5": 1699602,
+     "brotli11": 1599350
+    },
+    ".json": {
+     "files": 11,
+     "bytes": 532816,
+     "gzip6": 100973,
+     "brotli5": 91736,
+     "brotli11": 77805
+    },
+    ".bin": {
+     "files": 1,
+     "bytes": 50088,
+     "gzip6": 2046,
+     "brotli5": 1426,
+     "brotli11": 1312
+    },
+    ".mask": {
+     "files": 1,
+     "bytes": 50088,
+     "gzip6": 84,
+     "brotli5": 13,
+     "brotli11": 13
+    },
+    ".html": {
+     "files": 1,
+     "bytes": 35181,
+     "gzip6": 12291,
+     "brotli5": 11785,
+     "brotli11": 10649
+    },
+    ".js": {
+     "files": 2,
+     "bytes": 34057,
+     "gzip6": 10758,
+     "brotli5": 10385,
+     "brotli11": 9494
+    },
+    ".txt": {
+     "files": 3,
+     "bytes": 7159,
+     "gzip6": 1722,
+     "brotli5": 1638,
+     "brotli11": 1438
+    },
+    ".plist": {
+     "files": 1,
+     "bytes": 504,
+     "gzip6": 292,
+     "brotli5": 254,
+     "brotli11": 227
+    }
+   }
+  }
+ },
+ "savesCheck": {
+  "result": "pass",
+  "engines": {
+   "chromium": {
+    "first": true,
+    "second": true,
+    "fresh": true
+   },
+   "webkit": {
+    "first": true,
+    "second": true,
+    "fresh": true
+   }
+  },
+  "macHeadless": true,
+  "note": "run on the static folder's data-*/app files"
+ },
+ "web": {
+  "target": "the static folder's data-*/app (program and bundle)",
+  "scenarios": {
+   "chromium": {
+    "browser": "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) HeadlessChrome/153.0.8010.12 Safari/537.36",
+    "rows": [
+     {
+      "scenario": "vs",
+      "exit": 0,
+      "seconds": 73.8,
+      "result": "equal",
+      "differs": [],
+      "node": "v26.7.0",
+      "page": {
+       "presents": 2341,
+       "skipped": 0,
+       "draws": 2339,
+       "torn": 0,
+       "check": {
+        "width": 794,
+        "height": 550,
+        "pixels": 436700,
+        "mismatchedPixels": 0,
+        "presentsBefore": 1
+       }
+      }
+     },
+     {
+      "scenario": "mission",
+      "exit": 0,
+      "seconds": 73.1,
+      "result": "equal",
+      "differs": [],
+      "node": "v26.7.0",
+      "page": {
+       "presents": 2170,
+       "skipped": 0,
+       "draws": 2170,
+       "torn": 0,
+       "check": {
+        "width": 794,
+        "height": 550,
+        "pixels": 436700,
+        "mismatchedPixels": 0,
+        "presentsBefore": 1
+       }
+      }
+     },
+     {
+      "scenario": "demo",
+      "exit": 0,
+      "seconds": 54.8,
+      "result": "equal",
+      "differs": [],
+      "node": "v26.7.0",
+      "page": {
+       "presents": 1784,
+       "skipped": 0,
+       "draws": 1784,
+       "torn": 0,
+       "check": {
+        "width": 794,
+        "height": 550,
+        "pixels": 436700,
+        "mismatchedPixels": 0,
+        "presentsBefore": 1
+       }
+      }
+     },
+     {
+      "scenario": "war",
+      "exit": 0,
+      "seconds": 119.4,
+      "result": "equal",
+      "differs": [],
+      "node": "v26.7.0",
+      "page": {
+       "presents": 3611,
+       "skipped": 0,
+       "draws": 3611,
+       "torn": 0,
+       "check": {
+        "width": 794,
+        "height": 550,
+        "pixels": 436700,
+        "mismatchedPixels": 0,
+        "presentsBefore": 1
+       }
+      }
+     },
+     {
+      "scenario": "playback",
+      "exit": 0,
+      "seconds": 83.6,
+      "result": "equal",
+      "differs": [],
+      "node": "v26.7.0",
+      "page": {
+       "presents": 2368,
+       "skipped": 0,
+       "draws": 2368,
+       "torn": 0,
+       "check": {
+        "width": 794,
+        "height": 550,
+        "pixels": 436700,
+        "mismatchedPixels": 0,
+        "presentsBefore": 1
+       }
+      }
+     },
+     {
+      "scenario": "tournament",
+      "exit": 0,
+      "seconds": 106.2,
+      "result": "equal",
+      "differs": [],
+      "node": "v26.7.0",
+      "page": {
+       "presents": 3414,
+       "skipped": 0,
+       "draws": 3414,
+       "torn": 0,
+       "check": {
+        "width": 794,
+        "height": 550,
+        "pixels": 436700,
+        "mismatchedPixels": 0,
+        "presentsBefore": 1
+       }
+      }
+     },
+     {
+      "scenario": "altenter",
+      "exit": 0,
+      "seconds": 77.2,
+      "result": "equal",
+      "differs": [],
+      "node": "v26.7.0",
+      "page": {
+       "presents": 2390,
+       "skipped": 0,
+       "draws": 2387,
+       "torn": 1,
+       "check": {
+        "width": 794,
+        "height": 550,
+        "pixels": 436700,
+        "mismatchedPixels": 0,
+        "presentsBefore": 1
+       }
+      }
+     },
+     {
+      "scenario": "tournament-win",
+      "exit": 0,
+      "seconds": 112.4,
+      "result": "equal",
+      "differs": [],
+      "node": "v26.7.0",
+      "page": {
+       "presents": 3655,
+       "skipped": 0,
+       "draws": 3655,
+       "torn": 0,
+       "check": {
+        "width": 794,
+        "height": 550,
+        "pixels": 436700,
+        "mismatchedPixels": 0,
+        "presentsBefore": 1
+       }
+      }
+     },
+     {
+      "scenario": "team-tournament",
+      "exit": 0,
+      "seconds": 86.3,
+      "result": "equal",
+      "differs": [],
+      "node": "v26.7.0",
+      "page": {
+       "presents": 2686,
+       "skipped": 0,
+       "draws": 2686,
+       "torn": 0,
+       "check": {
+        "width": 794,
+        "height": 550,
+        "pixels": 436700,
+        "mismatchedPixels": 0,
+        "presentsBefore": 1
+       }
+      }
+     },
+     {
+      "scenario": "joystick",
+      "exit": 0,
+      "seconds": 26.9,
+      "result": "equal",
+      "differs": [],
+      "node": "v26.7.0",
+      "page": {
+       "presents": 766,
+       "skipped": 0,
+       "draws": 765,
+       "torn": 0,
+       "check": {
+        "width": 794,
+        "height": 550,
+        "pixels": 436700,
+        "mismatchedPixels": 0,
+        "presentsBefore": 1
+       }
+      }
+     }
+    ],
+    "frames": {
+     "frames": 18088,
+     "mismatched": 0,
+     "result": "identical"
+    }
+   },
+   "webkit": {
+    "browser": "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/605.1.15 (KHTML, like Gecko)",
+    "rows": [
+     {
+      "scenario": "vs",
+      "exit": 0,
+      "seconds": 83.2,
+      "result": "equal",
+      "differs": [],
+      "node": "v26.7.0",
+      "page": {
+       "presents": 2341,
+       "skipped": 0,
+       "draws": 2341,
+       "torn": 0,
+       "check": {
+        "width": 794,
+        "height": 550,
+        "pixels": 436700,
+        "mismatchedPixels": 0,
+        "presentsBefore": 1
+       }
+      }
+     },
+     {
+      "scenario": "mission",
+      "exit": 0,
+      "seconds": 81.3,
+      "result": "equal",
+      "differs": [],
+      "node": "v26.7.0",
+      "page": {
+       "presents": 2170,
+       "skipped": 0,
+       "draws": 2170,
+       "torn": 0,
+       "check": {
+        "width": 794,
+        "height": 550,
+        "pixels": 436700,
+        "mismatchedPixels": 0,
+        "presentsBefore": 1
+       }
+      }
+     },
+     {
+      "scenario": "demo",
+      "exit": 0,
+      "seconds": 60.6,
+      "result": "equal",
+      "differs": [],
+      "node": "v26.7.0",
+      "page": {
+       "presents": 1784,
+       "skipped": 0,
+       "draws": 1782,
+       "torn": 0,
+       "check": {
+        "width": 794,
+        "height": 550,
+        "pixels": 436700,
+        "mismatchedPixels": 0,
+        "presentsBefore": 1
+       }
+      }
+     },
+     {
+      "scenario": "war",
+      "exit": 0,
+      "seconds": 128.0,
+      "result": "equal",
+      "differs": [],
+      "node": "v26.7.0",
+      "page": {
+       "presents": 3611,
+       "skipped": 0,
+       "draws": 3611,
+       "torn": 0,
+       "check": {
+        "width": 794,
+        "height": 550,
+        "pixels": 436700,
+        "mismatchedPixels": 0,
+        "presentsBefore": 1
+       }
+      }
+     },
+     {
+      "scenario": "playback",
+      "exit": 0,
+      "seconds": 87.5,
+      "result": "equal",
+      "differs": [],
+      "node": "v26.7.0",
+      "page": {
+       "presents": 2368,
+       "skipped": 0,
+       "draws": 2367,
+       "torn": 0,
+       "check": {
+        "width": 794,
+        "height": 550,
+        "pixels": 436700,
+        "mismatchedPixels": 0,
+        "presentsBefore": 1
+       }
+      }
+     },
+     {
+      "scenario": "tournament",
+      "exit": 0,
+      "seconds": 113.3,
+      "result": "equal",
+      "differs": [],
+      "node": "v26.7.0",
+      "page": {
+       "presents": 3414,
+       "skipped": 0,
+       "draws": 3414,
+       "torn": 0,
+       "check": {
+        "width": 794,
+        "height": 550,
+        "pixels": 436700,
+        "mismatchedPixels": 0,
+        "presentsBefore": 1
+       }
+      }
+     },
+     {
+      "scenario": "altenter",
+      "exit": 0,
+      "seconds": 81.9,
+      "result": "equal",
+      "differs": [],
+      "node": "v26.7.0",
+      "page": {
+       "presents": 2390,
+       "skipped": 0,
+       "draws": 2389,
+       "torn": 0,
+       "check": {
+        "width": 794,
+        "height": 550,
+        "pixels": 436700,
+        "mismatchedPixels": 0,
+        "presentsBefore": 1
+       }
+      }
+     },
+     {
+      "scenario": "tournament-win",
+      "exit": 0,
+      "seconds": 119.3,
+      "result": "equal",
+      "differs": [],
+      "node": "v26.7.0",
+      "page": {
+       "presents": 3655,
+       "skipped": 0,
+       "draws": 3652,
+       "torn": 1,
+       "check": {
+        "width": 794,
+        "height": 550,
+        "pixels": 436700,
+        "mismatchedPixels": 0,
+        "presentsBefore": 1
+       }
+      }
+     },
+     {
+      "scenario": "team-tournament",
+      "exit": 0,
+      "seconds": 94.0,
+      "result": "equal",
+      "differs": [],
+      "node": "v26.7.0",
+      "page": {
+       "presents": 2686,
+       "skipped": 0,
+       "draws": 2686,
+       "torn": 0,
+       "check": {
+        "width": 794,
+        "height": 550,
+        "pixels": 436700,
+        "mismatchedPixels": 0,
+        "presentsBefore": 1
+       }
+      }
+     },
+     {
+      "scenario": "joystick",
+      "exit": 0,
+      "seconds": 29.8,
+      "result": "equal",
+      "differs": [],
+      "node": "v26.7.0",
+      "page": {
+       "presents": 766,
+       "skipped": 0,
+       "draws": 765,
+       "torn": 0,
+       "check": {
+        "width": 794,
+        "height": 550,
+        "pixels": 436700,
+        "mismatchedPixels": 0,
+        "presentsBefore": 1
+       }
+      }
+     }
+    ],
+    "frames": {
+     "frames": 18088,
+     "mismatched": 0,
+     "result": "identical"
+    }
+   }
+  },
+  "note": "--web scripted pages through the runner (the page's config.json path) in Chromium and WebKit; frames compared with tw-w1b3/wasi (the none group); the page, worker, runner and web_app.py unchanged from before the saves check to after the regression (SHA-256 checked)"
+ },
+ "existingHosts": "No Core, Runtime, Package.swift or Swift change; the program is W2b-3's NTSDWeb.wasm, byte-identical in the static folder",
+ "review": "Round 1 (independent, read-only): critical: the runner's /web/ files route answered config.json with 404 before the new config route (every runner run would have failed); high: the page did not tell the worker it ran without the runner (output and the end posted to the static host; a buffered flush in a question could kill the game); medium: a failure looked like a normal end; a real network would need 1,530 one-at-a-time requests revalidated each visit (~75 s of round trips at 50 ms); reads without retry or timeout; low: subpath without a slash, host limits and MIME, TZ, measure counts, clone fallback, --url gaps. Fixed (TZ and console capture documented). Round 2: OK; low items queued: the slash redirect lets the script run on; no progress while the probe skips the prefetch; the prefetch runs on after a startup failure; a one-file probe cannot see later cache eviction; --url exits 0 when the page never started; the immutable rule matches the site root only; page, config and scripts rely on host revalidation defaults; retries without a pause; --url step timing and a save in flight at the last step.",
+ "boundaries": [
+  "Publishing needs the user; no host was tried",
+  "A first visit downloads ~881 MB (the full data, as the original loads it) — the hosting decision (bandwidth, per-file limits) is the user's",
+  "The guest runs in UTC on a static page (the runner pins Etc/GMT-1; whether WASI Foundation honours TZ for the player's zone is unchecked)",
+  "WebKit (Playwright's build) gets no prefetch; real Safari untried",
+  "Deployment at the site root assumed for the immutable rule"
+ ]
+}
