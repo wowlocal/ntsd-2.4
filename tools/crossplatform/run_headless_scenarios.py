@@ -116,6 +116,8 @@ def main():
             program = "NTSDWeb.wasm" if mode == "--web" else "NTSDHeadless.wasm"
             command = [node(), str(ROOT / "tools/crossplatform/web_run.mjs"), "--ro", f"/app={app}", "--ro", f"/music={MUSIC}",
                        "--map", f"/out={out}", "--argv0", f"/app/{program}", "--metrics", str(base / "browser-metrics.json"),
+                       # NTSD_WEB_PRECOMPRESSED=1: served as a host serves web_app.py --compress forms (TVOS_WEB W3b)
+                       *(["--precompressed"] if os.environ.get("NTSD_WEB_PRECOMPRESSED") == "1" else []),
                        *(["--canvas"] if mode == "--web" else []), "--", str(app / program),
                        "--resources", "/app/NTSDNative_NTSDCore.bundle", "--music-dir", "/music", *args]
         elif mode == "--wasi":

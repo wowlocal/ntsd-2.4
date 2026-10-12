@@ -10,6 +10,7 @@
 //                         [--serve PORT] [--persist GUEST] [--profile DIR] [--port PORT]
 //                         -- PROGRAM.wasm [ARGS ...]
 //        node web_run.mjs --url URL [--steps FILE | --for SECONDS] [--profile DIR] [--timeout SECONDS]
+// (also [--precompressed] with a program)
 //
 // A local node:http server serves web/run.html and web/wasi-worker.js with
 // cross-origin isolation headers, the program, and each mount under
@@ -47,7 +48,11 @@
 // web_app.py, W2b-4c) instead of this runner's, runs --steps on it and ends
 // after the last step (1 when the page's program ended with a non-zero code),
 // or (any engine) keeps it open --for SECONDS (no program, no reports: the
-// page's and the worker's output is the browser console's, not captured).
+// page's and the worker's output is the browser console's; with --steps the
+// worker's console is printed on stderr).
+// --precompressed serves a file's NAME.br or NAME.gz form (web_app.py build
+// --compress) with Content-Encoding when the browser accepts it, as a host
+// would (W3b), so scenarios run from the delivered files.
 // the browser keeps storage per origin, port included (else a free port); a
 // profile serves one run at a time. For the same reason the page is served on
 // 127.0.0.1 only: localhost is sent there, so a player's saves stay in one
@@ -73,7 +78,7 @@ if (sepAt < 0 || sepAt + 1 >= argv.length) {
 const options = argv.slice(2, sepAt);
 const [program, ...args] = argv.slice(sepAt + 1);
 const mounts = [], guestEnv = { TZ: env.TZ ?? 'Etc/GMT-1' };
-let holdFor = null;
+let holdFor = null, precompressed = false;
 let argv0 = program, metricsFile = null, canvas = false, interactive = false, answer = null, steps = null, timeout = 3300, serve = null, kept = null, port = 0;
 for (let i = 0; i < options.length; i += 2) {
   if (options[i] === '--canvas') { canvas = true; i--; continue; }
@@ -86,6 +91,7 @@ for (let i = 0; i < options.length; i += 2) {
   if (options[i] === '--profile' && options[i + 1]) { kept = resolve(options[i + 1]); continue; }
   if (options[i] === '--url') continue;
   if (options[i] === '--for') { holdFor = Number(options[i + 1]); continue; }
+  if (options[i] === '--precompressed') { precompressed = true; i--; continue; }
   if (options[i] === '--port') {
     port = Number(options[i + 1]);
     if (!Number.isInteger(port) || port < 0 || port > 65535) { console.error(`web_run.mjs: bad port ${options[i + 1]}`); exit(2); }
@@ -144,9 +150,20 @@ function hostPath(mount, rel) {
 
 const server = createServer(async (req, res) => {
   const url = new URL(req.url, 'http://local');
-  const send = (status, data = '', type = 'text/plain; charset=utf-8') => {
+  const send = (status, data = '', type = 'text/plain; charset=utf-8', extra = {}) => {
     if (env.NTSD_WEB_DEBUG) say(`web_run.mjs: ${req.method} ${req.url.slice(0, 120)} -> ${status}\n`);
-    res.writeHead(status, { ...headers, 'Content-Type': type }); res.end(data);
+    res.writeHead(status, { ...headers, 'Content-Type': type, ...extra }); res.end(data);
+  };
+  // A file's bytes, or with --precompressed its .br/.gz form the request accepts (q > 0).
+  const file = (path, type) => {
+    if (precompressed) {
+      const accepted = new Set((req.headers['accept-encoding'] ?? '').split(',').map(p => p.trim().split(';'))
+        .filter(([, q]) => !q || Number(q.trim().replace(/^q=/, '')) > 0).map(([c]) => c.trim().toLowerCase()));
+      for (const [suffix, coding] of [['br', 'br'], ['gz', 'gzip']])
+        if (accepted.has(coding) && existsSync(`${path}.${suffix}`))
+          return send(200, readFileSync(`${path}.${suffix}`), type, { 'Content-Encoding': coding, Vary: 'Accept-Encoding' });
+    }
+    return send(200, readFileSync(path), type);
   };
   // Only this machine's page: a rebound host name never reaches the mounts.
   const port = server.address().port;
@@ -167,7 +184,7 @@ const server = createServer(async (req, res) => {
       const file = join(here, 'web', name);
       return existsSync(file) ? send(200, readFileSync(file), types[name.slice(name.lastIndexOf('.'))] ?? 'application/octet-stream') : send(404);
     }
-    if (req.method === 'GET' && url.pathname === '/program.wasm') return send(200, readFileSync(program), types['.wasm']);
+    if (req.method === 'GET' && url.pathname === '/program.wasm') return file(program, types['.wasm']);
     const m = url.pathname.match(/^\/m\/(\d+)\/?(.*)$/);
     if (m) {
       const mount = mounts[Number(m[1])]; if (!mount || mount.persist) return send(404);   // a kept mount is the page's
@@ -178,13 +195,16 @@ const server = createServer(async (req, res) => {
         const st = statSync(path);
         if (url.searchParams.has('list')) {
           if (!st.isDirectory()) return send(404);
-          const entries = readdirSync(path).flatMap(name => {
+          const names = readdirSync(path);
+          // --precompressed: a file's .br/.gz forms are its encodings, not files of the folder.
+          const form = name => precompressed && /\.(br|gz)$/.test(name) && names.includes(name.slice(0, -3));
+          const entries = names.filter(name => !form(name)).flatMap(name => {
             try { const s = statSync(join(path, name)); return [{ n: name, d: s.isDirectory(), s: s.isDirectory() ? 0 : s.size }]; }
             catch { return []; }   // a dangling link: not listed, as stat would fail in the guest too
           });
           return send(200, JSON.stringify(entries), 'application/json');
         }
-        return st.isFile() ? send(200, readFileSync(path), 'application/octet-stream') : send(404);
+        return st.isFile() ? file(path, 'application/octet-stream') : send(404);
       }
       if (!mount.writable) return send(403);
       if (req.method === 'PUT') { mkdirSync(dirname(path), { recursive: true }); writeFileSync(path, await body(req)); return send(200); }
@@ -252,8 +272,14 @@ async function runSteps() {
     if (m.method === 'Page.javascriptDialogOpening') {
       say(`web_run.mjs: the page asked ${JSON.stringify(m.params.message)}, accepted\n`); call('Page.handleJavaScriptDialog', { accept: true });
     }
+    // An external page's output is the console's: the worker's, printed here.
+    if (m.method === 'Target.attachedToTarget' && m.params.targetInfo.type === 'worker')
+      socket.send(JSON.stringify({ id: next++, sessionId: m.params.sessionId, method: 'Runtime.enable' }));
+    if (m.method === 'Runtime.consoleAPICalled' && m.sessionId)
+      say(`web_run.mjs: console ${m.params.args.map(a => a.value ?? a.description ?? '').join(' ').slice(0, 4000)}\n`);
   };
   await call('Page.enable');
+  if (external) await call('Target.setAutoAttach', { autoAttach: true, waitForDebuggerOnStart: false, flatten: true });
   const evaluate = async expression => (await call('Runtime.evaluate', { expression, returnByValue: true })).result?.result?.value;
   const started = Date.now();
   for (const step of steps) {

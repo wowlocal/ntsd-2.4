@@ -101,6 +101,7 @@
       for (let i = 0; i < n; i += 4) { target[i] = source[i + 2]; target[i + 1] = source[i + 1]; target[i + 2] = source[i]; target[i + 3] = 255; }
       context.putImageData(image, 0, 0);
       shown = seq; report.draws++;
+      if (report.draws === 1) report.firstFrameMs = Math.round(performance.now());   // since the page began loading (W3b)
       if (loading) { loading.remove(); loading = null; }
       if (report.check === null && source.some((v, i) => (i & 3) !== 3 && v !== 0)) {
         // Read the page canvas back and compare with the source pixels themselves.

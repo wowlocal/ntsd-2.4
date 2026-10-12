@@ -1,0 +1,606 @@
+{
+ "phase": "W3b: the browser host's data sent compressed",
+ "change": "web_app.py build --compress writes beside each data file NAME.gz (gzip -9, no time stamp) and NAME.br (brotli -11, with the brotli command) where at least 5% smaller; the content-named folder's hash and listings cover the plain files only. serve answers a request for NAME with NAME.br or NAME.gz and Content-Encoding when the request accepts the coding (q values honoured), as nginx gzip_static/brotli_static or an object store with the encoding in the object's metadata would; Vary on every data response; --rate caps the total sending rate (bandwidth only); --plain ignores the forms; the log gains the encoding and seconds. verify checks every form decodes to its plain file. The worker fails a listed file whose decoded size differs from the listing, so a host that strips or doubles an encoding fails loudly. The page records the first frame's time. Host notes in web_app.py: which hosts can serve the forms (nginx; S3/R2 with metadata, behind a CDN rule for the isolation headers), which cannot (Netlify, Cloudflare Pages, GitHub Pages), Vercel compressing image/bmp on the fly (its documentation, untested), WebKit advertising brotli only over HTTPS.",
+ "build": {
+  "data": "data-93491c703e70",
+  "compressed": {
+   "files": 1532,
+   "bytes": 970815405,
+   "gz": {
+    "files": 1404,
+    "wire": 210258993
+   },
+   "br": {
+    "files": 1517,
+    "wire": 188806739
+   }
+  },
+  "seconds": "about 315 s on this Mac (a process pool)"
+ },
+ "verify": {
+  "checked": {
+   "gz": 1404,
+   "br": 1517
+  },
+  "wrong": [],
+  "result": "pass"
+ },
+ "firstVisits": {
+  "how": "tools/crossplatform/web_app.py serve on the rebuilt folder, with --plain (no forms) and without, unthrottled and --rate 100 (Mbit/s, bandwidth only: no round trips, so lower bounds); Chromium through web_run.mjs --url ?answer=0 with steps (first frame, START, Escape, exit), WebKit with --for (its request log); delivered = the last /app/ response's end minus the page request's",
+  "runs": {
+   "packed-100-chromium": {
+    "requests": 1530,
+    "wireMB": 99.5,
+    "appWireMB": 71.9,
+    "encodings": {
+     "br": 1517,
+     "identity": 8
+    },
+    "appDeliveredSeconds": 6.05,
+    "firstFrameSeconds": 12.82,
+    "not200": 0
+   },
+   "packed-100-webkit": {
+    "requests": 1530,
+    "wireMB": 120.9,
+    "appWireMB": 93.3,
+    "encodings": {
+     "gzip": 1404,
+     "identity": 121
+    },
+    "appDeliveredSeconds": 13.44,
+    "firstFrameSeconds": null,
+    "not200": 0
+   },
+   "packed-none-chromium": {
+    "requests": 1530,
+    "wireMB": 99.5,
+    "appWireMB": 71.9,
+    "encodings": {
+     "br": 1517,
+     "identity": 8
+    },
+    "appDeliveredSeconds": 1.46,
+    "firstFrameSeconds": 6.08,
+    "not200": 0
+   },
+   "packed-none-webkit": {
+    "requests": 1530,
+    "wireMB": 120.9,
+    "appWireMB": 93.3,
+    "encodings": {
+     "gzip": 1404,
+     "identity": 121
+    },
+    "appDeliveredSeconds": 5.99,
+    "firstFrameSeconds": null,
+    "not200": 0
+   },
+   "plain-100-chromium": {
+    "requests": 1530,
+    "wireMB": 881.5,
+    "appWireMB": 853.7,
+    "encodings": {
+     "identity": 1525
+    },
+    "appDeliveredSeconds": 68.65,
+    "firstFrameSeconds": 75.46,
+    "not200": 0
+   },
+   "plain-100-webkit": {
+    "requests": 1530,
+    "wireMB": 881.5,
+    "appWireMB": 853.7,
+    "encodings": {
+     "identity": 1525
+    },
+    "appDeliveredSeconds": 78.83,
+    "firstFrameSeconds": null,
+    "not200": 0
+   },
+   "plain-none-chromium": {
+    "requests": 1530,
+    "wireMB": 881.5,
+    "appWireMB": 853.7,
+    "encodings": {
+     "identity": 1525
+    },
+    "appDeliveredSeconds": 1.29,
+    "firstFrameSeconds": 5.54,
+    "not200": 0
+   },
+   "plain-none-webkit": {
+    "requests": 1530,
+    "wireMB": 881.5,
+    "appWireMB": 853.7,
+    "encodings": {
+     "identity": 1525
+    },
+    "appDeliveredSeconds": 6.81,
+    "firstFrameSeconds": null,
+    "not200": 0
+   }
+  },
+  "summary": "At 100 Mbit/s a first visit sends 881.5 MB plain — the data arrives after 68.7 s in Chromium (first frame 75.5 s) and 78.8 s in WebKit — and 99.5 MB precompressed with brotli in Chromium (data after 6.1 s, first frame 12.8 s) or 120.9 MB with gzip in WebKit over plain HTTP (data after 13.4 s). Unthrottled, the first frame comes at 5.5 s plain and 6.1 s precompressed in Chromium (the decoding costs ~0.5 s; the rest is the game's startup, W3c). Every response 200; the game started and quit (exit 0) in every Chromium run; every listed file arrived at its listed size"
+ },
+ "unthrottledFirstFrames": {
+  "ms": {
+   "packed-1": 6163,
+   "packed-2": 6154,
+   "packed-3": 6260,
+   "plain-1": 5500,
+   "plain-2": 5552,
+   "plain-3": 5411
+  },
+  "note": "3 cold first visits each in Chromium, unthrottled: plain 5.41–5.55 s, precompressed 6.15–6.26 s — the browser's decoding of ~100 MB costs ~0.7 s on this Mac, worth it at any real bandwidth"
+ },
+ "brokenHost": {
+  "how": "web_app.py serve --broken-encoding: data files' forms sent without their Content-Encoding (a misconfigured host); Chromium through --url with steps, the worker's console printed (web_run.mjs now attaches to the worker)",
+  "console": [
+   "web_run.mjs: console {\"characterAI\":0,\"error\":\"Error Domain=NSCocoaErrorDomain Code=256 \\\"(null)\\\"UserInfo={NSFilePath=\\/app\\/NTSDNative_NTSDCore.bundle\\/OriginalStartup\\/bitmaps\\/CS2.dib, NSUnderlyingError=Error Domain=NSPOSIXErrorDomain Code=29 \\\"I\\/O error\\\", NSURL=file:\\/\\/\\/app\\/NTSDNative_NTSDCore.bundle\\/OriginalStartup\\/bitmaps\\/CS2.dib}\",\"event\":\"boundary\",\"iterations\":0,\"objectInputs\":0,\"refusedReplays\":[],\"replayFiles\":[],\"request\":\"\"}",
+   "web_run.mjs: console web_run: fd_read: read NTSDNative_NTSDCore.bundle/OriginalStartup/bitmaps/CS2.dib: 2815 bytes, listed 5326 (the host altered it: Content-Encoding?)"
+  ],
+  "steps": [
+   "web_run.mjs: log [self.ntsdPage && self.ntsdPage.exit, [...document.querySelectorAll(\".notice\")].map(n => n.textContent.slice(0, 220))] = [1,[\"Loading… 758 / 758 MB\"]]"
+  ],
+  "result": "the worker's size check stopped the read ('2815 bytes, listed 5326 (the host altered it: Content-Encoding?)'), the game saw an I/O error and stopped at its boundary (exit 1) before any frame: it never ran on altered data"
+ },
+ "web": {
+  "target": "the static folder's data-*/app with its .br/.gz forms, served by the runner with --precompressed (NTSD_WEB_PRECOMPRESSED=1), so the browser decodes every read",
+  "scenarios": {
+   "chromium": {
+    "browser": "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) HeadlessChrome/153.0.8010.12 Safari/537.36",
+    "rows": [
+     {
+      "scenario": "vs",
+      "exit": 0,
+      "seconds": 73.4,
+      "result": "equal",
+      "differs": [],
+      "node": "v26.7.0",
+      "page": {
+       "presents": 2341,
+       "skipped": 0,
+       "draws": 2339,
+       "torn": 0,
+       "check": {
+        "width": 794,
+        "height": 550,
+        "pixels": 436700,
+        "mismatchedPixels": 0,
+        "presentsBefore": 1
+       }
+      }
+     },
+     {
+      "scenario": "mission",
+      "exit": 0,
+      "seconds": 74.1,
+      "result": "equal",
+      "differs": [],
+      "node": "v26.7.0",
+      "page": {
+       "presents": 2170,
+       "skipped": 0,
+       "draws": 2170,
+       "torn": 0,
+       "check": {
+        "width": 794,
+        "height": 550,
+        "pixels": 436700,
+        "mismatchedPixels": 0,
+        "presentsBefore": 1
+       }
+      }
+     },
+     {
+      "scenario": "demo",
+      "exit": 0,
+      "seconds": 55.5,
+      "result": "equal",
+      "differs": [],
+      "node": "v26.7.0",
+      "page": {
+       "presents": 1784,
+       "skipped": 0,
+       "draws": 1784,
+       "torn": 0,
+       "check": {
+        "width": 794,
+        "height": 550,
+        "pixels": 436700,
+        "mismatchedPixels": 0,
+        "presentsBefore": 1
+       }
+      }
+     },
+     {
+      "scenario": "war",
+      "exit": 0,
+      "seconds": 118.9,
+      "result": "equal",
+      "differs": [],
+      "node": "v26.7.0",
+      "page": {
+       "presents": 3611,
+       "skipped": 0,
+       "draws": 3611,
+       "torn": 0,
+       "check": {
+        "width": 794,
+        "height": 550,
+        "pixels": 436700,
+        "mismatchedPixels": 0,
+        "presentsBefore": 1
+       }
+      }
+     },
+     {
+      "scenario": "playback",
+      "exit": 0,
+      "seconds": 80.1,
+      "result": "equal",
+      "differs": [],
+      "node": "v26.7.0",
+      "page": {
+       "presents": 2368,
+       "skipped": 0,
+       "draws": 2368,
+       "torn": 0,
+       "check": {
+        "width": 794,
+        "height": 550,
+        "pixels": 436700,
+        "mismatchedPixels": 0,
+        "presentsBefore": 1
+       }
+      }
+     },
+     {
+      "scenario": "tournament",
+      "exit": 0,
+      "seconds": 104.5,
+      "result": "equal",
+      "differs": [],
+      "node": "v26.7.0",
+      "page": {
+       "presents": 3414,
+       "skipped": 0,
+       "draws": 3414,
+       "torn": 0,
+       "check": {
+        "width": 794,
+        "height": 550,
+        "pixels": 436700,
+        "mismatchedPixels": 0,
+        "presentsBefore": 1
+       }
+      }
+     },
+     {
+      "scenario": "altenter",
+      "exit": 0,
+      "seconds": 76.1,
+      "result": "equal",
+      "differs": [],
+      "node": "v26.7.0",
+      "page": {
+       "presents": 2390,
+       "skipped": 0,
+       "draws": 2390,
+       "torn": 0,
+       "check": {
+        "width": 794,
+        "height": 550,
+        "pixels": 436700,
+        "mismatchedPixels": 0,
+        "presentsBefore": 1
+       }
+      }
+     },
+     {
+      "scenario": "tournament-win",
+      "exit": 0,
+      "seconds": 111.2,
+      "result": "equal",
+      "differs": [],
+      "node": "v26.7.0",
+      "page": {
+       "presents": 3655,
+       "skipped": 0,
+       "draws": 3655,
+       "torn": 0,
+       "check": {
+        "width": 794,
+        "height": 550,
+        "pixels": 436700,
+        "mismatchedPixels": 0,
+        "presentsBefore": 1
+       }
+      }
+     },
+     {
+      "scenario": "team-tournament",
+      "exit": 0,
+      "seconds": 86.4,
+      "result": "equal",
+      "differs": [],
+      "node": "v26.7.0",
+      "page": {
+       "presents": 2686,
+       "skipped": 0,
+       "draws": 2686,
+       "torn": 0,
+       "check": {
+        "width": 794,
+        "height": 550,
+        "pixels": 436700,
+        "mismatchedPixels": 0,
+        "presentsBefore": 1
+       }
+      }
+     },
+     {
+      "scenario": "joystick",
+      "exit": 0,
+      "seconds": 27.5,
+      "result": "equal",
+      "differs": [],
+      "node": "v26.7.0",
+      "page": {
+       "presents": 766,
+       "skipped": 0,
+       "draws": 764,
+       "torn": 2,
+       "check": {
+        "width": 794,
+        "height": 550,
+        "pixels": 436700,
+        "mismatchedPixels": 0,
+        "presentsBefore": 1
+       }
+      }
+     }
+    ],
+    "frames": {
+     "frames": 18088,
+     "mismatched": 0,
+     "result": "identical"
+    }
+   },
+   "webkit": {
+    "browser": "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/605.1.15 (KHTML, like Gecko)",
+    "rows": [
+     {
+      "scenario": "vs",
+      "exit": 0,
+      "seconds": 78.2,
+      "result": "equal",
+      "differs": [],
+      "node": "v26.7.0",
+      "page": {
+       "presents": 2341,
+       "skipped": 0,
+       "draws": 2339,
+       "torn": 1,
+       "check": {
+        "width": 794,
+        "height": 550,
+        "pixels": 436700,
+        "mismatchedPixels": 0,
+        "presentsBefore": 1
+       }
+      }
+     },
+     {
+      "scenario": "mission",
+      "exit": 0,
+      "seconds": 76.5,
+      "result": "equal",
+      "differs": [],
+      "node": "v26.7.0",
+      "page": {
+       "presents": 2170,
+       "skipped": 0,
+       "draws": 2170,
+       "torn": 0,
+       "check": {
+        "width": 794,
+        "height": 550,
+        "pixels": 436700,
+        "mismatchedPixels": 0,
+        "presentsBefore": 1
+       }
+      }
+     },
+     {
+      "scenario": "demo",
+      "exit": 0,
+      "seconds": 57.7,
+      "result": "equal",
+      "differs": [],
+      "node": "v26.7.0",
+      "page": {
+       "presents": 1784,
+       "skipped": 0,
+       "draws": 1782,
+       "torn": 0,
+       "check": {
+        "width": 794,
+        "height": 550,
+        "pixels": 436700,
+        "mismatchedPixels": 0,
+        "presentsBefore": 1
+       }
+      }
+     },
+     {
+      "scenario": "war",
+      "exit": 0,
+      "seconds": 124.1,
+      "result": "equal",
+      "differs": [],
+      "node": "v26.7.0",
+      "page": {
+       "presents": 3611,
+       "skipped": 0,
+       "draws": 3611,
+       "torn": 0,
+       "check": {
+        "width": 794,
+        "height": 550,
+        "pixels": 436700,
+        "mismatchedPixels": 0,
+        "presentsBefore": 1
+       }
+      }
+     },
+     {
+      "scenario": "playback",
+      "exit": 0,
+      "seconds": 83.2,
+      "result": "equal",
+      "differs": [],
+      "node": "v26.7.0",
+      "page": {
+       "presents": 2368,
+       "skipped": 0,
+       "draws": 2368,
+       "torn": 0,
+       "check": {
+        "width": 794,
+        "height": 550,
+        "pixels": 436700,
+        "mismatchedPixels": 0,
+        "presentsBefore": 1
+       }
+      }
+     },
+     {
+      "scenario": "tournament",
+      "exit": 0,
+      "seconds": 108.8,
+      "result": "equal",
+      "differs": [],
+      "node": "v26.7.0",
+      "page": {
+       "presents": 3414,
+       "skipped": 0,
+       "draws": 3414,
+       "torn": 0,
+       "check": {
+        "width": 794,
+        "height": 550,
+        "pixels": 436700,
+        "mismatchedPixels": 0,
+        "presentsBefore": 1
+       }
+      }
+     },
+     {
+      "scenario": "altenter",
+      "exit": 0,
+      "seconds": 79.4,
+      "result": "equal",
+      "differs": [],
+      "node": "v26.7.0",
+      "page": {
+       "presents": 2390,
+       "skipped": 0,
+       "draws": 2388,
+       "torn": 1,
+       "check": {
+        "width": 794,
+        "height": 550,
+        "pixels": 436700,
+        "mismatchedPixels": 0,
+        "presentsBefore": 1
+       }
+      }
+     },
+     {
+      "scenario": "tournament-win",
+      "exit": 0,
+      "seconds": 115.4,
+      "result": "equal",
+      "differs": [],
+      "node": "v26.7.0",
+      "page": {
+       "presents": 3655,
+       "skipped": 0,
+       "draws": 3653,
+       "torn": 0,
+       "check": {
+        "width": 794,
+        "height": 550,
+        "pixels": 436700,
+        "mismatchedPixels": 0,
+        "presentsBefore": 1
+       }
+      }
+     },
+     {
+      "scenario": "team-tournament",
+      "exit": 0,
+      "seconds": 90.9,
+      "result": "equal",
+      "differs": [],
+      "node": "v26.7.0",
+      "page": {
+       "presents": 2686,
+       "skipped": 0,
+       "draws": 2686,
+       "torn": 0,
+       "check": {
+        "width": 794,
+        "height": 550,
+        "pixels": 436700,
+        "mismatchedPixels": 0,
+        "presentsBefore": 1
+       }
+      }
+     },
+     {
+      "scenario": "joystick",
+      "exit": 0,
+      "seconds": 28.6,
+      "result": "equal",
+      "differs": [],
+      "node": "v26.7.0",
+      "page": {
+       "presents": 766,
+       "skipped": 0,
+       "draws": 766,
+       "torn": 0,
+       "check": {
+        "width": 794,
+        "height": 550,
+        "pixels": 436700,
+        "mismatchedPixels": 0,
+        "presentsBefore": 1
+       }
+      }
+     }
+    ],
+    "frames": {
+     "frames": 18088,
+     "mismatched": 0,
+     "result": "identical"
+    }
+   }
+  },
+  "note": "--web scripted pages in Chromium and WebKit; frames compared with tw-w1b3/wasi (the none group). A first run failed every scenario at startup (a boundary): the runner's listings showed the .br/.gz forms as files of the bundle's folders; --precompressed now hides a file's forms (the static page's manifests never listed them). The worker's size check now covers every read-only mount (manifest or runner listing)"
+ },
+ "savesCheck": {
+  "result": "pass",
+  "note": "on the build folder (the runner path; the worker's size check active on its read-only mounts)"
+ },
+ "existingHosts": "No Core, Runtime, Package.swift or Swift change; NTSDWeb.wasm is W2b-3's build",
+ "review": "Round 1 (independent, read-only): high: the plain and precompressed folders ran different page code (the plain one was W2b-4c's build); medium: WebKit's delivery time measured from the server's start and through the music, unlike Chromium's; --rate models bandwidth only; nothing caught a host stripping or doubling an encoding; host claims (Vercel compresses image/bmp; S3/R2 need a CDN for the isolation headers; Cloudflare may re-encode; ngx_brotli third-party; GitHub Pages unsuitable); low: q values, Vary on plain responses, WebKit's brotli only over HTTPS, log and verify gaps. Fixed and the matrix rerun on one folder. Round 2: the fixes correct; the scenario gate still open (the regression then ran the runner's plain path) and the size check never exercised; closed with --precompressed, the scenarios from the delivered files, the broken-host test and 3 unthrottled runs each. Round 3: OK; low items queued (--precompressed limited to read-only mounts; a count of encoded responses in the run; the broken mode's log label).",
+ "boundaries": [
+  "No real host was tried: publishing needs the user",
+  "Times are bandwidth-bound lower bounds (no round trips); WebKit's one-at-a-time reads would each pay one on a real network",
+  "Vercel's on-the-fly compression of image/bmp is from its documentation, untested",
+  "The folder with forms is 1.11 GB (plain 971 MB + forms)"
+ ]
+}

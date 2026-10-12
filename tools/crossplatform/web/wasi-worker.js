@@ -87,7 +87,13 @@ class Node {
     if (this.data === null) {
       const x = read(this.url(), 'arraybuffer');
       if (x.status !== 200) throw new Error(`read ${this.path}: ${x.status}`);
-      this.data = new Uint8Array(x.response); this.size = this.data.length;
+      const data = new Uint8Array(x.response);
+      // A read-only mount's file must arrive at its listed size (a manifest's
+      // or the runner's listing): a host that strips or doubles a
+      // Content-Encoding (W3b's precompressed forms) fails here, loudly.
+      if (!this.mount.writable && data.length !== this.size)
+        throw new Error(`read ${this.path}: ${data.length} bytes, listed ${this.size} (the host altered it: Content-Encoding?)`);
+      this.data = data; this.size = data.length;
     }
     return this.data;
   }
