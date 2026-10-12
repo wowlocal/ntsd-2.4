@@ -1,0 +1,849 @@
+{
+ "phase": "W3e: WASI's loading packages computed at first use",
+ "change": "OriginalConcurrentInputs.Background on WASI (no threads) keeps its computation and runs it at the first get() — where a threaded host waits for what its thread has not finished — instead of at creation; get returns the value or throws its error every time as before. Its one user, the session's loading packages (every packaged file read and SHA-256-digested; created right after 'started', taken at the first loading cycle), so no longer runs before the menu is created on WASI. Code outside #if os(WASI) unchanged (comments updated). web_run.mjs: W3c's queued items (the profiler's sampling interval set, the metrics file kept and the parse failure logged, responses counted after their read).",
+ "startup": {
+  "staticFirstFrameMs": {
+   "after-1": 1854,
+   "after-2": 1819,
+   "after-3": 1814,
+   "before-1": 5533,
+   "before-2": 5386,
+   "before-3": 5354
+  },
+  "note": "the static page (web_app.py serve --plain, Chromium through --url, 3 cold visits each): the first frame at 5.35–5.53 s before (W3c's folder) and 1.81–1.85 s after",
+  "startedToLoaded": {
+   "wasi": {
+    "summary": {
+     "startedToLoadedSeconds": {
+      "median": 4.135,
+      "min": 4.116,
+      "max": 4.737
+     },
+     "loadSeconds": {
+      "median": 3.731,
+      "min": 3.71,
+      "max": 4.33
+     },
+     "completeMsPerTick": {
+      "median": 3.826,
+      "min": 3.7799,
+      "max": 3.8854
+     }
+    },
+    "packagesWaitSeconds": [
+     3.412,
+     2.815,
+     2.807
+    ]
+   },
+   "chromium": {
+    "summary": {
+     "startedToLoadedSeconds": {
+      "median": 4.988,
+      "min": 4.984,
+      "max": 5.203
+     },
+     "loadSeconds": {
+      "median": 4.551,
+      "min": 4.551,
+      "max": 4.761
+     },
+     "completeMsPerTick": {
+      "median": 2.2847,
+      "min": 2.2705,
+      "max": 2.3095
+     }
+    },
+    "packagesWaitSeconds": [
+     3.973,
+     3.773,
+     3.778
+    ]
+   },
+   "webkit": {
+    "summary": {
+     "startedToLoadedSeconds": {
+      "median": 5.532,
+      "min": 5.235,
+      "max": 5.579
+     },
+     "loadSeconds": {
+      "median": 5.108,
+      "min": 4.813,
+      "max": 5.155
+     },
+     "completeMsPerTick": {
+      "median": 3.1736,
+      "min": 3.1317,
+      "max": 3.221
+     }
+    },
+    "packagesWaitSeconds": [
+     4.245,
+     4.551,
+     4.591
+    ]
+   }
+  },
+  "noteLoad": "'started' to 'loaded' stays ~4.1 s (Node WASI), ~5.0 s (Chromium), ~5.5 s (WebKit): the same work, now at the first loading cycle — packagesWaitSeconds 2.8–4.6 s and loadSeconds include it; frame time per tick unchanged"
+ },
+ "scenarios": {
+  "wasi": {
+   "rows": [
+    {
+     "scenario": "vs",
+     "exit": 0,
+     "seconds": 62.6,
+     "result": "equal",
+     "differs": [],
+     "node": "v26.7.0"
+    },
+    {
+     "scenario": "mission",
+     "exit": 0,
+     "seconds": 61.6,
+     "result": "equal",
+     "differs": [],
+     "node": "v26.7.0"
+    },
+    {
+     "scenario": "demo",
+     "exit": 0,
+     "seconds": 45.9,
+     "result": "equal",
+     "differs": [],
+     "node": "v26.7.0"
+    },
+    {
+     "scenario": "war",
+     "exit": 0,
+     "seconds": 100.7,
+     "result": "equal",
+     "differs": [],
+     "node": "v26.7.0"
+    },
+    {
+     "scenario": "playback",
+     "exit": 0,
+     "seconds": 67.3,
+     "result": "equal",
+     "differs": [],
+     "node": "v26.7.0"
+    },
+    {
+     "scenario": "tournament",
+     "exit": 0,
+     "seconds": 88.6,
+     "result": "equal",
+     "differs": [],
+     "node": "v26.7.0"
+    },
+    {
+     "scenario": "altenter",
+     "exit": 0,
+     "seconds": 64.0,
+     "result": "equal",
+     "differs": [],
+     "node": "v26.7.0"
+    },
+    {
+     "scenario": "tournament-win",
+     "exit": 0,
+     "seconds": 93.7,
+     "result": "equal",
+     "differs": [],
+     "node": "v26.7.0"
+    },
+    {
+     "scenario": "team-tournament",
+     "exit": 0,
+     "seconds": 73.1,
+     "result": "equal",
+     "differs": [],
+     "node": "v26.7.0"
+    },
+    {
+     "scenario": "joystick",
+     "exit": 0,
+     "seconds": 22.4,
+     "result": "equal",
+     "differs": [],
+     "node": "v26.7.0"
+    }
+   ],
+   "frames": {
+    "frames": 18088,
+    "mismatched": 0,
+    "result": "identical"
+   }
+  },
+  "chromium": {
+   "rows": [
+    {
+     "scenario": "vs",
+     "exit": 0,
+     "seconds": 74.1,
+     "result": "equal",
+     "differs": [],
+     "node": "v26.7.0",
+     "page": {
+      "presents": 2341,
+      "skipped": 0,
+      "draws": 2339,
+      "torn": 0,
+      "check": {
+       "width": 794,
+       "height": 550,
+       "pixels": 436700,
+       "mismatchedPixels": 0,
+       "presentsBefore": 1
+      }
+     }
+    },
+    {
+     "scenario": "mission",
+     "exit": 0,
+     "seconds": 73.0,
+     "result": "equal",
+     "differs": [],
+     "node": "v26.7.0",
+     "page": {
+      "presents": 2170,
+      "skipped": 0,
+      "draws": 2170,
+      "torn": 0,
+      "check": {
+       "width": 794,
+       "height": 550,
+       "pixels": 436700,
+       "mismatchedPixels": 0,
+       "presentsBefore": 1
+      }
+     }
+    },
+    {
+     "scenario": "demo",
+     "exit": 0,
+     "seconds": 54.5,
+     "result": "equal",
+     "differs": [],
+     "node": "v26.7.0",
+     "page": {
+      "presents": 1784,
+      "skipped": 0,
+      "draws": 1784,
+      "torn": 0,
+      "check": {
+       "width": 794,
+       "height": 550,
+       "pixels": 436700,
+       "mismatchedPixels": 0,
+       "presentsBefore": 1
+      }
+     }
+    },
+    {
+     "scenario": "war",
+     "exit": 0,
+     "seconds": 118.9,
+     "result": "equal",
+     "differs": [],
+     "node": "v26.7.0",
+     "page": {
+      "presents": 3611,
+      "skipped": 0,
+      "draws": 3611,
+      "torn": 0,
+      "check": {
+       "width": 794,
+       "height": 550,
+       "pixels": 436700,
+       "mismatchedPixels": 0,
+       "presentsBefore": 1
+      }
+     }
+    },
+    {
+     "scenario": "playback",
+     "exit": 0,
+     "seconds": 80.5,
+     "result": "equal",
+     "differs": [],
+     "node": "v26.7.0",
+     "page": {
+      "presents": 2368,
+      "skipped": 0,
+      "draws": 2368,
+      "torn": 0,
+      "check": {
+       "width": 794,
+       "height": 550,
+       "pixels": 436700,
+       "mismatchedPixels": 0,
+       "presentsBefore": 1
+      }
+     }
+    },
+    {
+     "scenario": "tournament",
+     "exit": 0,
+     "seconds": 104.0,
+     "result": "equal",
+     "differs": [],
+     "node": "v26.7.0",
+     "page": {
+      "presents": 3414,
+      "skipped": 0,
+      "draws": 3414,
+      "torn": 0,
+      "check": {
+       "width": 794,
+       "height": 550,
+       "pixels": 436700,
+       "mismatchedPixels": 0,
+       "presentsBefore": 1
+      }
+     }
+    },
+    {
+     "scenario": "altenter",
+     "exit": 0,
+     "seconds": 75.3,
+     "result": "equal",
+     "differs": [],
+     "node": "v26.7.0",
+     "page": {
+      "presents": 2390,
+      "skipped": 0,
+      "draws": 2387,
+      "torn": 0,
+      "check": {
+       "width": 794,
+       "height": 550,
+       "pixels": 436700,
+       "mismatchedPixels": 0,
+       "presentsBefore": 1
+      }
+     }
+    },
+    {
+     "scenario": "tournament-win",
+     "exit": 0,
+     "seconds": 110.7,
+     "result": "equal",
+     "differs": [],
+     "node": "v26.7.0",
+     "page": {
+      "presents": 3655,
+      "skipped": 0,
+      "draws": 3655,
+      "torn": 0,
+      "check": {
+       "width": 794,
+       "height": 550,
+       "pixels": 436700,
+       "mismatchedPixels": 0,
+       "presentsBefore": 1
+      }
+     }
+    },
+    {
+     "scenario": "team-tournament",
+     "exit": 0,
+     "seconds": 85.1,
+     "result": "equal",
+     "differs": [],
+     "node": "v26.7.0",
+     "page": {
+      "presents": 2686,
+      "skipped": 0,
+      "draws": 2686,
+      "torn": 0,
+      "check": {
+       "width": 794,
+       "height": 550,
+       "pixels": 436700,
+       "mismatchedPixels": 0,
+       "presentsBefore": 1
+      }
+     }
+    },
+    {
+     "scenario": "joystick",
+     "exit": 0,
+     "seconds": 26.5,
+     "result": "equal",
+     "differs": [],
+     "node": "v26.7.0",
+     "page": {
+      "presents": 766,
+      "skipped": 0,
+      "draws": 766,
+      "torn": 0,
+      "check": {
+       "width": 794,
+       "height": 550,
+       "pixels": 436700,
+       "mismatchedPixels": 0,
+       "presentsBefore": 1
+      }
+     }
+    }
+   ],
+   "frames": {
+    "frames": 18088,
+    "mismatched": 0,
+    "result": "identical"
+   }
+  },
+  "webkit": {
+   "rows": [
+    {
+     "scenario": "vs",
+     "exit": 0,
+     "seconds": 79.4,
+     "result": "equal",
+     "differs": [],
+     "node": "v26.7.0",
+     "page": {
+      "presents": 2341,
+      "skipped": 0,
+      "draws": 2340,
+      "torn": 0,
+      "check": {
+       "width": 794,
+       "height": 550,
+       "pixels": 436700,
+       "mismatchedPixels": 0,
+       "presentsBefore": 1
+      }
+     }
+    },
+    {
+     "scenario": "mission",
+     "exit": 0,
+     "seconds": 80.0,
+     "result": "equal",
+     "differs": [],
+     "node": "v26.7.0",
+     "page": {
+      "presents": 2170,
+      "skipped": 0,
+      "draws": 2170,
+      "torn": 0,
+      "check": {
+       "width": 794,
+       "height": 550,
+       "pixels": 436700,
+       "mismatchedPixels": 0,
+       "presentsBefore": 1
+      }
+     }
+    },
+    {
+     "scenario": "demo",
+     "exit": 0,
+     "seconds": 59.7,
+     "result": "equal",
+     "differs": [],
+     "node": "v26.7.0",
+     "page": {
+      "presents": 1784,
+      "skipped": 0,
+      "draws": 1784,
+      "torn": 0,
+      "check": {
+       "width": 794,
+       "height": 550,
+       "pixels": 436700,
+       "mismatchedPixels": 0,
+       "presentsBefore": 1
+      }
+     }
+    },
+    {
+     "scenario": "war",
+     "exit": 0,
+     "seconds": 126.2,
+     "result": "equal",
+     "differs": [],
+     "node": "v26.7.0",
+     "page": {
+      "presents": 3611,
+      "skipped": 0,
+      "draws": 3611,
+      "torn": 0,
+      "check": {
+       "width": 794,
+       "height": 550,
+       "pixels": 436700,
+       "mismatchedPixels": 0,
+       "presentsBefore": 1
+      }
+     }
+    },
+    {
+     "scenario": "playback",
+     "exit": 0,
+     "seconds": 87.9,
+     "result": "equal",
+     "differs": [],
+     "node": "v26.7.0",
+     "page": {
+      "presents": 2368,
+      "skipped": 0,
+      "draws": 2368,
+      "torn": 0,
+      "check": {
+       "width": 794,
+       "height": 550,
+       "pixels": 436700,
+       "mismatchedPixels": 0,
+       "presentsBefore": 1
+      }
+     }
+    },
+    {
+     "scenario": "tournament",
+     "exit": 0,
+     "seconds": 113.1,
+     "result": "equal",
+     "differs": [],
+     "node": "v26.7.0",
+     "page": {
+      "presents": 3414,
+      "skipped": 0,
+      "draws": 3414,
+      "torn": 0,
+      "check": {
+       "width": 794,
+       "height": 550,
+       "pixels": 436700,
+       "mismatchedPixels": 0,
+       "presentsBefore": 1
+      }
+     }
+    },
+    {
+     "scenario": "altenter",
+     "exit": 0,
+     "seconds": 82.4,
+     "result": "equal",
+     "differs": [],
+     "node": "v26.7.0",
+     "page": {
+      "presents": 2390,
+      "skipped": 0,
+      "draws": 2390,
+      "torn": 0,
+      "check": {
+       "width": 794,
+       "height": 550,
+       "pixels": 436700,
+       "mismatchedPixels": 0,
+       "presentsBefore": 1
+      }
+     }
+    },
+    {
+     "scenario": "tournament-win",
+     "exit": 0,
+     "seconds": 119.8,
+     "result": "equal",
+     "differs": [],
+     "node": "v26.7.0",
+     "page": {
+      "presents": 3655,
+      "skipped": 0,
+      "draws": 3655,
+      "torn": 0,
+      "check": {
+       "width": 794,
+       "height": 550,
+       "pixels": 436700,
+       "mismatchedPixels": 0,
+       "presentsBefore": 1
+      }
+     }
+    },
+    {
+     "scenario": "team-tournament",
+     "exit": 0,
+     "seconds": 94.6,
+     "result": "equal",
+     "differs": [],
+     "node": "v26.7.0",
+     "page": {
+      "presents": 2686,
+      "skipped": 0,
+      "draws": 2685,
+      "torn": 0,
+      "check": {
+       "width": 794,
+       "height": 550,
+       "pixels": 436700,
+       "mismatchedPixels": 0,
+       "presentsBefore": 1
+      }
+     }
+    },
+    {
+     "scenario": "joystick",
+     "exit": 0,
+     "seconds": 29.7,
+     "result": "equal",
+     "differs": [],
+     "node": "v26.7.0",
+     "page": {
+      "presents": 766,
+      "skipped": 0,
+      "draws": 766,
+      "torn": 0,
+      "check": {
+       "width": 794,
+       "height": 550,
+       "pixels": 436700,
+       "mismatchedPixels": 0,
+       "presentsBefore": 1
+      }
+     }
+    }
+   ],
+   "frames": {
+    "frames": 18088,
+    "mismatched": 0,
+    "result": "identical"
+   }
+  }
+ },
+ "existingHosts": {
+  "gate": "tw-w3e vs tw-w2b3 on native bd143036 (the final tree, comments included): all 10 scenarios, AppKit vs and playback, unchecked vs and Demo, emulator vs equal with frames identical (15 equal rows); 0 crashes in 20 launches; OriginalLoadingReadAheadTests (5), OriginalMacRuntimeStartupTests (5), OriginalExclusivityChecksTests (1) pass; phone A/B with music and sounds within spread (main 10.78–10.92 against 10.84–10.92 ms)",
+  "frames": [
+   {
+    "frames": 1832,
+    "mismatched": 0,
+    "result": "identical"
+   },
+   {
+    "frames": 1832,
+    "mismatched": 0,
+    "result": "identical"
+   },
+   {
+    "frames": 3960,
+    "mismatched": 0,
+    "result": "identical"
+   },
+   {
+    "frames": 1832,
+    "mismatched": 0,
+    "result": "identical"
+   }
+  ],
+  "suites": [
+   "OriginalExclusivityChecksTests exit=0 1s Executed 1 test, with 0 failures (0 unexpected) in 0.002 (0.004) seconds",
+   "OriginalLoadingReadAheadTests exit=0 2s Executed 5 tests, with 0 failures (0 unexpected) in 1.564 (1.565) seconds",
+   "OriginalMacRuntimeStartupTests exit=0 0s Executed 5 tests, with 0 failures (0 unexpected) in 0.546 (0.547) seconds"
+  ],
+  "phoneAB": [
+   {
+    "label": "tw-w3e-ab-01-tw-w3e",
+    "loadSeconds": 5.9,
+    "loadedResidentMB": 565,
+    "peakResidentMB": 602,
+    "bodiesResidentMB": 568,
+    "mainMsPerTick": 10.78,
+    "renderMsPerTick": 7.54,
+    "processMsPerTick": 27.49,
+    "completeMsPerTick": 7.26
+   },
+   {
+    "label": "tw-w3e-ab-02-tw-w2b3",
+    "loadSeconds": 5.17,
+    "loadedResidentMB": 571,
+    "peakResidentMB": 585,
+    "bodiesResidentMB": 550,
+    "mainMsPerTick": 10.84,
+    "renderMsPerTick": 7.15,
+    "processMsPerTick": 27.16,
+    "completeMsPerTick": 7.36
+   },
+   {
+    "label": "tw-w3e-ab-03-tw-w3e",
+    "loadSeconds": 6.11,
+    "loadedResidentMB": 607,
+    "peakResidentMB": 616,
+    "bodiesResidentMB": 581,
+    "mainMsPerTick": 10.92,
+    "renderMsPerTick": 7.61,
+    "processMsPerTick": 27.72,
+    "completeMsPerTick": 7.34
+   },
+   {
+    "label": "tw-w3e-ab-04-tw-w2b3",
+    "loadSeconds": 6.21,
+    "loadedResidentMB": 558,
+    "peakResidentMB": 580,
+    "bodiesResidentMB": 532,
+    "mainMsPerTick": 10.92,
+    "renderMsPerTick": 7.17,
+    "processMsPerTick": 27.32,
+    "completeMsPerTick": 7.39
+   },
+   {
+    "label": "tw-w3e-ab-05-tw-w3e",
+    "loadSeconds": 5.17,
+    "loadedResidentMB": 585,
+    "peakResidentMB": 612,
+    "bodiesResidentMB": 572,
+    "mainMsPerTick": 10.87,
+    "renderMsPerTick": 7.16,
+    "processMsPerTick": 27.27,
+    "completeMsPerTick": 7.34
+   }
+  ],
+  "macAB": [
+   {
+    "label": "tw-w3e-mac-ab-01-frozen-unchecked-tw-w3e",
+    "loadSeconds": 0.318,
+    "loadedResidentMB": 548,
+    "peakResidentMB": 646,
+    "bodiesResidentMB": 596,
+    "mainMsPerTick": null,
+    "renderMsPerTick": null,
+    "processMsPerTick": 3.522,
+    "completeMsPerTick": 1.4474
+   },
+   {
+    "label": "tw-w3e-mac-ab-02-frozen-unchecked-tw-w2b3",
+    "loadSeconds": 0.324,
+    "loadedResidentMB": 550,
+    "peakResidentMB": 637,
+    "bodiesResidentMB": 606,
+    "mainMsPerTick": null,
+    "renderMsPerTick": null,
+    "processMsPerTick": 3.4,
+    "completeMsPerTick": 1.3787
+   },
+   {
+    "label": "tw-w3e-mac-ab-03-frozen-unchecked-tw-w3e",
+    "loadSeconds": 0.326,
+    "loadedResidentMB": 550,
+    "peakResidentMB": 640,
+    "bodiesResidentMB": 600,
+    "mainMsPerTick": null,
+    "renderMsPerTick": null,
+    "processMsPerTick": 3.489,
+    "completeMsPerTick": 1.4303
+   },
+   {
+    "label": "tw-w3e-mac-ab-04-frozen-unchecked-tw-w2b3",
+    "loadSeconds": 0.314,
+    "loadedResidentMB": 551,
+    "peakResidentMB": 639,
+    "bodiesResidentMB": 597,
+    "mainMsPerTick": null,
+    "renderMsPerTick": null,
+    "processMsPerTick": 3.4,
+    "completeMsPerTick": 1.4149
+   },
+   {
+    "label": "tw-w3e-mac-ab-05-frozen-unchecked-tw-w3e",
+    "loadSeconds": 0.322,
+    "loadedResidentMB": 569,
+    "peakResidentMB": 649,
+    "bodiesResidentMB": 620,
+    "mainMsPerTick": null,
+    "renderMsPerTick": null,
+    "processMsPerTick": 3.522,
+    "completeMsPerTick": 1.4753
+   },
+   {
+    "label": "tw-w3e-mac-ab-06-frozen-unchecked-tw-w2b3",
+    "loadSeconds": 0.329,
+    "loadedResidentMB": 567,
+    "peakResidentMB": 640,
+    "bodiesResidentMB": 620,
+    "mainMsPerTick": null,
+    "renderMsPerTick": null,
+    "processMsPerTick": 3.433,
+    "completeMsPerTick": 1.3957
+   }
+  ],
+  "macABReversed": [
+   {
+    "label": "tw-w3e-mac-ab-reversed-01-frozen-unchecked-tw-w2b3",
+    "loadSeconds": 0.324,
+    "loadedResidentMB": 558,
+    "peakResidentMB": 644,
+    "bodiesResidentMB": 610,
+    "mainMsPerTick": null,
+    "renderMsPerTick": null,
+    "processMsPerTick": 2.878,
+    "completeMsPerTick": 1.1514
+   },
+   {
+    "label": "tw-w3e-mac-ab-reversed-02-frozen-unchecked-tw-w3e",
+    "loadSeconds": 0.343,
+    "loadedResidentMB": 565,
+    "peakResidentMB": 649,
+    "bodiesResidentMB": 613,
+    "mainMsPerTick": null,
+    "renderMsPerTick": null,
+    "processMsPerTick": 2.956,
+    "completeMsPerTick": 1.21
+   },
+   {
+    "label": "tw-w3e-mac-ab-reversed-03-frozen-unchecked-tw-w2b3",
+    "loadSeconds": 0.35,
+    "loadedResidentMB": 566,
+    "peakResidentMB": 651,
+    "bodiesResidentMB": 617,
+    "mainMsPerTick": null,
+    "renderMsPerTick": null,
+    "processMsPerTick": 2.889,
+    "completeMsPerTick": 1.1661
+   },
+   {
+    "label": "tw-w3e-mac-ab-reversed-04-frozen-unchecked-tw-w3e",
+    "loadSeconds": 0.334,
+    "loadedResidentMB": 568,
+    "peakResidentMB": 650,
+    "bodiesResidentMB": 615,
+    "mainMsPerTick": null,
+    "renderMsPerTick": null,
+    "processMsPerTick": 2.844,
+    "completeMsPerTick": 1.1604
+   },
+   {
+    "label": "tw-w3e-mac-ab-reversed-05-frozen-unchecked-tw-w2b3",
+    "loadSeconds": 0.329,
+    "loadedResidentMB": 557,
+    "peakResidentMB": 637,
+    "bodiesResidentMB": 609,
+    "mainMsPerTick": null,
+    "renderMsPerTick": null,
+    "processMsPerTick": 2.9,
+    "completeMsPerTick": 1.2048
+   },
+   {
+    "label": "tw-w3e-mac-ab-reversed-06-frozen-unchecked-tw-w3e",
+    "loadSeconds": 0.336,
+    "loadedResidentMB": 552,
+    "peakResidentMB": 638,
+    "bodiesResidentMB": 600,
+    "mainMsPerTick": null,
+    "renderMsPerTick": null,
+    "processMsPerTick": 2.744,
+    "completeMsPerTick": 1.0751
+   }
+  ],
+  "macBinaries": "the frozen unchecked NTSDHeadless and AppKit NTSDNative: __TEXT,__const, __DATA_CONST,__const and __DATA,__data identical to tw-w2b3's; __TEXT,__text differs in exactly five instructions in the headless (mov w3, #0x4c→#0x53 four times and #0x71→#0x78 once: the line numbers of force-unwrap failures in OriginalConcurrentInputs.swift, shifted by the WASI lines and comments), same instruction count and layout",
+  "macTiming": "the gate's interleaved Mac A/B ran the new binary first in each pair and showed it ~2.5% slower (complete 1.43–1.48 against 1.38–1.41 ms); run again with the order reversed it was not (complete 1.160 against 1.166 ms, process 2.844 against 2.889 ms): order, not code"
+ },
+ "review": "Independent, read-only: OK — the packages' computation has no effect but its value (no events, heap, counters or SHA installation), the comparator's fields cannot change (virtual clock; 'loaded' counts from the loading object), errors surface at the same get; native code token-for-token unchanged. Low items: loaded.seconds and packagesWaitSeconds now include the read on WASI (measured above), the ~3 s moves to the start of loading with the last menu frame on screen (bounded slices in the menu's sleeps would remove it — not done), stale comments (fixed), a metrics parse failure logged (fixed); WASI-only tests would need a WASI test build (none exists).",
+ "boundaries": [
+  "The ~3 s of package reads and digests now come at the first loading cycle, with the menu's last frame on screen and no progress",
+  "No WASI XCTest build: the lazy semantics are checked by the scenarios (Node WASI, Chromium, WebKit) and the startup measurements"
+ ]
+}

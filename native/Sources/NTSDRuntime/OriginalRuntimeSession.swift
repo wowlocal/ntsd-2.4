@@ -113,8 +113,9 @@ public enum OriginalRuntimeSessionBoundary: Error, Equatable {
     /// instead of reading and verifying it again (MEMORY_LOADING L13).
     private var startupPackage: OriginalApplicationStartupInputs?
     /// The loading packages, read on a thread of their own from the end of
-    /// startup while the menu runs (MEMORY_LOADING L13); the loading phase takes
-    /// them, waiting if needed, where it read them, in the same order.
+    /// startup while the menu runs (MEMORY_LOADING L13; on WASI where the
+    /// loading phase takes them, TVOS_WEB W3e); the loading phase takes them,
+    /// waiting if needed, where it read them, in the same order.
     private var loadingPackages: OriginalConcurrentInputs.Background<OriginalRuntimeLoadingPackages>?
     private var captureAfter: (count: Int,path: String)?
     private var clickAt: (count: Int,x: Int32,y: Int32)?

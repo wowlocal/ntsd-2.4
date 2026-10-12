@@ -19,21 +19,24 @@ public enum OriginalConcurrentInputs {
     /// every core below the game thread's priority). Set before the first one.
     nonisolated(unsafe) public static var backgroundStart: (@Sendable () -> Void)?
 
-    /// A value computed on a thread of its own from creation. `get` waits for
-    /// it, then returns it or throws its error, every time it is called: a
-    /// caller that takes it where it used to compute it keeps that point and,
-    /// taking several in their old order, which error comes first (MEMORY_LOADING
-    /// L13). The thread takes the computation out of the box before running it,
-    /// so only the result stays.
+    /// A value computed on a thread of its own from creation (on WASI, which has
+    /// no threads, at the first `get`). `get` waits for it, then returns it or
+    /// throws its error, every time it is called: a caller that takes it where
+    /// it used to compute it keeps that point and, taking several in their old
+    /// order, which error comes first (MEMORY_LOADING L13). The computation is
+    /// taken out of the box before it runs, so only the result stays.
     public final class Background<Value>: @unchecked Sendable {
         private let condition = NSCondition()
         private var compute: (@Sendable () throws -> Value)?
         private var result: Result<Value, Error>?
         public init(_ compute: @escaping @Sendable () throws -> Value) {
             #if os(WASI)
-            // A host without threads (TVOS_WEB W0): computed here, at creation;
-            // `get` returns it or throws its error as it would after waiting.
-            result = Result { try compute() }
+            // A host without threads (TVOS_WEB W0): computed at the first `get`,
+            // the point where a threaded host waits for what its thread has not
+            // finished (TVOS_WEB W3e; computed at creation before, it delayed
+            // what comes between, the menu's first frame among it); `get`
+            // returns it or throws its error every time, as after waiting.
+            self.compute = compute
             #else
             self.compute = compute
             let thread = Thread { [self] in
@@ -46,9 +49,13 @@ public enum OriginalConcurrentInputs {
             thread.name = "NTSD.readahead"; thread.stackSize = 8 << 20; thread.start()
             #endif
         }
-        /// Whether the value is ready (`get` would not wait).
+        /// Whether the value is ready (`get` would not wait; on WASI, false until
+        /// the first `get` computes it).
         public var isReady: Bool { condition.lock(); defer { condition.unlock() }; return result != nil }
         public func get() throws -> Value {
+            #if os(WASI)
+            if result == nil, let body = compute { compute = nil; result = Result { try body() } }
+            #endif
             condition.lock()
             while result == nil { condition.wait() }
             let value = result!

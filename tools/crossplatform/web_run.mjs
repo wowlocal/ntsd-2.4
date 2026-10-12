@@ -164,10 +164,10 @@ const server = createServer(async (req, res) => {
         .filter(([, q]) => !q || Number(q.trim().replace(/^q=/, '')) > 0).map(([c]) => c.trim().toLowerCase()));
       for (const [suffix, coding] of [['br', 'br'], ['gz', 'gzip']])
         if (accepted.has(coding) && existsSync(`${path}.${suffix}`))
-          { served[coding]++; return send(200, readFileSync(`${path}.${suffix}`), type, { 'Content-Encoding': coding, Vary: 'Accept-Encoding' }); }
+          { const data = readFileSync(`${path}.${suffix}`); served[coding]++; return send(200, data, type, { 'Content-Encoding': coding, Vary: 'Accept-Encoding' }); }
     }
-    served.plain++;
-    return send(200, readFileSync(path), type);
+    const data = readFileSync(path); served.plain++;
+    return send(200, data, type);
   };
   // Only this machine's page: a rebound host name never reaches the mounts.
   const port = server.address().port;
@@ -237,7 +237,12 @@ const server = createServer(async (req, res) => {
     if (req.method === 'POST' && url.pathname === '/metrics') {
       const data = await body(req);
       // With --precompressed, how the runner served the program and mounts' files (a run's own proof of the encodings).
-      if (metricsFile) writeFileSync(metricsFile, precompressed ? JSON.stringify({ ...JSON.parse(data), served }) : data);
+      if (metricsFile) {
+        let report = data;
+        if (precompressed) try { report = JSON.stringify({ ...JSON.parse(data), served }); }
+        catch { say('web_run.mjs: the worker\'s metrics did not parse; written without the served counts\n'); }
+        writeFileSync(metricsFile, report);
+      }
       return send(200);
     }
     if (req.method === 'POST' && url.pathname === '/exit') {
@@ -289,7 +294,10 @@ async function runSteps() {
     if (m.method === 'Target.attachedToTarget' && m.params.targetInfo.type === 'worker') {
       worker = m.params.sessionId;
       if (external) socket.send(JSON.stringify({ id: next++, sessionId: worker, method: 'Runtime.enable' }));
-      if (profiling) callWorker('Profiler.enable').then(() => callWorker('Profiler.start'));
+      // Sampled every 1 ms (V8's and node --cpu-prof's default, set explicitly); the
+      // worker usually exists before this attach, so its first moments go unsampled.
+      if (profiling) callWorker('Profiler.enable').then(() => callWorker('Profiler.setSamplingInterval', { interval: 1000 }))
+        .then(() => callWorker('Profiler.start'));
     }
     if (m.method === 'Runtime.consoleAPICalled' && m.sessionId)
       say(`web_run.mjs: console ${m.params.args.map(a => a.value ?? a.description ?? '').join(' ').slice(0, 4000)}\n`);
