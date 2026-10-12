@@ -7,7 +7,8 @@
 //                         [--env KEY=VALUE ...] [--argv0 GUEST_PATH]
 //                         [--metrics FILE] [--canvas] [--interactive]
 //                         [--answer N] [--steps FILE] [--timeout SECONDS]
-//                         [--serve PORT] -- PROGRAM.wasm [ARGS ...]
+//                         [--serve PORT] [--persist GUEST] [--profile DIR] [--port PORT]
+//                         -- PROGRAM.wasm [ARGS ...]
 //
 // A local node:http server serves web/run.html and web/wasi-worker.js with
 // cross-origin isolation headers, the program, and each mount under
@@ -33,7 +34,15 @@
 // unless --answer automates it (a --steps click can be that gesture).
 // --serve PORT starts no browser: it serves the page on 127.0.0.1:PORT (or
 // localhost) for a player's own browser and keeps serving after the game
-// ends, so reloading the page plays again.
+// ends, so reloading the page plays again. --persist GUEST (with --canvas)
+// mounts a folder the page keeps in the browser's IndexedDB (the saves,
+// TVOS_WEB W2b-4a); the page's report then lists what it keeps. --profile DIR
+// runs the browser on a profile folder kept after the run (else a temporary
+// one), so a second run sees what the first one stored — on the same --port:
+// the browser keeps storage per origin, port included (else a free port); a
+// profile serves one run at a time. For the same reason the page is served on
+// 127.0.0.1 only: localhost is sent there, so a player's saves stay in one
+// place.
 // --timeout ends the run (exit 124) after SECONDS (default 3300); a run ended
 // by a signal also closes its browser, so none is left running.
 import { createServer } from 'node:http';
@@ -53,7 +62,7 @@ if (sepAt < 0 || sepAt + 1 >= argv.length) {
 const options = argv.slice(2, sepAt);
 const [program, ...args] = argv.slice(sepAt + 1);
 const mounts = [], guestEnv = { TZ: env.TZ ?? 'Etc/GMT-1' };
-let argv0 = program, metricsFile = null, canvas = false, interactive = false, answer = null, steps = null, timeout = 3300, serve = null;
+let argv0 = program, metricsFile = null, canvas = false, interactive = false, answer = null, steps = null, timeout = 3300, serve = null, kept = null, port = 0;
 for (let i = 0; i < options.length; i += 2) {
   if (options[i] === '--canvas') { canvas = true; i--; continue; }
   if (options[i] === '--interactive') { interactive = true; i--; continue; }
@@ -61,6 +70,13 @@ for (let i = 0; i < options.length; i += 2) {
   if (options[i] === '--steps') { steps = JSON.parse(readFileSync(options[i + 1], 'utf8')); continue; }
   if (options[i] === '--timeout') { timeout = Number(options[i + 1]); continue; }
   if (options[i] === '--serve') { serve = Number(options[i + 1]); continue; }
+  if (options[i] === '--persist' && options[i + 1]?.startsWith('/')) { mounts.push({ guest: options[i + 1], writable: true, persist: true }); continue; }
+  if (options[i] === '--profile' && options[i + 1]) { kept = resolve(options[i + 1]); continue; }
+  if (options[i] === '--port') {
+    port = Number(options[i + 1]);
+    if (!Number.isInteger(port) || port < 0 || port > 65535) { console.error(`web_run.mjs: bad port ${options[i + 1]}`); exit(2); }
+    continue;
+  }
   const [name, value] = [options[i], options[i + 1]];
   const at = value?.indexOf('=') ?? -1;
   if ((name === '--map' || name === '--ro') && at > 0)
@@ -70,6 +86,7 @@ for (let i = 0; i < options.length; i += 2) {
   else if (name === '--metrics' && value) metricsFile = value;
   else { console.error(`web_run.mjs: bad option ${name} ${value}`); exit(2); }
 }
+if (mounts.some(m => m.persist) && !canvas) { console.error('web_run.mjs: --persist needs --canvas (the page keeps it)'); exit(2); }
 
 const headers = { 'Cross-Origin-Opener-Policy': 'same-origin', 'Cross-Origin-Embedder-Policy': 'require-corp',
                   'Cross-Origin-Resource-Policy': 'same-origin', 'Cache-Control': 'no-store' };
@@ -86,7 +103,7 @@ function finish(code) {
   let leaving = false;
   const done = () => {
     if (leaving) return; leaving = true;
-    try { if (profile) rmSync(profile, { recursive: true, force: true, maxRetries: 5, retryDelay: 100 }); } catch {}
+    try { if (profile && profile !== kept) rmSync(profile, { recursive: true, force: true, maxRetries: 5, retryDelay: 100 }); } catch {}
     process.stdout.write('', () => process.stderr.write('', () => exit(code)));
   };
   if (!browser || browser.exitCode !== null || browser.signalCode !== null) return done();
@@ -118,7 +135,10 @@ const server = createServer(async (req, res) => {
   };
   // Only this machine's page: a rebound host name never reaches the mounts.
   const port = server.address().port;
-  if (req.headers.host !== `127.0.0.1:${port}` && req.headers.host !== `localhost:${port}`) return send(403);
+  if (req.headers.host === `localhost:${port}`) {   // another origin, with other storage: one address for the saves
+    res.writeHead(302, { ...headers, Location: `http://127.0.0.1:${port}${req.url}` }); res.end(); return;
+  }
+  if (req.headers.host !== `127.0.0.1:${port}`) return send(403);
   try {
     if (req.method === 'GET' && url.pathname.startsWith('/web/')) {
       const name = url.pathname.slice(5);
@@ -130,12 +150,12 @@ const server = createServer(async (req, res) => {
     if (req.method === 'GET' && url.pathname === '/config') {
       if (steps && !stepsStarted) { stepsStarted = true; runSteps().catch(e => say(`web_run.mjs: steps: ${e}\n`)); }
       return send(200, JSON.stringify({ program: '/program.wasm', args: [argv0, ...args], env: guestEnv, canvas, frameBytes: 32 << 20,
-                                        interactive, autostart: answer !== null, ...(answer === null ? {} : { answer }),
-                                        mounts: mounts.map(m => ({ guest: m.guest, writable: m.writable })) }), 'application/json');
+                                        interactive, autostart: answer !== null, ...(answer === null ? {} : { answer }), report: metricsFile !== null,
+                                        mounts: mounts.map(m => ({ guest: m.guest, writable: m.writable, ...(m.persist ? { persist: true } : {}) })) }), 'application/json');
     }
     const m = url.pathname.match(/^\/m\/(\d+)\/?(.*)$/);
     if (m) {
-      const mount = mounts[Number(m[1])]; if (!mount) return send(404);
+      const mount = mounts[Number(m[1])]; if (!mount || mount.persist) return send(404);   // a kept mount is the page's
       const rel = m[2].split('/').map(decodeURIComponent).join('/');
       const path = hostPath(mount, rel); if (!path) return send(403);
       if (req.method === 'GET') {
@@ -254,10 +274,12 @@ function browserPath() {
   console.error('web_run.mjs: no chrome-headless-shell in the Playwright cache; set NTSD_BROWSER'); exit(2);
 }
 
-server.listen(serve ?? 0, '127.0.0.1', () => {
+server.on('error', e => { console.error(`web_run.mjs: ${e.message}`); exit(2); });   // e.g. the port is taken
+server.listen(serve ?? port, '127.0.0.1', () => {
   if (serve !== null) { say(`web_run.mjs: open http://127.0.0.1:${server.address().port}/web/run.html\n`); return; }
   const { port } = server.address(), binary = browserPath();
-  profile = mkdtempSync(join(tmpdir(), 'ntsd-web-'));
+  if (kept) { mkdirSync(kept, { recursive: true }); rmSync(join(kept, 'DevToolsActivePort'), { force: true }); }   // the last run's port is stale
+  profile = kept ?? mkdtempSync(join(tmpdir(), 'ntsd-web-'));
   const page = `http://127.0.0.1:${port}/web/run.html`;
   if (engine === 'webkit') {
     const frameworks = dirname(dirname(dirname(dirname(binary))));

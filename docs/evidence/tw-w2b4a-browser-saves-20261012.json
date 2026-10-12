@@ -1,0 +1,572 @@
+{
+ "phase": "W2b-4a: the browser host's saves kept in the browser",
+ "change": "web_run.mjs --persist GUEST (with --canvas): a mount the page keeps in the browser's IndexedDB ('ntsd-save', one record per entry keyed by its guest path, {dir, data}); the runner never serves it. The worker never yields while the game runs, so the page loads the mount's whole tree before the worker starts (both the scripted and interactive paths) and the worker sends each change back as a message (a closed or synced file's bytes, a folder made, an unlink, an rmdir, a rename); the page stores them in order, each in a readwrite transaction with strict durability, a file replaced whole, a rename replacing its target and moving a folder's subtree. At exit the worker counts its store messages into the frame header; the page stores all of them (within the worker's 5 s) before it acknowledges, and with --metrics reports what the browser keeps (path, size, SHA-256). Failures are shown to the player (a notice) and reported on stderr; a connection the browser closed is opened again; a page without IndexedDB plays without saving; a second tab of the game plays without saving (a Web Lock held for the page's life); navigator.storage.persist() is asked. --profile DIR keeps a browser profile between runs and --port PORT keeps one origin (the browser keeps storage per origin, port included); localhost is redirected to 127.0.0.1 for the same reason. The worker's rename now answers as rename(2) (the same entry, into itself, file onto folder, folder onto file or a non-empty folder); a kept file's bytes stay after close. No Swift change: the host already wrote its overlay to /save/NTSD Native when the page mounts /save.",
+ "savesCheck": {
+  "how": "tools/crossplatform/web_saves_check.py BUILD OUT --mac-headless frozen tw-w2b3 NTSDHeadless: per engine, first run (new profile) app_e2e's CONTROL SETTINGS change of player 1's up to Q; second run (same profile and port) player 1's down to X; fresh run (new profile, same port) the second change alone. The game writes its whole control table on OK, so the second file holds both changes only if the game read the first run's file back from the browser",
+  "expectedSha256": {
+   "first": "053cb972d8069d93548e7882f55a68bc50e8607664edf5b6a131329d6dc1ad41",
+   "second": "61eaffa6c0026f81d74268844deed65045deec0a7156506858069dee2f56e0bb",
+   "fresh": "c4a431ea0f97e1b5b3bb39eb63832cf1e30113e4d5a88240585c9a3f4f26d3b2"
+  },
+  "engines": {
+   "chromium": {
+    "first": {
+     "exit": 0,
+     "boundaries": 0,
+     "problems": [],
+     "kept": {
+      "/save/NTSD Native": "dir",
+      "/save/NTSD Native/data": "dir",
+      "/save/NTSD Native/data/adinfo.txt": "bbbc625958095740ae6f64a671c1673b5b1be1dad8a02de5e1c19b99528b759e",
+      "/save/NTSD Native/data/control.txt": "053cb972d8069d93548e7882f55a68bc50e8607664edf5b6a131329d6dc1ad41"
+     },
+     "control": "053cb972d8069d93548e7882f55a68bc50e8607664edf5b6a131329d6dc1ad41",
+     "pass": true
+    },
+    "second": {
+     "exit": 0,
+     "boundaries": 0,
+     "problems": [],
+     "kept": {
+      "/save/NTSD Native": "dir",
+      "/save/NTSD Native/data": "dir",
+      "/save/NTSD Native/data/adinfo.txt": "bbbc625958095740ae6f64a671c1673b5b1be1dad8a02de5e1c19b99528b759e",
+      "/save/NTSD Native/data/control.txt": "61eaffa6c0026f81d74268844deed65045deec0a7156506858069dee2f56e0bb"
+     },
+     "control": "61eaffa6c0026f81d74268844deed65045deec0a7156506858069dee2f56e0bb",
+     "pass": true
+    },
+    "fresh": {
+     "exit": 0,
+     "boundaries": 0,
+     "problems": [],
+     "kept": {
+      "/save/NTSD Native": "dir",
+      "/save/NTSD Native/data": "dir",
+      "/save/NTSD Native/data/adinfo.txt": "bbbc625958095740ae6f64a671c1673b5b1be1dad8a02de5e1c19b99528b759e",
+      "/save/NTSD Native/data/control.txt": "c4a431ea0f97e1b5b3bb39eb63832cf1e30113e4d5a88240585c9a3f4f26d3b2"
+     },
+     "control": "c4a431ea0f97e1b5b3bb39eb63832cf1e30113e4d5a88240585c9a3f4f26d3b2",
+     "pass": true
+    }
+   },
+   "webkit": {
+    "first": {
+     "exit": 0,
+     "boundaries": 0,
+     "problems": [],
+     "kept": {
+      "/save/NTSD Native": "dir",
+      "/save/NTSD Native/data": "dir",
+      "/save/NTSD Native/data/adinfo.txt": "bbbc625958095740ae6f64a671c1673b5b1be1dad8a02de5e1c19b99528b759e",
+      "/save/NTSD Native/data/control.txt": "053cb972d8069d93548e7882f55a68bc50e8607664edf5b6a131329d6dc1ad41"
+     },
+     "control": "053cb972d8069d93548e7882f55a68bc50e8607664edf5b6a131329d6dc1ad41",
+     "pass": true
+    },
+    "second": {
+     "exit": 0,
+     "boundaries": 0,
+     "problems": [],
+     "kept": {
+      "/save/NTSD Native": "dir",
+      "/save/NTSD Native/data": "dir",
+      "/save/NTSD Native/data/adinfo.txt": "bbbc625958095740ae6f64a671c1673b5b1be1dad8a02de5e1c19b99528b759e",
+      "/save/NTSD Native/data/control.txt": "61eaffa6c0026f81d74268844deed65045deec0a7156506858069dee2f56e0bb"
+     },
+     "control": "61eaffa6c0026f81d74268844deed65045deec0a7156506858069dee2f56e0bb",
+     "pass": true
+    },
+    "fresh": {
+     "exit": 0,
+     "boundaries": 0,
+     "problems": [],
+     "kept": {
+      "/save/NTSD Native": "dir",
+      "/save/NTSD Native/data": "dir",
+      "/save/NTSD Native/data/adinfo.txt": "bbbc625958095740ae6f64a671c1673b5b1be1dad8a02de5e1c19b99528b759e",
+      "/save/NTSD Native/data/control.txt": "c4a431ea0f97e1b5b3bb39eb63832cf1e30113e4d5a88240585c9a3f4f26d3b2"
+     },
+     "control": "c4a431ea0f97e1b5b3bb39eb63832cf1e30113e4d5a88240585c9a3f4f26d3b2",
+     "pass": true
+    }
+   }
+  },
+  "macHeadless": {
+   "binary": "/private/tmp/claude-501/-Users-michael-Developer-ntsd-2-4/1f9218ae-9d5d-4c4e-a8dd-d5254994839c/scratchpad/frozen-tw-w2b3/NTSDHeadless",
+   "exits": [
+    0,
+    0
+   ],
+   "control": "61eaffa6c0026f81d74268844deed65045deec0a7156506858069dee2f56e0bb",
+   "pass": true
+  },
+  "result": "pass"
+ },
+ "interactive": {
+  "lock": "an interactive run (Chromium, --persist, --profile, --port): navigator.locks.query() held = [\"ntsd-save\"]; navigator.storage.persisted() = false (headless browsers do not grant persistence; a player's browser decides by engagement)",
+  "redirect": "web_run.mjs --serve: GET http://localhost:PORT/web/run.html -> 302 to http://127.0.0.1:PORT/web/run.html; 127.0.0.1 -> 200",
+  "notTested": "the second-tab path (the harness drives one page), a closed IndexedDB connection, a full quota, Safari and Firefox"
+ },
+ "bugsFoundInTesting": [
+  "Chromium's default (relaxed) IndexedDB durability reported the last write done before it was on disk: the first run's control.txt was missing after the browser was killed, while the earlier adinfo.txt survived; writes are now strict",
+  "Every run's server listened on a free port, a new origin with empty storage each time, so the second run started without the first run's saves (a temporary trace showed an empty seed); --port keeps one origin (a player's server already had a fixed port)",
+  "A capture of the CONTROL SETTINGS screen could not show the change: the none text group draws no key names; the check compares the written bytes instead"
+ ],
+ "web": {
+  "build": "b60fad5b31784ddf2b06fd7718dcf899df33c6ba0ecf050d77b96253add7ba0d",
+  "scenarios": {
+   "chromium": {
+    "browser": "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) HeadlessChrome/153.0.8010.12 Safari/537.36",
+    "rows": [
+     {
+      "scenario": "vs",
+      "exit": 0,
+      "seconds": 73.3,
+      "result": "equal",
+      "differs": [],
+      "node": "v26.7.0",
+      "page": {
+       "presents": 2341,
+       "skipped": 0,
+       "draws": 2341,
+       "torn": 0,
+       "check": {
+        "width": 794,
+        "height": 550,
+        "pixels": 436700,
+        "mismatchedPixels": 0,
+        "presentsBefore": 1
+       }
+      }
+     },
+     {
+      "scenario": "mission",
+      "exit": 0,
+      "seconds": 72.7,
+      "result": "equal",
+      "differs": [],
+      "node": "v26.7.0",
+      "page": {
+       "presents": 2170,
+       "skipped": 0,
+       "draws": 2170,
+       "torn": 0,
+       "check": {
+        "width": 794,
+        "height": 550,
+        "pixels": 436700,
+        "mismatchedPixels": 0,
+        "presentsBefore": 1
+       }
+      }
+     },
+     {
+      "scenario": "demo",
+      "exit": 0,
+      "seconds": 55.1,
+      "result": "equal",
+      "differs": [],
+      "node": "v26.7.0",
+      "page": {
+       "presents": 1784,
+       "skipped": 0,
+       "draws": 1784,
+       "torn": 0,
+       "check": {
+        "width": 794,
+        "height": 550,
+        "pixels": 436700,
+        "mismatchedPixels": 0,
+        "presentsBefore": 1
+       }
+      }
+     },
+     {
+      "scenario": "war",
+      "exit": 0,
+      "seconds": 118.9,
+      "result": "equal",
+      "differs": [],
+      "node": "v26.7.0",
+      "page": {
+       "presents": 3611,
+       "skipped": 0,
+       "draws": 3611,
+       "torn": 0,
+       "check": {
+        "width": 794,
+        "height": 550,
+        "pixels": 436700,
+        "mismatchedPixels": 0,
+        "presentsBefore": 1
+       }
+      }
+     },
+     {
+      "scenario": "playback",
+      "exit": 0,
+      "seconds": 80.2,
+      "result": "equal",
+      "differs": [],
+      "node": "v26.7.0",
+      "page": {
+       "presents": 2368,
+       "skipped": 0,
+       "draws": 2368,
+       "torn": 0,
+       "check": {
+        "width": 794,
+        "height": 550,
+        "pixels": 436700,
+        "mismatchedPixels": 0,
+        "presentsBefore": 1
+       }
+      }
+     },
+     {
+      "scenario": "tournament",
+      "exit": 0,
+      "seconds": 104.6,
+      "result": "equal",
+      "differs": [],
+      "node": "v26.7.0",
+      "page": {
+       "presents": 3414,
+       "skipped": 0,
+       "draws": 3414,
+       "torn": 0,
+       "check": {
+        "width": 794,
+        "height": 550,
+        "pixels": 436700,
+        "mismatchedPixels": 0,
+        "presentsBefore": 1
+       }
+      }
+     },
+     {
+      "scenario": "altenter",
+      "exit": 0,
+      "seconds": 75.3,
+      "result": "equal",
+      "differs": [],
+      "node": "v26.7.0",
+      "page": {
+       "presents": 2390,
+       "skipped": 0,
+       "draws": 2389,
+       "torn": 0,
+       "check": {
+        "width": 794,
+        "height": 550,
+        "pixels": 436700,
+        "mismatchedPixels": 0,
+        "presentsBefore": 1
+       }
+      }
+     },
+     {
+      "scenario": "tournament-win",
+      "exit": 0,
+      "seconds": 110.7,
+      "result": "equal",
+      "differs": [],
+      "node": "v26.7.0",
+      "page": {
+       "presents": 3655,
+       "skipped": 0,
+       "draws": 3655,
+       "torn": 0,
+       "check": {
+        "width": 794,
+        "height": 550,
+        "pixels": 436700,
+        "mismatchedPixels": 0,
+        "presentsBefore": 1
+       }
+      }
+     },
+     {
+      "scenario": "team-tournament",
+      "exit": 0,
+      "seconds": 86.0,
+      "result": "equal",
+      "differs": [],
+      "node": "v26.7.0",
+      "page": {
+       "presents": 2686,
+       "skipped": 0,
+       "draws": 2686,
+       "torn": 0,
+       "check": {
+        "width": 794,
+        "height": 550,
+        "pixels": 436700,
+        "mismatchedPixels": 0,
+        "presentsBefore": 1
+       }
+      }
+     },
+     {
+      "scenario": "joystick",
+      "exit": 0,
+      "seconds": 26.9,
+      "result": "equal",
+      "differs": [],
+      "node": "v26.7.0",
+      "page": {
+       "presents": 766,
+       "skipped": 0,
+       "draws": 766,
+       "torn": 0,
+       "check": {
+        "width": 794,
+        "height": 550,
+        "pixels": 436700,
+        "mismatchedPixels": 0,
+        "presentsBefore": 1
+       }
+      }
+     }
+    ],
+    "frames": {
+     "frames": 18088,
+     "mismatched": 0,
+     "result": "identical"
+    }
+   },
+   "webkit": {
+    "browser": "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/605.1.15 (KHTML, like Gecko)",
+    "rows": [
+     {
+      "scenario": "vs",
+      "exit": 0,
+      "seconds": 76.6,
+      "result": "equal",
+      "differs": [],
+      "node": "v26.7.0",
+      "page": {
+       "presents": 2341,
+       "skipped": 0,
+       "draws": 2341,
+       "torn": 0,
+       "check": {
+        "width": 794,
+        "height": 550,
+        "pixels": 436700,
+        "mismatchedPixels": 0,
+        "presentsBefore": 1
+       }
+      }
+     },
+     {
+      "scenario": "mission",
+      "exit": 0,
+      "seconds": 76.1,
+      "result": "equal",
+      "differs": [],
+      "node": "v26.7.0",
+      "page": {
+       "presents": 2170,
+       "skipped": 0,
+       "draws": 2170,
+       "torn": 0,
+       "check": {
+        "width": 794,
+        "height": 550,
+        "pixels": 436700,
+        "mismatchedPixels": 0,
+        "presentsBefore": 1
+       }
+      }
+     },
+     {
+      "scenario": "demo",
+      "exit": 0,
+      "seconds": 57.6,
+      "result": "equal",
+      "differs": [],
+      "node": "v26.7.0",
+      "page": {
+       "presents": 1784,
+       "skipped": 0,
+       "draws": 1784,
+       "torn": 0,
+       "check": {
+        "width": 794,
+        "height": 550,
+        "pixels": 436700,
+        "mismatchedPixels": 0,
+        "presentsBefore": 1
+       }
+      }
+     },
+     {
+      "scenario": "war",
+      "exit": 0,
+      "seconds": 123.1,
+      "result": "equal",
+      "differs": [],
+      "node": "v26.7.0",
+      "page": {
+       "presents": 3611,
+       "skipped": 0,
+       "draws": 3611,
+       "torn": 0,
+       "check": {
+        "width": 794,
+        "height": 550,
+        "pixels": 436700,
+        "mismatchedPixels": 0,
+        "presentsBefore": 1
+       }
+      }
+     },
+     {
+      "scenario": "playback",
+      "exit": 0,
+      "seconds": 83.1,
+      "result": "equal",
+      "differs": [],
+      "node": "v26.7.0",
+      "page": {
+       "presents": 2368,
+       "skipped": 0,
+       "draws": 2368,
+       "torn": 0,
+       "check": {
+        "width": 794,
+        "height": 550,
+        "pixels": 436700,
+        "mismatchedPixels": 0,
+        "presentsBefore": 1
+       }
+      }
+     },
+     {
+      "scenario": "tournament",
+      "exit": 0,
+      "seconds": 108.6,
+      "result": "equal",
+      "differs": [],
+      "node": "v26.7.0",
+      "page": {
+       "presents": 3414,
+       "skipped": 0,
+       "draws": 3414,
+       "torn": 0,
+       "check": {
+        "width": 794,
+        "height": 550,
+        "pixels": 436700,
+        "mismatchedPixels": 0,
+        "presentsBefore": 1
+       }
+      }
+     },
+     {
+      "scenario": "altenter",
+      "exit": 0,
+      "seconds": 79.2,
+      "result": "equal",
+      "differs": [],
+      "node": "v26.7.0",
+      "page": {
+       "presents": 2390,
+       "skipped": 0,
+       "draws": 2389,
+       "torn": 0,
+       "check": {
+        "width": 794,
+        "height": 550,
+        "pixels": 436700,
+        "mismatchedPixels": 0,
+        "presentsBefore": 1
+       }
+      }
+     },
+     {
+      "scenario": "tournament-win",
+      "exit": 0,
+      "seconds": 117.7,
+      "result": "equal",
+      "differs": [],
+      "node": "v26.7.0",
+      "page": {
+       "presents": 3655,
+       "skipped": 0,
+       "draws": 3655,
+       "torn": 0,
+       "check": {
+        "width": 794,
+        "height": 550,
+        "pixels": 436700,
+        "mismatchedPixels": 0,
+        "presentsBefore": 1
+       }
+      }
+     },
+     {
+      "scenario": "team-tournament",
+      "exit": 0,
+      "seconds": 89.8,
+      "result": "equal",
+      "differs": [],
+      "node": "v26.7.0",
+      "page": {
+       "presents": 2686,
+       "skipped": 0,
+       "draws": 2686,
+       "torn": 0,
+       "check": {
+        "width": 794,
+        "height": 550,
+        "pixels": 436700,
+        "mismatchedPixels": 0,
+        "presentsBefore": 1
+       }
+      }
+     },
+     {
+      "scenario": "joystick",
+      "exit": 0,
+      "seconds": 28.7,
+      "result": "equal",
+      "differs": [],
+      "node": "v26.7.0",
+      "page": {
+       "presents": 766,
+       "skipped": 0,
+       "draws": 766,
+       "torn": 0,
+       "check": {
+        "width": 794,
+        "height": 550,
+        "pixels": 436700,
+        "mismatchedPixels": 0,
+        "presentsBefore": 1
+       }
+      }
+     }
+    ],
+    "frames": {
+     "frames": 18088,
+     "mismatched": 0,
+     "result": "identical"
+    }
+   }
+  },
+  "note": "--web scripted pages (no persist mount) in Chromium and WebKit; frames compared with tw-w1b3/wasi (the none group). A first regression run was stopped (its files changed during it); its log kept as tw-w2b4a-chromium-stopped-mixed.log"
+ },
+ "existingHosts": "No Core, Runtime, Package.swift or Swift change: the existing hosts' gate does not apply; NTSDWeb.wasm is W2b-3's build (b60fad5b31784ddf)",
+ "review": "Round 1 (independent, read-only): high (latent): fd_close released an unchanged file's bytes, which a kept mount cannot read back, so a second open of a save in one session would read it empty; medium: an interactive start with IndexedDB unavailable would hang on a black page; medium: a connection the browser closed (iOS Safari) would fail every later save silently, failures went only to stderr; low: the key range's upper bound, rename into its own subtree and rename(2)'s checks, seed conflicts, --port/EADDRINUSE handling, localhost vs 127.0.0.1 as two origins, finish's waits vs the worker's 5 s and hashing, two tabs racing, eviction. Fixed: all but the seed conflict's orphans and lazy loading (documented boundaries). Round 2: medium: the fallback without saving (a second tab, no IndexedDB) removed the mount, shifting the worker's mount numbering, and the host's temporary overlay is not mounted in the browser; fixed by keeping the mount in place (loaded read-only or empty, its changes not stored, the player told); low: one retry for any error but a full quota, the lock released when loading fails, a synchronous open failure; fixed. Round 3: OK; one low item left (opened() keeps a rejected promise when indexedDB.open throws synchronously, since ??= assigns after the executor; harmless now, queued for W2b-4b). The files tested: run.html, wasi-worker.js, web_run.mjs, web_saves_check.py unchanged from before the saves check to after the regression (SHA-256 checked).",
+ "boundaries": [
+  "A change still being stored when the tab closes is lost (milliseconds after the game wrote it)",
+  "Every kept file is loaded into the page and the worker at each start (recordings included)",
+  "The browser may evict the storage: persist() is asked; Safari caps a site's script-writable storage at 7 days without a visit unless the page is a home-screen app",
+  "A second tab plays without saving",
+  "A record whose path runs through a stored file (a conflict) is ignored at load and stays stored",
+  "Safari and Firefox are not tried; WebKit is Playwright's build"
+ ]
+}

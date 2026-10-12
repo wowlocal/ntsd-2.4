@@ -7,7 +7,11 @@
 // never copied whole; a folder is listed once (?list). Writes stay in memory
 // and reach the runner when the file closes (PUT); folders made, files
 // removed and renames go at once. Read-only mounts refuse every change with
-// EROFS. stdout and stderr are buffered and posted in order. poll_oneoff
+// EROFS. A mount the page keeps (persist, TVOS_WEB W2b-4a: the saves, in the
+// browser's IndexedDB) arrives whole with the config, and its changes go to
+// the page as messages, which stores them in order (the worker never yields,
+// so it cannot wait on the browser's asynchronous storage itself).
+// stdout and stderr are buffered and posted in order. poll_oneoff
 // sleeps with Atomics.wait, which needs a cross-origin-isolated page.
 //
 // With a frame buffer (config.frames, a SharedArrayBuffer from the page), the
@@ -44,6 +48,7 @@ class Node {
   url(extra = '') { return `${this.mount.url}/${this.path.split('/').map(encodeURIComponent).join('/')}${extra}`; }
   list() {
     if (this.kind !== 'dir') return null;
+    if (this.mount.persist) return this.children ??= new Map();
     if (this.children === null) {
       const x = request('GET', this.url('?list'));
       if (x.status !== 200 && x.status !== 404) throw new Error(`list ${this.path}: ${x.status}`);
@@ -56,6 +61,7 @@ class Node {
     return this.children;
   }
   bytes() {
+    if (this.mount.persist) return this.data ??= new Uint8Array(0);
     if (this.data === null) {
       const x = request('GET', this.url(), null, 'arraybuffer');
       if (x.status !== 200) throw new Error(`read ${this.path}: ${x.status}`);
@@ -92,9 +98,27 @@ self.onmessage = async ({ data: config }) => {
 async function run(config) {
   const sleeper = new Int32Array(new SharedArrayBuffer(4));
   const mounts = config.mounts.map((m, i) => ({ ...m, url: `/m/${i}` }));
+  // A kept mount's tree as the page loaded it (entries: path, dir, data);
+  // folders on the way to an entry exist even without their own record.
+  function seed(root, entries) {
+    for (const e of [...entries].sort((a, b) => (a.path < b.path ? -1 : a.path > b.path ? 1 : 0))) {
+      const parts = e.path.split('/').filter(Boolean); let dir = root;
+      for (let i = 0; i < parts.length && dir && dir.kind === 'dir'; i++) {
+        const last = i === parts.length - 1, kids = dir.list();
+        let node = kids.get(parts[i]);
+        if (!node) {
+          node = new Node(last && !e.dir ? 'file' : 'dir', root.mount, parts.slice(0, i + 1).join('/'));
+          if (node.kind === 'file') { node.data = e.data ?? new Uint8Array(0); node.size = node.data.length; }
+          kids.set(parts[i], node);
+        }
+        dir = node;
+      }
+    }
+    return root;
+  }
   const fds = [
     { kind: 'stdin' }, { kind: 'stdout' }, { kind: 'stderr' },
-    ...mounts.map(m => ({ kind: 'node', node: new Node('dir', m, ''), pos: 0, preopen: m.guest })),
+    ...mounts.map(m => ({ kind: 'node', node: m.persist ? seed(new Node('dir', m, ''), m.entries ?? []) : new Node('dir', m, ''), pos: 0, preopen: m.guest })),
   ];
   const args = config.args.map(a => encoder.encode(a + '\0'));
   const env = Object.entries(config.env).map(([k, v]) => encoder.encode(`${k}=${v}\0`));
@@ -122,8 +146,20 @@ async function run(config) {
     v.setBigUint64(ptr + 32, BigInt(node.kind === 'dir' ? 0 : (node.data ? node.data.length : node.size)), true);
     v.setBigUint64(ptr + 40, 0n, true); v.setBigUint64(ptr + 48, 0n, true); v.setBigUint64(ptr + 56, 0n, true);
   }
+  // A change to a writable mount: a request to the runner's folder, or for a
+  // kept mount a message the page stores (in the order sent).
+  let stores = 0;   // store messages sent: the page applies that many before it reports
+  function change(node, op, to) {
+    if (node.mount.persist) { postMessage({ kind: 'store', guest: node.mount.guest, op, path: node.path, to }); stores++; return true; }
+    return request('POST', node.url(op === 'rename' ? `?op=rename&to=${encodeURIComponent(to)}` : `?op=${op}`)).status === 200;
+  }
   function upload(node) {
     if (!node.dirty || node.deleted) return;
+    if (node.mount.persist) {
+      const data = (node.data ?? new Uint8Array(0)).slice();
+      postMessage({ kind: 'store', guest: node.mount.guest, op: 'put', path: node.path, data }, [data.buffer]);
+      stores++; node.dirty = false; return;
+    }
     const x = request('PUT', node.url(), node.data ?? new Uint8Array(0));
     if (x.status !== 200) throw new Error(`write ${node.path}: ${x.status}`);
     node.dirty = false;
@@ -204,7 +240,8 @@ async function run(config) {
         upload(f.node);
         // An unchanged file's bytes go when no other descriptor has it open:
         // they would otherwise stay in the worker beside the linear memory.
-        if (!f.node.dirty && !fds.some((g, i) => i !== fd && g && g.node === f.node)) f.node.data = null;
+        // A kept mount's stay: nothing could read them back.
+        if (!f.node.mount.persist && !f.node.dirty && !fds.some((g, i) => i !== fd && g && g.node === f.node)) f.node.data = null;
       }
       fds[fd] = undefined; return 0;
     },
@@ -278,21 +315,21 @@ async function run(config) {
       const p = resolve(fd, text(ptr, len), { parent: true }); if (p.error) return p.error;
       if (!writable(p.dir)) return ERR.ROFS; const kids = p.dir.list(); if (kids.has(p.name)) return ERR.EXIST;
       const node = new Node('dir', p.dir.mount, p.dir.path ? `${p.dir.path}/${p.name}` : p.name); node.children = new Map();
-      if (request('POST', node.url('?op=mkdir')).status !== 200) return ERR.IO;
+      if (!change(node, 'mkdir')) return ERR.IO;
       kids.set(p.name, node); return 0;
     },
     path_remove_directory(fd, ptr, len) {
       const p = resolve(fd, text(ptr, len), { parent: true }); if (p.error) return p.error;
       if (!writable(p.dir)) return ERR.ROFS; const node = p.dir.list().get(p.name); if (!node) return ERR.NOENT;
       if (node.kind !== 'dir') return ERR.NOTDIR; if (node.list().size) return ERR.NOTEMPTY;
-      if (request('POST', node.url('?op=rmdir')).status !== 200) return ERR.IO;
+      if (!change(node, 'rmdir')) return ERR.IO;
       p.dir.list().delete(p.name); return 0;
     },
     path_unlink_file(fd, ptr, len) {
       const p = resolve(fd, text(ptr, len), { parent: true }); if (p.error) return p.error;
       if (!writable(p.dir)) return ERR.ROFS; const node = p.dir.list().get(p.name); if (!node) return ERR.NOENT;
       if (node.kind === 'dir') return ERR.ISDIR;
-      if (request('POST', node.url('?op=unlink')).status !== 200) return ERR.IO;
+      if (!change(node, 'unlink')) return ERR.IO;
       node.deleted = true; p.dir.list().delete(p.name); return 0;
     },
     path_rename(fd, ptr, len, fd2, ptr2, len2) {
@@ -301,10 +338,15 @@ async function run(config) {
       if (a.dir.mount !== b.dir.mount) return ERR.XDEV;
       if (!writable(a.dir) || !writable(b.dir)) return ERR.ROFS;
       const node = a.dir.list().get(a.name); if (!node) return ERR.NOENT;
+      const to = b.dir.path ? `${b.dir.path}/${b.name}` : b.name, replaced = b.dir.list().get(b.name);
+      if (replaced === node) return 0;   // the same entry: nothing to do, as rename(2)
+      if (node.kind === 'dir' && to.startsWith(node.path + '/')) return ERR.INVAL;   // into itself
+      if (replaced && replaced.kind === 'dir' && node.kind !== 'dir') return ERR.ISDIR;
+      if (replaced && replaced.kind !== 'dir' && node.kind === 'dir') return ERR.NOTDIR;
+      if (replaced && replaced.kind === 'dir' && replaced.list().size) return ERR.NOTEMPTY;
       if (node.kind === 'file') upload(node);
-      const to = b.dir.path ? `${b.dir.path}/${b.name}` : b.name;
-      if (request('POST', node.url(`?op=rename&to=${encodeURIComponent(to)}`)).status !== 200) return ERR.IO;
-      const replaced = b.dir.list().get(b.name); if (replaced && replaced !== node) replaced.deleted = true;
+      if (!change(node, 'rename', to)) return ERR.IO;
+      if (replaced) replaced.deleted = true;
       a.dir.list().delete(a.name);
       const move = (n, path) => { n.path = path; if (n.children) for (const [k, c] of n.children) move(c, `${path}/${k}`); };
       move(node, to); b.dir.list().set(b.name, node); return 0;
@@ -441,8 +483,8 @@ async function run(config) {
   try { for (const f of fds) if (f && f.kind === 'node' && f.node.kind === 'file') upload(f.node); }
   catch (e) { stderr.push(encoder.encode(`web_run: upload ${e}\n`)); code = code || 134; }
   try { flush(); } catch (e) { request('POST', '/stderr', `web_run: ${e.message}\n`); code = code || 134; }
-  if (frames) {   // the page reports its canvas, then acknowledges
-    Atomics.store(header, 4, 1); Atomics.notify(header, 4);
+  if (frames) {   // the page stores what it was sent and reports its canvas, then acknowledges
+    Atomics.store(header, 6, stores); Atomics.store(header, 4, 1); Atomics.notify(header, 4);
     if (Atomics.wait(header, 5, 0, 5000) === 'timed-out')
       request('POST', '/stderr', 'web_run: the page did not report its canvas within 5 s\n');
   }

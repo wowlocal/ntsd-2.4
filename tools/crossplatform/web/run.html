@@ -63,6 +63,12 @@
         const png = await new Promise(ok => canvas.toBlob(ok, 'image/png'));
         if (png) await fetch('/canvas', { method: 'POST', body: png });
         if (audio) report.audio = audioStats();
+        if (kept.length) {   // every change the worker sent, stored (within the worker's 5 s), then for a report what the browser keeps
+          const until = performance.now() + 3500, sleep = ms => new Promise(ok => setTimeout(ok, ms));
+          while (received < Atomics.load(header, 6) && performance.now() < until) await sleep(10);
+          await Promise.race([storing, sleep(Math.max(0, until - performance.now()))]);
+          if (config.report && saving) report.kept = await keptSummary().catch(e => ({ error: String(e) }));
+        }
         await fetch('/page', { method: 'POST', body: JSON.stringify(report) });
       } finally { Atomics.store(header, 5, 1); Atomics.notify(header, 5); }
     }
@@ -204,7 +210,13 @@
       canvas.addEventListener('pointercancel', () => buttons(null, 0));
       if (!config.autostart) focus();   // the state at the start (the host assumes focused; an automated page may lack focus)
       const rate = await startAudio();
-      worker.postMessage({ ...config, frames, input, pads, dialog, ...(rate ? { audio: { ring: soundRing, rate } } : {}) });
+      let ready;
+      try { ready = await withKept(config); }
+      catch (e) {
+        saving = false; if (unlock) unlock();
+        ready = withoutKept(config); notice(`Saves are not available in this browser (${e && e.name || e}): playing without saving`);
+      }
+      worker.postMessage({ ...ready, frames, input, pads, dialog, ...(rate ? { audio: { ring: soundRing, rate } } : {}) });
     }
     // The first two gamepads, each kept in the slot it first took; d-pad over
     // the left stick (standard mapping), A/B/X/Y as buttons 1-4. A pad that
@@ -229,6 +241,90 @@
         });
       } catch {}
     }
+    // Saves (W2b-4a): a mount the page keeps (persist) lives in the browser's
+    // IndexedDB, one record per entry keyed by its guest path ({dir, data}).
+    // The worker never yields, so it gets the whole tree before it starts and
+    // sends each change back (a closed file's bytes, a folder made, a
+    // removal, a rename), which the page stores in order, each on disk before
+    // the next (strict durability: Chromium's default reports a write done
+    // before it is on disk, and lost the last save when the browser was
+    // killed). Each file is replaced whole. Without saving (a second tab of
+    // the game: a Web Lock, as two snapshots would overwrite each other; or no
+    // usable IndexedDB) the mount stays, loaded read-only or empty, and its
+    // changes are not stored; the player is told. Boundaries: a change still
+    // being stored when the tab closes is lost (milliseconds after the game
+    // wrote it); every kept file is loaded at each start; the browser may
+    // evict the storage (persist() is asked after the start gesture — Firefox
+    // asks the player; Safari caps a site's storage at 7 days without a visit
+    // unless the page is a home-screen app); a record whose path runs through
+    // a stored file is ignored at load and stays stored. A failure is shown.
+    const kept = config.mounts.filter(m => m.persist);
+    let saving = kept.length > 0, unlock = null, database = null, storing = Promise.resolve(), received = 0, warned = false;
+    function opened() {   // the connection, opened again after the browser closed it (iOS Safari does)
+      return database ??= new Promise((ok, no) => {
+        let r; try { r = indexedDB.open('ntsd-save', 1); } catch (e) { database = null; return no(e); }
+        r.onupgradeneeded = () => r.result.createObjectStore('entries');
+        r.onsuccess = () => { const db = r.result; db.onclose = db.onversionchange = () => { database = null; db.close(); }; ok(db); };
+        r.onerror = () => { database = null; no(r.error); };
+      });
+    }
+    const done = r => new Promise((ok, no) => { r.onsuccess = () => ok(r.result); r.onerror = () => no(r.error); });
+    const under = key => IDBKeyRange.bound(key + '/', key + '0', false, true);   // the entries inside a folder ('0' follows '/')
+    // Kept mounts stay in place (the worker numbers mounts by position), empty.
+    const withoutKept = config => ({ ...config, mounts: config.mounts.map(m => (m.persist ? { ...m, entries: [] } : m)) });
+    async function entries(guest) {
+      const store = (await opened()).transaction('entries').objectStore('entries');
+      const [keys, values] = await Promise.all([done(store.getAllKeys(under(guest))), done(store.getAll(under(guest)))]);
+      return keys.map((key, i) => ({ path: key.slice(guest.length + 1), dir: values[i].dir, data: values[i].data }));
+    }
+    async function withKept(config) {   // the config with each kept mount's tree
+      if (!kept.length) return config;
+      if (navigator.locks) {
+        const held = await new Promise(ok => navigator.locks.request('ntsd-save', { ifAvailable: true },
+          lock => { ok(!!lock); return lock ? new Promise(done => { unlock = done; }) : undefined; }));   // held while the page lives
+        if (!held) { saving = false; notice('The game is open in another tab, which keeps the saves: this tab uses them without saving'); }
+      }
+      if (saving && navigator.storage && navigator.storage.persist) navigator.storage.persist().catch(() => {});
+      const mounts = [];
+      for (const m of config.mounts) mounts.push(m.persist ? { ...m, entries: await entries(m.guest) } : m);
+      return { ...config, mounts };
+    }
+    function apply(db, m) {
+      return new Promise((ok, no) => {
+        const t = db.transaction('entries', 'readwrite', { durability: 'strict' }), store = t.objectStore('entries'), key = `${m.guest}/${m.path}`;
+        t.oncomplete = ok; t.onerror = t.onabort = () => no(t.error ?? new Error('transaction aborted'));
+        if (m.op === 'put') store.put({ dir: false, data: m.data }, key);
+        else if (m.op === 'mkdir') store.put({ dir: true, data: null }, key);
+        else if (m.op === 'unlink' || m.op === 'rmdir') store.delete(key);
+        else if (m.op === 'rename' && m.to !== m.path && !m.to.startsWith(m.path + '/')) {   // replaces the target, as rename does; folders move whole
+          const to = `${m.guest}/${m.to}`, move = (from, value) => { store.put(value, to + from.slice(key.length)); store.delete(from); };
+          store.delete(to); store.delete(under(to));
+          store.get(key).onsuccess = e => { if (e.target.result) move(key, e.target.result); };
+          store.openCursor(under(key)).onsuccess = e => { const c = e.target.result; if (c) { move(c.key, c.value); c.continue(); } };
+        }
+      });
+    }
+    function keep(m) {
+      if (!saving) return;
+      storing = storing.then(async () => {
+        // Once more on a fresh connection unless the quota is full: an aborted
+        // transaction left nothing, and a dropped connection surfaces as
+        // InvalidStateError, UnknownError or AbortError.
+        try { await apply(await opened(), m); }
+        catch (e) { if (e && e.name === 'QuotaExceededError') throw e; database = null; await apply(await opened(), m); }
+      }).catch(e => {
+        fetch('/stderr', { method: 'POST', body: `web_run: storing ${m.op} ${m.path}: ${e}\n` });
+        if (!warned) { warned = true; notice(`Saving failed (${e && e.name || e}): the game's saves in this browser may be incomplete`); }
+      });
+    }
+    async function keptSummary() {   // guest path → {dir} or {size, sha256}
+      const out = {};
+      for (const m of kept) for (const e of await entries(m.guest)) {
+        const digest = e.dir ? null : new Uint8Array(await crypto.subtle.digest('SHA-256', e.data));
+        out[`${m.guest}/${e.path}`] = e.dir ? { dir: true } : { size: e.data.length, sha256: [...digest].map(b => b.toString(16).padStart(2, '0')).join('') };
+      }
+      return out;
+    }
     // Questions from the worker; an automated run answers config.answer at once.
     function reply(index) { asking = false; released = false; Atomics.store(answer, 1, index); Atomics.store(answer, 0, 1); Atomics.notify(answer, 0); }
     function notice(content) {
@@ -237,6 +333,7 @@
       document.body.append(bar); setTimeout(() => bar.remove(), 15000);
     }
     worker.onmessage = ({ data: m }) => {
+      if (m.kind === 'store') { received++; keep(m); return; }
       if (m.kind === 'open') {   // a popup not tied to a click is blocked: the player opens it
         const a = document.createElement('a'); a.href = m.url; a.target = '_blank'; a.rel = 'noopener'; a.textContent = `Open ${m.url}`;
         notice(a); return;
@@ -265,7 +362,7 @@
     function tick() { if (reported) return; if (config.interactive) samplePads(); draw(); if (Atomics.load(header, 4) === 1) finish(); }
     (function frame() { if (!reported) requestAnimationFrame(frame); tick(); })();
     setInterval(tick, 50);   // where animation frames are throttled
-    if (!config.interactive) worker.postMessage({ ...config, frames, input, pads, dialog });
+    if (!config.interactive) withKept(config).then(ready => worker.postMessage({ ...ready, frames, input, pads, dialog }), e => fail(`saves: ${e}`));
     else if (config.autostart) start();
     else {
       // A player's gesture first: browsers show gamepads only after one of
