@@ -96,7 +96,7 @@ and scenarios unchanged — checked on that host as the gates say.
 | ID | Step | Status |
 | --- | --- | --- |
 | S0 | This card; the per-host survey | **done** |
-| S1 | Apple TV: verify and make the launch fill the TV at 1080p and 4K (the view, its scale, safe areas/overscan), the original-format flag (1:1 at the screen's centre) | queued |
+| S1 | Apple TV: verify and make the launch fill the TV at 1080p and 4K (the view, its scale, safe areas/overscan), the original-format flag (1:1 at the screen's centre) | **done** |
 | S2 | Browser: the original-format option (`?original`, config) beside today's fit and Full screen; integer or device-pixel snapping considered | queued |
 | S3 | macOS app: a resizable window (aspect kept, the game's geometry held at any size), the green button's native full screen, a default size larger than 1× where the screen allows, `--original-window` for today's fixed window | queued |
 | S4 | SDL (Linux, Windows): a resizable, high-density window holding the game's geometry, the native full-screen toggle, the original flag | queued |
@@ -105,23 +105,26 @@ and scenarios unchanged — checked on that host as the gates say.
 
 Open for the user (not blocking): on a 16:9 TV the 794:550 picture keeps its
 aspect with bars at the sides; a stretched or filled mode would distort or
-crop the original — ask before adding one.
+crop the original — ask before adding one. Nearest filtering at a
+non-integer scale (1.96× at 1080p) gives uneven pixels; a smoothed mode would
+blur them — also the user's choice.
 
 ## Ledger
 
 | Date | Step | Result | Evidence | Commit |
 | --- | --- | --- | --- | --- |
-| 2026-10-12 | S0: card and survey | Branch `exp/window-scaling` from `main` 9d7beb8a (exp/tvos-web merged by fast-forward at the user's request); the survey above | this card | this commit |
+| 2026-10-12 | S0: card and survey | Branch `exp/window-scaling` from `main` 9d7beb8a (exp/tvos-web merged by fast-forward at the user's request); the survey above | this card | 1d39dd65 |
+| 2026-10-13 | S1: Apple TV fills the TV | Screenshots of the Apple TV 4K simulators: **the launch already fills the TV's height at 1080p (1560×1080 px) and 4K (3118×2160 px)**, 794:550 kept, bars at the sides. `--original-window` (or the NTSDOriginalWindow default) shows 794×550 points at the centre (794×550 px at 1080p, 1588×1100 px at 4K); the game's Alt+Enter popup still fills the screen in that mode (the review's medium finding, fixed). Safe area unchanged (the picture runs to the top and bottom edges; recorded). All 10 tvOS scenarios equal with all 18,088 frames identical to the AppKit reference, itself identical to T1a's pinned coretext reference; iPad vs equal, frames identical | [evidence](../evidence/ws-s1-tvos-full-screen-20261013.json) | this commit |
 
 ## Next task
 
-S1: Apple TV fills the TV. Build the tvOS app for the Apple TV 4K
-simulator at 1080p and at 4K, launch it, take screenshots, and measure the
-picture's box against the screen (expected: the full height, 794:550 aspect,
-bars at the sides). Check the root view's frame against the screen bounds,
-the safe area and `overscanCompensationInsets`, and the layer's scale
-(contentsScale at 4K). Fix what does not fill. Add the original-format flag
-(a launch argument read on tvOS, `--original-window`: the 794×550 picture at
-one point per pixel, centred). Gates: tvOS scenarios equal with frames
-identical to the `coretext` references; screenshots at both resolutions;
-review.
+S2: the browser's original format. The page already fits the canvas to the
+window (aspect kept, nearest) and has a Full screen button (W2b-4b). Add the
+original format: `?original` on the page URL or `"original": true` in
+config.json — the canvas at the frame's size in CSS pixels, centred, no
+fitting — while the game's own full-screen popup (Alt+Enter, if the web host
+ever presents one) would fill as elsewhere; a page-bar toggle between fit
+and original is optional. Input already maps through the canvas's on-screen
+box (check it in both modes with the runner's click steps). Gates: the web
+scenarios unchanged in both engines; clicks exact in both modes at several
+window sizes; the static page with `?original`; review.

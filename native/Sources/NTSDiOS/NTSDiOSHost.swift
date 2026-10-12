@@ -56,7 +56,8 @@ final class NTSDiOSCursor {}
                                   bitmapInfo:CGBitmapInfo(rawValue:CGImageAlphaInfo.noneSkipFirst.rawValue).union(.byteOrder32Little),
                                   provider:provider,decode:nil,shouldInterpolate:false,intent:.defaultIntent)
         else { throw OriginalRuntimeWindowBackend.Boundary.geometry }
-        view.show(image,size:CGSize(width:frame.width,height:frame.height)); shown = Self.window(window)
+        let w = Self.window(window)
+        view.show(image,size:CGSize(width:frame.width,height:frame.height),popup:w.popup); shown = w
     }
 }
 

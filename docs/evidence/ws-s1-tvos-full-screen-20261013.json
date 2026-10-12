@@ -1,0 +1,184 @@
+{
+ "study": "WINDOW_SCALING",
+ "step": "S1: Apple TV fills the TV; the original format behind a flag",
+ "change": "native/Sources/NTSDiOS: NTSDGameView.original (from --original-window or the NTSDOriginalWindow default; -NTSDOriginalWindow YES on a launch line sets it) shows the frame at one point per pixel at the centre (contentsGravity .center, contentsScale 1, reapplied when the view moves to a window or the display scale changes); the game's own full-screen popup (Alt+Enter) still fills the screen in that mode, as the shared backend declares and the macOS host shows it (the present passes the window's popup flag); clientPoint maps through the same scale. The default presentation is unchanged (aspect fit, nearest). Applies to the iPad too.",
+ "screenshots": {
+  "how": "the tvOS app (ios_app.py --platform tvos build) launched interactively on the Apple TV 4K (3rd generation) simulators at 1080p (scale 1) and at 4K (scale 2); xcrun simctl io screenshot; the non-black picture's box measured",
+  "results": {
+   "fit-1080": {
+    "screen": [
+     1920,
+     1080
+    ],
+    "box": [
+     180,
+     0,
+     1740,
+     1080
+    ],
+    "boxSize": [
+     1560,
+     1080
+    ],
+    "aspect": 1.4444
+   },
+   "fit-4k": {
+    "screen": [
+     3840,
+     2160
+    ],
+    "box": [
+     361,
+     0,
+     3479,
+     2160
+    ],
+    "boxSize": [
+     3118,
+     2160
+    ],
+    "aspect": 1.4435
+   },
+   "orig-1080": {
+    "screen": [
+     1920,
+     1080
+    ],
+    "box": [
+     563,
+     265,
+     1357,
+     815
+    ],
+    "boxSize": [
+     794,
+     550
+    ],
+    "aspect": 1.4436
+   },
+   "orig-4k": {
+    "screen": [
+     3840,
+     2160
+    ],
+    "box": [
+     1126,
+     530,
+     2714,
+     1630
+    ],
+    "boxSize": [
+     1588,
+     1100
+    ],
+    "aspect": 1.4436
+   },
+   "orig-altenter-1080": {
+    "screen": [
+     1920,
+     1080
+    ],
+    "box": [
+     180,
+     0,
+     1740,
+     1080
+    ],
+    "boxSize": [
+     1560,
+     1080
+    ],
+    "aspect": 1.4444
+   }
+  },
+  "reading": "Default: the TV's whole height, 794:550 kept, bars at the sides (1560×1080 px at 1080p, 3118×2160 at 4K) — the launch already filled the TV before this step. Original: 794×550 px at 1080p and 1588×1100 px (794×550 points) at 4K, centred. Original then Alt+Enter (a script holding Alt and pressing Enter at the menu): the popup fills the TV again (1560×1080)."
+ },
+ "safeArea": "Not changed: the picture runs to the top and bottom edges (tvOS's safe area is 60 pt top and bottom, 80 pt at the sides on a 1920×1080 pt screen; the side bars keep the sides inside it, the game's HP bars at the top fall in the top band). Apple's guidelines let full-screen games use the whole screen; a TV that overscans may crop a little at the top and bottom (Apple TV's own overscan setting compensates). Recorded for the user.",
+ "scaling": "Nearest filtering at a non-integer scale (1.96× at 1080p, 3.93× at 4K) gives uneven pixels (at 1080p 20 rows and 29 columns 1 px narrower); no integer scale fits the height. A smoothed mode is a question for the user.",
+ "scenarios": {
+  "tvos": [
+   {
+    "scenario": "vs",
+    "compare": {
+     "result": "equal",
+     "differs": []
+    }
+   },
+   {
+    "scenario": "mission",
+    "compare": {
+     "result": "equal",
+     "differs": []
+    }
+   },
+   {
+    "scenario": "demo",
+    "compare": {
+     "result": "equal",
+     "differs": []
+    }
+   },
+   {
+    "scenario": "war",
+    "compare": {
+     "result": "equal",
+     "differs": []
+    }
+   },
+   {
+    "scenario": "playback",
+    "compare": {
+     "result": "equal",
+     "differs": []
+    }
+   },
+   {
+    "scenario": "tournament",
+    "compare": {
+     "result": "equal",
+     "differs": []
+    }
+   },
+   {
+    "scenario": "altenter",
+    "compare": {
+     "result": "equal",
+     "differs": []
+    }
+   },
+   {
+    "scenario": "tournament-win",
+    "compare": {
+     "result": "equal",
+     "differs": []
+    }
+   },
+   {
+    "scenario": "team-tournament",
+    "compare": {
+     "result": "equal",
+     "differs": []
+    }
+   },
+   {
+    "scenario": "joystick",
+    "compare": {
+     "result": "equal",
+     "differs": []
+    }
+   }
+  ],
+  "framesAgainstAppKit": {
+   "frames": 18088,
+   "mismatched": 0,
+   "result": "identical"
+  },
+  "ipadVs": {
+   "result": "equal",
+   "differs": []
+  },
+  "ipadVsFrames": "6 frames and 1826 digests identical",
+  "reference": "a fresh AppKit run (the frozen app of the tw-w3e gate, run_headless_scenarios.py --local, all 10 scenarios equal) whose 18,030 frame digests are identical, scenario by scenario, to TVOS_WEB T1a's pinned coretext reference (extracted from its T7 archive runs-20261012b.tar)"
+ },
+ "review": "Independent, read-only: OK after one medium fix — in the original format Alt+Enter's full-screen popup would have shown 1:1 instead of filling the screen (fixed: the popup flag reaches the view); low: contentsScale could be reset by UIKit on a display-scale change (fixed: reapplied on window moves and scale trait changes), the safe area and the non-integer nearest scaling (recorded above), backingScale in the 'started' event still 2 in the original mode (left: only reported), the launch-argument wording (fixed), the frame reference (compared against the pinned one)."
+}
