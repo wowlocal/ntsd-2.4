@@ -15,6 +15,8 @@ import NTSDRuntime
 // present, adds session options for scripted checks; `--events-file PATH`
 // there sends the event lines to a file, and `--tz NAME` sets the process time
 // zone (an app inherits the zygote's environment, not the harness's TZ).
+// `--original-window` there shows the original window: the frame at one
+// device pixel per pixel, centred (WINDOW_SCALING S5).
 
 @_cdecl("ntsd_android_on_create")
 func ntsdAndroidOnCreate(_ activity: UnsafeMutablePointer<ANativeActivity>) {

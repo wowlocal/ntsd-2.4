@@ -82,7 +82,7 @@ arrive), no process memory or CPU readings (the runner's process is not the
 game's; the module's linear memory is in each scenario run's metrics).
 local_run reports startedToLoadedSeconds too. --ticks A and B are multiples
 of 300 (progress events come every 300 bodies). --game-arg=ARG adds ARG to
-the game's command line on the Mac, browser and WASI hosts (not Android),
+the game's command line on every host (on Android, to files/args.txt),
 e.g. --synchronous-render: the Mac
 renders on its game thread, as WASI does, for a like-for-like
 completeMsPerTick).
@@ -135,7 +135,7 @@ def android_run(o, apk, label):
         if volume: phone.media_volume(s, 0)
         phone.shell(s, f"am force-stop {PACKAGE}")
         phone.shell(s, f"run-as {PACKAGE} sh -c 'rm -rf files/speed && mkdir -p files/speed/overlay && cat > files/args.txt'",
-                    input="\n".join(arguments(o.scenario, f"{FILES}/speed/overlay", f"{FILES}/speed/events.jsonl", o.sounds, o.music)) + "\n")
+                    input="\n".join(arguments(o.scenario, f"{FILES}/speed/overlay", f"{FILES}/speed/events.jsonl", o.sounds, o.music) + o.game_arg) + "\n")
         if o.fresh_data:
             # The next launch extracts the APK's assets again (MEMORY_LOADING S2).
             phone.shell(s, f"run-as {PACKAGE} rm -f files/ntsd-data/.extracted")

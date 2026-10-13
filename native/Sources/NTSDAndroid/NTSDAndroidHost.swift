@@ -23,6 +23,13 @@ final class NTSDAndroidCursor {}
     /// The window and size of the last presented frame, set on the main thread
     /// when the draw is replayed (touches map with them).
     private(set) var shown: NTSDAndroidWindow?, shownSize: (width: Int,height: Int)?
+    /// The original window (WINDOW_SCALING S5, `--original-window`): the frame
+    /// at one device pixel per pixel, centred, when the surface holds it (else
+    /// fitted as by default); the game's full-screen popup still fills.
+    var original = false
+    /// Whether the last presented frame was drawn one to one (touches map with it).
+    private(set) var shownOneToOne = false
+    private func oneToOne(_ w: NTSDAndroidWindow) -> Bool { original && !w.popup }
     /// The last presented frame (redrawn when the surface comes back), the
     /// surface and the buffer geometry last set, shared with the display
     /// backend's render thread: everything that touches the ANativeWindow holds
@@ -32,6 +39,8 @@ final class NTSDAndroidCursor {}
     final class Target: @unchecked Sendable {
         let lock = NSLock()
         var frame: OriginalFramebuffer?, surface: OpaquePointer?, geometry: (width: Int32,height: Int32)?
+        /// The last frame's presentation: one to one (the original window) or fitted.
+        var oneToOne = false
         func withLock<T>(_ body: () -> T) -> T { lock.lock(); defer { lock.unlock() }; return body() }
     }
     let target = Target()
@@ -45,7 +54,7 @@ final class NTSDAndroidCursor {}
     /// overtakes one. Counts go out every 300 frames (`androidPresent`).
     final class Presenter: @unchecked Sendable {
         private let condition = NSCondition()
-        private var pending: OriginalFramebuffer?
+        private var pending: OriginalFramebuffer?, pendingOneToOne = false
         private var submitted = 0,drawn = 0,waits = 0
         init(_ target: Target) {
             let thread = Thread { [self] in
@@ -67,20 +76,20 @@ final class NTSDAndroidCursor {}
             while pending != nil || drawn != submitted { condition.wait() }
             condition.unlock()
         }
-        func submit(_ frame: OriginalFramebuffer) {
+        func submit(_ frame: OriginalFramebuffer,oneToOne: Bool) {
             condition.lock()
             if pending != nil { waits += 1 }
             while pending != nil { condition.wait() }
-            pending = frame; submitted += 1
+            pending = frame; pendingOneToOne = oneToOne; submitted += 1
             condition.broadcast(); condition.unlock()
         }
         private func run(_ target: Target) {
             while true {
                 condition.lock()
                 while pending == nil { condition.wait() }
-                let frame = pending!; pending = nil
+                let frame = pending!,oneToOne = pendingOneToOne; pending = nil
                 condition.broadcast(); condition.unlock()
-                NTSDAndroidWindowHost.show(frame,target)
+                NTSDAndroidWindowHost.show(frame,target,oneToOne:oneToOne)
                 condition.lock(); drawn += 1
                 let counts = drawn % 300 == 0 ? (submitted,drawn,waits) : nil
                 condition.broadcast(); condition.unlock()
@@ -124,31 +133,33 @@ final class NTSDAndroidCursor {}
         let w = Self.window(window); return CGPoint(x:w.origin.x+point.x,y:w.origin.y+point.y)
     }
     func present(_ frame: OriginalFramebuffer,in window: AnyObject) throws {
-        shown = Self.window(window); shownSize = (frame.width,frame.height)
+        let w = Self.window(window); shown = w; shownSize = (frame.width,frame.height); shownOneToOne = oneToOne(w)
         // After the render queue's flush, frames handed to the presenter may
         // still be undrawn: they go first (R2's review).
         presenter?.waitUntilIdle()
-        Self.show(frame,target)
+        Self.show(frame,target,oneToOne:shownOneToOne)
     }
     var presentsConcurrently: Bool { true }
     /// Presents from the render thread through the presenter thread (R2); the
     /// window is recorded now, at the replayed draw, as the synchronous
     /// present did.
     func concurrentPresenter(_ window: AnyObject,width: Int,height: Int) -> (@Sendable (OriginalFramebuffer) -> Void)? {
-        shown = Self.window(window); shownSize = (width,height)
+        let w = Self.window(window),one = oneToOne(w); shown = w; shownSize = (width,height); shownOneToOne = one
         let presenter = presenter ?? Presenter(target)
         self.presenter = presenter
-        return { frame in presenter.submit(frame) }
+        return { frame in presenter.submit(frame,oneToOne:one) }
     }
-    private nonisolated static func show(_ frame: OriginalFramebuffer,_ target: Target) {
-        target.withLock { target.frame = frame; if let surface = target.surface { draw(surface,frame,target) } }
+    private nonisolated static func show(_ frame: OriginalFramebuffer,_ target: Target,oneToOne: Bool) {
+        target.withLock { target.frame = frame; target.oneToOne = oneToOne; if let surface = target.surface { draw(surface,frame,target) } }
     }
     /// Redraws the last frame (a new or invalidated surface).
     func redraw() { target.withLock { if let surface = target.surface,let frame = target.frame { Self.draw(surface,frame,target) } } }
-    /// The buffer size that fits the frame into the surface's aspect.
-    private nonisolated static func buffer(_ surface: OpaquePointer,_ width: Int,_ height: Int) -> (Int32,Int32) {
+    /// The buffer size that fits the frame into the surface's aspect; one to
+    /// one, the surface's own size when it holds the frame.
+    private nonisolated static func buffer(_ surface: OpaquePointer,_ width: Int,_ height: Int,_ oneToOne: Bool) -> (Int32,Int32) {
         let sw = Int(ANativeWindow_getWidth(surface)),sh = Int(ANativeWindow_getHeight(surface))
         guard sw > 0,sh > 0 else { return (Int32(width),Int32(height)) }
+        if oneToOne,sw >= width,sh >= height { return (Int32(sw),Int32(sh)) }
         if sw*height > sh*width { return (Int32((height*sw+sh-1)/sh),Int32(height)) }
         return (Int32(width),Int32((width*sh+sw-1)/sw))
     }
@@ -156,7 +167,7 @@ final class NTSDAndroidCursor {}
     /// pixels are B,G,R,X bytes; the surface buffer is R,G,B,X.
     /// The caller holds target.lock.
     private nonisolated static func draw(_ surface: OpaquePointer,_ frame: OriginalFramebuffer,_ target: Target) {
-        let (bw,bh) = buffer(surface,frame.width,frame.height)
+        let (bw,bh) = buffer(surface,frame.width,frame.height,target.oneToOne)
         if target.geometry == nil || target.geometry! != (bw,bh) {
             _ = ANativeWindow_setBuffersGeometry(surface,bw,bh,Int32(WINDOW_FORMAT_RGBX_8888.rawValue)); target.geometry = (bw,bh)
         }
@@ -206,7 +217,7 @@ final class NTSDAndroidCursor {}
         guard let size = shownSize else { return nil }
         let sw = Float(ANativeWindow_getWidth(surface)),sh = Float(ANativeWindow_getHeight(surface))
         guard sw > 0,sh > 0 else { return nil }
-        let (bw,bh) = Self.buffer(surface,size.width,size.height)
+        let (bw,bh) = Self.buffer(surface,size.width,size.height,shownOneToOne)
         let bx = x*Float(bw)/sw,by = y*Float(bh)/sh
         return (Int32((bx-Float((Int(bw)-size.width)/2)).rounded(.down)),Int32((by-Float((Int(bh)-size.height)/2)).rounded(.down)))
     }
@@ -227,6 +238,7 @@ final class NTSDAndroidCursor {}
     lazy var touch = OriginalRuntimeTouchMouse { [unowned self] message,x,y,buttons in self.mouse(message,x:x,y:y,buttons:buttons) }
     init(arguments: [String],screen: CGSize,density: Double,musicDirectory: String,files: URL) {
         self.arguments = arguments; windows = NTSDAndroidWindowHost(screen:screen)
+        windows.original = arguments.contains("--original-window")
         self.musicDirectory = musicDirectory; self.files = files; self.density = density
     }
     static func report(_ value: [String:Any]) { OriginalRuntimeSession.emit(value) }

@@ -1,0 +1,205 @@
+{
+ "study": "WINDOW_SCALING",
+ "step": "S5: iPad and Android",
+ "change": "NTSDAndroid: --original-window (files/args.txt, the app's argument channel) sets NTSDAndroidWindowHost.original; one-to-one = original && not the game's popup, computed per window at present and carried with each frame through the presenter thread (stored with the frame under Target's lock; redraw reuses it); the buffer is then the surface's own size, so the frame is drawn at one device pixel per pixel, centred, without compositor scaling; a surface smaller than the frame is fitted as by default; touches map with the last presentation. Device pixels, not dp: 794x550 dp does not fit a 720 px tall phone. load_memory.py: --game-arg now reaches Android runs (files/args.txt). The iPad needs no code: it shares the S1 view (NTSDGameView) and its original mode.",
+ "checks": {
+  "ipad": {
+   "scenario": "ios_app.py vs on the iPad Air 13-inch (M4) simulator: equal; vs frames identical to the CoreText reference (6/6, 1,826 digests; the other 9 scenarios were not run here)",
+   "screenshots": [
+    "fit FBFEC8E7-9504-4FA2-A435-F0B24406601E {\"screen\": [2048, 2732], \"box\": [0, 657, 2048, 2075], \"boxSize\": [2048, 1418], \"aspect\": 1.4443}",
+    "orig FBFEC8E7-9504-4FA2-A435-F0B24406601E {\"screen\": [2048, 2732], \"box\": [429, 954, 1619, 1778], \"boxSize\": [1190, 824], \"aspect\": 1.4442}",
+    "orig-altenter FBFEC8E7-9504-4FA2-A435-F0B24406601E {\"screen\": [2048, 2732], \"box\": [0, 657, 2048, 2075], \"boxSize\": [2048, 1418], \"aspect\": 1.4443}",
+    "fit E2ACBB35-F184-4F8E-92A6-3E8C84D1A729 {\"screen\": [1488, 2266], \"box\": [39, 16, 1449, 1622], \"boxSize\": [1410, 1606], \"aspect\": 0.878}",
+    "orig E2ACBB35-F184-4F8E-92A6-3E8C84D1A729 {\"screen\": [1488, 2266], \"box\": [223, 772, 1265, 1494], \"boxSize\": [1042, 722], \"aspect\": 1.4432}",
+    "orig-altenter E2ACBB35-F184-4F8E-92A6-3E8C84D1A729 {\"screen\": [1488, 2266], \"box\": [39, 644, 1449, 1622], \"boxSize\": [1410, 978], \"aspect\": 1.4417}"
+   ],
+   "reading": "the simulator devices were in portrait, the app's landscape window shown shrunk (iPad Air 0.75, iPad mini 0.657): default fill (iPad Air 2048x1418 px), original 794x550 pt centred (1190x824 and 1042x722 px after the shrink), the Alt+Enter popup fills; the iPad mini default box also caught a system notification banner (the picture itself 1410x978 px, as the popup)",
+   "taps": "not exercised (no simulator tap tool)"
+  },
+  "androidGate": {
+   "how": "X5 ml-tools android-gate-run-ws-s5.sh (a copy of the T1c host-only gate): pinned trees, clean APK, emulator vs/joystick/demo, vs frames against android-app-ref, A12 A/B against tw-w3e (no Android/Core/Runtime change since W3e) with music and sounds, 5 runs + warm-up, bodies 600-1800",
+   "testedTrees": "native ddd60f3f6dd224f767f7e343cf34c8d68258b8f5 tools 95a7aed8b572771b385b43631a970ca7d9802c47",
+   "emulator": [
+    "{\"scenario\": \"vs\", \"seconds\": 58.6, \"result\": \"equal\", \"differs\": []}",
+    "{\"scenario\": \"joystick\", \"seconds\": 21.6, \"result\": \"equal\", \"differs\": []}",
+    "{\"scenario\": \"demo\", \"seconds\": 44.2, \"result\": \"equal\", \"differs\": []}"
+   ],
+   "phoneAB": {
+    "ws-s5": {
+     "runs": 3,
+     "mainMsPerTick": {
+      "median": 10.9,
+      "min": 10.89,
+      "max": 10.93
+     },
+     "renderMsPerTick": {
+      "median": 7.18,
+      "min": 7.17,
+      "max": 7.68
+     },
+     "processMsPerTick": {
+      "median": 27.33,
+      "min": 27.2,
+      "max": 27.79
+     },
+     "loadSeconds": {
+      "median": 6.1,
+      "min": 5.95,
+      "max": 6.25
+     },
+     "peakFootprintMB": {
+      "median": 619,
+      "min": 588,
+      "max": 638
+     }
+    },
+    "tw-w3e": {
+     "runs": 2,
+     "mainMsPerTick": {
+      "median": 10.855,
+      "min": 10.84,
+      "max": 10.87
+     },
+     "renderMsPerTick": {
+      "median": 7.175000000000001,
+      "min": 7.15,
+      "max": 7.2
+     },
+     "processMsPerTick": {
+      "median": 27.240000000000002,
+      "min": 27.2,
+      "max": 27.28
+     },
+     "loadSeconds": {
+      "median": 6.275,
+      "min": 6.04,
+      "max": 6.51
+     },
+     "peakFootprintMB": {
+      "median": 621.5,
+      "min": 621,
+      "max": 622
+     }
+    }
+   },
+   "reading": "emulator scenarios equal, vs frames identical (1,832); A12 within noise: main 10.90 vs 10.86, render 7.18 vs 7.18, process 27.33 vs 27.24 ms per tick, load 6.1 vs 6.3 s, peak 619 vs 622 MB (the default path only carries a false flag)"
+  },
+  "devices": {
+   "how": "emulator (2560x1600) and the A12 (1600x720): files/args.txt with and without --original-window, a screenshot, a real `adb shell input tap` on START's client pixel (350,230) mapped through the picture box measured on the screenshot, the loaded event; then --original-window with scripted Alt+Enter at iterations 300 and 1500 and screenshots every 2 s; the phone kept awake only meanwhile (stay_on restored to 0)",
+   "lines": [
+    "emulator-5554 fit screen 2560x1600 tap (1144,670) loaded=1 box={\"screen\": [2560, 1600], \"box\": [124, 0, 2436, 1600], \"boxSize\": [2312, 1600], \"aspect\": 1.445}",
+    "emulator-5554 orig screen 2560x1600 tap (1233,755) loaded=1 box={\"screen\": [2560, 1600], \"box\": [883, 525, 1677, 1075], \"boxSize\": [794, 550], \"aspect\": 1.4436}",
+    "emulator-5554 alt 1 [794, 550]",
+    "emulator-5554 alt 2 [2312, 1600]",
+    "emulator-5554 alt 3 [794, 550]",
+    "emulator-5554 alt 4 [794, 550]",
+    "emulator-5554 alt 5 [794, 550]",
+    "emulator-5554 alt 6 [794, 550]",
+    "emulator-5554 alt 7 [794, 550]",
+    "emulator-5554 alt 8 [794, 550]",
+    "emulator-5554 alt 9 [794, 550]",
+    "emulator-5554 alt 10 [794, 550]",
+    "emulator-5554 alt 11 [794, 550]",
+    "emulator-5554 alt 12 [794, 550]",
+    "emulator-5554 alt 13 [794, 550]",
+    "emulator-5554 alt 14 [794, 550]",
+    "emulator-5554 alt 15 [794, 550]",
+    "emulator-5554 alt 16 [794, 550]",
+    "emulator-5554 alt 17 [794, 550]",
+    "emulator-5554 alt 18 [794, 550]",
+    "R58R36F7VFD fit screen 1600x720 tap (761,301) loaded=1 box={\"screen\": [1600, 720], \"box\": [302, 0, 1343, 720], \"boxSize\": [1041, 720], \"aspect\": 1.4458}",
+    "R58R36F7VFD orig screen 1600x720 tap (775,315) loaded=1 box={\"screen\": [1600, 720], \"box\": [425, 85, 1219, 635], \"boxSize\": [794, 550], \"aspect\": 1.4436}",
+    "R58R36F7VFD alt 1 [1485, 563]",
+    "R58R36F7VFD alt 2 [794, 550]",
+    "R58R36F7VFD alt 3 [794, 550]",
+    "R58R36F7VFD alt 4 [794, 550]",
+    "R58R36F7VFD alt 5 [1041, 720]",
+    "R58R36F7VFD alt 6 [1041, 720]",
+    "R58R36F7VFD alt 7 [1041, 720]",
+    "R58R36F7VFD alt 8 [1041, 720]",
+    "R58R36F7VFD alt 9 [1041, 720]",
+    "R58R36F7VFD alt 10 [1041, 720]",
+    "R58R36F7VFD alt 11 [1041, 720]",
+    "R58R36F7VFD alt 12 [1041, 720]",
+    "R58R36F7VFD alt 13 [1041, 720]",
+    "R58R36F7VFD alt 14 [1041, 720]",
+    "R58R36F7VFD alt 15 [794, 550]",
+    "R58R36F7VFD alt 16 [794, 550]",
+    "R58R36F7VFD alt 17 [794, 550]",
+    "R58R36F7VFD alt 18 [794, 550]"
+   ],
+   "reading": "both devices, both modes: the tap loaded the game; default boxes 2312x1600 and 1041x720, original 794x550 centred; the original window went to the popup's fill and came back to 794x550 after the second Alt+Enter on both"
+  },
+  "originalModeCost": {
+   "how": "load_memory.py on the A12, the ws-s5 APK, 3 runs + warm-up with --game-arg=--original-window, then 3 runs + warm-up without (not interleaved), music and sounds, bodies 600-1800",
+   "original": {
+    "ws-s5": {
+     "runs": 3,
+     "mainMsPerTick": {
+      "median": 11.07,
+      "min": 11.05,
+      "max": 11.12
+     },
+     "renderMsPerTick": {
+      "median": 7.34,
+      "min": 7.27,
+      "max": 7.51
+     },
+     "processMsPerTick": {
+      "median": 28.43,
+      "min": 28.36,
+      "max": 28.5
+     },
+     "loadSeconds": {
+      "median": 5.68,
+      "min": 5.45,
+      "max": 6.24
+     },
+     "peakFootprintMB": {
+      "median": 611,
+      "min": 610,
+      "max": 616
+     }
+    }
+   },
+   "default": {
+    "ws-s5": {
+     "runs": 3,
+     "mainMsPerTick": {
+      "median": 10.89,
+      "min": 10.76,
+      "max": 10.9
+     },
+     "renderMsPerTick": {
+      "median": 7.32,
+      "min": 7.31,
+      "max": 7.56
+     },
+     "processMsPerTick": {
+      "median": 27.38,
+      "min": 27.28,
+      "max": 27.42
+     },
+     "loadSeconds": {
+      "median": 5.87,
+      "min": 4.82,
+      "max": 6.81
+     },
+     "peakFootprintMB": {
+      "median": 600,
+      "min": 596,
+      "max": 627
+     }
+    }
+   },
+   "reading": "the opt-in original mode costs about +1.0 ms process CPU per tick (28.43 vs 27.38: the presenter thread fills a full-surface buffer, ~1.7x the pixels on the A12) and main 11.07 vs 10.89 ms per tick (sets not interleaved); both well under 16.67 ms; the default mode is unaffected"
+  }
+ },
+ "review": "Independent, read-only: OK — the flag travels with its frame under the lock, ordering at Alt+Enter holds, touches map with the same centring, a new surface clears the geometry, the default path is unchanged. Low: the Alt+Enter round trip in original mode (checked on both devices: back to 794x550), the opt-in mode's cost (measured), recorded: no in-app switch on Android (S6 documents args.txt), device pixels rather than dp (recorded), iPad taps not exercised.",
+ "boundaries": [
+  "iPad taps not exercised (tvOS has no touch): the original mode's touch mapping (scale 1) is untried on a device",
+  "Android: the flag needs adb (files/args.txt); no in-app switch",
+  "Android nearest scaling for the default not attempted: the compositor's filtering kept",
+  "The original mode's border fill each frame costs ~1 ms CPU on the A12 (clearing borders only after a geometry change would save it; not done)"
+ ]
+}
