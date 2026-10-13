@@ -3,7 +3,7 @@
   "sourceCommit": "f340f1e29a40b921fab9520f523a11bf9d410011",
   "sourceNativeTree": "9db6dd702f0c2d75540b1078aee0e17d49da9cd7",
   "tag": "native-preview-20261013",
-  "status": "builds/checks in progress; nothing published yet",
+  "status": "Published; latest normal release, all 13 GitHub stored-asset digests and sizes verified equal local",
   "artifactsRoot": "/Volumes/T7/ntsd-2.4-artifacts/releases-20261013",
   "plan": "/Volumes/T7/ntsd-2.4-artifacts/releases-20261013/plan.json",
   "failures": "/Volumes/T7/ntsd-2.4-artifacts/releases-20261013/failures.json",
@@ -122,7 +122,9 @@
         "milestones": 5
       }
     ],
-    "signing": "Developer ID exists; codesign errSecInternalComponent; notarytool reports keychainLocked. Waiting for user to unlock login keychain."
+    "signing": "Developer ID signed; app and DMG notarization Accepted; staple/validate and Gatekeeper Notarized Developer ID pass; hdiutil checksum valid. Resolved command-session keychain boundary using task-owned Aqua LaunchAgent with unchanged existing key/profile; terminal exit 0; agent unloaded.",
+    "archive": "NTSD-Native-0.5.0.dmg",
+    "sha256": "361307cd6179b30878c7f2abd9778f13f925c7d893e4734b56bc2609573178bf"
   },
   "linux-aarch64": {
     "archive": "ntsd-linux-aarch64-f340f1e.tar.gz",
@@ -137,8 +139,14 @@
     "checks": "archive members equal manifest; clean Ubuntu amd64/Rosetta ldd/default music/font and X11 input-to-gameplay pass; VS equal (77.0 s)"
   },
   "android": {
-    "build": "complete; aligned APK ZIP integrity passes (1540 entries)",
-    "signing": "existing release key password is in locked login keychain; unsigned APK retained; do not publish unsigned"
+    "archive": "ntsd-android-arm64-9c700da.apk",
+    "sha256": "13aa89465a308fc0290b27fb90f1efd2a04fc69ad7cb71124d78b4e623d79a24",
+    "nativeTree": "9db6dd702f0c2d75540b1078aee0e17d49da9cd7",
+    "sourceCommit": "9c700dae5bfb3144ab0da17875c24e70e34178aa",
+    "checks": "APFS packaging; every listed asset exists with exact size; signature verification and prior certificate match; all unsigned payloads unchanged; emulator install, cold launch and visible main menu pass",
+    "signing": "Existing PKCS12 release key; secret from login keychain directly into apksigner environment in Aqua LaunchAgent, never printed/stored; agent unloaded",
+    "certificateSHA256": "70194aaa0740d0376a91338af4b34c17fd99ff51629eb65fcc7f65ccfbf0d61d",
+    "failedRound": "Initial ExFAT files.txt listed AppleDouble files omitted by aapt2, resulting in black screen; failed signed package retained, never uploaded. Corrected APFS package uses identical native sources. Physical-device validation of this package remains open."
   },
   "windows": {
     "sourceCommit": "2c4db98b (packaging-only differences from game-source tag)",
@@ -147,7 +155,13 @@
     "checks": "1554 file hashes plus archive directory set verified; fresh task-owned CrossOver bottle ntsd-release-20261013 default launch with GDI SYSTEM_FONT and packaged music; VS equal (59.5 s)",
     "boundaries": "CrossOver harness only, real Windows untested"
   },
-  "web": "pending; old f0471f13 web prerelease exists; latest memory fix needs rebuild",
+  "web": {
+    "archive": "ntsd-web-f340f1e.zip",
+    "sha256": "87c1956903f28a120e13803130bcdcc1c6c5c94b18d8f36e18c774f3c3e5d780",
+    "checks": "Chromium and WebKit fresh wasm VS each equal at 75.9s; control frame mismatchedPixels=0; gzip 1404 + brotli 1517 decoded forms equal; ZIP per-file hashes verified",
+    "hosting": "Static archive, not a new deployed website; requires configured COOP/COEP and Content-Encoding for precompressed forms",
+    "buildArchive": "build-archives/web-build-checks.tar verified; task-owned X5 cache and checks removed after terminal process validation"
+  },
   "excluded": [
     "iOS per user",
     "tvOS simulator packages are not distributable device apps"
@@ -163,13 +177,24 @@
   "publication": {
     "tagPushed": true,
     "draftURL": "https://github.com/wowlocal/ntsd-2.4/releases/edit/untagged-7d4ab37dfa3e01a499bc",
-    "status": "Linux assets uploading via Safari; not published",
-    "cli": "expired token, device refresh expired awaiting user; existing Safari login usable"
+    "status": "published and verified",
+    "cli": "expired token, device refresh expired awaiting user; existing Safari login usable",
+    "url": "https://github.com/wowlocal/ntsd-2.4/releases/tag/native-preview-20261013",
+    "releaseID": 411674260,
+    "latest": true,
+    "prerelease": false,
+    "verification": "published-digest-verification.json",
+    "downloadBoundary": "Three manifests downloaded and hash-matched; large partial downloads preserved and stopped after all GitHub asset digests matched",
+    "labelChange": "User requested Latest instead of pre-release; normal release and title updated; original source tag kept unchanged"
   },
   "commits": [
     {
       "commit": "2c4db98b",
       "push": "post-commit hook failed: exp/iphone has no upstream; commit exists; source tag push succeeded separately"
+    },
+    {
+      "commit": "9c700dae",
+      "scope": "Linux/Windows package checks and isolated Windows bottle option"
     }
   ]
 }
