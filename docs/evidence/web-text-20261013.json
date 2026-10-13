@@ -1,0 +1,163 @@
+{
+ "study": "TVOS_WEB",
+ "step": "W4: the browser draws the game's GDI text",
+ "request": "user 2026-10-13, testing the web version: \"где шрифты?\" (screenshots: the computer-players count, player/ninja/team names, Background and Difficulty values and the match summary's numbers missing) — chose the browser's fonts over a bundled FreeType font",
+ "change": "NTSDWeb: a wasm import ntsd.text (WebPage.swift) and WebGlyphs.mask as the startup host's TextOutA glyph provider (before: blank masks, the none group). The worker draws the bytes (UTF-8, BOM kept) with OffscreenCanvas 2D, 'bold 13px -apple-system, BlinkMacSystemFont, \"Segoe UI\", Roboto, \"DejaVu Sans Condensed\", \"Liberation Sans\", \"Noto Sans\", system-ui, Arial, sans-serif' (config.textFont overrides): advance = the rounded measured width, an (advance + 8) x 24 cell, the baseline at row 17 (the 16-pixel cell's +13 under the 4-pixel margin, as CoreText and FreeType), 1 where alpha >= 128; failures or no OffscreenCanvas leave the text blank (-1).",
+ "checks": {
+  "chromium": {
+   "scenarios": [
+    {
+     "scenario": "vs",
+     "exit": 0,
+     "result": "equal"
+    },
+    {
+     "scenario": "mission",
+     "exit": 0,
+     "result": "equal"
+    },
+    {
+     "scenario": "demo",
+     "exit": 0,
+     "result": "equal"
+    },
+    {
+     "scenario": "war",
+     "exit": 0,
+     "result": "equal"
+    },
+    {
+     "scenario": "playback",
+     "exit": 0,
+     "result": "equal"
+    },
+    {
+     "scenario": "tournament",
+     "exit": 0,
+     "result": "equal"
+    },
+    {
+     "scenario": "altenter",
+     "exit": 0,
+     "result": "equal"
+    },
+    {
+     "scenario": "tournament-win",
+     "exit": 0,
+     "result": "equal"
+    },
+    {
+     "scenario": "team-tournament",
+     "exit": 0,
+     "result": "equal"
+    },
+    {
+     "scenario": "joystick",
+     "exit": 0,
+     "result": "equal"
+    }
+   ],
+   "textFrames": {
+    "frames": 18030,
+    "textless": 8465,
+    "text": 9565,
+    "disagree": 0,
+    "result": "agree"
+   }
+  },
+  "webkit": {
+   "scenarios": [
+    {
+     "scenario": "vs",
+     "exit": 0,
+     "result": "equal"
+    },
+    {
+     "scenario": "mission",
+     "exit": 0,
+     "result": "equal"
+    },
+    {
+     "scenario": "demo",
+     "exit": 0,
+     "result": "equal"
+    },
+    {
+     "scenario": "war",
+     "exit": 0,
+     "result": "equal"
+    },
+    {
+     "scenario": "playback",
+     "exit": 0,
+     "result": "equal"
+    },
+    {
+     "scenario": "tournament",
+     "exit": 0,
+     "result": "equal"
+    },
+    {
+     "scenario": "altenter",
+     "exit": 0,
+     "result": "equal"
+    },
+    {
+     "scenario": "tournament-win",
+     "exit": 0,
+     "result": "equal"
+    },
+    {
+     "scenario": "team-tournament",
+     "exit": 0,
+     "result": "equal"
+    },
+    {
+     "scenario": "joystick",
+     "exit": 0,
+     "result": "equal"
+    }
+   ],
+   "textFrames": {
+    "frames": 18030,
+    "textless": 8465,
+    "text": 9565,
+    "disagree": 0,
+    "result": "agree"
+   }
+  }
+ },
+ "textFramesHow": "compare_text_frames.py: the CoreText reference (S1's AppKit run), the text-free none group (tw-w1b3/wasi), the browser run — text in exactly the same 9,565 frames as CoreText, the 8,465 text-free frames identical to both",
+ "engines": {
+  "chromiumVsWebkit": {
+   "frames": 18088,
+   "mismatched": 39,
+   "result": "differs"
+  },
+  "reading": "39 frames differ between the engines: text pixels depend on the engine and the OS fonts, so each engine is its own text group"
+ },
+ "determinism": {
+  "how": "Chromium's vs again",
+  "result": {
+   "scenario": "vs",
+   "frames": 6,
+   "identical": 6,
+   "differ": [],
+   "missing": [],
+   "digests": {
+    "a": 1826,
+    "b": 1826,
+    "equal": true,
+    "firstDifferentBody": null
+   }
+  },
+  "reading": "identical frames and 1,826 digests run to run"
+ },
+ "visual": "the vs selection capture shows the player numbers, Naruto/Sasuke/Deidara, Computer, Independent, District, Difficult, Music: Random and the recording message; the match shows 1, 2, Com and VS mode (Difficult)",
+ "review": "Independent, read-only: geometry matches CoreText (baseline, origin, empty strings, rounding), memory views are safe, cost is per new string only. Fixed: a throw in the import ended the run (try/catch, blank text), wasm32 pointers reached JS signed (>>> 0), TextDecoder dropped a leading BOM (ignoreBOM), system-ui came first and picks the ~15% wider DejaVu Sans on Linux (the platform faces now precede it). Recorded: the masks are the engines' antialiasing cut at half coverage (CoreText draws unantialiased), the canvas turns control bytes into spaces, the worker cannot see the page's @font-face fonts, advance parity with CoreText not measured; the browser has no matrix.py row (its own group per engine).",
+ "boundaries": [
+  "Text pixels differ by engine and OS (own group per engine)",
+  "Advance widths not compared with CoreText",
+  "Old Safari without OffscreenCanvas draws no text (blank, as before)"
+ ]
+}

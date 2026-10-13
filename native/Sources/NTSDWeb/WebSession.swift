@@ -24,8 +24,7 @@ import NTSDRuntime
     }
     static func report(_ value: [String:Any]) { OriginalRuntimeSession.emit(value) }
     var startupHost: OriginalRuntimeStartupHost {
-        // No glyph rasteriser yet: TextOutA draws nothing, as on the headless host.
-        .init(windows:windows,textMask:{ _ in .init(advance:0,originX:0,originY:0,width:0,height:0,bits:[]) },
+        .init(windows:windows,textMask:WebGlyphs.mask,
               messageBox:{ [weak self] text,caption in
                   let text = String(decoding:text,as:UTF8.self),caption = String(decoding:caption,as:UTF8.self)
                   Self.report(["event":"webMessageBox","text":text,"caption":caption])

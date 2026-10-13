@@ -23,8 +23,10 @@
 //
 // With a frame buffer (config.frames, a SharedArrayBuffer from the page), the
 // worker also provides the browser host's "ntsd" imports (TVOS_WEB W2b):
-// present hands an XRGB8888 crop to the page, which draws it. At exit the
-// worker waits up to 5 s for the page to report what it drew.
+// present hands an XRGB8888 crop to the page, which draws it; input, gamepads,
+// questions, links and sound go through shared memory; text draws TextOutA's
+// glyph masks with the browser's fonts (OffscreenCanvas). At exit the worker
+// waits up to 5 s for the page to report what it drew.
 'use strict';
 
 const ERR = { SUCCESS: 0, ACCES: 2, BADF: 8, EXIST: 20, INVAL: 28, IO: 29, ISDIR: 31, NOENT: 44, NOSYS: 52,
@@ -459,7 +461,40 @@ async function run(config) {
   const audioFrames = config.audio ? new Float32Array(config.audio.ring, 32) : null;
   const audioTarget = config.audio ? Math.round(config.audio.rate * 0.15) : 0;
   const audioMask = audioFrames ? audioFrames.length / 2 - 1 : 0;
+  // TextOutA's glyph masks from the browser's fonts (NTSDWeb WebGlyphs): bold
+  // 13 px, white on an (advance + 8) × 24 cell, baseline at row 17, one 0/1
+  // byte per pixel at half coverage and up (the canvas cannot turn
+  // antialiasing off). The platform's UI sans-serif as on the native hosts:
+  // SF (macOS), Segoe UI, Roboto (Android), then the Linux faces whose 13 px
+  // bold widths are closest (SDLGlyphs; plain DejaVu Sans is ~15 % wider).
+  // config.textFont replaces the font. Any failure leaves the text blank.
+  const TEXT_FONT = config.textFont ?? 'bold 13px -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "DejaVu Sans Condensed", "Liberation Sans", "Noto Sans", system-ui, Arial, sans-serif';
+  let textContext = null, textDecoder = null;
   const ntsd = {
+    text(ptr, count, out, capacity) {
+      try {
+        if (!textContext) {
+          if (typeof OffscreenCanvas !== 'function') return -1;
+          textContext = new OffscreenCanvas(256, 24).getContext('2d', { willReadFrequently: true });
+          if (!textContext) return -1;
+          textDecoder = new TextDecoder('utf-8', { ignoreBOM: true });   // keeps U+FEFF, as Swift's decoding does
+        }
+        ptr >>>= 0; out >>>= 0;   // wasm32 addresses are unsigned
+        const text = textDecoder.decode(new Uint8Array(memory.buffer, ptr, count).slice());
+        const c = textContext;
+        c.font = TEXT_FONT;
+        const advance = Math.max(0, Math.round(c.measureText(text).width)), width = advance + 8, height = 24;
+        if (width * height > capacity) return advance;
+        if (c.canvas.width < width) c.canvas.width = width;   // resets the context's state
+        c.font = TEXT_FONT; c.textBaseline = 'alphabetic'; c.textAlign = 'left'; c.fillStyle = '#fff';
+        c.clearRect(0, 0, width, height); c.fillText(text, 4, 17);
+        const pixels = c.getImageData(0, 0, width, height).data, mask = new Uint8Array(memory.buffer, out, width * height);
+        for (let i = 0; i < width * height; i++) mask[i] = pixels[i * 4 + 3] >= 128 ? 1 : 0;
+        return advance;
+      } catch (e) {
+        stderr.push(encoder.encode(`web_run: text: ${e && e.message || e}\n`)); return -1;
+      }
+    },
     input(ptr, capacity) {
       if (!input) return 0;
       const write = Atomics.load(input, 0);   // a 256-event ring; counters wrap as Int32

@@ -3,6 +3,15 @@
 // page gives the worker a canvas. The worker never yields while the game runs,
 // so page-to-worker traffic goes through shared memory the page fills.
 
+/// TextOutA's glyph mask from the page's fonts: the `count` bytes (UTF-8)
+/// drawn white, 13 px em, bold, at x 4 on an (advance + 8) × 24 cell with the
+/// baseline at row 17 (the 16-pixel cell's +13 under a 4-pixel margin), written
+/// to `out` as one 0/1 byte per pixel when it holds width × 24 bytes. Returns
+/// the advance (the mask is not written when it does not fit), or −1 when the
+/// page has no font service (the text is blank, as on the headless host).
+@_extern(wasm, module: "ntsd", name: "text")
+func ntsdText(_ bytes: UnsafeRawPointer, _ count: Int32, _ out: UnsafeMutableRawPointer, _ capacity: Int32) -> Int32
+
 /// Shows a finished crop: `width × height` XRGB8888 words (little-endian
 /// 0x00RRGGBB, `OriginalFramebuffer`'s layout) at `pixels`; `popup` 1 when
 /// it is the game's full-screen popup's (Alt+Enter), which fills the page
