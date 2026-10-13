@@ -323,7 +323,7 @@ import XCTest
             + "\(String(describing:p.bitmapDelivery.cursor?.position)) \(p.bitmapDelivery.retainedIterationCount) "
             + "\(String(describing:p.lifecycleDelivery.cursor?.position)) \(p.lifecycleDelivery.retainedIterationCount) "
             + "\(String(describing:p.graphicsDelivery.cursor?.position)) \(p.graphicsDelivery.retainedIterationCount) "
-            + "\(String(describing:p.iterationDelivery.cursor?.position)) \(p.iterationDelivery.retainedIterationCount)"
+            + "\(String(describing:p.iterationDelivery.cursor?.position)) \(p.iterationDelivery.retainedIterationCount) \(p.iterationDelivery.retainedResourceCount)"
         }
         let committed = try kept.map { try fingerprint($0.platformSnapshot()) }
         var now: UInt32 = 5_000_000,calls = 0,failAt = Int.max
@@ -371,7 +371,7 @@ import XCTest
                 // The committed platform's delivery (A3 invariant 11, L4b).
                 let delivery = try? started.host.platformSnapshot().iterationDelivery
                 globals.combine(delivery?.cursor?.position);globals.combine(delivery?.cursor?.isSuspended)
-                globals.combine(delivery?.retainedIterationCount)
+                globals.combine(delivery?.retainedIterationCount);globals.combine(delivery?.retainedResourceCount)
                 steps.append("\(kind) \(menu.requests) \(menu.textRequests) \(menu.emptyBlits) \(menu.iterations) \(clockCalls) "
                     + "\(String(describing:menu.lastRequest)) \(menu.messages.delivered.map(\.message)) \(menu.messages.sleeps) "
                     + "\(started.host.committedSequence) \(started.display.frontOperationCount) \(started.display.operationCount) "

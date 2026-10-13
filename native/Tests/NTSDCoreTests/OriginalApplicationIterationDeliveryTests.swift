@@ -39,4 +39,31 @@ final class OriginalApplicationIterationDeliveryTests: XCTestCase {
         delivery.begin(try exchange.snapshot.cursor()); delivery.begin(try exchange.snapshot.cursor())
         XCTAssertEqual(delivery.retainedIterationCount,1)
     }
+
+    /// Menu iterations hold the same surfaces every frame (MENU_MEMORY): each
+    /// distinct resource is kept once and stays alive, however many
+    /// iterations held it, and a copy keeps what it had when copied.
+    func testRetainedResourcesAreKeptOnceEach() throws {
+        var delivery = OriginalApplicationIterationDelivery()
+        weak var weakFirst: Held?,weakSecond: Held?,weakThird: Held?
+        var copy: OriginalApplicationIterationDelivery?
+        try autoreleasepool {
+            let first = Held(),second = Held(),third = Held(); weakFirst = first; weakSecond = second; weakThird = third
+            for i in 0..<1000 { delivery.begin(try consumed(i == 500 ? [first,second] : [first])) }
+            delivery.begin(try consumed([]))
+            copy = delivery
+            delivery.begin(try consumed([third]))
+            delivery.begin(try consumed([]))
+        }
+        XCTAssertEqual(delivery.retainedIterationCount,1001)
+        XCTAssertEqual(delivery.retainedResourceCount,3)
+        XCTAssertNotNil(weakFirst); XCTAssertNotNil(weakSecond); XCTAssertNotNil(weakThird)
+        XCTAssertEqual(copy?.retainedIterationCount,1000)
+        XCTAssertEqual(copy?.retainedResourceCount,2)
+        // Either holder alone keeps what it holds; the last one releases it.
+        delivery = OriginalApplicationIterationDelivery()
+        XCTAssertNotNil(weakFirst); XCTAssertNotNil(weakSecond); XCTAssertNil(weakThird)
+        copy = nil
+        XCTAssertNil(weakFirst); XCTAssertNil(weakSecond)
+    }
 }

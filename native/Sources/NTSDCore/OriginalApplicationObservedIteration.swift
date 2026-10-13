@@ -41,18 +41,34 @@ public enum OriginalApplicationIterationRequest: OriginalExchangeRequest {
 }
 public typealias OriginalApplicationIterationExchange = OriginalRequestExchange<OriginalApplicationIterationRequest, any OriginalApplicationStartupResource>
 
-/// One staged value cursor plus earlier nonempty iterations whose receipts
-/// hold resources, which stay alive through copied platform/delivery contexts.
-/// An iteration whose receipts hold none (the message loop's queue and
-/// DefWindowProc requests, every gameplay tick) is not kept: it has nothing to
-/// keep alive, and keeping it grew the app by ≈12 MB per match.
+/// One staged value cursor plus the resources that earlier nonempty
+/// iterations' receipts hold, which stay alive through copied platform/delivery
+/// contexts. Each resource is kept once (by identity), without its iteration's
+/// requests and replies: menu iterations hold the same few surfaces every
+/// frame, and keeping each whole cursor grew the app by ≈30 MB per idle minute
+/// in a menu (MENU_MEMORY, 2026-10-13). An iteration whose receipts hold none
+/// (the message loop's queue and DefWindowProc requests, every gameplay tick)
+/// adds nothing (≈12 MB per match before 2026-09-30).
 public struct OriginalApplicationIterationDelivery {
     public private(set) var cursor: OriginalApplicationIterationExchange.Cursor?
-    private var earlier = OriginalRetainedHistory<OriginalApplicationIterationExchange.Cursor>()
-    public var retainedIterationCount: Int { earlier.count }
+    /// Each kept resource once, in the order first held (so their release at
+    /// the last holder is deterministic), and their identities.
+    private var retained: [any OriginalApplicationStartupResource] = []
+    private var retainedIdentities: Set<ObjectIdentifier> = []
+    /// Earlier iterations whose receipts held resources.
+    public private(set) var retainedIterationCount = 0
+    /// The distinct resources those iterations keep alive.
+    public var retainedResourceCount: Int { retained.count }
     public init() {}
     public mutating func begin(_ cursor: OriginalApplicationIterationExchange.Cursor) {
-        if let old = self.cursor,old.position > 0,old.retainsResources { earlier.append(old) }
+        if let old = self.cursor,old.position > 0 {
+            var held = false
+            old.forEachResource { resource in
+                held = true
+                if retainedIdentities.insert(ObjectIdentifier(resource)).inserted { retained.append(resource) }
+            }
+            if held { retainedIterationCount += 1 }
+        }
         self.cursor = cursor
     }
     public mutating func response(for request: OriginalApplicationIterationRequest) throws -> OriginalApplicationIterationRequest.Reply {
