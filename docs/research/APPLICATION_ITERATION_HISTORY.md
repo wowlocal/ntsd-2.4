@@ -43,4 +43,9 @@ one of its receipts retains a resource (`Cursor.retainsResources`). The
 bitmap, menu-graphics and lifecycle deliveries are unchanged. Measurements
 are in [APPLICATION_SOAKS.md](APPLICATION_SOAKS.md#vs-session-many-recorded-matches-2026-09-30).
 
+Menu iterations (2026-10-13): their display replies retain the surfaces they
+draw, so each was still kept whole and an idle menu grew by ≈30 MB per
+minute; the iteration delivery now keeps each resource once —
+[MENU_MEMORY](MENU_MEMORY.md).
+
 EXE envelope not recalculated.

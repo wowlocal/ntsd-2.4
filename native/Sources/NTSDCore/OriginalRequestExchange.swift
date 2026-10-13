@@ -68,6 +68,8 @@ public final class OriginalRequestExchange<Input: OriginalExchangeRequest, Resou
         }
         /// Whether any receipt keeps a resource alive.
         public var retainsResources: Bool { receipts.contains { !$0.resources.isEmpty } }
+        /// Calls `body` with each resource its receipts keep alive.
+        public func forEachResource(_ body: (Resource) -> Void) { for receipt in receipts { receipt.resources.forEach(body) } }
         fileprivate init(owner: Identity, receipts: [Receipt]) {
             self.owner = owner; self.receipts = receipts
         }

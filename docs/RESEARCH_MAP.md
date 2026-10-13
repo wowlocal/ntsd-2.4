@@ -194,6 +194,9 @@ overlay files with `tools/app_e2e_reference.json`. [Evidence](evidence/applicati
 request deliveries' retained cursor history is a persistent list, so copying a
 platform per attempt no longer grows with the session; idle menu iterations
 stay at 15.1 s per 2000. [Evidence](evidence/application-iteration-history.json).
+[Menu memory](research/MENU_MEMORY.md) (2026-10-13): the iteration delivery
+keeps each retained resource once instead of every menu iteration's cursor,
+which grew every host by ≈30 MB per idle minute in a menu.
 
 [Music output](research/APPLICATION_MUSIC.md): the app plays the
 original tracks for the committed DirectShow graph state (menu `main`, District
