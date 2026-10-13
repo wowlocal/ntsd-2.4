@@ -91,6 +91,32 @@ and scenarios unchanged — checked on that host as the gates say.
 5. One commit per checked increment on `exp/window-scaling`, evidence in
    `docs/evidence/ws-*.json`.
 
+## Flags and controls (all hosts)
+
+By default the game's picture scales with its window or screen, aspect
+kept, nearest pixels (Android's default leaves the scaling to the
+compositor, which filters); the game itself still sees its own 794×550
+window.
+The original window (the 794×550 client at one point per pixel, a fixed
+window) is behind one flag name on every host, `original-window`:
+
+| Host | Default | Original window | Full screen |
+| --- | --- | --- | --- |
+| macOS app | resizable window opening at the largest whole multiple of 2× or more within 85% of the visible screen, else the fraction that fits (down to half); its size is kept across Alt+Enter | `--original-window`, or `defaults write local.ntsd.native NTSDOriginalWindow -bool YES` (a bare executable: `-NTSDOriginalWindow YES`) | the green button or View ▸ Enter Full Screen (⌃⌘F) |
+| SDL (Linux, macOS SDL; Windows shares the code, not built) | resizable, maximisable, high pixel density, the same initial size rule | `--original-window` or `NTSD_ORIGINAL_WINDOW=1` | the window manager's maximise and full-screen controls (macOS SDL: the green button, a zoom, not tried by hand); no game key is taken, since the original receives F1–F12 |
+| Apple TV | the whole TV, aspect kept | the launch argument `--original-window` or the NTSDOriginalWindow default | always full screen |
+| iPad | the whole screen, aspect kept | as Apple TV | always full screen |
+| Android | the whole screen, aspect kept (the compositor scales) | `--original-window` in the app's `files/args.txt` (one argument per line; needs adb `run-as`): one device pixel per pixel, centred | always immersive full screen |
+| Browser | the canvas fitted to the page | `?original-window` (alias `?original`; `=0`, `=false`, `=no` turn it off; the real name wins over the alias), or `"originalWindow": true` in config.json; `web_run.mjs --original-window` | the page's Full screen button; the browser's own full screen (F11, the green button) enlarges the page, which the default fit follows, while the original window stays 1:1 there |
+
+Common rules: the game's own Alt+Enter is the original's (a full-screen
+popup at the display mode it asks for), and that popup fills the screen in
+either mode; scripted runs (`--script`) keep the original window unless
+`--scalable-window` (macOS, SDL) so their captures do not depend on the
+display; the scenario runner passes extra game arguments with
+`NTSD_GAME_ARGS`. In the original window a window smaller than the frame
+shrinks the picture rather than cropping it (browser, Android).
+
 ## Plan
 
 | ID | Step | Status |
@@ -101,7 +127,7 @@ and scenarios unchanged — checked on that host as the gates say.
 | S3 | macOS app: a resizable window (aspect kept, the game's geometry held at any size), the green button's native full screen, a default size larger than 1× where the screen allows, `--original-window` for today's fixed window | **done** |
 | S4 | SDL (Linux, Windows): a resizable, high-density window holding the game's geometry, the native full-screen toggle, the original flag | **done** (Windows not built) |
 | S5 | iPad and Android: the original flag, nearest filtering on Android, checks at several screens | **done** (Android nearest filtering left to the compositor) |
-| S6 | All hosts: the flag's name and defaults documented in one place, launch notes for each app | queued |
+| S6 | All hosts: the flag's name and defaults documented in one place, launch notes for each app | **done** |
 
 Open for the user (not blocking): on a 16:9 TV the 794:550 picture keeps its
 aspect with bars at the sides; a stretched or filled mode would distort or
@@ -118,23 +144,23 @@ blur them — also the user's choice.
 | 2026-10-13 | S2: the browser's original window | `?original-window` (alias `?original`; `=0`, `=false`, `=no` off) or `config.originalWindow`: the frame at one CSS pixel per pixel, centred, **shrunk to fit a smaller window, never cut**; the browser's full screen and the game's Alt+Enter popup fill the page (the web host now passes the popup flag with each present). Checked at 1600×900, 800×600, 801×601 and 400×600 (clicks exact at every size), full screen on and off, Alt+Enter, and the static page's flags. One CSS pixel per frame pixel, no device-pixel snapping (recorded). Review round 1 found the crop in small windows and full screen staying 1:1, fixed; round 2 OK, two small items queued for S6. Scenarios equal with all 18,088 frames identical in both engines | [evidence](../evidence/ws-s2-browser-original-window-20261013.json) | 71e5243a |
 | 2026-10-13 | S3: the macOS scalable window | **By default the game window scales**: the game's 794×550 client is held from creation (the native full screen's mechanism, set on the lease since the backend registers it after `windowCreated`), the window resizes with its aspect kept (half size at least) and opens at the largest whole multiple ≥2 within 85% of the screen, else the fraction that fits (2× on the 6K test display); the size at the game's DestroyWindow (Alt+Enter) is the next window's. The picture is the layer's contents, scaled by the compositor, nearest. Clicks and GetMessagePos map through the picture. The green button's full screen fills (aspect kept) and returns. `--original-window` / `-NTSDOriginalWindow YES` keep the fixed window; scripted runs keep it unless `--scalable-window`. The new geometry test caught the hold silently failing on its first run (fixed). All 10 AppKit scenarios equal with 18,088 frames identical, fixed and scalable; live on the 6K display (upright, 98.7% of 4×4 px blocks uniform, a pid-posted click lands on its client pixel, full screen in and out, both flags). A/B fixed vs 2×: ms per tick 2.02 vs 1.74, process CPU 4.66 vs 3.30, peak 799 vs 692 MB (vs), 813 vs 702 MB (Demo); the first build's window-sized backing store cost +73..78 MB and was replaced. Two review rounds: round 1 found GetMessagePos inconsistent with the hold, clicks before the first frame, the remembered size and small screens (all fixed); round 2 OK. Boundaries: a moved window no longer reaches the fixed window's off-screen stops; MSG.pt in the game's own popup stays physical (pre-existing); hand checks of a real click and the green button open (a real HID-level click at 2× activated START after the commit, recorded in the evidence) | [evidence](../evidence/ws-s3-macos-scalable-window-20261013.json) | b7cd16c6 |
 | 2026-10-13 | S4: the SDL scalable window | **By default the SDL game window scales** (macOS, Linux; the same code for Windows): resizable and maximisable with its aspect kept (`SDL_SetWindowAspectRatio`), high pixel density (drawn in output pixels, clicks in window points), half size at least, the macOS initial-size rule over the usable display bounds, the size at DestroyWindow reused; the game keeps the centred 1× client it asked for (`placed`) as its position, so moving or resizing never reaches it; clicks and GetMessagePos map through the picture; the window redraws its last frame when resized or uncovered. Full screen: the platform's own controls (maximise, the window manager's full screen, macOS SDL's green button = zoom) and the script's `fullscreen` (SDL desktop full screen); no host key, since F1–F12 all reach the game. `--original-window` / `NTSD_ORIGINAL_WINDOW=1` keep the fixed window; scripted runs keep it unless `--scalable-window`. Checks: macOS SDL all 10 scenarios equal with 18,088 frames identical to the CoreText reference, fixed and scalable; Linux SDL fixed and scalable against a baseline built from HEAD (see evidence); `linux_sdl_scaling.py`: X11 with real xdotool clicks at 1325×918 and, letterboxed, 1001×600 reaching a match, Wayland full screen in and out with identical frames; macOS SDL on the 6K display: 2× window, full screen and back, both flags, and a real HID click at density 2 activating START. `run_headless_scenarios.py` gains `NTSD_GAME_ARGS` (recorded per row). Two review rounds (round 1: clicks at density 2 untested — closed by the real click; stale picture box after a resize — fixed). Open: GetMessagePos exercised by no run; Linux window-manager maximise and aspect hints untried (no WM in the X11 run); Windows not built (DPI units, metrics 0,0,0) | [evidence](../evidence/ws-s4-sdl-scalable-window-20261013.json) | d45fd928 |
-| 2026-10-13 | S5: iPad and Android | **iPad** (no code: the S1 view is shared): vs equal with frames identical; simulator screenshots on the iPad Air 13" and the iPad mini — the default fills, `--original-window` gives 794×550 points centred, the game's Alt+Enter popup fills (the app's landscape window appears shrunk in the portrait screenshots; a system banner inflated one box). **Android**: `--original-window` in `files/args.txt` shows the frame at **one device pixel per pixel**, centred, with no compositor scaling (794×550 dp would not fit a 720 px phone: recorded), fitted as by default when the surface is smaller; the popup fills; the one-to-one flag travels with each frame through the presenter thread. Gate: clean APK, emulator vs/joystick/demo equal with vs frames identical to the Android reference; A12 A/B against tw-w3e with music and sounds within noise (main 10.90 vs 10.86, render 7.18 vs 7.18 ms per tick). On the emulator (2560×1600) and the A12 (1600×720): both modes, a real `adb input tap` on START mapped through the measured picture loads the game, and the original window survives Alt+Enter and back. The opt-in original mode costs about 1 ms of CPU per tick on the A12 (full-surface buffer; 28.4 vs 27.4 ms process), within budget. Review OK (threading confirmed). Open: iPad taps not exercised; Android has no in-app switch (the flag needs adb: S6 documents it); nearest scaling on Android not attempted (compositor filtering kept) | [evidence](../evidence/ws-s5-ipad-android-20261013.json) | this commit |
+| 2026-10-13 | S5: iPad and Android | **iPad** (no code: the S1 view is shared): vs equal with frames identical; simulator screenshots on the iPad Air 13" and the iPad mini — the default fills, `--original-window` gives 794×550 points centred, the game's Alt+Enter popup fills (the app's landscape window appears shrunk in the portrait screenshots; a system banner inflated one box). **Android**: `--original-window` in `files/args.txt` shows the frame at **one device pixel per pixel**, centred, with no compositor scaling (794×550 dp would not fit a 720 px phone: recorded), fitted as by default when the surface is smaller; the popup fills; the one-to-one flag travels with each frame through the presenter thread. Gate: clean APK, emulator vs/joystick/demo equal with vs frames identical to the Android reference; A12 A/B against tw-w3e with music and sounds within noise (main 10.90 vs 10.86, render 7.18 vs 7.18 ms per tick). On the emulator (2560×1600) and the A12 (1600×720): both modes, a real `adb input tap` on START mapped through the measured picture loads the game, and the original window survives Alt+Enter and back. The opt-in original mode costs about 1 ms of CPU per tick on the A12 (full-surface buffer; 28.4 vs 27.4 ms process), within budget. Review OK (threading confirmed). Open: iPad taps not exercised; Android has no in-app switch (the flag needs adb: S6 documents it); nearest scaling on Android not attempted (compositor filtering kept) | [evidence](../evidence/ws-s5-ipad-android-20261013.json) | f7aeada1 |
+| 2026-10-13 | S6: one place for the flags | The "Flags and controls" section: one table of the default, the original window and full screen per host, and the common rules (the reviewer checked it against each host's code and four claims were corrected). Browser: the real flag name now wins over the alias when both are given, and Safari's prefixed `webkitfullscreenchange` is handled. Checks: the static page's six flag cases, S2's window sizes, clicks, full screen and Alt+Enter unchanged, the web scenarios in both engines (see evidence) | [evidence](../evidence/ws-s6-flags-20261013.json) | this commit |
 
 ## Next task
 
-S6: one place for the flags and defaults. Write the user-facing summary
-(the card's "Flags" section and a short launch note per app): the scalable
-default and the original window on each host — macOS `--original-window`
-or `defaults write local.ntsd.native NTSDOriginalWindow -bool YES` (check
-the bundle id), SDL `--original-window` / `NTSD_ORIGINAL_WINDOW=1`,
-iPad/Apple TV the launch argument or the NTSDOriginalWindow default, the
-browser `?original-window` / `config.originalWindow`, Android `--original-window`
-in `files/args.txt`; scripted runs keep the fixed window unless
-`--scalable-window`; the native full-screen controls per host; Alt+Enter
-is the game's. Add the options to `OriginalRuntimeSession.swift`'s option
-list only if it is a comment-only change outside Runtime's code (else in the
-host files). Then the queued small items: the browser's real flag name wins
-over the alias when both are given and `webkitfullscreenchange` is handled
-(S2 review); the open questions for the user (stretch/fill on a TV,
-smoothing at non-integer scales). Gates: the browser change's web scenarios
-in both engines and a static check; review.
+The plan is complete; exp/window-scaling is merged into main at the user's
+request (2026-10-13). Open, in order of value:
+
+1. The user's choices (not blocking): a stretched or filled mode for a
+   16:9 TV (it would distort or crop the original), and smoothing at
+   non-integer scales (it would blur the pixels).
+2. Windows SDL: build it, run its scenarios under CrossOver and check the
+   resizable window at high DPI (SDL3's units there; the metrics 0,0,0).
+3. Hand checks the harness cannot do: the macOS green button by hand, a
+   Linux window manager's maximise and aspect hints, iPad taps, the Apple TV
+   on a real TV (overscan), a phone browser.
+4. Small items: the browser's own full screen (F11) could count as full
+   screen in the original window; Android's original mode could clear its
+   borders only after a geometry change (about 1 ms per tick on the A12);
+   GetMessagePos under the SDL scalable window is exercised by no run.

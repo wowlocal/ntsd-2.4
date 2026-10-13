@@ -1,0 +1,170 @@
+{
+ "study": "WINDOW_SCALING",
+ "step": "S6: one place for the flags",
+ "change": "docs/research/WINDOW_SCALING.md gains the 'Flags and controls (all hosts)' table (default, original window, full screen per host) and the common rules. tools/crossplatform/web/run.html: the alias ?original is read before ?original-window, so the real name decides when both are given; full screen is handled on fullscreenchange and webkitfullscreenchange.",
+ "checks": {
+  "staticFlags": {
+   "how": "web_app.py build of build-wasm-web/release served by web_app.py serve, Chromium via web_run.mjs --url; [ntsdPage.originalWindow, canvas CSS width, height] in an 800x600 viewport",
+   "lines": [
+    "?original-window exit=0 [true,794,550] ",
+    "?original=0&original-window exit=0 [true,794,550] ",
+    "?original-window=0&original exit=0 [false,800,554] ",
+    "?original-window&original=0 exit=0 [true,794,550] ",
+    "?original=false exit=0 [false,800,554] ",
+    "? exit=0 [false,800,554] "
+   ],
+   "reading": "?original-window on; ?original=0&original-window on; ?original-window=0&original off; ?original-window&original=0 on; ?original=false off; none off — the real name wins either way"
+  },
+  "runner": {
+   "how": "S2's steps (web_run.mjs --original-window: 1600x900, 800x600, 801x601, 400x600 with clicks at three canvas pixels; the bar's Full screen on and off; Alt+Enter)",
+   "logs": [
+    "(() => { const r = document.querySelector('canvas').getBoundingClientRect(); return [Math.round(r.width*10)/10, Math.round(r.height*10)/10, Math.round(r.left*10)/10, Math.round(r.top*10)/10, innerWidth, innerHeight]; })() = [794,550,403,175,1600,900]",
+    "ntsdPage.pointer() = [0,0]",
+    "ntsdPage.pointer() = [350,230]",
+    "ntsdPage.pointer() = [793,549]",
+    "(() => { const r = document.querySelector('canvas').getBoundingClientRect(); return [Math.round(r.width*10)/10, Math.round(r.height*10)/10, Math.round(r.left*10)/10, Math.round(r.top*10)/10, innerWidth, innerHeight]; })() = [794,550,3,25,800,600]",
+    "ntsdPage.pointer() = [0,0]",
+    "ntsdPage.pointer() = [350,230]",
+    "ntsdPage.pointer() = [793,549]",
+    "(() => { const r = document.querySelector('canvas').getBoundingClientRect(); return [Math.round(r.width*10)/10, Math.round(r.height*10)/10, Math.round(r.left*10)/10, Math.round(r.top*10)/10, innerWidth, innerHeight]; })() = [794,550,3.5,25.5,801,601]",
+    "ntsdPage.pointer() = [0,0]",
+    "ntsdPage.pointer() = [350,230]",
+    "ntsdPage.pointer() = [793,549]",
+    "(() => { const r = document.querySelector('canvas').getBoundingClientRect(); return [Math.round(r.width*10)/10, Math.round(r.height*10)/10, Math.round(r.left*10)/10, Math.round(r.top*10)/10, innerWidth, innerHeight]; })() = [400,277.1,0,161.5,400,600]",
+    "ntsdPage.pointer() = [0,0]",
+    "ntsdPage.pointer() = [350,230]",
+    "ntsdPage.pointer() = [793,549]",
+    "(() => { const r = document.querySelector('canvas').getBoundingClientRect(); return [Math.round(r.width*10)/10, Math.round(r.height*10)/10, Math.round(r.left*10)/10, Math.round(r.top*10)/10, innerWidth, innerHeight]; })() = [794,550,403,175,1600,900]",
+    "[!!document.fullscreenElement, (() => { const r = document.querySelector('canvas').getBoundingClientRect(); return [Math.round(r.width*10)/10, Math.round(r.height*10)/10, Math.round(r.left*10)/10, Math.round(r.top*10)/10, innerWidth, innerHeight]; })()] = [true,[1299.3,900,150.4,0,1600,900]]",
+    "[!!document.fullscreenElement, (() => { const r = document.querySelector('canvas').getBoundingClientRect(); return [Math.round(r.width*10)/10, Math.round(r.height*10)/10, Math.round(r.left*10)/10, Math.round(r.top*10)/10, innerWidth, innerHeight]; })()] = [false,[794,550,403,175,1600,900]]",
+    "(() => { const r = document.querySelector('canvas').getBoundingClientRect(); return [Math.round(r.width*10)/10, Math.round(r.height*10)/10, Math.round(r.left*10)/10, Math.round(r.top*10)/10, innerWidth, innerHeight]; })() = [1299.3,900,150.4,0,1600,900]"
+   ],
+   "reading": "unchanged from S2: 794x550 centred, 400x277 shrunk, clicks exact, full screen 1299x900 and back, the popup fills"
+  },
+  "scenarios": {
+   "chromium": {
+    "rows": [
+     {
+      "scenario": "vs",
+      "exit": 0,
+      "result": "equal"
+     },
+     {
+      "scenario": "mission",
+      "exit": 0,
+      "result": "equal"
+     },
+     {
+      "scenario": "demo",
+      "exit": 0,
+      "result": "equal"
+     },
+     {
+      "scenario": "war",
+      "exit": 0,
+      "result": "equal"
+     },
+     {
+      "scenario": "playback",
+      "exit": 0,
+      "result": "equal"
+     },
+     {
+      "scenario": "tournament",
+      "exit": 0,
+      "result": "equal"
+     },
+     {
+      "scenario": "altenter",
+      "exit": 0,
+      "result": "equal"
+     },
+     {
+      "scenario": "tournament-win",
+      "exit": 0,
+      "result": "equal"
+     },
+     {
+      "scenario": "team-tournament",
+      "exit": 0,
+      "result": "equal"
+     },
+     {
+      "scenario": "joystick",
+      "exit": 0,
+      "result": "equal"
+     }
+    ],
+    "frames": {
+     "frames": 18088,
+     "mismatched": 0,
+     "result": "identical"
+    }
+   },
+   "webkit": {
+    "rows": [
+     {
+      "scenario": "vs",
+      "exit": 0,
+      "result": "equal"
+     },
+     {
+      "scenario": "mission",
+      "exit": 0,
+      "result": "equal"
+     },
+     {
+      "scenario": "demo",
+      "exit": 0,
+      "result": "equal"
+     },
+     {
+      "scenario": "war",
+      "exit": 0,
+      "result": "equal"
+     },
+     {
+      "scenario": "playback",
+      "exit": 0,
+      "result": "equal"
+     },
+     {
+      "scenario": "tournament",
+      "exit": 0,
+      "result": "equal"
+     },
+     {
+      "scenario": "altenter",
+      "exit": 0,
+      "result": "equal"
+     },
+     {
+      "scenario": "tournament-win",
+      "exit": 0,
+      "result": "equal"
+     },
+     {
+      "scenario": "team-tournament",
+      "exit": 0,
+      "result": "equal"
+     },
+     {
+      "scenario": "joystick",
+      "exit": 0,
+      "result": "equal"
+     }
+    ],
+    "frames": {
+     "frames": 18088,
+     "mismatched": 0,
+     "result": "identical"
+    }
+   }
+  }
+ },
+ "review": "Independent, read-only: run.html OK (both full-screen events run fit twice in browsers that send both: harmless); the table was checked against each host's code and four claims corrected (the browser's own full screen keeps the original window 1:1, Android's default is compositor-filtered, the macOS initial size rule, SDL Windows not built).",
+ "boundaries": [
+  "Old Safari's prefixed event not exercised (Playwright's WebKit sends the standard one)",
+  "The browser's own full screen (F11, the green button) does not count as full screen in the original window (recorded in the table)"
+ ]
+}

@@ -66,7 +66,8 @@
     // An automated start of a static folder: ?autostart, ?answer=N (every question answered N).
     if (query.has('autostart')) config.autostart = true;
     // The original window (WINDOW_SCALING S2): ?original-window (or ?original); =0, =false or =no turn it off.
-    for (const name of ['original-window', 'original'])
+    // Read the alias first, so the real name decides when both are given.
+    for (const name of ['original', 'original-window'])
       if (query.has(name)) config.originalWindow = !['0', 'false', 'no'].includes(query.get(name).toLowerCase());
     if (config.original !== undefined && config.originalWindow === undefined) config.originalWindow = !!config.original;
     if (query.has('answer')) { config.autostart = true; config.answer = Number(query.get('answer')); }
@@ -94,9 +95,11 @@
       canvas.style.width = `${canvas.width * scale}px`; canvas.style.height = `${canvas.height * scale}px`;
     }
     addEventListener('resize', fit);
-    document.addEventListener('fullscreenchange', () => {   // the keyboard lock only while in full screen
-      fit(); if (!document.fullscreenElement && navigator.keyboard && navigator.keyboard.unlock) navigator.keyboard.unlock();
-    });
+    // The keyboard lock only while in full screen; older Safari sends only the prefixed event.
+    for (const name of ['fullscreenchange', 'webkitfullscreenchange'])
+      document.addEventListener(name, () => {
+        fit(); if (!document.fullscreenElement && navigator.keyboard && navigator.keyboard.unlock) navigator.keyboard.unlock();
+      });
     const report = { draws: 0, torn: 0, check: null };
     self.ntsdPage = { report, header, originalWindow: !!config.originalWindow };   // for the runner's DevTools steps
     let shown = 0, image = null, reported = false;   // sequence 0: nothing presented yet
