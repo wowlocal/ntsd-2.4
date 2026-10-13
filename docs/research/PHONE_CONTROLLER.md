@@ -7,34 +7,25 @@ Requested by the user on 2026-10-13 with a photo: "вот джойстик дл�
 
 ## The device
 
-A clip-on USB-C controller with a telescoping bridge: left module with a
-capture (screenshot) button, d-pad, options (…) button and left stick; right
-module with menu (≡), a logo button, Xbox-layout A/B/X/Y (Y top), right stick,
-an LED by B; bumpers and triggers on the top edge. This matches the
-**Backbone One (USB-C)** — Android and iPhone 15 and later; the first and
-second generations share the layout. Model and generation to be confirmed
-when it is connected (vendor 0x358a).
+**Razer Kishi V2** (USB-C, the Android model), as it reports itself when
+plugged into a Pixel 10 (C2, 2026-10-13): "Razer Razer Kishi V2", USB vendor
+0x1532, product 0x0712. C0 took the photo for a Backbone One (USB-C), which
+has the same layout (clip-on, telescoping bridge, Xbox-layout A/B/X/Y, two
+sticks, bumpers and triggers, a logo button); that identification was wrong.
 
-What the sources say:
+What Android sees (C2, [evidence](../evidence/phone-controller-c2-20261013.json)):
 
-- Buttons: A, B, X, Y, LB/RB, LT/RT, clickable sticks (L3/R3), d-pad,
-  Backbone, Menu, Capture, Options
-  ([EFTM review](https://eftm.com/2024/05/backbone-one-second-gen-review-an-excellent-update-to-a-mobile-gaming-essential-246343),
-  [JB Hi-Fi listing](https://jbhifi.co.nz/products/backbone-one-mobile-gaming-controller-usb-c-2nd-gen)).
-- Android: Android 8.0 or later; the button map cannot be changed; the
-  Backbone button opens the Backbone app (single press back to the game,
-  double press the shortcuts menu)
-  ([Backbone help: Android](https://help.backbone.com/hc/en-us/categories/13753251866647-Backbone-One-for-Android),
-  [button map](https://help.backbone.com/hc/en-us/articles/13754191941655-Can-I-adjust-the-button-map-on-Backbone-One-for-Android)).
-- iOS: an MFi controller, so GameController reports it as an extended
-  gamepad named "Backbone One"; SDL enables its guide (Backbone) button,
-  which iOS delivers on a long press (> 400 ms), and leaves its share button
-  masked
-  ([SDL patch](https://discourse.libsdl.org/t/sdl-added-support-for-the-backbone-one-guide-button/35660)).
-  The PlayStation Edition reports vendor 0x358a, products 0x0104 and 0x0304
-  (second generation)
-  ([SDL](https://discourse.libsdl.org/t/sdl-added-support-for-the-backbone-one-playstation-edition-ea710/42730),
-  [SDL](https://discourse.libsdl.org/t/sdl-add-second-gen-backbone-one-to-recognized-controllers-8ba90/66689)).
+- HID interface 0: the gamepad — sticks X/Y and Z/RZ and triggers GAS/BRAKE
+  (0–255, rest 0x80, flat 15), the d-pad as hat axes HAT0X/HAT0Y (−1…1),
+  15 buttons (A/B/X/Y, bumpers, triggers, Select, Start, the Razer button,
+  stick clicks). Android: one input device, sources KEYBOARD | GAMEPAD |
+  JOYSTICK, controller number 1.
+- HID interface 2: the same 15 buttons with no axes — a second input device,
+  sources KEYBOARD | GAMEPAD, controller number 0. It sent nothing during
+  the played test.
+- HID interface 1: a multi-touch surface (2048×4096, 5 slots), plus a
+  consumer-control node (volume, power, menu, back, home keys) and an
+  ABS_MISC node.
 
 ## What the port already does
 
@@ -42,30 +33,34 @@ What the sources say:
   takes the first two extended GameController gamepads connected at launch
   (the original probes its joysticks once, at startup), samples them every
   25 ms as joySetCapture asks, maps the left stick or the d-pad to the WinMM
-  X/Y axes and A/B/X/Y to buttons 1–4. A Backbone One is an extended
-  gamepad, so it is covered there.
+  X/Y axes and A/B/X/Y to buttons 1–4. Whether iOS/macOS accept this Android
+  model as an extended gamepad is not observed (Razer sells a separate
+  iPhone model).
 - Android: `NTSDAndroidGamepads` (TVOS_WEB T1c) takes the first two input
   devices whose sources include SOURCE_GAMEPAD at launch, the d-pad from hat
   axes or d-pad keys over the left stick, A/B/X/Y (or BUTTON_1–4) as buttons
-  1–4; a gamepad's B never becomes Back (Esc). A USB HID gamepad such as the
-  Backbone One is covered if Android lists it with SOURCE_GAMEPAD.
+  1–4; a gamepad's B never becomes Back (Esc). The Kishi V2 works there
+  (C2: the user played a match with it, "все работает").
 
 ## Gaps
 
-1. **The iPhone is not a target.** The iOS app is built for the iPad only
-   (`UIDeviceFamily` [2] in `ios_app.py` and `ios_device.py`), and this
-   controller is for phones. Add the iPhone: device family, landscape only,
-   the shared full-screen view (WINDOW_SCALING S1/S5) on a 19.5:9 screen
-   (bars at the sides, the Dynamic Island inside them), scenarios on an
-   iPhone simulator.
-2. **Not seen on the device yet.** Whether Android lists it as SOURCE_GAMEPAD,
-   whether its d-pad comes as hat axes or keys, the stick ranges, and what
-   GameController reports on iOS/macOS — to be observed with the controller
-   connected.
-3. Menu, Options, Capture and the Backbone button have no role in the
-   original's joystick (four buttons); Capture and Backbone are the system's
-   and the Backbone app's on Android. Left as they are unless the user wants
+1. ~~The iPhone is not a target~~ — C1 added the separate iPhone build.
+2. **The second, empty gamepad node** (C2): the Android host takes the
+   first two input devices with SOURCE_GAMEPAD, so with the Kishi V2 alone
+   the game is also given its button-only interface-2 node as joystick 2 — a
+   joystick that never moves or presses, and a second player's gamepad
+   connected alongside would not get that slot (inference from the probe
+   code and the device list; the game's joystick count is not logged on
+   Android). C3.
+3. Not observed: the Kishi V2 on the Mac and on iOS (GameController).
+4. Menu, Options, Capture and the Razer button have no role in the
+   original's joystick (four buttons). Left as they are unless the user wants
    a host shortcut (e.g. Menu as Esc).
+5. Recorded, not studied: closing the third run logged a SIGSEGV in ART's
+   "Jit thread pool" thread 94 ms after the window went invisible, then
+   Zygote reported the process "exited cleanly (0)" (no tombstone, no
+   dialog; the first two runs closed without it). The host's onDestroy calls
+   `exit(0)` while ART's threads are still running.
 
 ## Plan
 
@@ -73,20 +68,19 @@ What the sources say:
 | --- | --- | --- |
 | C0 | This card: identify the device, the sources, the survey | **done** |
 | C1 | iPhone: a **separate iPhone build** (user, 2026-10-13: "сделай iPhone отдельную сборку") — its own harness platform and bundle id, iPhone only, landscape, the shared full-screen view and safe areas; scenarios on an iPhone simulator equal with frames identical (CoreText group), the controller path unchanged | **done** |
-| C2 | The controller observed: plugged into the Mac (macOS app and the iPhone/iPad simulators get it through GameController) and into the A12 (adb over Wi-Fi while it holds the USB-C port: `dumpsys input`, `getevent`, the game's joystick events and a played match) | needs the user to plug it in |
-| C3 | Fix what C2 shows (mapping, d-pad source, detection) on each host | queued |
+| C2 | The controller observed: on a Pixel 10 with adb over Wi-Fi (`dumpsys input`, `getevent`, logcat) while the user played; on the Mac (macOS app, iPhone/iPad simulators) | **Android done**; the Mac part needs the controller plugged into the Mac |
+| C3 | The Android host skips a gamepad node without joystick axes when a node with axes has the same vendor and product (the Kishi V2's interface 2), so one controller is one joystick and a second gamepad gets joystick 2 | next |
 
 ## Next task
 
-C2 needs the controller: plug it into the Mac (the macOS app and the iPhone/iPad
-simulators then see it through GameController: its name, extended-gamepad
-elements, the d-pad and sticks in a played match), then into the A12 with adb
-over Wi-Fi (`adb tcpip 5555`, `adb connect` while the phone is on USB, then the
-controller in the port): `dumpsys input` (vendor 0x358a, sources), `getevent`,
-the game's joystick count at start and a played match. The controllers are probed once, at launch
-(as the original does), so the phone must already sit in the controller when
-the game starts. A real iPhone needs a development profile covering
-`local.ntsd.native.iphone` (`ios_device.py --iphone` checks it before building).
+C3: in `NTSDAndroidGamepads.probe`, read each SOURCE_GAMEPAD device's vendor
+and product ids (InputDevice.getVendorId/getProductId) and drop a node
+without SOURCE_JOYSTICK when a node with it has the same ids; keep the order
+and the two-device limit otherwise. Gates: the Android build, the emulator's
+vs scenario equal with frames identical, an independent read-only review of
+the host change, then the Pixel with the Kishi V2 (the found devices are not
+logged, so a host log line or the user's check that the game offers one
+joystick). The Mac part of C2 waits for the controller on the Mac.
 Recorded from C1's review: the game's Alt+Enter popup fills the iPhone's
 screen edge to edge, so the Dynamic Island and the rounded corners cover its
 edges (the windowed picture is clear of them); an empty launch screen may flash
@@ -98,3 +92,4 @@ white in light mode.
 | --- | --- | --- | --- | --- |
 | 2026-10-13 | C0 | The device is most likely a Backbone One (USB-C); both hosts already map extended/HID gamepads; the iPhone is the missing iOS target | this card | — |
 | 2026-10-13 | C1: the separate iPhone build | `ios_app.py --platform iphone` / `ios_device.py --iphone`: its own app (`local.ntsd.native.iphone`, iPhone only, landscape). The first run stopped every scenario at the menu's first blit: the game was told the iPhone's 874×402-point screen, smaller than its window; the iOS host now scales the told screen up to at least 800×600 as Android does (iPad and TV unchanged), fits the original window on screens smaller than the frame and defers the bottom-edge gesture on phones. iPhone 17 Pro: all 10 scenarios equal, 18,088 frames identical to the CoreText reference; iPad vs equal and identical; landscape screenshots on two iPhones (the picture full height, the Dynamic Island in a side bar) | [evidence](../evidence/phone-controller-c1-20261013.json) | this commit |
+| 2026-10-13 | C2 (Android) | The controller is a **Razer Kishi V2** (USB 1532:0712), not a Backbone One. On a Pixel 10 (Android 17) the user played with it ("все работает"): one gamepad node with sticks, triggers and the d-pad as hat axes, plus a button-only gamepad node (interface 2) that sent nothing and that the host takes as joystick 2; closing the run logged an ART JIT-thread SIGSEGV during `exit(0)`, the process still exited 0 | [evidence](../evidence/phone-controller-c2-20261013.json) | this commit |

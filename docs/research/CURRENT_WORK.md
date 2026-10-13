@@ -26,7 +26,7 @@ iOS исключён по просьбе пользователя, tvOS simulato
   [TVOS_WEB](TVOS_WEB.md) W4, локальная ветка `exp/web-text`.
 - Рост памяти в меню (≈30 МБ/мин на всех хостах, найден по 11 ГБ процесса в
   симуляторе): [MENU_MEMORY](MENU_MEMORY.md) — исправлено, меню больше не растёт, гейт пройден.
-- Следующее: отдельная сборка для iPhone и джойстик Backbone One:
+- Джойстик Razer Kishi V2 (не Backbone One) работает на Pixel 10; отдельная сборка для iPhone сделана, следующее — C3 (лишний второй джойстик на Android):
   [PHONE_CONTROLLER](PHONE_CONTROLLER.md).
 
 ## Apple TV и Web — 2026-10-11

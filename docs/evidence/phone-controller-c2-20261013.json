@@ -1,0 +1,51 @@
+{
+  "study": "PHONE_CONTROLLER C2 (Android): the user's controller on a real phone",
+  "date": "2026-10-13",
+  "kind": "actual device observation (the user played; adb over Wi-Fi recorded the input side)",
+  "phone": {"model": "Pixel 10 (frankel)", "android": "17", "adbSerial": "5B061VDCR0003Y", "adbWifi": "192.168.0.52:5555 (adb tcpip while on USB, then the phone moved into the controller)"},
+  "apk": {"path": "X5 crossplatform/apks/mm-2.apk", "sha256": "b158cb9334a5b58895b766f3236cacdf3bec6d27ec59fb5a3f246ca55aa3ba43",
+          "build": "debug local.ntsd.port from the MENU_MEMORY gate mm-2; the Android sources equal main (only NTSDiOS and NTSDWeb changed since 340b1a64)"},
+  "recorder": "scratchpad watch.sh: dumpsys input and getevent -pl on every input-device change, getevent -lt, logcat -v threadtime, pidof local.ntsd.port every 2 s",
+  "controller": {
+    "name": "Razer Razer Kishi V2",
+    "usb": {"bus": "0x0003", "vendor": "0x1532", "product": "0x0712"},
+    "correction": "C0 identified the device from the photo as a Backbone One (USB-C); the device reports itself as a Razer Kishi V2",
+    "hidNodes": [
+      {"interface": "input0", "node": "event3", "eventHubClasses": "KEYBOARD | GAMEPAD | JOYSTICK", "controllerNumber": 1,
+       "abs": "X Y Z RZ GAS BRAKE 0..255 flat 15 (rest 0x80); HAT0X HAT0Y -1..1",
+       "keys": "BTN_SOUTH(GAMEPAD) EAST C NORTH WEST Z TL TR TL2 TR2 SELECT START MODE THUMBL THUMBR"},
+      {"interface": "input1", "node": "event5", "eventHubClasses": "TOUCH | TOUCH_MT | EXTERNAL", "abs": "MT 2048x4096, 5 slots"},
+      {"interface": "input2", "node": "event6", "eventHubClasses": "KEYBOARD | GAMEPAD", "controllerNumber": 0,
+       "keys": "the same 15 gamepad buttons, no axes"},
+      {"node": "event4", "name": "Razer Razer Kishi V2 Consumer Control", "keys": "VOLUMEDOWN VOLUMEUP POWER MENU SLEEP BACK HOMEPAGE APPSELECT"},
+      {"node": "event7", "abs": "ABS_MISC 0..255"}
+    ],
+    "androidInputDevices": [
+      {"id": 4, "sources": "KEYBOARD | GAMEPAD | JOYSTICK", "controllerNum": 1, "motionRanges": "X Y Z RZ -1..1 flat 0.118; LTRIGGER RTRIGGER GAS BRAKE 0..1; HAT_X HAT_Y -1..1"},
+      {"id": 5, "sources": "KEYBOARD | GAMEPAD", "controllerNum": 0},
+      {"id": 6, "sources": "touch (the controller's input1)"}
+    ]
+  },
+  "timeline": {
+    "clock": "Mac CEST (+02:00); logcat lines are the phone's local time, one hour ahead",
+    "runs": [
+      {"pid": 19756, "from": "18:51:26", "to": "18:52:33", "controllerAtLaunch": false},
+      {"pid": 20989, "from": "18:52:36", "to": "18:53:11", "controllerAtLaunch": false, "note": "controller attached at 18:52:54, during the run"},
+      {"pid": 21467, "from": "18:53:18", "to": "18:57:58", "controllerAtLaunch": true, "note": "the played test, about 4 min 40 s"}
+    ],
+    "controllerAttached": ["attached between the 18:51:28 and 18:51:46 samples, removed by 18:52:28", "18:52:54 to 18:58:10"]
+  },
+  "rawEventsOnController": {
+    "event3": {"SYN_REPORT": 1338, "ABS_X": 311, "ABS_Y": 315, "ABS_Z": 170, "ABS_RZ": 177, "ABS_GAS": 184, "ABS_BRAKE": 159, "ABS_HAT0X": 57, "ABS_HAT0Y": 96,
+               "BTN_SOUTH": 86, "BTN_EAST": 36, "BTN_NORTH": 20, "BTN_WEST": 14, "BTN_TL": 2, "BTN_TL2": 6, "BTN_TR2": 12, "BTN_SELECT": 10, "BTN_START": 4, "BTN_MODE": 4},
+    "event6": "none",
+    "event4": {"KEY_POWER": 6, "KEY_VOLUMEDOWN": 6},
+    "note": "event counts include presses and releases over the whole recording; the d-pad arrives as hat axes, which the host's hat path takes over the stick"
+  },
+  "user": "все работает",
+  "findings": [
+    "The controller works in the game as joystick 1: the user played run 3 with it (stick, d-pad, buttons).",
+    "Inference from NTSDAndroidGamepads.probe (first two ids with SOURCE_GAMEPAD, ids ascending) and the device list: the game is also given id 5, the controller's button-only input2 node, which sent no event, as joystick 2; a second gamepad would not get that slot. The game's joystick count is not logged on Android.",
+    "Closing run 3: libc 'Fatal signal 11 (SIGSEGV), code 1 (SEGV_MAPERR), fault addr 0x0 in tid 21473 (Jit thread pool), pid 21467 (local.ntsd.port)' 94 ms after the window became invisible, then Zygote 'Process 21467 exited cleanly (0)'; no tombstone, no error dialog; runs 1 and 2 closed without it. The host's onDestroy calls Foundation.exit(0) while ART's threads run; recorded, not studied."
+  ]
+}
