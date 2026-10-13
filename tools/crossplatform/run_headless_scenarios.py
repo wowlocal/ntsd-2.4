@@ -42,6 +42,8 @@ Node 26 runs it), default the newest node fnm installed, else `node`.
 $NTSD_LINUX_PLATFORM sets the container platform (e.g. linux/amd64) and
 $NTSD_LINUX_IMAGE replaces the container image (e.g. ntsd-linux-runtime:noble
 from linux-runtime/Dockerfile, which adds fontconfig and DejaVu for text).
+$NTSD_GAME_ARGS adds game arguments (split as a shell would) after the
+scenario's own, before --script (e.g. --scalable-window, WINDOW_SCALING).
 """
 import importlib.util, json, os, shlex, shutil, subprocess, sys, time
 from pathlib import Path
@@ -102,7 +104,7 @@ def main():
                 "--virtual-clock", "123456789", "8", "--script-clock", "gameplay", "--body-captures", host(inner / "captures"),
                 "--body-frames", host(inner / "frames"),
                 *([] if os.environ.get("NTSD_NO_FRAME_DIGESTS") else ["--body-frame-digests"]),
-                *extra, "--script", script]
+                *extra, *shlex.split(os.environ.get("NTSD_GAME_ARGS", "")), "--script", script]
         if mode == "--linux":
             command = ["docker", "run", "--rm", *platform, *docker, "-e", "TZ=Etc/GMT-1", "-v", f"{target}:/app:ro", "-v", f"{MUSIC}:/music:ro",
                        "-v", f"{out}:/out", os.environ.get("NTSD_LINUX_IMAGE", "swift:6.4.0-noble"), f"/app/{binary}", "--music-dir", "/music", *args]
@@ -146,7 +148,8 @@ def main():
                                                                       [f"{DEVICE}/out={out}"] if mode == "--android" else [])
         c = subprocess.run(compare, capture_output=True, text=True)
         verdict = json.loads(c.stdout.strip().splitlines()[-1]) if c.stdout.strip() else {"result": "error", "differs": [c.stderr[-300:]]}
-        row = {"scenario": name, "exit": done.returncode, "seconds": round(time.time() - start, 1), **verdict}
+        row = {"scenario": name, "exit": done.returncode, "seconds": round(time.time() - start, 1), **verdict,
+               **({"gameArgs": os.environ["NTSD_GAME_ARGS"]} if os.environ.get("NTSD_GAME_ARGS") else {})}
         if mode in ("--wasi", "--browser", "--web"): row["node"] = node_version   # the WASI runtime is part of the result
         if mode in ("--browser", "--web") and (base / "browser-metrics.json").exists():
             row["browser"] = json.loads((base / "browser-metrics.json").read_text()).get("userAgent")

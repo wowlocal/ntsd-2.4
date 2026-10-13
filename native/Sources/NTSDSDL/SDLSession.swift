@@ -164,6 +164,16 @@ final class SDLAudioFeed: @unchecked Sendable {
     }
     func cursorPoint() -> (Int32,Int32) {
         var x: Float = 0,y: Float = 0; _ = SDL_GetGlobalMouseState(&x,&y)
+        // A scalable window: the game's own window (where it was created), the
+        // point mapped back through the picture as clicks are.
+        if let game = gameWindow(),game.scalable {
+            var wx: Int32 = 0,wy: Int32 = 0
+            if SDL_GetWindowPosition(game.window,&wx,&wy) {
+                let frame = game.textureSize == .zero ? game.client : game.textureSize
+                let (cx,cy) = windows.clientPoint(game,x:x-Float(wx),y:y-Float(wy),frame:frame)
+                return (Int32(game.placed.x)+cx,Int32(game.placed.y)+cy)
+            }
+        }
         return (Int32(x.rounded(.down)),Int32(y.rounded(.down)))
     }
     func attach(_ window: UInt32,in windows: OriginalRuntimeWindowBackend,session: OriginalRuntimeSession) throws {
@@ -195,6 +205,11 @@ final class SDLAudioFeed: @unchecked Sendable {
         case SDL_EVENT_WINDOW_CLOSE_REQUESTED where event.window.windowID == game.id:
             if session.closeRequested() { terminate() }
             return
+        case SDL_EVENT_WINDOW_PIXEL_SIZE_CHANGED where event.window.windowID == game.id && game.scalable,
+             SDL_EVENT_WINDOW_EXPOSED where event.window.windowID == game.id && game.scalable:
+            // A resized or uncovered scalable window: its picture box follows now,
+            // not at the game's next frame.
+            windows.draw(game); return
         default: break
         }
         guard let messages = session.messages,!session.stopped else { return }
@@ -228,11 +243,27 @@ final class SDLAudioFeed: @unchecked Sendable {
     func snapshotPNG(_ window: UInt32,in windows: OriginalRuntimeWindowBackend) throws -> Data { try windows.presentedPNG(window) }
     /// Declared: the presented framebuffer, not a read-back of the scaled view.
     func viewPNG(_ window: UInt32,in windows: OriginalRuntimeWindowBackend) throws -> Data { try windows.presentedPNG(window) }
+    /// A scalable window's desktop full screen (the platform's own maximise
+    /// and full-screen controls reach the same scaling); the fixed window has none.
     func toggleFullScreen(_ window: UInt32,in windows: OriginalRuntimeWindowBackend) throws {
-        throw OriginalRuntimeWindowBackend.Boundary.unsupported("SDL host full screen")
+        guard let w = try windows.lease(window).window as? SDLWindow,w.scalable else {
+            throw OriginalRuntimeWindowBackend.Boundary.unsupported("SDL host full screen")
+        }
+        let full = SDL_GetWindowFlags(w.window) & NTSD_SDL_WINDOW_FULLSCREEN != 0
+        guard SDL_SetWindowFullscreen(w.window,!full) else { throw SDLWindowHost.error() }
+        _ = SDL_SyncWindow(w.window)
+        var ww: Int32 = 0,wh: Int32 = 0; _ = SDL_GetWindowSize(w.window,&ww,&wh)
+        Self.report(["event":"sdlFullScreen","entered":!full,"window":[Int(ww),Int(wh)]])
     }
     func hide(_ window: UInt32,in windows: OriginalRuntimeWindowBackend) throws {
-        if let w = try windows.lease(window).window as? SDLWindow { _ = SDL_HideWindow(w.window); w.visible = false }
+        if let w = try windows.lease(window).window as? SDLWindow {
+            // DestroyWindow: a scalable window's restored size is the next one's.
+            if w.scalable,SDL_GetWindowFlags(w.window) & (NTSD_SDL_WINDOW_FULLSCREEN | NTSD_SDL_WINDOW_MAXIMIZED) == 0 {
+                var ww: Int32 = 0,wh: Int32 = 0
+                if SDL_GetWindowSize(w.window,&ww,&wh) { self.windows.lastSize = CGSize(width:CGFloat(ww),height:CGFloat(wh)) }
+            }
+            _ = SDL_HideWindow(w.window); w.visible = false
+        }
     }
     func askMessageBox(text: String,caption: String,buttons: [String]) -> Int {
         let titles = buttons.map { strdup($0) }

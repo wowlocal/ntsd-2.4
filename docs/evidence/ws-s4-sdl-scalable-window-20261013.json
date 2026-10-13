@@ -1,0 +1,414 @@
+{
+ "study": "WINDOW_SCALING",
+ "step": "S4: the SDL scalable window (macOS, Linux; Windows shares the code, not built)",
+ "change": "NTSDSDL: SDLWindowHost.scalable (default; off with --original-window or NTSD_ORIGINAL_WINDOW=1, and for --script runs unless --scalable-window). A scalable titled window: SDL_WINDOW_RESIZABLE | SDL_WINDOW_HIGH_PIXEL_DENSITY, SDL_SetWindowAspectRatio 794:550, half-size minimum, the macOS initial-size rule over SDL_GetDisplayUsableBounds (minus the frame metrics), centred; the game keeps `placed` (the centred 1x client it asked for) as its position and w.client as its client; the picture box is computed in output pixels for drawing and in window points for clicks (box/draw), redrawn on SDL_EVENT_WINDOW_PIXEL_SIZE_CHANGED and EXPOSED; clicks before the first frame map through the client's box; GetMessagePos maps the global mouse through the window plus placed; the script's fullscreen = SDL desktop full screen for scalable windows (the fixed window keeps the unsupported boundary); DestroyWindow (hide) records the restored size for the next window. No host key for full screen: F1-F12 all reach the game (OriginalHIDKeys). The fixed and popup paths are unchanged. CSDL3 shim: the new flag constants. run_headless_scenarios.py: $NTSD_GAME_ARGS (recorded per row as gameArgs). New harness tools/crossplatform/linux_sdl_scaling.py.",
+ "checks": {
+  "macosSDL": {
+   "fixed": {
+    "rows": [
+     {
+      "scenario": "vs",
+      "exit": 0,
+      "result": "equal"
+     },
+     {
+      "scenario": "mission",
+      "exit": 0,
+      "result": "equal"
+     },
+     {
+      "scenario": "demo",
+      "exit": 0,
+      "result": "equal"
+     },
+     {
+      "scenario": "war",
+      "exit": 0,
+      "result": "equal"
+     },
+     {
+      "scenario": "playback",
+      "exit": 0,
+      "result": "equal"
+     },
+     {
+      "scenario": "tournament",
+      "exit": 0,
+      "result": "equal"
+     },
+     {
+      "scenario": "altenter",
+      "exit": 0,
+      "result": "equal"
+     },
+     {
+      "scenario": "tournament-win",
+      "exit": 0,
+      "result": "equal"
+     },
+     {
+      "scenario": "team-tournament",
+      "exit": 0,
+      "result": "equal"
+     },
+     {
+      "scenario": "joystick",
+      "exit": 0,
+      "result": "equal"
+     }
+    ],
+    "frames": {
+     "frames": 18088,
+     "mismatched": 0,
+     "result": "identical"
+    }
+   },
+   "scalable": {
+    "rows": [
+     {
+      "scenario": "vs",
+      "exit": 0,
+      "result": "equal",
+      "gameArgs": "--scalable-window"
+     },
+     {
+      "scenario": "mission",
+      "exit": 0,
+      "result": "equal",
+      "gameArgs": "--scalable-window"
+     },
+     {
+      "scenario": "demo",
+      "exit": 0,
+      "result": "equal",
+      "gameArgs": "--scalable-window"
+     },
+     {
+      "scenario": "war",
+      "exit": 0,
+      "result": "equal",
+      "gameArgs": "--scalable-window"
+     },
+     {
+      "scenario": "playback",
+      "exit": 0,
+      "result": "equal",
+      "gameArgs": "--scalable-window"
+     },
+     {
+      "scenario": "tournament",
+      "exit": 0,
+      "result": "equal",
+      "gameArgs": "--scalable-window"
+     },
+     {
+      "scenario": "altenter",
+      "exit": 0,
+      "result": "equal",
+      "gameArgs": "--scalable-window"
+     },
+     {
+      "scenario": "tournament-win",
+      "exit": 0,
+      "result": "equal",
+      "gameArgs": "--scalable-window"
+     },
+     {
+      "scenario": "team-tournament",
+      "exit": 0,
+      "result": "equal",
+      "gameArgs": "--scalable-window"
+     },
+     {
+      "scenario": "joystick",
+      "exit": 0,
+      "result": "equal",
+      "gameArgs": "--scalable-window"
+     }
+    ],
+    "frames": {
+     "frames": 18088,
+     "mismatched": 0,
+     "result": "identical"
+    }
+   },
+   "reference": "S1's AppKit run (CoreText group, identical to TVOS_WEB T1a's pinned reference)"
+  },
+  "linuxSDL": {
+   "baseline": {
+    "how": "the same tree with the four SDL files at HEAD b7cd16c6, built with the same SDK and run in ntsd-linux-runtime:noble (--linux-sdl, SDL offscreen)",
+    "rows": [
+     {
+      "scenario": "vs",
+      "exit": 0,
+      "result": "equal"
+     },
+     {
+      "scenario": "mission",
+      "exit": 0,
+      "result": "equal"
+     },
+     {
+      "scenario": "demo",
+      "exit": 0,
+      "result": "equal"
+     },
+     {
+      "scenario": "war",
+      "exit": 0,
+      "result": "equal"
+     },
+     {
+      "scenario": "playback",
+      "exit": 0,
+      "result": "equal"
+     },
+     {
+      "scenario": "tournament",
+      "exit": 0,
+      "result": "equal"
+     },
+     {
+      "scenario": "altenter",
+      "exit": 0,
+      "result": "equal"
+     },
+     {
+      "scenario": "tournament-win",
+      "exit": 0,
+      "result": "equal"
+     },
+     {
+      "scenario": "team-tournament",
+      "exit": 0,
+      "result": "equal"
+     },
+     {
+      "scenario": "joystick",
+      "exit": 0,
+      "result": "equal"
+     }
+    ]
+   },
+   "fixed": {
+    "rows": [
+     {
+      "scenario": "vs",
+      "exit": 0,
+      "result": "equal"
+     },
+     {
+      "scenario": "mission",
+      "exit": 0,
+      "result": "equal"
+     },
+     {
+      "scenario": "demo",
+      "exit": 0,
+      "result": "equal"
+     },
+     {
+      "scenario": "war",
+      "exit": 0,
+      "result": "equal"
+     },
+     {
+      "scenario": "playback",
+      "exit": 0,
+      "result": "equal"
+     },
+     {
+      "scenario": "tournament",
+      "exit": 0,
+      "result": "equal"
+     },
+     {
+      "scenario": "altenter",
+      "exit": 0,
+      "result": "equal"
+     },
+     {
+      "scenario": "tournament-win",
+      "exit": 0,
+      "result": "equal"
+     },
+     {
+      "scenario": "team-tournament",
+      "exit": 0,
+      "result": "equal"
+     },
+     {
+      "scenario": "joystick",
+      "exit": 0,
+      "result": "equal"
+     }
+    ],
+    "frames_vs_baseline": {
+     "frames": 18088,
+     "mismatched": 0,
+     "result": "identical"
+    }
+   },
+   "scalable": {
+    "rows": [
+     {
+      "scenario": "vs",
+      "exit": 0,
+      "result": "equal",
+      "gameArgs": "--scalable-window"
+     },
+     {
+      "scenario": "mission",
+      "exit": 0,
+      "result": "equal",
+      "gameArgs": "--scalable-window"
+     },
+     {
+      "scenario": "demo",
+      "exit": 0,
+      "result": "equal",
+      "gameArgs": "--scalable-window"
+     },
+     {
+      "scenario": "war",
+      "exit": 0,
+      "result": "equal",
+      "gameArgs": "--scalable-window"
+     },
+     {
+      "scenario": "playback",
+      "exit": 0,
+      "result": "equal",
+      "gameArgs": "--scalable-window"
+     },
+     {
+      "scenario": "tournament",
+      "exit": 0,
+      "result": "equal",
+      "gameArgs": "--scalable-window"
+     },
+     {
+      "scenario": "altenter",
+      "exit": 0,
+      "result": "equal",
+      "gameArgs": "--scalable-window"
+     },
+     {
+      "scenario": "tournament-win",
+      "exit": 0,
+      "result": "equal",
+      "gameArgs": "--scalable-window"
+     },
+     {
+      "scenario": "team-tournament",
+      "exit": 0,
+      "result": "equal",
+      "gameArgs": "--scalable-window"
+     },
+     {
+      "scenario": "joystick",
+      "exit": 0,
+      "result": "equal",
+      "gameArgs": "--scalable-window"
+     }
+    ],
+    "frames_vs_baseline": {
+     "frames": 18088,
+     "mismatched": 0,
+     "result": "identical"
+    }
+   }
+  },
+  "linuxScaling": {
+   "how": "linux_sdl_scaling.py on the final build",
+   "summary": {
+    "x11Docker": 0,
+    "waylandDocker": 0,
+    "x11": {
+     "window": [
+      "first 1325 918",
+      "resized 1001 600"
+     ],
+     "clicks": [
+      "click 350 230 at 584 384 in 1325 918",
+      "click 402 218 at 506 238 in 1001 600"
+     ],
+     "loaded": true,
+     "maxGameplayBodies": 300,
+     "boundary": [],
+     "frames": 4,
+     "result": "exit=0"
+    },
+    "x11-original": {
+     "window": [
+      "first 794 550"
+     ],
+     "clicks": [
+      "click 350 230 at 350 230 in 794 550",
+      "click 402 218 at 402 218 in 794 550"
+     ],
+     "loaded": true,
+     "maxGameplayBodies": 300,
+     "boundary": [],
+     "frames": 4,
+     "result": "exit=0"
+    },
+    "wayland": {
+     "drivers": [
+      {
+       "audio": "dummy",
+       "event": "sdlDrivers",
+       "video": "wayland"
+      }
+     ],
+     "fullScreen": [
+      {
+       "entered": true,
+       "event": "sdlFullScreen",
+       "window": [
+        1280,
+        1024
+       ]
+      },
+      {
+       "entered": false,
+       "event": "sdlFullScreen",
+       "window": [
+        1088,
+        754
+       ]
+      }
+     ],
+     "frames": [
+      "1-window.png",
+      "2-full.png",
+      "3-back.png"
+     ],
+     "result": "exit=0"
+    }
+   },
+   "reading": [
+    "X11 (Xvfb 1920x1080, no window manager, real xdotool input, no script): the scalable window opened at 1325x918 (1.67x); START clicked at window (584,384) -> loaded; after windowsize 1001x600 (letterboxed) the VS mode clicked at (506,238); the VS keys started a match that reached body 400 (4 frames) - the same as --original-window at 794x550",
+    "Wayland (headless Weston 1280x1024): the script's fullscreen -> 1280x1024, back -> 1088x754 (the initial size); the frames before, in and after are byte-identical"
+   ]
+  },
+  "macosLive": {
+   "display": "Apple 6K, 3008x1692 pt",
+   "reading": [
+    "default launch: window 1588x1100 pt content (2x, density 2)",
+    "the script's fullscreen: 3008x1692 and back to 1588x1100; frames before, in and after byte-identical",
+    "--original-window and NTSD_ORIGINAL_WINDOW=1: the fixed 794x550 client",
+    "a pid-posted click did not land (the game's cursor elsewhere; inconclusive)",
+    "a real HID-level click (posted only while the game was frontmost and its window topmost at the point; the cursor restored) at client (350,230) in the 2x window activated START (loaded event; the mode menu shown) - clicks at density 2 map exactly"
+   ]
+  }
+ },
+ "review": "Round 1 (independent, read-only): OK by reading; medium: clicks at a density above 1 untested (closed: the real HID click at density 2); low: a stale picture box before the first frame and after a resize (fixed: box(w, client) and redraw on resize/expose), gameArgs not in results (fixed); recorded: GetMessagePos not exercised, window-manager maximise/aspect untested on Linux, Windows not built. Round 2: OK; notes: no redraw during a modal drag (the OS stretches the old picture), a resize before the first frame keeps the first box until a frame.",
+ "boundaries": [
+  "Windows not built: SDL3's DPI awareness and size units there, the Windows scenarios and the metrics (0,0,0) remain open",
+  "GetMessagePos under the scalable window is exercised by no run (Wayland relies on SDL's window-relative global position with the window at 0,0)",
+  "Linux window-manager maximise and aspect hints untried (no WM in the X11 run)",
+  "The pid-posted click on macOS SDL is inconclusive (the real click passed)",
+  "Scales between 1 and 2 give uneven nearest pixels (the card's open question)"
+ ]
+}

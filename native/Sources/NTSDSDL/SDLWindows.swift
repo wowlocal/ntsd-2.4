@@ -10,6 +10,9 @@ import NTSDRuntime
 /// framebuffer. `origin` is the client top-left on the desktop, as placed.
 final class SDLWindow {
     let window: OpaquePointer, renderer: OpaquePointer, popup: Bool, client: CGSize
+    /// The scalable window (WINDOW_SCALING S4): the game keeps the client and
+    /// position it was created with while the picture scales with the window.
+    var scalable = false
     /// Where the host placed the client (desktop, top-left origin).
     var placed = CGPoint.zero
     var texture: UnsafeMutablePointer<SDL_Texture>?, textureSize = CGSize.zero
@@ -35,8 +38,30 @@ final class SDLCursor { let cursor: OpaquePointer?; init(_ cursor: OpaquePointer
     enum Failure: Error { case sdl(String) }
     let metrics: (frameX: CGFloat,frameY: CGFloat,caption: CGFloat)
     init(metrics: (CGFloat,CGFloat,CGFloat)) { self.metrics = (metrics.0,metrics.1,metrics.2) }
+    /// The scalable window (WINDOW_SCALING S4): the game's titled window is
+    /// resizable and maximisable with its aspect kept, at high pixel density,
+    /// opens larger than 1× where the display allows and keeps its size for
+    /// the next window; the game keeps its creation geometry. False keeps the
+    /// original fixed window.
+    var scalable = false
+    /// The size of the game's last scalable window when the game destroyed it.
+    var lastSize: CGSize?
+    /// A scalable window's first size, as on macOS: the last one (no larger
+    /// than the display allows), else the largest whole multiple of the client
+    /// within 85% of the usable display when that is 2× or more, else the
+    /// fraction that fits there (at least half).
+    func initialSize(_ client: CGSize) -> CGSize {
+        var r = SDL_Rect()
+        guard SDL_GetDisplayUsableBounds(SDL_GetPrimaryDisplay(),&r),client.width > 0,client.height > 0 else { return lastSize ?? client }
+        let room = CGSize(width:CGFloat(r.w)-2*metrics.frameX,height:CGFloat(r.h)-metrics.caption-2*metrics.frameY)
+        let fit = min(room.width/client.width,room.height/client.height)*0.85
+        var scale = fit >= 2 ? fit.rounded(.down) : max(0.5,fit)
+        if let last = lastSize { scale = max(0.5,min(last.width/client.width,room.width/client.width,room.height/client.height)) }
+        let width = (client.width*scale).rounded()
+        return CGSize(width:width,height:(width*client.height/client.width).rounded())
+    }
     static func window(_ object: AnyObject) -> SDLWindow { object as! SDLWindow }
-    private static func error() -> Failure { .sdl(String(cString:SDL_GetError())) }
+    static func error() -> Failure { .sdl(String(cString:SDL_GetError())) }
     func screenSize() throws -> CGSize {
         var r = SDL_Rect()
         guard SDL_GetDisplayBounds(SDL_GetPrimaryDisplay(),&r) else { throw Self.error() }
@@ -55,15 +80,28 @@ final class SDLCursor { let cursor: OpaquePointer?; init(_ cursor: OpaquePointer
         let screen = try screenSize()
         let client = popup ? screen : CGSize(width:width-2*metrics.frameX,height:height-metrics.caption-2*metrics.frameY)
         guard client.width > 0,client.height > 0 else { throw OriginalRuntimeWindowBackend.Boundary.geometry }
+        let scalable = self.scalable && !popup
         let flags = NTSD_SDL_WINDOW_HIDDEN | (popup ? NTSD_SDL_WINDOW_FULLSCREEN : 0)
+            | (scalable ? NTSD_SDL_WINDOW_RESIZABLE | NTSD_SDL_WINDOW_HIGH_PIXEL_DENSITY : 0)
         guard let window = SDL_CreateWindow(title,Int32(client.width),Int32(client.height),flags) else { throw Self.error() }
         guard let renderer = SDL_CreateRenderer(window,nil) else { SDL_DestroyWindow(window); throw Self.error() }
         let w = SDLWindow(window:window,renderer:renderer,popup:popup,client:client)
         if !popup {
             let x = ((screen.width-width)/2).rounded(.down)+metrics.frameX
             let y = ((screen.height-height)/2).rounded(.down)+metrics.caption+metrics.frameY
-            _ = SDL_SetWindowPosition(window,Int32(x),Int32(y))
             w.placed = CGPoint(x:x,y:y)
+            if scalable {
+                // The game keeps the centred client it asked for (`placed`);
+                // the real window is larger, centred, and only scales the picture.
+                w.scalable = true
+                let aspect = Float(client.width/client.height),size = initialSize(client)
+                _ = SDL_SetWindowAspectRatio(window,aspect,aspect)
+                _ = SDL_SetWindowMinimumSize(window,Int32((client.width/2).rounded()),Int32((client.height/2).rounded()))
+                _ = SDL_SetWindowSize(window,Int32(size.width),Int32(size.height))
+                _ = SDL_SetWindowPosition(window,NTSD_SDL_WINDOWPOS_CENTERED,NTSD_SDL_WINDOWPOS_CENTERED)
+            } else {
+                _ = SDL_SetWindowPosition(window,Int32(x),Int32(y))
+            }
         }
         return w
     }
@@ -88,7 +126,7 @@ final class SDLCursor { let cursor: OpaquePointer?; init(_ cursor: OpaquePointer
     /// window to be: there the host reports the position it placed.
     private static let positionsKnown = SDL_GetCurrentVideoDriver().map { String(cString:$0) } != "wayland"
     private func origin(_ w: SDLWindow) -> CGPoint {
-        guard Self.positionsKnown else { return w.placed }
+        guard Self.positionsKnown,!w.scalable else { return w.placed }
         var x: Int32 = 0,y: Int32 = 0
         guard SDL_GetWindowPosition(w.window,&x,&y) else { return w.placed }
         return CGPoint(x:CGFloat(x),y:CGFloat(y))
@@ -112,16 +150,44 @@ final class SDLCursor { let cursor: OpaquePointer?; init(_ cursor: OpaquePointer
             w.texture = texture; w.textureSize = size
         }
         frame.pixels.withUnsafeBytes { _ = SDL_UpdateTexture(w.texture,nil,$0.baseAddress,Int32(frame.width*4)) }
+        if w.scalable { draw(w); return }
         var ww: Int32 = 0,wh: Int32 = 0; _ = SDL_GetWindowSize(w.window,&ww,&wh)
-        let scale = min(CGFloat(ww)/size.width,CGFloat(wh)/size.height)
-        w.drawn = size == w.client ? CGRect(origin:.zero,size:size)
-            : CGRect(x:(CGFloat(ww)-size.width*scale)/2,y:(CGFloat(wh)-size.height*scale)/2,width:size.width*scale,height:size.height*scale)
-        var destination = SDL_FRect(x:Float(w.drawn.minX),y:Float(w.drawn.minY),w:Float(w.drawn.width),h:Float(w.drawn.height))
+        var destination: SDL_FRect
+        do {
+            let scale = min(CGFloat(ww)/size.width,CGFloat(wh)/size.height)
+            w.drawn = size == w.client ? CGRect(origin:.zero,size:size)
+                : CGRect(x:(CGFloat(ww)-size.width*scale)/2,y:(CGFloat(wh)-size.height*scale)/2,width:size.width*scale,height:size.height*scale)
+            destination = SDL_FRect(x:Float(w.drawn.minX),y:Float(w.drawn.minY),w:Float(w.drawn.width),h:Float(w.drawn.height))
+        }
         _ = SDL_SetRenderDrawColor(w.renderer,0,0,0,255); _ = SDL_RenderClear(w.renderer)
         _ = SDL_RenderTexture(w.renderer,w.texture,nil,&destination); _ = SDL_RenderPresent(w.renderer)
     }
+    /// A scalable window's picture box for its current size: in the output's
+    /// pixels (high pixel density) for drawing, and in window points, where
+    /// mouse events arrive.
+    func box(_ w: SDLWindow,_ size: CGSize) -> (pixels: CGRect,points: CGRect) {
+        var ww: Int32 = 0,wh: Int32 = 0; _ = SDL_GetWindowSize(w.window,&ww,&wh)
+        var pw: Int32 = 0,ph: Int32 = 0
+        if !SDL_GetRenderOutputSize(w.renderer,&pw,&ph) || pw <= 0 || ph <= 0 { pw = ww; ph = wh }
+        let scale = min(CGFloat(pw)/size.width,CGFloat(ph)/size.height)
+        let pixels = CGRect(x:((CGFloat(pw)-size.width*scale)/2).rounded(),y:((CGFloat(ph)-size.height*scale)/2).rounded(),
+                            width:(size.width*scale).rounded(),height:(size.height*scale).rounded())
+        let density = CGFloat(pw)/max(1,CGFloat(ww))
+        return (pixels,CGRect(x:pixels.minX/density,y:pixels.minY/density,width:pixels.width/density,height:pixels.height/density))
+    }
+    /// Draws a scalable window's last frame at its current size (each present,
+    /// and again when the window's size changes).
+    func draw(_ w: SDLWindow) {
+        guard w.scalable,let texture = w.texture,w.textureSize != .zero else { return }
+        let (pixels,points) = box(w,w.textureSize); w.drawn = points
+        var destination = SDL_FRect(x:Float(pixels.minX),y:Float(pixels.minY),w:Float(pixels.width),h:Float(pixels.height))
+        _ = SDL_SetRenderDrawColor(w.renderer,0,0,0,255); _ = SDL_RenderClear(w.renderer)
+        _ = SDL_RenderTexture(w.renderer,texture,nil,&destination); _ = SDL_RenderPresent(w.renderer)
+    }
     /// A window point as the game's client point (the drawn frame's pixels).
     func clientPoint(_ w: SDLWindow,x: Float,y: Float,frame: CGSize) -> (Int32,Int32) {
+        // A scalable window before its first frame maps through its client's box.
+        if w.scalable,w.drawn.width <= 0 || w.drawn.height <= 0 { w.drawn = box(w,w.client).points }
         guard w.drawn.width > 0,w.drawn.height > 0 else { return (Int32(x.rounded(.down)),Int32(y.rounded(.down))) }
         let px = (CGFloat(x)-w.drawn.minX)*frame.width/w.drawn.width,py = (CGFloat(y)-w.drawn.minY)*frame.height/w.drawn.height
         return (Int32(px.rounded(.down)),Int32(py.rounded(.down)))

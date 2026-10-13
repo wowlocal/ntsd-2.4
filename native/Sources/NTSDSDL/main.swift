@@ -48,7 +48,13 @@ let session: OriginalRuntimeSession = MainActor.assumeIsolated {
     caption = caption ?? 0
     let metrics: (CGFloat,CGFloat,CGFloat) = (0,0,caption!)
     #endif
-    let host = SDLSessionHost(arguments:arguments,windows:SDLWindowHost(metrics:metrics),musicDirectory:musicDirectory)
+    let windows = SDLWindowHost(metrics:metrics)
+    // A scalable window by default (WINDOW_SCALING S4); the original fixed window
+    // with --original-window or NTSD_ORIGINAL_WINDOW=1, and for scripted runs
+    // unless --scalable-window.
+    windows.scalable = !arguments.contains("--original-window") && ProcessInfo.processInfo.environment["NTSD_ORIGINAL_WINDOW"] != "1"
+        && (!arguments.contains("--script") || arguments.contains("--scalable-window"))
+    let host = SDLSessionHost(arguments:arguments,windows:windows,musicDirectory:musicDirectory)
     let session = OriginalRuntimeSession(arguments:arguments,host:host)
     host.session = session; retainedHost = host
     session.start()

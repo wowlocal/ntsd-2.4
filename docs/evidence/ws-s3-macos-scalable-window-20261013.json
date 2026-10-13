@@ -364,8 +364,13 @@
  "boundaries": [
   "Moving a scalable window off-screen or to another display no longer reaches the fixed window's 'screen changed'/geometry stops (the game keeps its creation geometry): recorded as a difference from the fixed window",
   "Scales between 1 and 2 (and full screen) give uneven nearest pixels — the card's open question",
-  "A real hand click and a real green-button press remain hand checks (the user)",
   "Two displays not tried",
-  "GetMessagePos for a cursor outside the scalable window is extrapolated (negative or off-screen values possible; Windows keeps it on the screen)"
- ]
+  "GetMessagePos for a cursor outside the scalable window is extrapolated (negative or off-screen values possible; Windows keeps it on the screen)",
+  "The green button pressed by hand not tried (the script's toggleFullScreen is the same AppKit action)"
+ ],
+ "laterCheck": {
+  "date": "2026-10-13",
+  "how": "after the commit, the same frozen app (sources = b7cd16c6): a real HID-level click (tools helper hidclick: posts only while the game is frontmost and its window is topmost at the point, then restores the cursor) at client (350,230) in the default 2× window",
+  "result": "START activated: the game's loaded event followed (loaded=1) — the real click path maps through the 2× picture. The hand check of a real click is closed; the green button pressed by hand stays open (the script's toggleFullScreen is the same action)."
+ }
 }
