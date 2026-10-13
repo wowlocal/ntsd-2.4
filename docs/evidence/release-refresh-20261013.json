@@ -134,13 +134,19 @@
     "build": "complete",
     "archive": "ntsd-linux-x86_64-f340f1e.tar.gz",
     "sha256": "3c6048dc34feab1e6ac16bb91790d6979e068fa78feae8c5ccd80d0b4098dea4",
-    "checks": "archive member hashes pass; ldd/default and X11 smoke pass, VS in progress"
+    "checks": "archive members equal manifest; clean Ubuntu amd64/Rosetta ldd/default music/font and X11 input-to-gameplay pass; VS equal (77.0 s)"
   },
   "android": {
     "build": "complete; aligned APK ZIP integrity passes (1540 entries)",
     "signing": "existing release key password is in locked login keychain; unsigned APK retained; do not publish unsigned"
   },
-  "windows": "pending",
+  "windows": {
+    "sourceCommit": "2c4db98b (packaging-only differences from game-source tag)",
+    "archive": "ntsd-windows-x86_64-2c4db98.zip",
+    "sha256": "87a7ca85e82e072946ab290eeafec98eeafbce43e4d2192495f35835d885ea46",
+    "checks": "1554 file hashes plus archive directory set verified; fresh task-owned CrossOver bottle ntsd-release-20261013 default launch with GDI SYSTEM_FONT and packaged music; VS equal (59.5 s)",
+    "boundaries": "CrossOver harness only, real Windows untested"
+  },
   "web": "pending; old f0471f13 web prerelease exists; latest memory fix needs rebuild",
   "excluded": [
     "iOS per user",
@@ -150,7 +156,20 @@
     "build-native: configurable scratch/version/build, explicit shipping product",
     "release-macos: configurable output",
     "app_e2e: configurable retained-capture directory; comparator/references unchanged",
-    "linux_x11_smoke: existing linux_sdl_scaling.py coordinate conversion for default scalable window"
+    "linux_x11_smoke: existing linux_sdl_scaling.py coordinate conversion for default scalable window",
+    "check_windows_package: configurable NTSD_WINE_BOTTLE; use a unique task-owned bottle, preserve other sessions"
   ],
-  "review": "No independent reviewer available; no game/numeric/comparator contract changed. Existing game evidence/reviews remain distinct from these package checks."
+  "review": "No independent reviewer available; no game/numeric/comparator contract changed. Existing game evidence/reviews remain distinct from these package checks.",
+  "publication": {
+    "tagPushed": true,
+    "draftURL": "https://github.com/wowlocal/ntsd-2.4/releases/edit/untagged-7d4ab37dfa3e01a499bc",
+    "status": "Linux assets uploading via Safari; not published",
+    "cli": "expired token, device refresh expired awaiting user; existing Safari login usable"
+  },
+  "commits": [
+    {
+      "commit": "2c4db98b",
+      "push": "post-commit hook failed: exp/iphone has no upstream; commit exists; source tag push succeeded separately"
+    }
+  ]
 }
