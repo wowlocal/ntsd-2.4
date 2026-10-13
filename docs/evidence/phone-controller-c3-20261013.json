@@ -1,0 +1,15 @@
+{
+  "study": "PHONE_CONTROLLER C3: one joystick per controller on Android",
+  "date": "2026-10-13",
+  "change": "NTSDAndroidGamepads.probe reads every SOURCE_GAMEPAD device's vendor and product ids and skips a node without SOURCE_JOYSTICK when a node with it has the same ids (not both zero); id order and the two-device limit are kept; one logcat line (tag NTSD) lists what it saw",
+  "reason": "C2 (phone-controller-c2-20261013.json): the Razer Kishi V2 lists a button-only HID interface as a second gamepad, which the old probe gave the game as joystick 2",
+  "build": {"apk": "X5 crossplatform/android-c3/ntsd.apk", "sha256": "a4a7f28a9791990aa06358c799f0120841280484ac67cc2ba787ba9f0994a8ed",
+            "versionName": "0.1.760-d4619cbc", "note": "the committed file differs from the built one by doc comments only (the review's wording note)"},
+  "gates": {
+    "harnessError": "the first run staged the APK on T7 (ExFAT): macOS AppleDouble ._ files entered files.txt (1585 entries), aapt2 left them out, the app's asset extraction failed and it stayed on a black screen until the scenario's 3600 s timeout; not a code result. Rerun staged on X5.",
+    "emulator": {"vs": "equal, no differences (62.8 s)", "joystick": "equal, no differences (21.4 s)",
+                 "note": "scripted runs take --joysticks and do not call the probe", "normalLaunch": "main menu shown; logcat 'NTSD: gamepads at launch: []'"},
+    "review": "independent read-only review: OK (JNI exception and local-reference handling, imports, selection rule equal to the old one without the duplicate pattern, handle() unchanged for skipped nodes); its doc-comment note applied",
+    "pixel": "installed on the Pixel 10 over adb Wi-Fi; the launch with the Kishi V2 attached is pending"
+  }
+}

@@ -69,18 +69,15 @@ What Android sees (C2, [evidence](../evidence/phone-controller-c2-20261013.json)
 | C0 | This card: identify the device, the sources, the survey | **done** |
 | C1 | iPhone: a **separate iPhone build** (user, 2026-10-13: "сделай iPhone отдельную сборку") — its own harness platform and bundle id, iPhone only, landscape, the shared full-screen view and safe areas; scenarios on an iPhone simulator equal with frames identical (CoreText group), the controller path unchanged | **done** |
 | C2 | The controller observed: on a Pixel 10 with adb over Wi-Fi (`dumpsys input`, `getevent`, logcat) while the user played; on the Mac (macOS app, iPhone/iPad simulators) | **Android done**; the Mac part needs the controller plugged into the Mac |
-| C3 | The Android host skips a gamepad node without joystick axes when a node with axes has the same vendor and product (the Kishi V2's interface 2), so one controller is one joystick and a second gamepad gets joystick 2 | next |
+| C3 | The Android host skips a gamepad node without joystick axes when a node with axes has the same vendor and product (the Kishi V2's interface 2), so one controller is one joystick and a second gamepad gets joystick 2 | **implemented**; emulator scenarios equal, review OK; the Pixel launch with the controller pending |
 
 ## Next task
 
-C3: in `NTSDAndroidGamepads.probe`, read each SOURCE_GAMEPAD device's vendor
-and product ids (InputDevice.getVendorId/getProductId) and drop a node
-without SOURCE_JOYSTICK when a node with it has the same ids; keep the order
-and the two-device limit otherwise. Gates: the Android build, the emulator's
-vs scenario equal with frames identical, an independent read-only review of
-the host change, then the Pixel with the Kishi V2 (the found devices are not
-logged, so a host log line or the user's check that the game offers one
-joystick). The Mac part of C2 waits for the controller on the Mac.
+C3's device check: the build is on the Pixel; launched with the Kishi V2
+attached, logcat should show `NTSD: gamepads at launch: [4 1532:712 axes, 5
+1532:712 unused]` (ids may differ), i.e. one joystick. Then the Mac part of
+C2 (the controller plugged into the Mac) when the user can, and turning adb
+on the Pixel back to USB (`adb usb`).
 Recorded from C1's review: the game's Alt+Enter popup fills the iPhone's
 screen edge to edge, so the Dynamic Island and the rounded corners cover its
 edges (the windowed picture is clear of them); an empty launch screen may flash
@@ -93,3 +90,4 @@ white in light mode.
 | 2026-10-13 | C0 | The device is most likely a Backbone One (USB-C); both hosts already map extended/HID gamepads; the iPhone is the missing iOS target | this card | — |
 | 2026-10-13 | C1: the separate iPhone build | `ios_app.py --platform iphone` / `ios_device.py --iphone`: its own app (`local.ntsd.native.iphone`, iPhone only, landscape). The first run stopped every scenario at the menu's first blit: the game was told the iPhone's 874×402-point screen, smaller than its window; the iOS host now scales the told screen up to at least 800×600 as Android does (iPad and TV unchanged), fits the original window on screens smaller than the frame and defers the bottom-edge gesture on phones. iPhone 17 Pro: all 10 scenarios equal, 18,088 frames identical to the CoreText reference; iPad vs equal and identical; landscape screenshots on two iPhones (the picture full height, the Dynamic Island in a side bar) | [evidence](../evidence/phone-controller-c1-20261013.json) | this commit |
 | 2026-10-13 | C2 (Android) | The controller is a **Razer Kishi V2** (USB 1532:0712), not a Backbone One. On a Pixel 10 (Android 17) the user played with it ("все работает"): one gamepad node with sticks, triggers and the d-pad as hat axes, plus a button-only gamepad node (interface 2) that sent nothing and that the host takes as joystick 2; closing the run logged an ART JIT-thread SIGSEGV during `exit(0)`, the process still exited 0 | [evidence](../evidence/phone-controller-c2-20261013.json) | this commit |
+| 2026-10-13 | C3: one joystick per controller | The Android probe skips a button-only gamepad node that shares vendor and product with a node that has axes, and logs what it found (tag NTSD). Emulator vs and joystick equal, a normal launch logs `gamepads at launch: []`; review OK. A first run staged on T7 (ExFAT) hung on a black screen (AppleDouble files in the asset list; harness error, rerun on X5). The Pixel check with the controller is pending | [evidence](../evidence/phone-controller-c3-20261013.json) | this commit |

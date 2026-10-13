@@ -3,11 +3,11 @@ import Foundation
 import NTSDRuntime
 
 /// Gamepads as the original's joysticks on Android (TVOS_WEB T1c), mapped as
-/// the SDL host maps them: the first two gamepads present at launch (the
-/// original probes its joysticks only at startup), sampled every 25 ms as
-/// joySetCapture asks; the d-pad (hat axes or keys) over the left stick as
-/// the WinMM X/Y axes, y down, and A/B/X/Y (BUTTON_1–4 on generic pads) as
-/// buttons 1–4.
+/// the SDL host maps them: the first two gamepads present at launch, one
+/// per controller (the original probes its joysticks only at startup),
+/// sampled every 25 ms as joySetCapture asks; the d-pad (hat axes or keys)
+/// over the left stick as the WinMM X/Y axes, y down, and A/B/X/Y
+/// (BUTTON_1–4 on generic pads) as buttons 1–4.
 ///
 /// A gamepad's stick motion and buttons never reach the touch and key paths
 /// (its d-pad keys and Back neither, for a gamepad found at launch): a
@@ -29,6 +29,13 @@ import NTSDRuntime
     /// the other hosts take only gamepads: not a lone motion-sensor or flight
     /// stick node), from InputDevice.getDeviceIds and getSources through JNI
     /// on the activity's (main) thread. A JNI failure finds none.
+    ///
+    /// A gamepad node without joystick axes is skipped when a node with them
+    /// has the same vendor and product ids (not both zero): one controller
+    /// can list a second, button-only HID interface as another gamepad (the
+    /// Razer Kishi V2's interface 2, which sent nothing in PHONE_CONTROLLER
+    /// C2), and it would take the second joystick. What it saw goes to
+    /// logcat (tag NTSD).
     func probe(_ activity: UnsafeMutablePointer<ANativeActivity>) -> Int {
         if probed { return devices.count }
         probed = true
@@ -41,23 +48,35 @@ import NTSDRuntime
         defer { jni.DeleteLocalRef(env,type) }
         guard let getIds = jni.GetStaticMethodID(env,type,"getDeviceIds","()[I"),
               let getDevice = jni.GetStaticMethodID(env,type,"getDevice","(I)Landroid/view/InputDevice;"),
-              let getSources = jni.GetMethodID(env,type,"getSources","()I"),!failed() else { _ = failed(); return 0 }
+              let getSources = jni.GetMethodID(env,type,"getSources","()I"),
+              let getVendor = jni.GetMethodID(env,type,"getVendorId","()I"),
+              let getProduct = jni.GetMethodID(env,type,"getProductId","()I"),!failed() else { _ = failed(); return 0 }
         guard let ids = jni.CallStaticObjectMethodA(env,type,getIds,nil),!failed() else { _ = failed(); return 0 }
         defer { jni.DeleteLocalRef(env,ids) }
         let count = jni.GetArrayLength(env,ids)
         var list = [jint](repeating:0,count:Int(max(0,count)))
         if count > 0 { jni.GetIntArrayRegion(env,ids,0,count,&list) }
         if failed() { return 0 }
-        let gamepad = Int32(AINPUT_SOURCE_GAMEPAD)
-        for id in list where devices.count < 2 {
+        let gamepad = Int32(AINPUT_SOURCE_GAMEPAD),joystick = Int32(AINPUT_SOURCE_JOYSTICK)
+        var found: [(id: Int32,axes: Bool,model: UInt32)] = []
+        for id in list {
             var argument = jvalue(i:id)
             guard let device = withUnsafePointer(to:&argument,{ jni.CallStaticObjectMethodA(env,type,getDevice,$0) }),!failed() else { _ = failed(); continue }
             let sources = jni.CallIntMethodA(env,device,getSources,nil)
+            var ok = !failed()
+            let vendor = ok ? jni.CallIntMethodA(env,device,getVendor,nil) : 0; ok = ok && !failed()
+            let product = ok ? jni.CallIntMethodA(env,device,getProduct,nil) : 0; ok = ok && !failed()
             jni.DeleteLocalRef(env,device)
-            if failed() { continue }
-            if sources & gamepad == gamepad { devices.append(id) }
+            if !ok { continue }
+            if sources & gamepad == gamepad {
+                found.append((id,sources & joystick == joystick,UInt32(UInt16(truncatingIfNeeded:vendor)) << 16 | UInt32(UInt16(truncatingIfNeeded:product))))
+            }
         }
+        let withAxes = Set(found.filter { $0.axes && $0.model != 0 }.map(\.model))
+        devices = found.filter { $0.axes || !withAxes.contains($0.model) }.prefix(2).map(\.id)
         for id in devices { states[id] = State() }
+        let seen = found.map { "\($0.id) \(String($0.model >> 16,radix:16)):\(String($0.model & 0xffff,radix:16))\($0.axes ? " axes" : "")\(devices.contains($0.id) ? "" : " unused")" }
+        _ = __android_log_write(Int32(ANDROID_LOG_INFO.rawValue),"NTSD","gamepads at launch: [\(seen.joined(separator:", "))]")
         return devices.count
     }
 
