@@ -26,6 +26,19 @@ final class NTSDAppDelegate: UIResponder, UIApplicationDelegate {
 final class NTSDSceneDelegate: UIResponder, UIWindowSceneDelegate {
     var window: UIWindow?
     private var host: NTSDiOSSessionHost?, session: OriginalRuntimeSession?
+    /// The screen the game is told: the device screen's bounds in points,
+    /// landscape (the app runs landscape only), scaled up (same aspect) to at
+    /// least 800x600, the desktop the original was made for, as on Android.
+    /// An iPad's (the mini's 1133x744 and up) and a TV's are already larger;
+    /// an iPhone's 874x402 would leave the 794x550 window partly above the
+    /// screen, where the game's first blit is refused (PHONE_CONTROLLER C1;
+    /// declared host policy, the picture is fitted to the view anyway).
+    static func gameScreen(_ bounds: CGSize) -> CGSize {
+        let w = max(bounds.width,bounds.height),h = min(bounds.width,bounds.height)
+        guard w > 0,h > 0 else { return bounds }
+        let fit = max(1,800/w,600/h)
+        return CGSize(width:(w*fit).rounded(.down),height:(h*fit).rounded(.down))
+    }
     func scene(_ scene: UIScene,willConnectTo session: UISceneSession,options connectionOptions: UIScene.ConnectionOptions) {
         guard let scene = scene as? UIWindowScene else { return }
         let window = UIWindow(windowScene:scene),controller = NTSDGameViewController()
@@ -39,7 +52,7 @@ final class NTSDSceneDelegate: UIResponder, UIWindowSceneDelegate {
             || UserDefaults.standard.bool(forKey:"NTSDOriginalWindow")
         window.rootViewController = controller; window.makeKeyAndVisible(); self.window = window
         MainActor.assumeIsolated {
-            let host = NTSDiOSSessionHost(arguments:CommandLine.arguments,view:controller.gameView,screen:scene.screen.bounds.size)
+            let host = NTSDiOSSessionHost(arguments:CommandLine.arguments,view:controller.gameView,screen:Self.gameScreen(scene.screen.bounds.size))
             let game = OriginalRuntimeSession(arguments:CommandLine.arguments,host:host)
             host.session = game; controller.gameView.host = host
             self.host = host; self.session = game
@@ -63,6 +76,12 @@ final class NTSDGameViewController: NTSDRootViewController {
     #if !os(tvOS)
     override var prefersStatusBarHidden: Bool { true }
     override var prefersHomeIndicatorAutoHidden: Bool { true }
+    /// On the iPhone (PHONE_CONTROLLER C1) a swipe from the bottom edge needs a
+    /// second swipe to leave the game, as games do, so a thumb sliding off a
+    /// clip-on controller or the screen's edge does not close it.
+    override var preferredScreenEdgesDeferringSystemGestures: UIRectEdge {
+        UIDevice.current.userInterfaceIdiom == .phone ? .bottom : []
+    }
     #endif
     override var canBecomeFirstResponder: Bool { true }
     override func viewDidAppear(_ animated: Bool) { super.viewDidAppear(animated); becomeFirstResponder() }
@@ -88,10 +107,14 @@ final class NTSDGameView: UIView {
     private(set) var frameSize = CGSize.zero
     /// The original format: the frame at one point per pixel, centred — but
     /// the game's own full-screen popup (Alt+Enter) still fills the screen, as
-    /// the shared backend declares it and the macOS host shows it.
+    /// the shared backend declares it and the macOS host shows it, and a
+    /// screen smaller than the frame (an iPhone's 402-point height) fits it
+    /// rather than cropping it, as the browser and Android do.
     var original = false { didSet { gravity() } }
     private var popup = false
-    private var oneToOne: Bool { original && !popup }
+    private var oneToOne: Bool {
+        original && !popup && bounds.width >= frameSize.width && bounds.height >= frameSize.height
+    }
     /// Centred at its own size, one pixel to a point (aspect fit ignores the
     /// scale; set again whenever UIKit may have reset it).
     private func gravity() {
@@ -100,6 +123,7 @@ final class NTSDGameView: UIView {
         if oneToOne && layer.contentsScale != 1 { layer.contentsScale = 1 }
     }
     override func didMoveToWindow() { super.didMoveToWindow(); gravity() }
+    override func layoutSubviews() { super.layoutSubviews(); gravity() }
     /// Points per frame pixel.
     private var scale: CGFloat {
         oneToOne ? 1 : min(bounds.width/frameSize.width,bounds.height/frameSize.height)
@@ -115,7 +139,9 @@ final class NTSDGameView: UIView {
     }
     required init?(coder: NSCoder) { fatalError("not used") }
     func show(_ image: CGImage,size: CGSize,popup: Bool) {
-        frameSize = size; if self.popup != popup { self.popup = popup; gravity() }
+        let changed = self.popup != popup || frameSize != size
+        frameSize = size; self.popup = popup
+        if changed { gravity() }
         layer.contents = image
     }
     /// A view point as the game's client point (the drawn frame's pixels).

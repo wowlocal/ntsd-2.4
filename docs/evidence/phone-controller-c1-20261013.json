@@ -1,0 +1,56 @@
+{
+ "study": "PHONE_CONTROLLER",
+ "step": "C1: the separate iPhone build",
+ "request": "user 2026-10-13: \"ага, сделай iPhone отдельную сборку значит\" (the controller is for phones; the iOS app was iPad-only)",
+ "change": "ios_app.py: platform iphone (the iPad's executable and simulator triple, bundle local.ntsd.native.iphone, UIDeviceFamily [1], landscape only, status bar hidden, default simulator iPhone 17 Pro); ios_device.py --iphone for a real iPhone (bundle, family, orientations, entitlements, launch). NTSDApp.swift: the screen the game is told is the scene's bounds, landscape, scaled up (same aspect) to at least 800x600 as on Android (an iPhone's 874x402 points left the 794x550 window partly off the screen: the first run's 10 scenarios all stopped at Boundary.geometry in the menu's first front blit); iPads and the TV are already larger (unchanged); the original window is one-to-one only when the view holds the frame (else fitted, as the browser and Android do); the bottom screen edge defers the system gesture on phones.",
+ "firstRun": [
+  "iPhone vs exit=0 \"result\": \"differs\"",
+  "iPhone mission exit=0 \"result\": \"differs\"",
+  "iPhone demo exit=0 \"result\": \"differs\"",
+  "iPhone war exit=0 \"result\": \"differs\"",
+  "iPhone playback exit=0 \"result\": \"differs\"",
+  "iPhone tournament exit=0 \"result\": \"differs\"",
+  "iPhone altenter exit=0 \"result\": \"differs\"",
+  "iPhone tournament-win exit=0 \"result\": \"differs\"",
+  "iPhone team-tournament exit=0 \"result\": \"differs\"",
+  "iPhone joystick exit=0 \"result\": \"differs\""
+ ],
+ "checks": {
+  "lines": [
+   "iPhone vs exit=0 \"result\": \"equal\"",
+   "iPhone mission exit=0 \"result\": \"equal\"",
+   "iPhone demo exit=0 \"result\": \"equal\"",
+   "iPhone war exit=0 \"result\": \"equal\"",
+   "iPhone playback exit=0 \"result\": \"equal\"",
+   "iPhone tournament exit=0 \"result\": \"equal\"",
+   "iPhone altenter exit=0 \"result\": \"equal\"",
+   "iPhone tournament-win exit=0 \"result\": \"equal\"",
+   "iPhone team-tournament exit=0 \"result\": \"equal\"",
+   "iPhone joystick exit=0 \"result\": \"equal\"",
+   "{\"frames\": 18088, \"mismatched\": 0, \"result\": \"identical\"}",
+   "iPad vs exit=0 \"result\": \"equal\"",
+   "{\"scenario\": \"vs\", \"frames\": 6, \"identical\": 6, \"differ\": [], \"missing\": [], \"digests\": {\"a\": 1826, \"b\": 1826, \"equal\":",
+   "fit C132503C-052D-4512-9CC1-C16F777DC130 {\"screen\": [2622, 1206], \"box\": [440, 0, 2182, 1206], \"boxSize\": [1742, 1206], \"aspect\": 1.4444}",
+   "orig C132503C-052D-4512-9CC1-C16F777DC130 {\"screen\": [2622, 1206], \"box\": [440, 0, 2182, 1206], \"boxSize\": [1742, 1206], \"aspect\": 1.4444}",
+   "orig-altenter C132503C-052D-4512-9CC1-C16F777DC130 {\"screen\": [2622, 1206], \"box\": [440, 0, 2182, 1206], \"boxSize\": [1742, 1206], \"aspect\": 1.4444}",
+   "fit 852D0E45-5DF9-4F84-96CC-4D390E232312 {\"screen\": [2532, 1170], \"box\": [421, 0, 2111, 1170], \"boxSize\": [1690, 1170], \"aspect\": 1.4444}",
+   "orig 852D0E45-5DF9-4F84-96CC-4D390E232312 {\"screen\": [2532, 1170], \"box\": [421, 0, 2111, 1170], \"boxSize\": [1690, 1170], \"aspect\": 1.4444}",
+   "orig-altenter 852D0E45-5DF9-4F84-96CC-4D390E232312 {\"screen\": [2532, 1170], \"box\": [421, 0, 2111, 1170], \"boxSize\": [1690, 1170], \"aspect\": 1.4444}",
+   "4",
+   "[exited with code 0]"
+  ],
+  "reading": [
+   "iPhone 17 Pro simulator: all 10 scenarios equal, all 18,088 frames identical to the CoreText reference (S1's AppKit run)",
+   "iPad Air vs equal with frames identical after the shared host change",
+   "screenshots, landscape: iPhone 17 Pro 2622x1206 px, the picture 1742x1206 centred (bars ~147 pt, the Dynamic Island inside one), iPhone 17e 2532x1170, the picture 1690x1170; the original window is fitted on both (550 pt > 402 pt); the Alt+Enter popup fills"
+  ]
+ },
+ "boundaries": [
+  "No real iPhone tried (needs the user's device and a profile for local.ntsd.native.iphone)",
+  "Taps not exercised in the simulator",
+  "The controller itself not yet connected (C2)",
+  "The game's Alt+Enter popup fills the iPhone screen edge to edge (the island and corners cover its edges)",
+  "Only comments changed after the checks (the checked build's code is the committed code)"
+ ],
+ "review": "Independent, read-only: OK after one medium fix — ios_device.py --iphone now checks that the profile covers the iPhone bundle (team.bundle or team.*) before building. Low/nits handled: comments (the device screen's bounds, the iPad mini 1133x744 also unchanged), docstrings, the shared scratch folder noted. Confirmed: no 599-pixel rounding (402 x 600/402 = 600), touch mapping and the layer use the same one-to-one test, the gesture deferral needs no update call, the real-device Info.plist has what an iPhone needs, GameController needs no Info.plist key on iOS. Recorded: the Alt+Enter popup ignores the iPhone's safe areas (the island and corners cover its edges); the portrait-bounds normalization means an iPad launched in portrait now tells the game a landscape desktop (frames unchanged; only the window origin and cursor values, now independent of how the iPad was held)."
+}

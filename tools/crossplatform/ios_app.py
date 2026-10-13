@@ -1,9 +1,9 @@
 #!/usr/bin/env python3
-"""Build NTSDiOS for the iPad or Apple TV simulator, wrap it into an app and
+"""Build NTSDiOS for the iPad, iPhone or Apple TV simulator, wrap it into an app and
 run an app_e2e scenario in the simulator (P8, TVOS_WEB T0; test harness: the
 simulator, not a device).
 
-Usage: ios_app.py OUT_DIR [SCENARIO] [--platform ios|tvos] [--device NAME]
+Usage: ios_app.py OUT_DIR [SCENARIO] [--platform ios|iphone|tvos] [--device NAME]
 
 Builds with SwiftPM for arm64-apple-ios17.0-simulator, or with --platform tvos
 arm64-apple-tvos17.0-simulator (NTSD_PORTABLE=1
@@ -30,6 +30,14 @@ PLATFORMS = {
             "plist": {"CFBundleSupportedPlatforms": ["iPhoneSimulator"], "LSRequiresIPhoneOS": True, "UIDeviceFamily": [2],
                       "UIRequiresFullScreen": True,
                       "UISupportedInterfaceOrientations~ipad": ["UIInterfaceOrientationLandscapeLeft", "UIInterfaceOrientationLandscapeRight"]}},
+    # The separate iPhone build (PHONE_CONTROLLER C1, user 2026-10-13): the
+    # iPad's executable in its own app, iPhone only, landscape only. It shares
+    # the iPad's scratch folder: do not build the two at the same time.
+    "iphone": {"triple": "arm64-apple-ios17.0-simulator", "sdk": "iphonesimulator", "scratch": "build-ios-sim",
+               "device": "iPhone 17 Pro", "runtime": ".iOS-", "bundle": "local.ntsd.native.iphone",
+               "plist": {"CFBundleSupportedPlatforms": ["iPhoneSimulator"], "LSRequiresIPhoneOS": True, "UIDeviceFamily": [1],
+                         "UIRequiresFullScreen": True, "UIStatusBarHidden": True,
+                         "UISupportedInterfaceOrientations": ["UIInterfaceOrientationLandscapeLeft", "UIInterfaceOrientationLandscapeRight"]}},
     "tvos": {"triple": "arm64-apple-tvos17.0-simulator", "sdk": "appletvsimulator", "scratch": "build-tvos-sim",
              "device": "Apple TV 4K (3rd generation) (at 1080p)", "runtime": ".tvOS-", "bundle": "local.ntsd.native.tvos",
              "plist": {"CFBundleSupportedPlatforms": ["AppleTVSimulator"], "UIDeviceFamily": [3],
