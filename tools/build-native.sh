@@ -5,11 +5,15 @@ python3 tools/import_ntsd.py
 python3 tools/inspect_original.py
 # Pin Xcode's toolchain; another swift earlier in PATH may not match the SDK.
 swift=(xcrun --toolchain XcodeDefault swift)
+build_args=(--package-path native -c release --product NTSDNative)
+if [[ -n "${NTSD_BUILD_SCRATCH:-}" ]]; then
+  build_args+=(--scratch-path "$NTSD_BUILD_SCRATCH")
+fi
 # The shipping build drops Swift's dynamic exclusivity checks, as the APK does
 # (the user's decision, CORE_REALTIME 4aa); test bundles keep them.
 export NTSD_UNCHECKED_EXCLUSIVITY=1
-"${swift[@]}" build --package-path native -c release
-binary_dir="$("${swift[@]}" build --package-path native -c release --show-bin-path)"
+"${swift[@]}" build "${build_args[@]}"
+binary_dir="$("${swift[@]}" build "${build_args[@]}" --show-bin-path)"
 bundle='build/NTSD Native.app'
 mkdir -p "$bundle/Contents/MacOS" "$bundle/Contents/Resources"
 cp "$binary_dir/NTSDNative" "$bundle/Contents/MacOS/NTSDNative"
@@ -34,5 +38,11 @@ cat > "$bundle/Contents/Info.plist" <<'PLIST'
   <key>NSSupportsAutomaticGraphicsSwitching</key><true/>
 </dict></plist>
 PLIST
+if [[ -n "${NTSD_RELEASE_VERSION:-}" ]]; then
+  /usr/libexec/PlistBuddy -c "Set :CFBundleShortVersionString $NTSD_RELEASE_VERSION" "$bundle/Contents/Info.plist"
+fi
+if [[ -n "${NTSD_RELEASE_BUILD:-}" ]]; then
+  /usr/libexec/PlistBuddy -c "Set :CFBundleVersion $NTSD_RELEASE_BUILD" "$bundle/Contents/Info.plist"
+fi
 codesign --force --sign - "$bundle"
 echo "Built: $PWD/$bundle"

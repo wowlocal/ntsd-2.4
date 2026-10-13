@@ -19,7 +19,11 @@ xwininfo -id $window | grep -E 'Absolute|Width|Height' > /out/window.txt
 xdotool windowfocus --sync $window 2>/dev/null || true
 # Presses last 150 ms, like a physical click or key press: the game reads its
 # input once per iteration, and xdotool's instant click/key can fall between two.
-click() { xdotool mousemove --window $window $1 $2; sleep 0.1; xdotool mousedown 1; sleep 0.15; xdotool mouseup 1; sleep ${3:-2}; }
+# Map game pixels into the current aspect-kept picture, as linux_sdl_scaling.py
+# does. The default window is now scalable, so raw game coordinates miss START.
+size() { xwininfo -id $window | awk '/Width:/{w=$2} /Height:/{h=$2} END{print w, h}'; }
+at() { read W H <<< "$(size)"; awk -v cx=$1 -v cy=$2 -v W=$W -v H=$H 'BEGIN{s=W/794; if (H/550<s) s=H/550; printf "%d %d", int((W-794*s)/2+(cx+0.5)*s), int((H-550*s)/2+(cy+0.5)*s)}'; }
+click() { read X Y <<< "$(at $1 $2)"; echo "click $1 $2 at $X $Y in $(size)" >> /out/clicks.txt; xdotool mousemove --window $window $X $Y; sleep 0.1; xdotool mousedown 1; sleep 0.15; xdotool mouseup 1; sleep ${3:-2}; }
 key() { xdotool keydown --window $window $1; sleep 0.15; xdotool keyup --window $window $1; sleep ${2:-0.6}; }
 click 350 230 1
 # Loading takes seconds in real time; continue once the game reports it.

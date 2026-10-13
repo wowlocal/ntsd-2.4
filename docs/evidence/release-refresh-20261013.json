@@ -1,0 +1,156 @@
+{
+  "date": "2026-10-13",
+  "sourceCommit": "f340f1e29a40b921fab9520f523a11bf9d410011",
+  "sourceNativeTree": "9db6dd702f0c2d75540b1078aee0e17d49da9cd7",
+  "tag": "native-preview-20261013",
+  "status": "builds/checks in progress; nothing published yet",
+  "artifactsRoot": "/Volumes/T7/ntsd-2.4-artifacts/releases-20261013",
+  "plan": "/Volumes/T7/ntsd-2.4-artifacts/releases-20261013/plan.json",
+  "failures": "/Volumes/T7/ntsd-2.4-artifacts/releases-20261013/failures.json",
+  "macOS": {
+    "version": "0.5.0",
+    "build": "fresh release NTSDNative, unchecked exclusivity as existing shipping policy",
+    "scenarios": [
+      {
+        "scenario": "vs",
+        "result": "pass",
+        "differs": [],
+        "resources": [
+          "/Users/michael/Developer/ntsd-2.4/build/NTSD Native.app/Contents/Resources/OriginalCatalog",
+          "/Users/michael/Developer/ntsd-2.4/build/NTSD Native.app/Contents/Resources/OriginalMusic"
+        ],
+        "progress": 6,
+        "milestones": 6
+      },
+      {
+        "scenario": "mission",
+        "result": "pass",
+        "differs": [],
+        "resources": [
+          "/Users/michael/Developer/ntsd-2.4/build/NTSD Native.app/Contents/Resources/OriginalCatalog",
+          "/Users/michael/Developer/ntsd-2.4/build/NTSD Native.app/Contents/Resources/OriginalMusic"
+        ],
+        "progress": 6,
+        "milestones": 4
+      },
+      {
+        "scenario": "demo",
+        "result": "pass",
+        "differs": [],
+        "resources": [
+          "/Users/michael/Developer/ntsd-2.4/build/NTSD Native.app/Contents/Resources/OriginalCatalog",
+          "/Users/michael/Developer/ntsd-2.4/build/NTSD Native.app/Contents/Resources/OriginalMusic"
+        ],
+        "progress": 3,
+        "milestones": 5
+      },
+      {
+        "scenario": "war",
+        "result": "pass",
+        "differs": [],
+        "resources": [
+          "/Users/michael/Developer/ntsd-2.4/build/NTSD Native.app/Contents/Resources/OriginalCatalog",
+          "/Users/michael/Developer/ntsd-2.4/build/NTSD Native.app/Contents/Resources/OriginalMusic"
+        ],
+        "progress": 10,
+        "milestones": 5
+      },
+      {
+        "scenario": "playback",
+        "result": "pass",
+        "differs": [],
+        "resources": [
+          "/Users/michael/Developer/ntsd-2.4/build/NTSD Native.app/Contents/Resources/OriginalCatalog",
+          "/Users/michael/Developer/ntsd-2.4/build/NTSD Native.app/Contents/Resources/OriginalMusic"
+        ],
+        "progress": 7,
+        "milestones": 6
+      },
+      {
+        "scenario": "tournament",
+        "result": "pass",
+        "differs": [],
+        "resources": [
+          "/Users/michael/Developer/ntsd-2.4/build/NTSD Native.app/Contents/Resources/OriginalCatalog",
+          "/Users/michael/Developer/ntsd-2.4/build/NTSD Native.app/Contents/Resources/OriginalMusic"
+        ],
+        "progress": 6,
+        "milestones": 6
+      },
+      {
+        "scenario": "altenter",
+        "result": "pass",
+        "differs": [],
+        "resources": [
+          "/Users/michael/Developer/ntsd-2.4/build/NTSD Native.app/Contents/Resources/OriginalCatalog",
+          "/Users/michael/Developer/ntsd-2.4/build/NTSD Native.app/Contents/Resources/OriginalMusic"
+        ],
+        "progress": 6,
+        "milestones": 6
+      },
+      {
+        "scenario": "tournament-win",
+        "result": "pass",
+        "differs": [],
+        "resources": [
+          "/Users/michael/Developer/ntsd-2.4/build/NTSD Native.app/Contents/Resources/OriginalCatalog",
+          "/Users/michael/Developer/ntsd-2.4/build/NTSD Native.app/Contents/Resources/OriginalMusic"
+        ],
+        "progress": 8,
+        "milestones": 7
+      },
+      {
+        "scenario": "team-tournament",
+        "result": "pass",
+        "differs": [],
+        "resources": [
+          "/Users/michael/Developer/ntsd-2.4/build/NTSD Native.app/Contents/Resources/OriginalCatalog",
+          "/Users/michael/Developer/ntsd-2.4/build/NTSD Native.app/Contents/Resources/OriginalMusic"
+        ],
+        "progress": 6,
+        "milestones": 6
+      },
+      {
+        "scenario": "joystick",
+        "result": "pass",
+        "differs": [],
+        "resources": [
+          "/Users/michael/Developer/ntsd-2.4/build/NTSD Native.app/Contents/Resources/OriginalCatalog",
+          "/Users/michael/Developer/ntsd-2.4/build/NTSD Native.app/Contents/Resources/OriginalMusic"
+        ],
+        "progress": 0,
+        "milestones": 5
+      }
+    ],
+    "signing": "Developer ID exists; codesign errSecInternalComponent; notarytool reports keychainLocked. Waiting for user to unlock login keychain."
+  },
+  "linux-aarch64": {
+    "archive": "ntsd-linux-aarch64-f340f1e.tar.gz",
+    "sha256": "629f3f3f96265b918b35810e8f14dd0f71dbe6306f1181f3df98a1590fc733c4",
+    "checks": "archive members equal manifest; ldd/default music/font pass on APFS; corrected X11 smoke reaches gameplay and exits 0; VS round 4 equal (74.9 s)",
+    "boundaries": "container only; prior failed runs retained (ExFAT sidecars and stale unscaled mouse coordinates)"
+  },
+  "linux-x86_64": {
+    "build": "complete",
+    "archive": "ntsd-linux-x86_64-f340f1e.tar.gz",
+    "sha256": "3c6048dc34feab1e6ac16bb91790d6979e068fa78feae8c5ccd80d0b4098dea4",
+    "checks": "archive member hashes pass; ldd/default and X11 smoke pass, VS in progress"
+  },
+  "android": {
+    "build": "complete; aligned APK ZIP integrity passes (1540 entries)",
+    "signing": "existing release key password is in locked login keychain; unsigned APK retained; do not publish unsigned"
+  },
+  "windows": "pending",
+  "web": "pending; old f0471f13 web prerelease exists; latest memory fix needs rebuild",
+  "excluded": [
+    "iOS per user",
+    "tvOS simulator packages are not distributable device apps"
+  ],
+  "toolChanges": [
+    "build-native: configurable scratch/version/build, explicit shipping product",
+    "release-macos: configurable output",
+    "app_e2e: configurable retained-capture directory; comparator/references unchanged",
+    "linux_x11_smoke: existing linux_sdl_scaling.py coordinate conversion for default scalable window"
+  ],
+  "review": "No independent reviewer available; no game/numeric/comparator contract changed. Existing game evidence/reviews remain distinct from these package checks."
+}

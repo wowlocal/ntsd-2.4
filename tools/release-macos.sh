@@ -15,7 +15,7 @@ identity="${1:-Developer ID Application: Misha Kharytonchyk (H8QG3CBM96)}"
 profile="${2:-codex-notary}"
 app='build/NTSD Native.app'
 version="$(/usr/libexec/PlistBuddy -c 'Print :CFBundleShortVersionString' "$app/Contents/Info.plist")"
-out='build/release'
+out="${NTSD_RELEASE_OUT:-build/release}"
 name="NTSD-Native-$version"
 mkdir -p "$out"
 accepted() { python3 -c 'import json,sys; s=json.load(open(sys.argv[1])).get("status"); print("notary status:", s); sys.exit(s != "Accepted")' "$1"; }
