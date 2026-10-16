@@ -83,6 +83,9 @@ git lfs pull
 The app opens the original game directly. Controls are the original's own; you
 can change them in its CONTROL SETTINGS screen.
 
+To install the Linux build on a Steam Deck and start it from Game Mode, see
+[docs/STEAM_DECK.md](docs/STEAM_DECK.md).
+
 ## Repository
 
 | Path | Contents |
