@@ -44,6 +44,89 @@ import XCTest
         for message: UInt32 in [0x3a0,0x3a1,0x3b5,0x3b6,0x3b7,0x3b8] { XCTAssertEqual(try m.answer(.init(.windowDefault,[7,message,0,0])),0) }
     }
 
+    /// MENU_GAMEPAD.md (a departure from the original): on the title, joystick
+    /// samples move the mouse from item to item and button 1 clicks the item.
+    func testTitleGamepadMovesBetweenItemsAndClicks() throws {
+        var now: UInt32 = 1000, title: Int32? = 202
+        // The desktop point (MSG.pt) is not where the game's cursor is.
+        let m = Messages(window:7,clock:{ now },point:{ (300,291) })
+        m.capturedJoysticks = 2
+        m.titleGamepad = .init { title }
+        /// The queued mouse messages [message, wParam, x, y]; GetMessage then delivers the queue.
+        func mice() throws -> [[Int32]] {
+            let out = m.queue.filter { (0x200...0x202).contains($0.message) }
+                .map { [Int32($0.message),Int32($0.wParam),Int32($0.lParam & 0xffff),Int32($0.lParam >> 16)] }
+            while !m.queue.isEmpty { _ = try m.answer(.init(.get,[0,0,0])) }
+            return out
+        }
+        func peek() throws -> [[Int32]] { _ = try m.answer(.init(.peek,[0,0,0,0])); return try mice() }
+        let c: UInt32 = 32767
+        // START, ONLINE GAME, CONTROL SETTINGS, RECORDING INFO, OFFICAL WEBSITE at x 398.
+        let ys: [Int32] = [229,259,291,321,351]
+        m.joystick(0,x:c,y:65535,buttons:0); XCTAssertEqual(try mice(),[[0x200,0,398,ys[0]]])   // no mouse yet: START
+        m.joystick(0,x:c,y:65535,buttons:0); XCTAssertEqual(try mice(),[])                         // held
+        now += 400; m.joystick(0,x:c,y:65535,buttons:0); XCTAssertEqual(try mice(),[[0x200,0,398,ys[1]]])
+        now += 100; m.joystick(0,x:c,y:65535,buttons:0); XCTAssertEqual(try mice(),[])
+        now += 80; m.joystick(0,x:c,y:65535,buttons:0); XCTAssertEqual(try mice(),[[0x200,0,398,ys[2]]])
+        m.joystick(0,x:c,y:45000,buttons:0); XCTAssertEqual(try mice(),[])                         // between the thresholds: still down
+        for item in [1,0,4] {                                                                       // up, wrapping at the top
+            m.joystick(0,x:c,y:c,buttons:0); m.joystick(0,x:c,y:0,buttons:0)
+            XCTAssertEqual(try mice(),[[0x200,0,398,ys[item]]])
+        }
+        m.joystick(0,x:c,y:c,buttons:0)
+        // The press: held 150 ms from GetMessage's delivery of WM_LBUTTONDOWN.
+        m.joystick(0,x:c,y:c,buttons:1)
+        XCTAssertEqual(m.queue.suffix(2).map(\.message),[0x200,0x201]); XCTAssertEqual(m.queue.last?.wParam,1)
+        m.joystick(1,x:c,y:c,buttons:1); m.joystick(1,x:c,y:c,buttons:0)                         // a second press waits
+        now += 500; m.joystick(0,x:c,y:c,buttons:0); _ = try m.answer(.init(.peek,[0,0,0,0]))
+        XCTAssertEqual(m.queue.filter { $0.message == 0x202 }.count,0)                              // not delivered yet
+        XCTAssertEqual(try mice(),[[0x200,0,398,ys[4]],[0x201,1,398,ys[4]]])
+        now += 149; XCTAssertEqual(try peek(),[])
+        now += 1; XCTAssertEqual(try peek(),[[0x202,0,398,ys[4]]])
+        // The game's last mouse point, not the remembered item, is the start:
+        // a real move onto START, then down, is ONLINE GAME.
+        m.mouse(0x200,x:300,y:ys[0],buttons:0); _ = try mice()
+        m.joystick(0,x:c,y:65535,buttons:0); XCTAssertEqual(try mice(),[[0x200,0,398,ys[1]]])
+        m.joystick(0,x:c,y:c,buttons:0)
+        // Button messages do not move the game's cursor: after a real move onto
+        // START while the pad holds ONLINE GAME, its release leaves START the start.
+        m.joystick(0,x:c,y:c,buttons:1); _ = try mice()
+        m.mouse(0x200,x:300,y:ys[0],buttons:1); _ = try mice()
+        m.joystick(0,x:c,y:c,buttons:0); now += 150; XCTAssertEqual(try peek(),[[0x202,0,398,ys[1]]])
+        m.joystick(0,x:c,y:65535,buttons:0); XCTAssertEqual(try mice(),[[0x200,0,398,ys[1]]])
+        m.joystick(0,x:c,y:c,buttons:0)
+        // Held past 2 s the left button goes up anyway; the release still posts after the title has gone.
+        m.joystick(0,x:c,y:c,buttons:1); _ = try mice()
+        now += 1999; XCTAssertEqual(try peek(),[])
+        now += 1; XCTAssertEqual(try peek(),[[0x202,0,398,ys[1]]])
+        m.joystick(0,x:c,y:c,buttons:0)
+        m.joystick(0,x:c,y:c,buttons:1); _ = try mice(); title = nil
+        now += 25; m.joystick(0,x:c,y:c,buttons:0); now += 150; XCTAssertEqual(try peek(),[[0x202,0,398,ys[1]]])
+        // Off the title the joysticks only post their MM_JOY messages.
+        m.joystick(0,x:c,y:65535,buttons:1); now += 500; m.joystick(0,x:c,y:65535,buttons:0); m.joystick(0,x:c,y:c,buttons:0)
+        XCTAssertEqual(m.queue.map(\.message),[0x3a0,0x3b5,0x3b7,0x3a0])
+        XCTAssertEqual(OriginalRuntimeTitleGamepad.item(at:(275,ys[0]),base:202),nil)
+        XCTAssertEqual(OriginalRuntimeTitleGamepad.item(at:(520,202+162),base:202),4)
+    }
+
+    /// MENU_GAMEPAD.md: off the title the departure reads the title state only
+    /// on a direction or button edge and never the clock; every clock read is a
+    /// posted message's time.
+    func testTitleGamepadReadsNothingOffTheTitle() throws {
+        var reads = 0, titleReads = 0
+        let m = Messages(window:7,clock:{ reads += 1; return 1000 },point:{ (0,0) })
+        m.capturedJoysticks = 2
+        m.titleGamepad = .init { titleReads += 1; return nil }
+        let c: UInt32 = 32767
+        for (y,b) in [(65535,1),(65535,1),(65535,0),(c,0),(0,1),(c,0)] as [(UInt32,UInt32)] {
+            m.joystick(0,x:c,y:y,buttons:b); m.joystick(1,x:c,y:y,buttons:b)
+        }
+        m.mouse(0x201,x:398,y:229,buttons:1)
+        while !m.queue.isEmpty { _ = try m.answer(.init(.peek,[0,0,0,0])); _ = try m.answer(.init(.get,[0,0,0])) }
+        XCTAssertEqual(reads,m.delivered.count); XCTAssertEqual(titleReads,8)
+        XCTAssertFalse(m.delivered.contains { [0x200,0x202].contains($0.message) })
+    }
+
     func testMessageQueueKeyMapAndTranslation() throws {
         var now: UInt32 = 1000
         let m = Messages(window:7,clock:{ now += 5; return now },point:{ (-3,40) })

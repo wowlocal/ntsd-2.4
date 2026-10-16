@@ -120,6 +120,7 @@ public struct OriginalMacRuntimeKey: Equatable {
     /// WM_MOUSEMOVE is coalesced: at most one pending move keeps the latest point.
     public func mouse(_ message: UInt32,x: Int32,y: Int32,buttons: UInt32) {
         let packed = UInt32(UInt16(truncatingIfNeeded:x)) | UInt32(UInt16(truncatingIfNeeded:y)) << 16
+        if message == 0x200 { lastMouse = (x,y) }
         if message == 0x200,let i = queue.lastIndex(where: { $0.message == 0x200 }),i == queue.count-1 {
             queue[i] = .init(message:0x200,wParam:buttons,lParam:packed,time:now(),x:queue[i].x,y:queue[i].y); return
         }
@@ -143,7 +144,12 @@ public struct OriginalMacRuntimeKey: Equatable {
         if pressed != 0 { post(0x3b5+id,state | pressed << 8,packed) }
         if released != 0 { post(0x3b7+id,state | released << 8,packed) }
         joysticks[id] = (x:moved ? x : last.x,y:moved ? y : last.y,buttons:state)
+        titleGamepad?.sample(id,y:y,buttons:state,messages:self,mouse:lastMouse,now:now)
     }
+    /// The joysticks on the title menu, a departure from the original (MENU_GAMEPAD.md).
+    public var titleGamepad: OriginalRuntimeTitleGamepad?
+    /// The last WM_MOUSEMOVE's point, in client coordinates: where the game's cursor goes.
+    public private(set) var lastMouse: (Int32,Int32)?
     func bytes(_ m: Message) -> [UInt8] {
         [window,m.message,m.wParam,m.lParam,m.time,UInt32(bitPattern:m.x),UInt32(bitPattern:m.y)].flatMap { w in (0..<4).map { UInt8(truncatingIfNeeded:w >> ($0*8)) } }
     }
@@ -151,12 +157,14 @@ public struct OriginalMacRuntimeKey: Equatable {
         switch q.kind {
         case .peek:
             guard q.arguments == [0,0,0,0] else { throw Boundary.arguments("PeekMessage") }
+            titleGamepad?.release(self,now:now)
             guard let head = queue.first else { return .init(result:0) }
             return .init(result:1,writes:[.init(offset:0,bytes:bytes(head))])
         case .get:
             guard q.arguments == [0,0,0] else { throw Boundary.arguments("GetMessage") }
             guard !queue.isEmpty else { throw Boundary.emptyGet }
             let head = queue.removeFirst(); delivered.append(head)
+            titleGamepad?.delivered(head.message,lParam:head.lParam,now:now)
             return .init(result:head.message == 0x12 ? 0 : 1,writes:[.init(offset:0,bytes:bytes(head))])
         case .translate:
             guard let bytes = q.message,bytes.count == 28 else { throw Boundary.arguments("TranslateMessage") }

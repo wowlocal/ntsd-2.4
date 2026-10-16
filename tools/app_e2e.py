@@ -105,6 +105,34 @@ def joystick_script(captures):
     return "; ".join(steps)
 
 
+# MENU_GAMEPAD.md (a departure from the original): joystick 1 on the title —
+# down (START), down (ONLINE GAME), up (START), button 1 — then player 3's
+# button 1 confirms VS on the mode menu. With the joystick scenario's later
+# steps, VS is played with no key or mouse input at all.
+TITLE_JOYSTICK = ["20 joy 0 32767 65535 0", "24 joy 0 32767 32767 0", "28 joy 0 32767 65535 0", "32 joy 0 32767 32767 0",
+                  "36 joy 0 32767 0 0", "40 joy 0 32767 32767 0", "44 joy 0 32767 32767 1", "52 joy 0 32767 32767 0",
+                  "110 joy 0 32767 32767 1", "118 joy 0 32767 32767 0"]
+
+
+def title_joystick_script(captures):
+    script = joystick_script(captures)
+    assert script.startswith("20 click 350 230; 60 click 402 218; 100 key 74; ")
+    return script.replace("20 click 350 230; 60 click 402 218; 100 key 74", "; ".join(TITLE_JOYSTICK), 1)
+
+
+def title_original_check(timeout, app=APP):
+    """`--original-title-menu`: the same title joystick input leaves the
+    original's mouse-only title showing (no loading), exit 0."""
+    with tempfile.TemporaryDirectory(prefix="ntsd-title-") as scratch:
+        done = subprocess.run([str(app), "--original", "--mute-music", "--mute-sounds", "--overlay", scratch, "--joysticks", "2",
+                               "--original-title-menu", "--virtual-clock", "123456789", "8", "--script", "; ".join(TITLE_JOYSTICK[:8] + ["300 exit"])],
+                              capture_output=True, text=True, timeout=timeout, env=APP_ENV)
+        events = [json.loads(l) for l in done.stdout.splitlines() if l.startswith("{")]
+        loaded = [e for e in events if e.get("event") == "loaded"]
+        ok = done.returncode == 0 and not loaded and not any(e.get("event") == "boundary" for e in events)
+        return ok, {"exitCode": done.returncode, "loaded": len(loaded)}
+
+
 # A recording the original wrote (distribution, VS). Earlier Mac recordings
 # carry the pre-fix catalog checksum and are rejected like in the original
 # (APPLICATION_CATALOG_CHECKSUM.md).
@@ -166,6 +194,8 @@ SCENARIOS = {
                             script=lambda captures: TEAM_TOURNAMENT.replace("{captures}", str(captures))),
     "joystick": dict(reference=ROOT / "tools/app_e2e_joystick_reference.json", extra=["--joysticks", "2", "--exit-after-bodies", "900"],
                      script=joystick_script),
+    "title-joystick": dict(reference=ROOT / "tools/app_e2e_title_joystick_reference.json",
+                           extra=["--joysticks", "2", "--exit-after-bodies", "900"], script=title_joystick_script),
 }
 
 
@@ -420,6 +450,10 @@ def main():
             ok, detail = recording_check(args.timeout, args.app)
             if not ok:
                 problems.append("recording"); reference["recording"] = {"opened": RECORDING_OPENED, "control.txt": "name naruto, recording off"}; observed["recording"] = detail
+        if name == "title-joystick":
+            ok, detail = title_original_check(args.timeout, args.app)
+            if not ok:
+                problems.append("original-title"); reference["original-title"] = "no loading with --original-title-menu, exit 0"; observed["original-title"] = detail
         if name == "altenter":
             ok, detail = altenter_fault_check(args.timeout, args.app)
             if not ok:
