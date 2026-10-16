@@ -102,5 +102,9 @@ MM_JOY messages count it.
 | 2026-10-16 | Second review (read-only) of the fixes: no high or medium defect; button messages moved the start point (the pad's own WM_LBUTTONUP after a trackpad move) — fixed, `lastMouse` now follows WM_MOUSEMOVE only; card wording corrected. Left as is: samples taken while an AppKit modal dialog runs still queue title moves and clicks, which act after it closes | fixed |
 | 2026-10-16 | Tests added: a release after a real move keeps the start on START; off the title the title state is read only on edges (8 reads for 2 joysticks × 4 edges) and every clock read is a posted message's time; all 13 `OriginalMacRuntimeMenuTests` | pass |
 | 2026-10-16 | Final code: `app_e2e.py --build`, all 11 scenarios with the vs run's checks and the `--original-title-menu` check (also run after the first review's fixes) | all pass; the 10 existing references and `title-joystick` equal |
+| 2026-10-16 | The Linux x86_64 package of 52042b56 installed on the Deck with `steamdeck_install.py` and started through Steam in Game Mode: X11 under gamescope, Steam's virtual pad opened, the title on screen | started |
 
-Open: a hand check on the Steam Deck (the user), and on hosts with a real controller (AppKit, iPad, Apple TV, Android, the browser), which use the same path.
+The user answered "good. push to master"; `exp/menu-gamepad` was
+fast-forwarded into `main`. A recorded hand check with a real controller on
+the other hosts (AppKit, iPad, Apple TV, Android, the browser), which use the
+same path, is open.
