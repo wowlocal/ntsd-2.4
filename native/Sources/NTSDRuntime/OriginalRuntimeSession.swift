@@ -218,6 +218,14 @@ public enum OriginalRuntimeSessionBoundary: Error, Equatable {
         guard !stopped else { return true }
         menu?.messages.close(); return false
     }
+    /// The host moved the game's window, or created it again (Alt+Enter) away
+    /// from where the last one was: the game gets WM_MOVE when its client's
+    /// desktop origin changed (`OriginalMacRuntimeMenu.windowMoved`). A window
+    /// without geometry (off every screen) is left to the next present.
+    public func windowMoved(_ token: UInt32) {
+        guard let menu,let started,!stopped else { return }
+        try? menu.windowMoved(token,in:started.windows)
+    }
     public func start() {
         do {
             // Timer precision without throttling, but the machine may still idle-sleep:

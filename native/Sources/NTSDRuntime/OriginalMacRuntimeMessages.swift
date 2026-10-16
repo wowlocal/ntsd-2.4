@@ -39,6 +39,7 @@ public struct OriginalMacRuntimeKey: Equatable {
 /// AppKit events and served to whole-iteration permits. Declared runtime
 /// behavior; not a Windows observation. Only messages the recovered WndProc
 /// accepts are generated: WM_KEYDOWN/KEYUP/CHAR, mouse 200/201/202/204/205,
+/// WM_SIZE/WM_MOVE at creation and WM_MOVE when the host moves the window,
 /// the music graph notification registered with SetNotifyWindow (0x400), and
 /// the quit path (APPLICATION_WINDOW_CLOSE_PLAN.md): WM_SYSCOMMAND(SC_CLOSE)
 /// from the close button, WM_CLOSE, WM_DESTROY, WM_NCDESTROY and WM_QUIT.
@@ -124,6 +125,20 @@ public struct OriginalMacRuntimeKey: Equatable {
             queue[i] = .init(message:0x200,wParam:buttons,lParam:packed,time:now(),x:queue[i].x,y:queue[i].y); return
         }
         post(message,buttons,packed)
+    }
+    /// The lParam of the last WM_MOVE posted: the client's desktop origin.
+    public private(set) var movedTo: UInt32?
+    /// WM_MOVE (lParam: the client's desktop origin, x and y as 16-bit words)
+    /// for an origin other than the last one posted. A pending WM_MOVE takes the
+    /// new origin instead of queueing another: its handler reads the live
+    /// geometry when it runs, not lParam.
+    public func move(_ origin: UInt32) {
+        guard origin != movedTo else { return }
+        movedTo = origin
+        if let i = queue.lastIndex(where: { $0.message == 3 }) {
+            let m = queue[i]; queue[i] = .init(message:3,wParam:0,lParam:origin,time:m.time,x:m.x,y:m.y); return
+        }
+        post(3,0,origin)
     }
     /// Last posted position and buttons of each captured joystick.
     private var joysticks: [UInt32:(x: UInt32,y: UInt32,buttons: UInt32)] = [:]

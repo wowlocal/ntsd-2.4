@@ -534,6 +534,77 @@ import XCTest
         }
     }
 
+    /// WINDOW_SCALING, 2026-10-16: the original fixed window moved on the
+    /// desktop. The primary is cropped at the window's live client while the
+    /// game Blts at the rectangle its WM_MOVE handler stored at 453ccc, so
+    /// without a WM_MOVE the picture shows shifted by the move with black
+    /// beyond. AppKit's move notification sends one WM_MOVE (none while the
+    /// origin is unchanged, one pending at a time, none under a held geometry);
+    /// its handler stores the moved rectangle and the frame is whole again.
+    func testMovedWindowSendsWMMoveAndThePictureFollows() throws {
+        let root = FileManager.default.temporaryDirectory.appendingPathComponent("ntsd-move-\(UUID().uuidString)",isDirectory:true)
+        defer { try? FileManager.default.removeItem(at:root) }
+        let (started,package) = try startup(root)
+        while try started.host.takeCommitted() != nil {}
+        var now: UInt32 = 5_000_000
+        let menu = try OriginalMacRuntimeMenu(started,inputs:package,clock:{ now &+= 7; return now })
+        let token = started.window,windows = started.windows
+        func step(_ count: Int = 1) throws { for _ in 0..<count { guard case .committed = try menu.step() else { throw Stop.limit } } }
+        for _ in 0..<400 where try XCTUnwrap(started.host.snapshot.session).state.settings == nil { try step() }
+        try step(20)
+        XCTAssertEqual(menu.messages.delivered.map(\.message),[5,3])
+        func stored() throws -> [Int32] {
+            let g = try XCTUnwrap(started.host.snapshot.session).state.full
+            return try (0..<4).map { try g.integer(at:0x453ccc-0x44d000+$0*4,as:Int32.self) }
+        }
+        func rect(_ r: CGRect) -> [Int32] { [Int32(r.minX),Int32(r.minY),Int32(r.maxX),Int32(r.maxY)] }
+        func pixel(_ f: OriginalFramebuffer,_ x: Int,_ y: Int) -> UInt32 {
+            f.pixels.withUnsafeBytes { $0.load(fromByteOffset:(y*f.width+x)*4,as:UInt32.self) }
+        }
+        let before = try windows.displayGeometry(token).clientInDesktop
+        XCTAssertEqual(try stored(),rect(before))
+        let unmoved = try XCTUnwrap(windows.presentedFrame(token))
+        XCTAssertEqual([unmoved.width,unmoved.height],[794,550])
+        // An unchanged origin sends nothing.
+        try menu.windowMoved(token,in:windows); XCTAssertTrue(menu.messages.queue.isEmpty)
+        let window = try XCTUnwrap(windows.lease(token).window as? NSWindow)
+        let dx = 40,dy = 30
+        // AppKit's y grows upwards, the desktop's downwards.
+        window.setFrameOrigin(.init(x:window.frame.minX+CGFloat(dx),y:window.frame.minY-CGFloat(dy)))
+        let moved = try windows.displayGeometry(token).clientInDesktop
+        XCTAssertEqual([moved.minX-before.minX,moved.minY-before.minY],[CGFloat(dx),CGFloat(dy)])
+        // The cause (no WM_MOVE yet, as before the fix): frames cropped at the
+        // moved client show the picture shifted up and left, black beyond.
+        try step(20)
+        XCTAssertEqual(try stored(),rect(before))
+        let shifted = try XCTUnwrap(windows.presentedFrame(token))
+        for (x,y) in [(0,0),(300,200),(793-dx,549-dy)] { XCTAssertEqual(pixel(shifted,x,y),pixel(unmoved,x+dx,y+dy)) }
+        XCTAssertTrue((0..<550).allSatisfy { y in (794-dx..<794).allSatisfy { pixel(shifted,$0,y) & 0xffffff == 0 } })
+        XCTAssertTrue((550-dy..<550).allSatisfy { y in (0..<794).allSatisfy { pixel(shifted,$0,y) & 0xffffff == 0 } })
+        // One WM_MOVE with the client's desktop origin; a second notice adds nothing.
+        try menu.windowMoved(token,in:windows); try menu.windowMoved(token,in:windows)
+        XCTAssertEqual(menu.messages.queue.map(\.message),[3])
+        XCTAssertEqual(menu.messages.queue.first?.lParam,UInt32(moved.minX) | UInt32(moved.minY) << 16)
+        for _ in 0..<5 where !menu.messages.queue.isEmpty { try step() }
+        XCTAssertEqual(menu.messages.delivered.map(\.message),[5,3,3])
+        XCTAssertEqual(try stored(),rect(moved))
+        try step(20)
+        XCTAssertEqual(try XCTUnwrap(windows.presentedFrame(token)).pixels,unmoved.pixels)
+        // The host's AppKit observer: two moves before the game reads its queue
+        // leave one WM_MOVE with the latest origin.
+        try windows.setMoved(token) { [unowned menu] in try? menu.windowMoved(token,in:windows) }
+        window.setFrameOrigin(.init(x:window.frame.minX+5,y:window.frame.minY)); RunLoop.main.run(until:Date().addingTimeInterval(0.1))
+        window.setFrameOrigin(.init(x:window.frame.minX+5,y:window.frame.minY)); RunLoop.main.run(until:Date().addingTimeInterval(0.1))
+        let last = try windows.displayGeometry(token).clientInDesktop
+        XCTAssertEqual(menu.messages.queue.map(\.lParam),[UInt32(last.minX) | UInt32(last.minY) << 16])
+        try step(5); XCTAssertEqual(try stored(),rect(last))
+        // Under a held geometry (macOS full screen) the game's client stays put.
+        try windows.holdForMacFullScreen(token,true)
+        window.setFrameOrigin(.init(x:window.frame.minX-20,y:window.frame.minY)); RunLoop.main.run(until:Date().addingTimeInterval(0.1))
+        XCTAssertTrue(menu.messages.queue.isEmpty)
+        try windows.holdForMacFullScreen(token,false)
+    }
+
     /// The end of the menu track: EC_COMPLETE and the registered 0x400 go through
     /// PeekMessage/DispatchMessage into the recovered WndProc graph callback.
     func testGraphNotificationRestartsTheMenuTrack() throws {
