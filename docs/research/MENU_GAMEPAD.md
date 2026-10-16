@@ -203,3 +203,29 @@ fixed:
 | --- | --- | --- |
 | 2026-10-16 | After the review: the screens test extended — player 1's device box as CONTROL SETTINGS' start, a first press only showing it and the next clicking it, the wrap left of it, a point left on another screen ignored (the address screen starts on Cancel), a move and a press in one sample clicking the new target; −3 and 4 not offered (6 tests) | pass |
 | 2026-10-16 | `app_e2e.py --build --scenario title-joystick` with the routes adjusted to the start rule (CONTROL SETTINGS: control.txt with player 1 on joystick 1; ONLINE GAME → Connect → Cancel → Back → START, loaded, no box, no link) and `--original-menu-input`; `--scenario joystick` | both pass, references equal |
+
+## Text on the Steam Deck (branch `exp/deck-keyboard`, 2026-10-16)
+
+Not requested by the user; offered after the front screens: the text the
+controller cannot type. `OriginalRuntimeMenuGamepad.textEntry(selector:word:)`
+names the field a front screen is typing into — the address (selector 3,
+until Return is taken: 4511b0), a player's name in CONTROL SETTINGS (4511c8
+> 0), a RECORDING INFO field (4511c4: name, info — several lines — or email)
+— and `OriginalRuntimeSession.frontTextEntry()` reads it before loading. The
+SDL host checks it every 200 ms and runs SDL text input while a field takes
+text (single line, multiline, email; no capitalisation or autocorrect). SDL
+3.4.16's X11 driver turns that into Steam's on-screen keyboard when Steam
+asks for it (`SDL_ENABLE_STEAM_SCREEN_KEYBOARD`, set for games in Game Mode:
+`steam://open/keyboard?…` and `steam://close/keyboard`); without that
+support (`SDL_HasScreenKeyboardSupport()` false: the desktop, macOS, Wayland)
+nothing starts. Each change is reported as a `screenKeyboard` event. The
+game still reads only key messages: the keyboard's keys reach it as on a
+desktop.
+
+| Date | Check | Result |
+| --- | --- | --- |
+| 2026-10-16 | `testMenuGamepadTextEntry`: each field and state, none on the other selectors | pass |
+| 2026-10-16 | The x86_64 package of 14456457 in `ntsd-linux-clean:noble-amd64` under Xvfb (SDL's X11 driver), scripted: ONLINE GAME → Connect (the address screen, captured) → Cancel → Back → CONTROL SETTINGS → player 1's name (captured, selected) → a key cell → Cancel. With `SDL_ENABLE_STEAM_SCREEN_KEYBOARD=1`: `screenKeyboard` line, none, line, none; without it: no event; both exit 0, no boundary | pass |
+
+Open: Steam's keyboard itself on the Deck (a hand check in Game Mode), an
+independent review, and merging (the user's decision).
