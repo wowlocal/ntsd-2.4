@@ -218,7 +218,7 @@ import XCTest
         // Every WM_LBUTTONDOWN is counted (a host may reopen its keyboard on a new click).
         let m = Messages(window:7,clock:{ 1 },point:{ (0,0) })
         m.mouse(0x200,x:1,y:1,buttons:0); m.mouse(0x201,x:1,y:1,buttons:1); m.mouse(0x202,x:1,y:1,buttons:0); m.mouse(0x201,x:2,y:2,buttons:1)
-        XCTAssertEqual(m.leftPresses,2)
+        XCTAssertEqual(m.leftPresses,2); XCTAssertEqual(m.lastPress.map { [$0.0,$0.1] },[2,2])
     }
 
     func testMessageQueueKeyMapAndTranslation() throws {

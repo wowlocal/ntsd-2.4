@@ -208,24 +208,48 @@ fixed:
 
 Not requested by the user; offered after the front screens: the text the
 controller cannot type. `OriginalRuntimeMenuGamepad.textEntry(selector:word:)`
-names the field a front screen is typing into — the address (selector 3,
-until Return is taken: 4511b0), a player's name in CONTROL SETTINGS (4511c8
-> 0), a RECORDING INFO field (4511c4: name, info — several lines — or email)
-— and `OriginalRuntimeSession.frontTextEntry()` reads it before loading. The
-SDL host checks it every 200 ms and runs SDL text input while a field takes
-text (single line, multiline, email; no capitalisation or autocorrect). SDL
-3.4.16's X11 driver turns that into Steam's on-screen keyboard when Steam
-asks for it (`SDL_ENABLE_STEAM_SCREEN_KEYBOARD`, set for games in Game Mode:
-`steam://open/keyboard?…` and `steam://close/keyboard`); without that
-support (`SDL_HasScreenKeyboardSupport()` false: the desktop, macOS, Wayland)
-nothing starts. Each change is reported as a `screenKeyboard` event. The
-game still reads only key messages: the keyboard's keys reach it as on a
-desktop.
+names the field a front screen is typing into and its area — the address
+(selector 3 while 4511b0 is 0; it is 1 only in the tick that takes Return;
+the box measured on a capture, 293…511 × 318…350), a player's name in
+CONTROL SETTINGS (4511c8 = player + 1, x 194+139·p, y 156…173; it stays set
+after the screen is left, as the game keeps typing into it on return) or a
+RECORDING INFO field (4511c4: name, info — several lines — or email; their
+click areas). `OriginalRuntimeSession.frontTextEntry()` reads it before
+loading.
+
+The SDL host, only with SDL's X11 driver and a Steam keyboard
+(`SDL_HasScreenKeyboardSupport()`, from Steam's
+`SDL_ENABLE_STEAM_SCREEN_KEYBOARD`, as in Game Mode), checks it every
+200 ms and runs SDL text input while a field takes text — single line,
+multiline or email, no capitalisation or autocorrect, the field's area in
+window points (`SDLWindowHost.windowRect`, the inverse of the click mapping)
+— which SDL 3.4.16 turns into `steam://open/keyboard?…` and
+`steam://close/keyboard`. SDL is not told when Steam closes its keyboard
+(Enter in a single line), so another field, another window or a new
+WM_LBUTTONDOWN inside the field (`messages.leftPresses` and `lastPress`:
+mouse, touch or a controller's click) restarts it: stopped in one check,
+started in the next, so the two URLs reach Steam in order. A window SDL
+already destroyed is not left with text input on: the game's window stops
+it. Once loading starts or the session stops, text input stops and the
+check ends. Re-entering CONTROL SETTINGS with a name still being edited
+opens the keyboard at once. Each change is a `screenKeyboard` event. Other
+drivers (Wayland, macOS, Windows) and X11 without a Steam keyboard start
+nothing; an X11 desktop running Steam's Big Picture also gets Steam's
+variable and so starts it.
+
+Limits: while text input runs on X11, SDL passes key presses through the
+input method (`XFilterEvent`), so dead keys and compose sequences produce
+no key-down for the game — Latin keys, Return and Backspace are unaffected.
+How Steam's keyboard delivers its keys under gamescope is not checked yet.
 
 | Date | Check | Result |
 | --- | --- | --- |
-| 2026-10-16 | `testMenuGamepadTextEntry`: each field and state, none on the other selectors | pass |
-| 2026-10-16 | The x86_64 package of 14456457 in `ntsd-linux-clean:noble-amd64` under Xvfb (SDL's X11 driver), scripted: ONLINE GAME → Connect (the address screen, captured) → Cancel → Back → CONTROL SETTINGS → player 1's name (captured, selected) → a key cell → Cancel. With `SDL_ENABLE_STEAM_SCREEN_KEYBOARD=1`: `screenKeyboard` line, none, line, none; without it: no event; both exit 0, no boundary | pass |
+| 2026-10-16 | `testMenuGamepadTextEntry`: each field, state and area, none on the other selectors; `leftPresses` counts WM_LBUTTONDOWN | pass |
+| 2026-10-16 | First version (14456457), the x86_64 package in `ntsd-linux-clean:noble-amd64` under Xvfb (SDL's X11 driver), scripted: the address screen and player 1's name (both captured) — with the Steam variable `screenKeyboard` line, none, line, none; without it none | pass |
+| 2026-10-16 | Review (read-only): the field detection matches the Core code; found the keyboard never reopening or changing mode (SDL's shown flag; Steam closes it on Enter), no field area, the support check also true for touch-only Wayland (text then arrives as TEXT_INPUT events, ignored) and X11 desktops under Big Picture (dead keys), a recreated window, the timer never ending. Fixed in e16cc8f0 | fixed |
+| 2026-10-16 | e16cc8f0 under Xvfb, fixed and `--scalable-window`: address line [293,318,219,33] → a click inside the field → none → line → Cancel → none → player 1's name → line [194,156,106,18] → player 2's → none → line [333,156,106,18] → a key cell → none; in the scalable window the same sequence with the areas scaled and offset ([401,435,301,46], …); both exit 0 | pass |
 
-Open: Steam's keyboard itself on the Deck (a hand check in Game Mode), an
-independent review, and merging (the user's decision).
+| 2026-10-16 | Second review of e16cc8f0: no new defect above low; fixed — a window destroyed before the stop left SDL's keyboard flag set (stop on the game's window instead), and every click on a text screen restarted the keyboard (now only a click inside the field); doc statements corrected | fixed |
+
+Open: Steam's keyboard itself on the Deck (a hand check in Game Mode), and
+merging (the user's decision).

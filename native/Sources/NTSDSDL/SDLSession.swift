@@ -291,9 +291,10 @@ final class SDLAudioFeed: @unchecked Sendable {
     /// (SDL_ENABLE_STEAM_SCREEN_KEYBOARD). Text input runs, with the field's
     /// area, while a front screen types into a field, checked every 200 ms
     /// until loading. SDL is not told when Steam closes its keyboard (Enter in
-    /// a single line), so another field or a new click restarts it: stopped
-    /// in one check, started in the next, so Steam's close and open arrive in
-    /// order. Any other driver, or no Steam keyboard, starts nothing.
+    /// a single line), so another field, another window or a new click in the
+    /// field restarts it: stopped in one check, started in the next, so
+    /// Steam's close and open arrive in order. Any other driver, or no Steam
+    /// keyboard, starts nothing.
     private var keyboardTimer: Timer?
     private var typing: (text: OriginalRuntimeMenuGamepad.Text,window: OpaquePointer,presses: Int)?
     private func startScreenKeyboard() {
@@ -308,7 +309,11 @@ final class SDLAudioFeed: @unchecked Sendable {
         guard let text = session.frontTextEntry(),let game = gameWindow() else { stopTyping(); return }
         let presses = messages.leftPresses
         if let typing {
-            if typing.text != text || typing.window != game.window || typing.presses != presses { stopTyping() }
+            if typing.text != text || typing.window != game.window { stopTyping() }
+            else if typing.presses != presses {
+                // A click in the field reopens the keyboard; elsewhere it is only counted.
+                if let p = messages.lastPress,text.area.contains(p) { stopTyping() } else { self.typing?.presses = presses }
+            }
             return
         }
         let frame = game.textureSize == .zero ? game.client : game.textureSize
@@ -329,7 +334,10 @@ final class SDLAudioFeed: @unchecked Sendable {
     }
     private func stopTyping() {
         guard let typing else { return }
-        _ = SDL_StopTextInput(typing.window); self.typing = nil
+        // A window SDL already destroyed (its lease released) cannot stop
+        // text input, which would leave SDL's keyboard shown: the game's does.
+        if let window = SDL_GetWindowID(typing.window) != 0 ? typing.window : gameWindow()?.window { _ = SDL_StopTextInput(window) }
+        self.typing = nil
         Self.report(["event":"screenKeyboard","entry":"none"])
     }
     func terminate() { SDL_Quit(); Foundation.exit(0) }
