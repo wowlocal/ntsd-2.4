@@ -250,6 +250,7 @@ How Steam's keyboard delivers its keys under gamescope is not checked yet.
 | 2026-10-16 | e16cc8f0 under Xvfb, fixed and `--scalable-window`: address line [293,318,219,33] → a click inside the field → none → line → Cancel → none → player 1's name → line [194,156,106,18] → player 2's → none → line [333,156,106,18] → a key cell → none; in the scalable window the same sequence with the areas scaled and offset ([401,435,301,46], …); both exit 0 | pass |
 
 | 2026-10-16 | Second review of e16cc8f0: no new defect above low; fixed — a window destroyed before the stop left SDL's keyboard flag set (stop on the game's window instead), and every click on a text screen restarted the keyboard (now only a click inside the field); doc statements corrected | fixed |
+| 2026-10-16 | e334323b under Xvfb (fixed window): the same sequence plus a click on player 1's device box while the name is edited — no restart for it; address line, none, line, none, player 1's name line, player 2's none then line, a key cell none; exit 0 | pass |
 
 Open: Steam's keyboard itself on the Deck (a hand check in Game Mode), and
 merging (the user's decision).
