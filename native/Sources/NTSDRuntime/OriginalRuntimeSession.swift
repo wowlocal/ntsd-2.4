@@ -497,11 +497,21 @@ public enum OriginalRuntimeSessionBoundary: Error, Equatable {
     /// with World+0 0 (START and a connected network game set it to 1), by
     /// the selector 44d064 (`OriginalMainMenu`, the front screens).
     private func menuScreen() -> OriginalRuntimeMenuGamepad.Screen? {
+        frontGlobals { OriginalRuntimeMenuGamepad.screen(selector:$0,word:$1) }
+    }
+    /// The text the front screen showing is typing into, for a host's
+    /// on-screen keyboard (MENU_GAMEPAD.md); nil on every other screen.
+    public func frontTextEntry() -> OriginalRuntimeMenuGamepad.TextEntry? {
+        frontGlobals { OriginalRuntimeMenuGamepad.textEntry(selector:$0,word:$1) }
+    }
+    /// Before loading with World+0 0: the selector 44d064 and a reader of the
+    /// committed globals.
+    private func frontGlobals<T>(_ body: (Int32,(Int) -> Int32?) -> T?) -> T? {
         guard loading == nil,let state = started?.host.snapshot.session?.state else { return nil }
         let base = OriginalMatchPreparation.globalBase
         func word(_ address: Int) -> Int32? { try? state.full.integer(at:address-base,as:Int32.self) }
         guard word(0x458b00) == 0,let selector = word(0x44d064) else { return nil }
-        return OriginalRuntimeMenuGamepad.screen(selector:selector,word:word)
+        return body(selector,word)
     }
     /// A single bounded diagnostic of committed owned state. It never supplies
     /// game inputs or another process's expected state.

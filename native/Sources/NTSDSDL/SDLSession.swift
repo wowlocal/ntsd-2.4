@@ -284,6 +284,35 @@ final class SDLAudioFeed: @unchecked Sendable {
     func showStop(title: String,text: String) { box(NTSD_SDL_MESSAGEBOX_ERROR,title,text) }
     func didStart() {
         if !arguments.contains("--no-activate"),let game = gameWindow() { _ = SDL_RaiseWindow(game.window) }
+        startScreenKeyboard()
+    }
+    /// Steam's on-screen keyboard (the Steam Deck, MENU_GAMEPAD.md): SDL shows
+    /// it for text input when Steam asks for it (SDL_ENABLE_STEAM_SCREEN_KEYBOARD,
+    /// X11, as in Game Mode). Text input runs while a front screen types into
+    /// a field, checked every 200 ms; without that support nothing starts.
+    private var keyboardTimer: Timer?, textEntry: OriginalRuntimeMenuGamepad.TextEntry?
+    private func startScreenKeyboard() {
+        guard keyboardTimer == nil,SDL_HasScreenKeyboardSupport() else { return }
+        let timer = Timer(timeInterval:0.2,repeats:true) { [weak self] _ in MainActor.assumeIsolated { self?.updateScreenKeyboard() } }
+        RunLoop.main.add(timer,forMode:.common); keyboardTimer = timer
+    }
+    private func updateScreenKeyboard() {
+        guard let session,!session.stopped,let game = gameWindow() else { return }
+        let entry = session.frontTextEntry()
+        guard entry != textEntry else { return }
+        textEntry = entry
+        guard let entry else {
+            _ = SDL_StopTextInput(game.window); Self.report(["event":"screenKeyboard","entry":"none"]); return
+        }
+        let props = SDL_CreateProperties()
+        defer { SDL_DestroyProperties(props) }
+        let type = entry == .email ? SDL_TEXTINPUT_TYPE_TEXT_EMAIL : SDL_TEXTINPUT_TYPE_TEXT
+        _ = SDL_SetNumberProperty(props,"SDL.textinput.type",Int64(type.rawValue))
+        _ = SDL_SetNumberProperty(props,"SDL.textinput.capitalization",Int64(SDL_CAPITALIZE_NONE.rawValue))
+        _ = SDL_SetBooleanProperty(props,"SDL.textinput.autocorrect",false)
+        _ = SDL_SetBooleanProperty(props,"SDL.textinput.multiline",entry == .lines)
+        _ = SDL_StartTextInputWithProperties(game.window,props)
+        Self.report(["event":"screenKeyboard","entry":"\(entry)"])
     }
     func terminate() { SDL_Quit(); Foundation.exit(0) }
     func exit(_ code: Int32) -> Never { SDL_Quit(); Foundation.exit(code) }

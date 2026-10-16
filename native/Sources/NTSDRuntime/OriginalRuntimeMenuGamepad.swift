@@ -169,6 +169,28 @@
         }
         return pick(others.filter { $0.1.along > 0 },far:true) ?? pick(others.filter { $0.1.along < 0 },far:false) ?? index
     }
+    /// The text a front screen is typing into, for a host's on-screen
+    /// keyboard: one line, several lines (Return is a new line) or an email.
+    public enum TextEntry: Equatable { case line, lines, email }
+    /// The address (selector 3, until Return is taken: 4511b0), a player's
+    /// name in CONTROL SETTINGS (4511c8 > 0) or a RECORDING INFO field
+    /// (4511c4: the name 44fd18, the info 44f900, the email 44f890); nil when
+    /// the screen takes no text (`OriginalNetworkMenu`, `OriginalFrontControlSettings`,
+    /// `OriginalFrontRecordingInfo`).
+    public static func textEntry(selector: Int32,word: (Int) -> Int32?) -> TextEntry? {
+        switch selector {
+        case 3: return word(0x4511b0) == 0 ? .line : nil
+        case 6: return (word(0x4511c8) ?? 0) > 0 ? .line : nil
+        case 7:
+            switch word(0x4511c4) {
+            case 0x44fd18: return .line
+            case 0x44f900: return .lines
+            case 0x44f890: return .email
+            default: return nil
+            }
+        default: return nil
+        }
+    }
     static func packed(_ x: Int32,_ y: Int32) -> UInt32 { UInt32(UInt16(truncatingIfNeeded:x)) | UInt32(UInt16(truncatingIfNeeded:y)) << 16 }
 
     /// The mouse-only front screen of selector 44d064 (`word` reads a global),
