@@ -1,0 +1,58 @@
+{
+ "study": "WINDOW_SCALING",
+ "step": "Fix: the picture of a moved original (fixed) macOS window",
+ "date": "2026-10-16",
+ "branch": "fix/macos-window-move from main 94581233",
+ "report": {
+  "user": "при движении окна в macos картинка игры не двигается вместе с окном (with a screenshot)",
+  "screenshot": "a VS match in the window 'Little Fighter 2' with a 794-point client at 2x (1588 px wide): the picture at one point per game pixel, shifted up and left by about 297 x 53 game pixels (the first HUD row and 1.5 panels cut off), black to the right and bottom. 794 points is the original fixed window, not the scalable one (1588 points at 2x on this display); how it was launched (--original-window, the NTSDOriginalWindow default or an older build) is not known"
+ },
+ "cause": {
+  "summary": "The original fixed window follows its live geometry: the display backend crops the desktop-sized primary at the window's live client, and clips the game's Blt there, while the game Blts at the rectangle its WM_MOVE handler stored at 453ccc. The macOS host sent WM_MOVE once, at startup, so after a move the crop moved and the drawing did not: the picture showed shifted by the move, black (fresh known-black primary) beyond. The scalable window (default since S3) is not affected: its geometry is held from creation.",
+  "code_at_94581233": [
+   "native/Sources/NTSDRuntime/OriginalMacDisplayBackend.swift:567-578 rectangle(): the primary's delivery and clip rectangle from windows.displayGeometry(window) (572), i.e. the live client for a window without a hold",
+   "native/Sources/NTSDRuntime/OriginalMacDisplayBackend.swift:1102-1103 frontTarget(): the game's Blt destination intersected with that live rectangle",
+   "native/Sources/NTSDMacPlatform/OriginalMacWindowBackend.swift:172-176 displayGeometry(): the live window's client on the screen",
+   "native/Sources/NTSDCore/OriginalWindowLifecycle.swift:55-62 WM_MOVE (43b3d0 case 3, windowed): GetClientRect and two ClientToScreen stored at 453ccc",
+   "native/Sources/NTSDRuntime/OriginalMacRuntimeMenu.swift:103-109 the only WM_MOVE: posted once at startup; nothing observed the window's moves (no didMove handling anywhere in the macOS host)"
+  ]
+ },
+ "reproduction_before_fix": {
+  "build": "94581233, release, clean scratch build/swiftpm-app in the worktree",
+  "display": "Pro Display XDR, 3008x1692 points at 2x, macOS 27.0",
+  "fixed_window": "live run with --original-window (main menu); a real title-bar drag (CGEvent HID mouse events) from (1107,286) to (1399,344): the picture shifted up/left by 292 x 58 points, black right and bottom; the content rows of the window capture (1588 x 1100 px): 1,744,798 of 1,746,800 pixels differ from the capture before the drag; the right strip (584 x 1100 px) 642,400 of 642,400 pixels black",
+  "scalable_window": "default launch, main menu and a scripted VS match (--scalable-window): Accessibility moves, HID title-bar drags (also captured mid-drag), after the green button's full screen and back, after a resize to 970x700, partly off the left edge: the picture followed every time (not this bug)"
+ },
+ "change": {
+  "NTSDRuntime/OriginalMacRuntimeMessages": "move(origin): WM_MOVE with the client's desktop origin in lParam, only when it differs from the last one posted; a pending WM_MOVE takes the new origin instead of queueing another (its handler re-reads the live geometry)",
+  "NTSDRuntime/OriginalMacRuntimeMenu": "the startup WM_MOVE goes through move() (same message); windowMoved(token,in:) sends it for the current window when it follows its live geometry (not closed, not the full-screen popup, no hold: scalable window and macOS full screen excluded)",
+  "NTSDRuntime/OriginalRuntimeSession": "windowMoved(token) for hosts",
+  "NTSDMacPlatform/OriginalMacWindowBackend": "setMoved(token,_): NSWindow.didMoveNotification observer, only on a window without a hold that is not the popup (the fixed window); removed with the window's other observers",
+  "NTSDApp/OriginalRuntimeLaunch": "attach() installs it and checks once: after Alt+Enter the new, centred window sends WM_MOVE when the game last had another origin",
+  "unchanged": "Core, the shared window backend, the display backend, the scalable window, timing, other hosts; no message is sent while the window stays where the game last was"
+ },
+ "checks": {
+  "unit": {
+   "how": "swift-test --package-path native --scratch-path build/swiftpm-app --build-system native --filter 'OriginalMacRuntimeMenuTests|OriginalMacWindowGeometryTests|OriginalMacWindowBackendTests' (debug)",
+   "result": "22 tests, 0 failures",
+   "new": "OriginalMacRuntimeMenuTests.testMovedWindowSendsWMMoveAndThePictureFollows: the live runtime menu on an AppKit window; an unchanged origin sends nothing; a 40x30 move without WM_MOVE presents the frame shifted (pixel(x,y) = unmoved(x+40,y+30), the right 40 columns and bottom 30 rows black) and 453ccc keeps the old rectangle (the cause); one WM_MOVE with the moved origin (a second notice adds nothing), its handler stores the moved rectangle and the next frame equals the unmoved one byte for byte; two AppKit moves before the game reads its queue leave one WM_MOVE with the latest origin; under a held geometry a move sends nothing"
+  },
+  "live_after_fix": {
+   "build": "this change, clean release build",
+   "fixed_window_drag": "the same drag as before (1107,286 -> 1399,344): the content rows differ from the pre-drag capture in 668 of 1,746,800 pixels (box 2,62-805,1155: the game's own cursor at its old and new places); the right strip 795 of 642,400 black",
+   "fixed_window_ax_move": "to (300,500): the same 668-pixel cursor difference only",
+   "scalable_window_drag": "default launch, title-bar drag by 292 x 95: the content rows (3176 x 2200 px) identical (0 differ)",
+   "alt_enter_after_move": "scripted fixed window (no exit step): moved to (400,600) by Accessibility, then the script's Alt+Enter (Alt held from 2200 and 2600, Enter at 2210 and 2610); the new window opened centred at (1107,286) and its capture at 3200 is whole (0 black pixels in the right 288 and bottom 100 px strips)",
+   "mid_match_drag": "asked in review: the vs scenario's script and options (virtual clock 123456789 8, gameplay script clock, --body-captures) with --original-window and no exit step; a real title-bar drag (1107,286 -> 1399,344) at uptime 812340.9-812342.2, between the progress events at bodies 300 (812337.3) and 600 (812344.1); kept running past body 1800; no boundary event, the process running until stopped. The progress captures (the window's view renders) at bodies 300 to 1800 are byte-identical to tools/app_e2e_reference.json, and so are iterations, cycles, characterAI and objectInputs at each: the moved window shows the whole picture and the WM_MOVE changed none of the game's counters. Screen captures of the window just after the drag and 10 s later: the right 584 px and bottom 116 px strips are as black as before the drag (19,731 vs 19,732 of 642,400 and 408 vs 409 of 184,208: the game's own dark pixels), against 100% in the bug",
+   "off_screen": "the fixed window then moved to x = -100: the run stopped at OriginalMacDisplayBackend.Boundary.geometry (exit 1), the rectangle() check at OriginalMacDisplayBackend.swift:575-577 that existed before this change"
+  },
+  "e2e": "python3 tools/app_e2e.py --scenario vs on this build (the worktree's build/swiftpm-app/release/NTSDNative; the scripted fixed window): pass, differs [] (milestones, progress captures, overlay files, exit code, and the quit, website, controls, online and recording checks)"
+ },
+ "review": "No independent review in this task; the parent agent reviews before merging.",
+ "boundaries": [
+  "WM_MOVE is posted (and coalesced) when AppKit reports the move; Windows sends it during its modal move loop, in which the game does not run. Here the game keeps running while the window is dragged, and frames between the move and the game's next PeekMessage still show the old rectangle",
+  "A fixed window moved partly off the screen still stops at the geometry boundary (reproduced above; unchanged by this fix), as does a move to another display ('screen changed')",
+  "The SDL host's fixed window where positions are known (X11, macOS SDL, Windows) uses the same model (SDLWindows.swift origin() is the live position) and handles no move event: probably the same bug, not checked or changed here",
+  "Seen while checking, not caused by this change (the popup path is untouched) and not rerun on the previous build: in a live run the game's own full-screen popup (Alt+Enter) did not take a second Alt+Enter, posted to the process or through the HID stream; the borderless popup probably cannot become key"
+ ]
+}

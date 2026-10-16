@@ -103,10 +103,7 @@ import NTSDCore
         // CreateWindowEx sends WM_SIZE then WM_MOVE; the startup model does not run
         // those synchronous WndProc calls, so they are delivered first here.
         let client = try started.windows.displayGeometry(started.window).clientInDesktop
-        func word(_ low: CGFloat,_ high: CGFloat) -> UInt32 {
-            UInt32(UInt16(truncatingIfNeeded:Int(low))) | UInt32(UInt16(truncatingIfNeeded:Int(high))) << 16
-        }
-        messages.post(5,0,word(client.width,client.height)); messages.post(3,0,word(client.minX,client.minY))
+        messages.post(5,0,Self.word(client.width,client.height)); messages.move(Self.word(client.minX,client.minY))
         let display = started.display,d = diagnostics
         front = OriginalMacFrontService(backend:display,diagnostic:{ q in d.debug.append(q.strings[0]); return .init(result:0) })
         bitmap = OriginalMacBitmapService(backend:display,inputs:.init(resources:inputs.bitmaps,
@@ -123,6 +120,25 @@ import NTSDCore
             if (try? audio.requireBuffer(token)) != nil { self?.sounds?.release(token); return }
             guard audio.deviceTokens.contains(token) else { throw Boundary.unserved("Release \(token)") }
         }
+    }
+    /// WM_SIZE/WM_MOVE lParam: two 16-bit words.
+    static func word(_ low: CGFloat,_ high: CGFloat) -> UInt32 {
+        UInt32(UInt16(truncatingIfNeeded:Int(low))) | UInt32(UInt16(truncatingIfNeeded:Int(high))) << 16
+    }
+    /// The host moved the game's window (WINDOW_SCALING, 2026-10-16). Windows
+    /// sends WM_MOVE, whose handler (43b3d0 case 3) stores GetClientRect and
+    /// ClientToScreen at 453ccc, the rectangle the game Blts to the primary;
+    /// the primary is cropped at the window's live client. Without it a moved
+    /// original window showed the picture shifted by the move, black beyond.
+    /// Only a window that follows its live geometry: the scalable window and
+    /// macOS full screen hold the game's, and the full-screen popup does not
+    /// move. Nothing is sent while the origin is the one last sent.
+    public func windowMoved(_ token: UInt32,in windows: OriginalRuntimeWindowBackend) throws {
+        guard token == messages.window else { return }
+        let owner = try windows.lease(token)
+        guard !owner.closed,!owner.fullScreen,owner.held == nil else { return }
+        let client = try windows.displayGeometry(token).clientInDesktop
+        messages.move(Self.word(client.minX,client.minY))
     }
     func inputs(_ state: Host.Session.State) throws -> Host.Inputs {
         if state.settings != nil,background == nil { background = try heap.allocate(0x1f50) }

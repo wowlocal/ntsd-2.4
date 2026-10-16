@@ -31,8 +31,8 @@ public typealias OriginalMacWindowBackend = OriginalRuntimeWindowBackend
         let width = (client.width*scale).rounded()
         return CGSize(width:width,height:(width*client.height/client.width).rounded())
     }
-    /// Per-window AppKit state kept in the lease: full-screen observers and the
-    /// close-button delegate.
+    /// Per-window AppKit state kept in the lease: full-screen and move
+    /// observers and the close-button delegate.
     fileprivate final class State {
         var observers: [NSObjectProtocol] = []
         var closeDelegate: CloseDelegate?
@@ -237,6 +237,17 @@ extension OriginalRuntimeWindowBackend {
         guard !owner.closed else { throw Boundary.geometry }
         let delegate = OriginalMacWindowHost.CloseDelegate(handler)
         (owner.platformState as? OriginalMacWindowHost.State)?.closeDelegate = delegate; nsWindow(owner).delegate = delegate
+    }
+    /// The original fixed window's moves call `moved` (the session sends the
+    /// game WM_MOVE). A window holding the game's geometry from creation (the
+    /// scalable window) and the full-screen popup never need it.
+    public func setMoved(_ token: UInt32,_ moved: @escaping () -> Void) throws {
+        let owner = try lease(token)
+        guard !owner.closed else { throw Boundary.geometry }
+        guard !owner.fullScreen,owner.held == nil,let state = owner.platformState as? OriginalMacWindowHost.State else { return }
+        state.observers.append(NotificationCenter.default.addObserver(forName:NSWindow.didMoveNotification,object:nsWindow(owner),queue:.main) { _ in
+            MainActor.assumeIsolated { moved() }
+        })
     }
     /// Enters or leaves the held geometry of macOS full screen. The window's
     /// will-enter/did-exit notifications call this; it sends the game nothing.

@@ -87,10 +87,14 @@ final class OriginalRuntimeDelegate: NSObject, NSApplicationDelegate {
     }
     /// The original window's input and close handling: the close button is the
     /// game's WM_SYSCOMMAND(SC_CLOSE); after a boundary stop it closes the app.
+    /// Moving the original fixed window sends the game WM_MOVE, as does an
+    /// Alt+Enter recreation away from where the game last was.
     func attach(_ window: UInt32,in windows: OriginalRuntimeWindowBackend,session: OriginalRuntimeSession) throws {
         gameWindows = windows; gameWindow = window
         try windows.setInput(window) { [weak self] event in self?.input(event,windows) ?? false }
         try windows.setCloseRequest(window) { [weak session] in session?.closeRequested() ?? true }
+        try windows.setMoved(window) { [weak session] in session?.windowMoved(window) }
+        session.windowMoved(window)
     }
     private func input(_ event: NSEvent,_ windows: OriginalRuntimeWindowBackend) -> Bool {
         guard let session,let messages = session.messages,!session.stopped else { return false }
