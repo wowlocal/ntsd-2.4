@@ -184,6 +184,14 @@ final class SDLCursor { let cursor: OpaquePointer?; init(_ cursor: OpaquePointer
         _ = SDL_SetRenderDrawColor(w.renderer,0,0,0,255); _ = SDL_RenderClear(w.renderer)
         _ = SDL_RenderTexture(w.renderer,texture,nil,&destination); _ = SDL_RenderPresent(w.renderer)
     }
+    /// A rectangle of the game's client (the drawn frame's pixels) in window
+    /// points: `clientPoint` the other way.
+    func windowRect(_ w: SDLWindow,client r: CGRect,frame: CGSize) -> CGRect {
+        if w.scalable,w.drawn.width <= 0 || w.drawn.height <= 0 { w.drawn = box(w,w.client).points }
+        guard w.drawn.width > 0,w.drawn.height > 0,frame.width > 0,frame.height > 0 else { return r }
+        let sx = w.drawn.width/frame.width,sy = w.drawn.height/frame.height
+        return CGRect(x:w.drawn.minX+r.minX*sx,y:w.drawn.minY+r.minY*sy,width:r.width*sx,height:r.height*sy)
+    }
     /// A window point as the game's client point (the drawn frame's pixels).
     func clientPoint(_ w: SDLWindow,x: Float,y: Float,frame: CGSize) -> (Int32,Int32) {
         // A scalable window before its first frame maps through its client's box.

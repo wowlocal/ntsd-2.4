@@ -501,9 +501,11 @@ public enum OriginalRuntimeSessionBoundary: Error, Equatable {
     }
     /// The text the front screen showing is typing into, for a host's
     /// on-screen keyboard (MENU_GAMEPAD.md); nil on every other screen.
-    public func frontTextEntry() -> OriginalRuntimeMenuGamepad.TextEntry? {
+    public func frontTextEntry() -> OriginalRuntimeMenuGamepad.Text? {
         frontGlobals { OriginalRuntimeMenuGamepad.textEntry(selector:$0,word:$1) }
     }
+    /// The front screens are over: START or a network game began loading.
+    public var loadingStarted: Bool { loading != nil }
     /// Before loading with World+0 0: the selector 44d064 and a reader of the
     /// committed globals.
     private func frontGlobals<T>(_ body: (Int32,(Int) -> Int32?) -> T?) -> T? {
