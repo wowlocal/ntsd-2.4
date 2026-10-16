@@ -77,7 +77,8 @@ In Game Mode the game is **NTSD 2.4** in the library. It runs full screen
 under gamescope (SDL's X11 driver) with PipeWire sound.
 
 Steam gives the game a virtual Xbox 360 pad, which the game treats as the
-original's joystick 1. The controls are the original's, except on the title:
+original's joystick 1. The controls are the original's, except on the screens
+before the mode menu:
 
 - The screens before the mode menu — the title, CONTROL SETTINGS, ONLINE
   GAME and RECORDING INFO — are mouse-only in the original. Here the d-pad
@@ -86,7 +87,9 @@ original's joystick 1. The controls are the original's, except on the title:
   asked for ([MENU_GAMEPAD](research/MENU_GAMEPAD.md)). In CONTROL SETTINGS,
   A on a device box switches keyboard → joystick 1 → joystick 2, and a
   joystick player's attack, jump or defend cell, once selected, takes the
-  next button pressed (A included). The touchscreen and the right trackpad
+  next button pressed on that player's joystick (A included). The first A
+  on a screen where nothing is selected only shows where the cursor
+  starts. The touchscreen and the right trackpad
   work as a mouse too.
 - Text — player names, the opponent's address, the recording info — needs
   keys: open Steam's on-screen keyboard with Steam + X.

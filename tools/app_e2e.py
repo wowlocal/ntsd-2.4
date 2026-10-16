@@ -130,16 +130,17 @@ def joy_steps(steps):
     return out
 
 
-# CONTROL SETTINGS by joystick 1 alone: down twice and button 1 on the title,
-# then from player 2's "up" (under the cursor): up to its device box, left to
-# player 1's, button 1 (keyboard → joystick 1), down through player 1's attack,
-# jump and defend to OK, button 1.
-MENU_CONTROLS = joy_steps([(20, "down"), (28, "down"), (36, "down"), (44, "a"), (70, "up"), (78, "left"), (86, "a"),
+# CONTROL SETTINGS by joystick 1 alone: down three times and button 1 on the
+# title; on CONTROL SETTINGS the first move shows the start, player 1's device
+# box, and button 1 switches it (keyboard → joystick 1); down through player
+# 1's attack, jump and defend to OK, button 1.
+MENU_CONTROLS = joy_steps([(20, "down"), (28, "down"), (36, "down"), (44, "a"), (70, "up"), (78, "a"),
                            (120, "down"), (128, "down"), (136, "down"), (144, "down"), (152, "a")]) + ["230 exit"]
-# ONLINE GAME and back by joystick 1 alone: Connect to Opponent, Cancel on the
-# address screen, Back (up wraps to it), then down wraps to START on the title.
+# ONLINE GAME and back by joystick 1 alone: Waiting (the start), Connect to
+# Opponent, button 1; on the address screen the start is Cancel, button 1;
+# Waiting, up wraps to Back, button 1; on the title the start is START, button 1.
 MENU_NETWORK = joy_steps([(20, "down"), (28, "down"), (36, "a"), (70, "down"), (78, "down"), (86, "a"), (120, "right"),
-                          (128, "right"), (136, "a"), (170, "down"), (178, "up"), (186, "a"), (220, "down"), (228, "a")]) + ["400 exit"]
+                          (128, "a"), (170, "down"), (178, "up"), (186, "a"), (220, "down"), (228, "a")]) + ["400 exit"]
 
 
 def menu_run(script, extra, timeout, app):

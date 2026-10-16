@@ -54,17 +54,20 @@ on Linux and Windows, the browser) gets it at once:
     (y 156…173), the device box (182…272; a click cycles keyboard → joystick
     1 → joystick 2) and the key cells a click can select (y 280+22·r…298+22·r;
     a joystick's four direction rows cannot be set, so they are left out);
-    OK (405…560 × 441…465), first when the cursor is on no target, and
-    Cancel (582…737).
-  - 1, the network menu: Waiting for Opponent, Connect to Opponent, Back
-    (x 260…547; y 274…300, 305…330, 336…361); 2 and 4: Cancel / Back
-    (322…472 × 361…386); 3, the address: OK (239…389) and Cancel (411…561),
-    y 357…382.
+    OK (405…560 × 441…465) and Cancel (582…737). Start: player 1's device
+    box.
+  - 1, the network menu: Waiting for Opponent (the start), Connect to
+    Opponent, Back (x 260…547; y 274…300, 305…330, 336…361); 2, waiting:
+    Cancel (322…472 × 361…386); 3, the address: OK (239…389) and Cancel
+    (411…561), y 357…382 — Cancel the start, as OK with no address typed
+    would try to connect.
   - 7, RECORDING INFO: the name, info and email fields, the recording
-    checkbox, OK (first) and Cancel; 8, its notice: OK.
-  - −3, the update panel (Enable, Disable and, folded, the description, at
-    its y: 96, or the panel's moving top 4511f4) and −1, the waiting
-    screen's Cancel.
+    checkbox, OK (the start) and Cancel; 8, its notice: OK; −1, the waiting
+    screen: Cancel.
+  - Not offered: −3, the update panel — its Enable and Disable run the
+    settings writer 423230, which this runtime stops at (a declared
+    boundary, "Alternate settings write", for the mouse as well) — and 4,
+    which sets World+0 in its first frame.
   - Left to the mouse: links to web pages and folders (the title's bottom
     right, the help links, the forum banner, the recording folder), the
     title's Update button and the bottom-left exit hotspot (it quits without
@@ -76,12 +79,15 @@ on Linux and Windows, the browser) gets it at once:
   45°, else at least 16 px that way, by the distance along plus twice the
   distance across; with none, it wraps to the farthest the other way (band,
   then 45°). A held direction repeats after 400 ms, then every 180 ms. The
-  original's hover highlights and cursor sprite follow. The start is the
-  target under the last WM_MOUSEMOVE point the game was sent (client
-  coordinates, the host's own mouse and touch included), else the one last
-  moved to on that screen, else the screen's first.
-- **Presses.** Button 1 (A) presses the left button on that target (a move,
-  then WM_LBUTTONDOWN). WM_LBUTTONUP follows once button 1 is up and 150 ms
+  original's hover highlights and cursor sprite follow. A move starts from
+  the target under the last WM_MOUSEMOVE point the game was sent (client
+  coordinates, the host's own mouse and touch included) — unless the
+  controller left that point there on another screen (after Back on ONLINE
+  GAME it lies on OFFICAL WEBSITE) — else from the one last moved to on that
+  screen; with neither, the move goes to the screen's start.
+- **Presses.** Button 1 (A) presses the left button on the target so found,
+  after the sample's own move (a move, then WM_LBUTTONDOWN); with no target
+  found, the press only moves the cursor to the screen's start. WM_LBUTTONUP follows once button 1 is up and 150 ms
   of the game clock have passed since GetMessage delivered the press — or
   2 s after it, even with button 1 still down (a controller lost while
   held); checked at every sample and every PeekMessage, so a menu frame
@@ -92,8 +98,9 @@ on Linux and Windows, the browser) gets it at once:
   CONTROL SETTINGS cell does not bind the click's own button and the mode
   menu after START does not see it as a confirmation. While a joystick
   player's cell waits for a button, that joystick's buttons are the game's
-  (MM_JOY as the original, no click), so any of A, B, X, Y can be bound;
-  the other joystick still clicks.
+  (MM_JOY as the original, no click), so any of its A, B, X, Y can be
+  bound; another joystick still clicks (so a joystick-2 cell with one
+  controller keeps waiting until A clicks elsewhere).
 - Every other screen, the mode menu included, reads the joysticks only as
   the original does; without joystick input on these screens nothing
   differs (the screen is read only on a direction or button edge, the clock
@@ -156,7 +163,7 @@ into `main`, was wrong — nothing was pushed to `main` then.
 
 | Date | Check | Result |
 | --- | --- | --- |
-| 2026-10-16 | General version: `OriginalMacRuntimeMenuTests` — the title test moved over (button 1 hidden from MM_JOY while it clicks, a second joystick's press the game's), off-menu reads, and `testMenuGamepadScreensMovesAndCapture`: CONTROL SETTINGS' 30 targets for keyboard, keyboard, joystick 1, joystick 2, their rectangles, nine moves (bands, 45°, the 16 px tier, both wraps), the capture's joystick for players 3 and 4 and none for a keyboard cell, every other screen's targets, and in the messages a capture press passed to MM_JOY while the other joystick clicks OK with button 1 hidden (6 tests with the joystick, queue and front-menu ones) | pass |
+| 2026-10-16 | General version: `OriginalMacRuntimeMenuTests` — the title test moved over (button 1 hidden from MM_JOY while it clicks, a second joystick's press the game's), off-menu reads, and `testMenuGamepadScreensMovesAndCapture`: CONTROL SETTINGS' 30 targets for keyboard, keyboard, joystick 1, joystick 2, their rectangles, ten moves (bands, 45°, the 16 px tier, both wraps), the capture's joystick for players 3 and 4 and none for a keyboard cell, every other screen's targets, and in the messages a capture press passed to MM_JOY while the other joystick clicks OK with button 1 hidden (6 tests with the joystick, queue and front-menu ones) | pass |
 | 2026-10-16 | `title-joystick` re-recorded although button 1 no longer reaches MM_JOY on the title: the reference came out byte-identical (match at iteration 1476, the same capture). The new checks run with it: `--original-menu-input` keeps the title; CONTROL SETTINGS by joystick alone (player 2's up → its device box → player 1's → A → down ×4 → OK → A) saves `control.txt` equal to the packaged one with player 1's device 0 → 1; ONLINE GAME by joystick alone (Connect → Cancel on the address screen → Back → START) loads with no message box or link opened | pass |
 | 2026-10-16 | `title-joystick` compared 4 times: the first compare right after recording differed in the match capture's hash only (iteration 2600, `b8b9d39…` against `9668805…`; every other milestone equal), the next three matched. The intermittent capture class seen before (APPLICATION_FRONT_MENU_ITEMS: a Mission capture) | 3 of 4 equal |
 | 2026-10-16 | `joystick` (the existing reference; its joystick input is all after loading) | equal |
@@ -166,3 +173,33 @@ whole e2e set was not rerun for the general version.
 
 Open: a hand check with a real controller (the Deck; AppKit, iPad, Apple TV,
 Android, the browser use the same path).
+
+## Review of the general version (2026-10-16)
+
+An independent read-only review of 52042b56..bf771779 found every rectangle
+equal to the recovered hit tests, no way for the MM_JOY hiding to leave a
+button stuck, nothing changed without joystick input on these screens or for
+the `joystick` scenario, and every target reachable from every other (it ran
+`next()` over the real rectangles for several device sets). Its findings,
+fixed:
+
+1. Medium: the point a click left carried over to the next screen — Back on
+   ONLINE GAME left it on OFFICAL WEBSITE, so the next A opened the browser;
+   the title's CONTROL SETTINGS left it on player 2's "up" (A started a
+   capture). Now a point the controller left on another screen is ignored,
+   and a press with nothing selected only shows the start.
+2. Medium: the address screen started on OK, which with no address tries to
+   connect (and may show a box a controller cannot answer). Now Cancel.
+3. Low: a move and a press in one sample clicked the old target. Now the
+   press takes the point after the move.
+4. Low: the update panel's buttons reach a settings writer the runtime stops
+   at. The panel is no longer offered (the Update button that opens it is
+   mouse-only anyway).
+5. Low: selector 4 never reaches the controller (World+0 is set at once);
+   removed. Docs corrected (STEAM_DECK's capture sentence, the start rule,
+   the move count, CURRENT_WORK's open items).
+
+| Date | Check | Result |
+| --- | --- | --- |
+| 2026-10-16 | After the review: the screens test extended — player 1's device box as CONTROL SETTINGS' start, a first press only showing it and the next clicking it, the wrap left of it, a point left on another screen ignored (the address screen starts on Cancel), a move and a press in one sample clicking the new target; −3 and 4 not offered (6 tests) | pass |
+| 2026-10-16 | `app_e2e.py --build --scenario title-joystick` with the routes adjusted to the start rule (CONTROL SETTINGS: control.txt with player 1 on joystick 1; ONLINE GAME → Connect → Cancel → Back → START, loaded, no box, no link) and `--original-menu-input`; `--scenario joystick` | both pass, references equal |

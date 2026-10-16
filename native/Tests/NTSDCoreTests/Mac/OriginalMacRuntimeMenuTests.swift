@@ -143,7 +143,7 @@ import XCTest
         let devices: [Int:Int32] = [0x44fb70:0,0x44fb70+80:0,0x44fb70+160:1,0x44fb70+240:2]
         // Per player: name, device box, the settable key cells; then OK and Cancel.
         let controls = try XCTUnwrap(screen(6,devices.merging([0x4511e0:0]) { $1 }))
-        XCTAssertEqual(controls.targets.count,30); XCTAssertEqual(controls.initial,28); XCTAssertNil(controls.buttonsToGame)
+        XCTAssertEqual(controls.targets.count,30); XCTAssertEqual(controls.initial,1); XCTAssertNil(controls.buttonsToGame)
         XCTAssertEqual(controls.targets[0],T(194,156,299,173)); XCTAssertEqual(controls.targets[1],T(194,182,299,272))
         XCTAssertEqual(controls.targets[2],T(194,280,299,298)); XCTAssertEqual(controls.targets[20],T(472,368,577,386))
         XCTAssertEqual(controls.targets[28],T(405,441,560,465)); XCTAssertEqual(controls.targets[29],T(582,441,737,465))
@@ -164,31 +164,41 @@ import XCTest
         XCTAssertNil(screen(6,devices.merging([0x4511e0:3]) { $1 })?.buttonsToGame)        // player 1's keyboard
         // The network screens, RECORDING INFO, the update panel and the waiting screen.
         XCTAssertEqual(screen(1,[:])?.targets,[T(260,274,547,300),T(260,305,547,330),T(260,336,547,361)])
-        XCTAssertEqual(screen(2,[:])?.targets,[T(322,361,472,386)]); XCTAssertEqual(screen(4,[:])?.targets,[T(322,361,472,386)])
-        XCTAssertEqual(screen(3,[:])?.targets,[T(239,357,389,382),T(411,357,561,382)])
+        XCTAssertEqual(screen(2,[:])?.targets,[T(322,361,472,386)])
+        XCTAssertEqual(screen(3,[:])?.targets,[T(239,357,389,382),T(411,357,561,382)]); XCTAssertEqual(screen(3,[:])?.initial,1)
         XCTAssertEqual(screen(7,[:])?.targets.count,6); XCTAssertEqual(screen(7,[:])?.initial,4)
         XCTAssertEqual(screen(8,[:])?.targets,[T(318,382,472,406)])
         XCTAssertEqual(screen(-1,[:])?.targets,[T(331,320,481,345)])
-        XCTAssertEqual(screen(-3,[0x4511f4:0])?.targets,[T(209,271,442,298),T(465,271,552,298),T(203,337,561,357)])
-        XCTAssertEqual(screen(-3,[0x4511f4:-85])?.targets,[T(209,90,442,117),T(465,90,552,117)])
-        XCTAssertNil(screen(5,[:])); XCTAssertNil(screen(0,[:]))
+        // Not offered: the update panel (its writer stops the runtime), 4 (World+0 set at once).
+        XCTAssertNil(screen(-3,[0x4511f4:0])); XCTAssertNil(screen(4,[:])); XCTAssertNil(screen(5,[:])); XCTAssertNil(screen(0,[:]))
 
         // In the messages: while player 3's cell waits, joystick 1's button 1
-        // is an MM_JOY press; joystick 2's is the menu's click, hidden from MM_JOY.
+        // is an MM_JOY press; joystick 2's is the menu's, hidden from MM_JOY.
         var now: UInt32 = 1000
         var current = screen(6,devices.merging([0x4511e0:45]) { $1 })
         let m = Messages(window:7,clock:{ now },point:{ (0,0) })
         m.capturedJoysticks = 2; m.menuGamepad = .init { current }
         let c: UInt32 = 32767
+        func drain() throws { while !m.queue.isEmpty { _ = try m.answer(.init(.get,[0,0,0])) } }
+        func lastMove() -> [UInt32]? { m.queue.last { $0.message == 0x200 }.map { [$0.lParam & 0xffff,$0.lParam >> 16] } }
         m.joystick(0,x:c,y:c,buttons:1); XCTAssertEqual(m.queue.map(\.message),[0x3b5])
-        m.joystick(1,x:c,y:c,buttons:1); XCTAssertEqual(m.queue.map(\.message),[0x3b5,0x200,0x201])
-        XCTAssertEqual(m.queue.last.map { [$0.lParam & 0xffff,$0.lParam >> 16] },[482,453])   // OK, the initial target
-        while !m.queue.isEmpty { _ = try m.answer(.init(.get,[0,0,0])) }
-        now += 150; m.joystick(1,x:c,y:c,buttons:0); XCTAssertEqual(m.queue.map(\.message),[0x202])   // no MM_JOY release
-        // Moves go left and right too; the cursor's target is the start.
+        // Its first press only shows the start, player 1's device box; the next clicks it.
+        m.joystick(1,x:c,y:c,buttons:1); XCTAssertEqual(m.queue.map(\.message),[0x3b5,0x200]); XCTAssertEqual(lastMove(),[246,227])
+        m.joystick(1,x:c,y:c,buttons:0); m.joystick(1,x:c,y:c,buttons:1)
+        XCTAssertEqual(m.queue.map(\.message),[0x3b5,0x200,0x201]); XCTAssertEqual(lastMove(),[246,227])
+        try drain(); now += 150; m.joystick(1,x:c,y:c,buttons:0); XCTAssertEqual(m.queue.map(\.message),[0x202])
+        try drain()
+        // Left and right move too: left of player 1's device box wraps to player 4's.
         current = screen(6,devices.merging([0x4511e0:0]) { $1 })
-        m.joystick(0,x:c,y:c,buttons:0); m.joystick(0,x:0,y:c,buttons:0)
-        XCTAssertEqual(m.queue.last { $0.message == 0x200 }.map { [$0.lParam & 0xffff,$0.lParam >> 16] },[385,421])  // OK → player 2's defend
+        m.joystick(0,x:c,y:c,buttons:0); m.joystick(0,x:0,y:c,buttons:0); XCTAssertEqual(lastMove(),[663,227])
+        // The point the controller left on CONTROL SETTINGS is not the address
+        // screen's selection: a move there goes to its start, Cancel.
+        try drain(); current = screen(3,[:])
+        m.joystick(0,x:c,y:c,buttons:0); m.joystick(0,x:c,y:65535,buttons:0); XCTAssertEqual(lastMove(),[486,369])
+        // A move and a press in one sample click the target moved to.
+        try drain()
+        m.joystick(0,x:c,y:c,buttons:0); m.joystick(0,x:0,y:c,buttons:1)
+        XCTAssertEqual(m.queue.filter { $0.message == 0x201 }.map { [$0.lParam & 0xffff,$0.lParam >> 16] },[[314,369]])
     }
 
     func testMessageQueueKeyMapAndTranslation() throws {

@@ -41,6 +41,9 @@
     let screen: () -> Screen?
     /// The target the controller last moved to, on screen `selected.screen`.
     private var selected: (screen: Int,target: Int)?
+    /// Where the controller last put the game's cursor, and on which screen:
+    /// a point it left on another screen is not this screen's selection.
+    private var placed: (screen: Int,x: Int32,y: Int32)?
     private var axes: [UInt32:(x: Int,y: Int)] = [:], directions: [UInt32:Direction] = [:], buttons: [UInt32:Bool] = [:]
     /// Joysticks whose button 1 is the menu's left button until it is up: the
     /// MM_JOY messages do not show it (a CONTROL SETTINGS cell would otherwise
@@ -84,11 +87,17 @@
         let down = state & 1 != 0,wasDown = buttons[id] ?? false
         buttons[id] = down
         if down && !wasDown && press == nil,let s = screen(),s.buttonsToGame != id,!s.targets.isEmpty {
-            let target = current(on:s,mouse:mouse) ?? s.initial
-            selected = (s.id,target)
-            let (x,y) = s.targets[target].center
-            messages.mouse(0x200,x:x,y:y,buttons:0); messages.mouse(0x201,x:x,y:y,buttons:1)
-            press = (id,x,y,nil,false); claimed.insert(id)
+            claimed.insert(id)
+            // This sample's move has already put the cursor on its target.
+            if let target = current(on:s,mouse:messages.lastMouse) {
+                let (x,y) = put(target,on:s,buttons:0,messages:messages)
+                messages.mouse(0x201,x:x,y:y,buttons:1)
+                press = (id,x,y,nil,false)
+            } else {
+                // Nothing selected on this screen yet: the first press only
+                // shows where the controller starts.
+                _ = put(s.initial,on:s,buttons:0,messages:messages)
+            }
         } else if !down && wasDown,press?.id == id {
             press?.released = true
         }
@@ -112,19 +121,27 @@
         press = nil
         messages.mouse(0x202,x:p.x,y:p.y,buttons:0)
     }
-    /// The target under the game's cursor (the last WM_MOUSEMOVE), else the
-    /// one last moved to on this screen.
+    /// The target under the game's cursor (the last WM_MOUSEMOVE) unless the
+    /// controller left it there on another screen, else the one last moved to
+    /// on this screen.
     private func current(on s: Screen,mouse: (Int32,Int32)?) -> Int? {
-        if let mouse,let i = s.targets.firstIndex(where: { $0.contains(mouse) }) { return i }
+        if let mouse,!(placed.map { $0.screen != s.id && $0.x == mouse.0 && $0.y == mouse.1 } ?? false),
+           let i = s.targets.firstIndex(where: { $0.contains(mouse) }) { return i }
         if let selected,selected.screen == s.id,selected.target < s.targets.count { return selected.target }
         return nil
     }
+    /// A move with nothing selected on the screen goes to its starting target.
     private func move(_ direction: Direction,on s: Screen,mouse: (Int32,Int32)?,messages: OriginalMacRuntimeMessages) {
         guard !s.targets.isEmpty else { return }
         let target = current(on:s,mouse:mouse).map { Self.next(from:$0,direction,in:s.targets) } ?? s.initial
-        selected = (s.id,target)
+        _ = put(target,on:s,buttons:press == nil ? 0 : 1,messages:messages)
+    }
+    /// The game's cursor to `target`'s centre (WM_MOUSEMOVE), which becomes the selection.
+    private func put(_ target: Int,on s: Screen,buttons: UInt32,messages: OriginalMacRuntimeMessages) -> (Int32,Int32) {
         let (x,y) = s.targets[target].center
-        messages.mouse(0x200,x:x,y:y,buttons:press == nil ? 0 : 1)
+        selected = (s.id,target); placed = (s.id,x,y)
+        messages.mouse(0x200,x:x,y:y,buttons:buttons)
+        return (x,y)
     }
     /// The next target in `direction`: among those whose centre lies that way,
     /// the nearest of the ones in the same row or column band (overlapping
@@ -157,7 +174,10 @@
     /// The mouse-only front screen of selector 44d064 (`word` reads a global),
     /// with the click targets of the recovered code; links to web pages and
     /// folders, the title's Update button and the bottom-left exit hotspot are
-    /// left to the mouse. Nil for any other selector.
+    /// left to the mouse. Nil for any other selector — also −3, the update
+    /// panel, whose Enable and Disable reach a settings writer the runtime
+    /// stops at (`OriginalApplicationMenuSession`, "Alternate settings
+    /// write"), and 4, which sets World+0 in its first frame.
     public static func screen(selector: Int32,word: (Int) -> Int32?) -> Screen? {
         typealias T = Target
         switch selector {
@@ -166,25 +186,20 @@
             guard let top = word(0x453da4) else { return nil }
             let base = top &+ 202
             return .init(id:0,targets:[(15,39),(45,70),(77,102),(107,132),(137,162)].map { T(276,base &+ $0.0,520,base &+ $0.1) })
-        case -3:
-            // The update panel: Enable, Disable and, folded, the description
-            // (`OriginalFrontScreenAlternate`; y 96, or the panel's moving top).
-            guard let stored = word(0x4511f4) else { return nil }
-            let y = stored == 0 ? 96 : stored
-            var targets = [T(209,y &+ 175,442,y &+ 202),T(465,y &+ 175,552,y &+ 202)]
-            if stored == 0 { targets.append(T(203,y &+ 241,561,y &+ 261)) }
-            return .init(id:-3,targets:targets)
         case -1: return .init(id:-1,targets:[T(331,320,481,345)])                          // waiting: Cancel
         case 1:                                                                             // Waiting, Connect, Back
             return .init(id:1,targets:[T(260,274,547,300),T(260,305,547,330),T(260,336,547,361)])
-        case 2,4: return .init(id:Int(selector),targets:[T(322,361,472,386)])               // Cancel / Back
-        case 3: return .init(id:3,targets:[T(239,357,389,382),T(411,357,561,382)])          // address: OK, Cancel
+        case 2: return .init(id:2,targets:[T(322,361,472,386)])                             // waiting: Cancel
+        // The address: OK, Cancel; Cancel first, as OK with no address typed
+        // would try to connect.
+        case 3: return .init(id:3,targets:[T(239,357,389,382),T(411,357,561,382)],initial:1)
         case 6:
             // CONTROL SETTINGS (`OriginalFrontControlSettings`): per player
             // (x 194+139·p) the name, the device box and the key cells a
             // click can select (a joystick's four direction rows cannot be
-            // set); then OK and Cancel. A cell waiting for a joystick button
-            // leaves that joystick's buttons to the game.
+            // set); then OK and Cancel. Player 1's device box first. A cell
+            // waiting for a joystick button leaves that joystick's buttons to
+            // the game.
             var targets: [T] = []
             for player in 0..<4 {
                 let x = Int32(194+139*player),device = word(0x44fb70+80*player) ?? 0
@@ -194,7 +209,7 @@
             targets += [T(405,441,560,465),T(582,441,737,465)]
             var capture: UInt32?
             if let cell = word(0x4511e0),cell > 0,let device = word(0x44fb70+Int(cell/20)*80),device > 0 { capture = UInt32(device-1) }
-            return .init(id:6,targets:targets,initial:targets.count-2,buttonsToGame:capture)
+            return .init(id:6,targets:targets,initial:1,buttonsToGame:capture)
         case 7:
             // RECORDING INFO (`OriginalFrontRecordingInfo`): the name, info and
             // email fields, the recording checkbox, OK and Cancel.
