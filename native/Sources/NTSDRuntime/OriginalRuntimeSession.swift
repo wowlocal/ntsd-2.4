@@ -256,8 +256,8 @@ public enum OriginalRuntimeSessionBoundary: Error, Equatable {
             // Scripted runs answer GetKeyState(VK_CAPITAL) with Caps Lock off.
             if arguments.contains("--script") { menu.capsLock = { 0 } }
             self.menu = menu; menu.sounds = sounds
-            if !arguments.contains("--original-title-menu") {
-                menu.messages.titleGamepad = OriginalRuntimeTitleGamepad { [unowned self] in self.titleMenuBase() }
+            if !arguments.contains("--original-menu-input") {
+                menu.messages.menuGamepad = OriginalRuntimeMenuGamepad { [unowned self] in self.menuScreen() }
             }
             // Live Winsock for ONLINE GAME (NETWORK_PLAY_PLAN.md); --no-network
             // keeps the declared stand-in (WSAStartup answers wVersion 0).
@@ -485,16 +485,15 @@ public enum OriginalRuntimeSessionBoundary: Error, Equatable {
             }
         } catch { stop(error) }
     }
-    /// The title menu's item base [453da4]+202 while the title shows: before
-    /// loading, with World+0 and the selector 44d064 both 0 (START sets
-    /// World+0 to 1; the other items set the selector, `OriginalMainMenu`).
-    private func titleMenuBase() -> Int32? {
+    /// The mouse-only front screen showing (MENU_GAMEPAD.md): before loading,
+    /// with World+0 0 (START and a connected network game set it to 1), by
+    /// the selector 44d064 (`OriginalMainMenu`, the front screens).
+    private func menuScreen() -> OriginalRuntimeMenuGamepad.Screen? {
         guard loading == nil,let state = started?.host.snapshot.session?.state else { return nil }
         let base = OriginalMatchPreparation.globalBase
-        guard (try? state.full.integer(at:0x458b00-base,as:UInt32.self)) == 0,
-              (try? state.full.integer(at:0x44d064-base,as:UInt32.self)) == 0,
-              let top = try? state.full.integer(at:0x453da4-base,as:Int32.self) else { return nil }
-        return top &+ 202
+        func word(_ address: Int) -> Int32? { try? state.full.integer(at:address-base,as:Int32.self) }
+        guard word(0x458b00) == 0,let selector = word(0x44d064) else { return nil }
+        return OriginalRuntimeMenuGamepad.screen(selector:selector,word:word)
     }
     /// A single bounded diagnostic of committed owned state. It never supplies
     /// game inputs or another process's expected state.

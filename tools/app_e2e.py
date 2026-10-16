@@ -120,17 +120,56 @@ def title_joystick_script(captures):
     return script.replace("20 click 350 230; 60 click 402 218; 100 key 74", "; ".join(TITLE_JOYSTICK), 1)
 
 
-def title_original_check(timeout, app=APP):
-    """`--original-title-menu`: the same title joystick input leaves the
-    original's mouse-only title showing (no loading), exit 0."""
-    with tempfile.TemporaryDirectory(prefix="ntsd-title-") as scratch:
-        done = subprocess.run([str(app), "--original", "--mute-music", "--mute-sounds", "--overlay", scratch, "--joysticks", "2",
-                               "--original-title-menu", "--virtual-clock", "123456789", "8", "--script", "; ".join(TITLE_JOYSTICK[:8] + ["300 exit"])],
+def joy_steps(steps):
+    """Script steps from (step, direction or "a") pairs: each sample, then the
+    stick centred and button 1 up 4 steps later (8 after a press)."""
+    words = {"up": "32767 0 0", "down": "32767 65535 0", "left": "0 32767 0", "right": "65535 32767 0", "a": "32767 32767 1"}
+    out = []
+    for step, what in steps:
+        out += [f"{step} joy 0 {words[what]}", f"{step + (8 if what == 'a' else 4)} joy 0 32767 32767 0"]
+    return out
+
+
+# CONTROL SETTINGS by joystick 1 alone: down twice and button 1 on the title,
+# then from player 2's "up" (under the cursor): up to its device box, left to
+# player 1's, button 1 (keyboard → joystick 1), down through player 1's attack,
+# jump and defend to OK, button 1.
+MENU_CONTROLS = joy_steps([(20, "down"), (28, "down"), (36, "down"), (44, "a"), (70, "up"), (78, "left"), (86, "a"),
+                           (120, "down"), (128, "down"), (136, "down"), (144, "down"), (152, "a")]) + ["230 exit"]
+# ONLINE GAME and back by joystick 1 alone: Connect to Opponent, Cancel on the
+# address screen, Back (up wraps to it), then down wraps to START on the title.
+MENU_NETWORK = joy_steps([(20, "down"), (28, "down"), (36, "a"), (70, "down"), (78, "down"), (86, "a"), (120, "right"),
+                          (128, "right"), (136, "a"), (170, "down"), (178, "up"), (186, "a"), (220, "down"), (228, "a")]) + ["400 exit"]
+
+
+def menu_run(script, extra, timeout, app):
+    with tempfile.TemporaryDirectory(prefix="ntsd-menu-") as scratch:
+        done = subprocess.run([str(app), "--original", "--mute-music", "--mute-sounds", "--overlay", scratch, "--joysticks", "2", *extra,
+                               "--virtual-clock", "123456789", "8", "--script", "; ".join(script)],
                               capture_output=True, text=True, timeout=timeout, env=APP_ENV)
         events = [json.loads(l) for l in done.stdout.splitlines() if l.startswith("{")]
-        loaded = [e for e in events if e.get("event") == "loaded"]
-        ok = done.returncode == 0 and not loaded and not any(e.get("event") == "boundary" for e in events)
-        return ok, {"exitCode": done.returncode, "loaded": len(loaded)}
+        saved = Path(scratch) / "data" / "control.txt"
+        # A boundary stop counts as a failed exit.
+        code = done.returncode if not any(e.get("event") == "boundary" for e in events) else -1
+        return code, events, saved.read_bytes() if saved.exists() else None
+
+
+def menu_checks(timeout, app=APP):
+    """MENU_GAMEPAD.md: `--original-menu-input` leaves the title showing for
+    the same joystick input; CONTROL SETTINGS and ONLINE GAME work with
+    joystick 1 alone."""
+    detail = {}
+    code, events, _ = menu_run(TITLE_JOYSTICK[:8] + ["300 exit"], ["--original-menu-input"], timeout, app)
+    loaded = sum(e.get("event") == "loaded" for e in events)
+    detail["original"] = {"exitCode": code, "loaded": loaded, "ok": code == 0 and loaded == 0}
+    packaged = (ROOT / "downloads/NTSD_2.4_2.0a_clean/NTSD 2.4_2.0a/data/control.txt").read_bytes()
+    code, events, saved = menu_run(MENU_CONTROLS, [], timeout, app)
+    detail["controls"] = {"exitCode": code, "saved": saved.decode(errors="replace") if saved else None,
+                          "ok": code == 0 and saved == packaged.replace(b"0 87 83 65", b"1 87 83 65", 1)}
+    code, events, _ = menu_run(MENU_NETWORK, ["--network-loopback"], timeout, app)
+    seen = {k: sum(e.get("event") == k for e in events) for k in ("loaded", "messageBox", "shellOpen")}
+    detail["network"] = {"exitCode": code, **seen, "ok": code == 0 and seen == {"loaded": 1, "messageBox": 0, "shellOpen": 0}}
+    return all(d["ok"] for d in detail.values()), detail
 
 
 # A recording the original wrote (distribution, VS). Earlier Mac recordings
@@ -451,9 +490,9 @@ def main():
             if not ok:
                 problems.append("recording"); reference["recording"] = {"opened": RECORDING_OPENED, "control.txt": "name naruto, recording off"}; observed["recording"] = detail
         if name == "title-joystick":
-            ok, detail = title_original_check(args.timeout, args.app)
+            ok, detail = menu_checks(args.timeout, args.app)
             if not ok:
-                problems.append("original-title"); reference["original-title"] = "no loading with --original-title-menu, exit 0"; observed["original-title"] = detail
+                problems.append("menus"); reference["menus"] = "title kept with --original-menu-input; control.txt with P1 on joystick 1; ONLINE GAME and back, then loaded"; observed["menus"] = detail
         if name == "altenter":
             ok, detail = altenter_fault_check(args.timeout, args.app)
             if not ok:

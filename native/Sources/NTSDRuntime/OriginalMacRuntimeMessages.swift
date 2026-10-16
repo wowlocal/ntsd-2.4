@@ -136,7 +136,9 @@ public struct OriginalMacRuntimeKey: Equatable {
     /// with their JOY_BUTTONnCHG bits; lParam holds x | y<<16.
     public func joystick(_ id: UInt32,x: UInt32,y: UInt32,buttons: UInt32) {
         guard id < min(capturedJoysticks,2) else { return }
-        let last = joysticks[id] ?? (x:32767,y:32767,buttons:0),state = buttons & 0xf
+        // The front screens' controller (MENU_GAMEPAD.md) may keep button 1 as the menu's.
+        let hidden = menuGamepad?.sample(id,x:x,y:y,buttons:buttons,messages:self,mouse:lastMouse,now:now) ?? 0
+        let last = joysticks[id] ?? (x:32767,y:32767,buttons:0),state = buttons & 0xf & ~hidden
         let packed = (x & 0xffff) | (y & 0xffff) << 16
         let moved = x.magnitude(from:last.x) > 100 || y.magnitude(from:last.y) > 100
         if moved { post(0x3a0+id,state,packed) }
@@ -144,10 +146,9 @@ public struct OriginalMacRuntimeKey: Equatable {
         if pressed != 0 { post(0x3b5+id,state | pressed << 8,packed) }
         if released != 0 { post(0x3b7+id,state | released << 8,packed) }
         joysticks[id] = (x:moved ? x : last.x,y:moved ? y : last.y,buttons:state)
-        titleGamepad?.sample(id,y:y,buttons:state,messages:self,mouse:lastMouse,now:now)
     }
-    /// The joysticks on the title menu, a departure from the original (MENU_GAMEPAD.md).
-    public var titleGamepad: OriginalRuntimeTitleGamepad?
+    /// The joysticks on the mouse-only front screens, a departure from the original (MENU_GAMEPAD.md).
+    public var menuGamepad: OriginalRuntimeMenuGamepad?
     /// The last WM_MOUSEMOVE's point, in client coordinates: where the game's cursor goes.
     public private(set) var lastMouse: (Int32,Int32)?
     func bytes(_ m: Message) -> [UInt8] {
@@ -157,14 +158,14 @@ public struct OriginalMacRuntimeKey: Equatable {
         switch q.kind {
         case .peek:
             guard q.arguments == [0,0,0,0] else { throw Boundary.arguments("PeekMessage") }
-            titleGamepad?.release(self,now:now)
+            menuGamepad?.release(self,now:now)
             guard let head = queue.first else { return .init(result:0) }
             return .init(result:1,writes:[.init(offset:0,bytes:bytes(head))])
         case .get:
             guard q.arguments == [0,0,0] else { throw Boundary.arguments("GetMessage") }
             guard !queue.isEmpty else { throw Boundary.emptyGet }
             let head = queue.removeFirst(); delivered.append(head)
-            titleGamepad?.delivered(head.message,lParam:head.lParam,now:now)
+            menuGamepad?.delivered(head.message,lParam:head.lParam,now:now)
             return .init(result:head.message == 0x12 ? 0 : 1,writes:[.init(offset:0,bytes:bytes(head))])
         case .translate:
             guard let bytes = q.message,bytes.count == 28 else { throw Boundary.arguments("TranslateMessage") }

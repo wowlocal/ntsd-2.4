@@ -79,17 +79,21 @@ under gamescope (SDL's X11 driver) with PipeWire sound.
 Steam gives the game a virtual Xbox 360 pad, which the game treats as the
 original's joystick 1. The controls are the original's, except on the title:
 
-- The title screen (START … OFFICAL WEBSITE) is mouse-only in the original.
-  Here up and down on the d-pad or the left stick also move the cursor from
-  item to item and A presses the item, a departure from the original the
-  user asked for ([MENU_GAMEPAD](research/MENU_GAMEPAD.md)). The touchscreen
-  and the right trackpad work as a mouse too.
+- The screens before the mode menu — the title, CONTROL SETTINGS, ONLINE
+  GAME and RECORDING INFO — are mouse-only in the original. Here the d-pad
+  or the left stick also moves the cursor to the next button or field in
+  that direction and A presses it, a departure from the original the user
+  asked for ([MENU_GAMEPAD](research/MENU_GAMEPAD.md)). In CONTROL SETTINGS,
+  A on a device box switches keyboard → joystick 1 → joystick 2, and a
+  joystick player's attack, jump or defend cell, once selected, takes the
+  next button pressed (A included). The touchscreen and the right trackpad
+  work as a mouse too.
+- Text — player names, the opponent's address, the recording info — needs
+  keys: open Steam's on-screen keyboard with Steam + X.
 - From the mode menu on the game reads the players' own devices. Joystick 1
   is player 3's default device: up and down choose the mode and A confirms;
   at the character selection A joins. CONTROL SETTINGS can give the
   joystick to player 1 instead.
-- CONTROL SETTINGS, RECORDING INFO and ONLINE GAME need the mouse (and the
-  keyboard for text) as in the original: use the touchscreen or trackpad.
 - In Game Mode B is a game button. Leave the game with the Steam button and
   **Exit Game**. In Desktop Mode Steam's desktop layout sends Esc for B, and
   Esc is the original's "Are you sure to quit?".

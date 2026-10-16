@@ -44,14 +44,20 @@ import XCTest
         for message: UInt32 in [0x3a0,0x3a1,0x3b5,0x3b6,0x3b7,0x3b8] { XCTAssertEqual(try m.answer(.init(.windowDefault,[7,message,0,0])),0) }
     }
 
+    typealias Gamepad = OriginalRuntimeMenuGamepad
+    /// The title with [453da4] = `top` (base `top`+202), or no menu screen.
+    static func title(_ top: Int32?) -> Gamepad.Screen? {
+        top.flatMap { t in Gamepad.screen(selector:0,word:{ $0 == 0x453da4 ? t : nil }) }
+    }
+
     /// MENU_GAMEPAD.md (a departure from the original): on the title, joystick
     /// samples move the mouse from item to item and button 1 clicks the item.
-    func testTitleGamepadMovesBetweenItemsAndClicks() throws {
-        var now: UInt32 = 1000, title: Int32? = 202
+    func testMenuGamepadMovesBetweenTitleItemsAndClicks() throws {
+        var now: UInt32 = 1000, title: Int32? = 0
         // The desktop point (MSG.pt) is not where the game's cursor is.
         let m = Messages(window:7,clock:{ now },point:{ (300,291) })
         m.capturedJoysticks = 2
-        m.titleGamepad = .init { title }
+        m.menuGamepad = .init { Self.title(title) }
         /// The queued mouse messages [message, wParam, x, y]; GetMessage then delivers the queue.
         func mice() throws -> [[Int32]] {
             let out = m.queue.filter { (0x200...0x202).contains($0.message) }
@@ -77,7 +83,9 @@ import XCTest
         // The press: held 150 ms from GetMessage's delivery of WM_LBUTTONDOWN.
         m.joystick(0,x:c,y:c,buttons:1)
         XCTAssertEqual(m.queue.suffix(2).map(\.message),[0x200,0x201]); XCTAssertEqual(m.queue.last?.wParam,1)
-        m.joystick(1,x:c,y:c,buttons:1); m.joystick(1,x:c,y:c,buttons:0)                         // a second press waits
+        XCTAssertFalse(m.queue.contains { $0.message == 0x3b5 })                                    // button 1 is the menu's
+        m.joystick(1,x:c,y:c,buttons:1); m.joystick(1,x:c,y:c,buttons:0)                         // a second press is the game's
+        XCTAssertEqual(m.queue.suffix(2).map(\.message),[0x3b6,0x3b8])
         now += 500; m.joystick(0,x:c,y:c,buttons:0); _ = try m.answer(.init(.peek,[0,0,0,0]))
         XCTAssertEqual(m.queue.filter { $0.message == 0x202 }.count,0)                              // not delivered yet
         XCTAssertEqual(try mice(),[[0x200,0,398,ys[4]],[0x201,1,398,ys[4]]])
@@ -105,18 +113,18 @@ import XCTest
         // Off the title the joysticks only post their MM_JOY messages.
         m.joystick(0,x:c,y:65535,buttons:1); now += 500; m.joystick(0,x:c,y:65535,buttons:0); m.joystick(0,x:c,y:c,buttons:0)
         XCTAssertEqual(m.queue.map(\.message),[0x3a0,0x3b5,0x3b7,0x3a0])
-        XCTAssertEqual(OriginalRuntimeTitleGamepad.item(at:(275,ys[0]),base:202),nil)
-        XCTAssertEqual(OriginalRuntimeTitleGamepad.item(at:(520,202+162),base:202),4)
+        let targets = try XCTUnwrap(Self.title(0)).targets
+        XCTAssertFalse(targets.contains { $0.contains((275,ys[0])) }); XCTAssertTrue(targets[4].contains((520,202+162)))
     }
 
-    /// MENU_GAMEPAD.md: off the title the departure reads the title state only
-    /// on a direction or button edge and never the clock; every clock read is a
-    /// posted message's time.
-    func testTitleGamepadReadsNothingOffTheTitle() throws {
+    /// MENU_GAMEPAD.md: off the menu screens the departure reads the screen
+    /// only on a direction or button edge and never the clock; every clock read
+    /// is a posted message's time.
+    func testMenuGamepadReadsNothingOffTheMenus() throws {
         var reads = 0, titleReads = 0
         let m = Messages(window:7,clock:{ reads += 1; return 1000 },point:{ (0,0) })
         m.capturedJoysticks = 2
-        m.titleGamepad = .init { titleReads += 1; return nil }
+        m.menuGamepad = .init { titleReads += 1; return nil }
         let c: UInt32 = 32767
         for (y,b) in [(65535,1),(65535,1),(65535,0),(c,0),(0,1),(c,0)] as [(UInt32,UInt32)] {
             m.joystick(0,x:c,y:y,buttons:b); m.joystick(1,x:c,y:y,buttons:b)
@@ -125,6 +133,62 @@ import XCTest
         while !m.queue.isEmpty { _ = try m.answer(.init(.peek,[0,0,0,0])); _ = try m.answer(.init(.get,[0,0,0])) }
         XCTAssertEqual(reads,m.delivered.count); XCTAssertEqual(titleReads,8)
         XCTAssertFalse(m.delivered.contains { [0x200,0x202].contains($0.message) })
+    }
+
+    /// MENU_GAMEPAD.md: the other mouse-only front screens' targets, the
+    /// nearest-target moves with their wrap, and CONTROL SETTINGS' capture.
+    func testMenuGamepadScreensMovesAndCapture() throws {
+        func screen(_ selector: Int32,_ globals: [Int:Int32]) -> Gamepad.Screen? { Gamepad.screen(selector:selector,word:{ globals[$0] }) }
+        typealias T = Gamepad.Target
+        let devices: [Int:Int32] = [0x44fb70:0,0x44fb70+80:0,0x44fb70+160:1,0x44fb70+240:2]
+        // Per player: name, device box, the settable key cells; then OK and Cancel.
+        let controls = try XCTUnwrap(screen(6,devices.merging([0x4511e0:0]) { $1 }))
+        XCTAssertEqual(controls.targets.count,30); XCTAssertEqual(controls.initial,28); XCTAssertNil(controls.buttonsToGame)
+        XCTAssertEqual(controls.targets[0],T(194,156,299,173)); XCTAssertEqual(controls.targets[1],T(194,182,299,272))
+        XCTAssertEqual(controls.targets[2],T(194,280,299,298)); XCTAssertEqual(controls.targets[20],T(472,368,577,386))
+        XCTAssertEqual(controls.targets[28],T(405,441,560,465)); XCTAssertEqual(controls.targets[29],T(582,441,737,465))
+        let t = controls.targets
+        XCTAssertEqual(Gamepad.next(from:11,.up,in:t),10)        // player 2's up → its device box
+        XCTAssertEqual(Gamepad.next(from:10,.left,in:t),1)       // → player 1's device box
+        XCTAssertEqual(Gamepad.next(from:1,.down,in:t),2)        // → player 1's up
+        XCTAssertEqual(Gamepad.next(from:19,.down,in:t),20)      // a joystick's device box → its attack row
+        XCTAssertEqual(Gamepad.next(from:22,.down,in:t),28)      // player 3's defend → OK
+        XCTAssertEqual(Gamepad.next(from:28,.right,in:t),29)     // OK → Cancel
+        XCTAssertEqual(Gamepad.next(from:0,.up,in:t),8)          // wrap: player 1's name → its defend row
+        XCTAssertEqual(Gamepad.next(from:8,.down,in:t),28)       // nothing in band or within 45°: player 1's defend → OK
+        XCTAssertEqual(Gamepad.next(from:29,.right,in:t),28)     // wrap along the row: Cancel → OK
+        XCTAssertEqual(Gamepad.next(from:28,.left,in:t),17)      // no row band: OK → player 2's defend, the nearest
+        // A cell waiting for a joystick button leaves that joystick's buttons to the game.
+        XCTAssertEqual(screen(6,devices.merging([0x4511e0:45]) { $1 })?.buttonsToGame,0)   // player 3, joystick 1
+        XCTAssertEqual(screen(6,devices.merging([0x4511e0:66]) { $1 })?.buttonsToGame,1)   // player 4, joystick 2
+        XCTAssertNil(screen(6,devices.merging([0x4511e0:3]) { $1 })?.buttonsToGame)        // player 1's keyboard
+        // The network screens, RECORDING INFO, the update panel and the waiting screen.
+        XCTAssertEqual(screen(1,[:])?.targets,[T(260,274,547,300),T(260,305,547,330),T(260,336,547,361)])
+        XCTAssertEqual(screen(2,[:])?.targets,[T(322,361,472,386)]); XCTAssertEqual(screen(4,[:])?.targets,[T(322,361,472,386)])
+        XCTAssertEqual(screen(3,[:])?.targets,[T(239,357,389,382),T(411,357,561,382)])
+        XCTAssertEqual(screen(7,[:])?.targets.count,6); XCTAssertEqual(screen(7,[:])?.initial,4)
+        XCTAssertEqual(screen(8,[:])?.targets,[T(318,382,472,406)])
+        XCTAssertEqual(screen(-1,[:])?.targets,[T(331,320,481,345)])
+        XCTAssertEqual(screen(-3,[0x4511f4:0])?.targets,[T(209,271,442,298),T(465,271,552,298),T(203,337,561,357)])
+        XCTAssertEqual(screen(-3,[0x4511f4:-85])?.targets,[T(209,90,442,117),T(465,90,552,117)])
+        XCTAssertNil(screen(5,[:])); XCTAssertNil(screen(0,[:]))
+
+        // In the messages: while player 3's cell waits, joystick 1's button 1
+        // is an MM_JOY press; joystick 2's is the menu's click, hidden from MM_JOY.
+        var now: UInt32 = 1000
+        var current = screen(6,devices.merging([0x4511e0:45]) { $1 })
+        let m = Messages(window:7,clock:{ now },point:{ (0,0) })
+        m.capturedJoysticks = 2; m.menuGamepad = .init { current }
+        let c: UInt32 = 32767
+        m.joystick(0,x:c,y:c,buttons:1); XCTAssertEqual(m.queue.map(\.message),[0x3b5])
+        m.joystick(1,x:c,y:c,buttons:1); XCTAssertEqual(m.queue.map(\.message),[0x3b5,0x200,0x201])
+        XCTAssertEqual(m.queue.last.map { [$0.lParam & 0xffff,$0.lParam >> 16] },[482,453])   // OK, the initial target
+        while !m.queue.isEmpty { _ = try m.answer(.init(.get,[0,0,0])) }
+        now += 150; m.joystick(1,x:c,y:c,buttons:0); XCTAssertEqual(m.queue.map(\.message),[0x202])   // no MM_JOY release
+        // Moves go left and right too; the cursor's target is the start.
+        current = screen(6,devices.merging([0x4511e0:0]) { $1 })
+        m.joystick(0,x:c,y:c,buttons:0); m.joystick(0,x:0,y:c,buttons:0)
+        XCTAssertEqual(m.queue.last { $0.message == 0x200 }.map { [$0.lParam & 0xffff,$0.lParam >> 16] },[385,421])  // OK → player 2's defend
     }
 
     func testMessageQueueKeyMapAndTranslation() throws {
