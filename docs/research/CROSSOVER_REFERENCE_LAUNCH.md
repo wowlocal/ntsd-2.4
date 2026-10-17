@@ -1,5 +1,34 @@
 # Original NTSD process launched through CrossOver
 
+## CrossOver 25.1.1 smoke check — 2026-10-17
+
+After the user's license activation request, the supplied license/signature files
+were installed unchanged. Its update entitlement ends 2025-12-02, so CrossOver
+26.3 was preserved in Downloads and replaced with official, signature-verified,
+notarized 25.1.1.38624. CrossOver opens without the expired-trial screen.
+
+The user then asked whether this runs NTSD from the project. One ordinary launch
+uses unchanged `run-ntsd24.sh` with explicit environment overrides. All 1,595
+project clean-distribution files match the original manifest, including the pinned
+EXE. The existing XP bottle's 1,170 entries were copied and verified before use;
+the copy now records 25.1.1, while the original remains 26.3. No debugger, memory
+modification, baseline edit or Native change was used.
+
+X5 is below its reserve. This bounded runtime check uses an APFS sparse image on
+verified T7 to preserve bottle symlinks, with a 4 GiB capacity and at least 40 GiB
+free on T7. It creates no build or working tree. Exact paths, launch job, preserved
+startup log and hashes are in the [checkpoint](../evidence/crossover-25.1.1-smoke-20261017.json).
+
+Original PID 91439, started 2026-10-17 19:34:30 Europe/Amsterdam, is live with its
+cwd in the task-owned game copy. The startup log contains GStreamer music
+warnings. CUA does not list the Wine window and reports `Invalid app: NTSD 2.4.exe`;
+the user was asked to report the visible title/menu/error. Title/menu, gameplay,
+input and audio remain unconfirmed. The live process is left running and must
+not be restarted for silence. This is Wine/Rosetta evidence, not actual Windows
+or full-game acceptance; earlier captures and plans remain unchanged.
+
+## Historical launch — 2026-09-26
+
 2026-09-26. Continues [setup](CROSSOVER_REFERENCE_SETUP.md) under its existing
 [plan](CROSSOVER_REFERENCE_SETUP_PLAN.md).
 [Launch checkpoint](../evidence/crossover-reference-launch.json).

@@ -1,0 +1,82 @@
+{
+  "schemaVersion": 1,
+  "recordedUTC": "2026-10-17T17:35:34.889171+00:00",
+  "question": "Project original NTSD launch after licensed downgrade to CrossOver 25.1.1",
+  "scope": "One ordinary runtime launch, not a new behavioral study or whole-game acceptance",
+  "runtime": {
+    "macOS": "27.0.1 (26A434)",
+    "CrossOver": "25.1.1.38624",
+    "license": "Original supplied license/signatures installed unchanged; SHA256 signature verified against vendor key; activated UI, no trial screen",
+    "CodeWeaversAppVerification": "codesign deep strict valid; spctl accepted Notarized Developer ID"
+  },
+  "source": {
+    "projectPath": "/Users/michael/Developer/ntsd-2.4/downloads/NTSD_2.4_2.0a_clean/NTSD 2.4_2.0a",
+    "exeSHA256": "3f7ac67c5890ef979ee24a6dae5528056e7f631725c292cf9cb0a928ebeff71c",
+    "gameFilesVerified": 1595,
+    "bottleEntriesVerified": 1170,
+    "baselineWritten": false,
+    "originalBottleWritten": false
+  },
+  "storage": {
+    "taskRoot": "/Volumes/T7/ntsd-2.4-artifacts/crossover-25.1.1-smoke-20261017",
+    "APFSRuntimeMount": "/Volumes/NTSD-CrossOver-Test",
+    "image": "/Volumes/T7/ntsd-2.4-artifacts/crossover-25.1.1-smoke-20261017/runtime.sparseimage",
+    "reason": "X5 below 40 GiB reserve; local volume also low. T7 verified ExFAT UUID 7C9569C1-BC8F-3288-B3FD-8831A3F07FAA with over 1 TiB free; APFS image preserves bottle symlinks. No build or working tree created."
+  },
+  "launch": {
+    "launcher": "run-ntsd24.sh",
+    "launches": 1,
+    "pid": 91439,
+    "startedLocal": "2026-10-17 19:34:30 Europe/Amsterdam",
+    "cwd": "/Volumes/NTSD-CrossOver-Test/game/NTSD 2.4_2.0a",
+    "processObservation": [
+      "90909     1 Sat Oct 17 19:34:16 2026        00:41 Ss     0.0 /Applications/CrossOver.app/Contents/SharedSupport/CrossOver/lib/wine/i386-windows/winewrapper.exe --workdir /Volumes/NTSD-CrossOver-Test/game/NTSD 2.4_2.0a --start -- /Volumes/NTSD-CrossOver-Test/game/NTSD 2.4_2.0a/NTSD 2.4.exe ",
+      "91067     1 Sat Oct 17 19:34:18 2026        00:39 Ss     0.0 /Applications/CrossOver.app/Contents/SharedSupport/CrossOver/lib/wine/../../bin/wineserver",
+      "91439     1 Sat Oct 17 19:34:30 2026        00:27 Ss     0.0 Z:\\Volumes\\NTSD-CrossOver-Test\\game\\NTSD 2.4_2.0a\\NTSD 2.4.exe "
+    ],
+    "copiedBottleVersion": "25.1.1.38624",
+    "preservedBottleVersion": "26.3.0.39832"
+  },
+  "result": {
+    "process": "Original EXE live at checkpoint",
+    "UI": "Wine window absent from CUA inventory; getApp(\"NTSD 2.4.exe\") returned Invalid app: NTSD 2.4.exe",
+    "titleMenuGameplay": "not confirmed; user observation requested",
+    "music": "startup log contains GStreamer-CRITICAL element/state/refcount warnings; no audio success claimed",
+    "sourceFault": "none observed in preserved startup log; no crash or completed startup inferred from process alone",
+    "processDisposition": "Left running; do not restart for silence"
+  },
+  "records": [
+    {
+      "path": "/Volumes/T7/ntsd-2.4-artifacts/crossover-25.1.1-smoke-20261017/plan.json",
+      "bytes": 1180,
+      "sha256": "fcbdcb66d7e3e58d372d2a0c6c3e5bcf9cab2420579bee2a04417a8039f97cd4"
+    },
+    {
+      "path": "/Volumes/T7/ntsd-2.4-artifacts/crossover-25.1.1-smoke-20261017/inputs.json",
+      "bytes": 533,
+      "sha256": "76c0efd4f726305f788169f879db3dbd8b0b197cdea9f65b0600dd4cab4af692"
+    },
+    {
+      "path": "/Volumes/T7/ntsd-2.4-artifacts/crossover-25.1.1-smoke-20261017/launch1.job.json",
+      "bytes": 673,
+      "sha256": "9b71093fd3c5bbd138580d454ccaf53d3e0df979c130f13f047f5a57c612fe72"
+    },
+    {
+      "path": "/Volumes/T7/ntsd-2.4-artifacts/crossover-25.1.1-smoke-20261017/checkpoint1.json",
+      "bytes": 1125,
+      "sha256": "1ae42014322c7507e068881ce747e1e20ea1846cba17e7bc06c809cca44801a4"
+    },
+    {
+      "path": "/Volumes/T7/ntsd-2.4-artifacts/crossover-25.1.1-smoke-20261017/launch1-checkpoint1.log",
+      "bytes": 10172,
+      "sha256": "4f3d32ac1b22a1de4c6799551c4466df41de605a67b01cdc52fef986ad57557c"
+    }
+  ],
+  "preflightFailure": "KeyError: Mounted before writes; corrected to actual diskutil MountPoint/WritableVolume fields",
+  "openGates": [
+    "manual visible window/error observation",
+    "gameplay and input",
+    "audio"
+  ],
+  "nativeCodeChanged": false
+}
