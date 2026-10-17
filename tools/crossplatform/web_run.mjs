@@ -54,6 +54,12 @@
 // or (any engine) keeps it open --for SECONDS (no program, no reports: the
 // page's and the worker's output is the browser console's; with --steps the
 // worker's console is printed on stderr).
+// --packed DIR (with --canvas) reads /app and /music from a static folder
+// built by web_app.py build (TVOS_WEB W5): the page's loader fetches DIR's
+// packs (served under /static/ with data-*/br/ as brotli) and the program is
+// DIR's (the PROGRAM argument is not served), so the scenarios run from the
+// files a host delivers; other mounts stay the runner's. With
+// NTSD_WEB_DATA_IN_MEMORY=1 the loader keeps them in memory, not OPFS.
 // --original-window shows the original window (the frame at one CSS pixel per
 // pixel, WINDOW_SCALING S2). --precompressed serves a file's NAME.br or NAME.gz form (web_app.py build
 // --compress) with Content-Encoding when the browser accepts it, as a host
@@ -83,7 +89,7 @@ if (sepAt < 0 || sepAt + 1 >= argv.length) {
 const options = argv.slice(2, sepAt);
 const [program, ...args] = argv.slice(sepAt + 1);
 const mounts = [], guestEnv = { TZ: env.TZ ?? 'Etc/GMT-1' };
-let holdFor = null, precompressed = false, originalWindow = false;
+let holdFor = null, precompressed = false, originalWindow = false, packed = null;
 const served = { br: 0, gzip: 0, plain: 0 };   // --precompressed: responses by encoding
 let argv0 = program, metricsFile = null, canvas = false, interactive = false, answer = null, steps = null, timeout = 3300, serve = null, kept = null, port = 0;
 for (let i = 0; i < options.length; i += 2) {
@@ -98,6 +104,7 @@ for (let i = 0; i < options.length; i += 2) {
   if (options[i] === '--url') continue;
   if (options[i] === '--for') { holdFor = Number(options[i + 1]); continue; }
   if (options[i] === '--precompressed') { precompressed = true; i--; continue; }
+  if (options[i] === '--packed' && options[i + 1]) { packed = resolve(options[i + 1]); continue; }
   if (options[i] === '--original-window') { originalWindow = true; i--; continue; }
   if (options[i] === '--port') {
     port = Number(options[i + 1]);
@@ -115,6 +122,9 @@ for (let i = 0; i < options.length; i += 2) {
 }
 if (external && steps && holdFor !== null) { console.error('web_run.mjs: --url takes --steps or --for, not both'); exit(2); }
 if (mounts.some(m => m.persist) && !canvas) { console.error('web_run.mjs: --persist needs --canvas (the page keeps it)'); exit(2); }
+if (packed && !canvas) { console.error('web_run.mjs: --packed needs --canvas (the page runs the loader)'); exit(2); }
+const built = packed ? JSON.parse(readFileSync(join(packed, 'config.json'), 'utf8')) : null;   // its program and index
+if (built) mounts.unshift(...built.mounts.filter(m => m.packed).map(m => ({ guest: m.guest, writable: false, packed: true })));
 
 const headers = { 'Cross-Origin-Opener-Policy': 'same-origin', 'Cross-Origin-Embedder-Policy': 'require-corp',
                   'Cross-Origin-Resource-Policy': 'same-origin', 'Cache-Control': 'no-store' };
@@ -182,9 +192,11 @@ const server = createServer(async (req, res) => {
   try {
     if (req.method === 'GET' && (url.pathname === '/web/config.json' || url.pathname === '/config')) {   // the page's config.json (before the /web/ files)
       if (steps && !stepsStarted) { stepsStarted = true; runSteps().catch(e => say(`web_run.mjs: steps: ${e}\n`)); }
-      return send(200, JSON.stringify({ runner: true, program: '/program.wasm', args: [argv0, ...args], env: guestEnv, canvas, frameBytes: 32 << 20,
+      return send(200, JSON.stringify({ runner: true, program: built ? `/static/${built.program}` : '/program.wasm',
+                                        ...(built ? { data: `/static/${built.data}`, dataInMemory: env.NTSD_WEB_DATA_IN_MEMORY === '1' } : {}),
+                                        args: [argv0, ...args], env: guestEnv, canvas, frameBytes: 32 << 20,
                                         interactive, autostart: answer !== null, ...(answer === null ? {} : { answer }), report: metricsFile !== null, originalWindow,
-                                        mounts: mounts.map(m => ({ guest: m.guest, writable: m.writable, ...(m.persist ? { persist: true } : {}) })) }), 'application/json');
+                                        mounts: mounts.map(m => ({ guest: m.guest, writable: m.writable, ...(m.persist ? { persist: true } : {}), ...(m.packed ? { packed: true } : {}) })) }), 'application/json');
     }
     if (req.method === 'GET' && url.pathname.startsWith('/web/')) {
       const name = url.pathname.slice(5);
@@ -193,9 +205,15 @@ const server = createServer(async (req, res) => {
       return existsSync(file) ? send(200, readFileSync(file), types[name.slice(name.lastIndexOf('.'))] ?? 'application/octet-stream') : send(404);
     }
     if (req.method === 'GET' && url.pathname === '/program.wasm') return file(program, types['.wasm']);
+    if (req.method === 'GET' && packed && url.pathname.startsWith('/static/')) {   // the built folder, as a host serves it
+      const rel = url.pathname.slice(8).split('/').map(decodeURIComponent).join('/'), path = hostPath({ host: packed }, rel);
+      if (!path || !existsSync(path) || !statSync(path).isFile()) return send(404);
+      const type = types[path.slice(path.lastIndexOf('.'))] ?? (path.endsWith('.json') ? 'application/json' : 'application/octet-stream');
+      return send(200, readFileSync(path), type, /^data-[^/]+\/br\//.test(rel) ? { 'Content-Encoding': 'br' } : {});
+    }
     const m = url.pathname.match(/^\/m\/(\d+)\/?(.*)$/);
     if (m) {
-      const mount = mounts[Number(m[1])]; if (!mount || mount.persist) return send(404);   // a kept mount is the page's
+      const mount = mounts[Number(m[1])]; if (!mount || mount.persist || mount.packed) return send(404);   // a kept or packed mount is the page's
       const rel = m[2].split('/').map(decodeURIComponent).join('/');
       const path = hostPath(mount, rel); if (!path) return send(403);
       if (req.method === 'GET') {

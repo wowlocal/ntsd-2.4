@@ -21,7 +21,11 @@
      browser's; the game's Alt+Enter stays the game's) and the saves' state
      with a reset. ?original-window (or config.originalWindow) keeps the
      original window: the frame at one CSS pixel per pixel, centred, shrunk
-     only to fit a smaller window (WINDOW_SCALING S2). -->
+     only to fit a smaller window (WINDOW_SCALING S2). A static folder's
+     data (config.data, TVOS_WEB W5: packs listed by an index) comes through
+     a loader worker (pack-loader.js) that starts with the page, as does the
+     module's compilation, so both run while the player has not yet clicked;
+     the game worker reads the packed files from it. -->
 <style>
   html, body { margin: 0; height: 100%; background: #000; overflow: hidden; touch-action: none; }
   body { display: flex; align-items: center; justify-content: center; }
@@ -76,6 +80,10 @@
     const worker = new Worker('wasi-worker.js');
     worker.onerror = e => fail(`worker: ${e.message || e}`);
     if (!config.canvas) return worker.postMessage(config);
+    // The module compiles while the page waits for the player (W5); the
+    // runner's runs compile at the start, as before, so its metrics compare.
+    if (!runner) worker.postMessage({ kind: 'prepare', program: config.program });
+    const data = packed(config);   // the loader's link for the worker, once the index is in
     const frames = new SharedArrayBuffer(32 + config.frameBytes), header = new Int32Array(frames, 0, 8);
     const canvas = document.createElement('canvas'); document.body.append(canvas);
     const context = canvas.getContext('2d', { alpha: false });
@@ -154,7 +162,6 @@
     const input = new SharedArrayBuffer(4 * (2 + 256 * 5)), ring = new Int32Array(input);
     const pads = new SharedArrayBuffer(4 * 9), padState = new Int32Array(pads);
     const dialog = new SharedArrayBuffer(8), answer = new Int32Array(dialog);
-    const gate = new SharedArrayBuffer(4), fetchGate = new Int32Array(gate);   // W3f: the program's reads first
     // Sound (W2b-3): a ring of stereo Float32 frames the worker fills and
     // web/audio.js plays, made on the player's gesture (browsers allow an
     // AudioContext to run only after one). 44.1 kHz where the browser allows
@@ -353,7 +360,10 @@
         ready = withoutKept(config); notice(`Saves are not available in this browser (${e && e.name || e}): playing without saving`);
       }
       savesButton();
-      worker.postMessage({ ...ready, frames, input, pads, dialog, fetchGate: gate, ...(rate ? { audio: { ring: soundRing, rate } } : {}) });
+      let link;
+      try { link = await data; } catch (e) { return fail(`game data: ${e && e.message || e}`); }
+      worker.postMessage({ ...withEntries(ready, link), frames, input, pads, dialog, ...(rate ? { audio: { ring: soundRing, rate } } : {}) },
+                         link ? [link.loader.port] : []);
     }
     // The first two gamepads, each kept in the slot it first took; d-pad over
     // the left stick (standard mapping), A/B/X/Y as buttons 1-4. A pad that
@@ -466,45 +476,52 @@
       }
       return out;
     }
-    // A static page's data (W3f): fetched here while the program runs (the
-    // worker never yields), the files it reads first first, into the cache its
-    // synchronous reads use; progress on the loading notice, then in a corner
-    // until done. The program comes first until its first frame: no new fetch
-    // starts while it waits on a read (the fetch gate) — else the menu's music
-    // waited behind the whole download; afterwards two of the 4 lanes go on
-    // regardless, so a program reading ahead of them is not left fetching file
-    // by file. 4 at a time leave connections free for its reads (6 per host
-    // over HTTP/1.1 in Chromium; tuned on that). They stop when the game ends.
-    async function fetchAll(files) {
-      const total = files.reduce((n, f) => n + f.size, 0), mb = n => Math.round(n / 1e6);
-      let loaded = 0, next = 0, failed = 0;
-      const status = document.createElement('div'); status.className = 'fetching'; document.body.append(status);
-      const show = () => {
-        if (loading) { loading.textContent = `Loading… ${mb(loaded)} / ${mb(total)} MB`; status.textContent = ''; }
-        else status.textContent = `Game data ${mb(loaded)} / ${mb(total)} MB`;
-        self.ntsdPage.prefetch = `${loaded}/${total}`; report.prefetchFailed = failed;
-      };
-      const timer = setInterval(show, 200); show();
-      const sleep = ms => new Promise(ok => setTimeout(ok, ms));
-      async function lane(index) {
-        while (next < files.length && !reported) {
-          while (Atomics.load(fetchGate, 0) > 0 && (index >= 2 || !report.draws) && !reported) await sleep(20);
-          if (next >= files.length || reported) break;   // taken meanwhile, or the game is over
-          const f = files[next++];
-          let ok = false;
-          for (let attempt = 0; attempt < 3 && !ok; attempt++) {
-            if (attempt) await sleep(500 * attempt);
-            try {
-              const r = await fetch(f.url);
-              if (r.ok) { await r.arrayBuffer(); ok = true; }
-              else { if (r.body) r.body.cancel().catch(() => {}); if (r.status < 500 && r.status !== 408 && r.status !== 429) break; }
-            } catch {}
-          }
-          if (ok) loaded += f.size; else failed++;   // the program fetches it when it reads it
-        }
+    // A static folder's packed data (W5): the index lists each packed
+    // mount's entries and the packs; the loader worker fetches and keeps
+    // them and answers the game worker's reads over a MessagePort. Its
+    // progress shows on the start cover and the loading notice, then in a
+    // corner until every eager pack is in; a pack that cannot arrive is shown.
+    let progressLine = null, cover = null, dataFailed = false;
+    async function packed(config) {
+      if (!config.data) return null;
+      const compiledOnce = new Promise(ok => worker.addEventListener('message', ({ data: m }) => { if (m.kind === 'compiled') ok(); }));
+      const r = await fetch(config.data); if (!r.ok) throw new Error(`${config.data}: HTTP ${r.status}`);
+      const index = await r.json(), base = new URL(config.data, location.href);
+      const files = [], mounts = {};
+      for (const m of config.mounts) if (m.packed) {
+        const listed = index.mounts[m.guest]; if (!listed) throw new Error(`the index has no ${m.guest}`);
+        mounts[m.guest] = listed.map(e => (e.dir ? e : { path: e.path, size: e.size, id: files.push({ pack: e.pack, offset: e.offset, size: e.size }) - 1 }));
       }
-      await Promise.all(Array.from({ length: 4 }, (_, i) => lane(i)));
-      clearInterval(timer); show(); status.remove(); report.prefetchDoneMs = Math.round(performance.now());
+      const loader = new Worker('pack-loader.js'), state = new SharedArrayBuffer(4 * Math.max(1, files.length)), channel = new MessageChannel();
+      loader.onerror = e => notice(`The game's data loader stopped: ${e.message || e}`);
+      loader.onmessage = ({ data: m }) => {
+        if (m.kind === 'failed') {   // each failure on the console, the first on the page
+          log(`web_run: data: ${m.url}: ${m.error}\n`);
+          if (!dataFailed) { dataFailed = true; notice(`Some game data could not be loaded (${m.error}). Reloading the page tries again.`); }
+          return;
+        }
+        if (m.kind !== 'progress') return;
+        self.ntsdPage.loader = report.loader = m;   // in the page's report too (OPFS or memory, reads, waits)
+        if (m.stored >= m.total && report.dataDoneMs === undefined) report.dataDoneMs = Math.round(performance.now());
+        showProgress(m);
+      };
+      // ?data-in-memory (or config.dataInMemory): the loader keeps nothing in OPFS (a check of the memory path).
+      loader.postMessage({ kind: 'init', key: base.pathname.split('/').slice(-2, -1)[0], files, state, memory: query.has('data-in-memory') || !!config.dataInMemory,
+                           packs: index.packs.map(p => ({ url: new URL(p.url, base).href, raw: p.raw, lazy: !!p.lazy, header: p.header || 0 })) });
+      loader.postMessage({ kind: 'port', port: channel.port1 }, [channel.port1]);
+      compiledOnce.then(() => loader.postMessage({ kind: 'go' }));   // until then the module has the bandwidth
+      return { mounts, loader: { port: channel.port2, state } };
+    }
+    const withEntries = (config, link) => (link ? { ...config, loader: link.loader,
+      mounts: config.mounts.map(m => (m.packed ? { ...m, entries: link.mounts[m.guest] } : m)) } : config);
+    function showProgress(m) {
+      const done = m.stored >= m.total, percent = m.total ? Math.floor(m.stored / m.total * 100) : 100;
+      const text = done ? '' : `Game data ${percent}%`;
+      if (cover) { progressLine ??= cover.appendChild(document.createElement('div')); progressLine.style.cssText = 'position:absolute;bottom:24px;font:14px system-ui;color:#fffb'; progressLine.textContent = text; }
+      if (loading) loading.textContent = done ? 'Loading…' : `Loading… ${percent}%`;
+      let corner = document.querySelector('.fetching');
+      if (!loading && !cover && !done) { corner ??= document.body.appendChild(Object.assign(document.createElement('div'), { className: 'fetching' })); corner.textContent = text; }
+      else if (corner && (done || loading)) corner.remove();
     }
     // Questions from the worker; an automated run answers config.answer at once.
     function reply(index) { asking = false; released = false; Atomics.store(answer, 1, index); Atomics.store(answer, 0, 1); Atomics.notify(answer, 0); }
@@ -520,8 +537,6 @@
         if (m.text) { (self.ntsdPage ??= {}).exit = m.code; shout(`The game stopped: ${m.text}`); }
         return;
       }
-      if (m.kind === 'progress') { if (m.skipped) self.ntsdPage.prefetch = 'skipped'; return; }   // the worker's probe found no cache hit
-      if (m.kind === 'prefetch') { fetchAll(m.files); return; }
       if (m.kind === 'open') {   // a popup not tied to a click is blocked: the player opens it
         const a = document.createElement('a'); a.href = m.url; a.target = '_blank'; a.rel = 'noopener'; a.textContent = `Open ${m.url}`;
         notice(a); return;
@@ -550,18 +565,19 @@
     function tick() { if (reported) return; if (config.interactive) samplePads(); draw(); if (Atomics.load(header, 4) === 1) finish(); }
     (function frame() { if (!reported) requestAnimationFrame(frame); tick(); })();
     setInterval(tick, 50);   // where animation frames are throttled
-    if (!config.interactive) withKept(config).then(ready => worker.postMessage({ ...ready, frames, input, pads, dialog, fetchGate: gate }), e => fail(`saves: ${e}`));
+    if (!config.interactive) Promise.all([withKept(config), data]).then(([ready, link]) =>
+      worker.postMessage({ ...withEntries(ready, link), frames, input, pads, dialog }, link ? [link.loader.port] : []), e => fail(`start: ${e}`));
     else if (config.autostart) start();
     else {
       // A player's gesture first: browsers show gamepads only after one of
       // their buttons is pressed (the game counts its joysticks once, at
       // launch), and allow sound only after a click or a key.
-      const cover = document.createElement('div');
+      cover = document.createElement('div');
       cover.textContent = 'Press a gamepad button to play with gamepads, or click or press a key to start';
       cover.style.cssText = 'position:fixed;inset:0;display:flex;align-items:center;justify-content:center;color:#fff;font:18px system-ui;cursor:pointer';
       document.body.append(cover);
       let begun = false;
-      const go = e => { if (begun) return; begun = true; if (e) e.preventDefault(); cover.remove(); start(); };
+      const go = e => { if (begun) return; begun = true; if (e) e.preventDefault(); cover.remove(); cover = null; start(); };
       cover.addEventListener('pointerdown', go); addEventListener('keydown', go, { once: true });
       (function wait() {
         if (begun) return;

@@ -98,20 +98,22 @@ import NTSDRuntime
     }
     /// The packaged tracks, decoded in the worker and mixed into the page's
     /// sound ring; scripted runs and pages without sound use the silent
-    /// manifest players (the headless host's).
+    /// manifest players (the headless host's). Each track's frame count from
+    /// the manifest lets a player keep time before its file has arrived (W5).
     func makeMusicOutput() throws -> OriginalMacMusicOutput {
         let directory = URL(fileURLWithPath:musicDirectory,isDirectory:true)
         guard let mixer else { return try .silent(directory:directory) }
         guard let manifest = try JSONSerialization.jsonObject(with:Data(contentsOf:directory.appendingPathComponent("manifest.json"))) as? [String:Any],
               let entries = manifest["entries"] as? [[String:Any]] else { throw OriginalMacMusicOutput.Boundary.manifest }
-        var tracks: [String:URL] = [:]
+        var tracks: [String:URL] = [:],frames: [URL:Int] = [:]
         for entry in entries {
             guard let name = entry["name"] as? String,let resource = entry["resource"] as? String else { throw OriginalMacMusicOutput.Boundary.manifest }
             let url = directory.appendingPathComponent(resource)
             guard FileManager.default.fileExists(atPath:url.path) else { throw OriginalMacMusicOutput.Boundary.missingTrack(resource) }
             tracks[name.lowercased()] = url
+            frames[url] = (entry["frames"] as? NSNumber)?.intValue
         }
-        return .init(tracks:tracks) { url,ended in try WebMusicPlayer(url,mixer:mixer,ended:ended) }
+        return .init(tracks:tracks) { url,ended in try WebMusicPlayer(url,frames:frames[url],mixer:mixer,ended:ended) }
     }
     func startSoundOutput(_ effects: OriginalMacSoundEffects,muted: Bool) throws -> String {
         guard let mixer else { return scripted ? "web (no output: scripted)" : "web (no output: the page has no audio)" }

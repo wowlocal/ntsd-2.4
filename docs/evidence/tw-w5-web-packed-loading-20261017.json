@@ -1,0 +1,468 @@
+{
+ "study": "TVOS_WEB",
+ "step": "W5: loading on a real host",
+ "date": "2026-10-17",
+ "request": "user 2026-10-17: \"https://ntsd-web-ashy.vercel.app check out our web version. its loading times are kinda bad. super bad. no matter the internet speed. we must heavily optimize it. we launch the game in 5s on samsung a12 and web is so slow that nobody is playing\"",
+ "liveSiteBefore": {
+  "how": "web_run.mjs --url https://ntsd-web-ashy.vercel.app/ (the 2026-10-13 deployment of f0471f13: data-fac8e49ba055) from this Mac, headless Chromium 153, a click at 0.5 s, cold = a fresh profile, return = the same profile again; the 29.3 MB module (Vercel's on-the-fly brotli of the 96 MB file) arrived in 1.7 s, so the connection was fast",
+  "cold": {
+   "firstFrameSeconds": 9.26,
+   "dataSeconds": 46.45
+  },
+  "return": {
+   "firstFrameSeconds": 1.64,
+   "dataSeconds": 1.92
+  },
+  "perRequest": "a CDN hit took ~0.2-0.35 s to its first byte with curl (new connection each); 1,521 data files, 4 page lanes (2 behind the program's reads): latency-bound, so a faster line hardly helps; WebKit skipped the prefetch (its synchronous reads missed the cache), so Safari read the files one at a time",
+  "headers": "Vercel served br for the module, BMPs, DIBs, .dat and JSON, none for .wav/.wma; COOP/COEP present; data immutable"
+ },
+ "readOrder": {
+  "how": "run_headless_scenarios.py --web vs with NTSD_WEB_DEBUG on the clean HEAD build: every file read once, 1,521 reads, the first 48 (the startup package and the music manifest) before the catalog's",
+  "file": "tools/crossplatform/web/read-order.json"
+ },
+ "compression": {
+  "how": "the 757.7 MB of data (no module, no tracks) of the deployed folder",
+  "gzip9PerFile": 62896871,
+  "brotli11PerFile": 51539113,
+  "brotli11Solid64MiBPacks": 44078156,
+  "module": {
+   "built": 96027847,
+   "stripped": 63842878,
+   "brotli11Built": 20087194,
+   "brotli11Stripped": 14165312,
+   "vercelOnTheFly": 29337370,
+   "dropped": "DWARF (.debug_*), the name section, .swift1_autolink_entries and producers: 32.2 MB; code and data sections unchanged"
+  }
+ },
+ "change": {
+  "web_app.py": "build: the data in 12 packs (a 64-byte header naming the pack and the data folder, then the files in read order; pack 0 = the 48 startup reads; then >= 64 MiB each), brotli -q 11 -w 24 under data-HASH/br/ with the stripped program; the music tracks plain, loaded when asked for; index.json; HASH also over the layout; vercel.json/_headers send Content-Encoding: br for data-*/br/. verify: every delivered byte against the build, the headers, the folder's name. serve: --latency, --broken-encoding on the packs. visit: cold/return visit timings",
+  "web/pack-loader.js": "new: a worker that streams the packs into OPFS (sync access handles; memory where that fails, holding ~320 MiB ahead and releasing a pack once read), marks files ready behind a checked header, answers the game worker's synchronous reads over a MessagePort and a shared status word, reuses complete packs on a later visit",
+  "web/wasi-worker.js": "packed files from the loader; the module compiled from the page's prepare message; the fileReady import; W3f's prefetch probe and fetch gate removed",
+  "web/run.html": "the loader and the module's compilation start with the page (before the player's click); progress on the start cover; W3f's page prefetch removed",
+  "web_run.mjs / run_headless_scenarios.py": "--packed DIR / NTSD_WEB_PACKED: scenarios through the loader from a built folder (verified against the build first); NTSD_WEB_DATA_IN_MEMORY",
+  "NTSDWeb (Swift, web host only)": "ntsd.fileReady; a music track not yet arrived keeps time silently from the manifest's frame count and opens once in (catching up at most 8 ALAC packets per mix); a track in at once plays as before",
+  "unchanged": "NTSDCore, NTSDRuntime, NTSDMusicDecoder, Package.swift: no other host's code changes"
+ },
+ "build": {
+  "data": "data-880df4d3f50d",
+  "program": {
+   "built": 96073631,
+   "stripped": 63728223,
+   "wire": 14144705
+  },
+  "packs": 12,
+  "raw": 757710827,
+  "wire": 43772280,
+  "startupPack": {
+   "url": "br/pack-00.bin",
+   "raw": 29705145,
+   "files": 48,
+   "header": 64,
+   "wire": 2417708
+  },
+  "lazy": 9
+ },
+ "gates": {
+  "baseline": "HEAD (5a6d3d38) tools in a git-archive root with its clean NTSDWeb build (a7d80e88...), all 11 scenarios: Chromium and WebKit each equal",
+  "build": "clean release NTSDWeb from HEAD, then the W5 sources incrementally (NTSDWeb only, no client of a changed module)",
+  "packedChromium": {
+   "results": [
+    {
+     "scenario": "vs",
+     "exit": 0,
+     "result": "equal"
+    },
+    {
+     "scenario": "mission",
+     "exit": 0,
+     "result": "equal"
+    },
+    {
+     "scenario": "demo",
+     "exit": 0,
+     "result": "equal"
+    },
+    {
+     "scenario": "war",
+     "exit": 0,
+     "result": "equal"
+    },
+    {
+     "scenario": "playback",
+     "exit": 0,
+     "result": "equal"
+    },
+    {
+     "scenario": "tournament",
+     "exit": 0,
+     "result": "equal"
+    },
+    {
+     "scenario": "altenter",
+     "exit": 0,
+     "result": "equal"
+    },
+    {
+     "scenario": "tournament-win",
+     "exit": 0,
+     "result": "equal"
+    },
+    {
+     "scenario": "team-tournament",
+     "exit": 0,
+     "result": "equal"
+    },
+    {
+     "scenario": "joystick",
+     "exit": 0,
+     "result": "equal"
+    },
+    {
+     "scenario": "title-joystick",
+     "exit": 0,
+     "result": "equal"
+    }
+   ],
+   "framesVsHEAD": {
+    "frames": 18384,
+    "mismatched": 0,
+    "result": "identical"
+   },
+   "loader": {
+    "runs": 11,
+    "opfsStores": [
+     12
+    ],
+    "memoryStores": [
+     0
+    ],
+    "failed": [
+     0
+    ],
+    "allStored": true
+   }
+  },
+  "packedWebKit": {
+   "results": [
+    {
+     "scenario": "vs",
+     "exit": 0,
+     "result": "equal"
+    },
+    {
+     "scenario": "mission",
+     "exit": 0,
+     "result": "equal"
+    },
+    {
+     "scenario": "demo",
+     "exit": 0,
+     "result": "equal"
+    },
+    {
+     "scenario": "war",
+     "exit": 0,
+     "result": "equal"
+    },
+    {
+     "scenario": "playback",
+     "exit": 0,
+     "result": "equal"
+    },
+    {
+     "scenario": "tournament",
+     "exit": 0,
+     "result": "equal"
+    },
+    {
+     "scenario": "altenter",
+     "exit": 0,
+     "result": "equal"
+    },
+    {
+     "scenario": "tournament-win",
+     "exit": 0,
+     "result": "equal"
+    },
+    {
+     "scenario": "team-tournament",
+     "exit": 0,
+     "result": "equal"
+    },
+    {
+     "scenario": "joystick",
+     "exit": 0,
+     "result": "equal"
+    },
+    {
+     "scenario": "title-joystick",
+     "exit": 0,
+     "result": "equal"
+    }
+   ],
+   "framesVsHEAD": {
+    "frames": 18384,
+    "mismatched": 0,
+    "result": "identical"
+   },
+   "loader": {
+    "runs": 11,
+    "opfsStores": [
+     12
+    ],
+    "memoryStores": [
+     0
+    ],
+    "failed": [
+     0
+    ],
+    "allStored": true
+   }
+  },
+  "runnerChromium": {
+   "results": [
+    {
+     "scenario": "vs",
+     "exit": 0,
+     "result": "equal"
+    },
+    {
+     "scenario": "mission",
+     "exit": 0,
+     "result": "equal"
+    },
+    {
+     "scenario": "demo",
+     "exit": 0,
+     "result": "equal"
+    },
+    {
+     "scenario": "war",
+     "exit": 0,
+     "result": "equal"
+    },
+    {
+     "scenario": "playback",
+     "exit": 0,
+     "result": "equal"
+    },
+    {
+     "scenario": "tournament",
+     "exit": 0,
+     "result": "equal"
+    },
+    {
+     "scenario": "altenter",
+     "exit": 0,
+     "result": "equal"
+    },
+    {
+     "scenario": "tournament-win",
+     "exit": 0,
+     "result": "equal"
+    },
+    {
+     "scenario": "team-tournament",
+     "exit": 0,
+     "result": "equal"
+    },
+    {
+     "scenario": "joystick",
+     "exit": 0,
+     "result": "equal"
+    },
+    {
+     "scenario": "title-joystick",
+     "exit": 0,
+     "result": "equal"
+    }
+   ],
+   "framesVsHEAD": {
+    "frames": 18384,
+    "mismatched": 0,
+    "result": "identical"
+   }
+  },
+  "runnerWebKit": {
+   "results": [
+    {
+     "scenario": "vs",
+     "exit": 0,
+     "result": "equal"
+    },
+    {
+     "scenario": "mission",
+     "exit": 0,
+     "result": "equal"
+    },
+    {
+     "scenario": "demo",
+     "exit": 0,
+     "result": "equal"
+    },
+    {
+     "scenario": "war",
+     "exit": 0,
+     "result": "equal"
+    },
+    {
+     "scenario": "playback",
+     "exit": 0,
+     "result": "equal"
+    },
+    {
+     "scenario": "tournament",
+     "exit": 0,
+     "result": "equal"
+    },
+    {
+     "scenario": "altenter",
+     "exit": 0,
+     "result": "equal"
+    },
+    {
+     "scenario": "tournament-win",
+     "exit": 0,
+     "result": "equal"
+    },
+    {
+     "scenario": "team-tournament",
+     "exit": 0,
+     "result": "equal"
+    },
+    {
+     "scenario": "joystick",
+     "exit": 0,
+     "result": "equal"
+    },
+    {
+     "scenario": "title-joystick",
+     "exit": 0,
+     "result": "equal"
+    }
+   ],
+   "framesVsHEAD": {
+    "frames": 18384,
+    "mismatched": 0,
+    "result": "identical"
+   }
+  },
+  "memoryPath": {
+   "how": "NTSD_WEB_DATA_IN_MEMORY=1 NTSD_WEB_PACKED vs, Chromium (before review round 2's fixes, which touched the memory budget and the per-response header check; the packed gates above ran after them)",
+   "result": [
+    {
+     "scenario": "vs",
+     "exit": 0,
+     "result": "equal"
+    }
+   ],
+   "frames": "{\"scenario\": \"vs\", \"frames\": 6, \"identical\": 6, \"differ\": [], \"missing\": [], \"digests\": {\"a\": 1826, \"b\": 1826, \"equal\": true, \"firstDifferentBody\": null}}",
+   "loader": {
+    "kind": "progress",
+    "stored": 757710827,
+    "total": 757710827,
+    "packsDone": 12,
+    "reused": 0,
+    "opfs": 0,
+    "memory": 12,
+    "released": 7,
+    "failed": 0,
+    "reads": 1041,
+    "waits": 0
+   },
+   "firstRun": "each released pack was prefetched again (18 fetches for 12 packs); fixed: a released pack comes back only when read"
+  },
+  "brokenHost": "serve --broken-encoding (the packs without Content-Encoding): all 12 refused as 'not a pack', nothing stored, the program's first reads EIO, a startup boundary, no frame, one notice on the page",
+  "saves": "pass",
+  "verify": "web_app.py verify: 1,530 files, 21 packs, pass"
+ },
+ "visits": {
+  "how": "web_app.py visit on web_app.py serve with --latency 100 (each response held 100 ms: a CDN's round trip, which W3b-W3f left out) and --rate (bandwidth); cold visits on fresh profiles, Chromium, a click at 0.5 s; old = HEAD's build --compress folder (per-file brotli-11, kinder than Vercel's on-the-fly level) with HEAD's page, new = the W5 folder; runs alternate old/new",
+  "cases": {
+   "old-100ms": {
+    "runs": 3,
+    "firstFrameSeconds": [
+     6.98,
+     5.46,
+     5.51
+    ],
+    "dataSeconds": [
+     45.92,
+     44.16,
+     44.19
+    ],
+    "firstFrameMedian": 5.51,
+    "dataMedian": 44.19,
+    "dataNotInWithinWindow": 0
+   },
+   "new-100ms": {
+    "runs": 3,
+    "firstFrameSeconds": [
+     1.36,
+     1.36,
+     1.39
+    ],
+    "dataSeconds": [
+     1.92,
+     1.88,
+     1.89
+    ],
+    "firstFrameMedian": 1.36,
+    "dataMedian": 1.89,
+    "dataNotInWithinWindow": 0
+   },
+   "old-100ms-50mbit": {
+    "runs": 3,
+    "firstFrameSeconds": [
+     12.97,
+     13.15,
+     12.94
+    ],
+    "dataSeconds": [
+     53.69,
+     53.66,
+     53.91
+    ],
+    "firstFrameMedian": 12.97,
+    "dataMedian": 53.69,
+    "dataNotInWithinWindow": 0
+   },
+   "new-100ms-50mbit": {
+    "runs": 3,
+    "firstFrameSeconds": [
+     3.75,
+     3.77,
+     3.73
+    ],
+    "dataSeconds": [
+     14.1,
+     14.14,
+     14.2
+    ],
+    "firstFrameMedian": 3.75,
+    "dataMedian": 14.14,
+    "dataNotInWithinWindow": 0
+   }
+  },
+  "return": "the W5 folder, a kept profile: every pack reused from OPFS, the data in at 0.41-0.45 s (before the click), the first frame at 1.36-1.54 s, nothing fetched"
+ },
+ "reviews": [
+  {
+   "round": 1,
+   "findings": "high: the data folder's name did not cover the layout (a reordered pack could reuse stale OPFS/HTTP-cache bytes); medium-high: files ready before a pack's bytes were known right; medium: the memory path held all 758 MB, reuse raced the schedule, a second tab removed the first tab's markers; low: no stall timeout, a failed init blocked reads, empty packs, a failed track silent without an error, the decode cap on ready tracks, the runner's metrics, _headers splats, NTSD_WEB_PACKED unverified",
+   "fixed": "all; headers per pack, the layout in the name"
+  },
+  {
+   "round": 2,
+   "findings": "medium: a released music pack never fetched again (silent for the session) in memory mode; a retried download skipped the header check; low: the budget could be exceeded, a non-fatal failure failed stored files, a quick reload truncated an intact pack, docstrings",
+   "fixed": "those; recorded instead: re-reads in memory mode fetch the whole pack again, progress in memory mode completes only once the program has read every pack, Netlify's _headers placeholders unverified"
+  }
+ ],
+ "boundaries": [
+  "Publishing (the GitHub release archive, Vercel's settings and deployment) is the user's Codex session's; the Content-Encoding rule for data-*/br/ on Vercel is checked there, on a preview, before production",
+  "The visits are local lower bounds with a fixed per-response delay and a capped rate; the real CDN's figures come from visit on the published site",
+  "The first loading cycle still digests every packaged file in wasm (~2.2 s, W3c) after START; not changed here",
+  "Memory path (no OPFS: private windows, a second tab): ~320 MiB held ahead of the program, a pack released once read and fetched again if read again",
+  "Phone browsers (W3d) and Safari/Firefox by hand stay open"
+ ]
+}

@@ -42,6 +42,9 @@ Node 26 runs it), default the newest node fnm installed, else `node`.
 $NTSD_LINUX_PLATFORM sets the container platform (e.g. linux/amd64) and
 $NTSD_LINUX_IMAGE replaces the container image (e.g. ntsd-linux-runtime:noble
 from linux-runtime/Dockerfile, which adds fontconfig and DejaVu for text).
+$NTSD_WEB_PACKED=DIR (with --web) reads /app and /music from DIR, a
+folder web_app.py build made, through the page's loader, and runs DIR's
+program (TVOS_WEB W5).
 $NTSD_GAME_ARGS adds game arguments (split as a shell would) after the
 scenario's own, before --script (e.g. --scalable-window, WINDOW_SCALING).
 """
@@ -79,6 +82,8 @@ def main():
                   "-v", f"{os.environ['NTSD_SDL_LIB']}:/sdl:ro"]
     if mode in ("--linux-amd64", "--linux-sdl"): mode = "--linux"
     names = sys.argv[4:] or list(app_e2e.SCENARIOS)
+    if mode == "--web" and os.environ.get("NTSD_WEB_PACKED"):   # the folder must hold this build's bytes, or its results are another build's
+        subprocess.run([sys.executable, str(ROOT / "tools/crossplatform/web_app.py"), "verify", os.environ["NTSD_WEB_PACKED"], target], check=True)
     if mode == "--android":   # the game and the music, once per run
         adb("shell", f"rm -rf {DEVICE} && mkdir -p {DEVICE}/out {DEVICE}/home")
         adb("push", str(Path(target).resolve()), f"{DEVICE}/app"); adb("push", str(MUSIC), f"{DEVICE}/music")
@@ -116,7 +121,10 @@ def main():
         elif mode in ("--browser", "--web"):   # in headless Chromium or WebKit (TVOS_WEB W2a, W2b)
             app = Path(target).resolve()
             program = "NTSDWeb.wasm" if mode == "--web" else "NTSDHeadless.wasm"
-            command = [node(), str(ROOT / "tools/crossplatform/web_run.mjs"), "--ro", f"/app={app}", "--ro", f"/music={MUSIC}",
+            # NTSD_WEB_PACKED=DIR (--web): /app and /music from web_app.py build's folder DIR, through the page's loader (TVOS_WEB W5)
+            packed = os.environ.get("NTSD_WEB_PACKED") if mode == "--web" else None
+            command = [node(), str(ROOT / "tools/crossplatform/web_run.mjs"),
+                       *(["--packed", packed] if packed else ["--ro", f"/app={app}", "--ro", f"/music={MUSIC}"]),
                        "--map", f"/out={out}", "--argv0", f"/app/{program}", "--metrics", str(base / "browser-metrics.json"),
                        # NTSD_WEB_PRECOMPRESSED=1: served as a host serves web_app.py --compress forms (TVOS_WEB W3b)
                        *(["--precompressed"] if os.environ.get("NTSD_WEB_PRECOMPRESSED") == "1" else []),

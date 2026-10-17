@@ -60,6 +60,21 @@ func ntsdAudioWrite(_ samples: UnsafeRawPointer, _ frames: Int32)
 @_extern(wasm, module: "ntsd", name: "audioOwed")
 func ntsdAudioOwed() -> Int32
 
+/// 1 when a read of the file at `path` (UTF-8) would not wait for the
+/// network: the page's loader holds the whole file, cannot bring it (the
+/// read then fails), or does not serve it. 0 while it is still on its way,
+/// and the first 0 asks the loader to fetch it (TVOS_WEB W5: a packaged
+/// track arrives while the menu runs instead of the menu waiting for it).
+@_extern(wasm, module: "ntsd", name: "fileReady")
+func ntsdFileReady(_ path: UnsafeRawPointer, _ count: Int32) -> Int32
+
+enum WebFiles {
+    static func ready(_ path: String) -> Bool {
+        let p = Array(path.utf8)
+        return p.withUnsafeBytes { ntsdFileReady($0.baseAddress ?? UnsafeRawPointer(bitPattern:1)!,Int32(p.count)) } != 0
+    }
+}
+
 /// Swift-side wrappers of the page functions.
 enum WebInput {
     /// kind 1, a key: a = USB HID usage, b = 1 down | 2 repeated, c = the

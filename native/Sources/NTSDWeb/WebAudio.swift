@@ -58,11 +58,19 @@ import NTSDRuntime
 /// whole, as the SDL host does), mixed into the page's ring at the
 /// AudioContext's rate by linear interpolation (output only: the game's
 /// music clock is this player's position, as with SDL's).
+///
+/// A track still on its way from the host (TVOS_WEB W5: the menu's 27.5 MB
+/// main.caf on a first visit) is not read yet, which would hold the game
+/// until it arrived: given its frame count from the music manifest, the
+/// player keeps time silently from the start and opens the track once the
+/// page has it, catching up to its position (at most 8 packets, ~0.75 s of
+/// sound, per mix, so no frame waits on a long decode). A track that is in
+/// at once, or has no count, opens and decodes as before.
 @MainActor final class WebMusicPlayer: OriginalMacMusicOutput.Player {
     private static let rate = 44100.0
     private var decoder: OriginalALACDecoder?
-    private let frames: Int, ended: () -> Void, name: String
-    private var samples: [Int16] = [], position = 0.0, playing = false, failed = false
+    private let frames: Int, ended: () -> Void, name: String, url: URL
+    private var samples: [Int16] = [], position = 0.0, playing = false, failed = false, waiting = false, late = false, polls = 0
     let duration: TimeInterval
     var volume: Float = 1
     var isPlaying: Bool { playing }
@@ -70,32 +78,54 @@ import NTSDRuntime
         get { position/Self.rate }
         set { position = max(0,min(Double(frames),(newValue*Self.rate).rounded())) }
     }
-    init(_ url: URL,mixer: WebAudioMixer,ended: @escaping () -> Void) throws {
+    init(_ url: URL,frames listed: Int?,mixer: WebAudioMixer,ended: @escaping () -> Void) throws {
+        self.url = url; self.ended = ended; name = url.lastPathComponent
+        if let listed,!WebFiles.ready(url.path) { frames = listed; waiting = true }
+        else { let (opened,count) = try Self.open(url); decoder = opened; frames = count }
+        duration = Double(frames)/Self.rate
+        samples.reserveCapacity(frames*2)
+        mixer.add(self)
+    }
+    private static func open(_ url: URL) throws -> (OriginalALACDecoder,Int) {
         let track = try OriginalALACTrack(contentsOf:url)
         guard track.sampleRate == Self.rate,track.channels == 2 else { throw OriginalALACTrack.Failure.unsupported("\(track.sampleRate) Hz, \(track.channels) channels") }
-        decoder = try OriginalALACDecoder(track); frames = track.frames; self.ended = ended; name = url.lastPathComponent
-        duration = Double(track.frames)/Self.rate
-        samples.reserveCapacity(track.frames*2)
-        mixer.add(self)
+        return (try OriginalALACDecoder(track),track.frames)
+    }
+    /// A waiting track opened once its file is in (checked every 10th mix);
+    /// a failure, or a track whose frames differ from the manifest's, stays
+    /// silent and says so, as a decode failure does.
+    private func arrive() {
+        polls += 1
+        guard polls % 10 == 1,WebFiles.ready(url.path) else { return }
+        waiting = false
+        do {
+            let (opened,count) = try Self.open(url)
+            guard count == frames else { throw OriginalALACTrack.Failure.corrupt("\(count) frames, the manifest lists \(frames)") }
+            decoder = opened; late = true
+        } catch { fail(error) }
+    }
+    private func fail(_ error: Error) {
+        failed = true; decoder = nil   // the track stays silent; say so instead of failing quietly
+        OriginalRuntimeSession.emit(["event":"webMusicError","track":name,"error":"\(error)"])
     }
     func play() { if Int(position) < frames { playing = true } }
     func pause() { playing = false }
-    /// Decodes until `frame` (plus two seconds) is available.
+    /// Decodes until `frame` (plus two seconds) is available; at most 8
+    /// packets per call for a track that opened late.
     private func decode(through frame: Int) {
-        let wanted = min(frames,frame+Int(Self.rate)*2)
-        while !failed,samples.count/2 < wanted,let decoder {
+        let wanted = min(frames,frame+Int(Self.rate)*2),limit = late ? 8 : Int.max
+        var packets = 0
+        while !failed,samples.count/2 < wanted,packets < limit,let decoder {
             do { try decoder.next { samples.append(contentsOf:$0) } }
-            catch {
-                failed = true; self.decoder = nil   // the track stays silent; say so instead of failing quietly
-                OriginalRuntimeSession.emit(["event":"webMusicError","track":name,"error":"\(error)"])
-                break
-            }
+            catch { fail(error); break }
+            packets += 1
             if decoder.finished { self.decoder = nil }   // done: the compressed file goes too
         }
     }
     func mix(frames count: Int,rate: Double,left: UnsafeMutableBufferPointer<Float>,right: UnsafeMutableBufferPointer<Float>) {
         guard playing else { return }
         let step = Self.rate/rate
+        if waiting { arrive() }
         decode(through:Int(position+Double(count)*step)+2)
         let available = samples.count/2,gain = volume/32768
         for i in 0..<count {

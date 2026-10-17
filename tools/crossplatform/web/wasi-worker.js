@@ -18,6 +18,12 @@
 // browser host also gets a /tmp in memory (memory, never stored), as WASI
 // programs expect one: without /save its overlay goes there (W2b-4b; before,
 // Foundation trapped creating a folder outside every mount).
+// A packed mount (TVOS_WEB W5: a static folder's /app and /music) comes
+// listed by the page, and its files' bytes come from the page's loader
+// (pack-loader.js) over a MessagePort: the worker posts a read with a
+// SharedArrayBuffer and waits on its status word, as for a synchronous XHR.
+// The page may send {kind: 'prepare', program} before the run's config, so
+// the module compiles while the player has not yet started the game.
 // stdout and stderr are buffered and posted in order. poll_oneoff
 // sleeps with Atomics.wait, which needs a cross-origin-isolated page.
 //
@@ -49,12 +55,7 @@ function request(method, url, body, type = 'text') {
 // a stalled connection or a server error is tried again after 0.5 then 1 s;
 // then the game sees the failure).
 const pause = new Int32Array(new SharedArrayBuffer(4));
-let reading = null;   // the page's fetch gate (W3f): raised while the program waits on a read
 function read(url, type = 'text') {
-  if (reading) Atomics.add(reading, 0, 1);
-  try { return readOnce(url, type); } finally { if (reading) Atomics.sub(reading, 0, 1); }
-}
-function readOnce(url, type) {
   let x = null;
   for (let attempt = 0; attempt < 3; attempt++) {
     if (attempt) Atomics.wait(pause, 0, 0, 500 * attempt);   // a moment before trying again
@@ -73,6 +74,7 @@ class Node {
     this.children = null;          // folders: Map name → Node, listed on first use
     this.data = null; this.size = size; this.dirty = false;   // files: bytes on first read
     this.deleted = false;
+    this.id = undefined;           // a packed file: its number in the loader's table
   }
   url(extra = '') { return `${this.mount.url}/${this.path.split('/').map(encodeURIComponent).join('/')}${extra}`; }
   list() {
@@ -91,6 +93,7 @@ class Node {
   }
   bytes() {
     if (this.mount.persist || this.mount.memory) return this.data ??= new Uint8Array(0);
+    if (this.data === null && this.id !== undefined) this.data = fromLoader(this);
     if (this.data === null) {
       const x = read(this.url(), 'arraybuffer');
       if (x.status !== 200) throw new Error(`read ${this.path}: ${x.status}`);
@@ -104,6 +107,19 @@ class Node {
     }
     return this.data;
   }
+}
+
+// A packed file's bytes (W5): the loader answers once they are stored,
+// fetching their pack first if it must; a pack that cannot arrive fails the
+// read after the loader's retries (or 10 minutes), which the game sees.
+let loader = null;   // {port, ready: Int32Array per file}
+function fromLoader(node) {
+  const buffer = new SharedArrayBuffer(8 + node.size), status = new Int32Array(buffer, 0, 2);
+  loader.port.postMessage({ op: 'read', id: node.id, buffer });
+  const until = performance.now() + 600000;
+  while (Atomics.load(status, 0) === 0 && performance.now() < until) Atomics.wait(status, 0, 0, 1000);
+  if (Atomics.load(status, 0) !== 1) throw new Error(`read ${node.path}: its data did not arrive (the page shows why)`);
+  return new Uint8Array(buffer, 8, node.size);
 }
 
 let memory = null, stdout = [], stderr = [], buffered = 0, runner = true;
@@ -126,9 +142,21 @@ function flush() {
 
 // A message for the runner's stderr, or the console without one.
 function say(text) { if (runner) request('POST', '/stderr', text); else console.warn(text); }
+// The module, compiled from the page's prepare message (W5) or at the run.
+let compiled = null, compiledFrom = null;
+function compile(program) {
+  compiledFrom = program;
+  compiled = WebAssembly.compileStreaming(fetch(program)).catch(async e => {
+    if (!(e instanceof TypeError)) throw e;   // e.g. a host that does not send application/wasm: compile from the bytes
+    const r = await fetch(program); if (!r.ok) throw new Error(`program: ${r.status}`);
+    return WebAssembly.compile(await r.arrayBuffer());
+  });
+  compiled.then(() => postMessage({ kind: 'compiled' }), () => postMessage({ kind: 'compiled', failed: true }));
+  return compiled;
+}
 self.onmessage = async ({ data: config }) => {
+  if (config.kind === 'prepare') { compile(config.program); return; }
   runner = config.runner !== false;
-  if (config.fetchGate) reading = new Int32Array(config.fetchGate);
   try { await run(config); }
   catch (e) {
     const text = `web_run: worker: ${e && e.stack || e}\n`;
@@ -141,7 +169,9 @@ async function run(config) {
   const sleeper = new Int32Array(new SharedArrayBuffer(4));
   const given = config.frames && !config.mounts.some(m => m.guest === '/tmp') ? [{ guest: '/tmp', writable: true, memory: true }] : [];
   const mounts = [...config.mounts, ...given].map((m, i) => ({ ...m, url: m.url ?? `/m/${i}` }));
-  for (const m of mounts) if (m.manifest) {   // a static folder's listing
+  if (config.loader) loader = { port: config.loader.port, ready: new Int32Array(config.loader.state) };
+  for (const m of mounts) if (m.entries && !m.persist) m.listed = true;   // listed by the page (a packed mount)
+  for (const m of mounts) if (m.manifest && !m.listed) {   // a static folder's listing
     const r = await fetch(m.manifest); if (!r.ok) throw new Error(`manifest ${m.manifest}: ${r.status}`);
     m.entries = await r.json(); m.listed = true;
   }
@@ -156,7 +186,7 @@ async function run(config) {
         if (!node) {
           node = new Node(last && !e.dir ? 'file' : 'dir', root.mount, parts.slice(0, i + 1).join('/'));
           if (node.kind === 'file' && e.data) { node.data = e.data; node.size = e.data.length; }
-          else if (node.kind === 'file') node.size = e.size ?? 0;   // a listed file: its bytes on first read
+          else if (node.kind === 'file') { node.size = e.size ?? 0; node.id = loader ? e.id : undefined; }   // a listed file: its bytes on first read
           kids.set(parts[i], node);
         }
         dir = node;
@@ -523,6 +553,19 @@ async function run(config) {
       return Atomics.load(dialog, 1);
     },
     open(ptr, count) { self.postMessage({ kind: 'open', url: text(ptr, count) }); },
+    // Whether reading the file would wait for the network (W5): 0 for a
+    // packed file the loader does not hold yet (the first 0 asks for it),
+    // else 1 (one it cannot bring too: the read then fails; every other file
+    // reads as it always did).
+    fileReady(ptr, count) {
+      const path = text(ptr, count), at = fds.findIndex(f => f && f.preopen && (path === f.preopen || path.startsWith(`${f.preopen}/`)));
+      if (at < 0 || !loader) return 1;
+      const r = resolve(at, path.slice(fds[at].preopen.length + 1));
+      if (r.error || r.node.id === undefined || r.node.data) return 1;
+      if (Atomics.load(loader.ready, r.node.id)) return 1;
+      loader.port.postMessage({ op: 'want', id: r.node.id });   // each time: a pack released from memory comes back (the loader ignores one under way)
+      return 0;
+    },
     // Sound (W2b-3): the page's ring (Int32 header [written, read, ...], then
     // a power of two of stereo Float32 frames), kept about 150 ms ahead.
     audioRate() { return config.audio ? config.audio.rate : 0; },
@@ -556,48 +599,11 @@ async function run(config) {
     },
   };
 
-  async function prefetch(listed) {
-    const files = listed.flatMap(m => m.entries.filter(e => !e.dir && !e.path.endsWith('.wasm'))
-      .map(e => ({ url: `${m.url}/${e.path.split('/').map(encodeURIComponent).join('/')}`, size: e.size || 0 })));
-    if (!files.length) return null;
-    // Only where the browser's cache serves the program's synchronous reads
-    // afterwards (Chromium's does; Playwright's WebKit fetched every file
-    // twice): one file fetched, then read as the program reads, and its
-    // timing entry must show no transfer. Else the program fetches as it reads.
-    const probe = files.shift();
-    try { const r = await fetch(probe.url); if (r.ok) await r.arrayBuffer(); } catch {}
-    if (performance.clearResourceTimings) performance.clearResourceTimings();
-    read(probe.url, 'arraybuffer');
-    const seen = performance.getEntriesByName ? performance.getEntriesByName(probe.url).pop() : null;
-    if (!seen || seen.transferSize !== 0) { postMessage({ kind: 'progress', loaded: 0, total: 0, skipped: true }); return null; }
-    // The page fetches the rest while the program runs (TVOS_WEB W3f: this
-    // worker never yields once it does): the startup package first, which
-    // the menu reads, then the others in listing order. A file the program
-    // reads before its turn it fetches itself; the other request then finds
-    // it in the cache or waits for the one under way.
-    // Handed over once the module is in: before, the prefetch shared the
-    // bandwidth with the 96 MB module, which the program waits for.
-    const first = f => (/\/OriginalStartup\//.test(f.url) ? 0 : 1);
-    return files.map((f, i) => ({ ...f, i })).sort((a, b) => first(a) - first(b) || a.i - b.i).map(({ url, size }) => ({ url, size }));
-  }
   let code = 0;
   const started = performance.now();
   try {
     const imports = { wasi_snapshot_preview1: wasi, ntsd };
-    // A static folder's files fetched in parallel by the page (a mount's
-    // prefetch: the host caches them, web_app.py), so the program's
-    // one-at-a-time reads come from the browser's cache; the probe runs while
-    // the module compiles. Music tracks load when they play.
-    const warm = prefetch(mounts.filter(m => m.listed && m.prefetch));
-    let instance;
-    try { ({ instance } = await WebAssembly.instantiateStreaming(fetch(config.program), imports)); }
-    catch (e) {
-      if (!(e instanceof TypeError)) throw e;   // e.g. a host that does not send application/wasm: compile from the bytes
-      const r = await fetch(config.program); if (!r.ok) throw new Error(`program: ${r.status}`);
-      ({ instance } = await WebAssembly.instantiate(await r.arrayBuffer(), imports));
-    }
-    const prefetching = await warm;
-    if (prefetching) postMessage({ kind: 'prefetch', files: prefetching });
+    const instance = await WebAssembly.instantiate(await (compiledFrom === config.program ? compiled : compile(config.program)), imports);
     memory = instance.exports.memory;
     instance.exports._start();
   } catch (e) {
