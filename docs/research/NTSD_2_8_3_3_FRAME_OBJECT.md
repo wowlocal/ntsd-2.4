@@ -168,3 +168,118 @@ required token constant and stop on any unknown read/helper. Compare the whole
 Object bytes/masks and repeated owners to a new Native-owned target storage,
 then connect its Frame reads. No unknown PNG/packed child is fabricated; real
 ID902/901 whole-file cases retain their actual resource gates.
+
+## Whole Object-body run1 plan, after storage maintenance
+
+The full goal was explicitly resumed after the completed internal-drive move and
+VM quota fix. M0's baseline/app gates are terminal and passed, as recorded in
+CURRENT_WORK; no old capture/build is restarted. New outputs remain on T7.
+
+Freeze `frame-object1/object-body-plan1.json` and `object-body-tool1.py` before
+execution. Four cases/six whole calls cover fresh a5/5a backing and repeated
+Objects with changed incoming metadata. Inputs are explicit owned Frame-free
+streams without trailing whitespace and declared incoming frame-rate/count fields;
+they are controlled inputs, not captured Windows allocation contents. The full
+433664-byte Object, masks, ordered writes and stream lifetimes are observed.
+
+Actual `40e540..412e7b`, custom scanner/string/EOF/close, tail child `45c500`
+and cookie check execute. Only Open and free are declared ownership boundaries.
+The tail child copies `+0→+4` and `+18→+1c` when destinations are zero, after each
+outer token; positive box counts reach other children and remain outside these
+first cases. The string scanner writes a four-byte zero terminator. Unknown
+memory, helper, positive-count child or mapping access stops its machine and
+retains a distinct outcome. No packed/PNG path or live Windows execution occurs.
+
+Limit: 2M instructions/30s per call, six calls/20 minutes/16 MiB output, T7 UUID
+and at least40 GiB reserve. The existing comparison tool gets one necessary case
+adapter; old pilots/fixtures are unchanged. Independent review is unavailable
+in this session and remains open. After returned whole-caller evidence, transfer
+the initializer, custom token/EOF cursor behavior and repeated owned storage into
+Core and its ready target content consumer; compare whole records and ownership.
+Other18 recognized outer-tag branches, including actual Frames/resources, remain
+explicit dependencies, not silently accepted no-ops.
+
+Source run1 is terminal0: all4 cases/6 whole calls returned, with correct stack
+and callee-saved registers, no unknown reads/helpers, no pending callbacks and no
+live stream owners. Result SHA-256
+`74f39ef256e6dcb50e9023181e28dc8704368b127a6ea99cdeeb55582a6b8d25`.
+All11 lossless blobs and expanded ordered-store hashes verify. Source buffers
+are released before cursor records. The Native fixture changes only compressed
+transport to the existing raw-DEFLATE developer decoder; every decoded byte,
+mask/count/hash is identical. Its SHA-256 is
+`1fe018d88e54061c9a3494f853d6442a2fcec6e8165e12a72e3ea9d886951d89`.
+A system-Python3.9 `compress(wbits=...)` preflight error published nothing;
+`compressobj` corrected transport without rerunning source. See source audit1.
+
+Candidate `NTSD2833ObjectStorage` uses native-owned `OriginalStateRecord` backing,
+source-ordered body stores and per-token tail processing. It does not call the
+2.4 Frame constructor or import expected after-states. `NTSD2833TokenStream`
+owns its cursor/buffer and preserves delimiters, four-byte terminators and the
+source's unsupported trailing-whitespace read boundary. Successful calls close
+their own working lease; errors retain public Object state. Prepared filename
+identity remains tied to its owned name. `frameStorage/frameState` read the
+proved432-byte records; the unbacked parser index999 remains a boundary.
+`OriginalRuntimeContentInputs.loadTargetObjectBody` is the ready acquisition
+consumer; real Genma reaches the explicit `<bmp_begin>` resource gate rather
+than a baseline fallback. Target startup and all other required branches remain
+open. Four new Native tests cover whole source records/stores/events, cursor
+lifetime, rollback/COW views and this real consumer boundary.
+
+Native candidate plan and command/PID logs:
+`/Volumes/NTSD-Builds/tasks/ntsd-2833-object-body-20261017/native1/`.
+Limit4GiB logical/8GiB allocated, T7 reserve40GiB. Emit current Core/Reference
+interfaces and compile actual new primary bodies, then current Runtime/Mac and
+new tests. Unchanged objects stay explicit hashed inputs. First compile/check
+the4 new tests plus retained13 acquisition/decoder/M0 checks; then required
+Object/raw-Frame/whole-catalog regressions. No old source or app capture rerun.
+Independent review and full target FileOpen/header/recognized-tag loading remain
+separate open gates; Native run has not yet passed.
+
+Native candidate1 passed17 focused tests in13.408s, including all4 new tests,
+and all9 required baseline Object/raw-Frame/whole-catalog tests in151.585s.
+Both jobs are terminal0; their sources, commands, binary and results remain in
+`native1`. These results cover the declared six returned source calls, not all
+streams. Author review found a missing wider-domain boundary: the actual
+`40e618..40e626` counter calls loading helper425010 on token32, then resets100.
+Candidate1 would silently omit that call outside the compared <=3-token inputs.
+
+Required correction in this same mechanism: frozen
+`object-body-counter-plan1.json`/`object-body-counter-tool1.py` execute only two
+new31/32-token cases. Old source1 is never rerun. Counter source1 terminal0:
+31 tokens return completely;32 stop before the first425010 instruction, as
+`unsupported-boundary` at425010 with2 live stream owners, not a Windows memory
+fault or returned case. SHA-256
+`52bb8a7c2a028dc6244acf1fdd1613dcf433039ea843edbbd5e2d646be64aeaf`.
+All blobs/write hashes and raw-DEFLATE transport verify; fixture SHA-256
+`f64fd21cbf27410fed693628bce0e7c65cba0a4a18d48c105a9b49f1fea54697`.
+
+Candidate2 raises an explicit425010 boundary at that point with public rollback.
+The comparator checks the31-token whole record/stores/events and reports the
+32-token source boundary separately from Native rejection. It never compares
+the retained partial source state to Native rollback as a successful match.
+This adds a fifth Native test. Loading-helper recovery remains necessary for
+the full caller; a31-token limit is not an original game rule. Candidate2 uses
+`/Volumes/NTSD-Builds/tasks/ntsd-2833-object-body-20261017/native2/` with separately
+pinned correction/inputs and the same storage bounds. Source1's four-case fixture
+and all old expected records/masks remain unchanged. Independent review stays open.
+
+Candidate2 is checked in its declared domain:18 focused tests passed in13.937s,
+including all5 new tests and13 retained acquisition/decoder/M0 tests. The required
+9 baseline Object/raw-Frame/whole-catalog tests also passed in145.169s on this
+same corrected binary. Both jobs and the build are terminal0. Seven returned
+whole-caller snapshots compare3,035,648 Object bytes plus masks, all ordered
+stores and token/EOF/release events. One unsupported-helper source stop remains
+separate from successful return matching. Candidate bodies are present exactly
+once in the linked binary; current source pins and regular fixture transport
+match the immutable source results. No source or old app capture was restarted.
+Detailed receipt: [body1](../evidence/ntsd-2.8.3.3-frame-object-20261017-body1.json).
+
+Next in this same D3 mechanism: the actual414570 integer scanner and six planned
+index/whole-caller cases, then native Frame population and its ready reader.
+Existing static instructions show digit accumulation through nondigits,32-bit
+wrap, and end/lookahead behavior different from VC80; do not reuse the baseline
+scanner. Preserve declared allocator bounds/unknowns at index999 and signed
+indices. Loading helper425010, positive-count postprocessing, the full header/
+FileOpen caller and actual PNG/packed resources retain their own gates. This
+checked increment does not accept target startup, AI/gameplay, M1–M6 or the full
+game. Independent contract/comparator review remains unavailable/open.

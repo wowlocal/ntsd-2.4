@@ -122,6 +122,12 @@ public final class OriginalRuntimeContentInputs {
         let raw = try rawTargetFile(name)
         return try .init(raw:raw,fileName:Array(name.replacingOccurrences(of:"/",with:"\\").utf8))
     }
+    /// Continues the actual target acquisition owner into its Object storage.
+    /// Recognized resource/Frame branches retain explicit Core boundaries; no
+    /// baseline parser or expected Object snapshot is used as a fallback.
+    public func loadTargetObjectBody(_ name: String, into object: inout NTSD2833ObjectStorage) throws -> NTSD2833ObjectStorage.Receipt {
+        try object.loadBody(decodedTargetFile(name))
+    }
     public func acquireStartup() throws -> Startup {
         switch source {
         case .baseline(let bundle): return .init(owner:self,inputs:try .bundled(in:bundle))

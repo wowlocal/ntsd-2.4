@@ -20,9 +20,36 @@ logical bytes, включая ранее выполненные X5 moves. Все
 
 VMPal Windows VM 1 quota поднята 40→80 GB; прежний paused session resumed без reset/
 restart. Проверено running/problem=null; initial resume check: 42.9 GB used, оригинал на character selection.
-Evidence: `vm-disk-limit-fixed1.json`. Полная цель порта остаётся paused в goal state;
-эту storage/VM задачу не считать разрешением автоматически продолжить game runs.
-Следующая D3 задача сохранена ниже.
+Evidence: `vm-disk-limit-fixed1.json`. Storage/VM задача завершена; последующее
+явное goal continuation возобновило полную цель. D3 продолжается по следующей
+карточке; старые game/capture/build jobs не перезапускаются.
+
+## D3 whole Object body: первый конечный run — 2026-10-17
+
+[Frame/Object](NTSD_2_8_3_3_FRAME_OBJECT.md#whole-object-body-run1-plan-after-storage-maintenance):
+frozen `frame-object1/object-body-plan1.json`,4 cases/6 calls, whole433664-byte
+Object/masks/writes/lifetimes. Actual custom scanner/EOF/close/tail; Open/free —
+declared owned boundaries. Unknown helpers/reads stop. Нет PNG/packed path,
+нового Windows capture или2.4 scanner substitution. Source1 terminal0: все6 whole
+returns, bytes/masks/stores/events проверены; source не перезапускать. Native-owned
+storage/cursor и actual content consumer реализованы, candidate build live:
+`/Volumes/NTSD-Builds/tasks/ntsd-2833-object-body-20261017/native1/candidate-build1-job.json`,
+tool handle88531 terminal0. Candidate1:17 focused tests/13.408s и9 Object/raw-Frame/
+whole-catalog regressions/151.585s passed, jobs terminal0. Author review нашёл
+пропущенную425010 call boundary на32-м outer token. Новые31/32 Source cases
+terminal0:1 returned,1 unsupported-helper boundary (не memory fault/match).
+Candidate2 добавляет явный stop/rollback и отдельный учёт исхода; build/checks terminal0:
+`/Volumes/NTSD-Builds/tasks/ntsd-2833-object-body-20261017/native2/candidate-build1-job.json`,
+tool60069 terminal0.18 focused tests/13.937s (5 новых+13 retained) и9 baseline
+Object/raw-Frame/whole-catalog tests/145.169s прошли на исправленном binary.
+Семь whole source returns:3,035,648 Object bytes+masks/stores/events совпали;
+одна source boundary учтена отдельно, не как Native return match.
+[Receipt](../evidence/ntsd-2.8.3.3-frame-object-20261017-body1.json).
+Старые source1/fixtures/candidate1 не перезапускать/не менять. Далее — actual414570
+integer scanner и6 index/whole-caller cases, затем Native Frame population/reader.
+Полный loading helper и18 recognized-tag branches, header/FileOpen/PNG остаются
+открытыми. Это не target startup/AI/gameplay/M1–M6 acceptance.
+Независимый review открыт; остальные18 outer-tag branches остаются отдельными gates.
 
 ## NTSD 2.8.3.3 M0: машинные gates прошли, review открыт — 2026-10-17
 

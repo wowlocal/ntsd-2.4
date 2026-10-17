@@ -1,0 +1,123 @@
+{
+  "schemaVersion": 1,
+  "recordedUTC": "2026-10-17T19:21:48.036428+00:00",
+  "study": "NTSD_2_8_3_3_FRAME_OBJECT.md",
+  "parentRevision": "8e6729e4",
+  "status": "Checked Native candidate in declared whole-body domain; independent review and full target loading open",
+  "scope": "Target Object-body initialization and Frame-free continuous token/EOF/tail/close behavior with native-owned raw storage and filename/working-stream ownership. Complete records, masks, ordered writes and lifetime events compared. Not full header/Frame/resource loading or game acceptance.",
+  "reference": {
+    "baseline": "downloads/NTSD_2.4_2.0a_clean/NTSD 2.4_2.0a/NTSD 2.4.exe",
+    "baselineSHA256": "3f7ac67c5890ef979ee24a6dae5528056e7f631725c292cf9cb0a928ebeff71c",
+    "targetZIP": "/Users/michael/Downloads/NTSD2.8.3.3.zip",
+    "targetZIP_SHA256": "fca38bfe1391d969b9d29d1289c51bbf5270a384fa7da6d4a7c053da77c52b2d",
+    "targetEXE_SHA256": "5eda51440039099069d041e5bd13fde8be9fd8c7b20983985b1712a59719d86b",
+    "dump": "/Volumes/T7/ntsd-2.4-artifacts/version-diff-20261017/windows-startup-fix1/NTSD-versus-selection-live1.dmp",
+    "dumpSHA256": "adb00fd69a252cd1d0def2ce21d4963b9853f7f963613785047ad4633ea7c303",
+    "dumpValidation": "/Volumes/T7/ntsd-2.4-artifacts/version-diff-20261017/windows-startup-fix1/live-dump-validation1.json"
+  },
+  "staticFacts": {
+    "objectAllocationBytes": 433664,
+    "bodyClear": [
+      2040,
+      433664
+    ],
+    "frameBase": 2096,
+    "frameStride": 432,
+    "completePhysicalFrameRecords": 999,
+    "sourceSignedParserUpperGate": 1000,
+    "unbackedParserIndex999": "Backing/outcome unestablished; Native getter rejection is not an observed-source-fault match",
+    "actualBody": "40e540..412e7b",
+    "customScanner": "414490/414520/414920",
+    "actualClose": "414950",
+    "tail": "45c500",
+    "firstLoadingPump": "token32 calls425010, next interval100 after it returns; helper currently unsupported"
+  },
+  "source": {
+    "cases": 6,
+    "calls": 8,
+    "returned": 7,
+    "unsupportedBoundary": 1,
+    "noSourceMemoryFaultClaim": true,
+    "openAndFree": "Declared synthetic ownership boundaries; actual custom scanner, EOF, close, tail and cookie instructions execute. No Windows/file API/PNG/packed reader.",
+    "source1": "/Volumes/T7/ntsd-2.4-artifacts/version-diff-20261017/frame-object1/object-body-result1.json",
+    "source1SHA256": "74f39ef256e6dcb50e9023181e28dc8704368b127a6ea99cdeeb55582a6b8d25",
+    "counter1": "/Volumes/T7/ntsd-2.4-artifacts/version-diff-20261017/frame-object1/object-body-counter-result1.json",
+    "counter1SHA256": "52bb8a7c2a028dc6244acf1fdd1613dcf433039ea843edbbd5e2d646be64aeaf",
+    "boundary": "32-token case stops before425010, retains partial source Object and2 live stream owners; Native rollback is counted separately, never as a returned match.",
+    "audits": [
+      "/Volumes/T7/ntsd-2.4-artifacts/version-diff-20261017/frame-object1/object-body-source-audit1.json",
+      "/Volumes/T7/ntsd-2.4-artifacts/version-diff-20261017/frame-object1/object-body-counter-audit1.json"
+    ]
+  },
+  "native": {
+    "compiledBodies": "Current Core/Reference interfaces and actual new primary objects; current Runtime/Mac consumer and new test class. Reused unchanged objects explicitly pinned, no duplicate link entries.",
+    "wholeReturnedObjectBytesPerComparison": 3035648,
+    "wholeReturnedMasksAlsoCompared": true,
+    "orderedStoreGroups": "Every source Object store, grouped without losing order/width/value/count; expanded source hash verified before Native comparison.",
+    "productionConsumer": "OriginalRuntimeContentInputs.loadTargetObjectBody -> NTSD2833ObjectStorage.loadBody, with real Genma reaching explicit bmp_begin boundary and public rollback",
+    "frameConsumer": "432-byte owned record/state views; no old Frame constructor or layout swap",
+    "candidate1": "Preserved binary/sources/commands;17 tests13.408s and9 regressions151.585s passed. Author review found omitted425010 call outside original<=3-token cases.",
+    "candidate2": "/Volumes/NTSD-Builds/tasks/ntsd-2833-object-body-20261017/native2",
+    "focused": {
+      "tests": 18,
+      "failures": 0,
+      "seconds": 13.937,
+      "job": "/Volumes/NTSD-Builds/tasks/ntsd-2833-object-body-20261017/native2/focused-tests1-job.json"
+    },
+    "baselineRegressions": {
+      "tests": 9,
+      "failures": 0,
+      "seconds": 145.169,
+      "job": "/Volumes/NTSD-Builds/tasks/ntsd-2833-object-body-20261017/native2/regression-tests1-job.json"
+    },
+    "binarySHA256": "f842d753e4acb909715c5b44acb8563ce0afad88013591aabbf45ac051e6ea70",
+    "totalTests": 27,
+    "candidate2InputsVerifiedAfterChecks": true,
+    "logPins": {
+      "candidate-build1.log": "ad84d5c630d0c40a135a609bd94caafd0aac228e564c19c7a855025cb14995dc",
+      "focused-tests1.log": "bf24a2391cfedeb52e8ae73ebc3388956fba7ab68654fc3ddb86d6358576d75e",
+      "regression-tests1.log": "5ced7e1398941b8ab759c047de2f6bec36289f76428429b2bc812764eda941fc",
+      "debug/NTSDNativePackageTests.xctest-input-pins.json": "7fd1bc1692f61a0e9f1627d83f7ab1eb0feef98b1a6a15dca61f3fb173363f89"
+    }
+  },
+  "corrections": [
+    "Python3.9 transport API preflight failure published no fixture; compressobj corrected raw-DEFLATE transport without source rerun",
+    "Cheap build preflight corrected exact existing M0 content-test object path before compilation",
+    "Author completeness correction: add token32 helper boundary, two new source cases and separate boundary accounting; preserve candidate1 and all old source/results/expected"
+  ],
+  "sourceAndFixturePreservation": "Original fixtures and source1 unchanged; transport copies are regular local fixtures, decompressed bytes/masks/SHA/counts and case metadata verified against immutable raw source results. Runtime never reads expected records.",
+  "inputs": {
+    "native/Sources/NTSDCore/NTSD2833ObjectStorage.swift": "4e3f89a4294f12c809822ce977f9d0c466101a930d65d2a949c85fde823a405d",
+    "native/Sources/NTSDCore/NTSD2833TokenStream.swift": "0a811531e6fa498da82ed2988efe88eec36c98ee763a7e8961dbd8e4a6231d2a",
+    "native/Sources/NTSDRuntime/OriginalRuntimeContentInputs.swift": "fe544ebe61a92b01f47a21af892feb743c21f81c2dc0ad6acebfe47cecaa7564",
+    "native/Sources/NTSDReferenceChecks/NTSD2833ObjectReference.swift": "bc89b9c251d2086b3b0a4b6c9286dbfd627a0dac64f1b91a1cdbaa6981308741",
+    "native/Tests/NTSDCoreTests/Mac/NTSD2833ObjectBodyTests.swift": "a07ae2e4f421529b6e460f9e282a4bf1bb69b40f03eefcbd1a48744c14047f51",
+    "native/Tests/NTSDCoreTests/Fixtures/ntsd-2.8.3.3-object-body1.json": "1fe018d88e54061c9a3494f853d6442a2fcec6e8165e12a72e3ea9d886951d89",
+    "native/Tests/NTSDCoreTests/Fixtures/ntsd-2.8.3.3-object-body-counter1.json": "f64fd21cbf27410fed693628bce0e7c65cba0a4a18d48c105a9b49f1fea54697",
+    "tools/compare_ntsd_engine.py": "0ea159411111d9ee03a1077cb16678faf8cdcf0d861c878bd4ec26655796388b"
+  },
+  "review": {
+    "independent": "open; subagents unavailable under current session rules",
+    "authorCompleteness": "counter gap found and corrected; this is not independent review"
+  },
+  "openDependencies": [
+    "Actual FileOpen/precondition/allocator and enclosing header construction",
+    "Recognized18 outer-tag handlers including Frame parsing, fields, repeated heap owners and real PNG resources",
+    "Actual loading helper425010 and its caller effects",
+    "Negative/index999/backing and remaining numeric/index cases",
+    "Full target startup/AI/gameplay/content/modes/network/macOS M1-M6 acceptance",
+    "Existing packed-content incident remains open; no affected operation retried"
+  ],
+  "nextPermittedTask": "Actual custom integer scanner and six declared index/whole-caller cases, then native Frame population/consumer; keep425010 and real resource children as explicit dependent gates.",
+  "completedUTC": "2026-10-17T19:23:48.000130+00:00",
+  "storage": {
+    "/Volumes/T7": {
+      "uuid": "7C9569C1-BC8F-3288-B3FD-8831A3F07FAA",
+      "freeBytes": 1048855838720
+    },
+    "/Volumes/NTSD-Builds": {
+      "uuid": "E36E5CAF-8FC7-4521-A7F3-679CFF71D663",
+      "freeBytes": 934821031936
+    }
+  }
+}

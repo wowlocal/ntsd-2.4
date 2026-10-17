@@ -2,8 +2,8 @@
 """Bounded static compatibility comparison against an existing game dump.
 
 Default modes read MDMP mappings and recorded main-module code with the existing
-PE reader. --rng-pilot and --dat-buffer-pilot execute their separately planned
-x86 routines in Unicorn on declared inputs. The latter reads only its pinned
+PE reader. The separately planned RNG, ordinary-buffer and Object-body pilots
+execute x86 routines in Unicorn on declared inputs. File inputs are only pinned
 ordinary files or synthetic buffers. No mode rebuilds an EXE, reads opaque
 embedded content, or supplies missing memory as known zero. Source-only results
 do not establish Native or whole-game parity.
@@ -490,6 +490,239 @@ def dat_buffer_pilot(parent_path, pilot_path):
         limitation='Whole decoder routine only on declared disjoint ordinary buffers; no original file API, packed path, Windows, FileOpen/Object caller or Native acceptance.')
 
 
+def object_body_pilot(parent_path, pilot_path):
+    """Whole target Object body on declared Frame-free owned streams.
+
+    Actual parser/scanner/EOF/close/tail/cookie instructions execute. FileOpen
+    supplies a declared owned buffer and free is an allocator boundary. No
+    Windows API, packed file, bitmap child or source after-state is supplied.
+    """
+    import base64
+    import zlib
+    import unicorn
+    from unicorn import x86_const as registers
+    from oracle_frames import STACK, STOP
+
+    class Boundary(RuntimeError):
+        pass
+
+    plan = json.loads(pilot_path.read_text())
+    parent = json.loads(parent_path.read_text())
+    if hashlib.sha256(parent_path.read_bytes()).hexdigest() != plan['parentPlanSHA256']:
+        raise ValueError('Object-body parent pin differs')
+    if (unicorn.__version__ != plan['environment']['unicorn'] or
+            len(plan['cases']) != plan['bounds']['cases'] or not 1 <= len(plan['cases']) <= 24):
+        raise ValueError('Object-body environment/case bound differs')
+    memory = RecordedMemory(parent['reference']['dump'])
+    source_regions = []
+    for pin in plan['sourceRegions']:
+        address = int(pin['va'], 16)
+        raw = memory.virtual(address, pin['count'])
+        if hashlib.sha256(raw).hexdigest() != pin['sha256']:
+            raise ValueError('Object-body source pin differs: '+pin['label'])
+        source_regions.append((address, raw, pin['label'], pin['executable']))
+    blobs, results = {}, []
+
+    def blob(raw):
+        raw = bytes(raw)
+        key = hashlib.sha256(raw).hexdigest()
+        if key not in blobs:
+            blobs[key] = dict(count=len(raw), deflate=base64.b64encode(zlib.compress(raw, 9)).decode())
+        return key
+
+    obj, filename = 0x22000000, 0x23000000
+    extent, sp = plan['allocationBytes'], STACK+0xf000
+    for case in plan['cases']:
+        uc = unicorn.Uc(unicorn.UC_ARCH_X86, unicorn.UC_MODE_32)
+        mapped, regions, pcs = set(), [], set()
+        events, groups, allocations, pending = [], [], [], {}
+        state = dict(writes=0, ordered=hashlib.sha256())
+
+        def region(address, raw, label, writable=False, known=True):
+            for page in range(address & ~4095, (address+len(raw)+4095) & ~4095, 4096):
+                if page not in mapped:
+                    uc.mem_map(page, 4096)
+                    uc.mem_write(page, b'\xa5'*4096)
+                    mapped.add(page)
+            uc.mem_write(address, bytes(raw))
+            r = dict(address=address, count=len(raw), label=label, writable=writable,
+                     mask=bytearray([int(known)])*len(raw), live=True)
+            regions.append(r)
+            return r
+
+        for a, raw, label, _ in source_regions:
+            region(a, raw, label)
+        stack_region = region(STACK, b'\xa5'*0x10000, 'synthetic stack', True, False)
+        object_region = region(obj, bytes([case['backingByte']])*extent, 'Object allocation', True, False)
+        region(filename, bytes.fromhex(plan['filenameHex'])+b'\0', 'owned filename')
+        region(0x49eea4, struct.pack('<I', plan['cookie']), 'declared process cookie')
+        region(STOP, b'\xcc', 'return sentinel')
+
+        def seed(address, raw, r):
+            uc.mem_write(address, bytes(raw))
+            offset = address-r['address']
+            r['mask'][offset:offset+len(raw)] = b'\1'*len(raw)
+
+        def patch(fields):
+            for offset, value in fields:
+                seed(obj+offset, struct.pack('<I', value & 0xffffffff), object_region)
+
+        patch(case['initialFields'])
+        patch([[0x7a8, filename]])
+        initial_bytes = blob(uc.mem_read(obj, extent))
+        initial_mask = blob(object_region['mask'])
+
+        def register(name):
+            return uc.reg_read(getattr(registers, 'UC_X86_REG_'+name))
+
+        def put_register(name, value):
+            uc.reg_write(getattr(registers, 'UC_X86_REG_'+name), value)
+
+        def word(address):
+            return struct.unpack('<I', uc.mem_read(address, 4))[0]
+
+        def returned(pop=0, eax=None):
+            at = register('ESP')
+            target = word(at)
+            if eax is not None:
+                put_register('EAX', eax)
+            put_register('ESP', at+4+pop)
+            put_register('EIP', target)
+
+        def cstring(address):
+            out = bytearray()
+            for offset in range(256):
+                b = uc.mem_read(address+offset, 1)[0]
+                if b == 0:
+                    return out.hex()
+                out.append(b)
+            raise Boundary('Diagnostic token exceeds declared bound')
+
+        def instruction(machine, pc, size, _):
+            pcs.add(pc)
+            if pc in pending:
+                kind, data = pending.pop(pc)
+                if kind == 'scan':
+                    events.append(dict(kind='token', bytes=cstring(data['destination']),
+                        before=data['before'], after=word(data['stream'])-data['buffer']))
+                elif kind == 'eof':
+                    events.append(dict(kind='eof', cursor=word(data['stream'])-data['buffer'],
+                                       result=register('EAX')))
+            if pc == 0x4143e0:
+                at = register('ESP')
+                if word(at+4) != filename:
+                    raise Boundary('Open filename owner differs')
+                call = state['call']
+                data, stream = 0x31000000+call*0x10000, 0x30000000+call*0x1000
+                raw = bytes.fromhex(state['input']['streamHex'])
+                buffer_region = region(data, raw, 'owned stream buffer')
+                stream_region = region(stream, struct.pack('<III', data, data+len(raw), data),
+                                       'owned stream record', True)
+                allocations.extend([buffer_region, stream_region])
+                state.update(buffer=data, stream=stream)
+                events.append(dict(kind='open', bytes=len(raw), cursor=0))
+                returned(4, stream)
+                return
+            if pc == 0x4450a6:
+                address = word(register('ESP')+4)
+                matches = [r for r in allocations if r['address'] == address and r['live']]
+                if len(matches) != 1:
+                    raise Boundary('Unknown or repeated free')
+                matches[0]['live'] = False
+                events.append(dict(kind='free', owner=matches[0]['label']))
+                # free has no game-level return contract; this is a declared
+                # volatile-register response, not recovered CRT behavior.
+                returned(eax=plan['freeVolatileEAX'])
+                return
+            if not any(executable and a <= pc and pc+size <= a+len(raw)
+                       for a, raw, _, executable in source_regions):
+                raise Boundary(f'Undeclared instruction {pc:#x}+{size}')
+            if pc == 0x414490:
+                at = register('ESP')
+                if word(at+4) != state['stream'] or word(at+8) != 0x4977fc:
+                    raise Boundary('Unexpected scanner owner or format')
+                pending[word(at)] = ('scan', dict(destination=word(at+12),
+                    before=word(state['stream'])-state['buffer'], stream=state['stream'], buffer=state['buffer']))
+            elif pc == 0x414920:
+                at = register('ESP')
+                if word(at+4) != state['stream']:
+                    raise Boundary('Unexpected EOF owner')
+                pending[word(at)] = ('eof', dict(stream=state['stream'], buffer=state['buffer']))
+            elif pc == 0x414950:
+                events.append(dict(kind='close'))
+
+        def access(machine, kind, address, size, value, _):
+            writing = kind == unicorn.UC_MEM_WRITE
+            hot = [object_region, stack_region]
+            found = next((r for r in hot if r['address'] <= address
+                          and address+size <= r['address']+r['count']), None)
+            if found is None:
+                found = next((r for r in regions if r['live'] and r['address'] <= address
+                              and address+size <= r['address']+r['count']), None)
+            if found is None:
+                raise Boundary(f'Undeclared memory {"write" if writing else "read"} '
+                               f'{address:#x}+{size} at {register("EIP"):#x}')
+            offset = address-found['address']
+            if writing:
+                if not found['writable']:
+                    raise Boundary('Write to immutable '+found['label'])
+                found['mask'][offset:offset+size] = b'\1'*size
+                if found is object_region:
+                    raw = (value & ((1 << (size*8))-1)).to_bytes(size, 'little')
+                    state['writes'] += 1
+                    state['ordered'].update(struct.pack('<II', offset, size)+raw)
+                    if groups and groups[-1]['offset']+groups[-1]['size']*groups[-1]['count'] == offset and groups[-1]['size'] == size and groups[-1]['value'] == raw.hex():
+                        groups[-1]['count'] += 1
+                    else:
+                        groups.append(dict(offset=offset, size=size, count=1, value=raw.hex()))
+            elif not all(found['mask'][offset:offset+size]):
+                raise Boundary(f'Unknown {found["label"]} bytes at {address:#x}+{size}, PC {register("EIP"):#x}')
+
+        uc.hook_add(unicorn.UC_HOOK_CODE, instruction)
+        uc.hook_add(unicorn.UC_HOOK_MEM_READ | unicorn.UC_HOOK_MEM_WRITE, access)
+        calls = []
+        for call_index, call in enumerate(case['calls']):
+            patch(call.get('patches', []))
+            state.update(call=call_index, input=call, writes=0, ordered=hashlib.sha256())
+            events.clear(); groups.clear(); pending.clear()
+            stack_region['mask'][:] = b'\0'*stack_region['count']
+            uc.mem_write(STACK, b'\xa5'*0x10000)
+            seed(sp, struct.pack('<II', STOP, obj), stack_region)
+            seeds = dict(EAX=0xf0e0d0c0, EBX=0x13579bdf, ECX=0x10a0b0c0,
+                         EDX=0x11223344, ESI=0x55667788, EDI=0x99aabbcc, EBP=0x12345678, EFLAGS=0x202)
+            for name, value in seeds.items():
+                put_register(name, value)
+            put_register('ESP', sp)
+            outcome, error = 'returned', None
+            try:
+                uc.emu_start(0x40e540, STOP, timeout=plan['bounds']['timeoutMicrosecondsPerCall'],
+                             count=plan['bounds']['instructionsPerCall'])
+                if register('EIP') != STOP:
+                    outcome, error = 'execution-limit', 'Whole caller did not return'
+            except Boundary as exc:
+                outcome, error = 'unsupported-boundary', str(exc)
+            except unicorn.UcError as exc:
+                outcome, error = 'synthetic-mapping-fault', str(exc)
+            calls.append(dict(input=call, outcome=outcome, error=error,
+                objectBytes=blob(uc.mem_read(obj, extent)), objectDefined=blob(object_region['mask']),
+                events=list(events), writeGroups=[dict(x) for x in groups], objectWrites=state['writes'],
+                orderedWriteSHA256=state['ordered'].hexdigest(), returnedESP=register('ESP'),
+                expectedReturnedESP=sp+8, terminalPC=register('EIP'), preservedRegisters=all(register(r) == seeds[r] for r in ('EBX','ESI','EDI','EBP')),
+                liveStreamOwners=sum(r['live'] for r in allocations), pendingCallbacks=len(pending)))
+            if outcome != 'returned':
+                break  # Never continue a faulted/unsupported machine.
+        results.append(dict(id=case['id'], input=case, initialObjectBytes=initial_bytes,
+                            initialObjectDefined=initial_mask, calls=calls,
+                            instructionAddresses=[hex(a) for a in sorted(pcs)]))
+    outcomes = [call['outcome'] for case in results for call in case['calls']]
+    return dict(schemaVersion=1, runID=plan['runID'], recordedUTC=datetime.now(timezone.utc).isoformat(),
+        environment=dict(python=sys.version, executable=sys.executable, unicorn=unicorn.__version__),
+        referenceBoundary=plan['referenceBoundary'], objectAddress=obj, filenameAddress=filename,
+        cases=results, blobs=blobs, summary=dict(cases=len(results), calls=len(outcomes),
+        outcomes={kind:outcomes.count(kind) for kind in sorted(set(outcomes))}),
+        limitation='Controlled whole Object body only; declared Open/free boundaries, actual custom scanner and close; no Windows, packed/PNG resources or target startup/game acceptance.')
+
+
 def main():
     parser = argparse.ArgumentParser(description=__doc__)
     parser.add_argument('--plan', type=Path, required=True)
@@ -498,9 +731,15 @@ def main():
     parser.add_argument('--ranges', type=Path)
     parser.add_argument('--rng-pilot', type=Path)
     parser.add_argument('--dat-buffer-pilot', type=Path)
+    parser.add_argument('--object-body-pilot', type=Path)
     args = parser.parse_args()
     if args.output.exists():
         raise ValueError('Refusing to overwrite an existing run result')
+    if args.object_body_pilot:
+        result = object_body_pilot(args.plan, args.object_body_pilot)
+        args.output.write_text(json.dumps(result, indent=2)+'\n')
+        print(json.dumps(result['summary'], sort_keys=True))
+        return
     if args.dat_buffer_pilot:
         result = dat_buffer_pilot(args.plan, args.dat_buffer_pilot)
         args.output.write_text(json.dumps(result, indent=2)+'\n')
