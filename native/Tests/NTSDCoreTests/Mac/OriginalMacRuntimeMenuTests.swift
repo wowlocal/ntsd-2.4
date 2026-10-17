@@ -201,6 +201,26 @@ import XCTest
         XCTAssertEqual(m.queue.filter { $0.message == 0x201 }.map { [$0.lParam & 0xffff,$0.lParam >> 16] },[[314,369]])
     }
 
+    /// MENU_GAMEPAD.md: the front screens' text fields and their areas, for a
+    /// host's on-screen keyboard.
+    func testMenuGamepadTextEntry() {
+        typealias T = Gamepad.Target
+        func entry(_ selector: Int32,_ globals: [Int:Int32]) -> Gamepad.Text? { Gamepad.textEntry(selector:selector,word:{ globals[$0] }) }
+        XCTAssertEqual(entry(3,[0x4511b0:0]),.init(entry:.line,area:T(293,318,511,350))); XCTAssertNil(entry(3,[0x4511b0:1]))
+        XCTAssertEqual(entry(6,[0x4511c8:1]),.init(entry:.line,area:T(194,156,299,173)))         // player 1's name
+        XCTAssertEqual(entry(6,[0x4511c8:4]),.init(entry:.line,area:T(611,156,716,173)))         // player 4's
+        XCTAssertNil(entry(6,[0x4511c8:0])); XCTAssertNil(entry(6,[0x4511c8:5]))
+        XCTAssertEqual(entry(7,[0x4511c4:0x44fd18]),.init(entry:.line,area:T(210,207,730,225)))
+        XCTAssertEqual(entry(7,[0x4511c4:0x44f900]),.init(entry:.lines,area:T(210,232,730,302)))
+        XCTAssertEqual(entry(7,[0x4511c4:0x44f890]),.init(entry:.email,area:T(210,309,730,327)))
+        XCTAssertNil(entry(7,[0x4511c4:0]))
+        for selector: Int32 in [0,1,2,4,8,-1,-3] { XCTAssertNil(entry(selector,[0x4511b0:0,0x4511c8:1,0x4511c4:0x44fd18])) }
+        // Every WM_LBUTTONDOWN is counted (a host may reopen its keyboard on a new click).
+        let m = Messages(window:7,clock:{ 1 },point:{ (0,0) })
+        m.mouse(0x200,x:1,y:1,buttons:0); m.mouse(0x201,x:1,y:1,buttons:1); m.mouse(0x202,x:1,y:1,buttons:0); m.mouse(0x201,x:2,y:2,buttons:1)
+        XCTAssertEqual(m.leftPresses,2); XCTAssertEqual(m.lastPress.map { [$0.0,$0.1] },[2,2])
+    }
+
     func testMessageQueueKeyMapAndTranslation() throws {
         var now: UInt32 = 1000
         let m = Messages(window:7,clock:{ now += 5; return now },point:{ (-3,40) })

@@ -122,6 +122,7 @@ public struct OriginalMacRuntimeKey: Equatable {
     public func mouse(_ message: UInt32,x: Int32,y: Int32,buttons: UInt32) {
         let packed = UInt32(UInt16(truncatingIfNeeded:x)) | UInt32(UInt16(truncatingIfNeeded:y)) << 16
         if message == 0x200 { lastMouse = (x,y) }
+        if message == 0x201 { leftPresses += 1; lastPress = (x,y) }
         if message == 0x200,let i = queue.lastIndex(where: { $0.message == 0x200 }),i == queue.count-1 {
             queue[i] = .init(message:0x200,wParam:buttons,lParam:packed,time:now(),x:queue[i].x,y:queue[i].y); return
         }
@@ -164,6 +165,9 @@ public struct OriginalMacRuntimeKey: Equatable {
     }
     /// The joysticks on the mouse-only front screens, a departure from the original (MENU_GAMEPAD.md).
     public var menuGamepad: OriginalRuntimeMenuGamepad?
+    /// WM_LBUTTONDOWNs posted (host mouse, touch or a controller's click) and the last one's point.
+    public private(set) var leftPresses = 0
+    public private(set) var lastPress: (Int32,Int32)?
     /// The last WM_MOUSEMOVE's point, in client coordinates: where the game's cursor goes.
     public private(set) var lastMouse: (Int32,Int32)?
     func bytes(_ m: Message) -> [UInt8] {

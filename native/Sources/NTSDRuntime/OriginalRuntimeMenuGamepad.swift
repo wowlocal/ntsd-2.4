@@ -169,6 +169,37 @@
         }
         return pick(others.filter { $0.1.along > 0 },far:true) ?? pick(others.filter { $0.1.along < 0 },far:false) ?? index
     }
+    /// The text a front screen is typing into, for a host's on-screen
+    /// keyboard: one line, several lines (Return is a new line) or an email,
+    /// and the field's area in client coordinates.
+    public enum TextEntry: Equatable { case line, lines, email }
+    public struct Text: Equatable {
+        public let entry: TextEntry, area: Target
+    }
+    /// The address (selector 3 while 4511b0 is 0 — it is 1 only in the tick
+    /// that takes Return; the field's box measured on a capture), a player's
+    /// name in CONTROL SETTINGS (4511c8 = player + 1; it stays set after the
+    /// screen is left, as the game keeps typing into it on return) or a
+    /// RECORDING INFO field (4511c4: the name 44fd18, the info 44f900, the
+    /// email 44f890; their click areas); nil when the screen takes no text
+    /// (`OriginalNetworkMenu`, `OriginalFrontControlSettings`, `OriginalFrontRecordingInfo`).
+    public static func textEntry(selector: Int32,word: (Int) -> Int32?) -> Text? {
+        switch selector {
+        case 3: return word(0x4511b0) == 0 ? .init(entry:.line,area:Target(293,318,511,350)) : nil
+        case 6:
+            guard let player = word(0x4511c8),(1...4).contains(player) else { return nil }
+            let x = Int32(194+139*(Int(player)-1))
+            return .init(entry:.line,area:Target(x,156,x+105,173))
+        case 7:
+            switch word(0x4511c4) {
+            case 0x44fd18: return .init(entry:.line,area:Target(210,207,730,225))
+            case 0x44f900: return .init(entry:.lines,area:Target(210,232,730,302))
+            case 0x44f890: return .init(entry:.email,area:Target(210,309,730,327))
+            default: return nil
+            }
+        default: return nil
+        }
+    }
     static func packed(_ x: Int32,_ y: Int32) -> UInt32 { UInt32(UInt16(truncatingIfNeeded:x)) | UInt32(UInt16(truncatingIfNeeded:y)) << 16 }
 
     /// The mouse-only front screen of selector 44d064 (`word` reads a global),

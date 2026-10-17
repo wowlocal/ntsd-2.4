@@ -284,6 +284,61 @@ final class SDLAudioFeed: @unchecked Sendable {
     func showStop(title: String,text: String) { box(NTSD_SDL_MESSAGEBOX_ERROR,title,text) }
     func didStart() {
         if !arguments.contains("--no-activate"),let game = gameWindow() { _ = SDL_RaiseWindow(game.window) }
+        startScreenKeyboard()
+    }
+    /// Steam's on-screen keyboard (the Steam Deck in Game Mode, MENU_GAMEPAD.md):
+    /// SDL's X11 driver shows it for text input when Steam asks for it
+    /// (SDL_ENABLE_STEAM_SCREEN_KEYBOARD). Text input runs, with the field's
+    /// area, while a front screen types into a field, checked every 200 ms
+    /// until loading. SDL is not told when Steam closes its keyboard (Enter in
+    /// a single line), so another field, another window or a new click in the
+    /// field restarts it: stopped in one check, started in the next, so
+    /// Steam's close and open arrive in order. Any other driver, or no Steam
+    /// keyboard, starts nothing.
+    private var keyboardTimer: Timer?
+    private var typing: (text: OriginalRuntimeMenuGamepad.Text,window: OpaquePointer,presses: Int)?
+    private func startScreenKeyboard() {
+        guard keyboardTimer == nil,SDL_HasScreenKeyboardSupport(),let driver = SDL_GetCurrentVideoDriver(),
+              String(cString:driver) == "x11" else { return }
+        let timer = Timer(timeInterval:0.2,repeats:true) { [weak self] _ in MainActor.assumeIsolated { self?.updateScreenKeyboard() } }
+        RunLoop.main.add(timer,forMode:.common); keyboardTimer = timer
+    }
+    private func updateScreenKeyboard() {
+        guard let session,let messages = session.messages else { return }
+        if session.stopped || session.loadingStarted { stopTyping(); keyboardTimer?.invalidate(); keyboardTimer = nil; return }
+        guard let text = session.frontTextEntry(),let game = gameWindow() else { stopTyping(); return }
+        let presses = messages.leftPresses
+        if let typing {
+            if typing.text != text || typing.window != game.window { stopTyping() }
+            else if typing.presses != presses {
+                // A click in the field reopens the keyboard; elsewhere it is only counted.
+                if let p = messages.lastPress,text.area.contains(p) { stopTyping() } else { self.typing?.presses = presses }
+            }
+            return
+        }
+        let frame = game.textureSize == .zero ? game.client : game.textureSize
+        let a = text.area,box = windows.windowRect(game,client:CGRect(x:CGFloat(a.left),y:CGFloat(a.top),
+                                                                       width:CGFloat(a.right-a.left+1),height:CGFloat(a.bottom-a.top+1)),frame:frame)
+        var area = SDL_Rect(x:Int32(box.minX.rounded(.down)),y:Int32(box.minY.rounded(.down)),w:Int32(box.width.rounded(.up)),h:Int32(box.height.rounded(.up)))
+        _ = SDL_SetTextInputArea(game.window,&area,0)
+        let props = SDL_CreateProperties()
+        defer { SDL_DestroyProperties(props) }
+        let type = text.entry == .email ? SDL_TEXTINPUT_TYPE_TEXT_EMAIL : SDL_TEXTINPUT_TYPE_TEXT
+        _ = SDL_SetNumberProperty(props,"SDL.textinput.type",Int64(type.rawValue))
+        _ = SDL_SetNumberProperty(props,"SDL.textinput.capitalization",Int64(SDL_CAPITALIZE_NONE.rawValue))
+        _ = SDL_SetBooleanProperty(props,"SDL.textinput.autocorrect",false)
+        _ = SDL_SetBooleanProperty(props,"SDL.textinput.multiline",text.entry == .lines)
+        _ = SDL_StartTextInputWithProperties(game.window,props)
+        typing = (text,game.window,presses)
+        Self.report(["event":"screenKeyboard","entry":"\(text.entry)","area":[Int(area.x),Int(area.y),Int(area.w),Int(area.h)]])
+    }
+    private func stopTyping() {
+        guard let typing else { return }
+        // A window SDL already destroyed (its lease released) cannot stop
+        // text input, which would leave SDL's keyboard shown: the game's does.
+        if let window = SDL_GetWindowID(typing.window) != 0 ? typing.window : gameWindow()?.window { _ = SDL_StopTextInput(window) }
+        self.typing = nil
+        Self.report(["event":"screenKeyboard","entry":"none"])
     }
     func terminate() { SDL_Quit(); Foundation.exit(0) }
     func exit(_ code: Int32) -> Never { SDL_Quit(); Foundation.exit(code) }
