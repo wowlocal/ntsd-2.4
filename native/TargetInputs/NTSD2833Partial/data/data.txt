@@ -1,0 +1,420 @@
+<object>
+
+id: 901 type: 0 file: custom\1genma\genma.dat
+id: 902 type: 3 file: custom\1genma\a\shuriken.dat
+id: 903 type: 0 file: custom\1genma\genmaclone.dat
+id: 904 type: 3 file: custom\1genma\a\katon.dat
+id: 905 type: 3 file: custom\1genma\a\smalldragon.dat
+id: 906 type: 3 file: custom\1genma\a\bigdragon.dat
+id: 907 type: 3 file: custom\1genma\a\wind.dat
+
+id: 50 type: 0 file: m\ton\ton.dat
+id: 39 type: 0 file: m\san\san.dat
+id: 32 type: 0 file: m\nin\hun.dat
+id: 31 type: 0 file: m\nin\nin2.dat
+id: 30 type: 0 file: m\nin\nin.dat
+id: 500 type: 0 file: m\hug\hug.dat
+id: 501 type: 0 file: m\hug\hug2.dat
+id: 502 type: 0 file: m\hug\hug3.dat
+id: 86 type: 0 file: m\teu\teu.dat
+
+id: 2 type: 0 file: c\nar\nar.dat
+id: 33 type: 0 file: c\nar\ncl.dat
+id: 99 type: 0 file: c\nar\sna.dat
+id: 96 type: 0 file: c\nar\snc.dat
+id: 52 type: 0 file: c\nar\kyu.dat
+id: 508 type: 0 file: c\nar\4tk.dat
+id: 434 type: 3 file: c\nar\a\ras.dat
+id: 518 type: 3 file: c\nar\a\atk.dat
+id: 746 type: 3 file: c\nar\a\4tk.dat
+
+id: 1 type: 0 file: c\saku\saku.dat
+id: 704 type: 0 file: c\saku\saku2.dat
+id: 705 type: 0 file: c\saku\saku3.dat
+id: 700 type: 3 file: c\saku\a\atk.dat
+
+id: 11 type: 0 file: c\sasu\sasu.dat
+id: 38 type: 0 file: c\sasu\cs2.dat
+id: 98 type: 0 file: c\sasu\mss.dat
+id: 87 type: 0 file: c\sasu\sus.dat
+id: 425 type: 3 file: c\sasu\a\gen.dat
+id: 440 type: 3 file: c\sasu\a\chi.dat
+id: 806 type: 3 file: c\sasu\a\mss.dat
+
+id: 4 type: 0 file: c\sai\sai.dat
+id: 207 type: 3 file: c\sai\a\ink.dat
+
+id: 3 type: 0 file: c\kaka\kaka.dat
+id: 721 type: 0 file: c\kaka\pak.dat
+id: 707 type: 3 file: c\kaka\a\rai.dat
+
+id: 13 type: 0 file: c\yam\yam.dat
+id: 48 type: 0 file: c\yam\ycl.dat
+id: 555 type: 3 file: c\yam\a\tre.dat
+
+id: 65 type: 0 file: c\ank\ank.dat
+id: 44 type: 0 file: c\ank\acl.dat
+id: 870 type: 0 file: c\ank\ssnk.dat
+id: 875 type: 3 file: c\ank\a\atk.dat
+id: 876 type: 3 file: c\ank\a\atk2.dat
+id: 877 type: 3 file: c\ank\a\atk3.dat
+
+id: 73 type: 0 file: c\hay\hay.dat
+id: 410 type: 0 file: c\hay\hayS.dat
+id: 412 type: 0 file: c\hay\clo1.dat
+id: 413 type: 0 file: c\hay\clo2.dat
+id: 417 type: 3 file: c\hay\a\sla.dat
+id: 418 type: 3 file: c\hay\a\blo.dat
+
+id: 72 type: 0 file: c\dan\dan.dat
+id: 604 type: 0 file: c\dan\danr.dat
+id: 406 type: 3 file: c\dan\a\win.dat
+id: 407 type: 3 file: c\dan\a\iza.dat
+id: 408 type: 3 file: c\dan\a\mark.dat
+
+id: 70 type: 0 file: c\shis\shis.dat
+id: 710 type: 3 file: c\shis\a\gen.dat
+
+id: 18 type: 0 file: c\nej\nej.dat
+id: 444 type: 3 file: c\nej\a\bya.dat
+id: 445 type: 3 file: c\nej\a\bya2.dat
+id: 809 type: 3 file: c\nej\a\are.dat
+
+id: 41 type: 0 file: c\hin\hin.dat
+id: 280 type: 3 file: c\hin\a\wind.dat
+id: 810 type: 3 file: c\hin\a\are.dat
+id: 866 type: 1 file: c\hin\a\hincha.dat
+
+id: 7 type: 0 file: c\lee\lee.dat
+id: 814 type: 3 file: c\lee\a\lee.dat
+
+id: 506 type: 0 file: c\guy\guy.dat
+id: 94 type: 0 file: c\guy\gsi.dat
+id: 97 type: 0 file: c\guy\gei.dat
+id: 760 type: 3 file: c\guy\a\bal.dat
+
+id: 19 type: 0 file: c\ten\ten.dat
+id: 713 type: 0 file: c\ten\pole.dat
+id: 723 type: 0 file: c\ten\swords.dat
+id: 724 type: 0 file: c\ten\blade.dat
+id: 729 type: 0 file: c\ten\bash.dat
+id: 725 type: 3 file: c\ten\a\ten.dat
+
+id: 22 type: 0 file: c\shik\shik.dat
+id: 462 type: 3 file: c\shik\a\sha.dat
+
+id: 430 type: 0 file: c\asu\asu.dat
+id: 431 type: 3 file: c\asu\a\ash.dat
+id: 432 type: 3 file: c\asu\a\fly.dat
+
+id: 5 type: 0 file: c\shino\shino.dat
+id: 228 type: 3 file: c\shino\a\bug.dat
+
+id: 12 type: 0 file: c\kib\kib.dat
+id: 226 type: 3 file: c\kib\a\aka.dat
+
+id: 8 type: 0 file: c\chi\chi.dat
+id: 850 type: 0 file: c\chi\pup1.dat
+id: 851 type: 0 file: c\chi\pup2.dat
+id: 852 type: 0 file: c\chi\pup3.dat
+id: 853 type: 0 file: c\chi\pup4.dat
+id: 854 type: 0 file: c\chi\pup5.dat
+id: 855 type: 0 file: c\chi\pup6.dat
+id: 856 type: 0 file: c\chi\pup7.dat
+id: 857 type: 0 file: c\chi\pup8.dat
+id: 858 type: 0 file: c\chi\pup9.dat
+id: 859 type: 0 file: c\chi\pup10.dat
+id: 419 type: 3 file: c\chi\a\atk.dat
+id: 420 type: 3 file: c\chi\a\pup.dat
+
+id: 14 type: 0 file: c\kan\kan.dat
+id: 95 type: 0 file: c\kan\kan2.dat
+id: 230 type: 3 file: c\kan\a\kar.dat
+id: 231 type: 3 file: c\kan\a\san.dat
+id: 630 type: 3 file: c\kan\a\kar2.dat
+
+id: 15 type: 0 file: c\tem\tem.dat
+id: 804 type: 3 file: c\tem\a\tem.dat
+
+id: 16 type: 0 file: c\gaa\gaa.dat
+id: 411 type: 3 file: c\gaa\a\san.dat
+id: 525 type: 3 file: c\gaa\a\ult.dat
+
+id: 78 type: 0 file: c\rai\rai.dat
+id: 436 type: 0 file: c\rai\raiT.dat
+id: 447 type: 3 file: c\rai\a\rai.dat
+
+id: 75 type: 0 file: c\bee\bee.dat
+id: 441 type: 3 file: c\bee\a\wind.dat
+
+id: 726 type: 0 file: c\han\han.dat
+id: 727 type: 0 file: c\han\smo.dat
+id: 728 type: 3 file: c\han\a\ste.dat
+
+id: 510 type: 0 file: c\yag\yag.dat
+id: 511 type: 3 file: c\yag\a\mir.dat
+id: 514 type: 3 file: c\yag\a\dra.dat
+
+id: 29 type: 0 file: c\hak\hak.dat
+id: 516 type: 3 file: c\hak\a\mir.dat
+
+id: 84 type: 0 file: c\gur\gur.dat
+id: 85 type: 0 file: c\gur\fakefan.dat
+id: 619 type: 3 file: c\gur\a\cag.dat
+
+id: 60 type: 0 file: c\zab\zab.dat
+id: 49 type: 0 file: c\zab\clo.dat
+id: 456 type: 0 file: c\zab\dem.dat
+id: 602 type: 3 file: c\zab\a\zab.dat
+id: 455 type: 3 file: c\zab\a\dra.dat
+
+id: 74 type: 0 file: c\sui\sui.dat
+id: 421 type: 3 file: c\sui\a\atk.dat
+
+id: 77 type: 0 file: c\kar\kar.dat
+id: 314 type: 3 file: c\kar\a\cha.dat
+id: 315 type: 3 file: c\kar\a\sas.dat
+id: 316 type: 3 file: c\kar\a\jug.dat
+id: 317 type: 3 file: c\kar\a\sui.dat
+
+id: 71 type: 0 file: c\jug\jugo.dat
+id: 400 type: 0 file: c\jug\jugoCS2.dat
+id: 402 type: 3 file: c\jug\a\pao.dat
+
+id: 76 type: 0 file: c\miz\miz.dat
+id: 428 type: 0 file: c\miz\cs2.dat
+id: 429 type: 3 file: c\miz\a\shur.dat
+
+id: 66 type: 0 file: c\jiro\jiro1.dat
+id: 37 type: 0 file: c\jiro\jiro.dat
+id: 711 type: 0 file: c\jiro\gol.dat
+id: 712 type: 0 file: c\jiro\gol2.dat
+id: 708 type: 3 file: c\jiro\a\cav.dat
+id: 709 type: 3 file: c\jiro\a\gol.dat
+
+id: 67 type: 0 file: c\kid\kid1.dat
+id: 34 type: 0 file: c\kid\kid.dat
+id: 438 type: 3 file: c\kid\a\spi.dat
+id: 442 type: 3 file: c\kid\a\kyo.dat
+id: 670 type: 3 file: c\kid\a\atk.dat
+
+id: 61 type: 0 file: c\sako\sako1.dat
+id: 81 type: 0 file: c\sako\suk1.dat
+id: 83 type: 0 file: c\sako\uko1.dat
+id: 35 type: 0 file: c\sako\sako.dat
+id: 80 type: 0 file: c\sako\suk.dat
+id: 82 type: 0 file: c\sako\uko.dat
+id: 805 type: 3 file: c\sako\a\atk.dat
+
+id: 62 type: 0 file: c\tay\tay1.dat
+id: 36 type: 0 file: c\tay\tay.dat
+id: 439 type: 3 file: c\tay\a\mon.dat
+
+id: 28 type: 0 file: c\kim\kim1.dat
+id: 507 type: 0 file: c\kim\kim.dat
+id: 820 type: 3 file: c\kim\a\bon.dat
+
+id: 23 type: 0 file: c\kab\kab.dat
+id: 860 type: 0 file: c\kab\tsurugi.dat
+id: 861 type: 0 file: c\kab\yoroi.dat
+id: 437 type: 1 file: c\kab\a\cha.dat
+id: 862 type: 3 file: c\kab\a\atk.dat
+
+id: 20 type: 0 file: c\oro\oro.dat
+id: 88 type: 0 file: c\oro\1.dat
+id: 89 type: 0 file: c\oro\2.dat
+id: 883 type: 3 file: c\oro\a\edo2.dat
+id: 888 type: 3 file: c\oro\a\atk.dat
+
+id: 21 type: 0 file: c\jira\jira.dat
+id: 701 type: 0 file: c\jira\pre.dat
+id: 702 type: 0 file: c\jira\sag.dat
+id: 414 type: 3 file: c\jira\a\ras.dat
+id: 423 type: 3 file: c\jira\a\toad.dat
+id: 424 type: 3 file: c\jira\a\mag.dat
+
+id: 513 type: 0 file: c\tsu\tsu.dat
+id: 237 type: 3 file: c\tsu\a\atk.dat
+
+id: 27 type: 0 file: c\min\min.dat
+id: 449 type: 0 file: c\min\sag.dat
+id: 427 type: 0 file: c\min\kcm.dat
+id: 448 type: 1 file: c\min\a\fla.dat
+id: 815 type: 3 file: c\min\a\fly.dat
+id: 817 type: 3 file: c\min\a\fly2.dat
+id: 426 type: 3 file: c\min\a\kcm.dat
+
+id: 63 type: 0 file: c\hir\hir.dat
+id: 504 type: 0 file: c\hir\hcl.dat
+id: 236 type: 3 file: c\hir\a\atk.dat
+
+id: 64 type: 0 file: c\tobir\tobir.dat
+id: 415 type: 0 file: c\tobir\tclo.dat
+id: 459 type: 3 file: c\tobir\a\atk.dat
+
+id: 69 type: 0 file: c\has\has.dat
+id: 93 type: 0 file: c\has\sag.dat
+id: 47 type: 0 file: c\has\hcl.dat
+id: 409 type: 3 file: c\has\a\atk.dat
+
+id: 25 type: 0 file: c\kaku\kakun.dat
+id: 498 type: 0 file: c\kaku\kakunck.dat
+id: 57 type: 0 file: c\kaku\kakunre.dat
+id: 871 type: 0 file: c\kaku\maskfir.dat
+id: 872 type: 0 file: c\kaku\maskthu.dat
+id: 873 type: 0 file: c\kaku\maskwat.dat
+id: 874 type: 0 file: c\kaku\maskair.dat
+id: 499 type: 3 file: c\kaku\a\nck.dat
+
+id: 24 type: 0 file: c\hid\hid.dat
+id: 56 type: 0 file: c\hid\rea.dat
+id: 333 type: 3 file: c\hid\a\rea.dat
+id: 334 type: 3 file: c\hid\a\rea2.dat
+id: 335 type: 3 file: c\hid\a\scy.dat
+
+id: 6 type: 0 file: c\saso\Hsa.dat
+id: 51 type: 0 file: c\saso\saso.dat
+id: 90 type: 0 file: c\saso\ncs.dat
+id: 55 type: 0 file: c\saso\pup.dat
+id: 213 type: 3 file: c\saso\a\pup.dat
+id: 512 type: 3 file: c\saso\a\pup2.dat
+id: 822 type: 3 file: c\saso\a\iro.dat
+
+id: 10 type: 0 file: c\dei\dei.dat
+id: 58 type: 0 file: c\dei\bir.dat
+id: 45 type: 0 file: c\dei\ncd.dat
+id: 46 type: 0 file: c\dei\ncb.dat
+id: 800 type: 0 file: c\dei\zom.dat
+id: 802 type: 0 file: c\dei\zom2.dat
+id: 225 type: 3 file: c\dei\a\cla.dat
+id: 206 type: 3 file: c\dei\a\cla2.dat
+id: 221 type: 3 file: c\dei\a\cla3.dat
+
+id: 17 type: 0 file: c\kis\kis.dat
+id: 505 type: 0 file: c\kis\kcl.dat
+id: 91 type: 0 file: c\kis\sam.dat
+id: 42 type: 0 file: c\kis\nck.dat
+id: 416 type: 3 file: c\kis\a\wat.dat
+
+id: 9 type: 0 file: c\ita\ita.dat
+id: 220 type: 3 file: c\ita\a\cro2.dat
+id: 603 type: 3 file: c\ita\a\cro.dat
+
+id: 68 type: 0 file: c\kon\kon.dat
+id: 54 type: 0 file: c\kon\ang.dat
+id: 526 type: 3 file: c\kon\a\pap.dat
+
+id: 26 type: 0 file: c\pai\pai.dat
+id: 509 type: 0 file: c\pai\paid.dat
+id: 401 type: 3 file: c\pai\a\sum.dat
+id: 403 type: 3 file: c\pai\a\rhi.dat
+id: 404 type: 3 file: c\pai\a\ox.dat
+id: 405 type: 3 file: c\pai\a\cha.dat
+id: 838 type: 3 file: c\pai\a\squ.dat
+
+id: 0 type: 0 file: c\tobi\tobi.dat
+id: 53 type: 0 file: c\tobi\ttobi.dat
+id: 232 type: 3 file: c\tobi\a\kat.dat
+id: 832 type: 3 file: c\tobi\a\fox.dat
+
+id: 899 type: 0 file: c\0\spe.dat
+
+id: 101 type: 4 file: w\2.dat
+id: 120 type: 1 file: w\4.dat
+id: 121 type: 1 file: w\5.dat
+id: 122 type: 6 file: w\3.dat
+id: 123 type: 6 file: w\8.dat
+id: 124 type: 4 file: w\9.dat
+id: 150 type: 2 file: w\1.dat
+id: 151 type: 2 file: w\l.dat
+id: 600 type: 4 file: w\6.dat
+id: 217 type: 2 file: w\t.dat
+id: 218 type: 2 file: w\h.dat
+id: 219 type: 3 file: w\e.dat
+id: 652 type: 2 file: w\h2.dat
+id: 422 type: 4 file: w\x.dat
+id: 503 type: 1 file: w\b.dat
+id: 515 type: 1 file: w\n.dat
+id: 884 type: 1 file: w\scr.dat
+
+id: 299 type: 3 file: s\0\0.dat
+id: 443 type: 3 file: s\0\ram.dat
+id: 92 type: 0 file: s\0\iru.dat
+id: 43 type: 0 file: s\0\iruc.dat
+id: 300 type: 3 file: s\c.dat
+id: 235 type: 3 file: s\S\S.dat
+id: 301 type: 3 file: s\1\1.dat
+id: 59 type: 0 file: s\1\ncs.dat
+id: 302 type: 3 file: s\2\2.dat
+id: 40 type: 0 file: s\2\ncs2.dat
+id: 303 type: 3 file: s\3\3.dat
+id: 304 type: 3 file: s\4\4.dat
+id: 305 type: 3 file: s\5\5.dat
+id: 355 type: 2 file: s\5\5p.dat
+
+id: 202 type: 3 file: a\hea\hea.dat
+id: 204 type: 3 file: a\cha\cha.dat
+id: 208 type: 3 file: a\gro\gro.dat
+id: 210 type: 3 file: a\kat\kat2.dat
+id: 211 type: 3 file: a\fir\fir.dat
+id: 212 type: 3 file: a\kam\kam.dat
+id: 214 type: 3 file: a\fla\fla.dat
+id: 222 type: 3 file: a\pur\pur.dat
+id: 223 type: 3 file: a\meg\meg.dat
+id: 224 type: 3 file: a\sna\sna.dat
+id: 227 type: 3 file: a\sna\snaoro.dat
+id: 233 type: 3 file: a\sna\snasas.dat
+id: 229 type: 3 file: a\roc\roc.dat
+id: 251 type: 3 file: a\fir\firz.dat
+id: 433 type: 3 file: a\spi\spi.dat
+id: 435 type: 3 file: a\zzz\zzz.dat
+id: 446 type: 3 file: a\blas\blas.dat
+id: 605 type: 3 file: a\ama\ama.dat
+id: 606 type: 3 file: a\ama\ama2.dat
+id: 608 type: 3 file: a\fir\fla.dat
+id: 616 type: 3 file: a\wat\wat2.dat
+id: 703 type: 3 file: a\gro\gro2.dat
+id: 706 type: 3 file: a\pof\pof2.dat
+id: 714 type: 3 file: a\blac\blac.dat
+id: 715 type: 3 file: a\fro\fro.dat
+id: 716 type: 3 file: a\pof\pof.dat
+id: 717 type: 3 file: a\pof\god.dat
+id: 719 type: 3 file: a\win\win.dat
+id: 736 type: 3 file: a\wal\wal.dat
+id: 761 type: 3 file: a\lig\lig.dat
+id: 762 type: 3 file: a\ble\ble.dat
+id: 808 type: 3 file: a\kat\kat.dat
+id: 816 type: 3 file: a\wat\wat.dat
+id: 818 type: 3 file: a\kat\kat3.dat
+id: 830 type: 3 file: a\kat\kat4.dat
+id: 846 type: 3 file: a\tra\tra.dat
+id: 900 type: 3 file: a\cla\cla.dat
+id: 998 type: 5 file: data\etc.dat
+id: 999 type: 5 file: data\broken_weapon.dat
+<object_end>
+<background>
+id: 0 file: b\Wha\b.dat
+id: 1 file: b\San\b.dat
+id: 2 file: b\Cav\b.dat
+id: 3 file: b\Dee\b.dat
+id: 4 file: b\For\b.dat
+id: 5 file: b\Rai\b.dat
+id: 6 file: b\Fod\b.dat
+id: 7 file: b\Vil\b.dat
+id: 8 file: b\Hid\b.dat
+id: 9 file: b\San2\b.dat
+id: 10 file: b\Dis\b.dat
+id: 11 file: b\Ent\b.dat
+id: 12 file: b\Are\b.dat
+id: 13 file: b\Hot\b.dat
+id: 14 file: b\Kab\b.dat
+id: 15 file: b\Pat\b.dat
+id: 16 file: b\Des\b.dat
+id: 17 file: b\Ram\b.dat
+id: 18 file: b\Aca\b.dat
+id: 19 file: b\Sno\b.dat
+id: 20 file: b\Uch\b.dat
+id: 21 file: b\Val\b.dat
+id: 22 file: b\Cli\b.dat
+id: 23 file: b\Hos\b.dat
+<background_end>

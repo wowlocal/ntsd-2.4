@@ -37,8 +37,14 @@ public struct OriginalRuntimeLoadingPackages {
     public let interface: Result<OriginalApplicationInterfaceInputs,Error>, menu: Result<OriginalApplicationMenuInputs,Error>
     public let arena: Result<OriginalApplicationArenaInputs,Error>
     public init(in bundle: Bundle) {
-        self.init(catalog:Result { try .bundled(in:bundle) },loading:Result { try .bundled(in:bundle) },
-            interface:Result { try .bundled(in:bundle) },menu:Result { try .bundledWithWar(in:bundle) },arena:Result { try .bundled(in:bundle) })
+        self.init(readCatalog:{ try .bundled(in:bundle) },readLoading:{ try .bundled(in:bundle) },
+            readInterface:{ try .bundled(in:bundle) },readMenu:{ try .bundledWithWar(in:bundle) },readArena:{ try .bundled(in:bundle) })
+    }
+    init(readCatalog: () throws -> OriginalApplicationCatalogInputs,readLoading: () throws -> OriginalApplicationLoadingInputs,
+         readInterface: () throws -> OriginalApplicationInterfaceInputs,readMenu: () throws -> OriginalApplicationMenuInputs,
+         readArena: () throws -> OriginalApplicationArenaInputs) {
+        self.init(catalog:Result(catching:readCatalog),loading:Result(catching:readLoading),
+            interface:Result(catching:readInterface),menu:Result(catching:readMenu),arena:Result(catching:readArena))
     }
     init(catalog: Result<OriginalApplicationCatalogInputs,Error>,loading: Result<OriginalApplicationLoadingInputs,Error>,
          interface: Result<OriginalApplicationInterfaceInputs,Error>,menu: Result<OriginalApplicationMenuInputs,Error>,

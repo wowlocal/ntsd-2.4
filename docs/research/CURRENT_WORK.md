@@ -1,5 +1,34 @@
 # Текущая передача работы
 
+## NTSD 2.8.3.3 M0: реализован content owner, полные gates выполняются — 2026-10-17
+
+[M0](NTSD_2_8_3_3_M0.md): реальный `OriginalRuntimeSession` удерживает один
+content owner, startup/read-ahead/loading tickets и один writable root.
+Строгие Core-пакеты 2.4 сохранены. Отдельный partial-пакет содержит девять
+точных raw outer-ZIP файлов,161202 байта; target startup явно останавливается
+до Core/файлов/таймера/аудио/сети. Все восемь новых focused-тестов прошли;
+baseline и target package verifiers прошли. Исправления/ошибки сохранены:
+Foundation `/var` и `/private/var` требовали нормализации обеих сторон пути.
+Проверки используют новые Runtime/Mac/App объекты и byte-identical прежние
+Core/Reference/codec/test объекты; исходные expected не менялись.
+
+Полная приёмка M0 **открыта**: выполняются заданные baseline suites/whole-startup/
+whole-loading (`xctest` PID61567, старт19:18:25 CEST) и все11 текущих app_e2e
+SCENARIOS на correction2 binary. Их tool handles50681/15735 и metadata/logs:
+`/Volumes/T7/ntsd-2.4-artifacts/version-diff-20261017/m0-native1/`.
+Наблюдать существующие jobs; не перезапускать и не менять pinned inputs.
+Независимый storage review не назначен и остаётся отдельной открытой gate.
+T7 для новых builds явно разрешён пользователем в этом продолжении; UUID,
+writable ExFAT и40GiB reserve проверены. X5 результаты сохранены на прежнем месте.
+
+Следующая независимая задача после локального коммита этого checked increment —
+D3: ≤60 минут targeted source review фактических target Frame/Object constructor/
+continuous-loader entries по сохранённому коду и interpretation correction;
+затем конечный план и ближайший доказанный native storage/loading consumer.
+Packed-content incident, target startup и M1–M6 остаются открытыми; M0 не
+устанавливает целевое игровое поведение. [Промежуточная evidence](
+../evidence/ntsd-2.8.3.3-m0-20261017-increment1.json).
+
 ## NTSD 2.8.3.3: план обновлён Astra xhigh — 2026-10-17
 
 [План реализации](NTSD_2_8_3_3_IMPLEMENTATION_PLAN.md) обновлён по завершённым

@@ -111,12 +111,15 @@ public enum OriginalRuntimeSessionBoundary: Error, Equatable {
     private var loading: OriginalMacRuntimeLoading?
     /// The startup package, read once: the loading phase takes the same value
     /// instead of reading and verifying it again (MEMORY_LOADING L13).
-    private var startupPackage: OriginalApplicationStartupInputs?
+    private var startupPackage: OriginalRuntimeContentInputs.Startup?
+    private let suppliedContent: OriginalRuntimeContentInputs?
+    private var contentInputs: OriginalRuntimeContentInputs?
+    private var contentOverlay: OriginalMacRuntimeOverlay?
     /// The loading packages, read on a thread of their own from the end of
     /// startup while the menu runs (MEMORY_LOADING L13; on WASI where the
     /// loading phase takes them, TVOS_WEB W3e); the loading phase takes them,
     /// waiting if needed, where it read them, in the same order.
-    private var loadingPackages: OriginalConcurrentInputs.Background<OriginalRuntimeLoadingPackages>?
+    private var loadingPackages: OriginalConcurrentInputs.Background<OriginalRuntimeContentInputs.Loading>?
     private var captureAfter: (count: Int,path: String)?
     private var clickAt: (count: Int,x: Int32,y: Int32)?
     private var cycles = 0, gameplayBodies = 0
@@ -153,8 +156,8 @@ public enum OriginalRuntimeSessionBoundary: Error, Equatable {
     }
     /// The current original window (replaced by an Alt+Enter recreation).
     public private(set) var gameWindow: UInt32 = 0
-    public init(arguments: [String],host: any OriginalRuntimeSessionHost) {
-        self.arguments = arguments; self.host = host
+    public init(arguments: [String],host: any OriginalRuntimeSessionHost,contentInputs: OriginalRuntimeContentInputs? = nil) {
+        self.arguments = arguments; self.host = host; self.suppliedContent = contentInputs
         exitAfterStartup = arguments.contains("--exit-after-startup")
         if let i = arguments.firstIndex(of:"--capture-after"),i+2 < arguments.count,let n = Int(arguments[i+1]) {
             captureAfter = (n,arguments[i+2])
@@ -228,12 +231,17 @@ public enum OriginalRuntimeSessionBoundary: Error, Equatable {
     }
     public func start() {
         do {
+            if suppliedContent != nil,arguments.contains("--resources") { throw OriginalRuntimeContentInputs.Boundary.conflictingResources }
+            let content = try suppliedContent ?? .baseline(in:resourceBundle())
+            // One origin for startup, read-ahead and loading. Target acquisition
+            // stops here before Core state, overlay IO or host services exist.
+            let startup = try content.acquireStartup(),package = startup.inputs
+            self.contentInputs = content
+            let overlay = try content.overlay { try overlayRoot() }
+            contentOverlay = overlay
             // Timer precision without throttling, but the machine may still idle-sleep:
             // the original never calls SetThreadExecutionState.
             host.beginTimingActivity()
-            let resources = try resourceBundle()
-            let package = try OriginalApplicationStartupInputs.bundled(in:resources)
-            let overlay = try overlayRoot()
             let started = try OriginalMacRuntimeStartup.run(inputs:package,overlay:overlay,environment:startupEnvironment(),host:host.startupHost)
             self.started = started
             started.display.pipelinesBackFill = !arguments.contains("--synchronous-render") && started.windows.presentsConcurrently
@@ -254,10 +262,10 @@ public enum OriginalRuntimeSessionBoundary: Error, Equatable {
                 "musicOutput":"packaged ALAC tracks; graph-event looping",
                 "soundOutput":soundOutputError ?? soundOutput ?? "",
                 "backingScale":host.backingScale(started.window,in:started.windows),
-                "resources":[(try? OriginalApplicationCatalogInputs.bundledDirectory(in:resources).path) ?? "",host.musicDirectory]])
+                "resources":[(try? content.catalogDirectory().path) ?? "",host.musicDirectory]])
             if exitAfterStartup { flushBeforeExit(); host.terminate(); return }
-            startupPackage = package
-            loadingPackages = .init { OriginalRuntimeLoadingPackages(in:resources) }
+            startupPackage = startup
+            loadingPackages = .init { try content.acquireLoading(for:startup) }
             let menu = try OriginalMacRuntimeMenu(started,inputs:package,clock:{ [unowned self] in try self.clock() },
                                                   point:{ [unowned self] in self.cursor() },overlay:overlay,
                                                   capsLock:{ [unowned host] in host.capsLock() },messageBox:host.startupHost.messageBox)
@@ -378,14 +386,15 @@ public enum OriginalRuntimeSessionBoundary: Error, Equatable {
                 if let n = scriptStep(committedBranch:false) { try runScript(n,menu,started,timeline:&script) }
                 try runScript(cycles,menu,started,timeline:&loadedScript)
                 if first {
-                    let resources = try resourceBundle()
-                    let startupInputs = try startupPackage ?? OriginalApplicationStartupInputs.bundled(in:resources)
+                    guard let contentInputs,let startupPackage,let contentOverlay else {
+                        throw OriginalMacRuntimeLoading.Boundary.missing("session content origin")
+                    }
                     let waitBegin = Date()
-                    let packages = try loadingPackages?.get() ?? OriginalRuntimeLoadingPackages(in:resources)
+                    let packages = try loadingPackages?.get() ?? contentInputs.acquireLoading(for:startupPackage)
                     packagesWaitSeconds = Date().timeIntervalSince(waitBegin); loadingPackages = nil
-                    loading = try OriginalMacRuntimeLoading.bundled(started,startupInputs:startupInputs,packages:packages,
+                    loading = try contentInputs.makeLoading(started,startup:startupPackage,packages:packages,
                                                                     clock:{ [unowned self] in try self.clock() },dialogs:host.loadingDialogs)
-                    loading?.overlay = try overlayRoot()
+                    loading?.overlay = contentOverlay
                     loading?.stageCheckpoints = arguments.contains("--stage-checkpoints")
                     loading?.pipelinesRendering = !arguments.contains("--synchronous-render")
                     loading?.sounds = sounds

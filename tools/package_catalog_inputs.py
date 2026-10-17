@@ -11,12 +11,15 @@ import json
 import os
 from pathlib import Path
 import stat
+import zipfile
 
 ROOT = Path(__file__).resolve().parents[1]
 BASELINE = ROOT / "downloads/NTSD_2.4_2.0a_clean/NTSD 2.4_2.0a"
 MANIFEST = Path(__file__).with_name("catalog_inputs_manifest.json")
 MANIFEST_SHA256 = "fd42d041549f00f5ba715063d7e560a9e2b01ab720017d1da5e032c34ca9451d"
 EXE_SHA256 = "3f7ac67c5890ef979ee24a6dae5528056e7f631725c292cf9cb0a928ebeff71c"
+TARGET_MANIFEST = Path(__file__).with_name("ntsd_2_8_3_3_partial_inputs_manifest.json")
+TARGET_MANIFEST_SHA256 = "c0ef67b9ee7d49b5efec4e98a3830395ecb8942136dd6e0784f66ac479688899"
 
 
 def digest(raw):
@@ -73,6 +76,15 @@ def build_package(baseline, output, verify_only=False):
         if len(data) != entry["count"] or digest(data) != entry["sha256"]:
             raise ValueError(f"Original input differs: {entry['name']}")
         return data
+    def validate_source():
+        if regular(baseline, "NTSD 2.4.exe") != exe:
+            raise ValueError("Baseline changed during copy")
+    result = publish_package(output, raw, entries, source, verify_only, validate_source)
+    return dict(result, manifestSHA256=MANIFEST_SHA256, originalExecuted=False)
+
+
+def publish_package(output, raw, entries, source, verify_only, validate_source=lambda: None):
+    """Shared verified-copy path; failed partials and existing outputs survive."""
     created = not output.exists() and not output.is_symlink()
     destination = output
     if created:
@@ -96,26 +108,64 @@ def build_package(baseline, output, verify_only=False):
         raise ValueError("Packaged manifest differs")
     for entry in entries:
         if regular(destination, entry["path"]) != source(entry):
-            raise ValueError(f"Packaged bytes differ: {entry['name']}")
+            raise ValueError(f"Packaged bytes differ: {entry.get('name', entry['path'])}")
         if stat.S_IMODE((destination/entry["path"]).stat().st_mode) != 0o644:
-            raise ValueError(f"Packaged mode differs: {entry['name']}")
-    if regular(baseline, "NTSD 2.4.exe") != exe:
-        raise ValueError("Baseline changed during copy")
+            raise ValueError(f"Packaged mode differs: {entry.get('name', entry['path'])}")
+    validate_source()
     if created:
         if output.exists() or output.is_symlink():
             raise ValueError("Output appeared during copy")
         destination.rename(output)
-    return dict(created=created,manifestSHA256=MANIFEST_SHA256,fileCount=1199,
-                payloadBytes=sum(e["count"] for e in entries),originalExecuted=False)
+    return dict(created=created,fileCount=len(entries)+1,payloadBytes=sum(e["count"] for e in entries))
+
+
+def build_target_raw_package(archive, output, verify_only=False):
+    """Only nine ordinary outer-ZIP members; no EXE/DLL or opaque content."""
+    raw = regular(TARGET_MANIFEST.parent, TARGET_MANIFEST.name)
+    if digest(raw) != TARGET_MANIFEST_SHA256:
+        raise ValueError("Target partial manifest identity differs")
+    manifest = json.loads(raw)
+    entries = manifest["entries"]
+    if (manifest["version"] != 1 or manifest["identity"] != "NTSD-2.8.3.3-partial"
+            or manifest["partial"] is not True or len(entries) != 9
+            or len({e["path"] for e in entries}) != 9
+            or sum(e["count"] for e in entries) != 161202):
+        raise ValueError("Target partial manifest contract differs")
+    archive = Path(archive)
+    if not stat.S_ISREG(archive.lstat().st_mode):
+        raise ValueError("Target archive is not a regular file")
+    with archive.open("rb") as stream:
+        archive_digest = hashlib.sha256()
+        for block in iter(lambda: stream.read(1 << 20), b""):
+            archive_digest.update(block)
+        if archive_digest.hexdigest() != manifest["archiveSHA256"]:
+            raise ValueError("Target archive identity differs")
+        stream.seek(0)
+        with zipfile.ZipFile(stream) as zipped:
+            def source(entry):
+                name = "NTSD2.8.3.3/" + entry["path"]
+                matches = [info for info in zipped.infolist() if info.filename == name]
+                if len(matches) != 1 or matches[0].file_size != entry["count"]:
+                    raise ValueError(f"Target member identity differs: {name}")
+                data = zipped.read(matches[0])
+                if len(data) != entry["count"] or digest(data) != entry["sha256"]:
+                    raise ValueError(f"Target member bytes differ: {name}")
+                return data
+            result = publish_package(Path(output), raw, entries, source, verify_only)
+    return dict(result,manifestSHA256=TARGET_MANIFEST_SHA256,partial=True,originalExecuted=False)
 
 
 def main():
     parser = argparse.ArgumentParser(description=__doc__)
-    parser.add_argument("--baseline",type=Path,default=BASELINE)
+    origin = parser.add_mutually_exclusive_group()
+    origin.add_argument("--baseline",type=Path)
+    origin.add_argument("--target-raw-zip",type=Path,help="Package only pinned ordinary 2.8.3.3 outer-ZIP inputs")
     parser.add_argument("--output",type=Path,required=True)
     parser.add_argument("--verify",action="store_true")
     args = parser.parse_args()
-    print(json.dumps(build_package(args.baseline,args.output,args.verify),sort_keys=True))
+    result = (build_target_raw_package(args.target_raw_zip,args.output,args.verify) if args.target_raw_zip
+              else build_package(args.baseline or BASELINE,args.output,args.verify))
+    print(json.dumps(result,sort_keys=True))
 
 
 if __name__ == "__main__":

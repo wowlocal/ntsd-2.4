@@ -1,0 +1,54 @@
+{
+  "version": 1,
+  "identity": "NTSD-2.8.3.3-partial",
+  "partial": true,
+  "archiveSHA256": "fca38bfe1391d969b9d29d1289c51bbf5270a384fa7da6d4a7c053da77c52b2d",
+  "exeSHA256": "5eda51440039099069d041e5bd13fde8be9fd8c7b20983985b1712a59719d86b",
+  "entries": [
+    {
+      "path": "data/data.txt",
+      "count": 13255,
+      "sha256": "3ed7de4918aa7b5e94fe73a2b7d9b43ded9d10575dd182b9ca2b647eae29a8f0"
+    },
+    {
+      "path": "data/control.txt",
+      "count": 192,
+      "sha256": "20d5469d09c05ea4d8e80d0a98b6e7a967d2e07ca25ad17a48c28087a2edb94c"
+    },
+    {
+      "path": "custom/1genma/genma.dat",
+      "count": 83946,
+      "sha256": "82ce5883edc210a401a9068ae74f04dd176b5c293a837147404294d18f33ee9c"
+    },
+    {
+      "path": "custom/1genma/a/shuriken.dat",
+      "count": 3344,
+      "sha256": "3b51d4c799070cce4a5ddb5693d85e2010161768ecfd3f816be706316ecb5e79"
+    },
+    {
+      "path": "custom/1genma/genmaclone.dat",
+      "count": 49828,
+      "sha256": "b43f37a677227314988465dccdfd6840d352aa1acfb0b49dc72993977124a982"
+    },
+    {
+      "path": "custom/1genma/a/katon.dat",
+      "count": 2654,
+      "sha256": "75998c160bae797515f2862744da494d9648e095b9d6304af363bedc7e1b50d2"
+    },
+    {
+      "path": "custom/1genma/a/smalldragon.dat",
+      "count": 2505,
+      "sha256": "d54634c171bd9aa7b1d0803c636359ec52f3ce054c5b66ffd6c9dfa9966dad14"
+    },
+    {
+      "path": "custom/1genma/a/bigdragon.dat",
+      "count": 2523,
+      "sha256": "1b530db892301a2489ef3a4983fa97e2b57f21ca665cda18ec954137c2ef8897"
+    },
+    {
+      "path": "custom/1genma/a/wind.dat",
+      "count": 2955,
+      "sha256": "d240cbf6c673e8b3957a02f9a4adab6dc6178132c766bc76f4e4b07d42d42126"
+    }
+  ]
+}

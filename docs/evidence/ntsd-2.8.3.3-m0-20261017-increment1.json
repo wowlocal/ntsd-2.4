@@ -1,0 +1,49 @@
+{
+  "schemaVersion": 1,
+  "recordedUTC": "2026-10-17T17:21:56.093347+00:00",
+  "parent": "e2c706453bb3c43814333904458521fe0d437fb9",
+  "branch": "exp/ntsd-2.8.3.3",
+  "status": "implemented; focused checks pass; prescribed baseline/app gates live; independent review open",
+  "sourceExecuted": false,
+  "shippingAcceptance": false,
+  "rawInputs": {
+    "identity": "NTSD-2.8.3.3-partial",
+    "fileCount": 9,
+    "payloadBytes": 161202,
+    "manifestSHA256": "c0ef67b9ee7d49b5efec4e98a3830395ecb8942136dd6e0784f66ac479688899"
+  },
+  "checks": {
+    "focused": "8 tests / 0 failures / 9.970 seconds, focused-tests4.log",
+    "packageVerification": "package-verification1.json; baseline1199 files/661635220 bytes and target10 files/161202 bytes",
+    "compile": "Debug Runtime/Mac/new tests and release correction2 Runtime/Mac/App linked successfully",
+    "baseline": "running: baseline-tests1.log, tool session50681, PID61567 start2026-10-17 19:18:25 CEST",
+    "appE2E": "running: app-e2e1-plan.json and app-e2e1.log; tool session15735; all11 unchanged current scenarios",
+    "review": "open; no independent reviewer; author inspection is not independent review"
+  },
+  "artifacts": {
+    "T7": "/Volumes/T7/ntsd-2.4-artifacts/version-diff-20261017/m0-native1",
+    "X5": "/Volumes/X5/ntsd-2.4-research/ntsd-2.8.3.3-m0-20261017",
+    "pins": "/Volumes/T7/ntsd-2.4-artifacts/version-diff-20261017/m0-native1/candidate-and-reuse-pins1.json"
+  },
+  "failures": [
+    "Python3.9 file_digest unavailable; streaming SHA used",
+    "swiftc preflights lacked deployment target/package name; saved SwiftPM values used",
+    "SwiftPM XCTest bundle lacks Info.plist; copy optional only",
+    "xctest does not support -list-tests-json; diagnostic environment dump omitted for credentials",
+    "candidate1 ownership case cleanup masked path composition error",
+    "renamed XCTest bundle/executable mismatch; immutable binary copied to normal bundle name",
+    "Foundation /var versus /private/var enumeration alias; normalized both sides with existing Core formula",
+    "one corrected test invocation preceded terminal link and executed no tests; same build handle was observed through completion"
+  ],
+  "refusal": "Existing packed-content incident remains open, not retried or rerouted. No new refusal.",
+  "next": "D3 targeted actual Frame/Object construction/loading entry identification from saved code, <=60min/8MiB, then ready native storage consumer",
+  "files": {
+    "native/Sources/NTSDRuntime/OriginalRuntimeContentInputs.swift": "42dedf647df9c8284a78010044b703e9e218538f507e6405224b3cf9e7bc0a0e",
+    "native/Sources/NTSDRuntime/OriginalRuntimeSession.swift": "1cafb1f44cd384ea4a79be7116e03b5ca089fcf7c60a6663f06a4431fb91c1fd",
+    "native/Sources/NTSDRuntime/OriginalMacRuntimeLoading.swift": "beb86a714614761f0f165cb38955cd2eb368aa654fc43add62eb4e8c8a706da6",
+    "native/Tests/NTSDCoreTests/Mac/OriginalRuntimeContentInputsTests.swift": "73194a85ac5552bbd9d4020c7ae3112b75bbdf40bc54886fce6092d4eaa218ed",
+    "tools/package_catalog_inputs.py": "3a2dda2e1e49e3604624ae12b06a2cad3170536b200dd5205b477ccc5b483ff9",
+    "tools/ntsd_2_8_3_3_partial_inputs_manifest.json": "c0ef67b9ee7d49b5efec4e98a3830395ecb8942136dd6e0784f66ac479688899",
+    ".gitattributes": "39124cc18e9b805fd587b915ff40de1688bda39b68ba9f77029ab8028f3ccbba"
+  }
+}
