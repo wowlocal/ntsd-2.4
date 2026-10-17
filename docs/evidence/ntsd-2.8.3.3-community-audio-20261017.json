@@ -1,0 +1,127 @@
+{
+  "scope": "Local automatic transcript intake of four user-provided community voice recordings. Testimony/leads only, not original-game evidence; no reliable speaker diarization or manual audio verification.",
+  "recordedUTC": "2026-10-17T13:54:20.777790+00:00",
+  "model": "mlx-community/whisper-turbo",
+  "modelRevision": "ec8e501925a1e2e85b082740a208c37ff6c4f59a",
+  "modelSHA256": {
+    "._.cache": "9f2e9aeaf5de6f367580062e28920650494fb7833b16f541b9c88ee8154cce91",
+    "config.json": "b34fc29e4e11e0a25e812775dd67f4dd16fc2c8eb43d28ae25ff7d660ecb6379",
+    "._config.json": "9f2e9aeaf5de6f367580062e28920650494fb7833b16f541b9c88ee8154cce91",
+    "weights.npz": "b0c190788fe5993dc196a8e19869ce64b12f19bfe75081db989165d716177eb8",
+    "._weights.npz": "9f2e9aeaf5de6f367580062e28920650494fb7833b16f541b9c88ee8154cce91"
+  },
+  "packageVersions": {
+    "mlx-whisper": "0.4.3",
+    "mlx": "0.32.4",
+    "numpy": "2.5.4"
+  },
+  "options": {
+    "language": "ru",
+    "task": "transcribe",
+    "temperature": 0,
+    "condition_on_previous_text": true,
+    "word_timestamps": false
+  },
+  "elapsedSeconds": 236.77164697647095,
+  "totalAudioSeconds": 1002.72,
+  "sourceAudioUnchanged": true,
+  "audioUploaded": false,
+  "originalGameExecuted": false,
+  "inputs": [
+    {
+      "path": "/Users/michael/Downloads/2026-10-17 15.42.02.ogg",
+      "sha256": "b140208b3d3ca63b4d3ac6e92413bdf3fe3a529218d37efc9f9ac17ceef62c70",
+      "bytes": 317350,
+      "durationSeconds": 79.86,
+      "asrJSON": "/Volumes/T7/ntsd-2.4-artifacts/version-diff-20261017/community-audio/2026-10-17 15.42.02.asr-run1.json",
+      "asrJSONSHA256": "0c800d3d585d21df9691f78f41cb35bf59a1c6c5e5d5b1a95d596a56ab33d83c",
+      "asrTextSHA256": "c700925c0f244db5317b3e99d49a8f402494a03d8c993f6a2d5794ac4cecbde0",
+      "boundedTranscript": "/Volumes/T7/ntsd-2.4-artifacts/version-diff-20261017/community-audio/2026-10-17 15.42.02.bounded-transcript1.txt",
+      "boundedTranscriptSHA256": "e8f7980c1916f59c70523a282ccaa0108e9954d00cd141abdfbe6d836c81b9a7",
+      "flaggedSegments": [
+        {
+          "start": 80.34,
+          "end": 81.12,
+          "compressionRatio": 7.09375,
+          "reason": "ASR segment exceeds source duration or has extreme repetition"
+        }
+      ]
+    },
+    {
+      "path": "/Users/michael/Downloads/2026-10-17 15.42.14.ogg",
+      "sha256": "1228cdd1e8a164bced4cca1b979cb191510300808ee559116fd5a936dea9a811",
+      "bytes": 333226,
+      "durationSeconds": 83.92,
+      "asrJSON": "/Volumes/T7/ntsd-2.4-artifacts/version-diff-20261017/community-audio/2026-10-17 15.42.14.asr-run1.json",
+      "asrJSONSHA256": "0266d6f440778e040f13a952a13ff41e74a5abebad6d408644117f7aee0d4e2c",
+      "asrTextSHA256": "5d28c6cfe5a9570fb45aa0f75bf9029b0d651904040a27e299b634cc5a73443a",
+      "boundedTranscript": "/Volumes/T7/ntsd-2.4-artifacts/version-diff-20261017/community-audio/2026-10-17 15.42.14.bounded-transcript1.txt",
+      "boundedTranscriptSHA256": "80029327b7f9ed41f229f45e508d327298b5bb2baee5cccf79c9fc919ce8af6d",
+      "flaggedSegments": []
+    },
+    {
+      "path": "/Users/michael/Downloads/2026-10-17 15.42.18.ogg",
+      "sha256": "0d63fba7e474dc5cd33b183e3e0e54159a70ef180a4ad4737410e60d56f13ad3",
+      "bytes": 1235808,
+      "durationSeconds": 311.68,
+      "asrJSON": "/Volumes/T7/ntsd-2.4-artifacts/version-diff-20261017/community-audio/2026-10-17 15.42.18.asr-run1.json",
+      "asrJSONSHA256": "cb7e3c1fb2584423cf8fe5e75ce7314e8ac775a051af090b2498c97281bf6475",
+      "asrTextSHA256": "7f097f618f08152dfcaead8aa61da1dfdace7dda5aedc0bea18cc01d474dc7fb",
+      "boundedTranscript": "/Volumes/T7/ntsd-2.4-artifacts/version-diff-20261017/community-audio/2026-10-17 15.42.18.bounded-transcript1.txt",
+      "boundedTranscriptSHA256": "807b970060047672adb9e0f6d3d5c26b46d4efa91adbd15339fa5f5d738cf9fa",
+      "flaggedSegments": []
+    },
+    {
+      "path": "/Users/michael/Downloads/2026-10-17 15.42.25.ogg",
+      "sha256": "bad4a0531b890600e13bedc5c87d8646124f00af10294370f677b7943ec0b976",
+      "bytes": 2090514,
+      "durationSeconds": 527.26,
+      "asrJSON": "/Volumes/T7/ntsd-2.4-artifacts/version-diff-20261017/community-audio/2026-10-17 15.42.25.asr-run1.json",
+      "asrJSONSHA256": "65678ed5c1934b782514b53ad3a5e6991aea9a3eaced875feb55f4131d94ac99",
+      "asrTextSHA256": "05da1871bc4c3d1990efc0eb6f0593f2d5d2de7dadf1832319882519b94394c0",
+      "boundedTranscript": "/Volumes/T7/ntsd-2.4-artifacts/version-diff-20261017/community-audio/2026-10-17 15.42.25.bounded-transcript1.txt",
+      "boundedTranscriptSHA256": "76233117ce21cc3ea30ed3fce4dd469aa68b7eb461ac8dbe55f53d12afdc81bb",
+      "flaggedSegments": [
+        {
+          "start": 527.16,
+          "end": 534.16,
+          "compressionRatio": 16.17241379310345,
+          "reason": "ASR segment exceeds source duration or has extreme repetition"
+        },
+        {
+          "start": 534.16,
+          "end": 537.16,
+          "compressionRatio": 16.17241379310345,
+          "reason": "ASR segment exceeds source duration or has extreme repetition"
+        },
+        {
+          "start": 537.16,
+          "end": 540.16,
+          "compressionRatio": 16.17241379310345,
+          "reason": "ASR segment exceeds source duration or has extreme repetition"
+        },
+        {
+          "start": 540.16,
+          "end": 544.16,
+          "compressionRatio": 16.17241379310345,
+          "reason": "ASR segment exceeds source duration or has extreme repetition"
+        },
+        {
+          "start": 544.16,
+          "end": 549.16,
+          "compressionRatio": 16.17241379310345,
+          "reason": "ASR segment exceeds source duration or has extreme repetition"
+        }
+      ]
+    }
+  ],
+  "quality": "Preserve raw ASR and uncertainty. Last file generated5 padded/repetitive segments starting527.16sec through549.16sec beyond physical527.26sec; these are unusable, not testimony. No ASR rerun. Mixed speakers and names remain unresolved.",
+  "artifactRoot": "/Volumes/T7/ntsd-2.4-artifacts/version-diff-20261017/community-audio",
+  "installAndStorage": "Task-ownedT7 binary wheels and model only; no global package installation. ExFAT allocation exceeded original4GiB estimate, recorded in storage-addendum1.json; revised14GiB ceiling,40GiBreserve unchanged.",
+  "readerOutcome": "First wildcard transcript read selected an ExFAT AppleDouble ._ file and raised UnicodeDecodeError; fixed by selecting exact four filenames from manifest. Original ASR files unchanged.",
+  "privatePublicationConstraint": "Local preparation branch only; no push/publication; raw voices and full transcripts remain outside Git.",
+  "references": {
+    "implementation": "https://github.com/ml-explore/mlx-examples/blob/main/whisper/README.md",
+    "model": "https://huggingface.co/mlx-community/whisper-turbo/tree/ec8e501925a1e2e85b082740a208c37ff6c4f59a"
+  }
+}

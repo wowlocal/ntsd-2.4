@@ -1,0 +1,28 @@
+{
+  "runID": "preparation-static1",
+  "recordedUTC": "2026-10-17T13:46:26.270039+00:00",
+  "outcome": "old unrelated pending-file pin mismatch during concurrent Web work",
+  "exactTerminalError": "Traceback (most recent call last):\n  File \"<stdin>\", line 52, in <module>\n  File \"<stdin>\", line 11, in check\nAssertionError: unrelated pending files equal prior pinned inputs",
+  "writeOutcome": "No output evidence file was written before assertion. All prior checks in that process, including original EXE/source/history pins, passed.",
+  "interpretation": "Concurrent unrelated work; not restored or changed by this task. Parent reported additional TVOS_WEB.md edits.",
+  "oldPinSource": "docs/evidence/ntsd-2.4-to-2.8.3.3-static-20261017-run1.json",
+  "currentObservationUTC": "2026-10-17T13:46:26.270211+00:00",
+  "currentComparedPendingSHA256": {
+    "native/Sources/NTSDWeb/WebAudio.swift": "15ac6b540c23aa1925ebd49f13ebfdd4c3719d5c88e8574ac6986ff6861a901e",
+    "native/Sources/NTSDWeb/WebPage.swift": "37ea212fd755abbcf1674e45b7f634b20b387bc421f37590b76be1001b41eb80",
+    "native/Sources/NTSDWeb/WebSession.swift": "66381e89e37dcf330f4d8e7f4d616056174039dbdc1a2031e193697a2ad8dafa",
+    "tools/crossplatform/run_headless_scenarios.py": "335b372de4181252db175e4e84b575c5e71271ef56db04d002e527669337a824",
+    "tools/crossplatform/web/run.html": "f893493d896cf805ea3c89f580f84181859c09e7f39be623ba4ffa19fcde40a8",
+    "tools/crossplatform/web/wasi-worker.js": "b71ba9721b1d7b39930ea180410c88a1bdb1a53d4c9f133d8b8114242ef72597",
+    "tools/crossplatform/web_app.py": "60251e0027b7308f85f100efb9015676f72d72ac756f53c4b5c0a1a3d2a5de21",
+    "tools/crossplatform/web_run.mjs": "866da77dd5799f343b7b0267ddc0ed62f84e17bb41ff4be253fb91124023eaff",
+    "docs/research/NTSD_2_8_3_3_ASSESSMENT.md": "ca7fa6f0c34bae94886061c221f6667092509ac58cf81a6f2203ebf6fcaaf5ac",
+    "tools/compare_ntsd_distributions.py": "4c0237cf7f57fa4ae419c9fc9c57a659a38122743fb59f84cd3756c6e573b109",
+    "tools/crossplatform/web/pack-loader.js": "d04080df2df619cca12b07c3270e6583c2b2aa7164da1a6af924c037b8793142",
+    "tools/crossplatform/web/read-order.json": "5892c7865feb738c0056abbde637d1ca497be272a74dc91aadb320c0d479297d"
+  },
+  "pathsDifferingFromEarlierAssessment": [
+    "docs/research/NTSD_2_8_3_3_ASSESSMENT.md"
+  ],
+  "safetyRefusal": false
+}

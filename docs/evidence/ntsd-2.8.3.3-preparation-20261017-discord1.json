@@ -1,0 +1,210 @@
+{
+  "schemaVersion": 1,
+  "recordedUTC": "2026-10-17T14:04:40.849704+00:00",
+  "scope": "Appended source-location review after user supplied exact Discord DM and authorized Safari Computer Use. Parent alone performed read-only UI browsing; Astra incorporates parent-observed message contexts.",
+  "authorizationSource": {
+    "userProvidedDM": "https://discord.com/channels/@me/1555506628319649913",
+    "relevantContact": "The Scar",
+    "purpose": "Locate shared links relevant to version preparation; no outreach requested."
+  },
+  "observer": {
+    "role": "parent agent",
+    "surface": "Safari via CUA",
+    "observationsTransferredTo": "Astra preparation owner by collaboration messages",
+    "displayedTimestampTimezone": "Not established from UI; displayed dates/times preserved without conversion."
+  },
+  "boundedOperations": {
+    "sharedLinksOpened": 3,
+    "serverSearchQueries": [
+      {
+        "query": "NTSD",
+        "displayedResultCount": 416,
+        "reviewedBoundary": "Page1 relevant Sept13 discussion and opened original context18:23–18:57; not all416 results read."
+      },
+      {
+        "query": "enigma",
+        "displayedResultCount": 7,
+        "reviewedBoundary": "Relevant Dec9 original context opened; result set not proof of full server history."
+      },
+      {
+        "query": "NTSD decrypt",
+        "displayedResultCount": 1,
+        "reviewedBoundary": "Exact JohnMuffin Sept13 18:57 message and next same-time message opened."
+      }
+    ],
+    "privateAPIFetches": false,
+    "postsOrReactions": false,
+    "messagesToPeople": false,
+    "invitesOrOnboarding": false,
+    "downloads": false,
+    "originalOrThirdPartyCodeExecuted": false,
+    "browserFinalLocation": "https://discord.com/channels/224499203714449409/754960391603355668/1548739293240098950"
+  },
+  "sources": [
+    {
+      "id": "dan-methodology-may6",
+      "url": "https://discord.com/channels/224499203714449409/507147497672671233/1501641838535119040",
+      "community": "Little Fighter Empire",
+      "displayedDate": "2026-05-06",
+      "author": "Dan",
+      "displayedTimes": [
+        "19:48",
+        "22:49"
+      ],
+      "observedClaim": "Author describes a replacement engine rebuilt from original lf2.exe logs with DLL instrumentation/parity tests, then Ghidra C/header output and raw address/offset mapping using Cheat Engine. Discusses LF2/LF2 Remastered and future 60 FPS/rollback.",
+      "evidenceStatus": "Direct author testimony observed in UI; original trace/code or target NTSD artifacts not delivered.",
+      "scopeLimit": "Not a measured NTSD 2.8.3.3 equivalence result or payload-access recipe."
+    },
+    {
+      "id": "scar-lutris-guide",
+      "url": "https://discord.com/channels/253945813774893056/253945813774893056/1419012211799756882",
+      "displayedDate": "2025-09-20",
+      "author": "The Scar",
+      "observedClaim": "Forwarded Lutris installation guidance for 2.7.2 with note to use 2.8.1.",
+      "evidenceStatus": "Observed guide/message identity; instructions not executed.",
+      "scopeLimit": "Different NTSD versions and installation subject; not content extraction or supplied-package correspondence."
+    },
+    {
+      "id": "dan-video-oct17",
+      "url": "https://discord.com/channels/224499203714449409/257435658333716480/1560996159412244520",
+      "displayedDate": "2026-10-17",
+      "author": "Dan",
+      "displayedTimes": [
+        "14:41"
+      ],
+      "observedClaim": "Forwarded video source is a reply to WillemNl about a new mod, showing a Julia thumbnail/context.",
+      "evidenceStatus": "Original message context located.",
+      "scopeLimit": "Not evidence that this supplied NTSD 2.8.3.3 is imported or identical."
+    },
+    {
+      "id": "dan-ntsd-backends-sept13",
+      "url": "https://discord.com/channels/224499203714449409/754960391603355668/1548732509754232895",
+      "community": "Little Fighter Empire",
+      "displayedDate": "2026-09-13",
+      "author": "Dan; nearby The Scar comment",
+      "displayedContextInterval": [
+        "18:23",
+        "18:57"
+      ],
+      "claimsByDisplayedTime": [
+        {
+          "time": "18:26",
+          "author": "Dan",
+          "paraphrase": "Uses C++20."
+        },
+        {
+          "time": "18:27",
+          "author": "Dan",
+          "paraphrase": "Plans support for LF2/LF2R/DBZ/NTSD/SGB and rollback."
+        },
+        {
+          "time": "18:29",
+          "author": "Dan",
+          "paraphrase": "Intends to retain NTSD/DBZ file encryption."
+        },
+        {
+          "time": "18:30",
+          "author": "Dan",
+          "paraphrase": "Will not release NTSD/DBZ until encryption is handled."
+        },
+        {
+          "time": "18:34",
+          "author": "The Scar",
+          "paraphrase": "Mods use changed EXEs; engine features must transfer along with DAT."
+        },
+        {
+          "time": "18:35",
+          "author": "Dan",
+          "paraphrase": "Separate C++ library per mod simulation backend."
+        },
+        {
+          "time": "18:39",
+          "author": "Dan",
+          "paraphrase": "Builds Linux first, with a headless original-game harness and log parity."
+        }
+      ],
+      "evidenceStatus": "Author claims in original thread, not independently measured target version/hash or parity.",
+      "scopeLimit": "Confirms relevance of version-specific simulation/backend work as a lead; does not establish identical mechanics or dictate our architecture."
+    },
+    {
+      "id": "john-ntsd-access-sept13",
+      "url": "https://discord.com/channels/224499203714449409/754960391603355668/1548739293240098950",
+      "community": "Little Fighter Empire",
+      "displayedDate": "2026-09-13",
+      "author": "JohnMuffin",
+      "displayedTimes": [
+        "18:57"
+      ],
+      "observedClaim": "In this and a following same-time message, says Dan showed him NTSD/DBZ decryption and that he knows at least one method.",
+      "evidenceStatus": "Relevant attributed access testimony observed at exact message.",
+      "scopeLimit": "No actual method, tool/version/parameters, assets, executable hash or independent target-version parity provided in the inspected context."
+    },
+    {
+      "id": "enigma-search-version-mismatch",
+      "url": "https://discord.com/channels/224499203714449409/408894698585980928/1447987982932901991",
+      "community": "Little Fighter Empire",
+      "displayedDate": "2025-12-09",
+      "author": "JohnMuffin",
+      "displayedTimes": [
+        "17:27"
+      ],
+      "observedClaim": "Discussion mentions unpacker tools; visible context concerns NTSD 2.4/1.9 executables, Lee on Road and Molebox.",
+      "evidenceStatus": "Search hit with version-mismatched context.",
+      "scopeLimit": "Does not identify a method for the ENIGMA-marked supplied 2.8.3.3 executable. No tools downloaded or run."
+    }
+  ],
+  "readinessAfterReview": {
+    "methodologySourceLocated": true,
+    "NTSDImportOrAccessTestimonyLocated": true,
+    "reproducibleTargetAccessRecipeLocated": false,
+    "suppliedZIPArtifactCorrespondenceEstablished": false,
+    "NTSD2833ParityEstablished": false
+  },
+  "historicalEvidence": "Earlier audio intake missing-URL status remains a historical result. This supplement adds located sources; raw ASR/static records are unchanged.",
+  "practicalConclusion": "Diffing remains the recommended acceleration method, but use per-version effective EXE/dependency/data/caller correspondence. Located messages improve the content-access lead, not acceptance or schedule confidence.",
+  "missingInputs": [
+    "Actual procedure or corresponding readable original artifacts",
+    "Exact target NTSD version and binary/content hashes",
+    "Independent comparison against the supplied 2.8.3.3 package"
+  ],
+  "publication": "Local preparation branch only. No push, publication or community contact.",
+  "creditsCorroboration": {
+    "scopeAddendum": "User supplied credits screenshot after Discord review; one bounded read of the corresponding original ZIP member confirms the relevant source lines. No extraction, original execution or outside communication.",
+    "checkedUTC": "2026-10-17T14:05:20.895366+00:00",
+    "userImageLabel": "CleanShot 2026-10-17 at 4.03.04 PM",
+    "archivePath": "/Users/michael/Downloads/NTSD2.8.3.3.zip",
+    "archiveSHA256FromExistingIdentity": "fca38bfe1391d969b9d29d1289c51bbf5270a384fa7da6d4a7c053da77c52b2d",
+    "member": "NTSD2.8.3.3/instructions/movelist&credits.txt",
+    "memberSHA256": "913c9754888af9d3f6338ead42262519c0aea0a8c1f8460a6f06d8d3e9aa586f",
+    "encoding": "UTF-16 with BOM",
+    "facts": [
+      {
+        "line": 1614,
+        "text": "                                                                            NTSD developers:"
+      },
+      {
+        "line": 1619,
+        "text": "-John Muffin (master spriter, sounds, menu designer)"
+      },
+      {
+        "line": 1624,
+        "text": "-TheScar (Anko, exe/dll edits)"
+      },
+      {
+        "line": 1634,
+        "text": "EXE/DLL edits - Darkfiren, Shad90, Zapashok, Zer0, TheScar"
+      },
+      {
+        "line": 1635,
+        "text": "Neora Engine - Alkarter, Drakken, Lord Silva, 1477, Surik, Archer-Dante"
+      },
+      {
+        "line": 1642,
+        "text": "NTSD 2.4 Patched/RE (between 2.4 and 2.5) - Smouk, Surik, TenBisT, Ig0r, Kara, LJ, Noir, Nakato"
+      }
+    ],
+    "parentPreflight": "Initial UTF-8 text search found no matches; parent detected BOM and correctly read UTF-16. Astra direct read used strict UTF-16.",
+    "interpretation": "Package credits name John Muffin and TheScar in development roles and identify several EXE/DLL/Neora contributors and intermediate NTSD2.4 Patched/RE lineage. This strengthens relevance of the named contacts to the original project, while Discord account/credited identity correspondence is not independently established.",
+    "limits": "Credits do not establish possession of a correct 2.8.3.3 access procedure, authority to publish assets, executable equivalence or any new original behavior contract."
+  }
+}
