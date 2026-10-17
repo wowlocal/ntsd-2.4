@@ -1,0 +1,25 @@
+{
+  "runID": "preparation-review-correction1",
+  "recordedUTC": "2026-10-17T13:47:08.690531+00:00",
+  "inputs": {
+    "ntsd-2.8.3.3-preparation-20261017-preflight1.json": "98c183ea57040d90ea1c3d44cbc12701050b85af7c982af237c414b6cb95bf52",
+    "ntsd-2.8.3.3-preparation-20261017-static2.json": "d9e9e06fb0156d5ab71882febfeb6a46fff65567444deef33813cce046b11633"
+  },
+  "correction": "The failed assertion compared the entire old inventory dirtyFileSHA256 map, which included the assessment document itself while in progress. Its only differing path is the subsequently finalized and committed assessment. The initial attribution to concurrent Web changes was wrong.",
+  "affectedOldStatements": [
+    "preflight1 outcome/interpretation asserting concurrent Web work caused that pin failure",
+    "static2 correction and pendingObservation interpretation describing this mismatch as concurrent work"
+  ],
+  "actualMismatch": {
+    "path": "docs/research/NTSD_2_8_3_3_ASSESSMENT.md",
+    "inventoryInProgressSHA256": "9dbcbfdbef92ea0eab02cadcad4785bc3797ec996922e4c7c90d6e2090e671d9",
+    "finalWorkingSHA256": "ca7fa6f0c34bae94886061c221f6667092509ac58cf81a6f2203ebf6fcaaf5ac",
+    "headCommittedSHA256": "ca7fa6f0c34bae94886061c221f6667092509ac58cf81a6f2203ebf6fcaaf5ac",
+    "matchesHEAD": true
+  },
+  "allOtherEarlierDirtyPinsEqualAtStatic2": true,
+  "otherEarlierDirtyPinCount": 11,
+  "separateConcurrentObservation": "TVOS_WEB.md appears in current git status and was reported by parent as independent work. This does not explain the old-map assertion failure. No task write targets any such path.",
+  "staticChecksStillValid": "All 24 pass records, archive/member/EXE/source/history identities, frame census, document facts and static marker observations in static2 are unaffected. No original or static binary operation repeated.",
+  "scopeCorrection": "Parent relayed local-only separate branch and no further push/publication. No branch created in preparation."
+}

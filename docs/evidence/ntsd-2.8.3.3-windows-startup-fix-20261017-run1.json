@@ -1,0 +1,100 @@
+{
+  "schemaVersion": 1,
+  "recordedUTC": "2026-10-17T15:57:40.721053+00:00",
+  "parentRevision": "507d0b3c",
+  "branch": "exp/ntsd-2.8.3.3",
+  "status": "Startup fixed in current Windows ARM64 VM; title menu and Versus character selection observed",
+  "referenceEXESHA256": "5eda51440039099069d041e5bd13fde8be9fd8c7b20983985b1712a59719d86b",
+  "fix": {
+    "scope": "Exact guest NTSD.exe path only",
+    "advancedSettings": true,
+    "disableHybridExecutionMode": true,
+    "otherAdvancedFlags": false,
+    "multiCore": "Fast",
+    "normalCompatibilityMode": false,
+    "runAsAdministrator": false,
+    "docs": "https://learn.microsoft.com/en-gb/windows/arm/apps-on-arm-program-compat-troubleshooter"
+  },
+  "diagnosis": {
+    "observedFault": "xor edx, dword ptr [ecx] at0x4B9D37 with ECX0xC2CC7FFC; invalid read",
+    "inference": "Windows ARM hybrid execution incompatibility. Only disabling hybrid execution changed between repeated default startup faults and two successful subsequent startups.",
+    "unknown": "Exact earlier corruption/allocation origin and responsible hybrid library not identified; allocator-like context inferred, not a recovered game rule."
+  },
+  "runs": {
+    "controlledTrial": {
+      "job": "E08D04F2-C6A9-465E-AF37-F835C274798B",
+      "PID": 1828,
+      "result": "title menu visible/responding; managed120second deadline later terminated process",
+      "terminal": "timedOuttrue exit1, not source access violation"
+    },
+    "normalInteractive": {
+      "PID": 8092,
+      "startUTC": "2026-10-17T15:47:44.3863085Z",
+      "launch": "Normal Explorer double-click; not subject to an exec-job deadline",
+      "state": "Versus character selection; no joined seats",
+      "lastObservedUTC": "2026-10-17T15:54:33.2981943Z",
+      "responding": true
+    }
+  },
+  "liveDump": {
+    "schemaVersion": 1,
+    "verifiedUTC": "2026-10-17T15:53:21.914231+00:00",
+    "path": "/Volumes/T7/ntsd-2.4-artifacts/version-diff-20261017/windows-startup-fix1/NTSD-versus-selection-live1.dmp",
+    "bytes": 476556770,
+    "sha256": "adb00fd69a252cd1d0def2ce21d4963b9853f7f963613785047ad4633ea7c303",
+    "matchesGuestSHA256": true,
+    "signature": "MDMP",
+    "version": "0xa0f4a793",
+    "flags": "0x421826",
+    "MiniDumpWithFullMemory": true,
+    "PID": 8092,
+    "processIDMatchesVerifiedLiveGame": true,
+    "streamCount": 16,
+    "memoryRegions": 1407,
+    "memoryBytes": 476327936,
+    "memoryDataWithinFile": true,
+    "systemInfoArchitecture": "ARM64",
+    "moduleCount": 93,
+    "targetModule": {
+      "path": "C:\\NTSDResearch\\2833-memory-run1\\package\\NTSD2.8.3.3\\NTSD.exe",
+      "base": "0x400000",
+      "imageSize": 4591616
+    },
+    "observedState": "Versus character selection; process responding; no joined seats or match acceptance",
+    "scope": "Standard diagnostic snapshot; dump memory payload not extracted/analyzed. Does not prove all resources or full parity."
+  },
+  "artifacts": {
+    "root": "/Volumes/T7/ntsd-2.4-artifacts/version-diff-20261017/windows-startup-fix1",
+    "terminalReceipt": {
+      "path": "/Volumes/T7/ntsd-2.4-artifacts/version-diff-20261017/windows-startup-fix1/terminal1.json",
+      "sha256": "e29df6b116595df2c793da51ea15a929dd047360f2f5ebb899dd9a3a40292f1d"
+    },
+    "validation": {
+      "path": "/Volumes/T7/ntsd-2.4-artifacts/version-diff-20261017/windows-startup-fix1/live-dump-validation1.json",
+      "sha256": "7883a3dc597ee455f3f9b4c2098c011e299a66577fb16ffd5c37ab5bb2a48e44"
+    },
+    "savedFaultDiagnosis": {
+      "path": "/Volumes/T7/ntsd-2.4-artifacts/version-diff-20261017/windows-startup-fix1/saved-crash-diagnosis1.json",
+      "sha256": "491deee79f56c6dfb9b2cfd5bf0e2baa31d8b8864df5a7506e9ce397d5fca6ee"
+    },
+    "screenshots": [
+      "emulation-before1.jpg",
+      "emulation-setting1.jpg",
+      "fixed-title-menu1.jpg",
+      "fixed-versus-selection1.jpg"
+    ]
+  },
+  "cleanup": {
+    "temporaryNTSDStartupFix1ShareRemoved": true,
+    "originalDownloadsSharePreserved": true,
+    "TaskManagerClosed": true,
+    "successfulPerGameSettingRetained": true,
+    "interactiveGameLeftOpen": true,
+    "WindowsVMLeftRunning": true,
+    "noWERChangesThisTask": true
+  },
+  "limits": "One compatibility profile tried, one new full working dump, task under2GiB and T7 reserve retained. No further profiles or captures needed.",
+  "preservation": "Original EXE and old crash dump unchanged. No Native changes, agents, push or new safety refusal. Existing packed-content access incident remains open.",
+  "review": "Author validation only; no independent contract/Native parity/whole-match acceptance claimed.",
+  "publication": "local commit only; no push; existing command-scoped hook retains LFS without auto-push"
+}

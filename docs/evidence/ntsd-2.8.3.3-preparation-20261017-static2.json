@@ -1,0 +1,986 @@
+{
+  "schemaVersion": 1,
+  "runID": "preparation-static2",
+  "generatedUTC": "2026-10-17T13:46:26.270420+00:00",
+  "correctionFrom": "preparation-static1",
+  "correction": "Record concurrent pending changes as observations, not a preservation assertion against a different task snapshot. No evidence or working files restored.",
+  "modelRequested": "gpt-6-astra",
+  "reasoningRequested": "xhigh",
+  "scope": "Selected static compatibility preparation; no original execution, extraction, install, build or runtime change.",
+  "revision": "2c5cb63366caecb2d44248299bd78424f5cd3945",
+  "priorEvidence": {
+    "docs/evidence/ntsd-2.4-to-2.8.3.3-static-20261017-run1.json": "a2dff4a52c16a75a20944be7766f6bb09b55ea2b5a10d94ee3e0bbf38d1cf2ad",
+    "docs/evidence/ntsd-2.4-to-2.8.3.3-static-20261017-validation1.json": "0640dd571a8a435ce9361d39bdf2d130be207fe4cff4a5924afe46e32e8d1856",
+    "docs/evidence/ntsd-2.8.3.3-preparation-20261017-preflight1.json": "98c183ea57040d90ea1c3d44cbc12701050b85af7c982af237c414b6cb95bf52"
+  },
+  "checks": [
+    {
+      "check": "archive identity",
+      "pass": true,
+      "detail": null
+    },
+    {
+      "check": "prior validation pins inventory",
+      "pass": true,
+      "detail": null
+    },
+    {
+      "check": "prior author checks all pass",
+      "pass": true,
+      "detail": 41
+    },
+    {
+      "check": "member identity: NTSD.exe",
+      "pass": true,
+      "detail": null
+    },
+    {
+      "check": "member identity: data/data.txt",
+      "pass": true,
+      "detail": null
+    },
+    {
+      "check": "independent registry census",
+      "pass": true,
+      "detail": {
+        "objects": 330,
+        "backgrounds": 24,
+        "visibleObjects": 7,
+        "type0": 158
+      }
+    },
+    {
+      "check": "member identity: custom/1genma/genma.dat",
+      "pass": true,
+      "detail": null
+    },
+    {
+      "check": "member identity: custom/1genma/a/shuriken.dat",
+      "pass": true,
+      "detail": null
+    },
+    {
+      "check": "member identity: custom/1genma/genmaclone.dat",
+      "pass": true,
+      "detail": null
+    },
+    {
+      "check": "member identity: custom/1genma/a/katon.dat",
+      "pass": true,
+      "detail": null
+    },
+    {
+      "check": "member identity: custom/1genma/a/smalldragon.dat",
+      "pass": true,
+      "detail": null
+    },
+    {
+      "check": "member identity: custom/1genma/a/bigdragon.dat",
+      "pass": true,
+      "detail": null
+    },
+    {
+      "check": "member identity: custom/1genma/a/wind.dat",
+      "pass": true,
+      "detail": null
+    },
+    {
+      "check": "independent visible frame census",
+      "pass": true,
+      "detail": null
+    },
+    {
+      "check": "member identity: instructions/special features for modding/other stuff.txt",
+      "pass": true,
+      "detail": null
+    },
+    {
+      "check": "member identity: instructions/special features for modding/window control and dll loading.txt",
+      "pass": true,
+      "detail": null
+    },
+    {
+      "check": "member identity: instructions/special features for modding/system dat.txt",
+      "pass": true,
+      "detail": null
+    },
+    {
+      "check": "member identity: instructions/special features for modding/tu mode.txt",
+      "pass": true,
+      "detail": null
+    },
+    {
+      "check": "member identity: custom/Custom Characters.txt",
+      "pass": true,
+      "detail": null
+    },
+    {
+      "check": "member identity: custom/movelist for customs.txt",
+      "pass": true,
+      "detail": null
+    },
+    {
+      "check": "member identity: recording/recording_readme.txt",
+      "pass": true,
+      "detail": null
+    },
+    {
+      "check": "2.4 baseline EXE pin",
+      "pass": true,
+      "detail": null
+    },
+    {
+      "check": "immutable AGENTS history",
+      "pass": true,
+      "detail": null
+    },
+    {
+      "check": "prior reviewed engine pins",
+      "pass": true,
+      "detail": null
+    }
+  ],
+  "members": {
+    "NTSD.exe": {
+      "bytes": 87261184,
+      "sha256": "5eda51440039099069d041e5bd13fde8be9fd8c7b20983985b1712a59719d86b"
+    },
+    "data/data.txt": {
+      "bytes": 13255,
+      "sha256": "3ed7de4918aa7b5e94fe73a2b7d9b43ded9d10575dd182b9ca2b647eae29a8f0"
+    },
+    "custom/1genma/genma.dat": {
+      "bytes": 83946,
+      "sha256": "82ce5883edc210a401a9068ae74f04dd176b5c293a837147404294d18f33ee9c"
+    },
+    "custom/1genma/a/shuriken.dat": {
+      "bytes": 3344,
+      "sha256": "3b51d4c799070cce4a5ddb5693d85e2010161768ecfd3f816be706316ecb5e79"
+    },
+    "custom/1genma/genmaclone.dat": {
+      "bytes": 49828,
+      "sha256": "b43f37a677227314988465dccdfd6840d352aa1acfb0b49dc72993977124a982"
+    },
+    "custom/1genma/a/katon.dat": {
+      "bytes": 2654,
+      "sha256": "75998c160bae797515f2862744da494d9648e095b9d6304af363bedc7e1b50d2"
+    },
+    "custom/1genma/a/smalldragon.dat": {
+      "bytes": 2505,
+      "sha256": "d54634c171bd9aa7b1d0803c636359ec52f3ce054c5b66ffd6c9dfa9966dad14"
+    },
+    "custom/1genma/a/bigdragon.dat": {
+      "bytes": 2523,
+      "sha256": "1b530db892301a2489ef3a4983fa97e2b57f21ca665cda18ec954137c2ef8897"
+    },
+    "custom/1genma/a/wind.dat": {
+      "bytes": 2955,
+      "sha256": "d240cbf6c673e8b3957a02f9a4adab6dc6178132c766bc76f4e4b07d42d42126"
+    },
+    "instructions/special features for modding/other stuff.txt": {
+      "bytes": 3452,
+      "sha256": "caec760a6502731ac42dd8e31cebd2adad271c68e5a87d208b6911d5650c9387",
+      "decodedAs": "utf-8-sig"
+    },
+    "instructions/special features for modding/window control and dll loading.txt": {
+      "bytes": 1381,
+      "sha256": "a30ba95539475a1bf808280402a4eacdc79d71e2bedd144d980a310e2a31463f",
+      "decodedAs": "utf-8-sig"
+    },
+    "instructions/special features for modding/system dat.txt": {
+      "bytes": 7696,
+      "sha256": "34dd954a42e486cd58cf71c6e35c3b70e9e4a22160ac7e5347547d7307386e0f",
+      "decodedAs": "utf-8-sig"
+    },
+    "instructions/special features for modding/tu mode.txt": {
+      "bytes": 560,
+      "sha256": "e20871452418eaff58b4df631003cd60724d258950767095196e16594e641720",
+      "decodedAs": "utf-8-sig"
+    },
+    "custom/Custom Characters.txt": {
+      "bytes": 1176,
+      "sha256": "fdd55d9a3aea4a616109ba612347c1405d96d971d20cd8405004d9d83fb63270",
+      "decodedAs": "utf-8-sig"
+    },
+    "custom/movelist for customs.txt": {
+      "bytes": 6178,
+      "sha256": "c95552613b6fa9a382f1326e55e63544e590377595c31ffb1fedf0b0358aa8b6",
+      "decodedAs": "utf-16"
+    },
+    "recording/recording_readme.txt": {
+      "bytes": 4116,
+      "sha256": "e89f1373a431c288c29487bcbfc203b6cc6a1b639fd7743f47255436f4bdd926",
+      "decodedAs": "utf-16"
+    }
+  },
+  "documentationFacts": [
+    {
+      "path": "instructions/special features for modding/other stuff.txt",
+      "line": 5,
+      "text": "- the principle of image processing by the program has been changed (API function).",
+      "status": "bundled-document statement, not executable behavior"
+    },
+    {
+      "path": "instructions/special features for modding/other stuff.txt",
+      "line": 6,
+      "text": "- full support for PNG format, transparency (alpha channel) is supported for 32-bit PNG files.",
+      "status": "bundled-document statement, not executable behavior"
+    },
+    {
+      "path": "instructions/special features for modding/other stuff.txt",
+      "line": 7,
+      "text": "- built-in support for multiserver [no need for ddraw.dll of multiserver anymore]",
+      "status": "bundled-document statement, not executable behavior"
+    },
+    {
+      "path": "instructions/special features for modding/other stuff.txt",
+      "line": 9,
+      "text": "- in mirror sprites, priority is given to images with the _mirror part, instead of hardware mirroring (relevant for some video cards).",
+      "status": "bundled-document statement, not executable behavior"
+    },
+    {
+      "path": "instructions/special features for modding/other stuff.txt",
+      "line": 11,
+      "text": "- data.txt object entry limit increased to 1000.",
+      "status": "bundled-document statement, not executable behavior"
+    },
+    {
+      "path": "instructions/special features for modding/other stuff.txt",
+      "line": 12,
+      "text": "- object limit during gameplay increased from 400 to 1000.",
+      "status": "bundled-document statement, not executable behavior"
+    },
+    {
+      "path": "instructions/special features for modding/other stuff.txt",
+      "line": 13,
+      "text": "- the itr and bdy limit per frame has been increased to 100.",
+      "status": "bundled-document statement, not executable behavior"
+    },
+    {
+      "path": "instructions/special features for modding/other stuff.txt",
+      "line": 14,
+      "text": "- the frame limit has been raised to 998.",
+      "status": "bundled-document statement, not executable behavior"
+    },
+    {
+      "path": "instructions/special features for modding/other stuff.txt",
+      "line": 15,
+      "text": "- the sound limit has been removed.",
+      "status": "bundled-document statement, not executable behavior"
+    },
+    {
+      "path": "instructions/special features for modding/other stuff.txt",
+      "line": 20,
+      "text": "- hitsparks and background animation are stopped during timestop",
+      "status": "bundled-document statement, not executable behavior"
+    },
+    {
+      "path": "instructions/special features for modding/other stuff.txt",
+      "line": 39,
+      "text": "- skin system doesn't work in championhsip modes, all locked characters are skipped in chamionship modes but locked with hidden values 10~1000 show up based on settings in mode.dat",
+      "status": "bundled-document statement, not executable behavior"
+    },
+    {
+      "path": "instructions/special features for modding/window control and dll loading.txt",
+      "line": 4,
+      "text": "in data\\dll_list.txt you can write the name of dlls you want to load at startup",
+      "status": "bundled-document statement, not executable behavior"
+    },
+    {
+      "path": "instructions/special features for modding/window control and dll loading.txt",
+      "line": 10,
+      "text": "all the dlls listed will be loaded when the EXE starts. ",
+      "status": "bundled-document statement, not executable behavior"
+    },
+    {
+      "path": "instructions/special features for modding/window control and dll loading.txt",
+      "line": 12,
+      "text": "note - ddraw.dll is still loaded if placed next to the exe or in the main directory",
+      "status": "bundled-document statement, not executable behavior"
+    },
+    {
+      "path": "instructions/special features for modding/window control and dll loading.txt",
+      "line": 17,
+      "text": "in data\\resolution.txt you can write the window size, display function and aspect ratio ",
+      "status": "bundled-document statement, not executable behavior"
+    },
+    {
+      "path": "instructions/special features for modding/window control and dll loading.txt",
+      "line": 23,
+      "text": "resolution X Y , display function [0-ddraw older, 1-gdi newer] and aspect ratio [0-off, 1-on] [default - 794 , widescreen - 1018 for width, height is 550]",
+      "status": "bundled-document statement, not executable behavior"
+    },
+    {
+      "path": "instructions/special features for modding/window control and dll loading.txt",
+      "line": 25,
+      "text": "if your mod uses only bmp images, you can use older display function [ddraw]",
+      "status": "bundled-document statement, not executable behavior"
+    },
+    {
+      "path": "instructions/special features for modding/window control and dll loading.txt",
+      "line": 26,
+      "text": "if your mod uses only png images, you should use newer display function [gdi]",
+      "status": "bundled-document statement, not executable behavior"
+    },
+    {
+      "path": "instructions/special features for modding/system dat.txt",
+      "line": 12,
+      "text": "file: data\\saves.txt\t\t\t;path of txt file which stores stage locked and unlocked character information",
+      "status": "bundled-document statement, not executable behavior"
+    },
+    {
+      "path": "instructions/special features for modding/system dat.txt",
+      "line": 17,
+      "text": "fps_value: 33\t\t;normal fps value",
+      "status": "bundled-document statement, not executable behavior"
+    },
+    {
+      "path": "instructions/special features for modding/system dat.txt",
+      "line": 18,
+      "text": "fps_value_f5: 3\t\t;fps value when F5 is used",
+      "status": "bundled-document statement, not executable behavior"
+    },
+    {
+      "path": "instructions/special features for modding/system dat.txt",
+      "line": 36,
+      "text": "load_type: 1\t\t;change data loading method [0 - default method where all files are loaded at startup, 1 - pdk loading method where only necessary files are loaded] **",
+      "status": "bundled-document statement, not executable behavior"
+    },
+    {
+      "path": "instructions/special features for modding/system dat.txt",
+      "line": 49,
+      "text": "\t\t\t;creates 3 txt file inside \"data\\load\\\" folder which keeps the record of which dat, images and sound files were loaded when round started in all modes",
+      "status": "bundled-document statement, not executable behavior"
+    },
+    {
+      "path": "instructions/special features for modding/system dat.txt",
+      "line": 51,
+      "text": "injury: 1\t\t;new image memory optimization system where the if the same image is loaded via different .dat files then it will not affect the ram usage\t[0-off, 1-on]",
+      "status": "bundled-document statement, not executable behavior"
+    },
+    {
+      "path": "instructions/special features for modding/tu mode.txt",
+      "line": 5,
+      "text": "default settings is set to \"2tu\"",
+      "status": "bundled-document statement, not executable behavior"
+    },
+    {
+      "path": "instructions/special features for modding/tu mode.txt",
+      "line": 7,
+      "text": "1tu - smooth input setting ",
+      "status": "bundled-document statement, not executable behavior"
+    },
+    {
+      "path": "instructions/special features for modding/tu mode.txt",
+      "line": 8,
+      "text": "- saves the recordings in \"recordings\\1tu\\\"",
+      "status": "bundled-document statement, not executable behavior"
+    },
+    {
+      "path": "instructions/special features for modding/tu mode.txt",
+      "line": 9,
+      "text": "- recordings are saved in \".mlfr\" format",
+      "status": "bundled-document statement, not executable behavior"
+    },
+    {
+      "path": "instructions/special features for modding/tu mode.txt",
+      "line": 11,
+      "text": "2tu - default input setting ",
+      "status": "bundled-document statement, not executable behavior"
+    },
+    {
+      "path": "instructions/special features for modding/tu mode.txt",
+      "line": 12,
+      "text": "- saves the recordings in \"recordings\\2tu\\\"",
+      "status": "bundled-document statement, not executable behavior"
+    },
+    {
+      "path": "instructions/special features for modding/tu mode.txt",
+      "line": 13,
+      "text": "- recordings are saved in \".lfr\" format",
+      "status": "bundled-document statement, not executable behavior"
+    },
+    {
+      "path": "custom/Custom Characters.txt",
+      "line": 3,
+      "text": "In order to add a custom character each dat file must be added with a unique id in the data\\data.txt. ID 901-979 has been reserved for custom chars.",
+      "status": "bundled-document statement, not executable behavior"
+    },
+    {
+      "path": "custom/Custom Characters.txt",
+      "line": 4,
+      "text": "Just continue adding IDs right after Genma's files and make sure no IDs are the same.",
+      "status": "bundled-document statement, not executable behavior"
+    },
+    {
+      "path": "custom/Custom Characters.txt",
+      "line": 10,
+      "text": "id: 901 type: 0 file: custom\\1genma\\genma.dat",
+      "status": "bundled-document statement, not executable behavior"
+    },
+    {
+      "path": "custom/Custom Characters.txt",
+      "line": 11,
+      "text": "id: 902 type: 3 file: custom\\1genma\\a\\shuriken.dat",
+      "status": "bundled-document statement, not executable behavior"
+    },
+    {
+      "path": "custom/Custom Characters.txt",
+      "line": 12,
+      "text": "id: 903 type: 0 file: custom\\1genma\\genmaclone.dat",
+      "status": "bundled-document statement, not executable behavior"
+    },
+    {
+      "path": "custom/Custom Characters.txt",
+      "line": 13,
+      "text": "id: 904 type: 3 file: custom\\1genma\\a\\katon.dat",
+      "status": "bundled-document statement, not executable behavior"
+    },
+    {
+      "path": "custom/Custom Characters.txt",
+      "line": 14,
+      "text": "id: 905 type: 3 file: custom\\1genma\\a\\smalldragon.dat",
+      "status": "bundled-document statement, not executable behavior"
+    },
+    {
+      "path": "custom/Custom Characters.txt",
+      "line": 15,
+      "text": "id: 906 type: 3 file: custom\\1genma\\a\\bigdragon.dat",
+      "status": "bundled-document statement, not executable behavior"
+    },
+    {
+      "path": "custom/Custom Characters.txt",
+      "line": 16,
+      "text": "id: 907 type: 3 file: custom\\1genma\\a\\wind.dat",
+      "status": "bundled-document statement, not executable behavior"
+    },
+    {
+      "path": "custom/Custom Characters.txt",
+      "line": 18,
+      "text": "By default Genma and his clone got \"hidden: 1\" in his dat file. This means you need to write Kanchoo in order to see him in the game.",
+      "status": "bundled-document statement, not executable behavior"
+    },
+    {
+      "path": "custom/Custom Characters.txt",
+      "line": 19,
+      "text": "\"Hidden: 0\" makes the character visible without the code. \"Hidden: 2\" is super secret characters such as stage secrets. There's no way to find them in menu.",
+      "status": "bundled-document statement, not executable behavior"
+    },
+    {
+      "path": "custom/Custom Characters.txt",
+      "line": 23,
+      "text": "Warning: To play online with someone you all need to have the exact same data.txt and files or else you will dsync.",
+      "status": "bundled-document statement, not executable behavior"
+    },
+    {
+      "path": "custom/movelist for customs.txt",
+      "line": 5,
+      "text": "-Genma Shiranui",
+      "status": "bundled-document statement, not executable behavior"
+    },
+    {
+      "path": "custom/movelist for customs.txt",
+      "line": 7,
+      "text": ">>AJ|Grab combo                         (catching move)                                         150CP                   100HP",
+      "status": "bundled-document statement, not executable behavior"
+    },
+    {
+      "path": "custom/movelist for customs.txt",
+      "line": 17,
+      "text": "GD^J|Replacement Technique              (Press D while getting hurt, directable)                250CP",
+      "status": "bundled-document statement, not executable behavior"
+    },
+    {
+      "path": "custom/movelist for customs.txt",
+      "line": 34,
+      "text": "-Genma Clone",
+      "status": "bundled-document statement, not executable behavior"
+    },
+    {
+      "path": "custom/movelist for customs.txt",
+      "line": 36,
+      "text": "    |Clone Weakness                     (vanishes upon a hit)",
+      "status": "bundled-document statement, not executable behavior"
+    },
+    {
+      "path": "recording/recording_readme.txt",
+      "line": 5,
+      "text": "To record your gameplay in LF2(v2.0), you have to turn on ",
+      "status": "bundled-document statement, not executable behavior"
+    },
+    {
+      "path": "recording/recording_readme.txt",
+      "line": 16,
+      "text": "gameplay to the folder \"recording\\\" under LF2 game directory.",
+      "status": "bundled-document statement, not executable behavior"
+    },
+    {
+      "path": "recording/recording_readme.txt",
+      "line": 24,
+      "text": "Usage of lfr_summary_generator.exe",
+      "status": "bundled-document statement, not executable behavior"
+    },
+    {
+      "path": "recording/recording_readme.txt",
+      "line": 27,
+      "text": "In the folder \"recording\\\" under the LF2 game folder, there",
+      "status": "bundled-document statement, not executable behavior"
+    },
+    {
+      "path": "recording/recording_readme.txt",
+      "line": 28,
+      "text": "is a little tool \"lfr_summary_generator.exe\".  By running it,",
+      "status": "bundled-document statement, not executable behavior"
+    },
+    {
+      "path": "recording/recording_readme.txt",
+      "line": 29,
+      "text": "you can generate a summary (lfr_summary.csv) for all of your ",
+      "status": "bundled-document statement, not executable behavior"
+    },
+    {
+      "path": "recording/recording_readme.txt",
+      "line": 30,
+      "text": "recording files.",
+      "status": "bundled-document statement, not executable behavior"
+    }
+  ],
+  "archive": {
+    "path": "/Users/michael/Downloads/NTSD2.8.3.3.zip",
+    "sha256": "fca38bfe1391d969b9d29d1289c51bbf5270a384fa7da6d4a7c053da77c52b2d"
+  },
+  "binaryStatic": {
+    "bytes": 87261184,
+    "sha256": "5eda51440039099069d041e5bd13fde8be9fd8c7b20983985b1712a59719d86b",
+    "peSectionRawEnd": 87261184,
+    "bytesAfterLastSection": 0,
+    "priorPE": {
+      "status": "PE32-headers-read",
+      "machine": "0x14c",
+      "imageBase": "0x400000",
+      "entryVA": "0x4171f4",
+      "sections": [
+        {
+          "name": "",
+          "rva": 4096,
+          "virtualSize": 614400,
+          "fileSize": 163840,
+          "fileOffset": 4096
+        },
+        {
+          "name": "",
+          "rva": 618496,
+          "virtualSize": 24576,
+          "fileSize": 8192,
+          "fileOffset": 167936
+        },
+        {
+          "name": "",
+          "rva": 643072,
+          "virtualSize": 53248,
+          "fileSize": 4096,
+          "fileOffset": 176128
+        },
+        {
+          "name": "",
+          "rva": 696320,
+          "virtualSize": 45056,
+          "fileSize": 4096,
+          "fileOffset": 180224
+        },
+        {
+          "name": ".rsrc",
+          "rva": 741376,
+          "virtualSize": 12288,
+          "fileSize": 12288,
+          "fileOffset": 184320
+        },
+        {
+          "name": "",
+          "rva": 753664,
+          "virtualSize": 2920448,
+          "fileSize": 86147072,
+          "fileOffset": 196608
+        },
+        {
+          "name": ".data",
+          "rva": 3674112,
+          "virtualSize": 917504,
+          "fileSize": 917504,
+          "fileOffset": 86343680
+        }
+      ],
+      "importsError": "ValueError: RVA outside file-backed sections: 9f38185e",
+      "resourcesError": "ValueError: RVA outside file-backed sections: ac724",
+      "dllNameStringsOnly": [
+        "COMDLG32.dll",
+        "DDRAW.dll",
+        "DSOUND.dll",
+        "MSVCP80.dll",
+        "MSVCR80.dll",
+        "WININET.dll",
+        "WINMM.dll",
+        "WSOCK32.dll",
+        "advapi32.dll",
+        "gdi32.dll",
+        "kernel32.dll",
+        "ole32.dll",
+        "oleaut32.dll",
+        "shell32.dll",
+        "user32.dll",
+        "version.dll"
+      ],
+      "dllNameStringsMeaning": "Strings only; not a recovered import table or observed loading."
+    },
+    "signatures": [
+      {
+        "hex": "4d6f6c65426f78",
+        "literal": "b'MoleBox'",
+        "count": 0,
+        "offsets": []
+      },
+      {
+        "hex": "4d4f4c45424f58",
+        "literal": "b'MOLEBOX'",
+        "count": 0,
+        "offsets": []
+      },
+      {
+        "hex": "456e69676d61",
+        "literal": "b'Enigma'",
+        "count": 0,
+        "offsets": []
+      },
+      {
+        "hex": "454e49474d41",
+        "literal": "b'ENIGMA'",
+        "count": 1,
+        "offsets": [
+          87246788
+        ]
+      },
+      {
+        "hex": "5468656d696461",
+        "literal": "b'Themida'",
+        "count": 0,
+        "offsets": []
+      },
+      {
+        "hex": "57696e4c6963656e7365",
+        "literal": "b'WinLicense'",
+        "count": 0,
+        "offsets": []
+      },
+      {
+        "hex": "55505821",
+        "literal": "b'UPX!'",
+        "count": 0,
+        "offsets": []
+      },
+      {
+        "hex": "55505830",
+        "literal": "b'UPX0'",
+        "count": 0,
+        "offsets": []
+      },
+      {
+        "hex": "377abcaf271c",
+        "literal": "b\"7z\\xbc\\xaf'\\x1c\"",
+        "count": 0,
+        "offsets": []
+      },
+      {
+        "hex": "504b0304",
+        "literal": "b'PK\\x03\\x04'",
+        "count": 0,
+        "offsets": []
+      },
+      {
+        "hex": "504b0506",
+        "literal": "b'PK\\x05\\x06'",
+        "count": 0,
+        "offsets": []
+      },
+      {
+        "hex": "4d534346",
+        "literal": "b'MSCF'",
+        "count": 0,
+        "offsets": []
+      },
+      {
+        "hex": "635c6e61725c6e61722e646174",
+        "literal": "b'c\\\\nar\\\\nar.dat'",
+        "count": 0,
+        "offsets": []
+      },
+      {
+        "hex": "632f6e61722f6e61722e646174",
+        "literal": "b'c/nar/nar.dat'",
+        "count": 0,
+        "offsets": []
+      },
+      {
+        "hex": "67656e6d61",
+        "literal": "b'genma'",
+        "count": 0,
+        "offsets": []
+      },
+      {
+        "hex": "4e545344",
+        "literal": "b'NTSD'",
+        "count": 0,
+        "offsets": []
+      },
+      {
+        "hex": "4461726b666972656e",
+        "literal": "b'Darkfiren'",
+        "count": 0,
+        "offsets": []
+      }
+    ],
+    "markerContext": {
+      "start": 87246772,
+      "bytesHex": "ed0600000081edacd74500e94c000000454e49474d410400ea0701001f0011001300020050e3a7a4d0af4d32eb326dfd320071caa7d126ea000000000000000000000000000000000000000000000000",
+      "status": "literal marker only; product/version/protection/format not established"
+    },
+    "fileCommand": {
+      "argv": [
+        "/usr/bin/file",
+        "-b",
+        "-"
+      ],
+      "stdin": "exact NTSD.exe member",
+      "exitCode": 0,
+      "stdout": "PE32 executable (GUI) Intel 80386, for MS Windows\n",
+      "stderr": ""
+    }
+  },
+  "visibleRegisteredObjects": [
+    {
+      "section": "object",
+      "id": 901,
+      "type": 0,
+      "path": "custom/1genma/genma.dat",
+      "line": 3
+    },
+    {
+      "section": "object",
+      "id": 902,
+      "type": 3,
+      "path": "custom/1genma/a/shuriken.dat",
+      "line": 4
+    },
+    {
+      "section": "object",
+      "id": 903,
+      "type": 0,
+      "path": "custom/1genma/genmaclone.dat",
+      "line": 5
+    },
+    {
+      "section": "object",
+      "id": 904,
+      "type": 3,
+      "path": "custom/1genma/a/katon.dat",
+      "line": 6
+    },
+    {
+      "section": "object",
+      "id": 905,
+      "type": 3,
+      "path": "custom/1genma/a/smalldragon.dat",
+      "line": 7
+    },
+    {
+      "section": "object",
+      "id": 906,
+      "type": 3,
+      "path": "custom/1genma/a/bigdragon.dat",
+      "line": 8
+    },
+    {
+      "section": "object",
+      "id": 907,
+      "type": 3,
+      "path": "custom/1genma/a/wind.dat",
+      "line": 9
+    }
+  ],
+  "visibleFrames": [
+    {
+      "path": "custom/1genma/genma.dat",
+      "frameOccurrences": 261,
+      "maxFrame": 701,
+      "outside0to399": 47,
+      "hiddenTokens": [
+        "1"
+      ]
+    },
+    {
+      "path": "custom/1genma/a/shuriken.dat",
+      "frameOccurrences": 14,
+      "maxFrame": 390,
+      "outside0to399": 0,
+      "hiddenTokens": []
+    },
+    {
+      "path": "custom/1genma/genmaclone.dat",
+      "frameOccurrences": 149,
+      "maxFrame": 701,
+      "outside0to399": 12,
+      "hiddenTokens": [
+        "1"
+      ]
+    },
+    {
+      "path": "custom/1genma/a/katon.dat",
+      "frameOccurrences": 13,
+      "maxFrame": 33,
+      "outside0to399": 0,
+      "hiddenTokens": []
+    },
+    {
+      "path": "custom/1genma/a/smalldragon.dat",
+      "frameOccurrences": 12,
+      "maxFrame": 62,
+      "outside0to399": 0,
+      "hiddenTokens": []
+    },
+    {
+      "path": "custom/1genma/a/bigdragon.dat",
+      "frameOccurrences": 12,
+      "maxFrame": 58,
+      "outside0to399": 0,
+      "hiddenTokens": []
+    },
+    {
+      "path": "custom/1genma/a/wind.dat",
+      "frameOccurrences": 9,
+      "maxFrame": 194,
+      "outside0to399": 0,
+      "hiddenTokens": []
+    }
+  ],
+  "auxiliaryExecutables": [
+    {
+      "path": "instructions/Fix side-by-side error.EXE",
+      "sha256": "4ee4da0fe62d5fa1b5e80c6e6d88a4a2f8b3b140c35da51053d0d7b72a381d29",
+      "bytes": 2707352,
+      "status": "outer inventory; not executed or functionally assessed"
+    },
+    {
+      "path": "instructions/LF2Lobby0.1.4_GUI.exe",
+      "sha256": "a613f19dff5f0a95f18e532fe6f57472ba174349bf080f893f9996e1c49ede21",
+      "bytes": 23040,
+      "status": "outer inventory; not executed or functionally assessed"
+    },
+    {
+      "path": "instructions/LF2_Multi_Server_v2.01.exe",
+      "sha256": "054f7cab275969fbeabfd2077c54e2f47815c691417a137428aa2338ec9ead94",
+      "bytes": 22528,
+      "status": "outer inventory; not executed or functionally assessed"
+    },
+    {
+      "path": "instructions/MiniLobbyServer.exe",
+      "sha256": "fc9652e16ff8fda3ccfd2b51c46b5789ac17355fc60743443b623dc50e601563",
+      "bytes": 24064,
+      "status": "outer inventory; not executed or functionally assessed"
+    },
+    {
+      "path": "instructions/Name_Changer_v1.1.exe",
+      "sha256": "20c1b960b3a75021b049550a07833330d4c973b4f19e2af90a1af61b015de5de",
+      "bytes": 1093120,
+      "status": "outer inventory; not executed or functionally assessed"
+    },
+    {
+      "path": "recording/lfr_summary_generator.exe",
+      "sha256": "acc7644fd8763358401ea74b4a5ff3eebfa52066349a381d20687861662200c7",
+      "bytes": 77824,
+      "status": "outer inventory; not executed or functionally assessed"
+    },
+    {
+      "path": "recording/2tu/lfr_summary_generator.exe",
+      "sha256": "acc7644fd8763358401ea74b4a5ff3eebfa52066349a381d20687861662200c7",
+      "bytes": 77824,
+      "status": "outer inventory; not executed or functionally assessed"
+    },
+    {
+      "path": "recording/1tu/mlfr_summary_generator.exe",
+      "sha256": "b6694d1595efedff19f2d14944e5cece9ee7e82b169c3bb10bd2ae7a67bf1af6",
+      "bytes": 77824,
+      "status": "outer inventory; not executed or functionally assessed"
+    },
+    {
+      "path": "Multiplayer.exe",
+      "sha256": "32fcb52c9bc99fb5147f131eb5f044e9b829e9bd6d3c7f4fc8881b2edebff612",
+      "bytes": 176128,
+      "status": "outer inventory; not executed or functionally assessed"
+    }
+  ],
+  "engineSourceSHA256": {
+    "native/Sources/NTSDCore/OriginalFrameLoader.swift": "2a8ff012749379c77e39e6a90922d1b7edafa269b3a23897f03b475f3f3097c0",
+    "native/Sources/NTSDCore/OriginalObjectLoader.swift": "3fcd7bef4900f1803f1c9ca7d0725ba3c65b8d4574026e63108c8f62fdffc692",
+    "native/Sources/NTSDRuntime/OriginalMacRuntimeStartup.swift": "6551dcf6433089aa10f921344a10f0ccd31ae2499edf03de6da49d2341b3aa11",
+    "native/Package.swift": "c1a52595741b58e9f13bd929d2d124dd81938813c6b57e4c2c99e97c79de3c46"
+  },
+  "pendingObservation": {
+    "observedUTC": "2026-10-17T13:46:27.088692+00:00",
+    "oldAssessmentPathsSHA256": {
+      "native/Sources/NTSDWeb/WebAudio.swift": "15ac6b540c23aa1925ebd49f13ebfdd4c3719d5c88e8574ac6986ff6861a901e",
+      "native/Sources/NTSDWeb/WebPage.swift": "37ea212fd755abbcf1674e45b7f634b20b387bc421f37590b76be1001b41eb80",
+      "native/Sources/NTSDWeb/WebSession.swift": "66381e89e37dcf330f4d8e7f4d616056174039dbdc1a2031e193697a2ad8dafa",
+      "tools/crossplatform/run_headless_scenarios.py": "335b372de4181252db175e4e84b575c5e71271ef56db04d002e527669337a824",
+      "tools/crossplatform/web/run.html": "f893493d896cf805ea3c89f580f84181859c09e7f39be623ba4ffa19fcde40a8",
+      "tools/crossplatform/web/wasi-worker.js": "b71ba9721b1d7b39930ea180410c88a1bdb1a53d4c9f133d8b8114242ef72597",
+      "tools/crossplatform/web_app.py": "60251e0027b7308f85f100efb9015676f72d72ac756f53c4b5c0a1a3d2a5de21",
+      "tools/crossplatform/web_run.mjs": "866da77dd5799f343b7b0267ddc0ed62f84e17bb41ff4be253fb91124023eaff",
+      "docs/research/NTSD_2_8_3_3_ASSESSMENT.md": "ca7fa6f0c34bae94886061c221f6667092509ac58cf81a6f2203ebf6fcaaf5ac",
+      "tools/compare_ntsd_distributions.py": "4c0237cf7f57fa4ae419c9fc9c57a659a38122743fb59f84cd3756c6e573b109",
+      "tools/crossplatform/web/pack-loader.js": "d04080df2df619cca12b07c3270e6583c2b2aa7164da1a6af924c037b8793142",
+      "tools/crossplatform/web/read-order.json": "5892c7865feb738c0056abbde637d1ca497be272a74dc91aadb320c0d479297d"
+    },
+    "changedFromEarlierAssessment": [
+      "docs/research/NTSD_2_8_3_3_ASSESSMENT.md"
+    ],
+    "gitStatus": " M docs/research/TVOS_WEB.md\n M native/Sources/NTSDWeb/WebAudio.swift\n M native/Sources/NTSDWeb/WebPage.swift\n M native/Sources/NTSDWeb/WebSession.swift\n M tools/crossplatform/run_headless_scenarios.py\n M tools/crossplatform/web/run.html\n M tools/crossplatform/web/wasi-worker.js\n M tools/crossplatform/web_app.py\n M tools/crossplatform/web_run.mjs\n?? docs/evidence/ntsd-2.8.3.3-preparation-20261017-preflight1.json\n?? docs/research/NTSD_2_8_3_3_PREPARATION.md\n?? tools/crossplatform/web/pack-loader.js\n?? tools/crossplatform/web/read-order.json\n",
+    "claim": "No task-owned writes target unrelated pending paths. They change concurrently, so across-task byte identity is not claimed."
+  },
+  "configuredReaders": {
+    "7zz": "/opt/homebrew/bin/7zz",
+    "7z": null,
+    "bsdtar": "/usr/bin/bsdtar",
+    "unar": null,
+    "unzip": "/usr/bin/unzip",
+    "objdump": "/usr/bin/objdump",
+    "llvm-objdump": "/Users/michael/.swiftly/bin/llvm-objdump",
+    "file": "/usr/bin/file",
+    "strings": "/usr/bin/strings"
+  },
+  "archiveListing": {
+    "attempted": false,
+    "reason": "No selected standard inner ZIP/7z/CAB signature identified; reader availability alone does not prove payload support."
+  },
+  "readPreflights": [
+    {
+      "outcome": "UTF-8 display of custom/movelist for customs.txt and recording/recording_readme.txt showed replacement/NUL characters; strict UTF-16 BOM decode used for final fact read. No source/evidence modified."
+    },
+    {
+      "outcome": "sed of guessed native/Sources/NTSDRuntime/OriginalRuntimeHost.swift failed: No such file or directory. Correct interface paths discovered with rg --files."
+    }
+  ],
+  "reproduction": {
+    "binary": "zipfile.ZipFile.read exact NTSD2.8.3.3/NTSD.exe; bytes.find each signatures hex until absent, first eight offsets retained. /usr/bin/file -b - receives member on stdin. No original execution.",
+    "registry": "Read data/data.txt latin-1, strip # comments, retain section/order; fullmatch id/type/file entries, visibility from saved normalized member inventory.",
+    "frames": "tools/import_ntsd.decode_dat; regex <frame>\\s+(-?\\d+) preserves every occurrence.",
+    "documents": "Strict utf-16 with BOM or utf-8-sig; 1-based splitlines locations.",
+    "hashes": "hashlib.sha256 raw bytes; compare preserved prior pins; no existing report regenerated."
+  },
+  "acceptance": {
+    "staticPreparationOnly": true,
+    "fullContentDiff": false,
+    "originalExecuted": false,
+    "nativeChanged": false,
+    "gameBehaviorAccepted": false,
+    "priorAssessmentReview": "Independent selected-source factual review. New recommendations are author analysis."
+  }
+}

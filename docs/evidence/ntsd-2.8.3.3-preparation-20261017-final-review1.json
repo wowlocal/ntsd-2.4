@@ -1,0 +1,21 @@
+{
+  "recordedUTC": "2026-10-17T14:09:04.176772+00:00",
+  "reviewerTask": "/root/astra_2833_final_review",
+  "requestedModel": "gpt-6-astra",
+  "requestedReasoning": "xhigh",
+  "contextMode": "none; explicit model/reasoning override",
+  "outcome": "No material findings within bounded preparation scope.",
+  "reviewedFilesSHA256": {
+    "docs/research/NTSD_2_8_3_3_PREPARATION.md": "edab837e435c45a250bd7adca35761113ab97bd66ddea2e2fcfac02c01da922f",
+    "docs/evidence/ntsd-2.8.3.3-community-audio-20261017.json": "ebdd821ce7d5df3d05f655f61cdf4e72fcaa60ba83f128f411d6e60e55be7138",
+    "docs/evidence/ntsd-2.8.3.3-preparation-20261017-community-leads1.json": "44dba118a91b2e33c31f0d881a9479edf31e9c6f83b2a4d6c654089382363379",
+    "docs/evidence/ntsd-2.8.3.3-preparation-20261017-discord1.json": "4889aad88db7517b2de869df589a34cd01636dd6ab545c46210e4228ff5b6195",
+    "docs/evidence/ntsd-2.8.3.3-preparation-20261017-preflight1.json": "98c183ea57040d90ea1c3d44cbc12701050b85af7c982af237c414b6cb95bf52",
+    "docs/evidence/ntsd-2.8.3.3-preparation-20261017-review-correction1.json": "8edb2dbbda7145699011964edde9c10d632625eea3244548e245dcdcfafd276c",
+    "docs/evidence/ntsd-2.8.3.3-preparation-20261017-static2.json": "d9e9e06fb0156d5ab71882febfeb6a46fff65567444deef33813cce046b11633"
+  },
+  "scope": "Read-only review of final preparation and6evidenceJSONs, saved24checks and470/59/701frame accounting, links/correction chain/current source limitations; no original execution or inventory/capture rerun.",
+  "limits": "Discord and originalaudio not independently viewed; attribution checked. This is preparation review, not new game-contract acceptance, behavioral equivalence or implementation readiness for unknown rules. Finaldelivery/commit checks remain parent responsibility.",
+  "localDelivery": "prep/ntsd-2.8.3.3 sparseworktree; no upstream, originalLFS postcommit retained by command-scoped hooks omittingauto-push; no publication.",
+  "unrelatedWork": "Main independently moved from2c5cb633 to1deaa396 during preparation; no parent writes targetedWeb/TVOS paths; documentation branch base stays2c5cb633. Implementation base not chosen."
+}

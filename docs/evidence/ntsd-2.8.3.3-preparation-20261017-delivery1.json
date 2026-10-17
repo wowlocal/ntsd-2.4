@@ -1,0 +1,31 @@
+{
+  "recordedUTC": "2026-10-17T14:10:51.299574+00:00",
+  "preparationCommit": "045d525e0c349734fab0ba3db4e060dddbb52d37",
+  "branch": "prep/ntsd-2.8.3.3",
+  "result": "Delivery checks pass for task-owned changes; inherited handoff-link defects remain explicit.",
+  "preflightFailure": {
+    "exactError": "subprocess.CalledProcessError: Command ['git', 'cat-file', '-e', ':docs/research/PHONE_CONTROLLER.md'] returned non-zero exit status 128.",
+    "cause": "Verifier checked every old CURRENT_WORK link as if introduced by this increment. The absent target already exists in base2c5cb633.",
+    "processError": "The shell continued to git commit after the Python check failed because fail-fast sequencing was absent. The resulting local commit is retained; no push ran.",
+    "correction": "Compare entire before/after missing-link sets and require no added missing links; separately require all preparation-card links. Other checks rerun because earlier control flow never reached them. No old evidence/expected/comparator was changed."
+  },
+  "inheritedMissingHandoffLinksBefore": [
+    "docs/research/PHONE_CONTROLLER.md"
+  ],
+  "missingHandoffLinksAfter": [
+    "docs/research/PHONE_CONTROLLER.md"
+  ],
+  "checks": [
+    "9committedpaths all documentation/evidence only",
+    "all6source evidence and finalreviewJSON parse",
+    "working bytes match preparationcommit",
+    "preparationcard SHA equals independentlyreviewed bytes",
+    "allpreparationcard links resolve in committedtree",
+    "no additional brokenhandofflinks versusbase",
+    "localbranch has no upstream",
+    "LFS-only commandhook contains no gitpush",
+    "X5free space above20GiB"
+  ],
+  "publication": "No furtherpush/publication; normalsharedhooks unchanged.",
+  "reviewScope": "Astra xhigh reviewed preparation content/evidence; thisdeliveryreceipt is parentverification, not independent game-contract acceptance."
+}
