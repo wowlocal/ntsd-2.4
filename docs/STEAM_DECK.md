@@ -91,8 +91,12 @@ before the mode menu:
   on a screen where nothing is selected only shows where the cursor
   starts. The touchscreen and the right trackpad
   work as a mouse too.
-- Text — player names, the opponent's address, the recording info — needs
-  keys: open Steam's on-screen keyboard with Steam + X.
+- Text — player names, the opponent's address, the recording info: in Game
+  Mode Steam's on-screen keyboard opens by itself while such a field takes
+  text and closes when it stops. Enter closes it in a single-line field;
+  press A or tap inside the field to bring it back
+  ([MENU_GAMEPAD](research/MENU_GAMEPAD.md#text-on-the-steam-deck)). In
+  Desktop Mode open it with Steam + X.
 - From the mode menu on the game reads the players' own devices. Joystick 1
   is player 3's default device: up and down choose the mode and A confirms;
   at the character selection A joins. CONTROL SETTINGS can give the

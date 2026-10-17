@@ -204,9 +204,11 @@ fixed:
 | 2026-10-16 | After the review: the screens test extended — player 1's device box as CONTROL SETTINGS' start, a first press only showing it and the next clicking it, the wrap left of it, a point left on another screen ignored (the address screen starts on Cancel), a move and a press in one sample clicking the new target; −3 and 4 not offered (6 tests) | pass |
 | 2026-10-16 | `app_e2e.py --build --scenario title-joystick` with the routes adjusted to the start rule (CONTROL SETTINGS: control.txt with player 1 on joystick 1; ONLINE GAME → Connect → Cancel → Back → START, loaded, no box, no link) and `--original-menu-input`; `--scenario joystick` | both pass, references equal |
 
-## Text on the Steam Deck (branch `exp/deck-keyboard`, 2026-10-16)
+## Text on the Steam Deck
 
-Not requested by the user; offered after the front screens: the text the
+Branch `exp/deck-keyboard` (2026-10-16), merged into `main` (b1584250) on
+2026-10-17 at the user's request. Not requested at first; offered after the
+front screens: the text the
 controller cannot type. `OriginalRuntimeMenuGamepad.textEntry(selector:word:)`
 names the field a front screen is typing into and its area — the address
 (selector 3 while 4511b0 is 0; it is 1 only in the tick that takes Return;
@@ -248,9 +250,10 @@ How Steam's keyboard delivers its keys under gamescope is not checked yet.
 | 2026-10-16 | First version (14456457), the x86_64 package in `ntsd-linux-clean:noble-amd64` under Xvfb (SDL's X11 driver), scripted: the address screen and player 1's name (both captured) — with the Steam variable `screenKeyboard` line, none, line, none; without it none | pass |
 | 2026-10-16 | Review (read-only): the field detection matches the Core code; found the keyboard never reopening or changing mode (SDL's shown flag; Steam closes it on Enter), no field area, the support check also true for touch-only Wayland (text then arrives as TEXT_INPUT events, ignored) and X11 desktops under Big Picture (dead keys), a recreated window, the timer never ending. Fixed in e16cc8f0 | fixed |
 | 2026-10-16 | e16cc8f0 under Xvfb, fixed and `--scalable-window`: address line [293,318,219,33] → a click inside the field → none → line → Cancel → none → player 1's name → line [194,156,106,18] → player 2's → none → line [333,156,106,18] → a key cell → none; in the scalable window the same sequence with the areas scaled and offset ([401,435,301,46], …); both exit 0 | pass |
-
 | 2026-10-16 | Second review of e16cc8f0: no new defect above low; fixed — a window destroyed before the stop left SDL's keyboard flag set (stop on the game's window instead), and every click on a text screen restarted the keyboard (now only a click inside the field); doc statements corrected | fixed |
 | 2026-10-16 | e334323b under Xvfb (fixed window): the same sequence plus a click on player 1's device box while the name is edited — no restart for it; address line, none, line, none, player 1's name line, player 2's none then line, a key cell none; exit 0 | pass |
 
-Open: Steam's keyboard itself on the Deck (a hand check in Game Mode), and
-merging (the user's decision).
+| 2026-10-17 | Merged `main` (b1584250, tree equal to 84ba197c): `OriginalMacRuntimeMenuTests` (16 tests), `title-joystick` with its menu checks and `joystick` on macOS | pass, equal |
+| 2026-10-17 | The x86_64 package of b1584250 installed on the Deck with `steamdeck_install.py`: README `Build: b1584250…`, `ldd` resolves everything, `NTSDSDL` imports SDL's text input calls, the Game Mode shortcut in place | pass |
+
+Open: Steam's keyboard itself on the Deck (a hand check in Game Mode).
