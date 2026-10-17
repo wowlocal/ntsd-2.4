@@ -1,6 +1,7 @@
 # NTSD 2.8.3.3 on the native engine: implementation plan
 
-2026-10-17. Fresh planning pass at `723b424fe7de9680d4da91ba228ee15940c3d141`,
+2026-10-17. Initial plan at `723b424fe7de9680d4da91ba228ee15940c3d141`,
+revised against completed engine evidence at `45d0fedc`,
 local branch `exp/ntsd-2.8.3.3`, worktree `/Users/michael/Developer/ntsd-2.4-v2833`.
 Status: **proposed implementation sequence, not behavioral acceptance**. The parent
 owns review, Git and CURRENT_WORK. This pass edits only this document; no build,
@@ -31,6 +32,31 @@ no Windows EXE/DLL execution, Wine, CrossOver, browser engine or emulation in th
 Mac runtime. Other commissioned hosts and their accepted conveniences are separate
 delivery/acceptance surfaces, not a replacement for the Mac application.
 
+## Revision: completed evidence → implementation decisions
+
+This revision incorporates [the engine study](NTSD_2_8_3_3_ENGINE_DIFF.md),
+[static run1](../evidence/ntsd-2.8.3.3-engine-diff-20261017-run1.json),
+[RNG pilot1](../evidence/ntsd-2.8.3.3-engine-diff-20261017-rng1.json) and its
+[interpretation correction1](../evidence/ntsd-2.8.3.3-engine-diff-20261017-rng1-correction1.json).
+The correction supersedes the overbroad Actor/Object-offset conclusion in pilot1;
+the original receipt, failed audit, bytes and comparison output remain immutable.
+
+| Completed evidence, 2026-10-17 | Decision and remaining gate |
+| --- | --- |
+| First recorded x86 code section `0x401000..<0x497000` is readable: 614,400 bytes, SHA-256 `9364fc67c15991140a8d379987c23e70bb33660f104a1d6e9203a056a1079eb0`. | Initial code availability is established. Use these saved bytes for the next required mechanism; do not repeat capture/availability discovery. Complete effective code, DLL and resource mapping remain open. |
+| Complete RNG `0x417170..<0x4171bd`: 77 bytes, 29 instructions; only five references to three state identities differ by `+0x50000`. Controlled Unicorn 2.1.4 pilot: 24 cases, 288 calls/version, all 29 instruction addresses and both returns, zero mismatches in results/registers/state/normalized ordered writes; tables unchanged. | Retain `OriginalRandom` arithmetic as a reuse candidate. This is source/source evidence on synthetic valid-domain tables, not Native execution or naturally observed initialization. Target table generation, ownership, callers and consumption order still gate production integration. No second unchanged-leaf pilot is the next priority. |
+| Candidate camera path: `0x41b8d7` bound 400→1000; `0x41b617` World-relative table `0x194→0x3ec`. | Recover pool construction, ownership, aliases and callers before changing this consumer. Neither value defines the whole World/Actor layout. |
+| Matched AI frame-index multiplies at `0x4045c0/0x404cd0`: `0x178→0x1b0` (376→432 bytes); object-relative fields `0x7ac→0x838`, `0x7d0→0x85c`. Actor object-reference **stays `+0x368`** in both contexts. | First changed engine contract is Frame/Object construction/loading/storage. The two accesses establish neither the whole record nor all AI semantics. Do not infer an Actor-reference relocation, a complete Object header, or globally replace constants. |
+| Purpose-selected 32-anchor sample: three same-VA identical prefixes, five matching shapes with numeric changes, 24 unresolved identities. | These are neither 24 changed functions nor a reuse percentage. An old VA may lie in another function or mid-instruction; establish the chosen caller's identity before execution or transfer. |
+
+The next order is **M0 minimal live content integration → D3 changed Frame/Object
+contract and Native consumer → the next ready M1 startup/loading slice**. D2
+observations join only where their inputs are needed. M0 provides a real runtime
+acquisition seam; it does not justify a prolonged sequence of research-only
+increments. Full resource access and a perfect global diff are not prerequisites
+for M0 or an independently evidenced storage implementation. The packed-content
+dependency below is unchanged by the successful code comparison and RNG pilot.
+
 ## Inputs and evidence limits
 
 | Input | Pin and meaning |
@@ -40,9 +66,12 @@ delivery/acceptance surfaces, not a replacement for the Mac application.
 | Target EXE member | `NTSD2.8.3.3/NTSD.exe`; SHA-256 `5eda51440039099069d041e5bd13fde8be9fd8c7b20983985b1712a59719d86b` |
 | Working diagnostic dump | `/Volumes/T7/ntsd-2.4-artifacts/version-diff-20261017/windows-startup-fix1/NTSD-versus-selection-live1.dmp`; 476,556,770 bytes; SHA-256 `adb00fd69a252cd1d0def2ce21d4963b9853f7f963613785047ad4633ea7c303` |
 
-The dump supplements the original ZIP/EXE. Its saved validation reports MDMP,
-full readable memory, 93 modules, 1,407 regions and NTSD at `0x400000`, image size
-4,591,616. On Windows 11 ARM64 with x86 compatibility, disabling hybrid execution
+The dump supplements the original ZIP/EXE. Saved validation and corrected reader
+accounting report MDMP with 16 directory entries (five unused padding entries,
+11 nonempty streams), 93 module entries including two identical NTSD records,
+1,407 memory regions and NTSD at `0x400000`, image size 4,591,616. These are not
+93 unique dependencies or proof of readable bytes for every path. On Windows 11
+ARM64 with x86 compatibility, disabling hybrid execution
 for this EXE allowed two starts; PID8092 was responding in Versus character
 selection at `2026-10-17T15:54:33Z`. No seats were joined. These are actual Windows
 guest observations, not physical x86 Windows, sound, arena loading or match proof.
@@ -123,20 +152,25 @@ and [qualified source facts:119–158](NTSD_2_8_3_3_PREPARATION.md#L119).
 | `OriginalRuntimeSession.resourceBundle()` only selects a Bundle; start invokes the hard-pinned startup package; read-ahead and loading invoke hard-pinned packages again. [Session:146,235,382](../../native/Sources/NTSDRuntime/OriginalRuntimeSession.swift#L146). | `--resources` is not target-version support. Introduce an explicit content acquisition boundary at these live call sites before trying a target bundle. |
 | Startup manifest pins 2.4 EXE, global base `0x44d000`, size `0xc3a8`, 45 entries; catalog pins manifest SHA, 1,198 entries and roles 521/669/8. [Startup:145](../../native/Sources/NTSDCore/OriginalApplicationStartupInputs.swift#L145), [Catalog:60](../../native/Sources/NTSDCore/OriginalApplicationCatalogInputs.swift#L60). | Retain exact 2.4 validation; a target package is separate, never a changed expected hash/count or permissive fallback. Target initial globals require provenance, not a wholesale dump import. |
 | `OriginalRuntimeLoadingPackages` reads five packages into `Result`, then raises errors in bundled order. [Loading:31–53](../../native/Sources/NTSDRuntime/OriginalMacRuntimeLoading.swift#L31). | Preserve read-ahead and first-error behavior, immutable ownership and the single source across startup/loading; do not mix provider identities. |
-| Frame indices `0..<400`, stride `0x178`; Object header `0x7a4`, tail `0x3c`, 400 frames; small Frame heap allocation bound 400 bytes. [Frame:100,183](../../native/Sources/NTSDCore/OriginalFrameLoader.swift#L100), [Object:164,283](../../native/Sources/NTSDCore/OriginalObjectLoader.swift#L164), [heap:43](../../native/Sources/NTSDCore/OriginalFrameStorage.swift#L43). | Frame capacity must change for visible target data, but target record layout is unknown. Actor-pool 400, allocation byte bound 400 and unrelated gameplay constants are different contracts. No global replacement. |
-| Actor input and AI traverse 400 slots and source-specific offsets/globals. [Input:52–91](../../native/Sources/NTSDCore/OriginalObjectInput.swift#L52), [AI:27–91](../../native/Sources/NTSDCore/OriginalCharacterAI.swift#L27). | Recover pool size, Actor/World representation, slot reuse, rest arrays and ordering together. 2.4 Actor size `0x420` is not evidence of the target size. |
+| Frame indices `0..<400`, stride `0x178`; Object header `0x7a4`, tail `0x3c`, 400 frames; small Frame heap allocation bound 400 bytes. [Frame:100,183](../../native/Sources/NTSDCore/OriginalFrameLoader.swift#L100), [Object:164,283](../../native/Sources/NTSDCore/OriginalObjectLoader.swift#L164), [heap:43](../../native/Sources/NTSDCore/OriginalFrameStorage.swift#L43). | Target high-index DATs and two `0x1b0` frame accesses establish a real delta; constructor/defaults, full storage, frame count and parser semantics remain incomplete. Frame count, live Actor capacity and allocation bytes are separate contracts. No global replacement. |
+| Actor input and AI traverse 400 slots and source-specific offsets/globals. [Input:52–91](../../native/Sources/NTSDCore/OriginalObjectInput.swift#L52), [AI:27–91](../../native/Sources/NTSDCore/OriginalCharacterAI.swift#L27). | Target candidate loop/table accesses establish specific changes; recover allocation, reuse, aliases, rest arrays and ordering before using them. Actor `+0x368` stays unchanged in the two audited contexts; 2.4 size `0x420` still does not establish target size. |
 | Image input accepts only 4/8/24-bit DIB and 8-bit RLE; decoded storage is RGB plus definedness. [Bitmap:60–97](../../native/Sources/NTSDCore/OriginalApplicationStartupInputs.swift#L60), [pixels:1–24](../../native/Sources/NTSDCore/OriginalDIBPixels.swift#L1). | PNG decoding, alpha, mirror precedence, surface conversion and compositing require a connected target path. PNG screenshot output is not a PNG asset decoder; converting to opaque BMP would discard required information. |
 | `OriginalMacRuntimeLoading` merges file images and embedded resources with distinct failure/retry meaning; one identity pool owns platform tokens. [Loading:148](../../native/Sources/NTSDRuntime/OriginalMacRuntimeLoading.swift#L148), [pool:1](../../native/Sources/NTSDRuntime/OriginalMacResourceIdentityPool.swift#L1). | Preserve file/resource identity, aliasing, lifetime and rollback. Identical bytes or reused filenames do not authorize merging live resource identities. |
 | Packer verifies the baseline EXE and exact manifest before copying bytes; app packer is also baseline-specific. [packer:52](../../tools/package_catalog_inputs.py#L52), [assets:22](../../tools/package_assets.py#L22). | Add an explicit target input mode only for independently available data; do not pass the target tree as `--baseline`, ship an EXE, or overwrite OriginalCatalog. |
 
 Critical unknowns: actual startup/system/configuration values; effective loaded
-game/DLL behavior and late hooks; target CRT/FPU and random streams; raw layouts,
+game/DLL behavior and late hooks; target CRT/FPU, RNG initialization and caller
+sequences; complete raw layouts beyond the recorded accesses,
 parser/decoder/checksum/EOF behavior; selectable roster/unlocks; complete assets;
 input timing and combos; collision/effect/spawn rules; AI; modes and transitions;
 replay/save/network compatibility; render/input/audio output. A successful menu
 and structural binary similarity close none of these by themselves.
 
-## Diff method and finite discovery queue
+The target also needs its own basis for 2.4 application accommodations such as
+zero-backed allocations, out-of-Object frame reads and full-pool fallback. Existing
+2.4 policies remain protected; they are not target defaults inferred from the dump.
+
+## Evidence method and finite implementation queue
 
 Keep one mechanism ledger in this study's subsequent evidence, not a new runner
 framework. Each row records target inputs/SHA, matching 2.4 evidence, effective
@@ -149,8 +183,9 @@ Native consumer, comparator and remaining gate. “Similar” is a search hint o
    semantic object correspondence are separate columns. ID/path matches are
    candidates: Naruto ID2 and Sasuke ID11 changed paths; District's apparent
    target ID10 is inferred from an unread background path, not a proved arena.
-2. **Effective code:** compare the loaded main module and relevant DLL behavior,
-   initialization, hooks, constants, field accesses, stores and calls. Pin module
+2. **Effective code:** the first-section availability, 32 anchors and RNG pilot
+   are complete. Extend comparison only for the next consumer's loaded code/DLL
+   behavior, initialization, hooks, constants, field accesses, stores and calls. Pin module
    identity/base/RVA and provenance, distinguish file bytes from runtime changes.
    2.4 already has DLL-installed behavior; main-EXE matching is insufficient.
    Normalize proven relocation differences only. Same leaf bytes with different
@@ -173,9 +208,10 @@ with exact cases/commands/pins; use existing manifests, oracle/comparator tools,
 
 | Task | Bounded question/output | Pass / failure / stop and next consumer |
 | --- | --- | --- |
-| D1: source availability, independent of M0 | One ≤60-minute read-only accounting pass, ≤2 MiB report, using saved metadata/inventory and already permitted readable artifacts. Map required startup + first-match files/modules to available / opaque / absent-by-observation / unknown. Do not rescan the whole disk or regenerate the census. This permissible accounting can precede or accompany M0 without delaying ready implementation. | Pass is a finite dependency list with provenance and at least one chosen mechanism; not “all resources extracted”. Stop on missing bytes or affected access; retain that dependency and implement another ready row. The dump metadata may locate modules but is not a complete readable-code declaration. |
+| D1 initial availability/anchors — **done** | Saved inventories, readable first code section, 32-anchor classifications and concrete RNG/camera/frame-access observations are already recorded. | Do not requeue the same census, hashes or code-availability experiment. Remaining availability work is an exact missing dependency of a chosen consumer, ≤60 minutes/≤2 MiB per justified accounting pass, not a new global survey. |
+| RNG source/source pilot — **done** | 24 cases/288 calls per version; passing declared domain and correction1 retained. | No new RNG algorithm study. Reuse the evidence for later Native arithmetic comparison and initialization/caller composition when those target inputs are ready; no accepted target Native RNG claim yet. |
 | D2: target startup and configuration | Up to one 30-minute Windows observation session, ≤12 named screens/transitions and ≤1 GiB new artifacts; reuse the working environment after verifying process/VM identity. Title → mode → character selection, control/recording/online settings, back/cancel/quit; record dimensions, input delivery, visible settings and actual file effects. No new dump merely for a new session. | Pass only observed transitions and accessible inputs to M1. Unjoined/missing asset/unsupported tool/source fault are separate outcomes. Do not claim full sound or match from title. If needed content/behavior remains opaque, stop that chain without inventing configuration. |
-| D3: first loader/storage contract | After permitted code/content evidence exists, select one whole caller and ≤24 finite cases covering the exact first M1 dependency; initial reference execution budget 30 minutes and ≤2 GiB. Start with actual registry/configuration or a visible object as the ready consumer dictates; new indices/fields must reach their consumers. | Pass requires target constructor/parser/defaults/errors, owned storage and caller comparison. Stop at the first unsupported dependency; preserve failure. No parser token acceptance or frame-limit increase without semantic evidence. Transfer a checked candidate immediately. |
+| D3: changed Frame/Object contract — **next after M0** | Use the recorded `0x1b0`/field-access deltas to recover the connected constructor → continuous Object/frame loading → owned storage/read consumer described below. At most 24 declared cases; initial source execution ≤30 minutes/≤2 GiB. | First Native target storage increment, then direct M1 loading integration. Confirm actual entries/callers before execution; do not run old VAs by assumption. No arbitrary token acceptance, whole-layout inference or frame-limit change from the manual alone. Missing dependencies stop only their chain. |
 | D4: first gameplay delta | Once M1 supplies a real selected catalog, choose one changed mechanism exercised by the first target match; ≤24 cases, one whole-tick/caller continuation, 30-minute source run and ≤2 GiB initial output. Include one preserved cross-call state and one relevant failure/rollback case. | Pass is target comparison plus affected 2.4 regressions and review; integrate into M2/M3 before another independent survey. Unknown heap/stack storage is not zero. Source fault is not a successful Native rejection. |
 | D5: missing complete content | Not in the automatically executable queue while the affected access route is unresolved. A corresponding readable developer/source package or another independently permitted source can supply missing files; first prove correspondence to the exact ZIP/EXE, including custom entries. | Full dependency closure is required for complete catalog/application acceptance. Do not use a substitute release, speculative reconstruction, diagnostic snapshot or renamed extraction operation to declare this gate closed. M0 and other evidenced mechanisms can continue independently. |
 
@@ -189,7 +225,7 @@ retry, no endless readiness stage and no repeat of completed successful captures
 | Milestone and order | Implementation and ready consumer | Observable gate |
 | --- | --- | --- |
 | **M0 — explicit content acquisition (ready now)** | The task below wires owned content inputs into `OriginalRuntimeSession` and loading, with isolated target identity/data root. | Existing 2.4 caller still runs unchanged; target raw inputs are admitted and produce the exact unsupported-startup boundary before unproved game logic. This is IO integration, not target gameplay. |
-| **M1 — target startup → loaded selection** | Recover/implement shipped startup/configuration, input/settings, resource/file contracts, catalog and selection. Add only required frame/storage and image operations with their direct consumers. Implement on-demand loading if established, not forced eager 2.4 loading. | Exact target title/settings/loading/selection flow, own menu state/RNG/resource lifetimes and outputs. Missing files remain explicit. Do not present a 2.4 title with target labels as target support. |
+| **M1 — target startup → loaded selection** | First implement D3's changed Frame/Object storage and its loading consumer; advance other ready startup/configuration, input/settings, resource/file, catalog and selection contracts. Add image operations when their consumers require them. Implement on-demand loading if established, not forced eager 2.4 loading. | Exact target title/settings/loading/selection flow, own menu state/RNG/resource lifetimes and outputs. Partial storage progress can be committed before this whole gate; missing dependencies stay explicit. Do not present a 2.4 title with target labels as target support. |
 | **M2 — first complete target match** | Real target Naruto/Sasuke and verified District counterpart, actual starting state, common controls/physics/contacts/hits/spawns/scheduler/drawing, sound, KO/results/recording and return/restart. Choose another declared pair only if the target does not contain this pair; no baseline-asset substitution. | Original-target/native-target continuous match comparison through Summary, saved output and next match; state/RNG/events and presentation checks. A deterministic fixture or silent match alone is incomplete. This remains an intermediate milestone. |
 | **M3 — complete content and shared mechanisms** | Cover every registered object and its transitive dependencies, all 24 arenas, reachable forms/helpers/techniques/effects/weapons, real selectable roster/unlocks/custom Genma. Extend common handlers and proved ID exceptions; include input innovations, AI, simultaneous actions, allocation/reuse and reachable unusual states. | Catalog closure with no unexplained token/asset/handler holes; mechanical coverage matrix tied to shipped data plus ordinary reachable error contracts; representative continuous matches and soaks across distinct mechanisms. Counts are not a fighter count or branch-coverage claim. |
 | **M4 — modes, UI and persistence** | Every mode actually offered by target and its transitions, complete Stage progression/ending, War/tournaments/Demo/AI as applicable, menus/HUD/pause/settings/unlocks/saves, recording/playback and input modes. Investigate any reachable developer modes separately. | Whole mode paths and restart/reload, retained session state, replay record→playback and original interchange where the format permits, file bytes/failures, target UI/audio. No invented feature based solely on a generic manual. |
@@ -213,8 +249,9 @@ consumer and prevents settings/replays crossing between the two applications.
 **Dependencies ready:** the current `OriginalRuntimeSession`/loading call sites,
 strict existing input types, overlay and immutable byte ownership, saved target
 member hashes. No target parser/layout/PNG behavior or packed-content access is
-needed. **Gated:** producing `OriginalApplicationStartupInputs` for target or
-executing its startup/selection requires D2/D3; it is not part of M0.
+needed. **Gated:** producing target startup state or executing startup/selection
+requires its relevant D2/D3 contracts; it is not part of M0. Target startup inputs
+need not share the 2.4 package's type or raw ABI.
 
 **Small implementation, not a rules framework:** add one content-input object
 or factory passed to the live session, carrying identity, immutable raw inputs,
@@ -293,15 +330,99 @@ Stop M0 on a baseline behavioral difference, identity mixing, changed error orde
 required unknown startup semantics, tool refusal or exhausted declared resources.
 Preserve the failure and diagnose; do not weaken baseline checks to make target
 input pass. A passing M0 proves the acquisition seam and 2.4 regression scope,
-**not any 2.8 game behavior**. After its checked local commit, take the first D2/D3
-contract whose data and permitted evidence are ready, then integrate it in M1.
+**not any 2.8 game behavior**. After its checked local commit, start D3 below.
+If a specific D3 dependency is unavailable, name it and advance a ready D2/M1
+contract; do not replace implementation with another unchanged small-leaf survey.
+
+## Next changed contract: Frame/Object construction → loading → owned reads
+
+**Result and consumer:** implement target Frame/Object storage needed by M1,
+including the observed 432-byte frame accesses, with native-owned backing and
+lifetimes. The existing ready composition seam is
+[OriginalLoadedCatalog's Object child](../../native/Sources/NTSDCore/OriginalLoadedCatalog.swift#L190),
+which invokes [OriginalObjectLoader](../../native/Sources/NTSDCore/OriginalObjectLoader.swift#L119)
+and its continuous [Frame loader](../../native/Sources/NTSDCore/OriginalFrameLoader.swift#L92).
+On the target branch, connect the proved target counterpart to M0's identity/raw
+inputs and the target loading path. Do not silently route target bytes through
+the 2.4 loader. The next gameplay consumer is the loaded frame read used by
+[special AI](../../native/Sources/NTSDCore/OriginalCharacterAISpecial.swift#L196);
+the recorded target reads identify why the storage matters, not acceptance of
+that whole AI caller. Keep target startup's explicit boundary until its own
+dependencies are proved, even if this storage increment is checked.
+
+**Evidence before new execution:** read [FRAME_LOADER](../FRAME_LOADER.md),
+[OBJECT_LOADER](OBJECT_LOADER.md), [RAW_FRAME_STORAGE](RAW_FRAME_STORAGE.md) and
+[LOADED_CATALOG](LOADED_CATALOG.md). The later full raw/whole-Object evidence
+supersedes the old isolated Frame coverage for dependency selection; its historical
+exclusions stay immutable. Use the pinned first code section and correction1
+contexts to locate actual target allocation, constructor and parse caller entries,
+sizes/counts, initialization stores, field uses and returns. Record exact source
+bytes/addresses and each required CRT/device dependency. The old constructor
+`0x40bbf0`, Object entry `0x40ef70` and frame fragment `0x4103f8` have unresolved
+target identity: do not treat them as target entries or infer a common address shift.
+Timebox this targeted source review to 60 minutes/≤8 MiB notes; an unresolved
+entry is an exact integration blocker, not grounds for a whole-engine resurvey.
+
+**Finite source plan:** freeze at most 24 cases before the first run using the
+existing adapters/manifests. Pin the selected raw member and decoded-byte provenance;
+an unproved target decoder/CRT contract cannot be replaced by the 2.4 answer.
+Use these case families, concretized to the recovered target branches:
+
+| Cases (maximum) | Input provenance and observable gate |
+| --- | --- |
+| 4 construction/reconstruction | Fresh and repeated construction over declared `0xa5`/`0x5a` backing. Compare all written bytes and defined masks, allocation size/count, untouched padding and retained aliases; these fills are synthetic, not Windows defaults. |
+| 6 index boundaries | 0, 399, 400 and visible Genma index 701, plus the source-proven last admitted index and first boundary. Do not assume the manual's 998 means a count or largest index. Record returned, rejected, faulted or unsupported outcomes separately. |
+| 4 repeated/continuous cases | Original-order repeated frame/field definitions, omitted fields, names/sound references, and sections read through the same stream. Preserve lexemes, partial conversions, checksum/EOF behavior and old allocations; never split a whole-file parse at an artificial `<frame_end>`. |
+| 4 changed field/allocation cases | Actual new fields and point/box forms used by the chosen visible DAT, plus recovered allocation/count boundaries. Compare requests, owner identity, pointer aliasing, order and postprocessing. An unproved form remains explicit; no accepting and ignoring new tokens. |
+| 2 failure/cross-call cases | A source-established file/allocation failure and a repeated call with live owners. Declare modeled API answers; retain source faults and partial effects separately from Native rejection/rollback. |
+| 2 whole-Object cases | Start with a small visible file, `custom/1genma/a/shuriken.dat` (ID902, 14 frame occurrences), then `custom/1genma/genma.dat` (ID901, max observed index701) as dependencies become ready. Use exact raw files and continuous loader return with all required children accounted for; unavailable PNG/sound/CRT children block that case, not construction or an independent ready path. |
+| 2 consumer cases | Read the newly loaded records through the recovered target loading parent and one proved field-access caller, preserving state into a subsequent call. A fragment read alone does not accept whole AI/gameplay. |
+
+Initial execution budget is 30 minutes and ≤2 GiB output, with explicit per-case
+limits and terminal outcomes. Synthetic API replies remain synthetic; missing
+assets or unknown backing never become fabricated original answers. Normalized
+references need a reviewed mapping; compare raw bytes/masks and ordered events
+where meaningful. No captured Object/Frame after-state is a Native initializer.
+
+**Implementation and integration gate:** extend or isolate only the proved
+constructor, storage and loading paths in `native/`; retain shared helpers whose
+contracts still apply. Native must create its own records/allocations, keep live
+and retired owners, aliasing and partial pointer writes, preserve state across
+calls and roll back the declared public transaction. Compare the connected
+constructor/loader caller, not only a list of parsed fields. After compile and
+focused checks, run the declared target caller comparisons plus affected 2.4
+raw-Frame, whole-Object and catalog regressions; preserve their expected/masks.
+Review new storage/numeric/comparator contracts independently. Then commit the
+coherent checked increment and connect the nearest ready loading consumer before
+opening an unrelated study. If full runtime loading is still gated, name the
+exact missing startup/resource contract and implement its next ready piece.
+
+This is one mechanism across discovery, implementation and corrections, not a
+fresh research-only task per substep. First implementation/checking budget:
+four hours, up to three correction rounds with preserved failures; apply the M0
+X5 build/T7 evidence bounds. Extensions need a diagnosed dependency or new
+evidence. Review or real-device gaps leave acceptance open while permitted code
+and comparisons continue; success never implies the full target catalog is loaded.
 
 ## Branches, checks, estimates and completion
 
 Keep this target work local in `exp/ntsd-2.8.3.3`; no push, PR publication, merge
 to main or baseline replacement follows from this plan. Preserve actual working
 inputs, not only HEAD; parent/other worktrees own unrelated files. Commit each
-coherent checked increment locally with open gates stated. Do not edit immutable
+coherent checked increment locally with open gates stated. The shared Git config
+uses `/Users/michael/Developer/ntsd-2.4/.githooks`, whose post-commit auto-push is
+incompatible with this local-only task. Preserve that shared configuration and
+existing LFS hooks. Before each commit verify the retained-LFS/no-push hook
+directory and use this command-scoped override (with explicit staged paths):
+
+```sh
+git -c core.hooksPath=/Volumes/X5/ntsd-2.4-research/version-2.8.3.3-preparation-20261017-hooks commit
+```
+
+Do not commit through the shared auto-push hook or use an empty hook directory.
+If the verified override is unavailable, leave only the commit pending while
+resolving its local hook dependency. No push/publication is authorized by a
+successful test, commit or milestone. Do not edit immutable
 2.4 references, historical plans/failures or the instruction archive. Target
 fixtures/manifests/run IDs and writable roots are separately named and pinned.
 Shared-code changes carry affected 2.4 regressions; target behavior gets separate
@@ -315,20 +436,26 @@ contracts. Do not assume an enlarged catalog has the same time/RAM cost or solve
 it by altering tick order, target limits or original assets.
 
 No overall hours or completion percentage is supportable yet. The older
-200–520-hour scenario is not carried forward as a forecast. First collect measured
-work for M0, one target loader/storage mechanism, one changed whole gameplay caller
+200–520-hour scenario is not carried forward as a forecast. The RNG pilot's
+0.262-second execution and roughly 30-minute first-pass wall time do not measure
+the cost of a changed loader, whole caller, integration or full game. First collect
+measured work for M0, one target loader/storage mechanism, one changed whole gameplay caller
 and the first match. Estimate remaining *mechanism groups and integration gates*
 from that ledger with assumptions/ranges; report access uncertainty separately.
 If code-volume estimation is later requested, follow [archive:4285](../../AGENTS_HISTORY_2026-09-12.md#L4285)
 and use the existing estimator at an explicit revision/new dated output; do not
 equate instruction area or registry counts to completion.
 
-**Checks performed for this plan:** clean starting worktree/branch/HEAD observed;
-current production entry, resource acquisition/ownership, loader/image limits,
-gameplay/AI/dispatch, overlay, socket seams, packers and relevant tests inspected;
-saved census reconciled (112/330/158/24/7, 470 occurrences/59 high frames);
-startup receipt and old incident record read; current acceptance and approved
-platform accommodations reconciled with historical statements. Local links,
-document size and diff checked after writing. No new behavioral observation or
-independent contract review is claimed. Full native 2.8.3.3 acceptance remains
-open through M6; successful first match or M0 does not close the goal.
+**Checks performed for the revision:** clean starting branch/worktree/HEAD;
+WORKFLOW, PROGRESS_RULES, current handoff, map/template and applicable archived
+loader/storage/estimate constraints; complete engine study and all three run/pilot/
+correction records; live Session startup/read-ahead/loading, Object/Frame guards,
+catalog composition, RNG formula and AI frame consumer; existing packer/runner
+entry points and retained-LFS/no-push hook inspected. Prior input pins and census
+are reused; no large artifact was rehashed and no successful experiment repeated.
+Local links, document size and diff checked after writing. This document-only
+revision executes no original or Native code and claims no new behavioral or
+independent contract acceptance. It does not start a goal. An active full-port
+goal continues after every checked local increment through M6, including original
+content, AI, modes, UI/input/audio, saves/replays/networking and clean-device gates.
+M0, a first match, or a running window is never full completion.

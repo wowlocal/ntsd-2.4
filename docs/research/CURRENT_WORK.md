@@ -1,5 +1,21 @@
 # Текущая передача работы
 
+## NTSD 2.8.3.3: план обновлён Astra xhigh — 2026-10-17
+
+[План реализации](NTSD_2_8_3_3_IMPLEMENTATION_PLAN.md) обновлён по завершённым
+code-diff и RNG pilot, с приоритетом отдельной interpretation correction1.
+Следующая очередь: **M0 через реальный startup/loading → изменённый Frame/Object
+constructor/continuous loader/owned storage → ближайший готовый M1 consumer**.
+Для Frame/Object заданы конечные случаи definedness, aliases, повторов, ошибок,
+целого Object и потребителя; старые адреса не считаются target entry автоматически.
+Повторные captures и новый обзор неизменённых leaf-функций не нужны.
+Полная приёмка остаётся M6: первый матч и M0 — промежуточные результаты.
+Ветка `exp/ntsd-2.8.3.3` только локальная; план фиксирует command-scoped
+LFS-preserving hook override, поскольку общий post-commit выполняет auto-push.
+Изменена только документация; M0 и новый goal ещё не запущены. Проверены
+согласованность evidence/следующей задачи, локальные ссылки и diff; это не новая
+поведенческая или независимая приёмка контрактов.
+
 ## NTSD 2.8.3.3: diff кода и первый controlled pilot — 2026-10-17
 
 По запросу пользователя выполнен [evidence pass](NTSD_2_8_3_3_ENGINE_DIFF.md)
