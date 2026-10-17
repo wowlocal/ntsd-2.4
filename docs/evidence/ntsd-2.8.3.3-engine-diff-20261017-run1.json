@@ -1,0 +1,604 @@
+{
+  "schemaVersion": 1,
+  "recordedUTC": "2026-10-17T16:40:16.132588+00:00",
+  "runID": "engine-diff1",
+  "parentRevision": "6b24cd1fc17555d208e2ffe46257b1669230c12d",
+  "branch": "exp/ntsd-2.8.3.3",
+  "status": "Static first pass complete; a reusable RNG candidate and changed capacity/storage instructions identified. Controlled execution not yet performed.",
+  "scope": "Read saved MDMP directories/module records and only recorded NTSD image headers/code using file-backed reads; compare x86 bytes/instructions to pinned 2.4 EXE via existing PE reader. No source execution in run1, new dump, executable reconstruction, resource extraction, protection bypass, heap-wide search or process mutation.",
+  "reference": {
+    "baseline": "downloads/NTSD_2.4_2.0a_clean/NTSD 2.4_2.0a/NTSD 2.4.exe",
+    "baselineSHA256": "3f7ac67c5890ef979ee24a6dae5528056e7f631725c292cf9cb0a928ebeff71c",
+    "targetZIP": "/Users/michael/Downloads/NTSD2.8.3.3.zip",
+    "targetZIP_SHA256": "fca38bfe1391d969b9d29d1289c51bbf5270a384fa7da6d4a7c053da77c52b2d",
+    "targetEXE_SHA256": "5eda51440039099069d041e5bd13fde8be9fd8c7b20983985b1712a59719d86b",
+    "dump": "/Volumes/T7/ntsd-2.4-artifacts/version-diff-20261017/windows-startup-fix1/NTSD-versus-selection-live1.dmp",
+    "dumpSHA256": "adb00fd69a252cd1d0def2ce21d4963b9853f7f963613785047ad4633ea7c303",
+    "dumpValidation": "/Volumes/T7/ntsd-2.4-artifacts/version-diff-20261017/windows-startup-fix1/live-dump-validation1.json"
+  },
+  "artifactsRoot": "/Volumes/T7/ntsd-2.4-artifacts/version-diff-20261017/engine-diff1",
+  "artifacts": {
+    "plan1.json": {
+      "bytes": 3232,
+      "sha256": "ad738fcbfc3893cff01945cd291cecbaed47b41872eda47d5dc1b965d82bcbc8"
+    },
+    "availability-command1.json": {
+      "bytes": 1084,
+      "sha256": "f1656b1cdb9bc7f368cf048f494c699d2d726353ed48c1101e433cbd360dac05"
+    },
+    "availability-correction1.json": {
+      "bytes": 711,
+      "sha256": "ff820feba79a1460950f852ff14c955334d34c5a370e706db60dee664b7fae36"
+    },
+    "availability-command2.json": {
+      "bytes": 880,
+      "sha256": "6d8526d6ecf288ecdbf1c1212495576be0f7a02c63b779becea9b70ec9b93c12"
+    },
+    "availability-correction2.json": {
+      "bytes": 774,
+      "sha256": "2beef07e078bfb473da7da3fa58b4ec2842b41957da11dbf7d4ec891633d25df"
+    },
+    "availability-command3.json": {
+      "bytes": 2919,
+      "sha256": "b9cc1f7d4e793de609419d6095bbd221760bcdb39c0be0f3d391b94437e354e3"
+    },
+    "availability3.json": {
+      "bytes": 19578,
+      "sha256": "9c3ab9898c915f400c8b607c60a0ffd0f685bd064f0eff9da211ce38a0fafd66"
+    },
+    "anchor-cases1.json": {
+      "bytes": 3518,
+      "sha256": "598bfc3e5061166e990e86c4d38635cb05eba54f94b0e3673ec1abdf4e9bd30e"
+    },
+    "anchor-comparison1.json": {
+      "bytes": 230396,
+      "sha256": "cbb7a98486fb929f77ebed09c84a0093fb31c8399020b75fc3abe4c74987e10b"
+    },
+    "anchor-command1.json": {
+      "bytes": 3140,
+      "sha256": "47497397380ac502acd9401a10319547332d19bffd79273e4695796d5345f0dd"
+    },
+    "anchor-tool1.py": {
+      "bytes": 12751,
+      "sha256": "b06117e559f55d0129684e778e447589c944977e04e45a9c4ea01f8945d6aee4"
+    },
+    "range-cases1.json": {
+      "bytes": 1021,
+      "sha256": "6253a762ac66a742e9228e45503b3bcdee58211c0076c2eb88a0214c8d66b6bd"
+    },
+    "range-comparison1.json": {
+      "bytes": 83574,
+      "sha256": "6d6afe4d8fb8f73403aacf134b63f9d4049c6ff0c2ce26ca86c3e6d3828cbe0b"
+    },
+    "range-command1.json": {
+      "bytes": 3138,
+      "sha256": "a1fe32301956a26652c3869e0b07291de17ed618b1d954a1692be9058ba17e9b"
+    },
+    "range-tool1.py": {
+      "bytes": 15397,
+      "sha256": "059af9b641381952bcf5199a64fa1c6e2994c9f13c606ddd7fda7ec17e3a12d9"
+    },
+    "rng-probe1.json": {
+      "bytes": 7918,
+      "sha256": "427b7eefa5c2e61865aefa3b016fa06cb54cdba551d9ae04625a60860938784d"
+    },
+    "layout-probe1.json": {
+      "bytes": 4901,
+      "sha256": "56b097967c83aa58ecaa448950bd2b6784752a13519d2cd7959567798a8fc24c"
+    }
+  },
+  "codeAvailability": {
+    "machine": "0x14c",
+    "base": "0x400000",
+    "entry": "0x4171f4",
+    "identicalModuleRecords": 2,
+    "sections": [
+      {
+        "name": "",
+        "rva": 4096,
+        "virtualSize": 614400,
+        "fileSize": 163840,
+        "fileOffset": 4096,
+        "characteristics": "0x60000020",
+        "executable": true
+      },
+      {
+        "name": "",
+        "rva": 618496,
+        "virtualSize": 24576,
+        "fileSize": 8192,
+        "fileOffset": 167936,
+        "characteristics": "0x40000040",
+        "executable": false
+      },
+      {
+        "name": "",
+        "rva": 643072,
+        "virtualSize": 53248,
+        "fileSize": 4096,
+        "fileOffset": 176128,
+        "characteristics": "0xc0000040",
+        "executable": false
+      },
+      {
+        "name": "",
+        "rva": 696320,
+        "virtualSize": 45056,
+        "fileSize": 4096,
+        "fileOffset": 180224,
+        "characteristics": "0x40000040",
+        "executable": false
+      },
+      {
+        "name": ".rsrc",
+        "rva": 741376,
+        "virtualSize": 12288,
+        "fileSize": 12288,
+        "fileOffset": 184320,
+        "characteristics": "0xe0000040",
+        "executable": true
+      },
+      {
+        "name": "",
+        "rva": 753664,
+        "virtualSize": 2920448,
+        "fileSize": 86147072,
+        "fileOffset": 196608,
+        "characteristics": "0xe0000040",
+        "executable": true
+      },
+      {
+        "name": ".data",
+        "rva": 3674112,
+        "virtualSize": 917504,
+        "fileSize": 917504,
+        "fileOffset": 86343680,
+        "characteristics": "0xe0000040",
+        "executable": true
+      }
+    ],
+    "codeSections": [
+      {
+        "rva": 4096,
+        "bytes": 614400,
+        "sha256": "9364fc67c15991140a8d379987c23e70bb33660f104a1d6e9203a056a1079eb0",
+        "prefix64": "8b442408568b7424086a005650e86ce3030085c07c2d837c241400744f8b068b5424108b08576a1152508b4150ffd08bf885ff7d106840734900ff1580704900",
+        "status": "recorded"
+      }
+    ]
+  },
+  "moduleDirectory": {
+    "rawEntries": 16,
+    "nonemptyStreams": 11,
+    "moduleEntries": 93,
+    "identicalTargetRecords": 2,
+    "memoryRegions": 1407
+  },
+  "anchorSample": {
+    "selection": "32 purpose-selected mechanism entries/fragments, not random or complete",
+    "classificationCounts": {
+      "different sampled instruction sequence; identity unresolved": 24,
+      "byte-identical sampled prefix at same VA": 3,
+      "same instruction/operand shape; numeric operands differ": 5
+    },
+    "rows": [
+      {
+        "label": "frame constructor",
+        "baselineVA": "0x40bbf0",
+        "status": "different sampled instruction sequence; identity unresolved",
+        "sampledBaselineBytes": 84,
+        "twelveInstructionShapeCandidateCount": 0,
+        "twelveInstructionShapeCandidates": []
+      },
+      {
+        "label": "BG layer allocation",
+        "baselineVA": "0x40c030",
+        "status": "different sampled instruction sequence; identity unresolved",
+        "sampledBaselineBytes": 66,
+        "twelveInstructionShapeCandidateCount": 0,
+        "twelveInstructionShapeCandidates": []
+      },
+      {
+        "label": "background metadata loader",
+        "baselineVA": "0x40c160",
+        "status": "different sampled instruction sequence; identity unresolved",
+        "sampledBaselineBytes": 70,
+        "twelveInstructionShapeCandidateCount": 5,
+        "twelveInstructionShapeCandidates": [
+          "0x425a00",
+          "0x429ce0",
+          "0x438be0",
+          "0x43dd60",
+          "0x44c3c0"
+        ]
+      },
+      {
+        "label": "stage loader",
+        "baselineVA": "0x40c910",
+        "status": "different sampled instruction sequence; identity unresolved",
+        "sampledBaselineBytes": 71,
+        "twelveInstructionShapeCandidateCount": 0,
+        "twelveInstructionShapeCandidates": []
+      },
+      {
+        "label": "actor scheduler",
+        "baselineVA": "0x40d960",
+        "status": "different sampled instruction sequence; identity unresolved",
+        "sampledBaselineBytes": 83,
+        "twelveInstructionShapeCandidateCount": 0,
+        "twelveInstructionShapeCandidates": []
+      },
+      {
+        "label": "actor physics",
+        "baselineVA": "0x40e490",
+        "status": "different sampled instruction sequence; identity unresolved",
+        "sampledBaselineBytes": 51,
+        "twelveInstructionShapeCandidateCount": 0,
+        "twelveInstructionShapeCandidates": []
+      },
+      {
+        "label": "object loader",
+        "baselineVA": "0x40ef70",
+        "status": "different sampled instruction sequence; identity unresolved",
+        "sampledBaselineBytes": 75,
+        "twelveInstructionShapeCandidateCount": 5,
+        "twelveInstructionShapeCandidates": [
+          "0x425a00",
+          "0x429ce0",
+          "0x438be0",
+          "0x43dd60",
+          "0x44c3c0"
+        ]
+      },
+      {
+        "label": "frame-section fragment",
+        "baselineVA": "0x4103f8",
+        "status": "different sampled instruction sequence; identity unresolved",
+        "sampledBaselineBytes": 71,
+        "twelveInstructionShapeCandidateCount": 0,
+        "twelveInstructionShapeCandidates": []
+      },
+      {
+        "label": "catalog registry",
+        "baselineVA": "0x4122f0",
+        "status": "different sampled instruction sequence; identity unresolved",
+        "sampledBaselineBytes": 75,
+        "twelveInstructionShapeCandidateCount": 5,
+        "twelveInstructionShapeCandidates": [
+          "0x425a00",
+          "0x429ce0",
+          "0x438be0",
+          "0x43dd60",
+          "0x44c3c0"
+        ]
+      },
+      {
+        "label": "DAT decoder",
+        "baselineVA": "0x4148a0",
+        "status": "different sampled instruction sequence; identity unresolved",
+        "sampledBaselineBytes": 85,
+        "twelveInstructionShapeCandidateCount": 0,
+        "twelveInstructionShapeCandidates": []
+      },
+      {
+        "label": "developer-mode dispatcher",
+        "baselineVA": "0x4151d0",
+        "status": "different sampled instruction sequence; identity unresolved",
+        "sampledBaselineBytes": 80,
+        "twelveInstructionShapeCandidateCount": 5,
+        "twelveInstructionShapeCandidates": [
+          "0x425a00",
+          "0x429ce0",
+          "0x438be0",
+          "0x43dd60",
+          "0x44c3c0"
+        ]
+      },
+      {
+        "label": "game RNG",
+        "baselineVA": "0x417170",
+        "status": "byte-identical sampled prefix at same VA",
+        "sampledBaselineBytes": 13,
+        "twelveInstructionShapeCandidateCount": 0,
+        "twelveInstructionShapeCandidates": []
+      },
+      {
+        "label": "2.4 rectangle overlap",
+        "baselineVA": "0x4171c0",
+        "status": "different sampled instruction sequence; identity unresolved",
+        "sampledBaselineBytes": 58,
+        "twelveInstructionShapeCandidateCount": 0,
+        "twelveInstructionShapeCandidates": []
+      },
+      {
+        "label": "accumulated impulses",
+        "baselineVA": "0x4196f0",
+        "status": "different sampled instruction sequence; identity unresolved",
+        "sampledBaselineBytes": 62,
+        "twelveInstructionShapeCandidateCount": 0,
+        "twelveInstructionShapeCandidates": []
+      },
+      {
+        "label": "playback input",
+        "baselineVA": "0x4197a0",
+        "status": "different sampled instruction sequence; identity unresolved",
+        "sampledBaselineBytes": 66,
+        "twelveInstructionShapeCandidateCount": 0,
+        "twelveInstructionShapeCandidates": []
+      },
+      {
+        "label": "remote input",
+        "baselineVA": "0x4198f0",
+        "status": "different sampled instruction sequence; identity unresolved",
+        "sampledBaselineBytes": 69,
+        "twelveInstructionShapeCandidateCount": 0,
+        "twelveInstructionShapeCandidates": []
+      },
+      {
+        "label": "object input parent",
+        "baselineVA": "0x419a60",
+        "status": "different sampled instruction sequence; identity unresolved",
+        "sampledBaselineBytes": 66,
+        "twelveInstructionShapeCandidateCount": 0,
+        "twelveInstructionShapeCandidates": []
+      },
+      {
+        "label": "background drawing helper",
+        "baselineVA": "0x41a050",
+        "status": "different sampled instruction sequence; identity unresolved",
+        "sampledBaselineBytes": 54,
+        "twelveInstructionShapeCandidateCount": 0,
+        "twelveInstructionShapeCandidates": []
+      },
+      {
+        "label": "actor drawing helper",
+        "baselineVA": "0x41a250",
+        "status": "different sampled instruction sequence; identity unresolved",
+        "sampledBaselineBytes": 36,
+        "twelveInstructionShapeCandidateCount": 0,
+        "twelveInstructionShapeCandidates": []
+      },
+      {
+        "label": "world camera",
+        "baselineVA": "0x41b5d0",
+        "status": "same instruction/operand shape; numeric operands differ",
+        "sampledBaselineBytes": 68,
+        "twelveInstructionShapeCandidateCount": 1,
+        "twelveInstructionShapeCandidates": [
+          "0x41b5d0"
+        ]
+      },
+      {
+        "label": "loaded match caller",
+        "baselineVA": "0x41bc90",
+        "status": "different sampled instruction sequence; identity unresolved",
+        "sampledBaselineBytes": 69,
+        "twelveInstructionShapeCandidateCount": 1,
+        "twelveInstructionShapeCandidates": [
+          "0x41c3d0"
+        ]
+      },
+      {
+        "label": "RNG table rebuild",
+        "baselineVA": "0x422ac0",
+        "status": "same instruction/operand shape; numeric operands differ",
+        "sampledBaselineBytes": 56,
+        "twelveInstructionShapeCandidateCount": 1,
+        "twelveInstructionShapeCandidates": [
+          "0x422ac0"
+        ]
+      },
+      {
+        "label": "mode dispatcher",
+        "baselineVA": "0x4246b0",
+        "status": "different sampled instruction sequence; identity unresolved",
+        "sampledBaselineBytes": 70,
+        "twelveInstructionShapeCandidateCount": 5,
+        "twelveInstructionShapeCandidates": [
+          "0x425a00",
+          "0x429ce0",
+          "0x438be0",
+          "0x43dd60",
+          "0x44c3c0"
+        ]
+      },
+      {
+        "label": "outer loop",
+        "baselineVA": "0x43cf40",
+        "status": "same instruction/operand shape; numeric operands differ",
+        "sampledBaselineBytes": 72,
+        "twelveInstructionShapeCandidateCount": 1,
+        "twelveInstructionShapeCandidates": [
+          "0x43cf40"
+        ]
+      },
+      {
+        "label": "top dispatcher",
+        "baselineVA": "0x43e9a0",
+        "status": "different sampled instruction sequence; identity unresolved",
+        "sampledBaselineBytes": 72,
+        "twelveInstructionShapeCandidateCount": 5,
+        "twelveInstructionShapeCandidates": [
+          "0x425a00",
+          "0x429ce0",
+          "0x438be0",
+          "0x43dd60",
+          "0x44c3c0"
+        ]
+      },
+      {
+        "label": "bitmap constructor",
+        "baselineVA": "0x43ee50",
+        "status": "different sampled instruction sequence; identity unresolved",
+        "sampledBaselineBytes": 76,
+        "twelveInstructionShapeCandidateCount": 0,
+        "twelveInstructionShapeCandidates": []
+      },
+      {
+        "label": "replay writer",
+        "baselineVA": "0x43dd60",
+        "status": "different sampled instruction sequence; identity unresolved",
+        "sampledBaselineBytes": 76,
+        "twelveInstructionShapeCandidateCount": 5,
+        "twelveInstructionShapeCandidates": [
+          "0x425a00",
+          "0x429ce0",
+          "0x438be0",
+          "0x43dd60",
+          "0x44c3c0"
+        ]
+      },
+      {
+        "label": "replay compressor wrapper",
+        "baselineVA": "0x43f4b0",
+        "status": "byte-identical sampled prefix at same VA",
+        "sampledBaselineBytes": 30,
+        "twelveInstructionShapeCandidateCount": 0,
+        "twelveInstructionShapeCandidates": []
+      },
+      {
+        "label": "integer abs",
+        "baselineVA": "0x4034e0",
+        "status": "byte-identical sampled prefix at same VA",
+        "sampledBaselineBytes": 11,
+        "twelveInstructionShapeCandidateCount": 0,
+        "twelveInstructionShapeCandidates": []
+      },
+      {
+        "label": "AI helper",
+        "baselineVA": "0x4034f0",
+        "status": "same instruction/operand shape; numeric operands differ",
+        "sampledBaselineBytes": 59,
+        "twelveInstructionShapeCandidateCount": 1,
+        "twelveInstructionShapeCandidates": [
+          "0x4034f0"
+        ]
+      },
+      {
+        "label": "special AI selector",
+        "baselineVA": "0x403a40",
+        "status": "same instruction/operand shape; numeric operands differ",
+        "sampledBaselineBytes": 38,
+        "twelveInstructionShapeCandidateCount": 1,
+        "twelveInstructionShapeCandidates": [
+          "0x403a40"
+        ]
+      },
+      {
+        "label": "character AI",
+        "baselineVA": "0x4094b0",
+        "status": "different sampled instruction sequence; identity unresolved",
+        "sampledBaselineBytes": 95,
+        "twelveInstructionShapeCandidateCount": 1,
+        "twelveInstructionShapeCandidates": [
+          "0x4094b0"
+        ]
+      }
+    ],
+    "limit": "Prefix matches are not whole-function equivalence; 24 unresolved identities do not mean 24 changed functions. No reuse percentage inferred."
+  },
+  "RNG": {
+    "label": "game RNG whole function",
+    "baselineVA": "0x417170",
+    "targetVA": "0x417170",
+    "baselineBytes": 77,
+    "targetBytes": 77,
+    "boundary": "Both returns and all instructions through final ret at4171bc; known baseline function, target identity matched all control flow.",
+    "baselineInstructions": 29,
+    "targetInstructions": 29,
+    "baselineSHA256": "e388b2dacdca3ed173f3fe5d400ff90a75b6e81e56cf00cf6e302531e30824c4",
+    "targetSHA256": "1929e53a036a0f91b78e35db69f6636ec01f303acbcbe7dc968324da2185b692",
+    "baselineHex": "568b74240c85f67f0433c05ec3a1340c450083c00199b9d2040000f7f9a1cc0b450083c00157bfb80b00008bca99f7ff5f890d340c45000fb68290ff440003c18915cc0b450099f7fe5e8bc2c3",
+    "targetHex": "568b74240c85f67f0433c05ec3a1340c4a0083c00199b9d2040000f7f9a1cc0b4a0083c00157bfb80b00008bca99f7ff5f890d340c4a000fb68290ff490003c18915cc0b4a0099f7fe5e8bc2c3",
+    "numericChanges": [
+      {
+        "baselineVA": "0x41717d",
+        "targetVA": "0x41717d",
+        "mnemonic": "mov",
+        "baselineOperands": "eax, dword ptr [0x450c34]",
+        "targetOperands": "eax, dword ptr [0x4a0c34]",
+        "baselineHex": "a1340c4500",
+        "targetHex": "a1340c4a00"
+      },
+      {
+        "baselineVA": "0x41718d",
+        "targetVA": "0x41718d",
+        "mnemonic": "mov",
+        "baselineOperands": "eax, dword ptr [0x450bcc]",
+        "targetOperands": "eax, dword ptr [0x4a0bcc]",
+        "baselineHex": "a1cc0b4500",
+        "targetHex": "a1cc0b4a00"
+      },
+      {
+        "baselineVA": "0x4171a1",
+        "targetVA": "0x4171a1",
+        "mnemonic": "mov",
+        "baselineOperands": "dword ptr [0x450c34], ecx",
+        "targetOperands": "dword ptr [0x4a0c34], ecx",
+        "baselineHex": "890d340c4500",
+        "targetHex": "890d340c4a00"
+      },
+      {
+        "baselineVA": "0x4171a7",
+        "targetVA": "0x4171a7",
+        "mnemonic": "movzx",
+        "baselineOperands": "eax, byte ptr [edx + 0x44ff90]",
+        "targetOperands": "eax, byte ptr [edx + 0x49ff90]",
+        "baselineHex": "0fb68290ff4400",
+        "targetHex": "0fb68290ff4900"
+      },
+      {
+        "baselineVA": "0x4171b0",
+        "targetVA": "0x4171b0",
+        "mnemonic": "mov",
+        "baselineOperands": "dword ptr [0x450bcc], edx",
+        "targetOperands": "dword ptr [0x4a0bcc], edx",
+        "baselineHex": "8915cc0b4500",
+        "targetHex": "8915cc0b4a00"
+      }
+    ],
+    "sequenceChanges": [],
+    "conclusion": "Entire77-byte routine has29 instructions; only5 absolute/indexed state references change by+0x50000. Constants1234/3000, instructions and two return paths match after these3 state identities are mapped. Static evidence only."
+  },
+  "cameraCandidate": {
+    "baselineVA": "0x41b5d0",
+    "targetVA": "0x41b5d0",
+    "baselineBytes": 1722,
+    "targetBytes": 1738,
+    "poolLoop": {
+      "baselineVA": "0x41b8d7",
+      "targetVA": "0x41b8d7",
+      "mnemonic": "cmp",
+      "baselineOperands": "ecx, 0x190",
+      "targetOperands": "ecx, 0x3e8",
+      "baselineHex": "81f990010000",
+      "targetHex": "81f9e8030000"
+    },
+    "worldTableOffset": {
+      "baselineVA": "0x41b617",
+      "targetVA": "0x41b617",
+      "mnemonic": "lea",
+      "baselineOperands": "edi, [edx + 0x194]",
+      "targetOperands": "edi, [edx + 0x3ec]",
+      "baselineHex": "8dba94010000",
+      "targetHex": "8dbaec030000"
+    },
+    "scope": "Static candidate identity from same prefix/known baseline path; full range contains real numeric/sequence differences. No complete camera contract or Windows capacity observation accepted."
+  },
+  "checks": {
+    "pinnedBaselineSHA256": true,
+    "reusedSavedDumpValidation": true,
+    "realDumpPaddingAndDuplicatesHandledExplicitly": true,
+    "missingMappedMemoryRejected": true,
+    "completeRNGOnlyFiveRelocatedReferences": true,
+    "RNGRelocationReverseExactlyMatchesSourceBytes": true,
+    "capacityComparisonBytesRetained": true
+  },
+  "preservedFailures": [
+    "Reader rejected canonical unused directory padding in availability-command1.json",
+    "Reader incorrectly required unique target basename in availability-command2.json"
+  ],
+  "limits": "Read only first NTSD executable section and metadata; no EXE reconstruction, resource extraction, heap search, source execution, VM input, native change, new safety refusal or push. Earlier packed-content access incident stays open.",
+  "review": "Author static checks; independent contract review unavailable and open. No behavioral acceptance.",
+  "next": "Finite RNG source/source comparison using declared synthetic inputs and both unchanged77-byte routines; same algorithm is a reuse candidate, target native startup/storage consumer remains gated."
+}

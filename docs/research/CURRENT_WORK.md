@@ -1,5 +1,18 @@
 # Текущая передача работы
 
+## NTSD 2.8.3.3: первые различия кода — 2026-10-17
+
+По запросу пользователя выполнен [ограниченный static pass](NTSD_2_8_3_3_ENGINE_DIFF.md)
+по свежему сохранённому live dump. Первые 614,400 байт main-code доступны.
+Полный RNG (77 байт/29 инструкций) совпадает с 2.4 после пяти ссылок на три
+перенесённых state-адреса (+0x50000); caller/init ещё не проверены. В candidate
+camera path реально изменены loop bound 400→1000 и World table offset.
+Из 32 выбранных entry/fragment anchors 24 имеют неизвестное соответствие по
+старому VA: это не 24 изменённые функции и не процент diff. Два исправленных
+ошибочных предположения MDMP reader сохранены; Native и исходники не менялись,
+повторных captures/push нет. Следующий конечный этап — controlled RNG comparison
+по отдельному плану; target startup/storage/callers и packed-content gate открыты.
+
 ## NTSD 2.8.3.3: рабочий Windows-референс — 2026-10-17
 
 Текущий вход для нового плана — [live dump из Versus character selection](
