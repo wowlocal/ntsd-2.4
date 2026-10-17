@@ -115,6 +115,13 @@ public final class OriginalRuntimeContentInputs {
         guard case .target(let files,_) = source,let bytes = files[name] else { throw Boundary.unsupportedName(name) }
         return bytes
     }
+    /// The ready target loading consumer: one owned ordinary input becomes an
+    /// owned in-place-decoded buffer with its separate source cursor. Unknown
+    /// packed paths cannot reach this adapter. Startup still stops below.
+    public func decodedTargetFile(_ name: String) throws -> NTSD2833FileBytes {
+        let raw = try rawTargetFile(name)
+        return try .init(raw:raw,fileName:Array(name.replacingOccurrences(of:"/",with:"\\").utf8))
+    }
     public func acquireStartup() throws -> Startup {
         switch source {
         case .baseline(let bundle): return .init(owner:self,inputs:try .bundled(in:bundle))

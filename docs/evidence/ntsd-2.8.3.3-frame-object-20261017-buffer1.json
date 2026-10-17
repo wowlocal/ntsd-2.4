@@ -1,0 +1,74 @@
+{
+  "schemaVersion": 1,
+  "recordedUTC": "2026-10-17T17:41:11.208559+00:00",
+  "parentRevision": "875a1783",
+  "status": "changed ordinary-buffer contract implemented and connected; full Frame/Object/storage/FileOpen and independent review remain open",
+  "source": {
+    "runID": "ordinary-dat-buffer1",
+    "plan": "/Volumes/T7/ntsd-2.4-artifacts/version-diff-20261017/frame-object1/ordinary-dat-buffer-plan1.json",
+    "producerSnapshot": "/Volumes/T7/ntsd-2.4-artifacts/version-diff-20261017/frame-object1/ordinary-dat-buffer-tool1.py",
+    "result": "/Volumes/T7/ntsd-2.4-artifacts/version-diff-20261017/frame-object1/ordinary-dat-buffer-result1.json",
+    "resultSHA256": "f755a7d652b58de5cc3b480f371f275d48f2e7d1393c6da5851b88667072003d",
+    "environment": {
+      "python": "3.11.15 (main, Jul 23 2026, 14:34:23) [Clang 22.1.3 ]",
+      "executable": "/Users/michael/.cache/uv/builds-v0/.tmpbQri1w/bin/python",
+      "unicorn": "2.1.4"
+    },
+    "summary": {
+      "cases": 20,
+      "outcomes": {
+        "returned": 18,
+        "unsupported-input-read": 2
+      }
+    },
+    "scope": "Executes only full target decoder helper on nine pinned ordinary outer-ZIP files plus eleven synthetic buffers. No source FileOpen/packed reader/process, resource extraction, whole Object or Windows equivalence. Missing input reads stop under declared owned extents, not promoted to Windows memory faults.",
+    "syntheticABI": "Disjoint owned input buffers; EFLAGS0x202 (DF0), declared stack/outer EBP filename slot and return sentinel. No Native private-source ABI imported.",
+    "observations": "Entire buffers, logical cursor, preserved registers/ESP, immutable name/key, ordered ascending single-byte writes; two input-read boundaries distinct from source memory faults and Native rejection."
+  },
+  "native": {
+    "tests": 13,
+    "failures": 0,
+    "seconds": 15.786,
+    "log": "/Volumes/T7/ntsd-2.4-artifacts/version-diff-20261017/frame-object1/native1/native-tests1.log",
+    "commands": "/Volumes/T7/ntsd-2.4-artifacts/version-diff-20261017/frame-object1/native1",
+    "fixtureSHA256": "f755a7d652b58de5cc3b480f371f275d48f2e7d1393c6da5851b88667072003d",
+    "implementation": "NTSD2833FileBytes owns full transformed bytes and separate0/123 cursor; no text/temp/lookahead transforms",
+    "consumer": "OriginalRuntimeContentInputs.decodedTargetFile, only pinned ordinary raw inputs, no baseline fallback",
+    "review": "Unassigned/open; author validation is not independent review"
+  },
+  "staticFindings": {
+    "actualBodyEntry": "0x40e540",
+    "headerConstructor": "0x44c6b0",
+    "catalogCallSite": "0x44c5a9",
+    "objectAllocationBytes": "0x69e00",
+    "frameBase": "0x830",
+    "frameStride": "0x1b0",
+    "wholeFramesWithinObservedAllocation": 999,
+    "parserUpperGate": 1000,
+    "limit": "index999 passes source gate but lies beyond observed owned allocation; actual Windows backing/outcome unknown, not a measured source memory fault",
+    "customFileOperations": [
+      "0x4143e0",
+      "0x414490",
+      "0x414520",
+      "0x414570",
+      "0x414920",
+      "0x414950",
+      "0x414970"
+    ]
+  },
+  "open": [
+    "Independent contract/storage/numeric/comparator review",
+    "Whole source FileOpen including logging, allocation/failure/short-read contracts",
+    "Custom scanner and full connected Frame/Object loader",
+    "Actual PNG/device and opaque resource dependencies",
+    "Target startup and M1\u2013M6/standalone acceptance"
+  ],
+  "refusal": "Existing packed-content incident remains open. Only exact known ordinary outer-ZIP files/synthetic buffers and already-recorded code/constants were used; no packed route or original process was invoked.",
+  "next": "Four fresh/repeated Frame-free whole40e540 body cases with actual custom scanner and declared buffer-open response; transfer owned target storage/Frame reads before new unrelated research.",
+  "files": {
+    "native/Sources/NTSDCore/NTSD2833FileBytes.swift": "cc39c35a47818c3c6b04a1adb1eaee84cc9f002d6cc9e2e4004654eca81fd79e",
+    "native/Sources/NTSDRuntime/OriginalRuntimeContentInputs.swift": "c708e4b124e0a17f51e96178a9152acea7dec7b5bf17f2714442b0d55f947c76",
+    "native/Tests/NTSDCoreTests/Mac/NTSD2833FileBytesTests.swift": "591e95f14d9e9170fe13253f0c9115352cc81975aba825281368c9391208e9b5",
+    "tools/compare_ntsd_engine.py": "2c3a88ee7f71cddc476cfa1477527dae2a240085fab29b948682b98a874bdfad"
+  }
+}

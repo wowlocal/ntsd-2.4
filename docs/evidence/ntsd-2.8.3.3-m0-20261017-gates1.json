@@ -1,0 +1,170 @@
+{
+  "schemaVersion": 1,
+  "recordedUTC": "2026-10-17T17:38:25.100127+00:00",
+  "revision": "875a1783",
+  "status": "all declared M0 machine gates pass; independent review open",
+  "focusedTests": {
+    "count": 8,
+    "failures": 0,
+    "seconds": 9.97,
+    "log": "/Volumes/T7/ntsd-2.4-artifacts/version-diff-20261017/m0-native1/focused-tests4.log"
+  },
+  "requiredBaselineTests": {
+    "count": 10,
+    "failures": 0,
+    "seconds": 180.563,
+    "log": "/Volumes/T7/ntsd-2.4-artifacts/version-diff-20261017/m0-native1/baseline-tests1.log",
+    "jobTerminal": true
+  },
+  "appE2E": {
+    "scenarios": [
+      {
+        "scenario": "vs",
+        "result": "pass",
+        "differs": [],
+        "resources": [
+          "/Users/michael/Developer/ntsd-2.4/build/swiftpm-app/arm64-apple-macosx/release/NTSDNative_NTSDCore.bundle/OriginalCatalog",
+          "/Users/michael/Developer/ntsd-2.4/build/swiftpm-app/arm64-apple-macosx/release/NTSDNative_NTSDMacPlatform.bundle/OriginalMusic"
+        ],
+        "progress": 6,
+        "milestones": 6
+      },
+      {
+        "scenario": "mission",
+        "result": "pass",
+        "differs": [],
+        "resources": [
+          "/Users/michael/Developer/ntsd-2.4/build/swiftpm-app/arm64-apple-macosx/release/NTSDNative_NTSDCore.bundle/OriginalCatalog",
+          "/Users/michael/Developer/ntsd-2.4/build/swiftpm-app/arm64-apple-macosx/release/NTSDNative_NTSDMacPlatform.bundle/OriginalMusic"
+        ],
+        "progress": 6,
+        "milestones": 4
+      },
+      {
+        "scenario": "demo",
+        "result": "pass",
+        "differs": [],
+        "resources": [
+          "/Users/michael/Developer/ntsd-2.4/build/swiftpm-app/arm64-apple-macosx/release/NTSDNative_NTSDCore.bundle/OriginalCatalog",
+          "/Users/michael/Developer/ntsd-2.4/build/swiftpm-app/arm64-apple-macosx/release/NTSDNative_NTSDMacPlatform.bundle/OriginalMusic"
+        ],
+        "progress": 3,
+        "milestones": 5
+      },
+      {
+        "scenario": "war",
+        "result": "pass",
+        "differs": [],
+        "resources": [
+          "/Users/michael/Developer/ntsd-2.4/build/swiftpm-app/arm64-apple-macosx/release/NTSDNative_NTSDCore.bundle/OriginalCatalog",
+          "/Users/michael/Developer/ntsd-2.4/build/swiftpm-app/arm64-apple-macosx/release/NTSDNative_NTSDMacPlatform.bundle/OriginalMusic"
+        ],
+        "progress": 10,
+        "milestones": 5
+      },
+      {
+        "scenario": "playback",
+        "result": "pass",
+        "differs": [],
+        "resources": [
+          "/Users/michael/Developer/ntsd-2.4/build/swiftpm-app/arm64-apple-macosx/release/NTSDNative_NTSDCore.bundle/OriginalCatalog",
+          "/Users/michael/Developer/ntsd-2.4/build/swiftpm-app/arm64-apple-macosx/release/NTSDNative_NTSDMacPlatform.bundle/OriginalMusic"
+        ],
+        "progress": 7,
+        "milestones": 6
+      },
+      {
+        "scenario": "tournament",
+        "result": "pass",
+        "differs": [],
+        "resources": [
+          "/Users/michael/Developer/ntsd-2.4/build/swiftpm-app/arm64-apple-macosx/release/NTSDNative_NTSDCore.bundle/OriginalCatalog",
+          "/Users/michael/Developer/ntsd-2.4/build/swiftpm-app/arm64-apple-macosx/release/NTSDNative_NTSDMacPlatform.bundle/OriginalMusic"
+        ],
+        "progress": 6,
+        "milestones": 6
+      },
+      {
+        "scenario": "altenter",
+        "result": "pass",
+        "differs": [],
+        "resources": [
+          "/Users/michael/Developer/ntsd-2.4/build/swiftpm-app/arm64-apple-macosx/release/NTSDNative_NTSDCore.bundle/OriginalCatalog",
+          "/Users/michael/Developer/ntsd-2.4/build/swiftpm-app/arm64-apple-macosx/release/NTSDNative_NTSDMacPlatform.bundle/OriginalMusic"
+        ],
+        "progress": 6,
+        "milestones": 6
+      },
+      {
+        "scenario": "tournament-win",
+        "result": "pass",
+        "differs": [],
+        "resources": [
+          "/Users/michael/Developer/ntsd-2.4/build/swiftpm-app/arm64-apple-macosx/release/NTSDNative_NTSDCore.bundle/OriginalCatalog",
+          "/Users/michael/Developer/ntsd-2.4/build/swiftpm-app/arm64-apple-macosx/release/NTSDNative_NTSDMacPlatform.bundle/OriginalMusic"
+        ],
+        "progress": 8,
+        "milestones": 7
+      },
+      {
+        "scenario": "team-tournament",
+        "result": "pass",
+        "differs": [],
+        "resources": [
+          "/Users/michael/Developer/ntsd-2.4/build/swiftpm-app/arm64-apple-macosx/release/NTSDNative_NTSDCore.bundle/OriginalCatalog",
+          "/Users/michael/Developer/ntsd-2.4/build/swiftpm-app/arm64-apple-macosx/release/NTSDNative_NTSDMacPlatform.bundle/OriginalMusic"
+        ],
+        "progress": 6,
+        "milestones": 6
+      },
+      {
+        "scenario": "joystick",
+        "result": "pass",
+        "differs": [],
+        "resources": [
+          "/Users/michael/Developer/ntsd-2.4/build/swiftpm-app/arm64-apple-macosx/release/NTSDNative_NTSDCore.bundle/OriginalCatalog",
+          "/Users/michael/Developer/ntsd-2.4/build/swiftpm-app/arm64-apple-macosx/release/NTSDNative_NTSDMacPlatform.bundle/OriginalMusic"
+        ],
+        "progress": 0,
+        "milestones": 5
+      },
+      {
+        "scenario": "title-joystick",
+        "result": "pass",
+        "differs": [],
+        "resources": [
+          "/Users/michael/Developer/ntsd-2.4/build/swiftpm-app/arm64-apple-macosx/release/NTSDNative_NTSDCore.bundle/OriginalCatalog",
+          "/Users/michael/Developer/ntsd-2.4/build/swiftpm-app/arm64-apple-macosx/release/NTSDNative_NTSDMacPlatform.bundle/OriginalMusic"
+        ],
+        "progress": 0,
+        "milestones": 5
+      }
+    ],
+    "referenceHashesUnchanged": true,
+    "jobTerminal": true,
+    "plan": "/Volumes/T7/ntsd-2.4-artifacts/version-diff-20261017/m0-native1/app-e2e1-plan.json",
+    "log": "/Volumes/T7/ntsd-2.4-artifacts/version-diff-20261017/m0-native1/app-e2e1.log"
+  },
+  "packageVerification": {
+    "toolSHA256": "3a2dda2e1e49e3604624ae12b06a2cad3170536b200dd5205b477ccc5b483ff9",
+    "baseline": {
+      "created": false,
+      "fileCount": 1199,
+      "payloadBytes": 661635220,
+      "manifestSHA256": "fd42d041549f00f5ba715063d7e560a9e2b01ab720017d1da5e032c34ca9451d",
+      "originalExecuted": false
+    },
+    "target": {
+      "created": false,
+      "fileCount": 10,
+      "payloadBytes": 161202,
+      "manifestSHA256": "c0ef67b9ee7d49b5efec4e98a3830395ecb8942136dd6e0784f66ac479688899",
+      "partial": true,
+      "originalExecuted": false
+    }
+  },
+  "scope": "Baseline acquisition/startup/loading and unchanged app scenarios; target admits nine raw inputs then stops before Core. No target startup/gameplay/whole-game acceptance.",
+  "review": "Open; no independent reviewer.",
+  "originalExecution": false,
+  "refusal": "Existing packed-content incident remains open; no retry or reroute."
+}

@@ -2,10 +2,11 @@
 """Bounded static compatibility comparison against an existing game dump.
 
 Default modes read MDMP mappings and recorded main-module code with the existing
-PE reader. --rng-pilot executes only its separately planned leaf x86 routine in
-Unicorn with declared synthetic inputs. No mode rebuilds an EXE, reads bundled
-resources, or supplies missing memory as known zero. Neither mode proves native
-or whole-game parity.
+PE reader. --rng-pilot and --dat-buffer-pilot execute their separately planned
+x86 routines in Unicorn on declared inputs. The latter reads only its pinned
+ordinary files or synthetic buffers. No mode rebuilds an EXE, reads opaque
+embedded content, or supplies missing memory as known zero. Source-only results
+do not establish Native or whole-game parity.
 """
 from __future__ import annotations
 
@@ -380,6 +381,115 @@ def rng_pilot(parent_path, pilot_path):
         limitation='Controlled source/source RNG comparison only. No Native executable, Windows startup/seed, caller ordering or whole-game acceptance.')
 
 
+def dat_buffer_pilot(parent_path, pilot_path):
+    """Complete target in-place decoder on declared ordinary-file buffers.
+
+    This reuses the configured Unicorn adapter's stack/return convention. No
+    original file API, packed path, process or resource reader is executed.
+    """
+    import unicorn
+    from unicorn import x86_const as registers
+    from oracle_frames import STACK, STOP
+
+    class Boundary(RuntimeError):
+        pass
+
+    parent = json.loads(parent_path.read_text())
+    plan = json.loads(pilot_path.read_text())
+    if hashlib.sha256(parent_path.read_bytes()).hexdigest() != plan['parentPlanSHA256']:
+        raise ValueError('DAT buffer parent-plan pin mismatch')
+    if unicorn.__version__ != plan['environment']['unicorn'] or len(plan['cases']) > 24:
+        raise ValueError('DAT buffer environment/case bound differs')
+    memory = RecordedMemory(parent['reference']['dump'])
+    entry, end = int(plan['entry'], 16), int(plan['endExclusive'], 16)
+    body = memory.virtual(entry, end-entry)
+    key_address = int(plan['keyAddress'], 16)
+    key = memory.virtual(key_address, plan['keyCount'])
+    if (hashlib.sha256(body).hexdigest() != plan['codeSHA256'] or
+            hashlib.sha256(key).hexdigest() != plan['keySHA256']):
+        raise ValueError('DAT buffer code/key identity differs')
+    results = []
+    for case in plan['cases']:
+        payload = (Path(case['inputPath']).read_bytes() if 'inputPath' in case
+                   else bytes.fromhex(case['inputHex']))
+        if len(payload) != case['count'] or hashlib.sha256(payload).hexdigest() != case['sha256']:
+            raise ValueError('DAT buffer input differs: '+case['id'])
+        if len(payload) > 1 << 20:
+            raise ValueError('DAT buffer input budget exceeded')
+        name = bytes.fromhex(case['fileNameHex'])
+        if b'\0' in name:
+            raise ValueError('Plan filename embeds NUL')
+        data, filename, frame = 0x20010000, 0x20000080, STACK+0x8000
+        uc = unicorn.Uc(unicorn.UC_ARCH_X86, unicorn.UC_MODE_32)
+        for address, size in [(entry & ~0xfff, 0x1000), (key_address & ~0xfff, 0x1000),
+                              (STACK, 0x10000), (0x20000000, 0x1000),
+                              (data, (max(1, len(payload))+4095)//4096*4096), (STOP & ~0xfff, 0x1000)]:
+            uc.mem_map(address, size)
+            uc.mem_write(address, b'\xa5'*size)
+        uc.mem_write(entry, body)
+        uc.mem_write(key_address, key)
+        uc.mem_write(filename, name+b'\0')
+        if payload:
+            uc.mem_write(data, payload)
+        sp = STACK+0xf000
+        uc.mem_write(sp, struct.pack('<III', STOP, data, len(payload)))
+        uc.mem_write(frame+0x14, struct.pack('<I', filename))
+        seeds = dict(EAX=0xf0e0d0c0, EBX=0x13579bdf, ECX=0x10a0b0c0,
+                     EDX=0x11223344, ESI=0x55667788, EDI=0x99aabbcc, EBP=frame, EFLAGS=0x202)
+        for register, value in seeds.items():
+            uc.reg_write(getattr(registers, 'UC_X86_REG_'+register), value)
+        uc.reg_write(registers.UC_X86_REG_ESP, sp)
+        pcs, write_count, ordered, digest = set(), [0], [True], hashlib.sha256()
+        reads = [(STACK, STACK+0x10000), (filename, filename+len(name)+1),
+                 (data, data+len(payload)), (key_address, key_address+len(key))]
+        writes = [(STACK, STACK+0x10000), (data, data+len(payload))]
+
+        def instruction(machine, address, size, _):
+            if not entry <= address < end or address+size > end:
+                raise Boundary(f'Undeclared instruction {address:#x}+{size}')
+            pcs.add(address)
+
+        def access(machine, kind, address, size, value, _):
+            is_write = kind == unicorn.UC_MEM_WRITE
+            if not any(a <= address and address+size <= b for a, b in (writes if is_write else reads)):
+                raise Boundary(f'Undeclared {"write" if is_write else "read"} at {address:#x}+{size}')
+            if is_write and data <= address < data+len(payload):
+                ordered[0] &= size == 1 and address-data == write_count[0]
+                digest.update(struct.pack('<II', address-data, size))
+                digest.update((value & ((1 << (8*size))-1)).to_bytes(size, 'little'))
+                write_count[0] += 1
+
+        uc.hook_add(unicorn.UC_HOOK_CODE, instruction)
+        uc.hook_add(unicorn.UC_HOOK_MEM_READ | unicorn.UC_HOOK_MEM_WRITE, access)
+        outcome, error = 'returned', None
+        try:
+            uc.emu_start(entry, STOP, timeout=plan['bounds']['timeoutMicrosecondsPerCall'],
+                         count=plan['bounds']['instructionsPerCall'])
+            if uc.reg_read(registers.UC_X86_REG_EIP) != STOP:
+                outcome, error = 'execution-limit', 'Routine did not reach return sentinel'
+        except Boundary as exc:
+            outcome, error = 'unsupported-input-read', str(exc)
+        except unicorn.UcError as exc:
+            outcome, error = 'source-memory-fault', str(exc)
+        after = bytes(uc.mem_read(data, len(payload))) if payload else b''
+        values = {name: uc.reg_read(getattr(registers, 'UC_X86_REG_'+name))
+                  for name in list(seeds)+['ESP', 'EIP']}
+        results.append(dict(id=case['id'], input=case, outcome=outcome, error=error,
+            decodedBufferHex=after.hex(), cursorOffset=values['ECX'], registers=values,
+            returnedESP=values['ESP'], expectedReturnedESP=sp+12,
+            preservedRegisters=all(values[r] == seeds[r] for r in ('EBX','ESI','EDI','EBP')),
+            bufferWrites=write_count[0], ascendingSingleByteWrites=ordered[0], writeOrderSHA256=digest.hexdigest(),
+            filenameUnchanged=bytes(uc.mem_read(filename, len(name)+1)) == name+b'\0',
+            keyUnchanged=bytes(uc.mem_read(key_address, len(key))) == key,
+            instructionAddresses=[hex(a) for a in sorted(pcs)]))
+    return dict(schemaVersion=1, runID=plan['runID'], recordedUTC=datetime.now(timezone.utc).isoformat(),
+        environment=dict(python=sys.version, executable=sys.executable, unicorn=unicorn.__version__),
+        referenceBoundary=plan['referenceBoundary'], keyHex=key.hex(), cases=results,
+        summary=dict(cases=len(results), outcomes={o:sum(c['outcome'] == o for c in results)
+                     for o in sorted(set(c['outcome'] for c in results))}),
+        limitation='Whole decoder routine only on declared disjoint ordinary buffers; no original file API, packed path, Windows, FileOpen/Object caller or Native acceptance.')
+
+
 def main():
     parser = argparse.ArgumentParser(description=__doc__)
     parser.add_argument('--plan', type=Path, required=True)
@@ -387,9 +497,15 @@ def main():
     parser.add_argument('--anchors', type=Path)
     parser.add_argument('--ranges', type=Path)
     parser.add_argument('--rng-pilot', type=Path)
+    parser.add_argument('--dat-buffer-pilot', type=Path)
     args = parser.parse_args()
     if args.output.exists():
         raise ValueError('Refusing to overwrite an existing run result')
+    if args.dat_buffer_pilot:
+        result = dat_buffer_pilot(args.plan, args.dat_buffer_pilot)
+        args.output.write_text(json.dumps(result, indent=2)+'\n')
+        print(json.dumps(result['summary'], indent=2))
+        return
     if args.rng_pilot:
         result = rng_pilot(args.plan, args.rng_pilot)
         args.output.write_text(json.dumps(result, indent=2)+'\n')

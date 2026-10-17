@@ -1,6 +1,6 @@
 # Текущая передача работы
 
-## NTSD 2.8.3.3 M0: реализован content owner, полные gates выполняются — 2026-10-17
+## NTSD 2.8.3.3 M0: машинные gates прошли, review открыт — 2026-10-17
 
 [M0](NTSD_2_8_3_3_M0.md): реальный `OriginalRuntimeSession` удерживает один
 content owner, startup/read-ahead/loading tickets и один writable root.
@@ -12,22 +12,32 @@ Foundation `/var` и `/private/var` требовали нормализации 
 Проверки используют новые Runtime/Mac/App объекты и byte-identical прежние
 Core/Reference/codec/test объекты; исходные expected не менялись.
 
-Полная приёмка M0 **открыта**: выполняются заданные baseline suites/whole-startup/
-whole-loading (`xctest` PID61567, старт19:18:25 CEST) и все11 текущих app_e2e
-SCENARIOS на correction2 binary. Их tool handles50681/15735 и metadata/logs:
+Локальный commit `875a1783`. Заданные10 baseline suites/whole-startup/whole-loading
+тестов прошли за180.563s; все11 текущих app_e2e SCENARIOS на correction2 binary
+прошли с неизменёнными milestone/frame/replay/overlay expectations. Оба job
+терминальны; не перезапускать. Metadata/logs:
 `/Volumes/T7/ntsd-2.4-artifacts/version-diff-20261017/m0-native1/`.
-Наблюдать существующие jobs; не перезапускать и не менять pinned inputs.
 Независимый storage review не назначен и остаётся отдельной открытой gate.
 T7 для новых builds явно разрешён пользователем в этом продолжении; UUID,
 writable ExFAT и40GiB reserve проверены. X5 результаты сохранены на прежнем месте.
 
-Следующая независимая задача после локального коммита этого checked increment —
-D3: ≤60 минут targeted source review фактических target Frame/Object constructor/
-continuous-loader entries по сохранённому коду и interpretation correction;
-затем конечный план и ближайший доказанный native storage/loading consumer.
+D3 уже начат: [Frame/Object](NTSD_2_8_3_3_FRAME_OBJECT.md) установил фактические
+`44c6b0 → 40e540`, allocation`69e00`, Frame base`830`/stride`1b0` и отдельно
+parser gate1000. Подмена1000 выделенными records неверна: в размере помещаются999.
+Новый custom file/scanner contract — доказанный блокер прежнего loader reuse.
+Первый необходимый перенос — in-place ordinary DAT buffer; source-run20 случаев
+дал18 возвратов и2 declared input-read boundaries. Он перенесён в
+`native/NTSD2833FileBytes` и consumer `decodedTargetFile`:13 Native tests прошли
+за15.786s, все9 inputs остаются собственными и не идут через2.4 decoder.
+[Evidence](../evidence/ntsd-2.8.3.3-frame-object-20261017-buffer1.json).
+Далее —4 fresh/repeated Frame-free случая целого `40e540..412e7b` constructor/
+continuous caller с actual custom scanner и declared owned file-buffer response,
+затем source index/repeat/field cases и Native-owned target Frame/Object storage,
+без подстановки2.4 CRT или неизвестных PNG/packed resources.
 Packed-content incident, target startup и M1–M6 остаются открытыми; M0 не
 устанавливает целевое игровое поведение. [Промежуточная evidence](
-../evidence/ntsd-2.8.3.3-m0-20261017-increment1.json).
+../evidence/ntsd-2.8.3.3-m0-20261017-increment1.json), [полные machine gates](
+../evidence/ntsd-2.8.3.3-m0-20261017-gates1.json).
 
 ## NTSD 2.8.3.3: план обновлён Astra xhigh — 2026-10-17
 
