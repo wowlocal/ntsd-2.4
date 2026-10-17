@@ -1,0 +1,520 @@
+{
+  "scope": "Static inventory audit; author verification, not independent review or behavior comparison.",
+  "inventory": "docs/evidence/ntsd-2.4-to-2.8.3.3-static-20261017-run1.json",
+  "inventorySHA256": "a2dff4a52c16a75a20944be7766f6bb09b55ea2b5a10d94ee3e0bbf38d1cf2ad",
+  "checks": [
+    {
+      "check": "baseline contains no LFS placeholders",
+      "result": "pass",
+      "detail": null
+    },
+    {
+      "check": "baseline every active registry line retained",
+      "result": "pass",
+      "detail": 154
+    },
+    {
+      "check": "baseline object type accounting",
+      "result": "pass",
+      "detail": null
+    },
+    {
+      "check": "later every active registry line retained",
+      "result": "pass",
+      "detail": 354
+    },
+    {
+      "check": "later object type accounting",
+      "result": "pass",
+      "detail": null
+    },
+    {
+      "check": "outer ZIP file accounting",
+      "result": "pass",
+      "detail": null
+    },
+    {
+      "check": "direct frame-token count: custom/1genma/genma.dat",
+      "result": "pass",
+      "detail": 261
+    },
+    {
+      "check": "direct frame-token count: custom/1genma/a/shuriken.dat",
+      "result": "pass",
+      "detail": 14
+    },
+    {
+      "check": "direct frame-token count: custom/1genma/genmaclone.dat",
+      "result": "pass",
+      "detail": 149
+    },
+    {
+      "check": "direct frame-token count: custom/1genma/a/katon.dat",
+      "result": "pass",
+      "detail": 13
+    },
+    {
+      "check": "direct frame-token count: custom/1genma/a/smalldragon.dat",
+      "result": "pass",
+      "detail": 12
+    },
+    {
+      "check": "direct frame-token count: custom/1genma/a/bigdragon.dat",
+      "result": "pass",
+      "detail": 12
+    },
+    {
+      "check": "direct frame-token count: custom/1genma/a/wind.dat",
+      "result": "pass",
+      "detail": 9
+    },
+    {
+      "check": "bundled documentation fact: Ported from the LF2 Neora",
+      "result": "pass",
+      "detail": null
+    },
+    {
+      "check": "bundled documentation fact: Hit Counter is now off",
+      "result": "pass",
+      "detail": null
+    },
+    {
+      "check": "bundled documentation fact: TU INPUT mode is now by default",
+      "result": "pass",
+      "detail": null
+    },
+    {
+      "check": "bundled documentation fact: Complete menu and HUD redesign",
+      "result": "pass",
+      "detail": null
+    },
+    {
+      "check": "bundled documentation fact: Merged all menu character",
+      "result": "pass",
+      "detail": null
+    },
+    {
+      "check": "bundled documentation fact: Alt+Enter is enabled",
+      "result": "pass",
+      "detail": null
+    },
+    {
+      "check": "bundled documentation fact: Increased itr limit",
+      "result": "pass",
+      "detail": null
+    },
+    {
+      "check": "bundled documentation fact: Increased frame limit",
+      "result": "pass",
+      "detail": null
+    },
+    {
+      "check": "bundled documentation fact: added new drain",
+      "result": "pass",
+      "detail": null
+    },
+    {
+      "check": "bundled documentation fact: increased limit from 1 to 20",
+      "result": "pass",
+      "detail": null
+    },
+    {
+      "check": "bundled documentation fact: 1tu -",
+      "result": "pass",
+      "detail": null
+    },
+    {
+      "check": "bundled documentation fact: 2tu -",
+      "result": "pass",
+      "detail": null
+    },
+    {
+      "check": "bundled documentation fact: .mlfr",
+      "result": "pass",
+      "detail": null
+    },
+    {
+      "check": "bundled documentation fact: .lfr",
+      "result": "pass",
+      "detail": null
+    },
+    {
+      "check": "bundled documentation fact: format from .bmp to .png",
+      "result": "pass",
+      "detail": null
+    },
+    {
+      "check": "bundled documentation fact: 0\tNormal:",
+      "result": "pass",
+      "detail": null
+    },
+    {
+      "check": "bundled documentation fact: -5\t0hitlagAll:",
+      "result": "pass",
+      "detail": null
+    },
+    {
+      "check": "Genma actual data: <stats>",
+      "result": "pass",
+      "detail": null
+    },
+    {
+      "check": "Genma actual data: <menu_face>",
+      "result": "pass",
+      "detail": null
+    },
+    {
+      "check": "Genma actual data: walking_frame:",
+      "result": "pass",
+      "detail": null
+    },
+    {
+      "check": "Genma actual data: hit_aj:",
+      "result": "pass",
+      "detail": null
+    },
+    {
+      "check": "Genma actual data: hit_ad:",
+      "result": "pass",
+      "detail": null
+    },
+    {
+      "check": "Genma actual data: hold_d:",
+      "result": "pass",
+      "detail": null
+    },
+    {
+      "check": "Genma actual data: hold_j:",
+      "result": "pass",
+      "detail": null
+    },
+    {
+      "check": "Genma actual data: hit_g:",
+      "result": "pass",
+      "detail": null
+    },
+    {
+      "check": "Genma actual data: .png",
+      "result": "pass",
+      "detail": null
+    },
+    {
+      "check": "2.4 baseline files unchanged after inventory",
+      "result": "pass",
+      "detail": 1595
+    },
+    {
+      "check": "unrelated pending files unchanged",
+      "result": "pass",
+      "detail": null
+    }
+  ],
+  "sourceFacts": [
+    {
+      "path": "2.8 full changelog.txt",
+      "needle": "Ported from the LF2 Neora",
+      "matches": [
+        {
+          "line": 168,
+          "text": " -Ported from the LF2 Neora exe to Darkfiren's main LF2 custom exe which required a bunch of changes to MANY functions below:"
+        }
+      ]
+    },
+    {
+      "path": "2.8 full changelog.txt",
+      "needle": "Hit Counter is now off",
+      "matches": [
+        {
+          "line": 13,
+          "text": " -Hit Counter is now off by default. The setting can still be turned on during Pause."
+        }
+      ]
+    },
+    {
+      "path": "2.8 full changelog.txt",
+      "needle": "TU INPUT mode is now by default",
+      "matches": [
+        {
+          "line": 52,
+          "text": " -TU INPUT mode is now by default 2 with the option to change it to 1 in both offline and online."
+        }
+      ]
+    },
+    {
+      "path": "2.8 full changelog.txt",
+      "needle": "Complete menu and HUD redesign",
+      "matches": [
+        {
+          "line": 476,
+          "text": " -Complete menu and HUD redesign!"
+        }
+      ]
+    },
+    {
+      "path": "2.8 full changelog.txt",
+      "needle": "Merged all menu character",
+      "matches": [
+        {
+          "line": 53,
+          "text": " -Merged all menu character animations into a single file to boost startup speed and size. Over 300 images into one."
+        }
+      ]
+    },
+    {
+      "path": "2.8 full changelog.txt",
+      "needle": "Alt+Enter is enabled",
+      "matches": [
+        {
+          "line": 253,
+          "text": " -Alt+Enter is enabled and fixed to successfully enter fullscreen mode without crashing or restarting game."
+        }
+      ]
+    },
+    {
+      "path": "instructions/special features for modding/frame/itr.txt",
+      "needle": "Increased itr limit",
+      "matches": [
+        {
+          "line": 6,
+          "text": "- Increased itr limit from 5 to 100"
+        }
+      ]
+    },
+    {
+      "path": "instructions/special features for modding/frame/itr.txt",
+      "needle": "Increased frame limit",
+      "matches": [
+        {
+          "line": 7,
+          "text": "- Increased frame limit from 400 to 998"
+        }
+      ]
+    },
+    {
+      "path": "instructions/special features for modding/frame/itr.txt",
+      "needle": "added new drain",
+      "matches": [
+        {
+          "line": 11,
+          "text": "- added new drain same as injury but affects mp of the victim, doesn't work with F6."
+        }
+      ]
+    },
+    {
+      "path": "instructions/special features for modding/frame/opoint.txt",
+      "needle": "increased limit from 1 to 20",
+      "matches": [
+        {
+          "line": 4,
+          "text": "- increased limit from 1 to 20 per frame"
+        }
+      ]
+    },
+    {
+      "path": "instructions/special features for modding/tu mode.txt",
+      "needle": "1tu -",
+      "matches": [
+        {
+          "line": 7,
+          "text": "1tu - smooth input setting "
+        }
+      ]
+    },
+    {
+      "path": "instructions/special features for modding/tu mode.txt",
+      "needle": "2tu -",
+      "matches": [
+        {
+          "line": 11,
+          "text": "2tu - default input setting "
+        }
+      ]
+    },
+    {
+      "path": "instructions/special features for modding/tu mode.txt",
+      "needle": ".mlfr",
+      "matches": [
+        {
+          "line": 9,
+          "text": "- recordings are saved in \".mlfr\" format"
+        }
+      ]
+    },
+    {
+      "path": "instructions/special features for modding/tu mode.txt",
+      "needle": ".lfr",
+      "matches": [
+        {
+          "line": 13,
+          "text": "- recordings are saved in \".lfr\" format"
+        }
+      ]
+    },
+    {
+      "path": "instructions/special features for modding/resource dat.txt",
+      "needle": "format from .bmp to .png",
+      "matches": [
+        {
+          "line": 5,
+          "text": "you can change the format from .bmp to .png"
+        }
+      ]
+    },
+    {
+      "path": "instructions/special features for modding/hitlag mode.txt",
+      "needle": "0\tNormal:",
+      "matches": [
+        {
+          "line": 6,
+          "text": " 0\tNormal:\t\tAttacker 3, Victim -3, hitBlock 3, blockstun -5.\t(original hitlag values)"
+        }
+      ]
+    },
+    {
+      "path": "instructions/special features for modding/hitlag mode.txt",
+      "needle": "-5\t0hitlagAll:",
+      "matches": [
+        {
+          "line": 11,
+          "text": "-5\t0hitlagAll:\tAttacker 0, Victim  0, hitBlock 0, blockstun  0."
+        }
+      ]
+    },
+    {
+      "path": "custom/1genma/genma.dat (decoded with existing decoder)",
+      "needle": "<stats>",
+      "matches": [
+        {
+          "line": 33,
+          "text": "<stats> max_mp: 500 <stats_end>"
+        }
+      ]
+    },
+    {
+      "path": "custom/1genma/genma.dat (decoded with existing decoder)",
+      "needle": "<menu_face>",
+      "matches": [
+        {
+          "line": 34,
+          "text": "<menu_face>"
+        }
+      ]
+    },
+    {
+      "path": "custom/1genma/genma.dat (decoded with existing decoder)",
+      "needle": "walking_frame:",
+      "matches": [
+        {
+          "line": 25,
+          "text": "walking_frame: 6"
+        }
+      ]
+    },
+    {
+      "path": "custom/1genma/genma.dat (decoded with existing decoder)",
+      "needle": "hit_aj:",
+      "matches": [
+        {
+          "line": 192,
+          "text": "pic: 27 state: 15 wait: 3 next: 46 centerx: 39 centery: 79 hit_ad: 165 hit_aj: 145 sound: custom\\1genma\\w\\a4.wav"
+        },
+        {
+          "line": 198,
+          "text": "pic: 27 state: 15 wait: 3 next: 46 centerx: 39 centery: 79 hit_ad: 165 hit_aj: 145 sound: custom\\1genma\\w\\a4.wav"
+        },
+        {
+          "line": 212,
+          "text": "pic: 27 state: 15 wait: 3 next: 46 centerx: 39 centery: 79 hit_ad: 165 hit_aj: 145 sound: custom\\1genma\\w\\a4.wav"
+        }
+      ]
+    },
+    {
+      "path": "custom/1genma/genma.dat (decoded with existing decoder)",
+      "needle": "hit_ad:",
+      "matches": [
+        {
+          "line": 192,
+          "text": "pic: 27 state: 15 wait: 3 next: 46 centerx: 39 centery: 79 hit_ad: 165 hit_aj: 145 sound: custom\\1genma\\w\\a4.wav"
+        },
+        {
+          "line": 198,
+          "text": "pic: 27 state: 15 wait: 3 next: 46 centerx: 39 centery: 79 hit_ad: 165 hit_aj: 145 sound: custom\\1genma\\w\\a4.wav"
+        },
+        {
+          "line": 212,
+          "text": "pic: 27 state: 15 wait: 3 next: 46 centerx: 39 centery: 79 hit_ad: 165 hit_aj: 145 sound: custom\\1genma\\w\\a4.wav"
+        }
+      ]
+    },
+    {
+      "path": "custom/1genma/genma.dat (decoded with existing decoder)",
+      "needle": "hold_d:",
+      "matches": [
+        {
+          "line": 1547,
+          "text": "pic: 40 state: 7 wait: 0 next: 999 centerx: 39 centery: 79 hold_d: 110 hit_ja: 124 hit_Fa: 250 hit_Fj: 265 hit_Ua: 280 hit_Uj: 295 hit_Da: 310 hit_Dj: 325"
+        }
+      ]
+    },
+    {
+      "path": "custom/1genma/genma.dat (decoded with existing decoder)",
+      "needle": "hold_j:",
+      "matches": [
+        {
+          "line": 1229,
+          "text": "pic: 39 state: 15 wait: 0 next: 266 centerx: 39 centery: 79 hold_j: 275"
+        }
+      ]
+    },
+    {
+      "path": "custom/1genma/genma.dat (decoded with existing decoder)",
+      "needle": "hit_g:",
+      "matches": [
+        {
+          "line": 1342,
+          "text": "pic: 50 state: 15 wait: 9 next: 310 dvy: 7 centerx: 44 centery: 79 mp: 100 hit_g: 310"
+        },
+        {
+          "line": 1554,
+          "text": "pic: 31 state: 16 wait: 2 next: 616 centerx: 39 centery: 79 hit_g: 615"
+        },
+        {
+          "line": 1561,
+          "text": "pic: 31 state: 16 wait: 2 next: 617 centerx: 39 centery: 79 hit_g: 616"
+        }
+      ]
+    },
+    {
+      "path": "custom/1genma/genma.dat (decoded with existing decoder)",
+      "needle": ".png",
+      "matches": [
+        {
+          "line": 3,
+          "text": "head: custom\\1genma\\genma_f.png"
+        },
+        {
+          "line": 4,
+          "text": "small: custom\\1genma\\genma_s.png"
+        },
+        {
+          "line": 5,
+          "text": "smallb: custom\\1genma\\genma_sb.png"
+        }
+      ]
+    }
+  ],
+  "preflight1": {
+    "result": "unsupported static-parser boundary",
+    "error": "ValueError: RVA outside file-backed sections: 9f38185e",
+    "operation": "inspect_original.PE.imports on ZIP main NTSD.exe; no original execution"
+  },
+  "engineSourceSHA256": {
+    "native/Sources/NTSDCore/OriginalFrameLoader.swift": "2a8ff012749379c77e39e6a90922d1b7edafa269b3a23897f03b475f3f3097c0",
+    "native/Sources/NTSDCore/OriginalObjectLoader.swift": "3fcd7bef4900f1803f1c9ca7d0725ba3c65b8d4574026e63108c8f62fdffc692",
+    "native/Sources/NTSDRuntime/OriginalMacRuntimeStartup.swift": "6551dcf6433089aa10f921344a10f0ccd31ae2499edf03de6da49d2341b3aa11",
+    "native/Package.swift": "c1a52595741b58e9f13bd929d2d124dd81938813c6b57e4c2c99e97c79de3c46"
+  },
+  "originalExecuted": false,
+  "nativeChanged": false,
+  "independentReview": "open"
+}
