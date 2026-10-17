@@ -1,0 +1,103 @@
+{
+  "schemaVersion": 1,
+  "recordedUTC": "2026-10-17T15:38:27.450287+00:00",
+  "study": "docs/research/NTSD_2_8_3_3_WINDOWS_MEMORY.md",
+  "status": "Memory captured at source startup fault; no working-game/menu observation",
+  "parentRevision": "107f2efc61f712b67e2f819556d0670068bb2db2",
+  "branch": "exp/ntsd-2.8.3.3",
+  "agentsUsed": false,
+  "reference": {
+    "archiveSHA256": "fca38bfe1391d969b9d29d1289c51bbf5270a384fa7da6d4a7c053da77c52b2d",
+    "exeSHA256": "5eda51440039099069d041e5bd13fde8be9fd8c7b20983985b1712a59719d86b",
+    "guest": "Windows11 24H2 build26100.4349 ARM64; x86 game compatibility"
+  },
+  "artifactRoot": "/Volumes/T7/ntsd-2.4-artifacts/version-diff-20261017/windows-memory-run1",
+  "terminalReceipt": {
+    "path": "/Volumes/T7/ntsd-2.4-artifacts/version-diff-20261017/windows-memory-run1/terminal1.json",
+    "sha256": "f6a4c2c18c172d6877ffa825339f8d4e7b7afe5a7ff0903b228b61069659bf92"
+  },
+  "validation": {
+    "path": "/Volumes/T7/ntsd-2.4-artifacts/version-diff-20261017/windows-memory-run1/dump-validation1.json",
+    "sha256": "cad480a0c9cc4a74ca752dd72bfa75d11ccbb7c5021321354c61fb01e2ba11f2"
+  },
+  "dump": {
+    "schemaVersion": 1,
+    "verifiedUTC": "2026-10-17T15:34:58.259546+00:00",
+    "path": "/Volumes/T7/ntsd-2.4-artifacts/version-diff-20261017/windows-memory-run1/NTSD-startup-full1.dmp",
+    "bytes": 117282498,
+    "sha256": "3965fdb513d3248ca08fe35982122c415671e6001d2651610a16257eca32fbf0",
+    "matchesGuestCopySHA256": true,
+    "signature": "MDMP",
+    "version": "0xa0f4a793",
+    "flags": "0x21826",
+    "MiniDumpWithFullMemory": true,
+    "streamCount": 16,
+    "capturedReadableMemoryRegions": 489,
+    "capturedMemoryBytes": 117190656,
+    "memoryDataWithinFile": true,
+    "systemInfoArchitecture": "x86",
+    "moduleCount": 51,
+    "targetModule": {
+      "path": "C:\\NTSDResearch\\2833-memory-run1\\package\\NTSD2.8.3.3\\NTSD.exe",
+      "base": "0x400000",
+      "imageSize": 4591616,
+      "exceptionOffset": "0xb9d37"
+    },
+    "exception": {
+      "threadID": 1276,
+      "code": "0xc0000005",
+      "address": "0x4b9d37",
+      "parameters": [
+        "0x0",
+        "0xffffffffc2cc7ffc"
+      ]
+    },
+    "state": "Original NTSD process startup access violation; no game window/menu observed. Standard dump metadata validated; memory payload not extracted/analyzed. No whole-game or all-resources claim."
+  },
+  "jobs": {
+    "stage": {
+      "id": "32CF2843-2396-4A0B-AC28-B7233B1F6228",
+      "exit": 0
+    },
+    "launch1": {
+      "id": "3F00851C-6861-4D15-8065-D94605DC277B",
+      "exit": 1,
+      "outcome": "missing VC80.MFC; process not created"
+    },
+    "installer": {
+      "id": "3958708A-7157-43FF-87E1-782267F9AA72",
+      "exit": 0,
+      "events": "MsiInstaller11707/1033 installation success"
+    },
+    "launch2": {
+      "id": "76726020-7A06-4D35-B77E-0BBCCE6E66AB",
+      "exit": -1073741819,
+      "pid": 5084
+    },
+    "capture3": {
+      "id": "0161E698-F604-41C4-881B-2AA7CAA9C4C3",
+      "exit": -1073741819,
+      "pid": 2320,
+      "state": "source fault; WER full dump complete"
+    }
+  },
+  "preservation": {
+    "originalZIPUnchanged": true,
+    "guestEXEUnchanged": true,
+    "instructionArchiveUnchanged": true,
+    "NativeChanges": false,
+    "historicalEvidenceUnchanged": true
+  },
+  "cleanup": {
+    "NTSDProcessCount": 0,
+    "NTSDOnlyWERAppKeyRestoredAbsent": true,
+    "temporaryNTSDMemory1ShareRemoved": true,
+    "originalDownloadsSharePreserved": true,
+    "WindowsVM": "left running",
+    "MicrosoftRuntime": "8.0.61001 installed after explicit licence acceptance",
+    "guestSourceAndDump": "retained in task-owned C:\\NTSDResearch\\2833-memory-run1"
+  },
+  "review": "Author provenance and standard dump-format checks only; no independent review, Native comparator or working-game acceptance",
+  "scope": "No packed-content extraction/protection changes or resolution of earlier unknown-trigger safety incident; no new safety refusal. Prior fault outcomes remain failures.",
+  "publication": "local commit only; no push; command-scoped hook retaining LFS and omitting auto-push"
+}
