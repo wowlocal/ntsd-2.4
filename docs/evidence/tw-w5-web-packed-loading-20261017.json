@@ -492,5 +492,50 @@
   "The first loading cycle still digests every packaged file in wasm (~2.2 s, W3c) after START; not changed here",
   "Memory path (no OPFS: private windows, a second tab): ~320 MiB held ahead of the program, a pack released once read and fetched again if read again",
   "Phone browsers (W3d) and Safari/Firefox by hand stay open"
- ]
+ ],
+ "published": {
+  "by": "the user's Codex session 01a13385-0d65-7593-8804-23a32ffb4ef9 (resumed with codex exec resume at the user's request), records in /Volumes/X5/ntsd-2.4-research/web-deploy-1deaa396-20261017",
+  "release": "https://github.com/wowlocal/ntsd-2.4/releases/tag/web-1deaa396-20261017",
+  "deployment": "dpl_2zEEoiMvZxTVcBGCHJwZRPNb36aZ (https://ntsd-dtrbaz5cz-wowlocals-projects.vercel.app), production https://ntsd-web-ashy.vercel.app",
+  "headers": "checked here with curl on production: data-880df4d3f50d/br/pack-00.bin and br/NTSDWeb.wasm sent with content-encoding: br, 2,417,708 and 14,144,705 bytes (the built files: Vercel does not compress them again), application/wasm, COOP/COEP on the page",
+  "visitsHere": {
+   "how": "web_app.py visit on production from this Mac (Chromium), cold on fresh profiles, then return visits on one profile",
+   "cold": [
+    {
+     "menuSeconds": 5.34,
+     "dataSeconds": 15.34,
+     "failed": 0,
+     "reusedPacks": 0
+    },
+    {
+     "menuSeconds": 2.04,
+     "dataSeconds": 4.61,
+     "failed": 0,
+     "reusedPacks": 0
+    },
+    {
+     "menuSeconds": 2.09,
+     "dataSeconds": 4.62,
+     "failed": 0,
+     "reusedPacks": 0
+    }
+   ],
+   "return": [
+    {
+     "menuSeconds": 2.07,
+     "dataSeconds": 4.62,
+     "failed": 0,
+     "reusedPacks": 0
+    },
+    {
+     "menuSeconds": 1.33,
+     "dataSeconds": 0.42,
+     "failed": 0,
+     "reusedPacks": 13
+    }
+   ],
+   "reading": "the first cold visit (5.3 s / 15.3 s) met the CDN edge without the new files (cache misses); the next ones 2.0-2.1 s to the menu and 4.6 s to the data, against 9.26 s / 46.45 s before"
+  },
+  "visitsCodex": "Codex's own: cold 3.19/9.04, 2.41/6.67, 2.05/4.70 s (menu/data), return 1.30/0.43 s; loader.failed 0"
+ }
 }
