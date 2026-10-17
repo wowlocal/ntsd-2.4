@@ -2,8 +2,8 @@
 
 2026-10-17. Parent `6b24cd1f`; local `exp/ntsd-2.8.3.3` only.
 User requested the bounded investigation described after the
-[implementation plan](NTSD_2_8_3_3_IMPLEMENTATION_PLAN.md). Static pass complete;
-controlled RNG comparison is next. No engine-wide reuse percentage is measured.
+[implementation plan](NTSD_2_8_3_3_IMPLEMENTATION_PLAN.md). Static pass and
+controlled RNG pilot complete. No engine-wide reuse percentage is measured.
 
 ## Question, scope and consumer
 
@@ -136,9 +136,83 @@ versions, stdout/stderr, failures, raw differences and SHA pins are saved in
 the external task directory and linked from the dated evidence. Original bytes
 and historical expected/masks remain unchanged. No Native change or push.
 
-Next bounded task: compare both complete RNG routines on declared synthetic
+The static checkpoint's next task, now completed below: compare both complete RNG routines on declared synthetic
 tables/index/counter/range sequences, preserving cross-call state and recording
 all side effects. It has no external calls or CRT/FPU dependencies. This tests
 the reuse proposition without pretending the rest of the engine is equivalent.
 Its execution needs a separate finite plan; original startup and arbitrary memory
 are not part of that experiment. Target storage/init/caller integration remains open.
+
+## Controlled RNG pilot and frame-storage observation
+
+Parent `71a69488`. [Pilot evidence](../evidence/ntsd-2.8.3.3-engine-diff-20261017-rng1.json).
+Frozen `engine-diff1/rng-pilot-plan1.json` declares 24 cases, 12 calls per chain,
+20-minute budget, 1,000-instruction/one-second per-call limits and ≤16 MiB output.
+T7 identity, writable state and 40 GiB reserve were rechecked before this stage.
+
+This stage **executes the two unchanged 77-byte RNG routines in Unicorn 2.1.4**,
+with Python 3.11.15 and explicitly supplied synthetic memory/registers. It reuses
+the existing reference tools' stack/return convention. Their frame/movement
+initialization cannot admit a captured target leaf and relocated state without
+unrelated 2.4 side effects, so the adapter adds this finite leaf case. It does not
+run either game's startup or read a table/after-state from the captured game.
+No Windows/device, CRT, FPU, file or network responses are simulated: this leaf
+uses only integer instructions and its three declared data identities.
+
+Inputs: four declared 3,000-byte nonzero table patterns and six valid index/counter
+pairs, including independent and simultaneous wrap boundaries. Each chain applies
+`0,-1,Int32.min,1,2,3,255,1234,3000,Int32.max,0,17` without resetting RNG state.
+Natural startup reachability of those exact tables is unestablished. Scratch
+memory is explicitly filled `0xa5`; hooks reject undeclared code/data accesses,
+so allocator fill is not promoted to original initialization. The stack argument,
+register seeds and cdecl return contract are declared in the plan.
+
+**Result: 24/24 cases equal, 288 returned calls per version, zero mismatches.**
+All 29 instruction addresses and both returns were exercised. Per version there
+were 192 updating calls and 96 nonpositive-range calls. EAX, all recorded general
+registers/flags, final ESP, live index/counter and normalized ordered writes match;
+raw storage addresses remain in the results. Tables stayed unchanged. Positive
+calls store counter before index; nonpositive calls leave both untouched.
+
+The successful source run took 0.262 seconds; that is execution time, not the
+investigation or future mechanism cost. Post-run audits also compare the observed
+results/state to the documented existing Native formula, verify saved registers,
+table hashes and artifacts. The Native executable was not run. The conclusion
+is limited to this controlled source/source domain and does not accept seed/table
+generation, caller RNG consumption, target ownership or whole-match equivalence.
+
+One setup assertion is retained: an offline uv command's temporary interpreter
+had expired before use. The diagnosed correction invokes the cached configured
+Unicorn environment through uv itself; no source run was repeated. The executed
+producer snapshot is preserved. The delivered module description was corrected
+to name its new optional executed mode; its executable AST is otherwise identical,
+so a further source run was unnecessary.
+
+A final bounded static check inside the selected special-AI address fragment
+`0x403a40..<0x4061a0` confirms two same-address instruction correspondences:
+
+| Instruction | Baseline | Target |
+| --- | --- | --- |
+| `0x4045c0` | `imul ecx,ecx,0x178` | `imul ecx,ecx,0x1b0` |
+| `0x404cd0` | `imul edx,edx,0x178` | `imul edx,edx,0x1b0` |
+
+The retained contexts load the frame index at Actor `+0x70`; the Actor's object
+reference remains at `+0x368` in both versions. Actual frame-access code uses a
+**376→432-byte multiplier**, while object-relative field accesses change
+`0x7ac→0x838` and `0x7d0→0x85c`. This is
+stronger than inferring capacity from a manual, but it is not a complete target
+Frame/Actor/Object specification or an accepted whole-AI mapping.
+
+The delivery audit rejected an earlier interpretation that the Actor reference
+offset changed. Its exact failed assertion and raw contexts are preserved in
+`delivery-validation1.json`; a [separate correction](../evidence/ntsd-2.8.3.3-engine-diff-20261017-rng1-correction1.json)
+supersedes that statement in the first pilot receipt and draft text. Source bytes,
+comparison output and the passing RNG verdict are unchanged; no source rerun.
+
+The evidence supports keeping `OriginalRandom`'s arithmetic. Its production
+target consumer still needs owned state initialization and recovered callers.
+M0 remains the ready application integration task; the first changed engine
+contract to recover is Frame/Object construction/loading and its consumers.
+The new stride and pointer accesses explain why replacing resources or globally
+changing `400` would be insufficient. Continue by proving those storage contracts,
+not by estimating the whole engine from 32 prefixes or one simple leaf.

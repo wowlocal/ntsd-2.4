@@ -1,0 +1,423 @@
+{
+  "schemaVersion": 1,
+  "recordedUTC": "2026-10-17T16:51:39.312937+00:00",
+  "runID": "rng-pilot1",
+  "parentRevision": "71a694881eda3132d5d1bed219890340733158ca",
+  "branch": "exp/ntsd-2.8.3.3",
+  "status": "Controlled source/source RNG comparison passed in declared synthetic domain",
+  "reference": {
+    "entry": "0x417170",
+    "endExclusive": "0x4171bd",
+    "baselineCodeSHA256": "e388b2dacdca3ed173f3fe5d400ff90a75b6e81e56cf00cf6e302531e30824c4",
+    "targetCodeSHA256": "1929e53a036a0f91b78e35db69f6636ec01f303acbcbe7dc968324da2185b692",
+    "stateIdentities": {
+      "baseline": {
+        "table": 4521872,
+        "index": 4525004,
+        "counter": 4525108
+      },
+      "target": {
+        "table": 4849552,
+        "index": 4852684,
+        "counter": 4852788
+      }
+    }
+  },
+  "environment": {
+    "python": "3.11.15 (main, Jul 23 2026, 14:34:23) [Clang 22.1.3 ]",
+    "executable": "/Users/michael/.cache/uv/builds-v0/.tmpuwHwO8/bin/python",
+    "unicorn": "2.1.4",
+    "mode": "synthetic x86_32, integer-only"
+  },
+  "provenance": "4 declared3000-byte nonzero table patterns,6 valid index/counter pairs,12 signed range calls per chain. Synthetic controlled inputs; ordinary-game reachability of these exact tables is unestablished. No captured after-state supplied.",
+  "summary": {
+    "cases": 24,
+    "callsPerVersion": 288,
+    "mismatches": [],
+    "pcs": {
+      "baseline": [
+        "0x417170",
+        "0x417171",
+        "0x417175",
+        "0x417177",
+        "0x417179",
+        "0x41717b",
+        "0x41717c",
+        "0x41717d",
+        "0x417182",
+        "0x417185",
+        "0x417186",
+        "0x41718b",
+        "0x41718d",
+        "0x417192",
+        "0x417195",
+        "0x417196",
+        "0x41719b",
+        "0x41719d",
+        "0x41719e",
+        "0x4171a0",
+        "0x4171a1",
+        "0x4171a7",
+        "0x4171ae",
+        "0x4171b0",
+        "0x4171b6",
+        "0x4171b7",
+        "0x4171b9",
+        "0x4171ba",
+        "0x4171bc"
+      ],
+      "target": [
+        "0x417170",
+        "0x417171",
+        "0x417175",
+        "0x417177",
+        "0x417179",
+        "0x41717b",
+        "0x41717c",
+        "0x41717d",
+        "0x417182",
+        "0x417185",
+        "0x417186",
+        "0x41718b",
+        "0x41718d",
+        "0x417192",
+        "0x417195",
+        "0x417196",
+        "0x41719b",
+        "0x41719d",
+        "0x41719e",
+        "0x4171a0",
+        "0x4171a1",
+        "0x4171a7",
+        "0x4171ae",
+        "0x4171b0",
+        "0x4171b6",
+        "0x4171b7",
+        "0x4171b9",
+        "0x4171ba",
+        "0x4171bc"
+      ]
+    }
+  },
+  "positiveCallsPerVersion": 192,
+  "nonpositiveCallsPerVersion": 96,
+  "artifactsRoot": "/Volumes/T7/ntsd-2.4-artifacts/version-diff-20261017/engine-diff1",
+  "artifactPins": {
+    "rng-pilot-preflight1.json": {
+      "bytes": 616,
+      "sha256": "e5e3b3c25c22eedbdc7d91a9ed2bc7a543276344e9baa25d5254c30def277aff"
+    },
+    "rng-pilot-plan1.json": {
+      "bytes": 3838,
+      "sha256": "abf9918126eefa9f27220cb9cf6b3ad44cd84bee54d05d0eceedcbb3097c2be0"
+    },
+    "rng-producer-inputs1.json": {
+      "bytes": 939,
+      "sha256": "98a8bc97271cc7237e4a8b6f09eeff67dd3b6e21c714bf175eabe8bd425d8a05"
+    },
+    "rng-tool1.py": {
+      "bytes": 23923,
+      "sha256": "191f45fa945dc193a6693ac54d2411011f13f822eb1b0764f1d9173dbb400e6a"
+    },
+    "rng-job1.json": {
+      "bytes": 1342,
+      "sha256": "74ca815ebe4a03368870f663d5bace05a6b317b084be6c5743b091f72ba89032"
+    },
+    "rng-terminal1.json": {
+      "bytes": 2852,
+      "sha256": "f31bd52fbacb87a1de412816dbc63f8c923bb77cbb07deda094e0b6056f53afa"
+    },
+    "rng-result1.json": {
+      "bytes": 662054,
+      "sha256": "0aa242b9a93cd754c0cdc663b6e370e923bac013ab52f577287f6674a35429df"
+    },
+    "frame-layout-audit1.json": {
+      "bytes": 7490,
+      "sha256": "133d55f98c8ed028e7688bc0dc45dcdcd963e5beb08edb08c42608a58772169f"
+    },
+    "rng-validation1.json": {
+      "bytes": 2003,
+      "sha256": "dfe25f1eb0aa4fce4994de1c8bf28dbebebbe9670f67d7eda0f4f319b756dc37"
+    }
+  },
+  "frameLayout": {
+    "schemaVersion": 1,
+    "recordedUTC": "2026-10-17T16:49:56.736885+00:00",
+    "scope": "Bounded fixed address fragment inside known baseline special-AI selector; target function boundary/caller not established. No execution or resource access.",
+    "start": "0x403a40",
+    "endExclusive": "0x4061a0",
+    "bytes": 10080,
+    "baselineSHA256": "f7027b459a3ab94b6a7529e92fbf1a2b11255ae343fb38c132c9a91562bccb45",
+    "targetSHA256": "b90a3e56361a0b6144f92356b328c5878a8d88bcae534e6c6aeffae90cbfead4",
+    "observations": [
+      {
+        "baselineVA": "0x4045c0",
+        "baselineHex": "69c978010000",
+        "targetHex": "69c9b0010000",
+        "baselineOperands": "ecx, ecx, 0x178",
+        "targetOperands": "ecx, ecx, 0x1b0",
+        "baselineContext": [
+          {
+            "va": "0x4045aa",
+            "bytes": "0f848e140000",
+            "mnemonic": "je",
+            "operands": "0x405a3e"
+          },
+          {
+            "va": "0x4045b0",
+            "bytes": "8b84be94010000",
+            "mnemonic": "mov",
+            "operands": "eax, dword ptr [esi + edi*4 + 0x194]"
+          },
+          {
+            "va": "0x4045b7",
+            "bytes": "8b4870",
+            "mnemonic": "mov",
+            "operands": "ecx, dword ptr [eax + 0x70]"
+          },
+          {
+            "va": "0x4045ba",
+            "bytes": "8b9068030000",
+            "mnemonic": "mov",
+            "operands": "edx, dword ptr [eax + 0x368]"
+          },
+          {
+            "va": "0x4045c0",
+            "bytes": "69c978010000",
+            "mnemonic": "imul",
+            "operands": "ecx, ecx, 0x178"
+          },
+          {
+            "va": "0x4045c6",
+            "bytes": "83bc11ac07000009",
+            "mnemonic": "cmp",
+            "operands": "dword ptr [ecx + edx + 0x7ac], 9"
+          },
+          {
+            "va": "0x4045ce",
+            "bytes": "752c",
+            "mnemonic": "jne",
+            "operands": "0x4045fc"
+          },
+          {
+            "va": "0x4045d0",
+            "bytes": "6a08",
+            "mnemonic": "push",
+            "operands": "8"
+          },
+          {
+            "va": "0x4045d2",
+            "bytes": "6a54",
+            "mnemonic": "push",
+            "operands": "0x54"
+          },
+          {
+            "va": "0x4045d4",
+            "bytes": "e8972b0100",
+            "mnemonic": "call",
+            "operands": "0x417170"
+          }
+        ],
+        "targetContext": [
+          {
+            "va": "0x4045aa",
+            "bytes": "0f848e140000",
+            "mnemonic": "je",
+            "operands": "0x405a3e"
+          },
+          {
+            "va": "0x4045b0",
+            "bytes": "8b84beec030000",
+            "mnemonic": "mov",
+            "operands": "eax, dword ptr [esi + edi*4 + 0x3ec]"
+          },
+          {
+            "va": "0x4045b7",
+            "bytes": "8b4870",
+            "mnemonic": "mov",
+            "operands": "ecx, dword ptr [eax + 0x70]"
+          },
+          {
+            "va": "0x4045ba",
+            "bytes": "8b9068030000",
+            "mnemonic": "mov",
+            "operands": "edx, dword ptr [eax + 0x368]"
+          },
+          {
+            "va": "0x4045c0",
+            "bytes": "69c9b0010000",
+            "mnemonic": "imul",
+            "operands": "ecx, ecx, 0x1b0"
+          },
+          {
+            "va": "0x4045c6",
+            "bytes": "83bc113808000009",
+            "mnemonic": "cmp",
+            "operands": "dword ptr [ecx + edx + 0x838], 9"
+          },
+          {
+            "va": "0x4045ce",
+            "bytes": "752c",
+            "mnemonic": "jne",
+            "operands": "0x4045fc"
+          },
+          {
+            "va": "0x4045d0",
+            "bytes": "6a08",
+            "mnemonic": "push",
+            "operands": "8"
+          },
+          {
+            "va": "0x4045d2",
+            "bytes": "6a54",
+            "mnemonic": "push",
+            "operands": "0x54"
+          },
+          {
+            "va": "0x4045d4",
+            "bytes": "e8972b0100",
+            "mnemonic": "call",
+            "operands": "0x417170"
+          }
+        ]
+      },
+      {
+        "baselineVA": "0x404cd0",
+        "baselineHex": "69d278010000",
+        "targetHex": "69d2b0010000",
+        "baselineOperands": "edx, edx, 0x178",
+        "targetOperands": "edx, edx, 0x1b0",
+        "baselineContext": [
+          {
+            "va": "0x404cbd",
+            "bytes": "c21c00",
+            "mnemonic": "ret",
+            "operands": "0x1c"
+          },
+          {
+            "va": "0x404cc0",
+            "bytes": "8b84be94010000",
+            "mnemonic": "mov",
+            "operands": "eax, dword ptr [esi + edi*4 + 0x194]"
+          },
+          {
+            "va": "0x404cc7",
+            "bytes": "8b5070",
+            "mnemonic": "mov",
+            "operands": "edx, dword ptr [eax + 0x70]"
+          },
+          {
+            "va": "0x404cca",
+            "bytes": "8b8068030000",
+            "mnemonic": "mov",
+            "operands": "eax, dword ptr [eax + 0x368]"
+          },
+          {
+            "va": "0x404cd0",
+            "bytes": "69d278010000",
+            "mnemonic": "imul",
+            "operands": "edx, edx, 0x178"
+          },
+          {
+            "va": "0x404cd6",
+            "bytes": "81bc02d007000022010000",
+            "mnemonic": "cmp",
+            "operands": "dword ptr [edx + eax + 0x7d0], 0x122"
+          },
+          {
+            "va": "0x404ce1",
+            "bytes": "7529",
+            "mnemonic": "jne",
+            "operands": "0x404d0c"
+          },
+          {
+            "va": "0x404ce3",
+            "bytes": "8b8cae94010000",
+            "mnemonic": "mov",
+            "operands": "ecx, dword ptr [esi + ebp*4 + 0x194]"
+          },
+          {
+            "va": "0x404cea",
+            "bytes": "83791400",
+            "mnemonic": "cmp",
+            "operands": "dword ptr [ecx + 0x14], 0"
+          },
+          {
+            "va": "0x404cee",
+            "bytes": "7d1c",
+            "mnemonic": "jge",
+            "operands": "0x404d0c"
+          }
+        ],
+        "targetContext": [
+          {
+            "va": "0x404cbd",
+            "bytes": "c21c00",
+            "mnemonic": "ret",
+            "operands": "0x1c"
+          },
+          {
+            "va": "0x404cc0",
+            "bytes": "8b84beec030000",
+            "mnemonic": "mov",
+            "operands": "eax, dword ptr [esi + edi*4 + 0x3ec]"
+          },
+          {
+            "va": "0x404cc7",
+            "bytes": "8b5070",
+            "mnemonic": "mov",
+            "operands": "edx, dword ptr [eax + 0x70]"
+          },
+          {
+            "va": "0x404cca",
+            "bytes": "8b8068030000",
+            "mnemonic": "mov",
+            "operands": "eax, dword ptr [eax + 0x368]"
+          },
+          {
+            "va": "0x404cd0",
+            "bytes": "69d2b0010000",
+            "mnemonic": "imul",
+            "operands": "edx, edx, 0x1b0"
+          },
+          {
+            "va": "0x404cd6",
+            "bytes": "81bc105c08000022010000",
+            "mnemonic": "cmp",
+            "operands": "dword ptr [eax + edx + 0x85c], 0x122"
+          },
+          {
+            "va": "0x404ce1",
+            "bytes": "7529",
+            "mnemonic": "jne",
+            "operands": "0x404d0c"
+          },
+          {
+            "va": "0x404ce3",
+            "bytes": "8b8caeec030000",
+            "mnemonic": "mov",
+            "operands": "ecx, dword ptr [esi + ebp*4 + 0x3ec]"
+          },
+          {
+            "va": "0x404cea",
+            "bytes": "83791400",
+            "mnemonic": "cmp",
+            "operands": "dword ptr [ecx + 0x14], 0"
+          },
+          {
+            "va": "0x404cee",
+            "bytes": "7d1c",
+            "mnemonic": "jge",
+            "operands": "0x404d0c"
+          }
+        ]
+      }
+    ],
+    "conclusion": "Same-address matched imul shapes change frame multiplier376 to432; surrounding accesses retained. Static field-layout evidence, not complete Frame/Object specification or whole-AI behavior."
+  },
+  "preservedPreflight": "Temporary offline runner interpreter path expired; setup assertion preserved and diagnosed before the source run. Configured offline uv command reused instead. No source run repeated.",
+  "descriptionCorrection": "Delivered module header now names the optional executed RNG mode. The per-mode plan/function and terminal records already described execution; producer AST excluding module docstring is unchanged. Frozen executed tool snapshot retained.",
+  "conclusion": "Reuse of the existing game-RNG arithmetic is supported for the compared domain. Frame access stride376\u2192432 and Actor/Object pointer offset changes are static evidence requiring separate target storage work. No global reuse fraction or total-hour estimate established.",
+  "limits": "No source/native executable comparison, actual Windows leaf observation, RNG seeding/table generation, whole caller/match, complete resource mapping or shipping runtime acceptance. Earlier packed-content incident remains open. No new capture or push.",
+  "review": "Author comparisons only; independent contract review and Native integration acceptance open."
+}

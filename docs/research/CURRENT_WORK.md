@@ -1,17 +1,22 @@
 # Текущая передача работы
 
-## NTSD 2.8.3.3: первые различия кода — 2026-10-17
+## NTSD 2.8.3.3: diff кода и первый controlled pilot — 2026-10-17
 
-По запросу пользователя выполнен [ограниченный static pass](NTSD_2_8_3_3_ENGINE_DIFF.md)
-по свежему сохранённому live dump. Первые 614,400 байт main-code доступны.
-Полный RNG (77 байт/29 инструкций) совпадает с 2.4 после пяти ссылок на три
-перенесённых state-адреса (+0x50000); caller/init ещё не проверены. В candidate
-camera path реально изменены loop bound 400→1000 и World table offset.
-Из 32 выбранных entry/fragment anchors 24 имеют неизвестное соответствие по
-старому VA: это не 24 изменённые функции и не процент diff. Два исправленных
-ошибочных предположения MDMP reader сохранены; Native и исходники не менялись,
-повторных captures/push нет. Следующий конечный этап — controlled RNG comparison
-по отдельному плану; target startup/storage/callers и packed-content gate открыты.
+По запросу пользователя выполнен [evidence pass](NTSD_2_8_3_3_ENGINE_DIFF.md)
+по свежему live dump: main-code доступен, RNG целиком сохранён после переноса
+трёх state-адресов (+0x50000). Controlled Unicorn source/source pilot прошёл:
+24 случая,288 вызовов на версию,29 instruction addresses,0 расхождений в
+результатах/регистрах/state/write order. Это не Native/Windows whole-game gate.
+Реальные static отличия: loop bound400→1000, World table offset0x194→0x3ec,
+frame-access multiplier376→432 байта и Object-relative field accesses.
+Actor object-reference offset в этих контекстах остался0x368; ошибочная
+интерпретация исправлена отдельно, raw и failed audit сохранены.
+Из32 выбранных anchors24 пока не сопоставлены; это не24 изменённые функции
+и не процент diff. Ошибки reader/setup и raw результаты сохранены; старые
+планы/эталоны не менялись. Native, повторные captures и push отсутствуют.
+Следующая реализация — M0 input boundary по [плану](NTSD_2_8_3_3_IMPLEMENTATION_PLAN.md);
+первый изменённый игровой контракт — Frame/Object storage/loading и consumers.
+RNG init/callers, target storage и packed-content dependency остаются открыты.
 
 ## NTSD 2.8.3.3: рабочий Windows-референс — 2026-10-17
 

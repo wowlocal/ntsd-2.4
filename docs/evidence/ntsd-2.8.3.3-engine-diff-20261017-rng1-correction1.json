@@ -1,0 +1,83 @@
+{
+  "schemaVersion": 1,
+  "recordedUTC": "2026-10-17T16:55:04.691421+00:00",
+  "corrects": "ntsd-2.8.3.3-engine-diff-20261017-rng1.json conclusion, and draft study/handoff wording",
+  "preservedFailure": "/Volumes/T7/ntsd-2.4-artifacts/version-diff-20261017/engine-diff1/delivery-validation1.json",
+  "status": "interpretation corrected; no raw bytes, expected values, source output or comparator modified",
+  "incorrectInterpretation": "Actor object-reference access moved0x31c\u21920x368",
+  "correctInterpretation": "The observed Actor object-reference offset stays0x368 in both versions. Frame-index multiplication changes376\u2192432; object-relative field displacements change0x7ac\u21920x838 and0x7d0\u21920x85c. World table offset separately changes0x194\u21920x3ec.",
+  "why": "Earlier wording conflated another header/field usage with the actual recorded Actor object-reference instruction. Raw baseline and target contexts already retained the correct operands.",
+  "observations": [
+    {
+      "unchangedActorReference": {
+        "baseline": {
+          "va": "0x4045ba",
+          "bytes": "8b9068030000",
+          "mnemonic": "mov",
+          "operands": "edx, dword ptr [eax + 0x368]"
+        },
+        "target": {
+          "va": "0x4045ba",
+          "bytes": "8b9068030000",
+          "mnemonic": "mov",
+          "operands": "edx, dword ptr [eax + 0x368]"
+        }
+      },
+      "changedFrameMultiplier": {
+        "baselineVA": "0x4045c0",
+        "baseline": "ecx, ecx, 0x178",
+        "target": "ecx, ecx, 0x1b0"
+      },
+      "changedObjectRelativeField": {
+        "baseline": {
+          "va": "0x4045c6",
+          "bytes": "83bc11ac07000009",
+          "mnemonic": "cmp",
+          "operands": "dword ptr [ecx + edx + 0x7ac], 9"
+        },
+        "target": {
+          "va": "0x4045c6",
+          "bytes": "83bc113808000009",
+          "mnemonic": "cmp",
+          "operands": "dword ptr [ecx + edx + 0x838], 9"
+        }
+      }
+    },
+    {
+      "unchangedActorReference": {
+        "baseline": {
+          "va": "0x404cca",
+          "bytes": "8b8068030000",
+          "mnemonic": "mov",
+          "operands": "eax, dword ptr [eax + 0x368]"
+        },
+        "target": {
+          "va": "0x404cca",
+          "bytes": "8b8068030000",
+          "mnemonic": "mov",
+          "operands": "eax, dword ptr [eax + 0x368]"
+        }
+      },
+      "changedFrameMultiplier": {
+        "baselineVA": "0x404cd0",
+        "baseline": "edx, edx, 0x178",
+        "target": "edx, edx, 0x1b0"
+      },
+      "changedObjectRelativeField": {
+        "baseline": {
+          "va": "0x404cd6",
+          "bytes": "81bc02d007000022010000",
+          "mnemonic": "cmp",
+          "operands": "dword ptr [edx + eax + 0x7d0], 0x122"
+        },
+        "target": {
+          "va": "0x404cd6",
+          "bytes": "81bc105c08000022010000",
+          "mnemonic": "cmp",
+          "operands": "dword ptr [eax + edx + 0x85c], 0x122"
+        }
+      }
+    }
+  ],
+  "RNGVerdict": "Unchanged:24 cases/288 calls per version, zero mismatches in declared controlled source/source domain. Native initialization/callers, full layouts and independent review remain open."
+}
