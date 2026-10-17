@@ -442,6 +442,34 @@
     "firstFrameMedian": 3.75,
     "dataMedian": 14.14,
     "dataNotInWithinWindow": 0
+   },
+   "old-100ms-20mbit": {
+    "runs": 2,
+    "firstFrameSeconds": [
+     25.98,
+     25.97
+    ],
+    "dataSeconds": [
+     71.62,
+     71.4
+    ],
+    "firstFrameMedian": 25.975,
+    "dataMedian": 71.51,
+    "dataNotInWithinWindow": 0
+   },
+   "new-100ms-20mbit": {
+    "runs": 2,
+    "firstFrameSeconds": [
+     7.76,
+     7.75
+    ],
+    "dataSeconds": [
+     34.19,
+     34.24
+    ],
+    "firstFrameMedian": 7.755,
+    "dataMedian": 34.215,
+    "dataNotInWithinWindow": 0
    }
   },
   "return": "the W5 folder, a kept profile: every pack reused from OPFS, the data in at 0.41-0.45 s (before the click), the first frame at 1.36-1.54 s, nothing fetched"
