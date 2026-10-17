@@ -2,6 +2,18 @@
 
 ## CrossOver 25.1.1 smoke check — 2026-10-17
 
+**Later UI check:** after the user explicitly authorized the installed project
+`cua-driver`, the same process's window was captured and controlled. NTSD showed
+`Could not create a filter graph for this file!`; clicking OK exposed its title
+screen. START, held for 400 ms through the driver's mouse gesture, loaded the
+distribution and reached the mode menu. Title, loading and menu captures plus
+the failed brief input attempts are retained in the
+[UI result](../evidence/crossover-25.1.1-smoke-ui-20261017.json). Brief driver S/Down
+presses did not visibly move the VS Mode selection; no demo or full match was
+observed, and physical keyboard input and sound effects are unverified. The game
+is left open at the mode menu. This supersedes the pending visible-window gate
+in the initial checkpoint below; that checkpoint remains unchanged.
+
 After the user's license activation request, the supplied license/signature files
 were installed unchanged. Its update entitlement ends 2025-12-02, so CrossOver
 26.3 was preserved in Downloads and replaced with official, signature-verified,

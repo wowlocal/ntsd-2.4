@@ -1,0 +1,224 @@
+{
+  "schemaVersion": 1,
+  "recordedUTC": "2026-10-17T17:40:52.195007+00:00",
+  "parent": "crossover-25.1.1-smoke-20261017.json",
+  "userAuthorization": "User explicitly selected: Use cua-driver to check NTSD. No manual observation requested after this instruction.",
+  "operation": "Ordinary screenshot/UI interaction with same live original process, no relaunch/debugger/memory modification. Installed project cua-driver 0.32.0; only pid 91439 and its observed window IDs addressed.",
+  "observations": {
+    "musicError": {
+      "window": 1125,
+      "text": "Could not create a filter graph for this file!",
+      "screenshot": "music-error1.png",
+      "dismissedWithOK": true
+    },
+    "title": {
+      "window": 1123,
+      "screenshot": "title1.png"
+    },
+    "loading": {
+      "screenshot": "loading2.png",
+      "input": "START accepted after exact-window foreground activation and 400ms held mouse press through driver drag"
+    },
+    "loadedModeMenu": {
+      "screenshot": "after-load2.png",
+      "visibleOptions": [
+        "VS Mode",
+        "Mission Mode",
+        "Tournament",
+        "Team Tournament",
+        "War",
+        "Demo",
+        "Playback Recording",
+        "Quit"
+      ]
+    },
+    "keyboard": "Brief foreground S and Down driver key attempts did not visibly move the VS Mode selection. No demo or match was observed. This does not establish failure of physical keyboard input.",
+    "audio": "Music error observed; sound effects not checked.",
+    "result": "Original launches and fully loads to mode menu under CrossOver 25.1.1; full gameplay/input/audio remain unverified.",
+    "disposition": "Left open at the mode menu; same original PID 91439, no restart."
+  },
+  "records": [
+    {
+      "path": "/Volumes/T7/ntsd-2.4-artifacts/crossover-25.1.1-smoke-20261017/after-load2-state.json",
+      "bytes": 1506,
+      "sha256": "b644a83ab15283f64223e84b2035cb846998390979bb75e52bead22c7368a3f9"
+    },
+    {
+      "path": "/Volumes/T7/ntsd-2.4-artifacts/crossover-25.1.1-smoke-20261017/after-load2.png",
+      "bytes": 921353,
+      "sha256": "fd078fd0cac2b298b1349cb67738affb62986d102195369fe3865ef300dad2b6"
+    },
+    {
+      "path": "/Volumes/T7/ntsd-2.4-artifacts/crossover-25.1.1-smoke-20261017/after-start1-state.json",
+      "bytes": 1507,
+      "sha256": "79259de36666a6dff512fd694ea4d60d86e4163711a76ab748676a2dc7e9daf8"
+    },
+    {
+      "path": "/Volumes/T7/ntsd-2.4-artifacts/crossover-25.1.1-smoke-20261017/after-start1.png",
+      "bytes": 731547,
+      "sha256": "ec3af3ba3da0c0db3d6b0f7b11b8ea6566a553a1d750202d85ef307c1fea63d0"
+    },
+    {
+      "path": "/Volumes/T7/ntsd-2.4-artifacts/crossover-25.1.1-smoke-20261017/demo-after-click1-state.json",
+      "bytes": 1512,
+      "sha256": "ec7d390363965cef7955e072e47e8075615bf84c3cec6858e1acb9170e3591ec"
+    },
+    {
+      "path": "/Volumes/T7/ntsd-2.4-artifacts/crossover-25.1.1-smoke-20261017/demo-after-click1.png",
+      "bytes": 856512,
+      "sha256": "456c3ce2a2967269d50456deead3d1e09e78737523113b498426d87e14c789e0"
+    },
+    {
+      "path": "/Volumes/T7/ntsd-2.4-artifacts/crossover-25.1.1-smoke-20261017/demo-click1.json",
+      "bytes": 347,
+      "sha256": "525c486a06cdc0a5c8f29fe9c025cb0c344af07a5b48d0925bb5e5ac3e2e7ef4"
+    },
+    {
+      "path": "/Volumes/T7/ntsd-2.4-artifacts/crossover-25.1.1-smoke-20261017/dismiss-error1.json",
+      "bytes": 414,
+      "sha256": "0981d42abd8f6cd54bd2c1b4b67df13aa96ee19d76466c7f4fdaf7495dfa16d5"
+    },
+    {
+      "path": "/Volumes/T7/ntsd-2.4-artifacts/crossover-25.1.1-smoke-20261017/front1.json",
+      "bytes": 668,
+      "sha256": "5ec00e89dad21bf0611289e10782d067763ed25e4dc1a4bc854c4cd5c3313ec5"
+    },
+    {
+      "path": "/Volumes/T7/ntsd-2.4-artifacts/crossover-25.1.1-smoke-20261017/hide-controls1.json",
+      "bytes": 347,
+      "sha256": "4369efaa16b812e5ab20e98905852f1061e0e8781669fe150f4667e5a3363d0d"
+    },
+    {
+      "path": "/Volumes/T7/ntsd-2.4-artifacts/crossover-25.1.1-smoke-20261017/loading-window-check1.json",
+      "bytes": 2425,
+      "sha256": "fa9b9fb31b0e34e0be630375dfde8714070b0b4d37aa06222c570a7aa81c3adc"
+    },
+    {
+      "path": "/Volumes/T7/ntsd-2.4-artifacts/crossover-25.1.1-smoke-20261017/loading1-state.json",
+      "bytes": 1503,
+      "sha256": "c902e7477a17a6bf7cb709209bfea60e779f59ba003b13573e98ae798e019a53"
+    },
+    {
+      "path": "/Volumes/T7/ntsd-2.4-artifacts/crossover-25.1.1-smoke-20261017/loading1.png",
+      "bytes": 732665,
+      "sha256": "c3e66dcc4fcba92361f8fb6d0aed07f57fbf3d18e80537c759d346d27b1c97e7"
+    },
+    {
+      "path": "/Volumes/T7/ntsd-2.4-artifacts/crossover-25.1.1-smoke-20261017/loading2-state.json",
+      "bytes": 1503,
+      "sha256": "113d6ba58d7556f517a6a3cd009abf01e5ca8a27729ec576d7e552d5bda96eb0"
+    },
+    {
+      "path": "/Volumes/T7/ntsd-2.4-artifacts/crossover-25.1.1-smoke-20261017/loading2.png",
+      "bytes": 840337,
+      "sha256": "6e0bacab0dc57f84f57a50d54a2b7b6e0d42f710f7302b69d25e886e613d8247"
+    },
+    {
+      "path": "/Volumes/T7/ntsd-2.4-artifacts/crossover-25.1.1-smoke-20261017/menu-arrow1-state.json",
+      "bytes": 1506,
+      "sha256": "8f8aedd10c628cdd847fc933421207da95bf857fc05d6a207d00c9932541d115"
+    },
+    {
+      "path": "/Volumes/T7/ntsd-2.4-artifacts/crossover-25.1.1-smoke-20261017/menu-arrow1.json",
+      "bytes": 178,
+      "sha256": "b2d9279ff123260c40ee3a052766c0667c6afc920f667e06fe7b09191e525242"
+    },
+    {
+      "path": "/Volumes/T7/ntsd-2.4-artifacts/crossover-25.1.1-smoke-20261017/menu-arrow1.png",
+      "bytes": 922465,
+      "sha256": "6c76ed422cad2a10af5031f09a8ed60b5ff67c2cc69500c8816c03a6e5e4f24c"
+    },
+    {
+      "path": "/Volumes/T7/ntsd-2.4-artifacts/crossover-25.1.1-smoke-20261017/menu-arrow2-state.json",
+      "bytes": 1506,
+      "sha256": "7db532f5d0ba42166452ab43cddf9048b51abd22fdc2cda9434b193e877920ee"
+    },
+    {
+      "path": "/Volumes/T7/ntsd-2.4-artifacts/crossover-25.1.1-smoke-20261017/menu-arrow2.json",
+      "bytes": 993,
+      "sha256": "1d1ef0674d58563077f7f9f4841f07dd3011402919773115bbfe9d91727ec2fb"
+    },
+    {
+      "path": "/Volumes/T7/ntsd-2.4-artifacts/crossover-25.1.1-smoke-20261017/menu-arrow2.png",
+      "bytes": 922465,
+      "sha256": "6c76ed422cad2a10af5031f09a8ed60b5ff67c2cc69500c8816c03a6e5e4f24c"
+    },
+    {
+      "path": "/Volumes/T7/ntsd-2.4-artifacts/crossover-25.1.1-smoke-20261017/menu-down1-state.json",
+      "bytes": 1505,
+      "sha256": "56daa6c08e562dcea1c30a5a1f50859a477c392f8f9397a1beccfbf5e09be7ec"
+    },
+    {
+      "path": "/Volumes/T7/ntsd-2.4-artifacts/crossover-25.1.1-smoke-20261017/menu-down1.json",
+      "bytes": 175,
+      "sha256": "e456cb51394dc3223f7dbbfd1793b86dc5d0b2e0b8bb8acafb700b8d45c8a2b6"
+    },
+    {
+      "path": "/Volumes/T7/ntsd-2.4-artifacts/crossover-25.1.1-smoke-20261017/menu-down1.png",
+      "bytes": 856512,
+      "sha256": "456c3ce2a2967269d50456deead3d1e09e78737523113b498426d87e14c789e0"
+    },
+    {
+      "path": "/Volumes/T7/ntsd-2.4-artifacts/crossover-25.1.1-smoke-20261017/menu-down2-state.json",
+      "bytes": 1505,
+      "sha256": "c7532f05715eb6ac9bfc0c246808b5853ae0c1ca2a6ff531550412ac42205c73"
+    },
+    {
+      "path": "/Volumes/T7/ntsd-2.4-artifacts/crossover-25.1.1-smoke-20261017/menu-down2.json",
+      "bytes": 978,
+      "sha256": "d497a204ba3441b1ef821d17eeabc21b6077c5ec4db444ca5922d7f23cd58e4c"
+    },
+    {
+      "path": "/Volumes/T7/ntsd-2.4-artifacts/crossover-25.1.1-smoke-20261017/menu-down2.png",
+      "bytes": 856512,
+      "sha256": "456c3ce2a2967269d50456deead3d1e09e78737523113b498426d87e14c789e0"
+    },
+    {
+      "path": "/Volumes/T7/ntsd-2.4-artifacts/crossover-25.1.1-smoke-20261017/mode-menu1-state.json",
+      "bytes": 1505,
+      "sha256": "85cf28701f7ad62a255a655f8551c3a847ce6161dd363092b8c744aa10f178bf"
+    },
+    {
+      "path": "/Volumes/T7/ntsd-2.4-artifacts/crossover-25.1.1-smoke-20261017/mode-menu1.png",
+      "bytes": 839248,
+      "sha256": "00b8d414367f8e8e5e7ad369ebc7aa131ebdfc88ddf98827fd55212339b3d954"
+    },
+    {
+      "path": "/Volumes/T7/ntsd-2.4-artifacts/crossover-25.1.1-smoke-20261017/music-error1.png",
+      "bytes": 9744,
+      "sha256": "c17734834e453d0f1918dc160b7c522297eac442963d26b47879801ea95d779a"
+    },
+    {
+      "path": "/Volumes/T7/ntsd-2.4-artifacts/crossover-25.1.1-smoke-20261017/start-click1.json",
+      "bytes": 414,
+      "sha256": "0981d42abd8f6cd54bd2c1b4b67df13aa96ee19d76466c7f4fdaf7495dfa16d5"
+    },
+    {
+      "path": "/Volumes/T7/ntsd-2.4-artifacts/crossover-25.1.1-smoke-20261017/start-click2.json",
+      "bytes": 316,
+      "sha256": "6cb8a7efc8b54e8837434199e02adceadaed735e0c58629f60ea4deb04323b6d"
+    },
+    {
+      "path": "/Volumes/T7/ntsd-2.4-artifacts/crossover-25.1.1-smoke-20261017/start-held1.json",
+      "bytes": 347,
+      "sha256": "f77ac3ffe24da93f5bf21454ed4bb4bb7fb4fecf71eadffb462acae7be192561"
+    },
+    {
+      "path": "/Volumes/T7/ntsd-2.4-artifacts/crossover-25.1.1-smoke-20261017/title1-state.json",
+      "bytes": 1448,
+      "sha256": "83e8afa37c9425b80cb8baf7946156646037e0b51061a6c91bc79c00d9538206"
+    },
+    {
+      "path": "/Volumes/T7/ntsd-2.4-artifacts/crossover-25.1.1-smoke-20261017/title1.png",
+      "bytes": 731355,
+      "sha256": "fae20d7895e6789add5c3effd359d39eeb51667a9be6221df430d4f91e5a33a2"
+    },
+    {
+      "path": "/Volumes/T7/ntsd-2.4-artifacts/crossover-25.1.1-smoke-20261017/windows-after-error1.json",
+      "bytes": 2725,
+      "sha256": "f192b95ee6a51d59bd3909cee5c343a459e7b2e9be80b0d9582741bdc040e8f8"
+    }
+  ],
+  "process": "  PID  PPID STARTED                      ELAPSED STAT COMMAND\n91439     1 Sat Oct 17 19:34:30 2026       06:22 Ss   Z:\\Volumes\\NTSD-CrossOver-Test\\game\\NTSD 2.4_2.0a\\NTSD 2.4.exe \n",
+  "validation": "Screenshot inspection; retained file hashes; no Native changes or Native tests."
+}
