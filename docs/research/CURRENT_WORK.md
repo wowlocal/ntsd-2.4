@@ -1,5 +1,29 @@
 # Текущая передача работы
 
+## Internal build storage и VM quota исправлены — 2026-10-17
+
+[Storage result](BUILD_STORAGE_T7.md): все 28 internal build/cache/output roots
+перенесены на T7-backed APFS `/Volumes/NTSD-Builds`; canonical paths — проверенные
+symlinks. Это 88,390,090,064 logical bytes; фактически на внутреннем диске свободно
+101,771,808,768 bytes (94.8 GiB) после возобновления VM. Новые builds/caches — T7;
+при отсутствующем томе запрещён local fallback. Sources/Git history и 462 tracked
+metadata files сохранены. App signature не дала ошибок, plist lint и Swift
+canonical cache-path check прошли; internal residual compiled-marker scan пуст.
+
+Уточнение пользователя: переносить всё с X5 не требуется, приоритет — internal.
+Оба movers завершили текущие units и остановлены; handles 13376/28339 terminal 143,
+watcher 96537 и monitor 5341 terminal 0. Всего завершено 77 units/299,777,916,228
+logical bytes, включая ранее выполненные X5 moves. Все links/manifest hashes
+проверены; partials/backups нет. Остальные X5 queues — только архивный inventory,
+не обязательство продолжать. Audit: `/Volumes/T7/ntsd-build-storage/`,
+`internal-migration-final1.json`, `user-scope-stop1.json`.
+
+VMPal Windows VM 1 quota поднята 40→80 GB; прежний paused session resumed без reset/
+restart. Проверено running/problem=null; initial resume check: 42.9 GB used, оригинал на character selection.
+Evidence: `vm-disk-limit-fixed1.json`. Полная цель порта остаётся paused в goal state;
+эту storage/VM задачу не считать разрешением автоматически продолжить game runs.
+Следующая D3 задача сохранена ниже.
+
 ## NTSD 2.8.3.3 M0: машинные gates прошли, review открыт — 2026-10-17
 
 [M0](NTSD_2_8_3_3_M0.md): реальный `OriginalRuntimeSession` удерживает один

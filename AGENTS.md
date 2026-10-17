@@ -137,6 +137,17 @@ outputs and partial/failure records; do not modify pinned running producers.
 
 ## Working files, storage and delivery
 
+- User update, 2026-10-17: keep generated NTSD build outputs and caches off the
+  internal disk; place new outputs on T7. Existing X5 artifacts may stay there;
+  bulk migration from X5 is not required. POSIX-dependent active builds use
+  `/Volumes/NTSD-Builds`, the APFS container backed by
+  `/Volumes/T7/ntsd-build-storage/NTSD-Builds.sparsebundle` (APFS UUID
+  `E36E5CAF-8FC7-4521-A7F3-679CFF71D663`). Verify the underlying T7 UUID below
+  and retain its 40 GiB reserve. Keep verified canonical-path symlinks;
+  do not replace missing-volume links with local fallback directories. This
+  supersedes earlier X5-only rules for new builds. Source/reference files,
+  tracked evidence metadata, live pins and verification requirements remain.
+
 - User update, 2026-09-22: make iterative Git commits after each coherent,
   checked increment, before starting the next independent task. No additional
   confirmation is needed. This supersedes earlier study-plan instructions such
