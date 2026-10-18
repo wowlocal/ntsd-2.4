@@ -14,7 +14,7 @@ from pathlib import Path
 ROOT = Path(__file__).resolve().parents[2]
 spec = importlib.util.spec_from_file_location("app_e2e", ROOT / "tools/app_e2e.py")
 app_e2e = importlib.util.module_from_spec(spec); spec.loader.exec_module(app_e2e)
-MUSIC = ROOT / "native/Sources/NTSDMacPlatform/Resources/OriginalMusic"
+MUSIC = ROOT / "native/Sources/NTSDContent/Resources/OriginalMusic"
 
 
 def main():

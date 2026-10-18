@@ -349,7 +349,7 @@ def script_run(o, kind, build, label):
         row["engine"] = os.environ.get("NTSD_BROWSER_ENGINE", "chromium")
     found = sorted((Path.home() / ".local/share/fnm/node-versions").glob("v26.*/installation/bin/node"))
     node = os.environ.get("NTSD_NODE") or (str(found[-1]) if found else "node")
-    music = ROOT / "native/Sources/NTSDMacPlatform/Resources/OriginalMusic"
+    music = ROOT / "native/Sources/NTSDContent/Resources/OriginalMusic"
     window, started_uptime = {}, None
     with tempfile.TemporaryDirectory(prefix="ntsd-load-") as out:
         Path(out, "overlay").mkdir()

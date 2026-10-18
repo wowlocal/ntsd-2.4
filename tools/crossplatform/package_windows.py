@@ -93,7 +93,7 @@ def main():
     for dll in sorted(loaded(stage / "NTSDSDL.exe", available) - {"sdl3.dll"}):
         shutil.copy2(available[dll], stage / available[dll].name)
     shutil.copytree(products / "NTSDNative_NTSDContent.resources", stage / "NTSDNative_NTSDContent.resources")
-    shutil.copytree(ROOT / "native/Sources/NTSDMacPlatform/Resources/OriginalMusic", stage / "OriginalMusic")
+    shutil.copytree(ROOT / "native/Sources/NTSDContent/Resources/OriginalMusic", stage / "OriginalMusic")
     lic = stage / "LICENSES"; lic.mkdir()
     shutil.copy2(sdl / "LICENSE.txt", lic / "SDL3-zlib.txt")
     shutil.copy2(ROOT / "native/Sources/CALAC/vendor/LICENSE", lic / "ALAC-Apache-2.0.txt")

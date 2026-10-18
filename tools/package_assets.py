@@ -42,7 +42,7 @@ shutil.copytree(ROOT / "native/Sources/NTSDContent/Resources/OriginalMatchArenas
 
 # Lossless decodes of the original bgm tracks (tools/package_music.py), played
 # by the runtime music output.
-shutil.copytree(ROOT / "native/Sources/NTSDMacPlatform/Resources/OriginalMusic",
+shutil.copytree(ROOT / "native/Sources/NTSDContent/Resources/OriginalMusic",
                 destination.parent / "OriginalMusic", dirs_exist_ok=True)
 
 # Full original catalog files, images and media for the owned host.

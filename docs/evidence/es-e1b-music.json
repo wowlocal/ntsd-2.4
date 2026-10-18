@@ -1,0 +1,596 @@
+{
+ "study": "ENGINE_SPLIT",
+ "step": "E1b",
+ "label": "es-e1b",
+ "prev": "es-e1a",
+ "base": "ce337708a9edc99243f7da2c49189620a393cf78",
+ "recordedUTC": "2026-10-18T18:55:49Z",
+ "change": "OriginalMusic (9 files, pure renames) moves from NTSDMacPlatform, which loses its resources, to NTSDContent; it joins the content bundle in non-portable (Mac) builds only and is excluded from portable ones, as NTSDMacPlatform's bundle held it only there. OriginalMacMusicOutput.directory/bundled take an OriginalContentLocation (NTSDApp passes NTSDContent.location()); NTSDHeadless and NTSDSDL source-tree fallbacks, OriginalALACTrackTests, PortableSHA256Tests (one root, the same files) and 15 active tools follow; the test helper adds the Bundle overloads. Harness: ios_app.py takes NTSD_SIM_SET (a device set elsewhere, created on first use, absolute path, runtime filtered by supported device type); web_app.py refuses a bundle holding OriginalMusic.",
+ "testedTrees": {
+  "recorded": "native 29aa8b2b5fc7dfb53c7a0529826def98abea6256 tools a5a60d2b8801335abb84c98f4694b41ce5501aa8",
+  "staged": "native 29aa8b2b5fc7dfb53c7a0529826def98abea6256 tools a5a60d2b8801335abb84c98f4694b41ce5501aa8",
+  "equal": true
+ },
+ "checks": [
+  "debug build of every Mac target and the tests: two compile errors of the first version fixed before any gate (a missing `import NTSDCore` in OriginalMacMusicPlayer.swift; a test call `Output.directory()` the caller search had missed)",
+  "the two music test classes in the debug build: 9 tests pass",
+  "portable debug build: content bundle holds the seven packages and no OriginalMusic; clean Mac build: one content bundle with the eight, no NTSDMacPlatform bundle; neither build warns about unhandled files"
+ ],
+ "review": {
+  "by": "a separate read-only agent, 2026-10-18, on the staged diff, then on the fix",
+  "first": "music lookup behaviour-neutral for every host; REQUIRED: copying OriginalMusic into NTSDContent on every platform would ship the music twice in the APK (~236 MB more extracted on the A12), the Linux/Windows packages and the web's eager packs (~118 MB more per visit), and break ios_app.py (FileExistsError)",
+  "fix": "option A: the music in the content bundle on non-portable builds only (exclude on portable)",
+  "second": "fix confirmed: every portable packager ships what it shipped at ce337708 apart from E1a's name; Mac builds and tests find the music in the content bundle; exclude valid; ios_app.py edits correct. Caution adopted: wasm builds must set NTSD_PORTABLE=1, now also enforced by web_app.py."
+ },
+ "gateScript": {
+  "run": "/Volumes/NTSD-Builds/tasks/engine-split/gates/gate-run-es-e1b.sh",
+  "sha256": "3095546564f340c0f7e5d86440e39de3e5ae4dbba95d27b70f06511a482f3ec6"
+ },
+ "launches": "launches: crashes 0 of 20",
+ "scenariosHeadless": [
+  {
+   "scenario": "vs",
+   "exit": 0,
+   "result": "equal",
+   "differs": []
+  },
+  {
+   "scenario": "mission",
+   "exit": 0,
+   "result": "equal",
+   "differs": []
+  },
+  {
+   "scenario": "demo",
+   "exit": 0,
+   "result": "equal",
+   "differs": []
+  },
+  {
+   "scenario": "war",
+   "exit": 0,
+   "result": "equal",
+   "differs": []
+  },
+  {
+   "scenario": "playback",
+   "exit": 0,
+   "result": "equal",
+   "differs": []
+  },
+  {
+   "scenario": "tournament",
+   "exit": 0,
+   "result": "equal",
+   "differs": []
+  },
+  {
+   "scenario": "altenter",
+   "exit": 0,
+   "result": "equal",
+   "differs": []
+  },
+  {
+   "scenario": "tournament-win",
+   "exit": 0,
+   "result": "equal",
+   "differs": []
+  },
+  {
+   "scenario": "team-tournament",
+   "exit": 0,
+   "result": "equal",
+   "differs": []
+  },
+  {
+   "scenario": "joystick",
+   "exit": 0,
+   "result": "equal",
+   "differs": []
+  },
+  {
+   "scenario": "title-joystick",
+   "exit": 0,
+   "result": "equal",
+   "differs": []
+  }
+ ],
+ "framesHeadlessVsM1": {
+  "frames": 1832,
+  "mismatched": 0,
+  "result": "identical"
+ },
+ "appkit": [
+  {
+   "scenario": "vs",
+   "exit": 0,
+   "seconds": 64.6,
+   "result": "equal",
+   "differs": []
+  },
+  {
+   "scenario": "playback",
+   "exit": 0,
+   "seconds": 68.8,
+   "result": "equal",
+   "differs": []
+  },
+  {
+   "frames": 3960,
+   "mismatched": 0,
+   "result": "identical"
+  }
+ ],
+ "uncheckedHeadless": [
+  {
+   "scenario": "vs",
+   "exit": 0,
+   "seconds": 64.4,
+   "result": "equal",
+   "differs": []
+  },
+  {
+   "scenario": "demo",
+   "exit": 0,
+   "seconds": 46.4,
+   "result": "equal",
+   "differs": []
+  },
+  {
+   "frames": 1832,
+   "mismatched": 0,
+   "result": "identical"
+  }
+ ],
+ "emulatorVs": {
+  "exit": "emu exit=0",
+  "frames": {
+   "frames": 1832,
+   "mismatched": 0,
+   "result": "identical"
+  }
+ },
+ "suites": [
+  "OriginalExclusivityChecksTests exit=0 1s \t Executed 1 test, with 0 failures (0 unexpected) in 0.001 (0.004) seconds",
+  "OriginalALACTrackTests exit=0 6s \t Executed 2 tests, with 0 failures (0 unexpected) in 5.597 (5.598) seconds",
+  "OriginalApplicationCatalogInputsTests exit=0 13s \t Executed 4 tests, with 0 failures (0 unexpected) in 13.403 (13.414) seconds",
+  "OriginalApplicationInterfaceInputsTests exit=0 1s \t Executed 3 tests, with 0 failures (0 unexpected) in 0.076 (0.077) seconds",
+  "OriginalApplicationLoadedLaunchTests exit=0 55s \t Executed 2 tests, with 0 failures (0 unexpected) in 55.466 (55.468) seconds",
+  "OriginalApplicationLoadingPrefixTests exit=0 23s \t Executed 2 tests, with 0 failures (0 unexpected) in 22.998 (23.000) seconds",
+  "OriginalApplicationLoadingSessionTests exit=0 0s \t Executed 3 tests, with 0 failures (0 unexpected) in 0.052 (0.054) seconds",
+  "OriginalApplicationMenuInputsTests exit=0 1s \t Executed 3 tests, with 0 failures (0 unexpected) in 0.118 (0.119) seconds",
+  "OriginalApplicationObservedBitmapTests exit=0 13s \t Executed 5 tests, with 0 failures (0 unexpected) in 12.725 (12.728) seconds",
+  "OriginalApplicationObservedGraphicsTests exit=0 37s \t Executed 5 tests, with 0 failures (0 unexpected) in 37.806 (37.812) seconds",
+  "OriginalApplicationObservedIterationTests exit=0 10s \t Executed 3 tests, with 0 failures (0 unexpected) in 9.211 (9.213) seconds",
+  "OriginalApplicationStartupInputsTests exit=0 0s \t Executed 4 tests, with 0 failures (0 unexpected) in 0.349 (0.351) seconds",
+  "OriginalCatalogChecksumTests exit=0 3s \t Executed 3 tests, with 0 failures (0 unexpected) in 2.346 (2.348) seconds",
+  "OriginalConcurrentInputsTests exit=0 4s \t Executed 7 tests, with 0 failures (0 unexpected) in 3.863 (3.865) seconds",
+  "OriginalDIBValidationTests exit=0 1s \t Executed 2 tests, with 0 failures (0 unexpected) in 1.113 (1.118) seconds",
+  "OriginalLoadingReadAheadTests exit=0 1s \t Executed 5 tests, with 0 failures (0 unexpected) in 1.496 (1.499) seconds",
+  "OriginalLZ4Tests exit=0 8s \t Executed 6 tests, with 0 failures (0 unexpected) in 7.363 (7.366) seconds",
+  "OriginalMacBitmapBackendTests exit=0 3s \t Executed 5 tests, with 0 failures (0 unexpected) in 2.657 (2.660) seconds",
+  "OriginalMacMusicOutputTests exit=0 0s \t Executed 7 tests, with 0 failures (0 unexpected) in 0.041 (0.043) seconds",
+  "OriginalMacRuntimeLoadingTests exit=0 2s \t Executed 7 tests, with 0 failures (0 unexpected) in 1.896 (1.899) seconds",
+  "OriginalMacWindowGeometryTests exit=0 18s \t Executed 6 tests, with 0 failures (0 unexpected) in 18.519 (18.524) seconds",
+  "OriginalReplayFileInputTests exit=0 1s \t Executed 1 test, with 0 failures (0 unexpected) in 0.249 (0.250) seconds",
+  "OriginalWord32BoundaryTests exit=0 0s \t Executed 6 tests, with 0 failures (0 unexpected) in 0.020 (0.022) seconds",
+  "PortableSHA256BlockFunctionTests exit=0 0s \t Executed 2 tests, with 0 failures (0 unexpected) in 0.190 (0.192) seconds",
+  "PortableSHA256Tests exit=0 8s \t Executed 3 tests, with 0 failures (0 unexpected) in 7.834 (7.836) seconds",
+  "OriginalMacMusicOutputTests exit=0 0s \t Executed 7 tests, with 0 failures (0 unexpected) in 0.015 (0.016) seconds"
+ ],
+ "phoneAB": {
+  "runs": [
+   {
+    "label": "es-e1b-ab-warmup",
+    "loadSeconds": 6.98,
+    "mainCpuToLoadedSeconds": 10.07,
+    "peakFootprintMB": 614,
+    "loadedResidentMB": 562,
+    "bodiesResidentMB": 558,
+    "mainMsPerTick": 10.86
+   },
+   {
+    "label": "es-e1b-ab-01-es-e1b",
+    "loadSeconds": 7.73,
+    "mainCpuToLoadedSeconds": 10.03,
+    "peakFootprintMB": 613,
+    "loadedResidentMB": 591,
+    "bodiesResidentMB": 537,
+    "mainMsPerTick": 10.89
+   },
+   {
+    "label": "es-e1b-ab-02-es-e1a",
+    "loadSeconds": 6.16,
+    "mainCpuToLoadedSeconds": 10.07,
+    "peakFootprintMB": 588,
+    "loadedResidentMB": 566,
+    "bodiesResidentMB": 531,
+    "mainMsPerTick": 10.86
+   },
+   {
+    "label": "es-e1b-ab-03-es-e1b",
+    "loadSeconds": 6.55,
+    "mainCpuToLoadedSeconds": 10.21,
+    "peakFootprintMB": 619,
+    "loadedResidentMB": 542,
+    "bodiesResidentMB": 538,
+    "mainMsPerTick": 10.99
+   },
+   {
+    "label": "es-e1b-ab-04-es-e1a",
+    "loadSeconds": 7.62,
+    "mainCpuToLoadedSeconds": 10.53,
+    "peakFootprintMB": 598,
+    "loadedResidentMB": 520,
+    "bodiesResidentMB": 531,
+    "mainMsPerTick": 10.88
+   },
+   {
+    "label": "es-e1b-ab-05-es-e1b",
+    "loadSeconds": 5.44,
+    "mainCpuToLoadedSeconds": 10.13,
+    "peakFootprintMB": 612,
+    "loadedResidentMB": 558,
+    "bodiesResidentMB": 561,
+    "mainMsPerTick": 10.89
+   }
+  ],
+  "summaries": [
+   {
+    "build": "es-e1b",
+    "runs": 3,
+    "startupSeconds": {
+     "median": -419727.44,
+     "min": -419727.46,
+     "max": -419727.36
+    },
+    "loadSeconds": {
+     "median": 6.55,
+     "min": 5.44,
+     "max": 7.73
+    },
+    "startToLoadedSeconds": {
+     "median": -419714.94,
+     "min": -419715.16,
+     "max": -419714.83
+    },
+    "peakResidentMB": {
+     "median": 596,
+     "min": 591,
+     "max": 608
+    },
+    "peakFootprintMB": {
+     "median": 613,
+     "min": 612,
+     "max": 619
+    },
+    "loadedResidentMB": {
+     "median": 558,
+     "min": 542,
+     "max": 591
+    },
+    "bodiesResidentMB": {
+     "median": 538,
+     "min": 537,
+     "max": 561
+    },
+    "mainMsPerTick": {
+     "median": 10.89,
+     "min": 10.89,
+     "max": 10.99
+    },
+    "renderMsPerTick": {
+     "median": 7.69,
+     "min": 7.13,
+     "max": 7.69
+    },
+    "processMsPerTick": {
+     "median": 27.71,
+     "min": 27.23,
+     "max": 27.99
+    },
+    "completeMsPerTick": {
+     "median": 7.36,
+     "min": 7.31,
+     "max": 7.36
+    },
+    "loadedSwapMB": {
+     "median": 22,
+     "min": 22,
+     "max": 22
+    },
+    "bodiesSwapMB": {
+     "median": 22,
+     "min": 22,
+     "max": 22
+    },
+    "ticksEndResidentMB": {
+     "median": 574,
+     "min": 573,
+     "max": 597
+    },
+    "ticksEndSwapMB": {
+     "median": 14,
+     "min": 14,
+     "max": 14
+    },
+    "ticksEndFootprintMB": {
+     "median": 588,
+     "min": 587,
+     "max": 611
+    },
+    "ticksEndPssMB": {
+     "median": 544,
+     "min": 542,
+     "max": 565
+    },
+    "cpuToEndSeconds": {
+     "median": 95.68,
+     "min": 95.67,
+     "max": 97.1
+    }
+   },
+   {
+    "build": "es-e1a",
+    "runs": 2,
+    "startupSeconds": {
+     "median": -419727.47,
+     "min": -419727.48,
+     "max": -419727.46
+    },
+    "loadSeconds": {
+     "median": 6.890000000000001,
+     "min": 6.16,
+     "max": 7.62
+    },
+    "startToLoadedSeconds": {
+     "median": -419715.105,
+     "min": -419715.27,
+     "max": -419714.94
+    },
+    "peakResidentMB": {
+     "median": 585.0,
+     "min": 584,
+     "max": 586
+    },
+    "peakFootprintMB": {
+     "median": 593.0,
+     "min": 588,
+     "max": 598
+    },
+    "loadedResidentMB": {
+     "median": 543.0,
+     "min": 520,
+     "max": 566
+    },
+    "bodiesResidentMB": {
+     "median": 531.0,
+     "min": 531,
+     "max": 531
+    },
+    "mainMsPerTick": {
+     "median": 10.870000000000001,
+     "min": 10.86,
+     "max": 10.88
+    },
+    "renderMsPerTick": {
+     "median": 7.21,
+     "min": 7.14,
+     "max": 7.28
+    },
+    "processMsPerTick": {
+     "median": 27.3,
+     "min": 27.23,
+     "max": 27.37
+    },
+    "completeMsPerTick": {
+     "median": 7.32,
+     "min": 7.32,
+     "max": 7.32
+    },
+    "loadedSwapMB": {
+     "median": 22.0,
+     "min": 22,
+     "max": 22
+    },
+    "bodiesSwapMB": {
+     "median": 22.0,
+     "min": 22,
+     "max": 22
+    },
+    "ticksEndResidentMB": {
+     "median": 566.5,
+     "min": 566,
+     "max": 567
+    },
+    "ticksEndSwapMB": {
+     "median": 14.0,
+     "min": 14,
+     "max": 14
+    },
+    "ticksEndFootprintMB": {
+     "median": 580.5,
+     "min": 580,
+     "max": 581
+    },
+    "ticksEndPssMB": {
+     "median": 538.0,
+     "min": 537,
+     "max": 539
+    },
+    "cpuToEndSeconds": {
+     "median": 95.44,
+     "min": 94.98,
+     "max": 95.9
+    }
+   }
+  ],
+  "finding": "peakFootprint ranges did not overlap (E1b 612-619, E1a 588-598 MB) although both APKs run the same program: libNTSDAndroid.so's .text, .rodata, .data, .data.rel.ro, .eh_frame, .dynstr and .dynsym are identical (only .note.gnu.build-id differs), all 1,530 assets equal by CRC and path, native heap allocated 1,621-1,622 MB in every run. So the gap is the phone's run-to-run spread: at three runs against two, the protocol's non-overlap test can be met by noise."
+ },
+ "macAB": {
+  "first": "harness error: the PREV (E1a) frozen headless found no music: without --music-dir it falls back to its compiled #filePath, the old NTSDMacPlatform path that E1b moved; its three runs failed to start (kept in logs/es-e1b-mac-ab.log)",
+  "rerun": {
+   "command": "load_memory.py ... --local frozen-unchecked-es-e1b --local frozen-unchecked-es-e1a --runs 3 --ticks 600,1500 --warmup --game-arg=--music-dir --game-arg=<worktree>/native/Sources/NTSDContent/Resources/OriginalMusic",
+   "summaries": [
+    {
+     "build": "frozen-unchecked-es-e1b",
+     "runs": 3,
+     "startupSeconds": {
+      "median": 0.192,
+      "min": 0.181,
+      "max": 0.192
+     },
+     "loadSeconds": {
+      "median": 2.588,
+      "min": 2.533,
+      "max": 2.658
+     },
+     "startToLoadedSeconds": {
+      "median": 3.092,
+      "min": 3.018,
+      "max": 3.161
+     },
+     "startedToLoadedSeconds": {
+      "median": 2.9,
+      "min": 2.837,
+      "max": 2.969
+     },
+     "peakResidentMB": {
+      "median": 676,
+      "min": 636,
+      "max": 677
+     },
+     "loadedResidentMB": {
+      "median": 634,
+      "min": 632,
+      "max": 636
+     },
+     "bodiesResidentMB": {
+      "median": 629,
+      "min": 565,
+      "max": 676
+     },
+     "processMsPerTick": {
+      "median": 1.1,
+      "min": 1.078,
+      "max": 1.111
+     },
+     "completeMsPerTick": {
+      "median": 0.4132,
+      "min": 0.411,
+      "max": 0.4211
+     }
+    },
+    {
+     "build": "frozen-unchecked-es-e1a",
+     "runs": 3,
+     "startupSeconds": {
+      "median": 0.158,
+      "min": 0.145,
+      "max": 0.202
+     },
+     "loadSeconds": {
+      "median": 2.464,
+      "min": 2.406,
+      "max": 2.633
+     },
+     "startToLoadedSeconds": {
+      "median": 2.939,
+      "min": 2.849,
+      "max": 3.156
+     },
+     "startedToLoadedSeconds": {
+      "median": 2.781,
+      "min": 2.703,
+      "max": 2.953
+     },
+     "peakResidentMB": {
+      "median": 634,
+      "min": 628,
+      "max": 674
+     },
+     "loadedResidentMB": {
+      "median": 632,
+      "min": 625,
+      "max": 633
+     },
+     "bodiesResidentMB": {
+      "median": 582,
+      "min": 565,
+      "max": 674
+     },
+     "processMsPerTick": {
+      "median": 1.089,
+      "min": 1.067,
+      "max": 1.111
+     },
+     "completeMsPerTick": {
+      "median": 0.4077,
+      "min": 0.4044,
+      "max": 0.4244
+     }
+    }
+   ]
+  },
+  "binaryComparison": "the two frozen unchecked headless binaries: __TEXT,__const, __DATA_CONST,__const and __DATA,__data identical; __TEXT,__text differs in one byte (the instruction addressing the music path string); __TEXT,__cstring by that path",
+  "finding": "equal: per tick 1.10 vs 1.089 ms and load 2.588 vs 2.464 s with overlapping ranges; memory ranges overlap"
+ },
+ "gate3": {
+  "script": "/Volumes/NTSD-Builds/tasks/engine-split/gates/gate3-es-e1b.sh",
+  "log": [
+   "trees ce337708a9edc99243f7da2c49189620a393cf78 staged no-unstaged",
+   "== wasm-builds",
+   "wasi build (NTSD_PORTABLE=1) exit=0",
+   "web build (NTSD_PORTABLE=1) exit=0",
+   "Info.plist OriginalCatalog OriginalCharacterMenu OriginalCommonSounds OriginalLoadingInterface OriginalMatchArenas OriginalStartup OriginalWarMenu ",
+   "== wasi",
+   "exit=0",
+   "{\"scenario\": \"vs\", \"exit\": 0, \"seconds\": 64.2, \"result\": \"equal\", \"differs\": [], \"node\": \"v26.7.0\"}",
+   "{\"frames\": 1832, \"mismatched\": 0, \"result\": \"identical\"}",
+   "== browser",
+   "build exit=0",
+   "exit=0",
+   "{\"scenario\": \"vs\", \"exit\": 0, \"seconds\": 69.7, \"result\": \"equal\", \"differs\": [], \"node\": \"v26.7.0\", \"browser\": \"Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) H",
+   "{\"scenario\": \"vs\", \"frames\": 1826, \"textless\": 1380, \"text\": 446, \"disagree\": 0, \"firstDisagreements\": []}",
+   "{\"frames\": 1826, \"textless\": 1380, \"text\": 446, \"disagree\": 0, \"result\": \"disagree\"}",
+   "== linux-headless",
+   "build exit=0",
+   "== windows",
+   "build exit=0",
+   "linux exit=0",
+   "{\"scenario\": \"vs\", \"exit\": 0, \"seconds\": 76.7, \"result\": \"equal\", \"differs\": []}",
+   "{\"frames\": 1832, \"mismatched\": 0, \"result\": \"identical\"}",
+   "windows exit=0",
+   "{\"scenario\": \"vs\", \"exit\": 0, \"seconds\": 65.7, \"result\": \"equal\", \"differs\": []}",
+   "{\"frames\": 1832, \"mismatched\": 0, \"result\": \"identical\"}",
+   "== ios",
+   "exit=0",
+   "Build complete! (1.08 sec)",
+   "{\"result\": \"differs\", \"differs\": [\"milestones\", \"progress\", \"overlayFiles\"]}",
+   "{\"frames\": 3960, \"mismatched\": 15, \"result\": \"differs\"}",
+   "== packaged-app",
+   "build exit=0",
+   "exit=0",
+   "{\"scenario\": \"vs\", \"exit\": -15, \"seconds\": 1029.7, \"result\": \"differs\", \"differs\": [\"exitCode\", \"milestones\", \"progress\", \"overlayFiles\"]}",
+   "{\"frames\": 3960, \"mismatched\": 15, \"result\": \"differs\"}",
+   "gate3_done"
+  ],
+  "verdicts": {
+   "wasm builds": "NTSD_PORTABLE=1; content bundle without OriginalMusic",
+   "wasi": "vs equal, 1,832 frames identical",
+   "browser": "packed and verified; vs equal; text in the same 446 of 1,826 frames, no disagreement (the summary counts the reference's playback, not run)",
+   "linux-headless": "vs equal, 1,832 frames identical",
+   "windows": "vs equal, 1,832 frames identical",
+   "ios": "open (environment): a new iPad device in the T7 set (iOS 26.5) booted and the app reported `started` with its content from the .app folders, then the main thread waited in OriginalMacMusicOutput.present -> AVAudioPlayer play -> AudioQueueXPC_Bridge::Start; a retry after a reboot waited the same; the pre-E1 control (es-base's NTSDiOS, no NTSDContent symbols) waited at the same frame. Samples: logs/es-e1b-ios-hang-sample.txt, es-e1b-ios2-hang-sample.txt, es-base-ios-hang-sample.txt.",
+   "packaged-app": "open (environment): the packaged NTSD Native.app waited in OriginalMacSoundOutput.init -> AVAudioNode outputFormatForBus -> AudioUnitInitialize for 17 minutes (stopped; exit -15). `afplay -v 0` of a system sound also cannot start within 15 s, before and after the simulator was shut down: the Mac's audio server (coreaudiod, output Scarlett 2i2 USB) stopped answering new clients between 19:27 (the end of this gate's AppKit vs and playback, which passed) and 19:56 (the first iOS wait); in between ran only this task's headless Mac A/Bs, the wasm builds, WASI, the browser (headless Chromium), the Linux container, the Windows row in CrossOver and the new simulator's boot and launch (the same rows except the simulator ran in E1a's gate 3, after which the packaged app still passed). The first failing call was the new simulator app's audio start; the cause is not established."
+  }
+ },
+ "harnessErrors": [
+  "Mac A/B PREV without music (above)",
+  "a control command used `timeout`, which macOS lacks; rerun without it"
+ ],
+ "openGates": [
+  "packaged-app vs and the iOS simulator vs: need the Mac's audio back (user)",
+  "E1b's AppKit vs and playback passed in the mlgate set (finished 19:27), before the audio stopped"
+ ]
+}

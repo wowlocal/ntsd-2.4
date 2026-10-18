@@ -93,7 +93,7 @@ ORDER = WEB / "read-order.json"   # the program's first reads (W5)
 PACK_BYTES = 64 << 20   # a pack's raw size, past the startup pack
 HEADER, FORMAT = 64, 1   # each pack's header (pack_header) and the layout's format
 MOUNTS = ("/app", "/music")
-MUSIC = ROOT / "native/Sources/NTSDMacPlatform/Resources/OriginalMusic"
+MUSIC = ROOT / "native/Sources/NTSDContent/Resources/OriginalMusic"
 HEADERS = {"Cross-Origin-Opener-Policy": "same-origin", "Cross-Origin-Embedder-Policy": "require-corp",
            "Cross-Origin-Resource-Policy": "same-origin"}
 IMMUTABLE = "public, max-age=31536000, immutable"   # the content-named data folder
@@ -212,6 +212,8 @@ def build(build_dir, out, music):
     for needed in (program, bundle, music, ORDER):
         if not needed.exists():
             sys.exit(f"web_app.py: no {needed}")
+    if (bundle / "OriginalMusic").exists():   # a non-portable build's bundle (ENGINE_SPLIT E1b): the music would ship twice
+        sys.exit("web_app.py: the bundle holds OriginalMusic; build the program with NTSD_PORTABLE=1")
     listed, sources = mount_files(build_dir, music)
     stripped = strip(program.read_bytes())
     order = json.loads(ORDER.read_text()); rank = {p: i for i, p in enumerate(order["paths"])}

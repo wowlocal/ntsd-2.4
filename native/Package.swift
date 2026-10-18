@@ -31,7 +31,7 @@ let exclusivity: [SwiftSetting] = uncheckedExclusivity
 
 let macProducts: [Product] = portable ? [] : [.executable(name: "NTSDNative", targets: ["NTSDApp"])]
 let macTargets: [Target] = portable ? [] : [
-    .target(name: "NTSDMacPlatform", dependencies: ["NTSDCore", "NTSDRuntime"], resources: [.copy("Resources/OriginalMusic")],
+    .target(name: "NTSDMacPlatform", dependencies: ["NTSDCore", "NTSDRuntime"],
             swiftSettings: exclusivity,
             linkerSettings: [.linkedFramework("AppKit"), .linkedFramework("AVFoundation")]),
     .executableTarget(name: "NTSDApp", dependencies: ["NTSDCore", "NTSDMacPlatform", "NTSDContent"], swiftSettings: exclusivity,
@@ -113,8 +113,11 @@ let package = Package(
                 publicHeadersPath: "include", cSettings: [.unsafeFlags(["-Wno-deprecated-non-prototype"])]),
         .target(name: "NTSDCore", dependencies: ["NTSDReplayCodec"], swiftSettings: crossModule + exclusivity),
         // The game's side (ENGINE_SPLIT E1): NTSD 2.4's content packages, found
-        // by the engine through OriginalContentLocation.
-        .target(name: "NTSDContent", dependencies: ["NTSDCore"], resources: [.copy("Resources/OriginalStartup"), .copy("Resources/OriginalCommonSounds"), .copy("Resources/OriginalLoadingInterface"), .copy("Resources/OriginalCharacterMenu"), .copy("Resources/OriginalWarMenu"), .copy("Resources/OriginalMatchArenas"), .copy("Resources/OriginalCatalog")],
+        // by the engine through OriginalContentLocation. The music joins the
+        // bundle in Mac builds only, as NTSDMacPlatform's did (E1b); the portable
+        // packagers copy it beside the program themselves.
+        .target(name: "NTSDContent", dependencies: ["NTSDCore"], exclude: portable ? ["Resources/OriginalMusic"] : [], resources: [.copy("Resources/OriginalStartup"), .copy("Resources/OriginalCommonSounds"), .copy("Resources/OriginalLoadingInterface"), .copy("Resources/OriginalCharacterMenu"), .copy("Resources/OriginalWarMenu"), .copy("Resources/OriginalMatchArenas"), .copy("Resources/OriginalCatalog")]
+                    + (portable ? [] : [.copy("Resources/OriginalMusic")]),
                 swiftSettings: exclusivity),
         .systemLibrary(name: "CZlib", path: "Sources/CZlib"),
         .target(name: "NTSDRuntime", dependencies: ["NTSDCore"], swiftSettings: crossModule + exclusivity),

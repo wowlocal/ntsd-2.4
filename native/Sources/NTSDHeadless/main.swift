@@ -24,7 +24,7 @@ let screen = option("--screen",2).flatMap { w in Double(w[0]).flatMap { x in Dou
 let caption = option("--caption",1).flatMap { Double($0[0]) }.map { CGFloat($0) } ?? 32
 let musicDirectory = option("--music-dir",1)?[0]
     ?? URL(fileURLWithPath:#filePath).deletingLastPathComponent().deletingLastPathComponent()
-        .appendingPathComponent("NTSDMacPlatform/Resources/OriginalMusic").path
+        .appendingPathComponent("NTSDContent/Resources/OriginalMusic").path
 let session: OriginalRuntimeSession = MainActor.assumeIsolated {
     let host = HeadlessSessionHost(arguments:arguments,screen:screen,caption:caption,musicDirectory:musicDirectory)
     let session = OriginalRuntimeSession(arguments:arguments,host:host)

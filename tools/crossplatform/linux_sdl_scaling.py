@@ -24,7 +24,7 @@ import json, os, shutil, subprocess, sys
 from pathlib import Path
 
 ROOT = Path(__file__).resolve().parents[2]
-MUSIC = ROOT / "native/Sources/NTSDMacPlatform/Resources/OriginalMusic"
+MUSIC = ROOT / "native/Sources/NTSDContent/Resources/OriginalMusic"
 
 X11 = r"""
 set -u

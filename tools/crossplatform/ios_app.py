@@ -22,6 +22,10 @@ ROOT = Path(__file__).resolve().parents[2]
 spec = importlib.util.spec_from_file_location("app_e2e", ROOT / "tools/app_e2e.py")
 app_e2e = importlib.util.module_from_spec(spec); spec.loader.exec_module(app_e2e)
 X5 = Path("/Volumes/X5/ntsd-2.4-research/crossplatform")
+# NTSD_SIM_SET=DIR keeps the simulator in a device set at DIR (ENGINE_SPLIT: off the
+# internal disk), created there on first use; unset, the default device set.
+SIM_SET = os.environ.get("NTSD_SIM_SET") and str(Path(os.environ["NTSD_SIM_SET"]).resolve())
+SIMCTL = ["xcrun", "simctl"] + (["--set", SIM_SET] if SIM_SET else [])
 # Per platform: target, SDK, default simulator, bundle identifier and the
 # platform's Info.plist keys.
 PLATFORMS = {
@@ -67,7 +71,7 @@ def main():
     for folder in sorted((products / "NTSDNative_NTSDContent.bundle").iterdir()):
         if folder.is_dir() and folder.name.startswith("Original"):
             shutil.copytree(folder, app / folder.name)
-    shutil.copytree(ROOT / "native/Sources/NTSDMacPlatform/Resources/OriginalMusic", app / "OriginalMusic")
+    shutil.copytree(ROOT / "native/Sources/NTSDContent/Resources/OriginalMusic", app / "OriginalMusic")
     plistlib.dump({"CFBundleIdentifier": p["bundle"], "CFBundleExecutable": "NTSDiOS", "CFBundleName": "NTSD Native",
                    "CFBundlePackageType": "APPL", "CFBundleShortVersionString": "0.1", "CFBundleVersion": "1",
                    "MinimumOSVersion": "17.0", "UILaunchScreen": {}, **p["plist"],
@@ -76,14 +80,22 @@ def main():
                                                                "UISceneDelegateClassName": "NTSDiOS.NTSDSceneDelegate"}]}}},
                   (app / "Info.plist").open("wb"))
     run(["codesign", "--force", "--sign", "-", str(app)])
-    devices = json.loads(run(["xcrun", "simctl", "list", "devices", "available", "-j"]))["devices"]
+    if SIM_SET: Path(SIM_SET).mkdir(parents=True, exist_ok=True)
+    devices = json.loads(run([*SIMCTL, "list", "devices", "available", "-j"]))["devices"]
     udid = next((d["udid"] for runtime, listed in devices.items() if p["runtime"] in runtime for d in listed if d["name"] == args.device), None)
+    if udid is None and SIM_SET:   # a new set: the device from the installed type and newest runtime
+        kinds = json.loads(run(["xcrun", "simctl", "list", "devicetypes", "-j"]))["devicetypes"]
+        runtimes = json.loads(run(["xcrun", "simctl", "list", "runtimes", "available", "-j"]))["runtimes"]
+        kind = next((k["identifier"] for k in kinds if k["name"] == args.device), None)
+        runtime = max((r for r in runtimes if p["runtime"] in r["identifier"]
+                       and any(t.get("identifier") == kind for t in r.get("supportedDeviceTypes", []))), key=lambda r: [int(x) for x in r["version"].split(".")], default=None)
+        if kind and runtime: udid = run([*SIMCTL, "create", args.device, kind, runtime["identifier"]])
     if udid is None:
         sys.exit(f"no available {args.platform} simulator named {args.device!r} (is its runtime installed? xcrun simctl list devices)")
-    subprocess.run(["xcrun", "simctl", "boot", udid], capture_output=True)
-    run(["xcrun", "simctl", "bootstatus", udid, "-b"])
-    run(["xcrun", "simctl", "install", udid, str(app)])
-    data = Path(run(["xcrun", "simctl", "get_app_container", udid, p["bundle"], "data"]))
+    subprocess.run([*SIMCTL, "boot", udid], capture_output=True)
+    run([*SIMCTL, "bootstatus", udid, "-b"])
+    run([*SIMCTL, "install", udid, str(app)])
+    data = Path(run([*SIMCTL, "get_app_container", udid, p["bundle"], "data"]))
     setup = app_e2e.SCENARIOS[args.scenario]
     work = data / "Documents" / args.scenario; shutil.rmtree(work, ignore_errors=True)
     for d in ("overlay", "captures", "frames"): (work / d).mkdir(parents=True)
@@ -91,7 +103,7 @@ def main():
     game = ["--events-file", str(work / "events.raw"), "--original", "--mute-music", "--mute-sounds", "--no-network", "--overlay", str(work / "overlay"),
             "--virtual-clock", "123456789", "8", "--script-clock", "gameplay", "--body-captures", str(work / "captures"),
             "--body-frames", str(work / "frames"), "--body-frame-digests", *extra, "--script", setup["script"](work / "captures")]
-    done = subprocess.run(["xcrun", "simctl", "launch", "--console", "--terminate-running-process", udid, p["bundle"], *game],
+    done = subprocess.run([*SIMCTL, "launch", "--console", "--terminate-running-process", udid, p["bundle"], *game],
                           capture_output=True, text=True, timeout=3600, env={**os.environ, "SIMCTL_CHILD_TZ": "Etc/GMT-1"})
     result = out / args.scenario; shutil.rmtree(result, ignore_errors=True); shutil.copytree(work, result)
     raw = (work / "events.raw").read_text() if (work / "events.raw").exists() else done.stdout

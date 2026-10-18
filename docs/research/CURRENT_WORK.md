@@ -16,7 +16,12 @@ target `NTSDContent`, Core без `Bundle.module`, получает `OriginalCon
 независимый review без замечаний к коду (исправлен шаг tested-tree в mlgate); gate
 `es-e1a` и строки WASI/браузер/Linux/Windows/упакованный `.app` совпали:
 [evidence](../evidence/es-e1a-content-target.json). Открыт iOS: данные симулятора
-(CoreSimulator/Devices) исчезли 2026-10-17. Следующая задача — E1b (музыка).
+(CoreSimulator/Devices) исчезли 2026-10-17. E1b выполнен: музыка в `NTSDContent` (в bundle
+только в Mac-сборках; review нашёл двойную поставку музыки, исправлено до gate), gate
+`es-e1b` и WASI/браузер/Linux/Windows совпали: [evidence](../evidence/es-e1b-music.json).
+Открыты упакованный `.app` и iOS: аудио-сервер Mac (coreaudiod) перестал отвечать между
+19:27 и 19:56; нужен пользователь (перезапуск coreaudiod или переподключение Scarlett).
+Следующая задача — E2: идентичность контента (digests, counts, EXE SHA) из Core в игру.
 
 ## Internal build storage и VM quota исправлены — 2026-10-17
 

@@ -26,7 +26,7 @@ import hashlib, json, os, socket, subprocess, sys, tempfile
 from pathlib import Path
 
 ROOT = Path(__file__).resolve().parents[2]
-MUSIC = ROOT / "native/Sources/NTSDMacPlatform/Resources/OriginalMusic"
+MUSIC = ROOT / "native/Sources/NTSDContent/Resources/OriginalMusic"
 PACKAGED = (ROOT / "downloads/NTSD_2.4_2.0a_clean/NTSD 2.4_2.0a/data/control.txt").read_bytes()
 FIRST = "20 click 410 292; 60 click 250 290; 100 key 81; 140 click 480 450; 220 exit"    # app_e2e's controls_check
 SECOND = "20 click 410 292; 60 click 250 312; 100 key 88; 140 click 480 450; 220 exit"   # the row below: down

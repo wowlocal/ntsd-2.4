@@ -62,8 +62,8 @@ final class OriginalRuntimeDelegate: NSObject, NSApplicationDelegate {
     private let joysticks = OriginalGameControllerJoysticks()
     func connectedJoysticks() -> Int { joysticks.count }
     func startJoystickSampling(_ session: OriginalRuntimeSession) { joysticks.startSampling(session) }
-    func makeMusicOutput() throws -> OriginalMacMusicOutput { try .bundled() }
-    var musicDirectory: String { OriginalMacMusicOutput.directory()?.path ?? "" }
+    func makeMusicOutput() throws -> OriginalMacMusicOutput { try .bundled(in:NTSDContent.location()) }
+    var musicDirectory: String { OriginalMacMusicOutput.directory(in:NTSDContent.location())?.path ?? "" }
     let contentFallback = NTSDContent.fallback
     func startSoundOutput(_ effects: OriginalMacSoundEffects,muted: Bool) throws -> String {
         let output = try OriginalMacSoundOutput(effects:effects)

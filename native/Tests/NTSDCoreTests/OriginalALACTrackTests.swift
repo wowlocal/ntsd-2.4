@@ -6,7 +6,7 @@ import NTSDMusicDecoder
 /// manifest records (FFmpeg's decode of bgm/*.wma, before ALAC encoding).
 final class OriginalALACTrackTests: XCTestCase {
     static let directory = URL(fileURLWithPath:#filePath).deletingLastPathComponent().deletingLastPathComponent().deletingLastPathComponent()
-        .appendingPathComponent("Sources/NTSDMacPlatform/Resources/OriginalMusic",isDirectory:true)
+        .appendingPathComponent("Sources/NTSDContent/Resources/OriginalMusic",isDirectory:true)
 
     func testEveryPackagedTrackDecodesToTheManifestPCM() throws {
         let manifest = try XCTUnwrap(JSONSerialization.jsonObject(with:Data(contentsOf:Self.directory.appendingPathComponent("manifest.json"))) as? [String:Any])

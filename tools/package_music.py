@@ -22,7 +22,7 @@ import tempfile
 
 ROOT = Path(__file__).resolve().parents[1]
 BASELINE = ROOT / "downloads/NTSD_2.4_2.0a_clean/NTSD 2.4_2.0a"
-OUTPUT = ROOT / "native/Sources/NTSDMacPlatform/Resources/OriginalMusic"
+OUTPUT = ROOT / "native/Sources/NTSDContent/Resources/OriginalMusic"
 EXE_SHA256 = "3f7ac67c5890ef979ee24a6dae5528056e7f631725c292cf9cb0a928ebeff71c"
 FILES = (
     ("boss1", 1254751, "851b9337cf258e59"),

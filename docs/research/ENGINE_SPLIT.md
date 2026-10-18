@@ -10,7 +10,7 @@ measurement from [TVOS_WEB](TVOS_WEB.md), [MEMORY_LOADING](MEMORY_LOADING.md) an
 engine from the game itself. to publish engine as the separate github repo";
 then, after the plan: "ok … when the plan is setteled start the loop in a
 separate branch" and "push automatically every step (on that new branch)".
-**Status:** E0 and E1a done (E1a's iOS row open); E1b next.
+**Status:** E0, E1a and E1b done; the packaged-app and iOS rows wait for the Mac's audio (user); E2 next.
 **Branch:** `exp/engine-split`, from `main` 380b448d. Worktree
 `/Volumes/NTSD-Builds/tasks/engine-split/worktree` (T7-backed APFS, see
 [BUILD_STORAGE_T7](BUILD_STORAGE_T7.md)). It tracks `origin/exp/engine-split`
@@ -148,8 +148,8 @@ A read-only survey of `native/` (three agents, 2026-10-18):
 | --- | --- | --- |
 | E0 | Harness: an mlgate copy parameterized by tree, output root (T7) and scratch path, defaults unchanged; a baseline gate of 380b448d in this worktree as PREV `es-base`; phone and emulator availability | **done** ([evidence](../evidence/es-e0-base.json)) |
 | E1a | Content is its own target: the seven `Original*` directories leave `NTSDCore` for the game-side `NTSDContent`; Core loaders take an `OriginalContentLocation` from the session/host instead of `Bundle.module`; tests and packaging follow the bundle (E1 design below) | **done** ([evidence](../evidence/es-e1a-content-target.json)); the iOS simulator row moves to E1b's gate |
-| E1b | Music: `OriginalMusic` leaves `NTSDMacPlatform` for `NTSDContent`; the source paths in tools and hosts follow; the iOS simulator row with a device set on `/Volumes/NTSD-Builds` | next |
-| E2 | Content policy out of Core: the digest, count and EXE-SHA pins become the NTSD content identity the game passes; Core checks what it is given with the same checks and errors (2.8.3.3's content origin as the model, read only) | queued |
+| E1b | Music: `OriginalMusic` leaves `NTSDMacPlatform` for `NTSDContent` (in the bundle on Mac builds only); the source paths in tools and hosts follow; the iOS simulator row with a device set on `/Volumes/NTSD-Builds` | **done** ([evidence](../evidence/es-e1b-music.json)); packaged-app and iOS rows open: the Mac's audio server stopped answering |
+| E2 | (next) Content policy out of Core: the digest, count and EXE-SHA pins become the NTSD content identity the game passes; Core checks what it is given with the same checks and errors (2.8.3.3's content origin as the model, read only) | queued |
 | E3 | Identity and Practice: user-data folder, wasm module, Android prefix/entry, queue/thread names, titles and messages become game configuration; Practice/Lab and its two checks move to the game side | queued |
 | E4 | Two packages: `engine/Package.swift` (Core, Runtime, codecs, decoders, shims, host libraries, self-contained tests) and `native/Package.swift` depending on it by path; the unsafeFlags plan (SwiftPM rejects them in version-pinned dependencies) | queued |
 | E5 | Game profile: the ~90 ID sites and the AI dispatch behind a profile the game supplies; the engine defines the `0x44d000` record's layout and the game supplies `initial.bin`; the NTSD profile bit-exact (all gates plus the full fixture-driven suites); the API's fit with 2.8.3.3 checked read only | queued |
@@ -234,13 +234,31 @@ about 85 test call sites in 21 files use the loaders' `.main` default.
   since 2026-10-17 19:47, outside the storage migration's records; `NTSDiOS`
   built. Harness error kept: the wasm SDK query matched two SDKs.
   [Evidence](../evidence/es-e1a-content-target.json).
+- 2026-10-18 E1b: the music in `NTSDContent`. The independent review found
+  one required fix before any gate: copying the music into the bundle on every
+  platform would have shipped it twice (APK, Linux, Windows, the web's eager
+  packs) and broken `ios_app.py`; it now joins the bundle on Mac builds only,
+  confirmed by builds and the reviewer, and `web_app.py` refuses a bundle with
+  it. Gate `es-e1b` against `es-e1a`: 11 scenarios, frames, AppKit (finished
+  19:27), unchecked, emulator, 20 launches, 26 suite runs pass. The phone's
+  footprint ranges did not overlap although both APKs run identical code and
+  data (only the build ID differs): noise at three runs against two. The Mac
+  A/B's first PREV runs found no music (its compiled source path moved); rerun
+  with `--music-dir`: equal, the two binaries differing in one instruction.
+  WASI, browser, Linux and Windows equal. Open: the packaged app and iOS. Both
+  wait inside audio start-up, as does `es-base`'s iOS build and a plain
+  `afplay`: the Mac's audio server stopped answering new clients between 19:27
+  and 19:56, the first failing call being the new simulator's audio start.
+  [Evidence](../evidence/es-e1b-music.json).
 
 ## Next task
 
-E1b: `OriginalMusic` moves from `NTSDMacPlatform` to `NTSDContent` with `git mv`
-(then `git lfs checkout`); `OriginalMacMusicOutput.directory(in:)` gets the
-location's rule; the hosts' `#filePath` music fallbacks (`NTSDHeadless`,
-`NTSDSDL`), `OriginalALACTrackTests`, `PortableSHA256Tests` and the tools'
-`MUSIC` source paths follow. `ios_app.py` gains a simulator device set on
-`/Volumes/NTSD-Builds` (no internal-disk simulator data). Gates: review, the
-mlgate set as `es-e1b` against `es-e1a`, and gate 3 including iOS.
+E2: the content identity leaves Core. The pinned manifest digests, entry and
+file counts and the EXE SHA in the six `OriginalApplication*Inputs` loaders
+become an identity the game supplies with its `OriginalContentLocation`
+(NTSD 2.4's in `NTSDContent`); Core checks the packages against what it is
+given, with the same checks, order and errors. Read 2.8.3.3's content origin
+(`exp/ntsd-2.8.3.3`, read only) for the shape. Gates as E1a's; the AppKit and
+packaged-app rows need the Mac's audio, so ask the user to restore it
+(`sudo killall coreaudiod`, or reconnecting the Scarlett 2i2) and re-run E1b's
+two open rows first.

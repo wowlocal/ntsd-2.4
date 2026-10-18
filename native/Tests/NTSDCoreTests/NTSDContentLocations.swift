@@ -45,4 +45,8 @@ extension OriginalMacRuntimeLoading {
         try bundled(started,startupInputs:startupInputs,clock:clock,in:NTSDContent.location())
     }
 }
+extension OriginalMacMusicOutput {
+    static func directory(in appBundle: Bundle = .main) -> URL? { directory(in:NTSDContent.location(in:appBundle)) }
+    static func bundled() throws -> OriginalMacMusicOutput { try bundled(in:NTSDContent.location()) }
+}
 #endif

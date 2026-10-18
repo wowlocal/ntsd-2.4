@@ -65,7 +65,7 @@ def main():
     shutil.copy2(products / "NTSDSDL", stage / "NTSDSDL")
     shutil.copy2(sdl / f"install-{arch}/lib/libSDL3.so.0.4.16", stage / "libSDL3.so.0")
     shutil.copytree(products / "NTSDNative_NTSDContent.bundle", stage / "NTSDNative_NTSDContent.bundle")
-    shutil.copytree(ROOT / "native/Sources/NTSDMacPlatform/Resources/OriginalMusic", stage / "OriginalMusic")
+    shutil.copytree(ROOT / "native/Sources/NTSDContent/Resources/OriginalMusic", stage / "OriginalMusic")
     lic = stage / "LICENSES"; lic.mkdir()
     shutil.copy2(sdl / "src/LICENSE.txt", lic / "SDL3-zlib.txt")
     shutil.copy2(ft / "src/docs/FTL.TXT", lic / "FreeType-FTL.txt")

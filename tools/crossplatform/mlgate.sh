@@ -74,7 +74,7 @@ rm -rf $X/apklib-$L && mkdir -p $X/apklib-$L && cp -p $B4/out/Products/Release-a
 (
   python3 - "$FA" "$S/launch-$L" <<'PY'
 import subprocess, sys, os, shutil
-app, out = sys.argv[1], sys.argv[2]; music = "native/Sources/NTSDMacPlatform/Resources/OriginalMusic"; codes = []
+app, out = sys.argv[1], sys.argv[2]; music = "native/Sources/NTSDContent/Resources/OriginalMusic"; codes = []
 for i in range(20):
     shutil.rmtree(out, ignore_errors=True); os.makedirs(out)
     p = subprocess.run([f"{app}/NTSDNative", "--music-dir", music, "--original", "--exit-after-startup", "--overlay", out, "--virtual-clock", "123456789", "8", "--mute-music", "--mute-sounds", "--no-activate"], capture_output=True, text=True, timeout=60, env={**os.environ, "TZ": "Etc/GMT-1"})

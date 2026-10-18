@@ -48,7 +48,7 @@ def main():
     for folder in sorted((products / "NTSDNative_NTSDContent.bundle").iterdir()):
         if folder.is_dir() and folder.name.startswith("Original"):
             shutil.copytree(folder, app / folder.name)
-    shutil.copytree(ROOT / "native/Sources/NTSDMacPlatform/Resources/OriginalMusic", app / "OriginalMusic")
+    shutil.copytree(ROOT / "native/Sources/NTSDContent/Resources/OriginalMusic", app / "OriginalMusic")
     plistlib.dump({"CFBundleIdentifier": BUNDLE_ID, "CFBundleExecutable": "NTSDiOS", "CFBundleName": "NTSD Native",
                    "CFBundleDisplayName": "NTSD", "CFBundlePackageType": "APPL", "CFBundleShortVersionString": "0.1",
                    "CFBundleVersion": "1", "CFBundleSupportedPlatforms": ["iPhoneOS"], "MinimumOSVersion": "17.0",

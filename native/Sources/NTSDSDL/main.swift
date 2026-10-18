@@ -31,7 +31,7 @@ let besideExecutable = URL(fileURLWithPath:CommandLine.arguments[0]).resolvingSy
 let musicDirectory = option("--music-dir",1)?[0]
     ?? (FileManager.default.fileExists(atPath:besideExecutable+"/manifest.json") ? besideExecutable
         : URL(fileURLWithPath:#filePath).deletingLastPathComponent().deletingLastPathComponent()
-            .appendingPathComponent("NTSDMacPlatform/Resources/OriginalMusic").path)
+            .appendingPathComponent("NTSDContent/Resources/OriginalMusic").path)
 // The drivers SDL chose, so harness runs show what actually ran (CrossOver,
 // for one, drops SDL_* variables).
 let drivers = ["video":SDL_GetCurrentVideoDriver().map { String(cString:$0) } ?? "",
