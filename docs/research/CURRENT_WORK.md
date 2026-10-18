@@ -1,5 +1,35 @@
 # Текущая передача работы
 
+## Internal build storage и VM quota исправлены — 2026-10-17
+
+[Storage result](BUILD_STORAGE_T7.md): все 28 internal build/cache/output roots
+перенесены на T7-backed APFS `/Volumes/NTSD-Builds`; canonical paths — проверенные
+symlinks. Это 88,390,090,064 logical bytes; фактически на внутреннем диске свободно
+101,771,808,768 bytes (94.8 GiB) после возобновления VM. Новые builds/caches — T7;
+при отсутствующем томе запрещён local fallback. Sources/Git history и 462 tracked
+metadata files сохранены. App signature не дала ошибок, plist lint и Swift
+canonical cache-path check прошли; internal residual compiled-marker scan пуст.
+
+Уточнение пользователя: переносить всё с X5 не требуется, приоритет — internal.
+Оба movers завершили текущие units и остановлены; handles 13376/28339 terminal 143,
+watcher 96537 и monitor 5341 terminal 0. Всего завершено 77 units/299,777,916,228
+logical bytes, включая ранее выполненные X5 moves. Все links/manifest hashes
+проверены; partials/backups нет. Остальные X5 queues — только архивный inventory,
+не обязательство продолжать. Audit: `/Volumes/T7/ntsd-build-storage/`,
+`internal-migration-final1.json`, `user-scope-stop1.json`.
+
+VMPal Windows VM 1 quota поднята 40→80 GB; прежний paused session resumed без reset/
+restart. Проверено running/problem=null; initial resume check: 42.9 GB used, оригинал на character selection.
+Evidence: `vm-disk-limit-fixed1.json`. Полная цель порта остаётся paused в goal state;
+эту storage/VM задачу не считать разрешением автоматически продолжить game runs.
+
+На main 2026-10-18 закоммичены правило AGENTS.md и [отчёт](BUILD_STORAGE_T7.md)
+без изменений из `8e6729e4` (ветка exp/ntsd-2.8.3.3). Проверено на main: все 10
+стандартных build-путей (`native/.build`, `build/swiftpm-*`, оба `.app`,
+`build/{imported,original,reports,research/e2e}`) — symlinks в `/Volumes/NTSD-Builds`;
+UUID томов совпадают, на T7 1,05 TB свободно. Последний абзац отчёта описывает
+состояние 2026-10-17, когда правило на main ещё не было закоммичено.
+
 ## CrossOver 25.1.1 — 2026-10-17
 
 По запросу пользователя лицензия активирована; 26.3 сохранён, установлен
