@@ -1,5 +1,16 @@
 # Текущая передача работы
 
+## Отделение движка от игры: loop начат — 2026-10-18
+
+По запросу пользователя («separate LF2 engine from the game itself … publish
+engine as the separate github repo») план принят: [ENGINE_SPLIT](ENGINE_SPLIT.md).
+Ветка `exp/engine-split` от main 380b448d, worktree на T7-backed
+`/Volumes/NTSD-Builds/tasks/engine-split/worktree`; каждый коммит пушится
+(пользователь, 2026-10-18). Этапы E0–E8; поведение не меняется, gates — набор
+mlgate. Открыты решения пользователя: D1 (LF2 2.0a EXE как второй эталон,
+блокирует только E6) и D2 (имя и лицензия, блокирует только публикацию E8).
+Следующая задача — E0: параметризованная копия mlgate и базовый gate `es-base`.
+
 ## Internal build storage и VM quota исправлены — 2026-10-17
 
 [Storage result](BUILD_STORAGE_T7.md): все 28 internal build/cache/output roots
