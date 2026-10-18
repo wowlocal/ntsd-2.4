@@ -15,6 +15,8 @@ import NTSDCore
     func makeSockets() -> any OriginalRuntimeSockets
     /// Interactive playback and document dialogs.
     var loadingDialogs: OriginalRuntimeLoadingDialogs { get }
+    /// The game's name and user-data folder (OriginalGameIdentity).
+    var game: OriginalGameIdentity { get }
     /// Writable user data when no `--overlay` is given.
     func standardOverlay() throws -> OriginalMacRuntimeOverlay
     /// Keeps the game loop's timer precision for the session's life.
@@ -756,6 +758,6 @@ public enum OriginalRuntimeSessionBoundary: Error, Equatable {
         let text = String(reflecting:error)
         // A source fault is the original's own crash at this point, reproduced
         // as a stop; anything else is a part of the game not yet supported.
-        host.showStop(title:text.contains("Source fault") ? "The original game crashes here" : "NTSD stopped at an unsupported boundary",text:text)
+        host.showStop(title:text.contains("Source fault") ? "The original game crashes here" : "\(host.game.name) stopped at an unsupported boundary",text:text)
     }
 }

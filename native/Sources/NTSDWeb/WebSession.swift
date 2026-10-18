@@ -16,6 +16,7 @@ import NTSDRuntime
 @MainActor final class WebSessionHost: OriginalRuntimeSessionHost {
     let arguments: [String], windows: WebWindowHost, musicDirectory: String
     func contentLocation(in appBundle: Bundle) -> OriginalContentLocation { NTSDContent.location(in:appBundle) }
+    var game: OriginalGameIdentity { NTSDContent.game }
     weak var session: OriginalRuntimeSession?
     var scripted: Bool { arguments.contains("--script") }
     private var caps = false, cursor: (Int32,Int32) = (0,0), pumping = false, gamepadCount = -1
@@ -46,7 +47,7 @@ import NTSDRuntime
     /// The page's persistent folder when it mounts one at /save, else a
     /// temporary one.
     func standardOverlay() throws -> OriginalMacRuntimeOverlay {
-        if FileManager.default.fileExists(atPath:"/save") { return .init(root:URL(fileURLWithPath:"/save/NTSD Native",isDirectory:true)) }
+        if FileManager.default.fileExists(atPath:"/save") { return .init(root:URL(fileURLWithPath:"/save/"+game.userDataFolder,isDirectory:true)) }
         return .init(root:FileManager.default.temporaryDirectory.appendingPathComponent("ntsd-web-"+UUID().uuidString,isDirectory:true))
     }
     func beginTimingActivity() {}

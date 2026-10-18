@@ -36,6 +36,7 @@ final class SDLAudioFeed: @unchecked Sendable {
 @MainActor final class SDLSessionHost: OriginalRuntimeSessionHost {
     let arguments: [String], windows: SDLWindowHost, musicDirectory: String
     func contentLocation(in appBundle: Bundle) -> OriginalContentLocation { NTSDContent.location(in:appBundle) }
+    var game: OriginalGameIdentity { NTSDContent.game }
     weak var session: OriginalRuntimeSession?
     private weak var backend: OriginalRuntimeWindowBackend?
     private var gamepads: [OpaquePointer] = [], timers: [Timer] = []
@@ -83,9 +84,9 @@ final class SDLAudioFeed: @unchecked Sendable {
     }
     func standardOverlay() throws -> OriginalMacRuntimeOverlay {
         #if canImport(NTSDMacPlatform)
-        return try .standard()
+        return try .standard(folder:game.userDataFolder)
         #else
-        guard let path = SDL_GetPrefPath("","NTSD Native") else { throw SDLWindowHost.Failure.sdl(String(cString:SDL_GetError())) }
+        guard let path = SDL_GetPrefPath("",game.userDataFolder) else { throw SDLWindowHost.Failure.sdl(String(cString:SDL_GetError())) }
         defer { SDL_free(path) }
         return .init(root:URL(fileURLWithPath:String(cString:path),isDirectory:true))
         #endif

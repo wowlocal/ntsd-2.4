@@ -12,6 +12,7 @@ import NTSDRuntime
 @MainActor final class HeadlessSessionHost: OriginalRuntimeSessionHost {
     let arguments: [String], windows: HeadlessWindowHost, musicDirectory: String
     func contentLocation(in appBundle: Bundle) -> OriginalContentLocation { NTSDContent.location(in:appBundle) }
+    var game: OriginalGameIdentity { NTSDContent.game }
     weak var session: OriginalRuntimeSession?
     init(arguments: [String],screen: CGSize,caption: CGFloat,musicDirectory: String) {
         self.arguments = arguments; windows = HeadlessWindowHost(screen:screen,caption:caption); self.musicDirectory = musicDirectory

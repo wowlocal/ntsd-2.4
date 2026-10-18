@@ -10,7 +10,7 @@ measurement from [TVOS_WEB](TVOS_WEB.md), [MEMORY_LOADING](MEMORY_LOADING.md) an
 engine from the game itself. to publish engine as the separate github repo";
 then, after the plan: "ok … when the plan is setteled start the loop in a
 separate branch" and "push automatically every step (on that new branch)".
-**Status:** E0–E2 and E3a done; E3b next.
+**Status:** E0–E3 done; E4a next.
 **Branch:** `exp/engine-split`, from `main` 380b448d. Worktree
 `/Volumes/NTSD-Builds/tasks/engine-split/worktree` (T7-backed APFS, see
 [BUILD_STORAGE_T7](BUILD_STORAGE_T7.md)). It tracks `origin/exp/engine-split`
@@ -138,7 +138,11 @@ A read-only survey of `native/` (three agents, 2026-10-18):
    Linux and Windows packages (`matrix.py`).
 4. An independent read-only review (a separate agent) for each Core, Runtime
    or package change; its follow-ups fixed before the gate or recorded.
-5. One commit per checked increment on `exp/engine-split`, staging only its
+5. A phone or Mac A/B whose ranges do not overlap at the gate's three runs
+   against two is followed by an interleaved 4-against-4 A/B before it is read
+   as a change (twice on 2026-10-18 the gap closed: E1b with byte-identical
+   library code, E3b).
+6. One commit per checked increment on `exp/engine-split`, staging only its
    files (the tested tree), evidence in `docs/evidence/es-*.json`; the hook
    pushes it.
 
@@ -150,8 +154,8 @@ A read-only survey of `native/` (three agents, 2026-10-18):
 | E1a | Content is its own target: the seven `Original*` directories leave `NTSDCore` for the game-side `NTSDContent`; Core loaders take an `OriginalContentLocation` from the session/host instead of `Bundle.module`; tests and packaging follow the bundle (E1 design below) | **done** ([evidence](../evidence/es-e1a-content-target.json)); the iOS simulator row moves to E1b's gate |
 | E1b | Music: `OriginalMusic` leaves `NTSDMacPlatform` for `NTSDContent` (in the bundle on Mac builds only); the source paths in tools and hosts follow; the iOS simulator row with a device set on `/Volumes/NTSD-Builds` | **done** ([evidence](../evidence/es-e1b-music.json)); its packaged-app and iOS rows, and E1a's iOS row, closed after the Mac's audio came back ([evidence](../evidence/es-e1b-open-rows.json)) |
 | E2 | Content policy out of Core: the digest, count and EXE-SHA pins become the NTSD content identity the game passes; Core checks what it is given with the same checks and errors (2.8.3.3's content origin as the model, read only) | **done** ([evidence](../evidence/es-e2-content-identity.json)) |
-| E3 | Identity and Practice: user-data folder, wasm module, Android prefix/entry, queue/thread names, titles and messages become game configuration; Practice/Lab and its two checks move to the game side | E3a **done** ([evidence](../evidence/es-e3a-practice.json)); E3b next |
-| E4 | Two packages: `engine/Package.swift` (Core, Runtime, codecs, decoders, shims, host libraries, self-contained tests) and `native/Package.swift` depending on it by path; the unsafeFlags plan (SwiftPM rejects them in version-pinned dependencies) | queued |
+| E3 | Identity and Practice: user-data folder, wasm module, Android prefix/entry, queue/thread names, titles and messages become game configuration; Practice/Lab and its two checks move to the game side | **done**: E3a ([evidence](../evidence/es-e3a-practice.json)), E3b ([evidence](../evidence/es-e3b-game-identity.json)); diagnostic labels wait for D2 |
+| E4 | Two packages: `engine/Package.swift` (Core, Runtime, codecs, decoders, shims, host libraries, self-contained tests) and `native/Package.swift` depending on it by path; the unsafeFlags plan (SwiftPM rejects them in version-pinned dependencies) | next (E4a–E4c; E4 design below) |
 | E5 | Game profile: the ~90 ID sites and the AI dispatch behind a profile the game supplies; the engine defines the `0x44d000` record's layout and the game supplies `initial.bin`; the NTSD profile bit-exact (all gates plus the full fixture-driven suites); the API's fit with 2.8.3.3 checked read only | queued |
 | E6 | Classify each profile rule as LF2 2.0a or NTSD from the second reference; LF2 rules become the engine's default profile | needs D1 |
 | E7 | Engine stand-alone: the engine package builds alone (macOS, Linux container) and passes its tests with a from-scratch synthetic content pack; a scan finds no original bytes (files under `downloads/`, the resources, fixtures, `initial.bin`) | queued |
@@ -229,11 +233,38 @@ Plan:
   depending on Core; the engine types they use become public where they are
   internal; NTSDApp, the two checks and their tests import it. No behaviour
   or expected value changes.
-- **E3b**: the identity strings that engine code holds become a game identity
-  the host supplies (user-data folder, queue-name prefix, the stop message),
-  with NTSD's current values, so every test and tool sees the same strings.
-  Compile-time names (the wasm import module, the C entry symbols) wait for
-  E4, where the host libraries are split from their apps.
+- **E3b**: the identity a player sees that engine code holds becomes a game
+  identity the host supplies (`OriginalGameIdentity`: the stop message's name
+  and the user-data folder), with NTSD's current values, so every test and
+  tool sees the same strings. Diagnostic labels (queue/thread names
+  `NTSD.readahead`, `NTSD.load`, `NTSD.release`, `NTSD.Winsock.readiness`,
+  `ntsd.render`, Android's `NTSD.present`, the stderr "NTSD: no display
+  geometry" line) wait for the engine's name (D2): their neutral prefix is
+  that name, and a test and a measuring tool key on them. Compile-time names
+  (the wasm import module, the C entry symbols) wait for E4, where the host
+  libraries are split from their apps.
+
+## E4 design (2026-10-19, before review)
+
+- **E4a**: a second local package `engine/` at the repository root holds the
+  engine targets, moved by `git mv` from `native/Sources`: `NTSDReplayCodec`,
+  `NTSDCore`, `NTSDRuntime`, `CALAC`, `NTSDMusicDecoder`, `NTSDMacPlatform`
+  (Mac builds) and `NTSDFreeTypeText` with `CFreeType` (when a FreeType prefix
+  is given), each a library product, with their settings (cross-module
+  optimization, exclusivity, the environment switches) unchanged.
+  `native/Package.swift` depends on it by path; the hosts, `NTSDContent`,
+  `NTSDPractice`, `NTSDReferenceChecks`, the checks, `CZlib`, `CSDL3` and the
+  tests stay. Module and bundle names do not change (D2 renames). The gate's
+  tested trees add `engine`; the per-host rows and a 4-against-4 phone A/B
+  run, as the package boundary is where cross-module optimization could
+  change code.
+- **E4b**: the hosts split into engine host libraries (the session host,
+  windows, audio, input for AppKit, SDL, iOS/tvOS, Android, Web, headless)
+  that take the game as a value (content location, content identity, game
+  identity), and thin game apps; the compile-time names (the wasm import
+  module, the Android entry symbol) go with the apps or become the engine's.
+- **E4c**: the self-contained tests move to `engine/Tests`; the
+  fixture-driven suites stay with the game.
 
 ## Ledger
 
@@ -310,14 +341,23 @@ Plan:
   no host or runtime-path code changed. Note for the next progress estimate:
   `estimate_port_progress.py` scans only `NTSDCore`.
   [Evidence](../evidence/es-e3a-practice.json).
+- 2026-10-19 E3b: `OriginalGameIdentity` (name, user-data folder) from the
+  host, NTSD's values in `NTSDContent.game`; reviewed (two required fixes in
+  the harness line and the card, made). Gate `es-e3b` against `es-e3a`: 11
+  scenarios, frames, AppKit, unchecked, emulator, 20 clean launches, 29 suite
+  runs; one vs equal with identical frames on WASI, browser, Linux, Windows,
+  iOS and the packaged `.app`; the macOS SDL host compiled. The gate's phone
+  A/B (3 against 2) showed CPU to the loaded state 10.20–10.24 against
+  9.99 s; an interleaved 4-against-4 follow-up overlapped everywhere.
+  [Evidence](../evidence/es-e3b-game-identity.json).
 
 ## Next task
 
-E3b (E3 design above): the identity strings engine code holds become a game
-identity the host supplies, with NTSD's current values: the user-data folder
-"NTSD Native", the queue/thread-name prefix (`NTSD.readahead`, `NTSD.load`,
-`NTSD.release`, `NTSD.Winsock.readiness`, `ntsd.render`) and the stop
-message. Every test and tool must see the same strings. With it, mlgate.sh's
-launch loop counts and samples a launch that outlives its timeout instead of
-aborting. Gates: review, the mlgate set as `es-e3b` against `es-e3a`, and
-the per-host rows (every host's code changes).
+E4a (E4 design above): `engine/Package.swift` with the engine targets moved
+by `git mv` (then `git lfs checkout` is not needed: they hold no LFS files),
+`native/Package.swift` depending on it by path; mlgate.sh records the
+`engine` tree too. First a cheap check that SwiftPM accepts the engine's
+unsafeFlags from a local path dependency and that the tests' `@testable`
+imports of engine modules build in debug and in the gate's release test
+build (`-enable-testing`). Gates: review, the mlgate set as `es-e4a` against
+`es-e3b`, every per-host row, a 4-against-4 phone A/B.

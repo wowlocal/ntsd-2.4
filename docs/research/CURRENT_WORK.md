@@ -27,8 +27,10 @@ E2 выполнен: идентичность контента (EXE SHA, digests
 `es-e2` и все платформенные строки совпали: [evidence](../evidence/es-e2-content-identity.json).
 E3a выполнен: Practice/Lab в игровом target `NTSDPractice`; review без замечаний, gate
 `es-e3a` совпал (один запуск из 20 превысил таймаут; повтор 20+20 чистый):
-[evidence](../evidence/es-e3a-practice.json). Следующая задача — E3b: строки идентичности
-(папка данных, имена очередей, сообщение остановки) из движка в игру.
+[evidence](../evidence/es-e3a-practice.json). E3b выполнен: имя игры и папка данных в
+`NTSDContent.game` (имена очередей ждут D2); все gates совпали:
+[evidence](../evidence/es-e3b-game-identity.json). Следующая задача — E4a: второй локальный
+пакет `engine/` с целями движка, `native/` зависит от него по пути.
 
 ## Internal build storage и VM quota исправлены — 2026-10-17
 

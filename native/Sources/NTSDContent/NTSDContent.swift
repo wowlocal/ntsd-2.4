@@ -20,6 +20,8 @@ public enum NTSDContent {
         menuManifestSHA256:"f0c363739088e477c8b51b597374f29bccae9f63d7d09f7169128c57b01b1161",
         warMenuManifestSHA256:"784c222b2313833f37219eae36b2424a61d4d0f2f257e5aaff083a82aaa5406a",
         arenaManifestSHA256:"60652ed8df36c7ff0bbaa167dcf1dd7be07140dac766c529d275f0705fc40519")
+    /// NTSD's name in the stop message and its user-data folder (E3b).
+    public static let game = OriginalGameIdentity(name:"NTSD",userDataFolder:"NTSD Native")
     /// The packages as the engine finds them: `appBundle`'s folders, else `bundle`.
     public static func location(in appBundle: Bundle = .main) -> OriginalContentLocation {
         .init(appBundle:appBundle,identity:identity,fallback:fallback)

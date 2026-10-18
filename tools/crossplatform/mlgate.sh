@@ -74,13 +74,19 @@ rm -rf $X/apklib-$L && mkdir -p $X/apklib-$L && cp -p $B4/out/Products/Release-a
 (
   python3 - "$FA" "$S/launch-$L" <<'PY'
 import subprocess, sys, os, shutil
-app, out = sys.argv[1], sys.argv[2]; music = "native/Sources/NTSDContent/Resources/OriginalMusic"; codes = []
+import glob
+app, out = sys.argv[1], sys.argv[2]; music = "native/Sources/NTSDContent/Resources/OriginalMusic"; codes = []; stalls = 0
+for old in glob.glob(f"{out}-stall-*.txt"): os.remove(old)
 for i in range(20):
     shutil.rmtree(out, ignore_errors=True); os.makedirs(out)
-    p = subprocess.run([f"{app}/NTSDNative", "--music-dir", music, "--original", "--exit-after-startup", "--overlay", out, "--virtual-clock", "123456789", "8", "--mute-music", "--mute-sounds", "--no-activate"], capture_output=True, text=True, timeout=60, env={**os.environ, "TZ": "Etc/GMT-1"})
-    codes.append(p.returncode)
+    p = subprocess.Popen([f"{app}/NTSDNative", "--music-dir", music, "--original", "--exit-after-startup", "--overlay", out, "--virtual-clock", "123456789", "8", "--mute-music", "--mute-sounds", "--no-activate"], stdout=subprocess.DEVNULL, stderr=subprocess.DEVNULL, env={**os.environ, "TZ": "Etc/GMT-1"})
+    try: codes.append(p.wait(timeout=60))
+    except subprocess.TimeoutExpired:   # ENGINE_SPLIT E3b: a stall counts as a failure, sampled, and the loop goes on
+        try: subprocess.run(["sample", str(p.pid), "3", "-file", f"{out}-stall-{i:02d}.txt"], capture_output=True, timeout=30)
+        except subprocess.TimeoutExpired: pass
+        p.kill(); p.wait(); stalls += 1
 shutil.rmtree(out, ignore_errors=True)
-print('launches: crashes', sum(1 for c in codes if c != 0), 'of 20', flush=True)
+print('launches: crashes', sum(1 for c in codes if c != 0) + stalls, 'of 20', *([f'({stalls} of them stalled past 60 s; samples {out}-stall-*.txt)'] if stalls else []), flush=True)
 PY
   rm -rf $X/rt-$L-all $X/rt-$L-appkit $X/rt-$L-unchecked
   python3 tools/crossplatform/run_headless_scenarios.py $X/rt-$L-all --local $F/NTSDHeadless 2>&1 | tail -10 | tee $X/logs/$L-scenarios.txt

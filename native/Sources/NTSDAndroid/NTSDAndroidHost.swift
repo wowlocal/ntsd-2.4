@@ -231,6 +231,7 @@ final class NTSDAndroidCursor {}
 @MainActor final class NTSDAndroidSessionHost: OriginalRuntimeSessionHost {
     let arguments: [String], windows: NTSDAndroidWindowHost, musicDirectory: String, files: URL, density: Double
     func contentLocation(in appBundle: Bundle) -> OriginalContentLocation { NTSDContent.location(in:appBundle) }
+    var game: OriginalGameIdentity { NTSDContent.game }
     weak var session: OriginalRuntimeSession?
     private var effects: NTSDAndroidStream?, feed: NTSDAndroidEffectsFeed?, effectsMuted = false
     private var players: [() -> NTSDAndroidMusicPlayer?] = [], focused = true
@@ -321,7 +322,7 @@ final class NTSDAndroidCursor {}
         .init(chooseRecording:{ _ in nil },alert:{ text in Self.report(["event":"androidAlert","text":text]) },
               open:{ path in Self.report(["event":"androidOpen","path":path]) })
     }
-    func standardOverlay() throws -> OriginalMacRuntimeOverlay { .init(root:files.appendingPathComponent("NTSD Native",isDirectory:true)) }
+    func standardOverlay() throws -> OriginalMacRuntimeOverlay { .init(root:files.appendingPathComponent(game.userDataFolder,isDirectory:true)) }
     func beginTimingActivity() {}
     /// Gamepads as the original's joysticks (TVOS_WEB T1c).
     let gamepads = NTSDAndroidGamepads()

@@ -9,10 +9,10 @@ extension OriginalRuntimeStartupHost {
 }
 
 extension OriginalMacRuntimeOverlay {
-    /// The Mac's writable user data: Application Support/NTSD Native.
-    public static func standard() throws -> Self {
+    /// The Mac's writable user data: Application Support/`folder`.
+    public static func standard(folder: String) throws -> Self {
         let support = try FileManager.default.url(for:.applicationSupportDirectory,in:.userDomainMask,appropriateFor:nil,create:true)
-        return .init(root:support.appendingPathComponent("NTSD Native",isDirectory:true))
+        return .init(root:support.appendingPathComponent(folder,isDirectory:true))
     }
 }
 

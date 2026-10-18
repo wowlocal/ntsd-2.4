@@ -50,7 +50,7 @@ final class OriginalRuntimeDelegate: NSObject, NSApplicationDelegate {
     func capsLock() -> Int32 { NSEvent.modifierFlags.contains(.capsLock) ? 1 : 0 }
     func makeSockets() -> any OriginalRuntimeSockets { OriginalMacWinsock() }
     var loadingDialogs: OriginalRuntimeLoadingDialogs { .mac }
-    func standardOverlay() throws -> OriginalMacRuntimeOverlay { try .standard() }
+    func standardOverlay() throws -> OriginalMacRuntimeOverlay { try .standard(folder:game.userDataFolder) }
     func beginTimingActivity() {
         // Timer precision without App Nap, but the Mac may still idle-sleep: the
         // original never calls SetThreadExecutionState.
@@ -65,6 +65,7 @@ final class OriginalRuntimeDelegate: NSObject, NSApplicationDelegate {
     func makeMusicOutput() throws -> OriginalMacMusicOutput { try .bundled(in:NTSDContent.location()) }
     var musicDirectory: String { OriginalMacMusicOutput.directory(in:NTSDContent.location())?.path ?? "" }
     func contentLocation(in appBundle: Bundle) -> OriginalContentLocation { NTSDContent.location(in:appBundle) }
+    var game: OriginalGameIdentity { NTSDContent.game }
     func startSoundOutput(_ effects: OriginalMacSoundEffects,muted: Bool) throws -> String {
         let output = try OriginalMacSoundOutput(effects:effects)
         output.muted = muted; output.focused = NSApp.isActive; soundOutput = output

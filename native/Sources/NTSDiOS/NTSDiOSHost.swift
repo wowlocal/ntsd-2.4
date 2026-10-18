@@ -90,6 +90,7 @@ final class NTSDiOSCursor {}
 @MainActor final class NTSDiOSSessionHost: OriginalRuntimeSessionHost {
     let arguments: [String], windows: NTSDiOSWindowHost, musicDirectory: String
     func contentLocation(in appBundle: Bundle) -> OriginalContentLocation { NTSDContent.location(in:appBundle) }
+    var game: OriginalGameIdentity { NTSDContent.game }
     weak var session: OriginalRuntimeSession?
     private let engine = AVAudioEngine()
     private var activity: NSObjectProtocol?
@@ -151,7 +152,7 @@ final class NTSDiOSCursor {}
         #else
         let folder = try FileManager.default.url(for:.documentDirectory,in:.userDomainMask,appropriateFor:nil,create:true)
         #endif
-        return .init(root:folder.appendingPathComponent("NTSD Native",isDirectory:true))
+        return .init(root:folder.appendingPathComponent(game.userDataFolder,isDirectory:true))
     }
     func beginTimingActivity() {
         activity = ProcessInfo.processInfo.beginActivity(options:[.userInitiated,.latencyCritical],reason:"Original game loop timing")
