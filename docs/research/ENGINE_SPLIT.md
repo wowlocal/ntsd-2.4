@@ -10,7 +10,7 @@ measurement from [TVOS_WEB](TVOS_WEB.md), [MEMORY_LOADING](MEMORY_LOADING.md) an
 engine from the game itself. to publish engine as the separate github repo";
 then, after the plan: "ok … when the plan is setteled start the loop in a
 separate branch" and "push automatically every step (on that new branch)".
-**Status:** E0 (harness) next.
+**Status:** E0 done (`es-base`); E1a next.
 **Branch:** `exp/engine-split`, from `main` 380b448d. Worktree
 `/Volumes/NTSD-Builds/tasks/engine-split/worktree` (T7-backed APFS, see
 [BUILD_STORAGE_T7](BUILD_STORAGE_T7.md)). It tracks `origin/exp/engine-split`
@@ -146,8 +146,9 @@ A read-only survey of `native/` (three agents, 2026-10-18):
 
 | ID | Step | Status |
 | --- | --- | --- |
-| E0 | Harness: an mlgate copy parameterized by tree, output root (T7) and scratch path, defaults unchanged; a baseline gate of 380b448d in this worktree as PREV `es-base`; phone and emulator availability | next |
-| E1 | Content is its own target: the seven `Original*` directories leave `NTSDCore` for a game-side resources target, music leaves `NTSDMacPlatform`; Core loaders get the content location from the session/host instead of `Bundle.module`; tests and packaging follow the bundle | queued |
+| E0 | Harness: an mlgate copy parameterized by tree, output root (T7) and scratch path, defaults unchanged; a baseline gate of 380b448d in this worktree as PREV `es-base`; phone and emulator availability | **done** ([evidence](../evidence/es-e0-base.json)) |
+| E1a | Content is its own target: the seven `Original*` directories leave `NTSDCore` for the game-side `NTSDContent`; Core loaders take an `OriginalContentLocation` from the session/host instead of `Bundle.module`; tests and packaging follow the bundle (E1 design below) | next (written in the dev worktree, not built) |
+| E1b | Music: `OriginalMusic` leaves `NTSDMacPlatform` for `NTSDContent`; the source paths in tools and hosts follow | queued |
 | E2 | Content policy out of Core: the digest, count and EXE-SHA pins become the NTSD content identity the game passes; Core checks what it is given with the same checks and errors (2.8.3.3's content origin as the model, read only) | queued |
 | E3 | Identity and Practice: user-data folder, wasm module, Android prefix/entry, queue/thread names, titles and messages become game configuration; Practice/Lab and its two checks move to the game side | queued |
 | E4 | Two packages: `engine/Package.swift` (Core, Runtime, codecs, decoders, shims, host libraries, self-contained tests) and `native/Package.swift` depending on it by path; the unsafeFlags plan (SwiftPM rejects them in version-pinned dependencies) | queued |
@@ -156,21 +157,72 @@ A read-only survey of `native/` (three agents, 2026-10-18):
 | E7 | Engine stand-alone: the engine package builds alone (macOS, Linux container) and passes its tests with a from-scratch synthetic content pack; a scan finds no original bytes (files under `downloads/`, the resources, fixtures, `initial.bin`) | queued |
 | E8 | Publication: name, licence, a new repository with fresh history, a tag; this repository depends on it by revision; README credits | needs D2 and the user |
 
+## E1 design (2026-10-18, before review)
+
+Inventory (read-only agent, 2026-10-18): the only `Bundle.module` uses outside
+the tests are the six `OriginalApplication*Inputs` lookups in Core and
+`OriginalMacMusicOutput.directory(in:)`; every test use reads its own
+`Fixtures`. Each lookup takes `appBundle.resourceURL/<Name>` when it exists or
+the bundle is an `.app`, else `Bundle.module`. The packaged `.app` holds the
+flat `Original*` folders and no SwiftPM bundle, so a fallback must stay lazy
+(SwiftPM's accessor stops the process when its bundle is missing). Runtime
+reaches content only through `OriginalRuntimeSession.resourceBundle()`
+(`--resources DIR` or `.main`) and `OriginalRuntimeLoadingPackages(in:)`;
+about 85 test call sites in 21 files use the loaders' `.main` default.
+
+- **E1a** (Core's seven packages): a game-side target `NTSDContent`
+  (`native/Sources/NTSDContent`: the seven directories by `git mv`, with
+  `.gitattributes` following, and one accessor for its bundle). Core gets one
+  value type for "where the content is": the app bundle plus a lazily
+  evaluated fallback bundle, carrying the same two-level rule. Loaders and
+  `OriginalRuntimeLoadingPackages` take it instead of a defaulted `Bundle`;
+  the session takes it from its host (`--resources` still replaces the app
+  bundle). Hosts and tests pass the game's value; test call sites change only
+  in what they pass. E2 extends the same value with the content identity, as
+  2.8.3.3's content origin does, so it is not throwaway. Rejected: a global
+  registry (hidden state, and tests have no global set-up hook) and searching
+  for any bundle that has the folders (finds nothing under xctest).
+- **E1b** (music): `OriginalMusic` moves from `NTSDMacPlatform` into
+  `NTSDContent`; the source paths in tools, hosts' `#filePath` fallbacks and
+  the two `#filePath` tests follow.
+- The built bundle becomes `NTSDNative_NTSDContent.bundle`
+  (`.resources` on Windows). `app_e2e.compare` checks exitCode, boundary,
+  milestones, progress and overlayFiles, not the printed `resources` path, so
+  the frozen references stay valid. Scripts that name the bundle follow
+  (android_app, web_app and `web/read-order.json`'s keys, package_linux,
+  package_windows, matrix, ios_app, ios_device, run_headless_scenarios,
+  web_saves_check, load_memory, package_assets). The 31 historical
+  `finalize_application_*`/`verify_application_*` producers are frozen and
+  stay as they are; they describe the old layout.
+- Gates: the mlgate set, the browser runner's scenarios (pack contents and
+  order identical apart from the prefix), an iOS simulator vs, the Linux and
+  Windows package rows.
+
 ## Ledger
 
 - 2026-10-18: plan agreed; branch `exp/engine-split` and its worktree created
   from 380b448d on `/Volumes/NTSD-Builds`; all 4,985 LFS files present
   (7.2 GB). `caffeinate -dims` with a one-minute `-u` ping runs without expiry
   for the loop.
+- 2026-10-18 E0: `tools/crossplatform/mlgate.sh` (X5's mlgate.sh, SHA-256
+  3312b3e9…, with `GATE_REPO`, `GATE_OUT`, `GATE_REFS`, `GATE_SCRATCH` and
+  `GATE_PHONE`; unset, the X5 behaviour) and `NTSD_ANDROID_SCRATCH` in
+  `android_app.py`. Gate `es-base` with outputs on `/Volumes/NTSD-Builds`:
+  all 11 scenarios equal and 1,832 frames identical (`m1-frames-ref`), AppKit
+  vs and playback equal (3,960 frames), unchecked vs and Demo, the emulator's
+  vs (1,832 frames), 20 launches, 18 suites plus the exclusivity check. The A12
+  was not on adb at the start; once the user connected it, its A/B against
+  `mm-2` ran separately: same CPU to the loaded state and per-tick time, wall
+  load converging run by run. Resident memory is ~28–30 MB above `mm-2`, from
+  main's changes since 2026-10-13 (E0 changed no Native code).
+  [Evidence](../evidence/es-e0-base.json).
 
 ## Next task
 
-E0. `mlgate.sh` (X5 `crossplatform/ml-tools`) hard-codes the main tree
-(`cd /Users/michael/Developer/ntsd-2.4`), an old session's scratchpad for frozen
-binaries, and X5 outputs. Give a copy on T7 variables for the tree, output root
-and scratch (frozen binaries kept on T7, not in a scratchpad a reboot wipes),
-keeping the existing references read-only and the default behaviour unchanged.
-Check the A12 (`adb devices`, swipe lock per AGENTS.md) and the emulator. Then
-run it once on this worktree at 380b448d as `es-base`, the PREV of E1. Done
-when every gate line reports, the results match the last recorded gates on
-`main`, and the evidence is in `docs/evidence/es-e0-*.json`.
+E1a, written in the detached worktree `/Volumes/NTSD-Builds/tasks/engine-split/dev`
+(not built yet): bring it into this worktree, build every touched product
+clean (headless, AppKit, the test bundle, the APK, WASI/browser, iOS
+simulator, Linux and Windows packages), have it reviewed independently, then
+run the mlgate set as `es-e1a` against `es-base` (with the phone) and the
+packaging rows of gate 3. Done when every gate line reports as `es-base`'s
+did and the evidence is in `docs/evidence/es-e1a-*.json`.

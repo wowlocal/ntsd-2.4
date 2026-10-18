@@ -9,7 +9,10 @@ engine as the separate github repo») план принят: [ENGINE_SPLIT](ENGI
 (пользователь, 2026-10-18). Этапы E0–E8; поведение не меняется, gates — набор
 mlgate. Открыты решения пользователя: D1 (LF2 2.0a EXE как второй эталон,
 блокирует только E6) и D2 (имя и лицензия, блокирует только публикацию E8).
-Следующая задача — E0: параметризованная копия mlgate и базовый gate `es-base`.
+E0 выполнен: mlgate.sh в ветке с параметрами путей, базовый gate `es-base` на T7
+совпал с main (11 сценариев, кадры идентичны, AppKit, эмулятор, suites; A/B на A12
+против `mm-2`): [evidence](../evidence/es-e0-base.json). Следующая задача — E1a:
+контент в отдельном target `NTSDContent`, Core получает `OriginalContentLocation`.
 
 ## Internal build storage и VM quota исправлены — 2026-10-17
 

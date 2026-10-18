@@ -35,6 +35,8 @@ ROOT = Path(__file__).resolve().parents[2]
 spec = importlib.util.spec_from_file_location("app_e2e", ROOT / "tools/app_e2e.py")
 app_e2e = importlib.util.module_from_spec(spec); spec.loader.exec_module(app_e2e)
 X5 = Path("/Volumes/X5/ntsd-2.4-research/crossplatform")
+# The build folder; NTSD_ANDROID_SCRATCH moves it (mlgate.sh GATE_OUT) without moving the dependencies or the debug key.
+SCRATCH = Path(os.environ.get("NTSD_ANDROID_SCRATCH", X5 / "build-android-aarch64"))
 SDK = Path("/opt/homebrew/share/android-commandlinetools")
 NDK = SDK / "ndk/30.0.16248370"
 TOOLS = SDK / "build-tools/36.1.0"
@@ -84,10 +86,10 @@ def build(out, release=False):
     # (CORE_REALTIME 4aa; the test bundles keep them).
     env = {**os.environ, "NTSD_PORTABLE": "1", "NTSD_ANDROID": "1", "NTSD_UNCHECKED_EXCLUSIVITY": "1", "ANDROID_HOME": str(SDK), "ANDROID_NDK_ROOT": str(NDK),
            "NTSD_FREETYPE_PREFIX": str(X5 / "android-deps/freetype/install-aarch64")}   # build_android_deps.sh
-    common = [SWIFT, "build", "--package-path", ROOT / "native", "--scratch-path", X5 / "build-android-aarch64",
+    common = [SWIFT, "build", "--package-path", ROOT / "native", "--scratch-path", SCRATCH,
               "--swift-sdk", "aarch64-unknown-linux-android28", "-c", "release", "--static-swift-stdlib", "--product", "NTSDAndroid"]
     subprocess.run([str(c) for c in common], env=env, check=True)
-    products = X5 / "build-android-aarch64/out/Products/Release-android-aarch64"
+    products = SCRATCH / "out/Products/Release-android-aarch64"
     stage = out / "stage"; shutil.rmtree(stage, ignore_errors=True)
     libs = stage / "lib/arm64-v8a"; libs.mkdir(parents=True)
     shutil.copy2(products / "libNTSDAndroid.so", libs / "libNTSDAndroid.so")
