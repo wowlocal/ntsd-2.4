@@ -61,7 +61,7 @@ def extract():
 
 def main():
     parser=argparse.ArgumentParser(description=__doc__);parser.add_argument('--check',action='store_true');args=parser.parse_args()
-    path=ROOT/'native/Sources/NTSDCore/OriginalFrontMenuRectangles.swift';text=extract()
+    path=ROOT/'engine/Sources/NTSDCore/OriginalFrontMenuRectangles.swift';text=extract()
     if args.check:assert path.read_text()==text
     else:path.write_text(text)
     print('Verified static151 rectangles /9 sheets /613 field assignments against pinned EXE')

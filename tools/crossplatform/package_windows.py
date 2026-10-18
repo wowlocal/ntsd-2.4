@@ -83,7 +83,7 @@ def main():
                                    capture_output=True, text=True).stdout.strip())
     commit = subprocess.run(["git", "-C", str(ROOT), "rev-parse", "HEAD"], check=True, capture_output=True, text=True).stdout.strip()
     epoch = int(subprocess.run(["git", "-C", str(ROOT), "log", "-1", "--format=%ct"], check=True, capture_output=True, text=True).stdout)
-    dirty = subprocess.run(["git", "-C", str(ROOT), "status", "--porcelain", "native"], check=True, capture_output=True, text=True).stdout.strip() != ""
+    dirty = subprocess.run(["git", "-C", str(ROOT), "status", "--porcelain", "native", "engine"], check=True, capture_output=True, text=True).stdout.strip() != ""
 
     name = "ntsd-windows-x86_64"; stage = args.out / name
     shutil.rmtree(args.out, ignore_errors=True); stage.mkdir(parents=True)
@@ -96,7 +96,7 @@ def main():
     shutil.copytree(ROOT / "native/Sources/NTSDContent/Resources/OriginalMusic", stage / "OriginalMusic")
     lic = stage / "LICENSES"; lic.mkdir()
     shutil.copy2(sdl / "LICENSE.txt", lic / "SDL3-zlib.txt")
-    shutil.copy2(ROOT / "native/Sources/CALAC/vendor/LICENSE", lic / "ALAC-Apache-2.0.txt")
+    shutil.copy2(ROOT / "engine/Sources/CALAC/vendor/LICENSE", lic / "ALAC-Apache-2.0.txt")
     shutil.copy2(SWIFT.parent.parent / "share/swift/LICENSE.txt", lic / "Swift-Apache-2.0-runtime-exception.txt")
     shutil.copy2(ROOT / "tools/crossplatform/licenses/ICU-LICENSE.txt", lic / "ICU-Unicode-3.0.txt")
     shutil.copy2(ROOT / "tools/crossplatform/licenses/swift-foundation-icu-LICENSE.md", lic / "swift-foundation-icu-Apache-2.0.md")

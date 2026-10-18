@@ -84,7 +84,7 @@ def git(*args):
 
 
 def snapshot(rev):
-    requested = ['native/Sources', 'docs/research']
+    requested = ['native/Sources', 'engine/Sources', 'docs/research']   # engine/ since ENGINE_SPLIT E4a
     paths = git('ls-tree', '--name-only', rev, *requested).decode().splitlines()
     raw = git('archive', rev, *paths)
     with tarfile.open(fileobj=io.BytesIO(raw)) as archive:
@@ -96,10 +96,18 @@ def matches(text):
     return {(int(m[1], 16), int(m[2], 16)) for m in RANGE.finditer(text)}
 
 
+# Core's sources: native/Sources/NTSDCore before ENGINE_SPLIT E4a, engine/Sources/NTSDCore after.
+CORE_PREFIXES = ('native/Sources/NTSDCore/', 'engine/Sources/NTSDCore/')
+
+
+def core_has(files, module):
+    return any(f'{prefix}{module}.swift' in files for prefix in CORE_PREFIXES)
+
+
 def collect(files, start, end, supplemental=True):
     found = []
     for path, text in files.items():
-        if not path.startswith('native/Sources/NTSDCore/'):
+        if not path.startswith(CORE_PREFIXES):
             continue
         for line, value in enumerate(text.splitlines(), 1):
             # Source rules are annotated on // comments; do not mine arbitrary
@@ -112,7 +120,7 @@ def collect(files, start, end, supplemental=True):
     if supplemental:
         for study, module, allowed in SUPPLEMENTS:
             path = f'docs/research/{study}.md'
-            if path not in files or f'native/Sources/NTSDCore/{module}.swift' not in files:
+            if path not in files or not core_has(files, module):
                 continue
             wanted = matches(allowed)
             for line, value in enumerate(files[path].splitlines(), 1):
@@ -121,7 +129,7 @@ def collect(files, start, end, supplemental=True):
                         found.append(dict(start=a, stop=b, source=path, line=line, kind='reviewed-study'))
         for study, module, a, b, oracle in WHOLE:
             path = f'docs/research/{study}.md'
-            if path in files and f'native/Sources/NTSDCore/{module}.swift' in files:
+            if path in files and core_has(files, module):
                 found.append(dict(start=a, stop=b, source=path, line=1,
                                   kind='whole-body-envelope', terminalRetSource=oracle))
     return found
@@ -198,7 +206,8 @@ def main():
         body = inside_mask(mask)
         counts = {}
         for folder in ['NTSDCore', 'NTSDApp', 'NTSDReferenceChecks']:
-            selected = [text for path, text in files.items() if path.startswith('native/Sources/'+folder+'/') and path.endswith('.swift')]
+            selected = [text for path, text in files.items()
+                        if path.startswith(('native/Sources/'+folder+'/', 'engine/Sources/'+folder+'/')) and path.endswith('.swift')]
             counts[folder] = dict(files=len(selected), lines=sum(len(t.splitlines()) for t in selected))
         timeline.append(dict(commit=commit, timestamp=timestamp, subject=subject,
                              documentedEnvelopeBytes=sum(mask), sourceCommentBytes=sum(source_mask), lines=counts,

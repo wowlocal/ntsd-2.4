@@ -16,7 +16,7 @@ public enum OriginalModeLabel {
     /// literal stores rewrite its NUL and suffix every tick, so on a shared
     /// buffer each call copied the 92 KB globals. For callers that drop the
     /// globals when this throws.
-    package static func drawInPlace(mode: Int32, alternateLine: UInt32, globals staged: inout OriginalStateRecord,
+    public static func drawInPlace(mode: Int32, alternateLine: UInt32, globals staged: inout OriginalStateRecord,
         resourceBitmap: (UInt32) throws -> (OriginalStateRecord, UInt32),
         performBlit: (OriginalBitmapBlit) throws -> Int32,
         detail: Bool = true,

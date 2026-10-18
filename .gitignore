@@ -20,6 +20,7 @@ Icon
 # Native build and local reverse-engineering outputs
 build/
 native/.build/
+engine/.build/
 __pycache__/
 *.pyc
 tools/crossover_drive/keyhold

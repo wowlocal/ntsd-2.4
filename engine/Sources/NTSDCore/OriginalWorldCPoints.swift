@@ -15,7 +15,7 @@ public enum OriginalWorldCPoints {
     /// globals move into the pass, back into the state around each stage's
     /// observer, and the second links pass runs in place; on a throw the state
     /// holds them again. For callers that drop the state when this throws.
-    package static func applyInPlace(state next: inout OriginalMatchPreparation,retainedPartnerSlot: Int32? = nil,
+    public static func applyInPlace(state next: inout OriginalMatchPreparation,retainedPartnerSlot: Int32? = nil,
                                      sse2Conversion: Bool = false,
                                      observe: (OriginalWorldLinksEvent) throws -> Void = { _ in },
                                      afterStage: (Stage,OriginalMatchPreparation) throws -> Void = { _,_ in },

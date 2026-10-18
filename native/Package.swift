@@ -1,21 +1,16 @@
 // swift-tools-version: 6.0
 import PackageDescription
 
-// The AppKit app, its platform layer and the tests in Tests/NTSDCoreTests/Mac
-// build only on an Apple host. Cross builds from macOS evaluate this manifest on
+// The NTSD game (ENGINE_SPLIT E4a): its content, apps, hosts, checks and tests,
+// on the engine package ../engine (by path; a dependency named here resolves
+// to the engine's product of that name). The AppKit app and the tests in
+// Tests/NTSDCoreTests/Mac build only on an Apple host. Cross builds from macOS evaluate this manifest on
 // the host and opt out with NTSD_PORTABLE=1 (docs/research/CROSS_PLATFORM.md).
 #if os(macOS)
 let portable = Context.environment["NTSD_PORTABLE"] == "1"
 #else
 let portable = true
 #endif
-
-// Release builds of the shared libraries serialize their bodies for callers in
-// other modules, so the generic Host, iteration and session code is
-// specialized for the one platform type the runtime uses instead of running
-// through value witnesses (CORE_REALTIME 4k). An optimization only: no
-// floating-point or other semantic flag.
-let crossModule: [SwiftSetting] = [.unsafeFlags(["-cross-module-optimization"], .when(configuration: .release))]
 
 // Shipping builds drop Swift's dynamic exclusivity checks (CORE_REALTIME 4aa;
 // the user's decision, 2026-10-08): about 3.5-4% of the A12's main thread.
@@ -29,15 +24,17 @@ let exclusivity: [SwiftSetting] = uncheckedExclusivity
        .define("NTSD_UNCHECKED_EXCLUSIVITY", .when(configuration: .release))]
     : []
 
+// The engine's products (../engine, package identity "engine").
+func engine(_ product: String) -> Target.Dependency { .product(name: product, package: "engine") }
+let core = engine("NTSDCore"), runtime = engine("NTSDRuntime"), musicDecoder = engine("NTSDMusicDecoder")
+let macPlatform = engine("NTSDMacPlatform"), freeTypeText = engine("NTSDFreeTypeText")
+
 let macProducts: [Product] = portable ? [] : [.executable(name: "NTSDNative", targets: ["NTSDApp"])]
 let macTargets: [Target] = portable ? [] : [
-    .target(name: "NTSDMacPlatform", dependencies: ["NTSDCore", "NTSDRuntime"],
-            swiftSettings: exclusivity,
-            linkerSettings: [.linkedFramework("AppKit"), .linkedFramework("AVFoundation")]),
-    .executableTarget(name: "NTSDApp", dependencies: ["NTSDCore", "NTSDMacPlatform", "NTSDContent", "NTSDPractice"], swiftSettings: exclusivity,
+    .executableTarget(name: "NTSDApp", dependencies: [core, macPlatform, "NTSDContent", "NTSDPractice"], swiftSettings: exclusivity,
                       linkerSettings: [.linkedFramework("AppKit"), .linkedFramework("SpriteKit"),
                                        .linkedFramework("AVFoundation")])]
-let macTestDependencies: [Target.Dependency] = portable ? [] : ["NTSDMacPlatform"]
+let macTestDependencies: [Target.Dependency] = portable ? [] : [macPlatform]
 
 // NTSD_SDL=1 adds the SDL3 host (P6). NTSD_SDL_PREFIX names the SDL3 install
 // (include/ and lib/); default builds never need SDL.
@@ -49,8 +46,8 @@ let sdlProducts: [Product] = sdl ? [.executable(name: "NTSDSDL", targets: ["NTSD
 let freetypePrefix = portable ? Context.environment["NTSD_FREETYPE_PREFIX"] : nil
 let sdlTargets: [Target] = sdl ? [
     .systemLibrary(name: "CSDL3", path: "Sources/CSDL3"),
-    .executableTarget(name: "NTSDSDL", dependencies: ["NTSDCore", "NTSDRuntime", "NTSDMusicDecoder", "CSDL3", "NTSDContent"] + (portable ? [] : ["NTSDMacPlatform"])
-                          + (freetypePrefix == nil ? [] : ["NTSDFreeTypeText"]),
+    .executableTarget(name: "NTSDSDL", dependencies: [core, runtime, musicDecoder, "CSDL3", "NTSDContent"] + (portable ? [] : [macPlatform])
+                          + (freetypePrefix == nil ? [] : [freeTypeText]),
                       swiftSettings: [.unsafeFlags(["-Xcc", "-I\(sdlPrefix)/include"]
                                                    + (freetypePrefix.map { ["-Xcc", "-I\($0)/include/freetype2"] } ?? []))] + exclusivity,
                       linkerSettings: [.unsafeFlags(["-L\(sdlPrefix)/lib"] + (freetypePrefix.map { ["-L\($0)/lib"] } ?? [])),
@@ -62,7 +59,7 @@ let sdlTargets: [Target] = sdl ? [
 let ios = Context.environment["NTSD_IOS"] == "1"
 let iosProducts: [Product] = ios ? [.executable(name: "NTSDiOS", targets: ["NTSDiOS"])] : []
 let iosTargets: [Target] = ios ? [
-    .executableTarget(name: "NTSDiOS", dependencies: ["NTSDCore", "NTSDRuntime", "NTSDContent"], swiftSettings: exclusivity,
+    .executableTarget(name: "NTSDiOS", dependencies: [core, runtime, "NTSDContent"], swiftSettings: exclusivity,
                       linkerSettings: [.linkedFramework("UIKit"), .linkedFramework("AVFoundation"), .linkedFramework("CoreText")])] : []
 
 // NTSD_ANDROID=1 (with NTSD_PORTABLE=1) adds the Android host (P8): a
@@ -72,7 +69,7 @@ let android = Context.environment["NTSD_ANDROID"] == "1"
 let androidProducts: [Product] = android ? [.library(name: "NTSDAndroid", type: .dynamic, targets: ["NTSDAndroid"])] : []
 let androidTargets: [Target] = android ? [
     .target(name: "CAndroidNative", linkerSettings: [.linkedLibrary("android"), .linkedLibrary("log"), .linkedLibrary("aaudio")]),
-    .target(name: "NTSDAndroid", dependencies: ["NTSDCore", "NTSDRuntime", "NTSDMusicDecoder", "CAndroidNative", "NTSDContent"] + (freetypePrefix == nil ? [] : ["NTSDFreeTypeText"]),
+    .target(name: "NTSDAndroid", dependencies: [core, runtime, musicDecoder, "CAndroidNative", "NTSDContent"] + (freetypePrefix == nil ? [] : [freeTypeText]),
             swiftSettings: [.unsafeFlags(freetypePrefix.map { ["-Xcc", "-I\($0)/include/freetype2"] } ?? [])] + exclusivity)] : []
 
 // NTSD_WEB=1 (with NTSD_PORTABLE=1) adds the browser host (TVOS_WEB W2b),
@@ -83,16 +80,8 @@ let androidTargets: [Target] = android ? [
 let web = Context.environment["NTSD_WEB"] == "1"
 let webProducts: [Product] = web ? [.executable(name: "NTSDWeb", targets: ["NTSDWeb"])] : []
 let webTargets: [Target] = web ? [
-    .executableTarget(name: "NTSDWeb", dependencies: ["NTSDCore", "NTSDRuntime", "NTSDMusicDecoder", "NTSDContent"],
+    .executableTarget(name: "NTSDWeb", dependencies: [core, runtime, musicDecoder, "NTSDContent"],
                       swiftSettings: [.enableExperimentalFeature("Extern")] + exclusivity)] : []
-
-// FreeType glyph masks for the SDL host off Apple platforms and the Android
-// host, from the static FreeType at NTSD_FREETYPE_PREFIX.
-let freetypeTargets: [Target] = (sdl || android) && freetypePrefix != nil ? [
-    .systemLibrary(name: "CFreeType", path: "Sources/CFreeType"),
-    .target(name: "NTSDFreeTypeText", dependencies: ["NTSDRuntime", "CFreeType"],
-            swiftSettings: [.unsafeFlags(["-Xcc", "-I\(freetypePrefix!)/include/freetype2"])] + exclusivity,
-            linkerSettings: [.unsafeFlags(["-L\(freetypePrefix!)/lib"])])] : []
 
 let package = Package(
     name: "NTSDNative",
@@ -108,43 +97,32 @@ let package = Package(
                .executable(name: "NTSDBGCheck", targets: ["NTSDBGCheck"]),
                .executable(name: "NTSDStageCheck", targets: ["NTSDStageCheck"]),
                .executable(name: "NTSDHeadless", targets: ["NTSDHeadless"])],
-    targets: macTargets + sdlTargets + iosTargets + androidTargets + webTargets + freetypeTargets + [
-        .target(name: "NTSDReplayCodec", exclude: ["README.md", "upstream.json"],
-                publicHeadersPath: "include", cSettings: [.unsafeFlags(["-Wno-deprecated-non-prototype"])]),
-        .target(name: "NTSDCore", dependencies: ["NTSDReplayCodec"], swiftSettings: crossModule + exclusivity),
+    dependencies: [.package(path: "../engine")],
+    targets: macTargets + sdlTargets + iosTargets + androidTargets + webTargets + [
         // The game's side (ENGINE_SPLIT E1): NTSD 2.4's content packages, found
         // by the engine through OriginalContentLocation. The music joins the
         // bundle in Mac builds only, as NTSDMacPlatform's did (E1b); the portable
         // packagers copy it beside the program themselves.
-        .target(name: "NTSDContent", dependencies: ["NTSDCore"], exclude: portable ? ["Resources/OriginalMusic"] : [], resources: [.copy("Resources/OriginalStartup"), .copy("Resources/OriginalCommonSounds"), .copy("Resources/OriginalLoadingInterface"), .copy("Resources/OriginalCharacterMenu"), .copy("Resources/OriginalWarMenu"), .copy("Resources/OriginalMatchArenas"), .copy("Resources/OriginalCatalog")]
+        .target(name: "NTSDContent", dependencies: [core], exclude: portable ? ["Resources/OriginalMusic"] : [], resources: [.copy("Resources/OriginalStartup"), .copy("Resources/OriginalCommonSounds"), .copy("Resources/OriginalLoadingInterface"), .copy("Resources/OriginalCharacterMenu"), .copy("Resources/OriginalWarMenu"), .copy("Resources/OriginalMatchArenas"), .copy("Resources/OriginalCatalog")]
                     + (portable ? [] : [.copy("Resources/OriginalMusic")]),
                 swiftSettings: exclusivity),
         .systemLibrary(name: "CZlib", path: "Sources/CZlib"),
-        .target(name: "NTSDRuntime", dependencies: ["NTSDCore"], swiftSettings: crossModule + exclusivity),
         // The game's side (ENGINE_SPLIT E3a): the Naruto/Sasuke practice model
         // behind NTSDApp's lab and the movement/combat checks; not on the
         // runtime path.
-        .target(name: "NTSDPractice", dependencies: ["NTSDCore"], swiftSettings: exclusivity),
-        // The vendored decoder learns the byte order from TargetConditionals.h
-        // on Apple platforms and only for x86 elsewhere; every non-Apple target
-        // built here (aarch64, x86_64, wasm32) is little-endian (without it the
-        // decoder byte-swapped every packet on wasm32, TVOS_WEB W2b-3).
-        .target(name: "CALAC", exclude: ["README.md", "upstream.json", "vendor/LICENSE"],
-                cSettings: [.define("TARGET_RT_LITTLE_ENDIAN", to: "1", .when(platforms: [.linux, .android, .windows, .wasi]))],
-                cxxSettings: [.define("TARGET_RT_LITTLE_ENDIAN", to: "1", .when(platforms: [.linux, .android, .windows, .wasi]))]),
-        .target(name: "NTSDMusicDecoder", dependencies: ["CALAC"], swiftSettings: exclusivity),
-        .executableTarget(name: "NTSDHeadless", dependencies: ["NTSDCore", "NTSDRuntime", "NTSDContent"], swiftSettings: exclusivity),
-        .target(name: "NTSDReferenceChecks", dependencies: ["NTSDCore", "CZlib"]),
+        .target(name: "NTSDPractice", dependencies: [core], swiftSettings: exclusivity),
+        .executableTarget(name: "NTSDHeadless", dependencies: [core, runtime, "NTSDContent"], swiftSettings: exclusivity),
+        .target(name: "NTSDReferenceChecks", dependencies: [core, "CZlib"]),
         .executableTarget(name: "NTSDBootstrapCheck", dependencies: ["NTSDReferenceChecks"]),
         .executableTarget(name: "NTSDCatalogCheck", dependencies: ["NTSDReferenceChecks"]),
         .executableTarget(name: "NTSDObjectCheck", dependencies: ["NTSDReferenceChecks"]),
         .executableTarget(name: "NTSDBGCheck", dependencies: ["NTSDReferenceChecks"]),
         .executableTarget(name: "NTSDStageCheck", dependencies: ["NTSDReferenceChecks"]),
-        .executableTarget(name: "NTSDFrameCheck", dependencies: ["NTSDCore"]),
-        .executableTarget(name: "NTSDMovementCheck", dependencies: ["NTSDCore", "NTSDPractice"]),
-        .executableTarget(name: "NTSDCombatCheck", dependencies: ["NTSDCore", "NTSDPractice"]),
-        .executableTarget(name: "NTSDStateCheck", dependencies: ["NTSDCore"]),
-        .testTarget(name: "NTSDCoreTests", dependencies: ["NTSDCore", "NTSDReferenceChecks", "NTSDRuntime", "NTSDMusicDecoder", "CZlib", "NTSDContent", "NTSDPractice"] + macTestDependencies,
+        .executableTarget(name: "NTSDFrameCheck", dependencies: [core]),
+        .executableTarget(name: "NTSDMovementCheck", dependencies: [core, "NTSDPractice"]),
+        .executableTarget(name: "NTSDCombatCheck", dependencies: [core, "NTSDPractice"]),
+        .executableTarget(name: "NTSDStateCheck", dependencies: [core]),
+        .testTarget(name: "NTSDCoreTests", dependencies: [core, "NTSDReferenceChecks", runtime, musicDecoder, "CZlib", "NTSDContent", "NTSDPractice"] + macTestDependencies,
                     exclude: portable ? ["Mac"] : [], resources: [.copy("Fixtures")], swiftSettings: exclusivity)
     ],
     swiftLanguageModes: [.v5]

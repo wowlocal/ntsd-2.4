@@ -77,10 +77,10 @@ def main(universe_path, out_path, image_path, repo, *executed_paths):
         data = json.load(open(path))
         for name, record in data.items():
             executed.setdefault(name, set()).update(record['starts'])
-    swift = (glob.glob(os.path.join(repo, 'native/Sources/NTSDCore/*.swift'))
-             + glob.glob(os.path.join(repo, 'native/Sources/NTSDMacPlatform/*.swift')))
-    code = ''.join(open(p, errors='ignore').read()
-                   for p in glob.glob(os.path.join(repo, 'native/**/*.swift'), recursive=True))
+    swift = [p for root in ('native', 'engine') for module in ('NTSDCore', 'NTSDMacPlatform')   # engine/ since ENGINE_SPLIT E4a
+             for p in glob.glob(os.path.join(repo, root, 'Sources', module, '*.swift'))]
+    code = ''.join(open(p, errors='ignore').read() for root in ('native', 'engine')
+                   for p in glob.glob(os.path.join(repo, root, '**/*.swift'), recursive=True))
 
     def stem(n):
         s = os.path.basename(n).rsplit('.', 1)[0]

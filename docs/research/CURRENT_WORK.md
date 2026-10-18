@@ -29,8 +29,10 @@ E3a выполнен: Practice/Lab в игровом target `NTSDPractice`; revi
 `es-e3a` совпал (один запуск из 20 превысил таймаут; повтор 20+20 чистый):
 [evidence](../evidence/es-e3a-practice.json). E3b выполнен: имя игры и папка данных в
 `NTSDContent.game` (имена очередей ждут D2); все gates совпали:
-[evidence](../evidence/es-e3b-game-identity.json). Следующая задача — E4a: второй локальный
-пакет `engine/` с целями движка, `native/` зависит от него по пути.
+[evidence](../evidence/es-e3b-game-identity.json). E4a выполнен: движок — отдельный локальный
+пакет `engine/`, `native/` зависит от него по пути; флаги движка сохраняются в обеих системах
+сборки; все gates и A/B 4×4 на A12 совпали: [evidence](../evidence/es-e4a-engine-package.json).
+Следующая задача — E4b: хосты на библиотеки движка и тонкие приложения игры.
 
 ## Internal build storage и VM quota исправлены — 2026-10-17
 

@@ -150,7 +150,7 @@ def main():
     hosts = args.hosts.split(",")
     report = {"date": datetime.datetime.now().isoformat(timespec="seconds"),
               "commit": subprocess.run(["git", "-C", str(ROOT), "rev-parse", "HEAD"], capture_output=True, text=True).stdout.strip(),
-              "dirty": subprocess.run(["git", "-C", str(ROOT), "status", "--porcelain", "native"], capture_output=True, text=True).stdout.strip() != "",
+              "dirty": subprocess.run(["git", "-C", str(ROOT), "status", "--porcelain", "native", "engine"], capture_output=True, text=True).stdout.strip() != "",
               "hosts": {}, "frames": {}}
     blocked = [h for h in hosts if h in GUI_HOSTS and screen_locked()]
     for host in blocked:

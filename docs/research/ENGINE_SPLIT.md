@@ -10,7 +10,7 @@ measurement from [TVOS_WEB](TVOS_WEB.md), [MEMORY_LOADING](MEMORY_LOADING.md) an
 engine from the game itself. to publish engine as the separate github repo";
 then, after the plan: "ok … when the plan is setteled start the loop in a
 separate branch" and "push automatically every step (on that new branch)".
-**Status:** E0–E3 done; E4a next.
+**Status:** E0–E3 and E4a done; E4b next.
 **Branch:** `exp/engine-split`, from `main` 380b448d. Worktree
 `/Volumes/NTSD-Builds/tasks/engine-split/worktree` (T7-backed APFS, see
 [BUILD_STORAGE_T7](BUILD_STORAGE_T7.md)). It tracks `origin/exp/engine-split`
@@ -155,7 +155,7 @@ A read-only survey of `native/` (three agents, 2026-10-18):
 | E1b | Music: `OriginalMusic` leaves `NTSDMacPlatform` for `NTSDContent` (in the bundle on Mac builds only); the source paths in tools and hosts follow; the iOS simulator row with a device set on `/Volumes/NTSD-Builds` | **done** ([evidence](../evidence/es-e1b-music.json)); its packaged-app and iOS rows, and E1a's iOS row, closed after the Mac's audio came back ([evidence](../evidence/es-e1b-open-rows.json)) |
 | E2 | Content policy out of Core: the digest, count and EXE-SHA pins become the NTSD content identity the game passes; Core checks what it is given with the same checks and errors (2.8.3.3's content origin as the model, read only) | **done** ([evidence](../evidence/es-e2-content-identity.json)) |
 | E3 | Identity and Practice: user-data folder, wasm module, Android prefix/entry, queue/thread names, titles and messages become game configuration; Practice/Lab and its two checks move to the game side | **done**: E3a ([evidence](../evidence/es-e3a-practice.json)), E3b ([evidence](../evidence/es-e3b-game-identity.json)); diagnostic labels wait for D2 |
-| E4 | Two packages: `engine/Package.swift` (Core, Runtime, codecs, decoders, shims, host libraries, self-contained tests) and `native/Package.swift` depending on it by path; the unsafeFlags plan (SwiftPM rejects them in version-pinned dependencies) | next (E4a–E4c; E4 design below) |
+| E4 | Two packages: `engine/Package.swift` (Core, Runtime, codecs, decoders, shims, host libraries, self-contained tests) and `native/Package.swift` depending on it by path; the unsafeFlags plan (SwiftPM rejects them in version-pinned dependencies) | E4a **done** ([evidence](../evidence/es-e4a-engine-package.json)); E4b next |
 | E5 | Game profile: the ~90 ID sites and the AI dispatch behind a profile the game supplies; the engine defines the `0x44d000` record's layout and the game supplies `initial.bin`; the NTSD profile bit-exact (all gates plus the full fixture-driven suites); the API's fit with 2.8.3.3 checked read only | queued |
 | E6 | Classify each profile rule as LF2 2.0a or NTSD from the second reference; LF2 rules become the engine's default profile | needs D1 |
 | E7 | Engine stand-alone: the engine package builds alone (macOS, Linux container) and passes its tests with a from-scratch synthetic content pack; a scan finds no original bytes (files under `downloads/`, the resources, fixtures, `initial.bin`) | queued |
@@ -350,14 +350,30 @@ Plan:
   A/B (3 against 2) showed CPU to the loaded state 10.20–10.24 against
   9.99 s; an interleaved 4-against-4 follow-up overlapped everywhere.
   [Evidence](../evidence/es-e3b-game-identity.json).
+- 2026-10-19 E4a: the engine is its own local package, `engine/`
+  (328 files by `git mv`, settings unchanged); `native/` depends on it by
+  path and names its products explicitly (SwiftPM does not resolve a name to
+  another package's product). `package` access does not cross packages: the
+  six Core entry points the game side calls are public, twelve stay
+  `package`. Reviewed (three required fixes in `.gitignore`'s bytes, the
+  estimate tool's snapshot and the tools' dirty checks, made and confirmed).
+  Both build systems keep the engine's flags (Mac `beginAccess` counts as
+  before; the APK's `manifest.pif` carries them and its library has as many
+  `swift_beginAccess` calls as E3b's). Gate `es-e4a` against `es-e3b`: 11
+  scenarios, frames, AppKit, unchecked, emulator, 20 clean launches, 29 suite
+  runs; one vs equal with identical frames on WASI, browser, Linux, Windows,
+  iOS and the packaged `.app`; a 4-against-4 phone A/B overlaps everywhere.
+  [Evidence](../evidence/es-e4a-engine-package.json).
 
 ## Next task
 
-E4a (E4 design above): `engine/Package.swift` with the engine targets moved
-by `git mv` (then `git lfs checkout` is not needed: they hold no LFS files),
-`native/Package.swift` depending on it by path; mlgate.sh records the
-`engine` tree too. First a cheap check that SwiftPM accepts the engine's
-unsafeFlags from a local path dependency and that the tests' `@testable`
-imports of engine modules build in debug and in the gate's release test
-build (`-enable-testing`). Gates: review, the mlgate set as `es-e4a` against
-`es-e3b`, every per-host row, a 4-against-4 phone A/B.
+E4b (E4 design above): split each host executable into an engine host library
+and a thin game app. First a read-only inventory of each host (AppKit
+`NTSDApp`'s runtime part, `NTSDSDL`, `NTSDiOS`, `NTSDAndroid`, `NTSDWeb`,
+`NTSDHeadless`): which files are generic host code (windows, input, audio,
+session host) and which reach the game (`NTSDContent`, `NTSDPractice`, the
+lab, NTSD's names and folders, compile-time names such as the wasm import
+module and the Android entry symbol). Then move the generic parts into
+engine host library targets that take the game as one value, one host at a
+time, headless first (the gates' own host), each its own increment with the
+mlgate set and that host's row.

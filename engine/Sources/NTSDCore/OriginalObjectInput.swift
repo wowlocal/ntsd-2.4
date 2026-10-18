@@ -23,7 +23,7 @@ public enum OriginalObjectInput {
     /// `apply` with the caller's world, actors and globals moved into the pass
     /// and written back on every path (CORE_REALTIME B2): for callers that drop
     /// the state when this throws.
-    package static func applyInPlace(slot: Int,state: inout OriginalMatchPreparation,
+    public static func applyInPlace(slot: Int,state: inout OriginalMatchPreparation,
                                      observe: (OriginalObjectInputEvent) throws -> Void = { _ in }) throws {
         let catalog = state.catalog
         guard try state.world.integer(at: 0x7d4,as: UInt32.self) == 0,

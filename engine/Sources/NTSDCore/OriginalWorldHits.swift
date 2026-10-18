@@ -13,7 +13,7 @@ public enum OriginalWorldHits {
     /// `apply` with the caller's records moved into the pass and published back
     /// on every path (CORE_REALTIME B2 P4): for callers that drop the state
     /// and CRT when this throws.
-    package static func applyInPlace(state: inout OriginalMatchPreparation,crt: inout OriginalCRTRandom,
+    public static func applyInPlace(state: inout OriginalMatchPreparation,crt: inout OriginalCRTRandom,
                                      retainedSpawnSlot: Int32? = nil,itemSlot: OriginalRequestSlotWord? = nil,sse2: Bool = false,
                                      observe: (OriginalHitEvent) throws -> Void = { _ in },
                                      afterHit: (Int,OriginalStateRecord) throws -> Void = { _,_ in }) throws {

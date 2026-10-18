@@ -56,7 +56,7 @@ public enum OriginalGameplayOutput {
     /// `apply` on the caller's world, globals and memory, the mode label in
     /// place too (CORE_REALTIME B2 P4g): for callers that drop all three when
     /// this throws.
-    package static func applyInPlace(world stagedWorld: inout OriginalStateRecord, globals stagedGlobals: inout OriginalStateRecord,
+    public static func applyInPlace(world stagedWorld: inout OriginalStateRecord, globals stagedGlobals: inout OriginalStateRecord,
         memory stagedMemory: inout OriginalMenuPresentationMemory, input: OriginalMenuPresentationInput,
         resourceBitmap: (UInt32) throws -> (OriginalStateRecord, UInt32),
         performBlit: (OriginalBitmapBlit) throws -> Int32,
