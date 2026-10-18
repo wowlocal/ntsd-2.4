@@ -10,7 +10,7 @@ measurement from [TVOS_WEB](TVOS_WEB.md), [MEMORY_LOADING](MEMORY_LOADING.md) an
 engine from the game itself. to publish engine as the separate github repo";
 then, after the plan: "ok … when the plan is setteled start the loop in a
 separate branch" and "push automatically every step (on that new branch)".
-**Status:** E0, E1a and E1b done, every row closed; E2 written and reviewed, its gate next.
+**Status:** E0, E1a, E1b and E2 done, every row closed; E3a next.
 **Branch:** `exp/engine-split`, from `main` 380b448d. Worktree
 `/Volumes/NTSD-Builds/tasks/engine-split/worktree` (T7-backed APFS, see
 [BUILD_STORAGE_T7](BUILD_STORAGE_T7.md)). It tracks `origin/exp/engine-split`
@@ -149,8 +149,8 @@ A read-only survey of `native/` (three agents, 2026-10-18):
 | E0 | Harness: an mlgate copy parameterized by tree, output root (T7) and scratch path, defaults unchanged; a baseline gate of 380b448d in this worktree as PREV `es-base`; phone and emulator availability | **done** ([evidence](../evidence/es-e0-base.json)) |
 | E1a | Content is its own target: the seven `Original*` directories leave `NTSDCore` for the game-side `NTSDContent`; Core loaders take an `OriginalContentLocation` from the session/host instead of `Bundle.module`; tests and packaging follow the bundle (E1 design below) | **done** ([evidence](../evidence/es-e1a-content-target.json)); the iOS simulator row moves to E1b's gate |
 | E1b | Music: `OriginalMusic` leaves `NTSDMacPlatform` for `NTSDContent` (in the bundle on Mac builds only); the source paths in tools and hosts follow; the iOS simulator row with a device set on `/Volumes/NTSD-Builds` | **done** ([evidence](../evidence/es-e1b-music.json)); its packaged-app and iOS rows, and E1a's iOS row, closed after the Mac's audio came back ([evidence](../evidence/es-e1b-open-rows.json)) |
-| E2 | (next) Content policy out of Core: the digest, count and EXE-SHA pins become the NTSD content identity the game passes; Core checks what it is given with the same checks and errors (2.8.3.3's content origin as the model, read only) | queued |
-| E3 | Identity and Practice: user-data folder, wasm module, Android prefix/entry, queue/thread names, titles and messages become game configuration; Practice/Lab and its two checks move to the game side | queued |
+| E2 | Content policy out of Core: the digest, count and EXE-SHA pins become the NTSD content identity the game passes; Core checks what it is given with the same checks and errors (2.8.3.3's content origin as the model, read only) | **done** ([evidence](../evidence/es-e2-content-identity.json)) |
+| E3 | Identity and Practice: user-data folder, wasm module, Android prefix/entry, queue/thread names, titles and messages become game configuration; Practice/Lab and its two checks move to the game side | next (E3a, then E3b; E3 design below) |
 | E4 | Two packages: `engine/Package.swift` (Core, Runtime, codecs, decoders, shims, host libraries, self-contained tests) and `native/Package.swift` depending on it by path; the unsafeFlags plan (SwiftPM rejects them in version-pinned dependencies) | queued |
 | E5 | Game profile: the ~90 ID sites and the AI dispatch behind a profile the game supplies; the engine defines the `0x44d000` record's layout and the game supplies `initial.bin`; the NTSD profile bit-exact (all gates plus the full fixture-driven suites); the API's fit with 2.8.3.3 checked read only | queued |
 | E6 | Classify each profile rule as LF2 2.0a or NTSD from the second reference; LF2 rules become the engine's default profile | needs D1 |
@@ -199,6 +199,41 @@ about 85 test call sites in 21 files use the loaders' `.main` default.
   order identical apart from the prefix and the bundle's `Info.plist`, whose
   name and identifier carry the target's name on swiftbuild targets), an iOS
   simulator vs, the Linux and Windows package rows.
+
+## E3 design (2026-10-18, before review)
+
+Inventory (read-only agent, 2026-10-18, on E2's tree):
+
+- **Practice/Lab.** `GameData`, `OriginalMovement`, `OriginalFighter`,
+  `OriginalMelee`, `OriginalProjectile` and `OriginalClock` (Naruto/Sasuke
+  guards, objects 2, 11, 203, 224, 440) are used only by NTSDApp's lab
+  (`main.swift` lab parts, `Assets`, `OriginalScene`, `MeleeScene`,
+  `MovementScene`), `NTSDMovementCheck`, `NTSDCombatCheck` and their tests;
+  nothing in Runtime or a host's runtime path uses them. They use engine
+  types the runtime path also needs (`OriginalFrameLoader.apply`,
+  `OriginalFrameRecord`, `OriginalLoaderError`, `OriginalRandom`), which stay.
+- **Identity strings in engine and host code** (none is the EXE's): the
+  user-data folder "NTSD Native" (five hosts), queue/thread names (`NTSD.readahead`,
+  `NTSD.load`, `NTSD.release`, `NTSD.Winsock.readiness`, `ntsd.render`,
+  `NTSD.present`), the stop message "NTSD stopped at an unsupported
+  boundary", `NTSDOriginalWindow` defaults key, Android's `ntsd/` asset
+  prefix, `ntsd-data`, `ntsd_android_on_create` and other `ntsd_` C symbols,
+  the wasm import module `"ntsd"`. A test pins `NTSD.release`; tools pin
+  `/save/NTSD Native`, `ntsd-data`, `NTSD.present`/`NTSD.release` timings.
+  The EXE's own strings ("Marti", "Little Fighter 2", "LF2", lf2.net, the DAT
+  key) are original behaviour and stay.
+
+Plan:
+
+- **E3a**: a game-side target `NTSDPractice` for the six files (by `git mv`),
+  depending on Core; the engine types they use become public where they are
+  internal; NTSDApp, the two checks and their tests import it. No behaviour
+  or expected value changes.
+- **E3b**: the identity strings that engine code holds become a game identity
+  the host supplies (user-data folder, queue-name prefix, the stop message),
+  with NTSD's current values, so every test and tool sees the same strings.
+  Compile-time names (the wasm import module, the C entry symbols) wait for
+  E4, where the host libraries are split from their apps.
 
 ## Ledger
 
@@ -255,15 +290,24 @@ about 85 test call sites in 21 files use the loaders' `.main` default.
   worktree), the packaged `.app` and the iOS simulator (T7 device set) vs are
   equal with frames identical to the CoreText reference.
   [Evidence](../evidence/es-e1b-open-rows.json).
+- 2026-10-18 E2: the content identity (EXE SHA, seven manifest digests,
+  declared counts, the startup's absent files) leaves Core for
+  `NTSDContent.identity`; `OriginalContentLocation` carries it and the
+  loaders check it in the old order with the old errors; hosts answer
+  `contentLocation(in:)`. Reviewed independently (no blocking issue; the
+  absent-file names and the EXE note adopted). Gate `es-e2` against
+  `es-e1b`: 11 scenarios, frames, AppKit, unchecked, emulator, 20 launches,
+  25 suite runs; phone ranges overlap; one vs equal with identical frames on
+  WASI, browser, Linux, Windows, iOS and the packaged `.app`.
+  [Evidence](../evidence/es-e2-content-identity.json).
 
 ## Next task
 
-E2: the content identity leaves Core. The pinned manifest digests, entry and
-file counts and the EXE SHA in the six `OriginalApplication*Inputs` loaders
-become an identity the game supplies with its `OriginalContentLocation`
-(NTSD 2.4's in `NTSDContent`); Core checks the packages against what it is
-given, with the same checks, order and errors. Read 2.8.3.3's content origin
-(`exp/ntsd-2.8.3.3`, read only) for the shape. Gates as E1a's; the AppKit and
-packaged-app rows need the Mac's audio, so ask the user to restore it
-(`sudo killall coreaudiod`, or reconnecting the Scarlett 2i2) and re-run E1b's
-two open rows first.
+E3a (E3 design above): `GameData`, `OriginalMovement`, `OriginalFighter`,
+`OriginalMelee`, `OriginalProjectile` and `OriginalClock` move with `git mv`
+to a game-side target `NTSDPractice` that depends on Core; the Core types
+they use become public where they are internal; NTSDApp, `NTSDMovementCheck`,
+`NTSDCombatCheck` and their tests import it. Gates: review, the mlgate set as
+`es-e3a` against `es-e2` (the lab is not on the runtime path, so the per-host
+rows need only the builds that compile NTSDApp and the checks), and the
+movement/combat suites with their fixtures.

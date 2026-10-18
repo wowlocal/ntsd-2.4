@@ -7,10 +7,12 @@ import Foundation
 /// supplies here and which is only looked up when the app bundle has none.
 public struct OriginalContentLocation {
     public let appBundle: Bundle
+    /// The packages' identity, which the loaders check (E2).
+    public let identity: OriginalContentIdentity
     private let fallback: @Sendable () -> Bundle?
 
-    public init(appBundle: Bundle,fallback: @escaping @Sendable () -> Bundle?) {
-        self.appBundle = appBundle; self.fallback = fallback
+    public init(appBundle: Bundle,identity: OriginalContentIdentity,fallback: @escaping @Sendable () -> Bundle?) {
+        self.appBundle = appBundle; self.identity = identity; self.fallback = fallback
     }
     /// The package folder `name`: the app bundle's when it has one or is an
     /// `.app` (an app must not use developer resources), else the fallback's.

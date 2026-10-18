@@ -26,9 +26,9 @@ import NTSDCore
     /// The packaged original tracks and their player.
     func makeMusicOutput() throws -> OriginalMacMusicOutput
     var musicDirectory: String { get }
-    /// The game's resource bundle, for content packages that neither the main
-    /// bundle nor a `--resources` directory holds (OriginalContentLocation).
-    var contentFallback: @Sendable () -> Bundle? { get }
+    /// The game's content in `appBundle` (the main bundle or a `--resources`
+    /// directory): its packages' identity and its resource bundle as the fallback.
+    func contentLocation(in appBundle: Bundle) -> OriginalContentLocation
     /// Starts output of the sound-effect mixer; returns its report text.
     func startSoundOutput(_ effects: OriginalMacSoundEffects,muted: Bool) throws -> String
     func backingScale(_ window: UInt32,in windows: OriginalRuntimeWindowBackend) -> Double
@@ -155,7 +155,7 @@ public enum OriginalRuntimeSessionBoundary: Error, Equatable {
         return bundle
     }
     /// The game's content: the resource bundle's packages, else the host's fallback.
-    func contentLocation() throws -> OriginalContentLocation { .init(appBundle:try resourceBundle(),fallback:host.contentFallback) }
+    func contentLocation() throws -> OriginalContentLocation { host.contentLocation(in:try resourceBundle()) }
     /// The current original window (replaced by an Alt+Enter recreation).
     public private(set) var gameWindow: UInt32 = 0
     public init(arguments: [String],host: any OriginalRuntimeSessionHost) {

@@ -7,14 +7,13 @@ import CryptoKit
 /// Platform replies and loaded PCM/after-state never enter this resource package.
 public struct OriginalApplicationLoadingInputs: Equatable {
     public enum Boundary: Error, Equatable { case missing(String), invalid(String), unsupportedName(String) }
-    public static let manifestSHA256 = "b1a519e2db09f18aa0d2bbaf29aa44226fba6a04852f8a4062778ae7d8e8a2f3"
     private struct Manifest: Decodable {
         struct Entry: Decodable { let name: String,count: Int,sha256: String }
         let version: Int,exeSHA256: String,entries: [Entry]
     }
     private let files: [String:[UInt8]]
     public static func bundled(in content: OriginalContentLocation) throws -> Self {
-        try load(directory:bundledDirectory(in:content))
+        try load(directory:bundledDirectory(in:content),identity:content.identity)
     }
     public static func bundledDirectory(in content: OriginalContentLocation) throws -> URL {
         guard let directory = content.directory("OriginalCommonSounds") else {
@@ -22,7 +21,7 @@ public struct OriginalApplicationLoadingInputs: Equatable {
         }
         return directory
     }
-    public static func load(directory: URL) throws -> Self {
+    public static func load(directory: URL,identity: OriginalContentIdentity) throws -> Self {
         guard FileManager.default.fileExists(atPath:directory.path) else { throw Boundary.missing("OriginalCommonSounds") }
         let root = try OriginalFileFacts.of(directory,[.isDirectoryKey,.isSymbolicLinkKey])
         guard root.isDirectory == true,root.isSymbolicLink != true else { throw Boundary.invalid("Package directory") }
@@ -35,9 +34,9 @@ public struct OriginalApplicationLoadingInputs: Equatable {
         }
         func digest(_ bytes: [UInt8]) -> String { SHA256.hash(data:Data(bytes)).map { String(format:"%02x",$0) }.joined() }
         let raw = try read("manifest.json")
-        guard digest(raw) == manifestSHA256 else { throw Boundary.invalid("Manifest digest") }
+        guard digest(raw) == identity.loadingManifestSHA256 else { throw Boundary.invalid("Manifest digest") }
         let manifest = try JSONDecoder().decode(Manifest.self,from:Data(raw))
-        guard manifest.version == 1,manifest.exeSHA256 == "3f7ac67c5890ef979ee24a6dae5528056e7f631725c292cf9cb0a928ebeff71c",
+        guard manifest.version == 1,manifest.exeSHA256 == identity.exeSHA256,
               manifest.entries.map(\.name) == OriginalInitialSoundLoading.paths else { throw Boundary.invalid("Manifest contract") }
         var files: [String:[UInt8]] = [:],names = Set(["manifest.json"])
         for item in manifest.entries {

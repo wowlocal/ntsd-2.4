@@ -35,7 +35,7 @@ final class SDLAudioFeed: @unchecked Sendable {
 /// AppKit host's CoreText masks, so frames match the AppKit app.
 @MainActor final class SDLSessionHost: OriginalRuntimeSessionHost {
     let arguments: [String], windows: SDLWindowHost, musicDirectory: String
-    let contentFallback = NTSDContent.fallback
+    func contentLocation(in appBundle: Bundle) -> OriginalContentLocation { NTSDContent.location(in:appBundle) }
     weak var session: OriginalRuntimeSession?
     private weak var backend: OriginalRuntimeWindowBackend?
     private var gamepads: [OpaquePointer] = [], timers: [Timer] = []

@@ -22,7 +22,10 @@ target `NTSDContent`, Core без `Bundle.module`, получает `OriginalCon
 Упакованный `.app` и iOS сначала ждали аудио-сервер Mac (coreaudiod не отвечал 19:27–~21:10);
 после его восстановления (без перезапуска) обе строки совпали на коммите E1b:
 [evidence](../evidence/es-e1b-open-rows.json).
-Следующая задача — E2: идентичность контента (digests, counts, EXE SHA) из Core в игру.
+E2 выполнен: идентичность контента (EXE SHA, digests манифестов, counts) в
+`NTSDContent.identity`, Core проверяет переданное; review без блокирующих замечаний, gate
+`es-e2` и все платформенные строки совпали: [evidence](../evidence/es-e2-content-identity.json).
+Следующая задача — E3a: Practice/Lab в игровой target `NTSDPractice`.
 
 ## Internal build storage и VM quota исправлены — 2026-10-17
 

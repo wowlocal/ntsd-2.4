@@ -7,7 +7,6 @@ import CryptoKit
 /// continuation; expected pixels, EXE execution and platform writes are absent.
 public struct OriginalApplicationInterfaceInputs: Equatable {
     public enum Boundary: Error, Equatable { case missing(String), invalid(String) }
-    public static let manifestSHA256 = "9f8cb29ac2546c0718e7c83541972b6e4589c64488ec057027b4fe4edd55af82"
     public let bitmaps: [String:OriginalApplicationStartupInputs.Bitmap]
     private struct Manifest: Decodable {
         struct Entry: Decodable { let name: String,path: String,count: Int,sha256: String }
@@ -19,8 +18,8 @@ public struct OriginalApplicationInterfaceInputs: Equatable {
         }
         return directory
     }
-    public static func bundled(in content: OriginalContentLocation) throws -> Self { try load(directory:bundledDirectory(in:content)) }
-    public static func load(directory: URL) throws -> Self {
+    public static func bundled(in content: OriginalContentLocation) throws -> Self { try load(directory:bundledDirectory(in:content),identity:content.identity) }
+    public static func load(directory: URL,identity: OriginalContentIdentity) throws -> Self {
         func read(_ path: String) throws -> Data {
             let url = directory.appendingPathComponent(path)
             guard OriginalFileFacts.exists(url) else { throw Boundary.missing(path) }
@@ -30,10 +29,10 @@ public struct OriginalApplicationInterfaceInputs: Equatable {
         }
         func digest(_ data: Data) -> String { SHA256.hash(data:data).map { String(format:"%02x",$0) }.joined() }
         let data = try read("manifest.json")
-        guard digest(data) == manifestSHA256 else { throw Boundary.invalid("Manifest digest") }
+        guard digest(data) == identity.interfaceManifestSHA256 else { throw Boundary.invalid("Manifest digest") }
         let manifest = try JSONDecoder().decode(Manifest.self,from:data)
         guard manifest.version == 1,
-              manifest.exeSHA256 == "3f7ac67c5890ef979ee24a6dae5528056e7f631725c292cf9cb0a928ebeff71c",
+              manifest.exeSHA256 == identity.exeSHA256,
               manifest.entries.map(\.name) == OriginalInitialInterfaceLoading.paths else { throw Boundary.invalid("Manifest contract") }
         var bitmaps: [String:OriginalApplicationStartupInputs.Bitmap] = [:]
         for entry in manifest.entries {

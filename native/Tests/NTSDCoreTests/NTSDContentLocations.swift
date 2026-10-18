@@ -6,29 +6,37 @@ import NTSDRuntime
 import NTSDMacPlatform
 #endif
 
-// ENGINE_SPLIT E1: the engine finds content through OriginalContentLocation;
-// these tests read NTSD's packages with their Bundle arguments (default the
-// main bundle) as before, the game's resource bundle being the fallback.
+// ENGINE_SPLIT E1/E2: the engine finds content through OriginalContentLocation
+// and checks it against an OriginalContentIdentity; these tests read NTSD's
+// packages with their Bundle and directory arguments (default the main bundle)
+// as before, the game's resource bundle being the fallback and NTSD 2.4's
+// identity the one checked.
 extension OriginalApplicationCatalogInputs {
+    static func load(directory: URL) throws -> Self { try load(directory:directory,identity:NTSDContent.identity) }
     static func bundled(in appBundle: Bundle = .main) throws -> Self { try bundled(in:NTSDContent.location(in:appBundle)) }
     static func bundledDirectory(in appBundle: Bundle = .main) throws -> URL { try bundledDirectory(in:NTSDContent.location(in:appBundle)) }
 }
 extension OriginalApplicationStartupInputs {
+    static func load(directory: URL) throws -> Self { try load(directory:directory,identity:NTSDContent.identity) }
     static func bundled(in appBundle: Bundle = .main) throws -> Self { try bundled(in:NTSDContent.location(in:appBundle)) }
     static func bundledDirectory(in appBundle: Bundle = .main) throws -> URL { try bundledDirectory(in:NTSDContent.location(in:appBundle)) }
 }
 extension OriginalApplicationLoadingInputs {
+    static func load(directory: URL) throws -> Self { try load(directory:directory,identity:NTSDContent.identity) }
     static func bundled(in appBundle: Bundle = .main) throws -> Self { try bundled(in:NTSDContent.location(in:appBundle)) }
     static func bundledDirectory(in appBundle: Bundle = .main) throws -> URL { try bundledDirectory(in:NTSDContent.location(in:appBundle)) }
 }
 extension OriginalApplicationInterfaceInputs {
+    static func load(directory: URL) throws -> Self { try load(directory:directory,identity:NTSDContent.identity) }
     static func bundled(in appBundle: Bundle = .main) throws -> Self { try bundled(in:NTSDContent.location(in:appBundle)) }
     static func bundledDirectory(in appBundle: Bundle = .main) throws -> URL { try bundledDirectory(in:NTSDContent.location(in:appBundle)) }
 }
 extension OriginalApplicationArenaInputs {
+    static func load(directory: URL) throws -> Self { try load(directory:directory,identity:NTSDContent.identity) }
     static func bundled(in bundle: Bundle = .main) throws -> Self { try bundled(in:NTSDContent.location(in:bundle)) }
 }
 extension OriginalApplicationMenuInputs {
+    static func load(directory: URL) throws -> Self { try load(directory:directory,identity:NTSDContent.identity) }
     static func bundledDirectory(_ name: String = "OriginalCharacterMenu",in appBundle: Bundle = .main) throws -> URL {
         try bundledDirectory(name,in:NTSDContent.location(in:appBundle))
     }

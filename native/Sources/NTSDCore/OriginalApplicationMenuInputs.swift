@@ -7,9 +7,7 @@ import CryptoKit
 /// continuation; expected pixels, EXE execution and platform writes are absent.
 public struct OriginalApplicationMenuInputs: Equatable {
     public enum Boundary: Error, Equatable { case missing(String), invalid(String) }
-    public static let manifestSHA256 = "f0c363739088e477c8b51b597374f29bccae9f63d7d09f7169128c57b01b1161"
     /// War setup bitmaps constructed by438b40 (tools/package_war_menu.py).
-    public static let warManifestSHA256 = "784c222b2313833f37219eae36b2424a61d4d0f2f257e5aaff083a82aaa5406a"
     public static let warPaths = ["BATTLEMODE","BATTLETROOPS"]
     public let bitmaps: [String:OriginalApplicationStartupInputs.Bitmap]
     private struct Manifest: Decodable {
@@ -22,11 +20,12 @@ public struct OriginalApplicationMenuInputs: Equatable {
         }
         return directory
     }
-    public static func bundled(in content: OriginalContentLocation) throws -> Self { try load(directory:bundledDirectory(in:content)) }
+    public static func bundled(in content: OriginalContentLocation) throws -> Self { try load(directory:bundledDirectory(in:content),identity:content.identity) }
     /// Character-menu and War-menu DIBs as one resource set for the loaded menu.
     public static func bundledWithWar(in content: OriginalContentLocation) throws -> Self {
         let menu = try bundled(in:content)
-        let war = try load(directory:bundledDirectory("OriginalWarMenu",in:content),manifest:warManifestSHA256,names:warPaths)
+        let war = try load(directory:bundledDirectory("OriginalWarMenu",in:content),identity:content.identity,
+                           manifest:content.identity.warMenuManifestSHA256,names:warPaths)
         return .init(bitmaps:menu.bitmaps.merging(war.bitmaps) { a,_ in a })
     }
     /// These inputs plus other packaged bitmaps: War start (43a21f) loads the
@@ -39,7 +38,8 @@ public struct OriginalApplicationMenuInputs: Equatable {
         }
         return .init(bitmaps:next)
     }
-    public static func load(directory: URL,manifest manifestDigest: String = manifestSHA256,
+    /// `manifest` defaults to the identity's character-menu digest.
+    public static func load(directory: URL,identity: OriginalContentIdentity,manifest manifestDigest: String? = nil,
                             names: [String] = OriginalMenuResourceLoading.paths) throws -> Self {
         func read(_ path: String) throws -> Data {
             let url = directory.appendingPathComponent(path)
@@ -50,10 +50,10 @@ public struct OriginalApplicationMenuInputs: Equatable {
         }
         func digest(_ data: Data) -> String { SHA256.hash(data:data).map { String(format:"%02x",$0) }.joined() }
         let data = try read("manifest.json")
-        guard digest(data) == manifestDigest else { throw Boundary.invalid("Manifest digest") }
+        guard digest(data) == (manifestDigest ?? identity.menuManifestSHA256) else { throw Boundary.invalid("Manifest digest") }
         let manifest = try JSONDecoder().decode(Manifest.self,from:data)
         guard manifest.version == 1,
-              manifest.exeSHA256 == "3f7ac67c5890ef979ee24a6dae5528056e7f631725c292cf9cb0a928ebeff71c",
+              manifest.exeSHA256 == identity.exeSHA256,
               manifest.entries.map(\.name) == names else { throw Boundary.invalid("Manifest contract") }
         var bitmaps: [String:OriginalApplicationStartupInputs.Bitmap] = [:]
         for entry in manifest.entries {

@@ -7,7 +7,6 @@ import CryptoKit
 /// decoded DAT state and comparison records are not part of this package.
 public struct OriginalApplicationCatalogInputs: Equatable {
     public enum Boundary: Error, Equatable { case missing(String), invalid(String), unsupportedName(String) }
-    public static let manifestSHA256 = "fd42d041549f00f5ba715063d7e560a9e2b01ab720017d1da5e032c34ca9451d"
     private struct Manifest: Decodable {
         struct Entry: Decodable {
             let name: String, kind: String, path: String, count: Int, sha256: String
@@ -20,7 +19,7 @@ public struct OriginalApplicationCatalogInputs: Equatable {
     private let fileNames: Set<String>
 
     public static func bundled(in content: OriginalContentLocation) throws -> Self {
-        try load(directory:bundledDirectory(in:content))
+        try load(directory:bundledDirectory(in:content),identity:content.identity)
     }
     public static func bundledDirectory(in content: OriginalContentLocation) throws -> URL {
         guard let directory = content.directory("OriginalCatalog") else {
@@ -28,7 +27,7 @@ public struct OriginalApplicationCatalogInputs: Equatable {
         }
         return directory
     }
-    public static func load(directory: URL) throws -> Self {
+    public static func load(directory: URL,identity: OriginalContentIdentity) throws -> Self {
         let fm = FileManager.default
         guard fm.fileExists(atPath:directory.path) else { throw Boundary.missing("OriginalCatalog") }
         let root = try OriginalFileFacts.of(directory,[.isDirectoryKey,.isSymbolicLinkKey])
@@ -53,11 +52,12 @@ public struct OriginalApplicationCatalogInputs: Equatable {
         }
         func digest(_ bytes: [UInt8]) -> String { OriginalConcurrentInputs.hex(SHA256.hash(data:bytes)) }
         let raw = try read("manifest.json")
-        guard digest(raw) == manifestSHA256 else { throw Boundary.invalid("Manifest digest") }
+        guard digest(raw) == identity.catalog.manifestSHA256 else { throw Boundary.invalid("Manifest digest") }
         let manifest = try JSONDecoder().decode(Manifest.self,from:Data(raw))
-        guard manifest.version == 1,manifest.exeSHA256 == "3f7ac67c5890ef979ee24a6dae5528056e7f631725c292cf9cb0a928ebeff71c",
-              manifest.entries.count == 1198,Set(manifest.entries.map(\.path)).count == 1198,
-              Set(manifest.entries.map(\.name)).count == 1198 else { throw Boundary.invalid("Manifest contract") }
+        let entries = identity.catalog.entries
+        guard manifest.version == 1,manifest.exeSHA256 == identity.exeSHA256,
+              manifest.entries.count == entries,Set(manifest.entries.map(\.path)).count == entries,
+              Set(manifest.entries.map(\.name)).count == entries else { throw Boundary.invalid("Manifest contract") }
         let rootPath = directory.standardizedFileURL.resolvingSymlinksInPath().path
         var expectedDirectories = Set<String>()
         for e in manifest.entries {
@@ -104,7 +104,7 @@ public struct OriginalApplicationCatalogInputs: Equatable {
             case .music(let bytes): music[e.name] = bytes
             }
         }
-        guard files.count == 521,bitmaps.count == 669,music.count == 8 else { throw Boundary.invalid("Input roles") }
+        guard files.count == identity.catalog.files,bitmaps.count == identity.catalog.bitmaps,music.count == identity.catalog.music else { throw Boundary.invalid("Input roles") }
         return .init(files:files,bitmaps:bitmaps,music:music,fileNames:Set(files.keys))
     }
     public func file(_ name: String) throws -> [UInt8]? {

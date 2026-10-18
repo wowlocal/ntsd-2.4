@@ -115,20 +115,19 @@ public struct OriginalApplicationStartupInputs: Equatable {
         struct Entry: Decodable { let path: String,count: Int,sha256: String }
         let version: Int,globalAddress: Int,globalCount: Int,exeSHA256: String,absentFiles: [String],entries: [Entry]
     }
-    public static let manifestSHA256 = "f67aff089a95f230b4e7f5c381ac92b420a5541f7fea6b6a268986aa6b7ef177"
     public let initial: OriginalStateRecord
     public let bitmaps: [String:Bitmap]
     private let files: [String:[UInt8]]
     private let fileNames: Set<String>
 
-    public static func bundled(in content: OriginalContentLocation) throws -> Self { try load(directory:bundledDirectory(in:content)) }
+    public static func bundled(in content: OriginalContentLocation) throws -> Self { try load(directory:bundledDirectory(in:content),identity:content.identity) }
     public static func bundledDirectory(in content: OriginalContentLocation) throws -> URL {
         guard let directory = content.directory("OriginalStartup") else {
             throw Boundary.missing("OriginalStartup bundle resource")
         }
         return directory
     }
-    public static func load(directory: URL) throws -> Self {
+    public static func load(directory: URL,identity: OriginalContentIdentity) throws -> Self {
         func read(_ path: String) throws -> [UInt8] {
             let url = directory.appendingPathComponent(path)
             guard OriginalFileFacts.exists(url) else { throw Boundary.missing(path) }
@@ -138,11 +137,11 @@ public struct OriginalApplicationStartupInputs: Equatable {
         }
         func digest(_ bytes: [UInt8]) -> String { OriginalConcurrentInputs.hex(SHA256.hash(data:bytes)) }
         let raw = try read("manifest.json")
-        guard digest(raw) == manifestSHA256 else { throw Boundary.invalid("Manifest digest") }
+        guard digest(raw) == identity.startup.manifestSHA256 else { throw Boundary.invalid("Manifest digest") }
         let manifest = try JSONDecoder().decode(Manifest.self,from:Data(raw))
         guard manifest.version == 1,manifest.globalAddress == 0x44d000,manifest.globalCount == 0xc3a8,
-              manifest.exeSHA256 == "3f7ac67c5890ef979ee24a6dae5528056e7f631725c292cf9cb0a928ebeff71c",
-              manifest.absentFiles == ["data/ad0.txt"],manifest.entries.count == 45 else { throw Boundary.invalid("Manifest contract") }
+              manifest.exeSHA256 == identity.exeSHA256,
+              manifest.absentFiles == identity.startup.absentFiles,manifest.entries.count == identity.startup.entries else { throw Boundary.invalid("Manifest contract") }
         // Entries are read and verified on all cores and taken in manifest
         // order (MEMORY_LOADING L3, M1): the first failing entry in that order
         // still fails first with its own error. A path the order check would
@@ -198,7 +197,9 @@ public struct OriginalApplicationStartupInputs: Equatable {
                 let name = String(path.dropFirst(8).dropLast(4));bitmaps[name] = try bitmap.get()!
             } else if path.hasPrefix("data/") { files[path.replacingOccurrences(of:"/",with:"\\")] = bytes }
         }
-        return .init(initial:initial,bitmaps:bitmaps,files:files,fileNames:Set(files.keys).union(["data\\ad0.txt"]))
+        // The declared-absent files are known names that read as missing.
+        let absent = identity.startup.absentFiles.map { $0.replacingOccurrences(of:"/",with:"\\") }
+        return .init(initial:initial,bitmaps:bitmaps,files:files,fileNames:Set(files.keys).union(absent))
     }
     public func file(_ name: String) throws -> [UInt8]? {
         guard fileNames.contains(name) else { throw Boundary.unsupportedName(name) }

@@ -8,7 +8,6 @@ import CryptoKit
 /// Loading this package performs no game logic or platform bitmap requests.
 public struct OriginalApplicationArenaInputs {
     public let bitmaps: [String:OriginalApplicationStartupInputs.Bitmap]
-    public static let manifestSHA256 = "60652ed8df36c7ff0bbaa167dcf1dd7be07140dac766c529d275f0705fc40519"
     private struct Manifest: Decodable {
         struct Entry: Decodable { let name: String,path: String,bytes: Int,sha256: String }
         let version: Int,exeSHA256: String,entries: [Entry]
@@ -17,9 +16,9 @@ public struct OriginalApplicationArenaInputs {
         guard let directory = content.directory("OriginalMatchArenas") else {
             throw OriginalStateError.invalidStorage("Missing arena input package")
         }
-        return try load(directory:directory)
+        return try load(directory:directory,identity:content.identity)
     }
-    public static func load(directory: URL) throws -> Self {
+    public static func load(directory: URL,identity: OriginalContentIdentity) throws -> Self {
         func error(_ text: String) -> OriginalStateError { .invalidStorage("Arena inputs: "+text) }
         func digest(_ bytes: Data) -> String { OriginalConcurrentInputs.hex(SHA256.hash(data:bytes)) }
         func read(_ path: String) throws -> Data {
@@ -37,9 +36,9 @@ public struct OriginalApplicationArenaInputs {
             return values.fileSize
         }
         let data = try read("manifest.json")
-        guard digest(data) == manifestSHA256 else { throw error("Manifest digest") }
+        guard digest(data) == identity.arenaManifestSHA256 else { throw error("Manifest digest") }
         let manifest = try JSONDecoder().decode(Manifest.self,from:data)
-        guard manifest.version == 1,manifest.exeSHA256 == "3f7ac67c5890ef979ee24a6dae5528056e7f631725c292cf9cb0a928ebeff71c" else { throw error("Reference identity") }
+        guard manifest.version == 1,manifest.exeSHA256 == identity.exeSHA256 else { throw error("Reference identity") }
         // Each file is read, checked and decoded concurrently; the checks that
         // depend on earlier entries (name, duplicate) and every error keep the
         // manifest order: read error, then the guard, then the decode's. A file

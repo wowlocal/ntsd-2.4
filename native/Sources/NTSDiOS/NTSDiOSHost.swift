@@ -89,7 +89,7 @@ final class NTSDiOSCursor {}
 /// (Caches on tvOS). The same host runs on the Apple TV (TVOS_WEB T0).
 @MainActor final class NTSDiOSSessionHost: OriginalRuntimeSessionHost {
     let arguments: [String], windows: NTSDiOSWindowHost, musicDirectory: String
-    let contentFallback = NTSDContent.fallback
+    func contentLocation(in appBundle: Bundle) -> OriginalContentLocation { NTSDContent.location(in:appBundle) }
     weak var session: OriginalRuntimeSession?
     private let engine = AVAudioEngine()
     private var activity: NSObjectProtocol?
