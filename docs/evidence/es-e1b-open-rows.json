@@ -1,0 +1,37 @@
+{
+ "study": "ENGINE_SPLIT",
+ "step": "E1b open rows",
+ "recordedUTC": "2026-10-18T19:22:54Z",
+ "tree": {
+  "commit": "6b640cd7",
+  "native": "29aa8b2b5fc7dfb53c7a0529826def98abea6256",
+  "tools": "a5a60d2b8801335abb84c98f4694b41ce5501aa8",
+  "where": "the detached dev worktree /Volumes/NTSD-Builds/tasks/engine-split/dev checked out at 6b640cd7 (the branch worktree held E2's staged change)"
+ },
+ "audio": "the Mac's audio answered again (afplay of a system sound exit 0) with the same coreaudiod process (PID 759, started 2026-10-17 05:44); no restart was made (the user's `sudo killall coreaudiod` through `!` failed for want of a terminal, after the recovery)",
+ "rows": {
+  "packaged-app": "tools/build-native.sh on that tree; vs through run_headless_scenarios --local of NTSD Native.app: equal, its 6 frames and 1,826 digests identical to rt-4w-appkit",
+  "ios": "ios_app.py with NTSD_SIM_SET=/Volumes/NTSD-Builds/tasks/engine-split/simulators (iPad Air 13-inch (M4), iOS 26.5, created there by E1b's gate): vs equal, its 6 frames and 1,826 digests identical to rt-4w-appkit (CoreText group)"
+ },
+ "notRun": "playback in these rows (the comparator's 'missing' lines are the reference's playback frames)",
+ "closes": [
+  "E1b's packaged-app and iOS rows",
+  "E1a's iOS row (E1b's tree contains E1a)"
+ ],
+ "log": [
+  "== packaged-app (E1b tree 6b640cd7)",
+  "build exit=0",
+  "exit=0",
+  "{\"scenario\": \"vs\", \"exit\": 0, \"seconds\": 66.0, \"result\": \"equal\", \"differs\": []}",
+  "{\"scenario\": \"playback\", \"frames\": 7, \"identical\": 0, \"differ\": [], \"missing\": [\"f000300.png\", \"f000600.png\", \"f000900.png\", \"f001200.png\", \"f001500.png\"], \"digests\": {\"a\": 2121, \"b\": 0, \"equal\": false, \"firstDifferentBody\": null}}",
+  "{\"scenario\": \"vs\", \"frames\": 6, \"identical\": 6, \"differ\": [], \"missing\": [], \"digests\": {\"a\": 1826, \"b\": 1826, \"equal\": true, \"firstDifferentBody\": null}}",
+  "== ios",
+  "exit=0",
+  "{\"result\": \"equal\", \"differs\": []}",
+  "{\"scenario\": \"playback\", \"frames\": 7, \"identical\": 0, \"differ\": [], \"missing\": [\"f000300.png\", \"f000600.png\", \"f000900.png\", \"f001200.png\", \"f001500.png\"], \"digests\": {\"a\": 2121, \"b\": 0, \"equal\": false, \"firstDifferentBody\": null}}",
+  "{\"scenario\": \"vs\", \"frames\": 6, \"identical\": 6, \"differ\": [], \"missing\": [], \"digests\": {\"a\": 1826, \"b\": 1826, \"equal\": true, \"firstDifferentBody\": null}}",
+  "rerun_done",
+  "",
+  "[exited with code 0]"
+ ]
+}
