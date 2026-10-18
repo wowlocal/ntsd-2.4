@@ -26,6 +26,9 @@ import NTSDCore
     /// The packaged original tracks and their player.
     func makeMusicOutput() throws -> OriginalMacMusicOutput
     var musicDirectory: String { get }
+    /// The game's resource bundle, for content packages that neither the main
+    /// bundle nor a `--resources` directory holds (OriginalContentLocation).
+    var contentFallback: @Sendable () -> Bundle? { get }
     /// Starts output of the sound-effect mixer; returns its report text.
     func startSoundOutput(_ effects: OriginalMacSoundEffects,muted: Bool) throws -> String
     func backingScale(_ window: UInt32,in windows: OriginalRuntimeWindowBackend) -> Double
@@ -151,6 +154,8 @@ public enum OriginalRuntimeSessionBoundary: Error, Equatable {
         guard let bundle = Bundle(path:arguments[i+1]) else { throw OriginalRuntimeSessionBoundary.resources(arguments[i+1]) }
         return bundle
     }
+    /// The game's content: the resource bundle's packages, else the host's fallback.
+    func contentLocation() throws -> OriginalContentLocation { .init(appBundle:try resourceBundle(),fallback:host.contentFallback) }
     /// The current original window (replaced by an Alt+Enter recreation).
     public private(set) var gameWindow: UInt32 = 0
     public init(arguments: [String],host: any OriginalRuntimeSessionHost) {
@@ -231,7 +236,7 @@ public enum OriginalRuntimeSessionBoundary: Error, Equatable {
             // Timer precision without throttling, but the machine may still idle-sleep:
             // the original never calls SetThreadExecutionState.
             host.beginTimingActivity()
-            let resources = try resourceBundle()
+            let resources = try contentLocation()
             let package = try OriginalApplicationStartupInputs.bundled(in:resources)
             let overlay = try overlayRoot()
             let started = try OriginalMacRuntimeStartup.run(inputs:package,overlay:overlay,environment:startupEnvironment(),host:host.startupHost)
@@ -378,7 +383,7 @@ public enum OriginalRuntimeSessionBoundary: Error, Equatable {
                 if let n = scriptStep(committedBranch:false) { try runScript(n,menu,started,timeline:&script) }
                 try runScript(cycles,menu,started,timeline:&loadedScript)
                 if first {
-                    let resources = try resourceBundle()
+                    let resources = try contentLocation()
                     let startupInputs = try startupPackage ?? OriginalApplicationStartupInputs.bundled(in:resources)
                     let waitBegin = Date()
                     let packages = try loadingPackages?.get() ?? OriginalRuntimeLoadingPackages(in:resources)

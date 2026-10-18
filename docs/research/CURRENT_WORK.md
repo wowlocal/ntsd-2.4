@@ -11,8 +11,12 @@ mlgate. Открыты решения пользователя: D1 (LF2 2.0a EXE
 блокирует только E6) и D2 (имя и лицензия, блокирует только публикацию E8).
 E0 выполнен: mlgate.sh в ветке с параметрами путей, базовый gate `es-base` на T7
 совпал с main (11 сценариев, кадры идентичны, AppKit, эмулятор, suites; A/B на A12
-против `mm-2`): [evidence](../evidence/es-e0-base.json). Следующая задача — E1a:
-контент в отдельном target `NTSDContent`, Core получает `OriginalContentLocation`.
+против `mm-2`): [evidence](../evidence/es-e0-base.json). E1a выполнен: контент в
+target `NTSDContent`, Core без `Bundle.module`, получает `OriginalContentLocation`;
+независимый review без замечаний к коду (исправлен шаг tested-tree в mlgate); gate
+`es-e1a` и строки WASI/браузер/Linux/Windows/упакованный `.app` совпали:
+[evidence](../evidence/es-e1a-content-target.json). Открыт iOS: данные симулятора
+(CoreSimulator/Devices) исчезли 2026-10-17. Следующая задача — E1b (музыка).
 
 ## Internal build storage и VM quota исправлены — 2026-10-17
 

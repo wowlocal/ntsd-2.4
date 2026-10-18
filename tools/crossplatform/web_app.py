@@ -192,11 +192,11 @@ def listing(folder):
 
 def mount_files(build_dir, music):
     """Each mount's listing ({path, dir, size}) and its files' sources."""
-    program, bundle = build_dir / "NTSDWeb.wasm", build_dir / "NTSDNative_NTSDCore.bundle"
-    app = [{"path": "NTSDNative_NTSDCore.bundle", "dir": True}] + \
-          [{**e, "path": f"NTSDNative_NTSDCore.bundle/{e['path']}"} for e in listing(bundle)] + \
+    program, bundle = build_dir / "NTSDWeb.wasm", build_dir / "NTSDNative_NTSDContent.bundle"
+    app = [{"path": "NTSDNative_NTSDContent.bundle", "dir": True}] + \
+          [{**e, "path": f"NTSDNative_NTSDContent.bundle/{e['path']}"} for e in listing(bundle)] + \
           [{"path": "NTSDWeb.wasm", "dir": False, "size": program.stat().st_size}]
-    sources = {f"/app/{e['path']}": bundle / e["path"][len("NTSDNative_NTSDCore.bundle/"):] for e in app if not e["dir"]}
+    sources = {f"/app/{e['path']}": bundle / e["path"][len("NTSDNative_NTSDContent.bundle/"):] for e in app if not e["dir"]}
     sources["/app/NTSDWeb.wasm"] = program
     tracks = listing(music)
     sources.update({f"/music/{e['path']}": music / e["path"] for e in tracks if not e["dir"]})
@@ -208,7 +208,7 @@ def build(build_dir, out, music):
         sys.exit(f"web_app.py: {out} exists")
     if not shutil.which("brotli"):
         sys.exit("web_app.py: build needs the brotli command")
-    program, bundle = build_dir / "NTSDWeb.wasm", build_dir / "NTSDNative_NTSDCore.bundle"
+    program, bundle = build_dir / "NTSDWeb.wasm", build_dir / "NTSDNative_NTSDContent.bundle"
     for needed in (program, bundle, music, ORDER):
         if not needed.exists():
             sys.exit(f"web_app.py: no {needed}")
@@ -258,7 +258,7 @@ def build(build_dir, out, music):
         else: clone(sources[g], out / data / p["url"]); p["wire"] = p["raw"]
     (out / data / "index.json").write_text(json.dumps({"packs": packs, "mounts": mounts}, separators=(",", ":")))
     config = {"program": f"{data}/br/NTSDWeb.wasm", "data": f"{data}/index.json",
-              "args": ["/app/NTSDWeb.wasm", "--resources", "/app/NTSDNative_NTSDCore.bundle", "--music-dir", "/music"],
+              "args": ["/app/NTSDWeb.wasm", "--resources", "/app/NTSDNative_NTSDContent.bundle", "--music-dir", "/music"],
               "env": {}, "canvas": True, "frameBytes": 32 << 20, "interactive": True, "autostart": False,
               "mounts": [{"guest": "/app", "writable": False, "packed": True},
                          {"guest": "/music", "writable": False, "packed": True},

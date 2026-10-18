@@ -1,5 +1,6 @@
 import Foundation
 import NTSDCore
+import NTSDContent
 import NTSDRuntime
 
 /// The browser session host (TVOS_WEB W2b): the original game in a page, run
@@ -14,6 +15,7 @@ import NTSDRuntime
 /// the page mounts one.
 @MainActor final class WebSessionHost: OriginalRuntimeSessionHost {
     let arguments: [String], windows: WebWindowHost, musicDirectory: String
+    let contentFallback = NTSDContent.fallback
     weak var session: OriginalRuntimeSession?
     var scripted: Bool { arguments.contains("--script") }
     private var caps = false, cursor: (Int32,Int32) = (0,0), pumping = false, gamepadCount = -1

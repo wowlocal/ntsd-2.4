@@ -38,7 +38,7 @@ from pathlib import Path
 
 ROOT = Path(__file__).resolve().parents[2]
 MUSIC = ROOT / "native/Sources/NTSDMacPlatform/Resources/OriginalMusic"
-CONTROL = ROOT / "native/Sources/NTSDCore/Resources/OriginalStartup/data/control.txt"
+CONTROL = ROOT / "native/Sources/NTSDContent/Resources/OriginalStartup/data/control.txt"
 HOST_SCRIPT = "20 click 410 262; 60 click 400 287; 2000 exit"
 TYPED = {"client": "127.0.0.1"}   # the address the client types (its ready state reports it as localAddress)
 

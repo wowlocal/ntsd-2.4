@@ -35,6 +35,9 @@ from pathlib import Path
 ROOT = Path(__file__).resolve().parents[2]
 TOOLS = ROOT / "tools/crossplatform"
 X5 = Path("/Volumes/X5/ntsd-2.4-research/crossplatform")
+# Build folders and run copies; NTSD_XPLAT_OUT moves them (ENGINE_SPLIT: outputs on T7) while the
+# SDL, FreeType and Windows SDK dependencies stay read from X5.
+OUTPUTS = Path(os.environ.get("NTSD_XPLAT_OUT", X5))
 OSS = Path.home() / "Library/Developer/Toolchains/swift-6.4.0-RELEASE.xctoolchain/usr/bin/swift"
 XCODE_BUILD = "/Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/bin/swift-build"
 GROUPS = {"appkit": "coretext", "macos-sdl": "coretext", "ios": "coretext", "tvos": "coretext", "linux-headless": "none", "linux-x86_64": "none",
@@ -71,32 +74,32 @@ def build(host):
         sh([XCODE_BUILD, "--package-path", "native", "--scratch-path", "build/swiftpm-sdl", "--build-system", "native", "-c", "release", "--product", "NTSDSDL"], {"NTSD_SDL": "1"})
     elif host in ("linux-headless", "linux-x86_64"):
         arch = "aarch64" if host == "linux-headless" else "x86_64"
-        sh([str(OSS), "build", "--package-path", "native", "--scratch-path", str(X5 / f"build-linux-{arch}"), "--swift-sdk", f"{arch}-swift-linux-musl",
+        sh([str(OSS), "build", "--package-path", "native", "--scratch-path", str(OUTPUTS / f"build-linux-{arch}"), "--swift-sdk", f"{arch}-swift-linux-musl",
             "-c", "release", "--product", "NTSDHeadless"], linux)
     elif host == "linux-sdl":
-        sh([str(OSS), "build", "--package-path", "native", "--scratch-path", str(X5 / "build-linux-glibc-aarch64"), "--swift-sdk", "ntsd-6.4.0-ubuntu24.04-aarch64",
+        sh([str(OSS), "build", "--package-path", "native", "--scratch-path", str(OUTPUTS / "build-linux-glibc-aarch64"), "--swift-sdk", "ntsd-6.4.0-ubuntu24.04-aarch64",
             "-c", "release", "--product", "NTSDSDL"], {**linux, "NTSD_SDL": "1", "NTSD_SDL_PREFIX": str(X5 / "linux-deps/sdl3/install-aarch64"),
                                                       "NTSD_FREETYPE_PREFIX": str(X5 / "linux-deps/freetype/install-aarch64")})
     elif host in ("windows", "windows-sdl"):
         product = "NTSDHeadless" if host == "windows" else "NTSDSDL"
         env = {**linux, **({"NTSD_SDL": "1", "NTSD_SDL_PREFIX": str(X5 / "windows-deps/sdl3/install-x86_64")} if host == "windows-sdl" else {})}
-        sh([str(OSS), "build", "--package-path", "native", "--scratch-path", str(X5 / "build-windows-x86_64"), "--build-system", "native",
+        sh([str(OSS), "build", "--package-path", "native", "--scratch-path", str(OUTPUTS / "build-windows-x86_64"), "--build-system", "native",
             "--swift-sdk", "ntsd-6.4.0-windows-x86_64", "-c", "release", "--product", product], env)
-        products = X5 / "build-windows-x86_64/x86_64-unknown-windows-msvc/release"; run = X5 / ("win-headless" if host == "windows" else "win-sdl")
+        products = OUTPUTS / "build-windows-x86_64/x86_64-unknown-windows-msvc/release"; run = OUTPUTS / ("win-headless" if host == "windows" else "win-sdl")
         run.mkdir(parents=True, exist_ok=True)
         shutil.copy2(products / f"{product}.exe", run / f"{product}.exe")
-        shutil.rmtree(run / "NTSDNative_NTSDCore.resources", ignore_errors=True)
-        shutil.copytree(products / "NTSDNative_NTSDCore.resources", run / "NTSDNative_NTSDCore.resources")
+        shutil.rmtree(run / "NTSDNative_NTSDContent.resources", ignore_errors=True)
+        shutil.copytree(products / "NTSDNative_NTSDContent.resources", run / "NTSDNative_NTSDContent.resources")
         for dll in (X5 / "windows-sdk-extract/tree").glob("*.dll"): shutil.copy2(dll, run / dll.name)
         if host == "windows-sdl": shutil.copy2(X5 / "windows-deps/sdl3/install-x86_64/bin/SDL3.dll", run / "SDL3.dll")
     elif host == "android":
-        sh([str(OSS), "build", "--package-path", "native", "--scratch-path", str(X5 / "build-android-aarch64"), "--swift-sdk", "aarch64-unknown-linux-android28",
+        sh([str(OSS), "build", "--package-path", "native", "--scratch-path", str(OUTPUTS / "build-android-aarch64"), "--swift-sdk", "aarch64-unknown-linux-android28",
             "-c", "release", "--static-swift-stdlib", "--product", "NTSDHeadless"],
            {**linux, "ANDROID_HOME": str(ANDROID_SDK), "ANDROID_NDK_ROOT": str(ANDROID_NDK)})
-        products = X5 / "build-android-aarch64/out/Products/Release-android-aarch64"; run = X5 / "android-headless"
+        products = OUTPUTS / "build-android-aarch64/out/Products/Release-android-aarch64"; run = OUTPUTS / "android-headless"
         shutil.rmtree(run, ignore_errors=True); run.mkdir(parents=True)
         shutil.copy2(products / "NTSDHeadless", run / "NTSDHeadless")
-        shutil.copytree(products / "NTSDNative_NTSDCore.bundle", run / "NTSDNative_NTSDCore.bundle")
+        shutil.copytree(products / "NTSDNative_NTSDContent.bundle", run / "NTSDNative_NTSDContent.bundle")
         shutil.copy2(ANDROID_NDK / "toolchains/llvm/prebuilt/darwin-x86_64/sysroot/usr/lib/aarch64-linux-android/libc++_shared.so", run / "libc++_shared.so")
 
 
@@ -107,19 +110,19 @@ def run(host, out):
     elif host == "macos-sdl":
         sh([sys.executable, str(RUNNER), str(target), "--local", str(ROOT / "build/swiftpm-sdl/release/NTSDSDL")])
     elif host == "linux-headless":
-        sh([sys.executable, str(RUNNER), str(target), "--linux", str(X5 / "build-linux-aarch64/out/Products/Release-staticlinux-aarch64")])
+        sh([sys.executable, str(RUNNER), str(target), "--linux", str(OUTPUTS / "build-linux-aarch64/out/Products/Release-staticlinux-aarch64")])
     elif host == "linux-x86_64":
-        sh([sys.executable, str(RUNNER), str(target), "--linux-amd64", str(X5 / "build-linux-x86_64/out/Products/Release-staticlinux-x86_64")])
+        sh([sys.executable, str(RUNNER), str(target), "--linux-amd64", str(OUTPUTS / "build-linux-x86_64/out/Products/Release-staticlinux-x86_64")])
     elif host == "linux-sdl":
-        sh([sys.executable, str(RUNNER), str(target), "--linux-sdl", str(X5 / "build-linux-glibc-aarch64/out/Products/Release-linux-aarch64")],
+        sh([sys.executable, str(RUNNER), str(target), "--linux-sdl", str(OUTPUTS / "build-linux-glibc-aarch64/out/Products/Release-linux-aarch64")],
            {"NTSD_LINUX_IMAGE": "ntsd-linux-runtime:noble", "NTSD_SDL_LIB": str(X5 / "linux-deps/sdl3/install-aarch64/lib")})
     elif host == "windows":
-        sh([sys.executable, str(RUNNER), str(target), "--wine", str(X5 / "win-headless")])
+        sh([sys.executable, str(RUNNER), str(target), "--wine", str(OUTPUTS / "win-headless")])
     elif host == "windows-sdl":
-        sh([sys.executable, str(RUNNER), str(target), "--wine", str(X5 / "win-sdl")],
+        sh([sys.executable, str(RUNNER), str(target), "--wine", str(OUTPUTS / "win-sdl")],
            {"NTSD_WINE_EXE": "NTSDSDL.exe", "NTSD_WINE_ENV": "NTSD_SDL_VIDEO_DRIVER=offscreen NTSD_SDL_AUDIO_DRIVER=dummy"})
     elif host == "android":
-        sh([sys.executable, str(RUNNER), str(target), "--android", str(X5 / "android-headless")], {"ADB": ADB})
+        sh([sys.executable, str(RUNNER), str(target), "--android", str(OUTPUTS / "android-headless")], {"ADB": ADB})
     elif host in ("ios", "tvos"):
         target.mkdir(parents=True, exist_ok=True)
         rows = []

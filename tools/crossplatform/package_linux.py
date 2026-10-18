@@ -9,7 +9,7 @@ and FreeType of build_linux_deps.sh, then assembles:
 
   ntsd-linux-<arch>/NTSDSDL                    the game (RUNPATH $ORIGIN)
   ntsd-linux-<arch>/libSDL3.so.0               SDL3 3.4.16
-  ntsd-linux-<arch>/NTSDNative_NTSDCore.bundle resources
+  ntsd-linux-<arch>/NTSDNative_NTSDContent.bundle resources
   ntsd-linux-<arch>/OriginalMusic              packaged tracks + manifest
   ntsd-linux-<arch>/LICENSES                   SDL3, FreeType, ALAC, Swift, ICU
   ntsd-linux-<arch>/README.txt
@@ -64,7 +64,7 @@ def main():
     shutil.rmtree(args.out, ignore_errors=True); stage.mkdir(parents=True)
     shutil.copy2(products / "NTSDSDL", stage / "NTSDSDL")
     shutil.copy2(sdl / f"install-{arch}/lib/libSDL3.so.0.4.16", stage / "libSDL3.so.0")
-    shutil.copytree(products / "NTSDNative_NTSDCore.bundle", stage / "NTSDNative_NTSDCore.bundle")
+    shutil.copytree(products / "NTSDNative_NTSDContent.bundle", stage / "NTSDNative_NTSDContent.bundle")
     shutil.copytree(ROOT / "native/Sources/NTSDMacPlatform/Resources/OriginalMusic", stage / "OriginalMusic")
     lic = stage / "LICENSES"; lic.mkdir()
     shutil.copy2(sdl / "src/LICENSE.txt", lic / "SDL3-zlib.txt")

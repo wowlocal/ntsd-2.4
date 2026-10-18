@@ -29,7 +29,7 @@ and the resource bundle) and the music to /data/local/tmp/ntsd on the device
 adb reaches (an emulator: a test harness), runs each scenario there with
 `adb shell`, and pulls its captures, overlay and frames back. $ADB names adb.
 `--wasi` runs BUILD_DIR/NTSDHeadless.wasm (built for wasm32-unknown-wasip1,
-its NTSDNative_NTSDCore.bundle beside it) under Node's WASI through
+its NTSDNative_NTSDContent.bundle beside it) under Node's WASI through
 wasi_run.mjs, a test harness (TVOS_WEB W0): BUILD_DIR, the music and OUT_DIR
 are preopened as /app, /music and /out, and --resources names the bundle.
 `--browser` runs the same BUILD_DIR/NTSDHeadless.wasm in headless Chromium
@@ -129,14 +129,14 @@ def main():
                        # NTSD_WEB_PRECOMPRESSED=1: served as a host serves web_app.py --compress forms (TVOS_WEB W3b)
                        *(["--precompressed"] if os.environ.get("NTSD_WEB_PRECOMPRESSED") == "1" else []),
                        *(["--canvas"] if mode == "--web" else []), "--", str(app / program),
-                       "--resources", "/app/NTSDNative_NTSDCore.bundle", "--music-dir", "/music", *args]
+                       "--resources", "/app/NTSDNative_NTSDContent.bundle", "--music-dir", "/music", *args]
         elif mode == "--wasi":
             app = Path(target).resolve()
             # --disable-warning: Node's notice that WASI is experimental stays out of stderr.
             command = [node(), "--disable-warning=ExperimentalWarning", str(ROOT / "tools/crossplatform/wasi_run.mjs"),
                        "--map", f"/app={app}", "--map", f"/music={MUSIC}",
                        "--map", f"/out={out}", "--argv0", "/app/NTSDHeadless.wasm", "--", str(app / "NTSDHeadless.wasm"),
-                       "--resources", "/app/NTSDNative_NTSDCore.bundle", "--music-dir", "/music", *args]
+                       "--resources", "/app/NTSDNative_NTSDContent.bundle", "--music-dir", "/music", *args]
         elif mode == "--wine":
             cx = "/Applications/CrossOver.app/Contents/SharedSupport/CrossOver/bin/wine"
             command = [cx, "--bottle", os.environ.get("NTSD_WINE_BOTTLE", "ntsd-xplat-test"), "--wait-children", host(Path(target).resolve() / os.environ.get("NTSD_WINE_EXE", "NTSDHeadless.exe")),

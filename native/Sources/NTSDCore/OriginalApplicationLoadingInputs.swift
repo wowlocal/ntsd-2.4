@@ -13,15 +13,11 @@ public struct OriginalApplicationLoadingInputs: Equatable {
         let version: Int,exeSHA256: String,entries: [Entry]
     }
     private let files: [String:[UInt8]]
-    public static func bundled(in appBundle: Bundle = .main) throws -> Self {
-        try load(directory:bundledDirectory(in:appBundle))
+    public static func bundled(in content: OriginalContentLocation) throws -> Self {
+        try load(directory:bundledDirectory(in:content))
     }
-    public static func bundledDirectory(in appBundle: Bundle = .main) throws -> URL {
-        if let resources = appBundle.resourceURL {
-            let directory = resources.appendingPathComponent("OriginalCommonSounds",isDirectory:true)
-            if appBundle.bundleURL.pathExtension == "app" || FileManager.default.fileExists(atPath:directory.path) { return directory }
-        }
-        guard let directory = Bundle.module.url(forResource:"OriginalCommonSounds",withExtension:nil) else {
+    public static func bundledDirectory(in content: OriginalContentLocation) throws -> URL {
+        guard let directory = content.directory("OriginalCommonSounds") else {
             throw Boundary.missing("OriginalCommonSounds bundle resource")
         }
         return directory

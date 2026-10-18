@@ -36,9 +36,9 @@ public struct OriginalRuntimeLoadingPackages {
     public let catalog: Result<OriginalApplicationCatalogInputs,Error>, loading: Result<OriginalApplicationLoadingInputs,Error>
     public let interface: Result<OriginalApplicationInterfaceInputs,Error>, menu: Result<OriginalApplicationMenuInputs,Error>
     public let arena: Result<OriginalApplicationArenaInputs,Error>
-    public init(in bundle: Bundle) {
-        self.init(catalog:Result { try .bundled(in:bundle) },loading:Result { try .bundled(in:bundle) },
-            interface:Result { try .bundled(in:bundle) },menu:Result { try .bundledWithWar(in:bundle) },arena:Result { try .bundled(in:bundle) })
+    public init(in content: OriginalContentLocation) {
+        self.init(catalog:Result { try .bundled(in:content) },loading:Result { try .bundled(in:content) },
+            interface:Result { try .bundled(in:content) },menu:Result { try .bundledWithWar(in:content) },arena:Result { try .bundled(in:content) })
     }
     init(catalog: Result<OriginalApplicationCatalogInputs,Error>,loading: Result<OriginalApplicationLoadingInputs,Error>,
          interface: Result<OriginalApplicationInterfaceInputs,Error>,menu: Result<OriginalApplicationMenuInputs,Error>,
@@ -159,9 +159,9 @@ public struct OriginalRuntimeLoadingPackages {
         bitmapInputs = .init(resources:resources,files:files)
     }
     public static func bundled(_ started: OriginalMacRuntimeStartup.Started,startupInputs: OriginalApplicationStartupInputs,
-        clock: @escaping () throws -> UInt32,dialogs: OriginalRuntimeLoadingDialogs,in bundle: Bundle = .main) throws -> OriginalMacRuntimeLoading {
-        try .init(started,startupInputs:startupInputs,catalogInputs:.bundled(in:bundle),loadingInputs:.bundled(in:bundle),
-            interfaceInputs:.bundled(in:bundle),menuInputs:.bundledWithWar(in:bundle),arenaInputs:.bundled(in:bundle),clock:clock,dialogs:dialogs)
+        clock: @escaping () throws -> UInt32,dialogs: OriginalRuntimeLoadingDialogs,in content: OriginalContentLocation) throws -> OriginalMacRuntimeLoading {
+        try .init(started,startupInputs:startupInputs,catalogInputs:.bundled(in:content),loadingInputs:.bundled(in:content),
+            interfaceInputs:.bundled(in:content),menuInputs:.bundledWithWar(in:content),arenaInputs:.bundled(in:content),clock:clock,dialogs:dialogs)
     }
     /// `bundled` with the packages already read (MEMORY_LOADING L13): the
     /// first failing package in `bundled`'s order throws its error.

@@ -45,7 +45,7 @@ def main():
     app = out / "NTSDiOS.app"; shutil.rmtree(app, ignore_errors=True); app.mkdir(parents=True)
     shutil.copy2(products / "NTSDiOS", app / "NTSDiOS")
     # Inside an .app the input loaders read their folders from the main bundle's resources.
-    for folder in sorted((products / "NTSDNative_NTSDCore.bundle").iterdir()):
+    for folder in sorted((products / "NTSDNative_NTSDContent.bundle").iterdir()):
         if folder.is_dir() and folder.name.startswith("Original"):
             shutil.copytree(folder, app / folder.name)
     shutil.copytree(ROOT / "native/Sources/NTSDMacPlatform/Resources/OriginalMusic", app / "OriginalMusic")

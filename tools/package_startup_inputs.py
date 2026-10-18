@@ -68,5 +68,5 @@ def package(output,source=DEFAULT_SOURCE):
 if __name__=='__main__':
     p=argparse.ArgumentParser(description=__doc__)
     p.add_argument('--source',type=Path,default=DEFAULT_SOURCE)
-    p.add_argument('--output',type=Path,default=ROOT/'native/Sources/NTSDCore/Resources/OriginalStartup')
+    p.add_argument('--output',type=Path,default=ROOT/'native/Sources/NTSDContent/Resources/OriginalStartup')
     a=p.parse_args();print(json.dumps(package(a.output,a.source)))

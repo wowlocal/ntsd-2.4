@@ -13,14 +13,8 @@ public struct OriginalApplicationArenaInputs {
         struct Entry: Decodable { let name: String,path: String,bytes: Int,sha256: String }
         let version: Int,exeSHA256: String,entries: [Entry]
     }
-    public static func bundled(in bundle: Bundle = .main) throws -> Self {
-        if let resources = bundle.resourceURL {
-            let directory = resources.appendingPathComponent("OriginalMatchArenas",isDirectory:true)
-            if bundle.bundleURL.pathExtension == "app" || FileManager.default.fileExists(atPath:directory.path) {
-                return try load(directory:directory)
-            }
-        }
-        guard let directory = Bundle.module.url(forResource:"OriginalMatchArenas",withExtension:nil) else {
+    public static func bundled(in content: OriginalContentLocation) throws -> Self {
+        guard let directory = content.directory("OriginalMatchArenas") else {
             throw OriginalStateError.invalidStorage("Missing arena input package")
         }
         return try load(directory:directory)

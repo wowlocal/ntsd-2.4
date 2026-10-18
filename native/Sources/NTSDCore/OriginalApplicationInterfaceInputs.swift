@@ -13,17 +13,13 @@ public struct OriginalApplicationInterfaceInputs: Equatable {
         struct Entry: Decodable { let name: String,path: String,count: Int,sha256: String }
         let version: Int,exeSHA256: String,entries: [Entry]
     }
-    public static func bundledDirectory(in appBundle: Bundle = .main) throws -> URL {
-        if let resources = appBundle.resourceURL {
-            let directory = resources.appendingPathComponent("OriginalLoadingInterface",isDirectory:true)
-            if appBundle.bundleURL.pathExtension == "app" || FileManager.default.fileExists(atPath:directory.path) { return directory }
-        }
-        guard let directory = Bundle.module.url(forResource:"OriginalLoadingInterface",withExtension:nil) else {
+    public static func bundledDirectory(in content: OriginalContentLocation) throws -> URL {
+        guard let directory = content.directory("OriginalLoadingInterface") else {
             throw Boundary.missing("OriginalLoadingInterface")
         }
         return directory
     }
-    public static func bundled(in appBundle: Bundle = .main) throws -> Self { try load(directory:bundledDirectory(in:appBundle)) }
+    public static func bundled(in content: OriginalContentLocation) throws -> Self { try load(directory:bundledDirectory(in:content)) }
     public static func load(directory: URL) throws -> Self {
         func read(_ path: String) throws -> Data {
             let url = directory.appendingPathComponent(path)

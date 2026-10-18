@@ -51,7 +51,7 @@ def main():
     a.add_argument("--platform", choices=sorted(PLATFORMS), default="ios")
     a.add_argument("--device"); a.add_argument("--scratch", type=Path)
     args = a.parse_args(); out = args.out.resolve(); p = PLATFORMS[args.platform]
-    args.device = args.device or p["device"]; args.scratch = args.scratch or X5 / p["scratch"]
+    args.device = args.device or p["device"]; args.scratch = args.scratch or Path(os.environ.get("NTSD_XPLAT_OUT", X5)) / p["scratch"]
     sdk = run(["xcrun", "--sdk", p["sdk"], "--show-sdk-path"])
     # The shipping build drops Swift's dynamic exclusivity checks (the user's decision, CORE_REALTIME 4aa).
     env = {**os.environ, "NTSD_PORTABLE": "1", "NTSD_IOS": "1", "NTSD_UNCHECKED_EXCLUSIVITY": "1"}
@@ -64,7 +64,7 @@ def main():
     shutil.copy2(products / "NTSDiOS", app / "NTSDiOS")
     # Inside an .app the input loaders read their folders from the main
     # bundle's resources (as the macOS packaging installs them), not .module.
-    for folder in sorted((products / "NTSDNative_NTSDCore.bundle").iterdir()):
+    for folder in sorted((products / "NTSDNative_NTSDContent.bundle").iterdir()):
         if folder.is_dir() and folder.name.startswith("Original"):
             shutil.copytree(folder, app / folder.name)
     shutil.copytree(ROOT / "native/Sources/NTSDMacPlatform/Resources/OriginalMusic", app / "OriginalMusic")

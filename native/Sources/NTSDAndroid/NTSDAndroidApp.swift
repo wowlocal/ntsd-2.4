@@ -205,7 +205,7 @@ func ntsdAndroidOnCreate(_ activity: UnsafeMutablePointer<ANativeActivity>) {
             freopen(arguments[i+1],"w",stdout); setvbuf(stdout,nil,_IOLBF,0)
         }
         if let i = arguments.firstIndex(of:"--tz"),i+1 < arguments.count { setenv("TZ",arguments[i+1],1); tzset() }
-        arguments += ["--resources",data.appendingPathComponent("NTSDNative_NTSDCore.bundle").path]
+        arguments += ["--resources",data.appendingPathComponent("NTSDNative_NTSDContent.bundle").path]
         let music = arguments.firstIndex(of:"--music-dir").flatMap { $0+1 < arguments.count ? arguments[$0+1] : nil }
             ?? data.appendingPathComponent("OriginalMusic").path
         let config = AConfiguration_new(); defer { AConfiguration_delete(config) }

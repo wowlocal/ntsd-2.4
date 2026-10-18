@@ -14,7 +14,7 @@ import stat
 
 ROOT = Path(__file__).resolve().parents[1]
 BASELINE = ROOT / "downloads/NTSD_2.4_2.0a_clean/NTSD 2.4_2.0a"
-OUTPUT = ROOT / "native/Sources/NTSDCore/Resources/OriginalCommonSounds"
+OUTPUT = ROOT / "native/Sources/NTSDContent/Resources/OriginalCommonSounds"
 EXE_SHA256 = "3f7ac67c5890ef979ee24a6dae5528056e7f631725c292cf9cb0a928ebeff71c"
 FILES = (
     ("001.wav", 23694, "28f50924fc845a963d398fda600b9df740149f1c696843aa7cbd56f8552d785a"),

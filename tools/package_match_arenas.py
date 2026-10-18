@@ -4,7 +4,7 @@
 Data only; the original is not executed. The backgrounds are the <background>
 entries of data/data.txt (bg\\sys\\<Name>\\bg.dat); every BMP of each folder
 is copied with its size, SHA-256, dimensions and format into
-native/Sources/NTSDCore/Resources/OriginalMatchArenas (manifest format of the
+native/Sources/NTSDContent/Resources/OriginalMatchArenas (manifest format of the
 earlier District package). An existing package is verified without rewriting.
 """
 import argparse
@@ -18,7 +18,7 @@ import struct
 
 ROOT = Path(__file__).resolve().parents[1]
 BASELINE = ROOT / "downloads/NTSD_2.4_2.0a_clean/NTSD 2.4_2.0a"
-OUTPUT = ROOT / "native/Sources/NTSDCore/Resources/OriginalMatchArenas"
+OUTPUT = ROOT / "native/Sources/NTSDContent/Resources/OriginalMatchArenas"
 EXE_SHA256 = "3f7ac67c5890ef979ee24a6dae5528056e7f631725c292cf9cb0a928ebeff71c"
 
 

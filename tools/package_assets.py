@@ -25,19 +25,19 @@ from package_common_sounds import build_package as package_common_sounds, BASELI
 print(package_common_sounds(COMMON_SOURCE, destination.parent / "OriginalCommonSounds"))
 
 # Exact embedded DIB package consumed by the owned loading continuation.
-shutil.copytree(ROOT / "native/Sources/NTSDCore/Resources/OriginalLoadingInterface",
+shutil.copytree(ROOT / "native/Sources/NTSDContent/Resources/OriginalLoadingInterface",
                 destination.parent / "OriginalLoadingInterface", dirs_exist_ok=True)
 
 # Original character-menu DIBs, consumed by the retained loaded menu.
-shutil.copytree(ROOT / "native/Sources/NTSDCore/Resources/OriginalCharacterMenu",
+shutil.copytree(ROOT / "native/Sources/NTSDContent/Resources/OriginalCharacterMenu",
                 destination.parent / "OriginalCharacterMenu", dirs_exist_ok=True)
 
 # Original War setup DIBs (tools/package_war_menu.py), constructed by the War menu.
-shutil.copytree(ROOT / "native/Sources/NTSDCore/Resources/OriginalWarMenu",
+shutil.copytree(ROOT / "native/Sources/NTSDContent/Resources/OriginalWarMenu",
                 destination.parent / "OriginalWarMenu", dirs_exist_ok=True)
 
 # Deferred original arena images consumed by the owned match launch.
-shutil.copytree(ROOT / "native/Sources/NTSDCore/Resources/OriginalMatchArenas",
+shutil.copytree(ROOT / "native/Sources/NTSDContent/Resources/OriginalMatchArenas",
                 destination.parent / "OriginalMatchArenas", dirs_exist_ok=True)
 
 # Lossless decodes of the original bgm tracks (tools/package_music.py), played

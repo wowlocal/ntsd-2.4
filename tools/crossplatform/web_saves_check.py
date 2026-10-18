@@ -65,7 +65,7 @@ def web(engine, build, profile, port, out, script):
     command = [node(), str(ROOT / "tools/crossplatform/web_run.mjs"), "--timeout", "600", "--port", str(port),
                "--ro", f"/app={build}", "--ro", f"/music={MUSIC}", "--persist", "/save", "--profile", str(profile),
                "--argv0", "/app/NTSDWeb.wasm", "--metrics", str(out / "browser-metrics.json"), "--canvas", "--",
-               str(build / "NTSDWeb.wasm"), "--resources", "/app/NTSDNative_NTSDCore.bundle", "--music-dir", "/music",
+               str(build / "NTSDWeb.wasm"), "--resources", "/app/NTSDNative_NTSDContent.bundle", "--music-dir", "/music",
                *GAME, "--script", script]
     done = subprocess.run(command, capture_output=True, text=True, timeout=900,
                           env={**os.environ, "NTSD_BROWSER_ENGINE": engine, "TZ": "Etc/GMT-1"})

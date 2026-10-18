@@ -44,7 +44,7 @@ final class PortableSHA256BlockFunctionTests: XCTestCase {
     func testInstalledFunctionDigestsEveryPackagedInputAsCryptoKit() throws {
         XCTAssertTrue(PortableSHA256.install(Self.swiftBlocks))
         let native = URL(fileURLWithPath: #filePath).deletingLastPathComponent().deletingLastPathComponent().deletingLastPathComponent()
-        let root = native.appendingPathComponent("Sources/NTSDCore/Resources/OriginalStartup")
+        let root = native.appendingPathComponent("Sources/NTSDContent/Resources/OriginalStartup")
         let iterator = try XCTUnwrap(FileManager.default.enumerator(at: root, includingPropertiesForKeys: [.isRegularFileKey]))
         var files = 0
         for case let url as URL in iterator where try url.resourceValues(forKeys: [.isRegularFileKey]).isRegularFile == true {

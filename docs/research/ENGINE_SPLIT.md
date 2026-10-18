@@ -10,7 +10,7 @@ measurement from [TVOS_WEB](TVOS_WEB.md), [MEMORY_LOADING](MEMORY_LOADING.md) an
 engine from the game itself. to publish engine as the separate github repo";
 then, after the plan: "ok … when the plan is setteled start the loop in a
 separate branch" and "push automatically every step (on that new branch)".
-**Status:** E0 done (`es-base`); E1a next.
+**Status:** E0 and E1a done (E1a's iOS row open); E1b next.
 **Branch:** `exp/engine-split`, from `main` 380b448d. Worktree
 `/Volumes/NTSD-Builds/tasks/engine-split/worktree` (T7-backed APFS, see
 [BUILD_STORAGE_T7](BUILD_STORAGE_T7.md)). It tracks `origin/exp/engine-split`
@@ -147,8 +147,8 @@ A read-only survey of `native/` (three agents, 2026-10-18):
 | ID | Step | Status |
 | --- | --- | --- |
 | E0 | Harness: an mlgate copy parameterized by tree, output root (T7) and scratch path, defaults unchanged; a baseline gate of 380b448d in this worktree as PREV `es-base`; phone and emulator availability | **done** ([evidence](../evidence/es-e0-base.json)) |
-| E1a | Content is its own target: the seven `Original*` directories leave `NTSDCore` for the game-side `NTSDContent`; Core loaders take an `OriginalContentLocation` from the session/host instead of `Bundle.module`; tests and packaging follow the bundle (E1 design below) | next (written in the dev worktree, not built) |
-| E1b | Music: `OriginalMusic` leaves `NTSDMacPlatform` for `NTSDContent`; the source paths in tools and hosts follow | queued |
+| E1a | Content is its own target: the seven `Original*` directories leave `NTSDCore` for the game-side `NTSDContent`; Core loaders take an `OriginalContentLocation` from the session/host instead of `Bundle.module`; tests and packaging follow the bundle (E1 design below) | **done** ([evidence](../evidence/es-e1a-content-target.json)); the iOS simulator row moves to E1b's gate |
+| E1b | Music: `OriginalMusic` leaves `NTSDMacPlatform` for `NTSDContent`; the source paths in tools and hosts follow; the iOS simulator row with a device set on `/Volumes/NTSD-Builds` | next |
 | E2 | Content policy out of Core: the digest, count and EXE-SHA pins become the NTSD content identity the game passes; Core checks what it is given with the same checks and errors (2.8.3.3's content origin as the model, read only) | queued |
 | E3 | Identity and Practice: user-data folder, wasm module, Android prefix/entry, queue/thread names, titles and messages become game configuration; Practice/Lab and its two checks move to the game side | queued |
 | E4 | Two packages: `engine/Package.swift` (Core, Runtime, codecs, decoders, shims, host libraries, self-contained tests) and `native/Package.swift` depending on it by path; the unsafeFlags plan (SwiftPM rejects them in version-pinned dependencies) | queued |
@@ -177,8 +177,9 @@ about 85 test call sites in 21 files use the loaders' `.main` default.
   evaluated fallback bundle, carrying the same two-level rule. Loaders and
   `OriginalRuntimeLoadingPackages` take it instead of a defaulted `Bundle`;
   the session takes it from its host (`--resources` still replaces the app
-  bundle). Hosts and tests pass the game's value; test call sites change only
-  in what they pass. E2 extends the same value with the content identity, as
+  bundle). Hosts pass the game's value (`NTSDContent.fallback`); the tests keep
+  every call site through `Bundle` overloads in one test file
+  (`NTSDContentLocations.swift`) that pass NTSD's location. E2 extends the same value with the content identity, as
   2.8.3.3's content origin does, so it is not throwaway. Rejected: a global
   registry (hidden state, and tests have no global set-up hook) and searching
   for any bundle that has the folders (finds nothing under xctest).
@@ -195,8 +196,9 @@ about 85 test call sites in 21 files use the loaders' `.main` default.
   `finalize_application_*`/`verify_application_*` producers are frozen and
   stay as they are; they describe the old layout.
 - Gates: the mlgate set, the browser runner's scenarios (pack contents and
-  order identical apart from the prefix), an iOS simulator vs, the Linux and
-  Windows package rows.
+  order identical apart from the prefix and the bundle's `Info.plist`, whose
+  name and identifier carry the target's name on swiftbuild targets), an iOS
+  simulator vs, the Linux and Windows package rows.
 
 ## Ledger
 
@@ -216,13 +218,29 @@ about 85 test call sites in 21 files use the loaders' `.main` default.
   load converging run by run. Resident memory is ~28–30 MB above `mm-2`, from
   main's changes since 2026-10-13 (E0 changed no Native code).
   [Evidence](../evidence/es-e0-base.json).
+- 2026-10-18 E1a: the content target, reviewed independently before the gates
+  (behaviour-neutral, no code fix required; one harness fix: mlgate's
+  tested-tree step dropped deletions under rename detection, so it now stages
+  with `git add -A` in a copy of the index; E0's recorded tools tree differs
+  from its commit only in two files' modes). Gate `es-e1a` against `es-base`:
+  all 11 scenarios equal, frames identical, AppKit, unchecked, emulator, 20
+  launches, 24 suites; phone A/B equal in CPU to the loaded state and per-tick
+  time, memory ranges overlapping; the Mac's footprint after the match read
+  higher (671 vs 558–590 MB) but `heap` shows the same live heap and an
+  identical es-base run reaching 677 MB. Gate 3, one vs each: WASI, browser
+  (packed, verified; text in the same 446 frames), Linux container, Windows
+  (CrossOver) and the packaged `.app` equal with identical frames. iOS stays
+  open: the simulator's data folder (all of CoreSimulator/Devices) is missing
+  since 2026-10-17 19:47, outside the storage migration's records; `NTSDiOS`
+  built. Harness error kept: the wasm SDK query matched two SDKs.
+  [Evidence](../evidence/es-e1a-content-target.json).
 
 ## Next task
 
-E1a, written in the detached worktree `/Volumes/NTSD-Builds/tasks/engine-split/dev`
-(not built yet): bring it into this worktree, build every touched product
-clean (headless, AppKit, the test bundle, the APK, WASI/browser, iOS
-simulator, Linux and Windows packages), have it reviewed independently, then
-run the mlgate set as `es-e1a` against `es-base` (with the phone) and the
-packaging rows of gate 3. Done when every gate line reports as `es-base`'s
-did and the evidence is in `docs/evidence/es-e1a-*.json`.
+E1b: `OriginalMusic` moves from `NTSDMacPlatform` to `NTSDContent` with `git mv`
+(then `git lfs checkout`); `OriginalMacMusicOutput.directory(in:)` gets the
+location's rule; the hosts' `#filePath` music fallbacks (`NTSDHeadless`,
+`NTSDSDL`), `OriginalALACTrackTests`, `PortableSHA256Tests` and the tools'
+`MUSIC` source paths follow. `ios_app.py` gains a simulator device set on
+`/Volumes/NTSD-Builds` (no internal-disk simulator data). Gates: review, the
+mlgate set as `es-e1b` against `es-e1a`, and gate 3 including iOS.

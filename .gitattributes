@@ -1,12 +1,12 @@
 downloads/** filter=lfs diff=lfs merge=lfs -text
-native/Sources/NTSDCore/Resources/OriginalStartup/** -text
-native/Sources/NTSDCore/Resources/OriginalStartup/data/control.txt -diff
-native/Sources/NTSDCore/Resources/OriginalStartup/data/adinfo.txt -diff
+native/Sources/NTSDContent/Resources/OriginalStartup/** -text
+native/Sources/NTSDContent/Resources/OriginalStartup/data/control.txt -diff
+native/Sources/NTSDContent/Resources/OriginalStartup/data/adinfo.txt -diff
 native/Tests/NTSDCoreTests/Fixtures/startup-dib-pixels.bin -text -diff
-native/Sources/NTSDCore/Resources/OriginalCommonSounds/** -text
+native/Sources/NTSDContent/Resources/OriginalCommonSounds/** -text
 native/Tests/NTSDCoreTests/Fixtures/original-catalog-dib-pixels.json.zlib -text -diff
 native/Tests/NTSDCoreTests/Fixtures/original-application-catalog-session*.zlib -text -diff
-native/Sources/NTSDCore/Resources/OriginalCatalog/files/** filter=lfs diff=lfs merge=lfs -text
-native/Sources/NTSDCore/Resources/OriginalCatalog/embedded/** -text -diff
+native/Sources/NTSDContent/Resources/OriginalCatalog/files/** filter=lfs diff=lfs merge=lfs -text
+native/Sources/NTSDContent/Resources/OriginalCatalog/embedded/** -text -diff
 native/Sources/NTSDMacPlatform/Resources/OriginalMusic/*.caf filter=lfs diff=lfs merge=lfs -text
-native/Sources/NTSDCore/Resources/OriginalMatchArenas/bg/** filter=lfs diff=lfs merge=lfs -text
+native/Sources/NTSDContent/Resources/OriginalMatchArenas/bg/** filter=lfs diff=lfs merge=lfs -text

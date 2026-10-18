@@ -1,6 +1,7 @@
 import CAndroidNative
 import Foundation
 import NTSDCore
+import NTSDContent
 import NTSDRuntime
 #if canImport(NTSDFreeTypeText)
 import NTSDFreeTypeText
@@ -229,6 +230,7 @@ final class NTSDAndroidCursor {}
 /// packaged music decoded by NTSDMusicDecoder (as on Linux).
 @MainActor final class NTSDAndroidSessionHost: OriginalRuntimeSessionHost {
     let arguments: [String], windows: NTSDAndroidWindowHost, musicDirectory: String, files: URL, density: Double
+    let contentFallback = NTSDContent.fallback
     weak var session: OriginalRuntimeSession?
     private var effects: NTSDAndroidStream?, feed: NTSDAndroidEffectsFeed?, effectsMuted = false
     private var players: [() -> NTSDAndroidMusicPlayer?] = [], focused = true

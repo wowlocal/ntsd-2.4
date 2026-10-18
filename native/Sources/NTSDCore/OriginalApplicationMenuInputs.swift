@@ -16,21 +16,17 @@ public struct OriginalApplicationMenuInputs: Equatable {
         struct Entry: Decodable { let name: String,path: String,count: Int,sha256: String }
         let version: Int,exeSHA256: String,entries: [Entry]
     }
-    public static func bundledDirectory(_ name: String = "OriginalCharacterMenu",in appBundle: Bundle = .main) throws -> URL {
-        if let resources = appBundle.resourceURL {
-            let directory = resources.appendingPathComponent(name,isDirectory:true)
-            if appBundle.bundleURL.pathExtension == "app" || FileManager.default.fileExists(atPath:directory.path) { return directory }
-        }
-        guard let directory = Bundle.module.url(forResource:name,withExtension:nil) else {
+    public static func bundledDirectory(_ name: String = "OriginalCharacterMenu",in content: OriginalContentLocation) throws -> URL {
+        guard let directory = content.directory(name) else {
             throw Boundary.missing(name)
         }
         return directory
     }
-    public static func bundled(in appBundle: Bundle = .main) throws -> Self { try load(directory:bundledDirectory(in:appBundle)) }
+    public static func bundled(in content: OriginalContentLocation) throws -> Self { try load(directory:bundledDirectory(in:content)) }
     /// Character-menu and War-menu DIBs as one resource set for the loaded menu.
-    public static func bundledWithWar(in appBundle: Bundle = .main) throws -> Self {
-        let menu = try bundled(in:appBundle)
-        let war = try load(directory:bundledDirectory("OriginalWarMenu",in:appBundle),manifest:warManifestSHA256,names:warPaths)
+    public static func bundledWithWar(in content: OriginalContentLocation) throws -> Self {
+        let menu = try bundled(in:content)
+        let war = try load(directory:bundledDirectory("OriginalWarMenu",in:content),manifest:warManifestSHA256,names:warPaths)
         return .init(bitmaps:menu.bitmaps.merging(war.bitmaps) { a,_ in a })
     }
     /// These inputs plus other packaged bitmaps: War start (43a21f) loads the

@@ -33,10 +33,11 @@ mkdir -p $X/logs $X/apks $S
 XB=/Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/bin/swift-build
 ADB=/opt/homebrew/share/android-commandlinetools/platform-tools/adb
 APPREF=$R/rt-4w-appkit
-export GIT_INDEX_FILE=$S/index-$L-test; rm -f $GIT_INDEX_FILE; git read-tree HEAD
-for f in $(git diff --name-only HEAD -- native tools) $(git ls-files --others --exclude-standard native tools); do
-  git update-index --add --cacheinfo 100644,$(git hash-object -w $f),$f
-done
+# The tested trees: native/ and tools/ as `git add -A` stages them (deletions,
+# renames and modes included; ENGINE_SPLIT E1a review), in a copy of the index.
+IDX=$(git rev-parse --git-path index)
+export GIT_INDEX_FILE=$S/index-$L-test; rm -f $GIT_INDEX_FILE; cp "$IDX" $GIT_INDEX_FILE
+git add -A -- native tools
 TR=$(git write-tree); unset GIT_INDEX_FILE
 echo "native $(git rev-parse "${TR}:native") tools $(git rev-parse "${TR}:tools")" | tee $X/logs/$L-tested-trees.txt
 B1=build/swiftpm-headless; B1U=build/swiftpm-headless-unchecked; B2=build/swiftpm-app; B3=${GATE_TEST_SCRATCH:-build/swiftpm-test-release-b}; B4=$X/build-android-aarch64; export NTSD_ANDROID_SCRATCH=$B4

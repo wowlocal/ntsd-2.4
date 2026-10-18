@@ -353,7 +353,7 @@ def script_run(o, kind, build, label):
     window, started_uptime = {}, None
     with tempfile.TemporaryDirectory(prefix="ntsd-load-") as out:
         Path(out, "overlay").mkdir()
-        game = ["--resources", "/app/NTSDNative_NTSDCore.bundle", "--music-dir", "/music", *arguments(o.scenario, "/out/overlay"), *o.game_arg]
+        game = ["--resources", "/app/NTSDNative_NTSDContent.bundle", "--music-dir", "/music", *arguments(o.scenario, "/out/overlay"), *o.game_arg]
         if kind == "web":
             command = [node, str(ROOT / "tools/crossplatform/web_run.mjs"), "--ro", f"/app={build}", "--ro", f"/music={music}",
                        "--map", f"/out={out}", "--argv0", "/app/NTSDWeb.wasm", "--canvas", "--", str(build / "NTSDWeb.wasm"), *game]

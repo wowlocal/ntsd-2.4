@@ -46,7 +46,7 @@ final class PortableSHA256Tests: XCTestCase {
     #if canImport(CryptoKit)
     func testEveryPackagedInputMatchesCryptoKit() throws {
         let native = URL(fileURLWithPath: #filePath).deletingLastPathComponent().deletingLastPathComponent().deletingLastPathComponent()
-        let roots = ["Sources/NTSDCore/Resources", "Sources/NTSDMacPlatform/Resources"].map { native.appendingPathComponent($0) }
+        let roots = ["Sources/NTSDContent/Resources", "Sources/NTSDMacPlatform/Resources"].map { native.appendingPathComponent($0) }
         var files = 0, bytes = 0
         for root in roots {
             let iterator = try XCTUnwrap(FileManager.default.enumerator(at: root, includingPropertiesForKeys: [.isRegularFileKey]))

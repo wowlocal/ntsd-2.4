@@ -3,6 +3,7 @@ import Foundation
 import CoreGraphics
 #endif
 import NTSDCore
+import NTSDContent
 import NTSDRuntime
 
 /// The headless session host: offscreen windows, framebuffer PNG captures,
@@ -10,6 +11,7 @@ import NTSDRuntime
 /// loopback ONLINE GAME probes.
 @MainActor final class HeadlessSessionHost: OriginalRuntimeSessionHost {
     let arguments: [String], windows: HeadlessWindowHost, musicDirectory: String
+    let contentFallback = NTSDContent.fallback
     weak var session: OriginalRuntimeSession?
     init(arguments: [String],screen: CGSize,caption: CGFloat,musicDirectory: String) {
         self.arguments = arguments; windows = HeadlessWindowHost(screen:screen,caption:caption); self.musicDirectory = musicDirectory

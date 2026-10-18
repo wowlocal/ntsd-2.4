@@ -25,7 +25,7 @@ extension OriginalRuntimeLoadingDialogs {
 extension OriginalMacRuntimeLoading {
     /// The bundled loading runtime with the Mac's dialogs.
     public static func bundled(_ started: OriginalMacRuntimeStartup.Started,startupInputs: OriginalApplicationStartupInputs,
-        clock: @escaping () throws -> UInt32) throws -> OriginalMacRuntimeLoading {
-        try bundled(started,startupInputs:startupInputs,clock:clock,dialogs:.mac)
+        clock: @escaping () throws -> UInt32,in content: OriginalContentLocation) throws -> OriginalMacRuntimeLoading {
+        try bundled(started,startupInputs:startupInputs,clock:clock,dialogs:.mac,in:content)
     }
 }

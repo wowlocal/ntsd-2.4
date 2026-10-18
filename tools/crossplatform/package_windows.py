@@ -12,7 +12,7 @@ against libsdl's SDL3 3.4.16 VC package, then assembles:
   ntsd-windows-x86_64/*.dll                          the Swift 6.4.0 and MSVC runtime
                                                      DLLs NTSDSDL.exe loads (import
                                                      closure; the rest are left out)
-  ntsd-windows-x86_64/NTSDNative_NTSDCore.resources  resources
+  ntsd-windows-x86_64/NTSDNative_NTSDContent.resources  resources
   ntsd-windows-x86_64/OriginalMusic                  packaged tracks + manifest
   ntsd-windows-x86_64/LICENSES, README.txt           SDL3, ALAC, Swift, ICU
 
@@ -92,7 +92,7 @@ def main():
     available = {p.name.lower(): p for p in runtime.glob("*.dll")}
     for dll in sorted(loaded(stage / "NTSDSDL.exe", available) - {"sdl3.dll"}):
         shutil.copy2(available[dll], stage / available[dll].name)
-    shutil.copytree(products / "NTSDNative_NTSDCore.resources", stage / "NTSDNative_NTSDCore.resources")
+    shutil.copytree(products / "NTSDNative_NTSDContent.resources", stage / "NTSDNative_NTSDContent.resources")
     shutil.copytree(ROOT / "native/Sources/NTSDMacPlatform/Resources/OriginalMusic", stage / "OriginalMusic")
     lic = stage / "LICENSES"; lic.mkdir()
     shutil.copy2(sdl / "LICENSE.txt", lic / "SDL3-zlib.txt")

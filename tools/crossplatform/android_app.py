@@ -95,7 +95,7 @@ def build(out, release=False):
     shutil.copy2(products / "libNTSDAndroid.so", libs / "libNTSDAndroid.so")
     shutil.copy2(NDK / "toolchains/llvm/prebuilt/darwin-x86_64/sysroot/usr/lib/aarch64-linux-android/libc++_shared.so", libs / "libc++_shared.so")
     assets = stage / "assets/ntsd"; assets.mkdir(parents=True)
-    shutil.copytree(products / "NTSDNative_NTSDCore.bundle", assets / "NTSDNative_NTSDCore.bundle")
+    shutil.copytree(products / "NTSDNative_NTSDContent.bundle", assets / "NTSDNative_NTSDContent.bundle")
     shutil.copytree(MUSIC, assets / "OriginalMusic")
     listing = sorted(p for p in assets.rglob("*") if p.is_file())
     (assets / "files.txt").write_text("".join(f"{p.relative_to(assets)}\t{p.stat().st_size}\n" for p in listing))

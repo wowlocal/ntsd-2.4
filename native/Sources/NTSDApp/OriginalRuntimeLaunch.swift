@@ -1,5 +1,6 @@
 import AppKit
 import NTSDCore
+import NTSDContent
 import NTSDMacPlatform
 
 /// `--original` on macOS: the portable `OriginalRuntimeSession` (options in its
@@ -63,6 +64,7 @@ final class OriginalRuntimeDelegate: NSObject, NSApplicationDelegate {
     func startJoystickSampling(_ session: OriginalRuntimeSession) { joysticks.startSampling(session) }
     func makeMusicOutput() throws -> OriginalMacMusicOutput { try .bundled() }
     var musicDirectory: String { OriginalMacMusicOutput.directory()?.path ?? "" }
+    let contentFallback = NTSDContent.fallback
     func startSoundOutput(_ effects: OriginalMacSoundEffects,muted: Bool) throws -> String {
         let output = try OriginalMacSoundOutput(effects:effects)
         output.muted = muted; output.focused = NSApp.isActive; soundOutput = output

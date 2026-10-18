@@ -121,15 +121,9 @@ public struct OriginalApplicationStartupInputs: Equatable {
     private let files: [String:[UInt8]]
     private let fileNames: Set<String>
 
-    public static func bundled(in appBundle: Bundle = .main) throws -> Self { try load(directory:bundledDirectory(in:appBundle)) }
-    public static func bundledDirectory(in appBundle: Bundle = .main) throws -> URL {
-        // build-native.sh/package_assets.py install ordinary files at this path.
-        // SwiftPM command-line/test clients use the same package via .module.
-        if let resources = appBundle.resourceURL {
-            let directory = resources.appendingPathComponent("OriginalStartup",isDirectory:true)
-            if appBundle.bundleURL.pathExtension == "app" || FileManager.default.fileExists(atPath:directory.path) { return directory }
-        }
-        guard let directory = Bundle.module.url(forResource:"OriginalStartup",withExtension:nil) else {
+    public static func bundled(in content: OriginalContentLocation) throws -> Self { try load(directory:bundledDirectory(in:content)) }
+    public static func bundledDirectory(in content: OriginalContentLocation) throws -> URL {
+        guard let directory = content.directory("OriginalStartup") else {
             throw Boundary.missing("OriginalStartup bundle resource")
         }
         return directory

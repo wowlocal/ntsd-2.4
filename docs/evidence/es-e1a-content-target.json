@@ -1,0 +1,714 @@
+{
+ "study": "ENGINE_SPLIT",
+ "step": "E1a",
+ "label": "es-e1a",
+ "prev": "es-base",
+ "recordedUTC": "2026-10-18T16:44:47Z",
+ "change": "NTSD 2.4's seven content packages move from NTSDCore to the game-side target NTSDContent (1,519 pure renames, .gitattributes following). Core gains OriginalContentLocation (the app bundle's folders, else a lazily looked-up fallback bundle: the old two-level rule) and no longer uses Bundle.module; the six loaders, OriginalRuntimeLoadingPackages and OriginalMacRuntimeLoading take it; the session builds it from --resources or the main bundle plus the host's new contentFallback; the six hosts give NTSDContent.fallback. Tests keep every call site through Bundle overloads in NTSDContentLocations.swift; two #filePath hash tests follow the path. The built bundle is NTSDNative_NTSDContent.bundle (.resources on Windows); 17 active tools follow, frozen producers and references unchanged (tools/finalize_application_*, verify_application_*, oracle_replay_*.py, prepare_application_catalog_package_validation.py, app_e2e_*reference.json). Harness: mlgate.sh's tested-tree step now stages with git add -A in a copy of the index; matrix.py and ios_app.py take NTSD_XPLAT_OUT for their build and run folders.",
+ "testedTrees": {
+  "recorded": "native ad1061b3729b911296328c5ae540134a407b45b6 tools efdfd5b5127a73631c40c8f7ae06a21c5225f9ff",
+  "stagedCommitTrees": "native ad1061b3729b911296328c5ae540134a407b45b6 tools efdfd5b5127a73631c40c8f7ae06a21c5225f9ff",
+  "equal": true
+ },
+ "base": "56cc10642131d0fee744b41482828da626a7ccc3",
+ "review": {
+  "by": "a separate read-only agent, 2026-10-18, on the staged index before the gates",
+  "verdict": "behaviour-neutral; no required code fix. Loader lookups and errors identical to HEAD's; the fallback is evaluated only where Bundle.module was; @Sendable fallback not MainActor-isolated, no traps in Swift 5 mode; every test call resolves to exactly one overload, fake-.app tests still never fall back; .gitattributes yields byte-identical attributes at the new paths (5,763 lines); Core does not depend on NTSDContent; app_e2e.compare ignores the printed resources path; read-order.json is a pure prefix rename.",
+  "requiredFix": "mlgate.sh's tested-tree step (read-tree HEAD plus `git diff --name-only` paths) drops deletions under rename detection: E1a's recorded native tree would have held the resources twice. Fixed (git add -A in a copy of the index) before the gate; the step's tree was checked equal to the staged index.",
+  "adopted": [
+   "one NTSDContent.fallback instead of six closures",
+   "design text matching the unchanged test call sites"
+  ],
+  "notAdopted": [
+   "declaring OriginalContentLocation Sendable (no warning to fix in Swift 5 mode; left for a stricter-checking step)"
+  ],
+  "browserNote": "on swiftbuild targets the bundle's Info.plist names the target, so the web packs' first offsets and data-HASH change by that plist alone"
+ },
+ "e0Addendum": "E0's recorded tools tree c4c059f9 differs from its commit's 927b5e91 only in the mode of android_app.py and mlgate.sh (the old step recorded 100644): same blobs and paths, checked 2026-10-18. E0's results are unaffected.",
+ "gateScript": {
+  "run": "/Volumes/NTSD-Builds/tasks/engine-split/gates/gate-run-es-e1a.sh",
+  "sha256": "fa0e821f01f7ca572a8b3d66f9131dd335ab44d49d5388b7a3693152614c76ad",
+  "env": {
+   "GATE_OUT": "/Volumes/NTSD-Builds/tasks/engine-split/gates",
+   "GATE_REFS": "/Volumes/X5/ntsd-2.4-research/crossplatform (read only)",
+   "GATE_SCRATCH": "/Volumes/NTSD-Builds/tasks/engine-split/scratch",
+   "GATE_PHONE": "1"
+  }
+ },
+ "checkBuild": "debug build of every macOS target and the tests (build/swiftpm-check): exit 0, no new warning in the changed files",
+ "builds": [
+  "headless built (checked: 3276 beginAccess)",
+  "app built (checked: 3402 beginAccess)",
+  "unchecked headless built (0 beginAccess)",
+  "apk saved",
+  "apk libraries kept"
+ ],
+ "launches": "launches: crashes 0 of 20",
+ "scenariosHeadless": [
+  {
+   "scenario": "vs",
+   "exit": 0,
+   "result": "equal",
+   "differs": []
+  },
+  {
+   "scenario": "mission",
+   "exit": 0,
+   "result": "equal",
+   "differs": []
+  },
+  {
+   "scenario": "demo",
+   "exit": 0,
+   "result": "equal",
+   "differs": []
+  },
+  {
+   "scenario": "war",
+   "exit": 0,
+   "result": "equal",
+   "differs": []
+  },
+  {
+   "scenario": "playback",
+   "exit": 0,
+   "result": "equal",
+   "differs": []
+  },
+  {
+   "scenario": "tournament",
+   "exit": 0,
+   "result": "equal",
+   "differs": []
+  },
+  {
+   "scenario": "altenter",
+   "exit": 0,
+   "result": "equal",
+   "differs": []
+  },
+  {
+   "scenario": "tournament-win",
+   "exit": 0,
+   "result": "equal",
+   "differs": []
+  },
+  {
+   "scenario": "team-tournament",
+   "exit": 0,
+   "result": "equal",
+   "differs": []
+  },
+  {
+   "scenario": "joystick",
+   "exit": 0,
+   "result": "equal",
+   "differs": []
+  },
+  {
+   "scenario": "title-joystick",
+   "exit": 0,
+   "result": "equal",
+   "differs": []
+  }
+ ],
+ "framesHeadlessVsM1": {
+  "frames": 1832,
+  "mismatched": 0,
+  "result": "identical"
+ },
+ "appkit": [
+  {
+   "scenario": "vs",
+   "exit": 0,
+   "seconds": 68.3,
+   "result": "equal",
+   "differs": []
+  },
+  {
+   "scenario": "playback",
+   "exit": 0,
+   "seconds": 73.3,
+   "result": "equal",
+   "differs": []
+  },
+  {
+   "frames": 3960,
+   "mismatched": 0,
+   "result": "identical"
+  }
+ ],
+ "uncheckedHeadless": [
+  {
+   "scenario": "vs",
+   "exit": 0,
+   "seconds": 68.6,
+   "result": "equal",
+   "differs": []
+  },
+  {
+   "scenario": "demo",
+   "exit": 0,
+   "seconds": 48.0,
+   "result": "equal",
+   "differs": []
+  },
+  {
+   "frames": 1832,
+   "mismatched": 0,
+   "result": "identical"
+  }
+ ],
+ "emulatorVs": {
+  "exit": "emu exit=0",
+  "frames": {
+   "frames": 1832,
+   "mismatched": 0,
+   "result": "identical"
+  }
+ },
+ "suites": [
+  "OriginalExclusivityChecksTests exit=0 1s \t Executed 1 test, with 0 failures (0 unexpected) in 0.001 (0.003) seconds",
+  "OriginalApplicationCatalogInputsTests exit=0 14s \t Executed 4 tests, with 0 failures (0 unexpected) in 13.424 (13.426) seconds",
+  "OriginalApplicationInterfaceInputsTests exit=0 0s \t Executed 3 tests, with 0 failures (0 unexpected) in 0.077 (0.080) seconds",
+  "OriginalApplicationLoadedLaunchTests exit=0 55s \t Executed 2 tests, with 0 failures (0 unexpected) in 54.952 (54.960) seconds",
+  "OriginalApplicationLoadingPrefixTests exit=0 23s \t Executed 2 tests, with 0 failures (0 unexpected) in 22.821 (22.822) seconds",
+  "OriginalApplicationLoadingSessionTests exit=0 0s \t Executed 3 tests, with 0 failures (0 unexpected) in 0.050 (0.051) seconds",
+  "OriginalApplicationMenuInputsTests exit=0 0s \t Executed 3 tests, with 0 failures (0 unexpected) in 0.131 (0.132) seconds",
+  "OriginalApplicationObservedBitmapTests exit=0 13s \t Executed 5 tests, with 0 failures (0 unexpected) in 12.516 (12.518) seconds",
+  "OriginalApplicationObservedGraphicsTests exit=0 37s \t Executed 5 tests, with 0 failures (0 unexpected) in 36.813 (36.815) seconds",
+  "OriginalApplicationObservedIterationTests exit=0 9s \t Executed 3 tests, with 0 failures (0 unexpected) in 9.027 (9.031) seconds",
+  "OriginalApplicationStartupInputsTests exit=0 0s \t Executed 4 tests, with 0 failures (0 unexpected) in 0.348 (0.350) seconds",
+  "OriginalCatalogChecksumTests exit=0 3s \t Executed 3 tests, with 0 failures (0 unexpected) in 2.312 (2.314) seconds",
+  "OriginalConcurrentInputsTests exit=0 3s \t Executed 7 tests, with 0 failures (0 unexpected) in 3.723 (3.726) seconds",
+  "OriginalDIBValidationTests exit=0 2s \t Executed 2 tests, with 0 failures (0 unexpected) in 1.098 (1.101) seconds",
+  "OriginalLoadingReadAheadTests exit=0 1s \t Executed 5 tests, with 0 failures (0 unexpected) in 1.465 (1.470) seconds",
+  "OriginalLZ4Tests exit=0 7s \t Executed 6 tests, with 0 failures (0 unexpected) in 7.224 (7.228) seconds",
+  "OriginalMacBitmapBackendTests exit=0 3s \t Executed 5 tests, with 0 failures (0 unexpected) in 2.551 (2.553) seconds",
+  "OriginalMacRuntimeLoadingTests exit=0 2s \t Executed 7 tests, with 0 failures (0 unexpected) in 1.654 (1.657) seconds",
+  "OriginalMacWindowGeometryTests exit=0 18s \t Executed 6 tests, with 0 failures (0 unexpected) in 17.613 (17.616) seconds",
+  "OriginalReplayFileInputTests exit=0 0s \t Executed 1 test, with 0 failures (0 unexpected) in 0.446 (0.448) seconds",
+  "OriginalWord32BoundaryTests exit=0 0s \t Executed 6 tests, with 0 failures (0 unexpected) in 0.020 (0.024) seconds",
+  "PortableSHA256BlockFunctionTests exit=0 0s \t Executed 2 tests, with 0 failures (0 unexpected) in 0.178 (0.180) seconds",
+  "PortableSHA256Tests exit=0 6s \t Executed 3 tests, with 0 failures (0 unexpected) in 5.112 (5.114) seconds",
+  "OriginalMacMusicOutputTests exit=0 0s \t Executed 7 tests, with 0 failures (0 unexpected) in 0.036 (0.037) seconds"
+ ],
+ "phoneAB": {
+  "apks": {
+   "es-e1a": "a5cf9ca525eb666899856d46204df5b08c249bf81f17a227015f42a9fa406bc4",
+   "es-base": "c244c6f600a0ffc23ed40feca1f4b7d24d935193ad7be19f34e65996baf51486"
+  },
+  "runs": [
+   {
+    "label": "es-e1a-ab-warmup",
+    "loadSeconds": 6.35,
+    "mainCpuToLoadedSeconds": 10.38,
+    "loadedResidentMB": 529,
+    "bodiesResidentMB": 550,
+    "peakFootprintMB": 617,
+    "mainMsPerTick": 10.89,
+    "renderMsPerTick": 7.17
+   },
+   {
+    "label": "es-e1a-ab-01-es-e1a",
+    "loadSeconds": 5.87,
+    "mainCpuToLoadedSeconds": 10.32,
+    "loadedResidentMB": 576,
+    "bodiesResidentMB": 550,
+    "peakFootprintMB": 601,
+    "mainMsPerTick": 10.95,
+    "renderMsPerTick": 7.46
+   },
+   {
+    "label": "es-e1a-ab-02-es-base",
+    "loadSeconds": 6.73,
+    "mainCpuToLoadedSeconds": 10.4,
+    "loadedResidentMB": 547,
+    "bodiesResidentMB": 534,
+    "peakFootprintMB": 594,
+    "mainMsPerTick": 10.97,
+    "renderMsPerTick": 7.15
+   },
+   {
+    "label": "es-e1a-ab-03-es-e1a",
+    "loadSeconds": 5.67,
+    "mainCpuToLoadedSeconds": 10.22,
+    "loadedResidentMB": 591,
+    "bodiesResidentMB": 598,
+    "peakFootprintMB": 634,
+    "mainMsPerTick": 10.82,
+    "renderMsPerTick": 7.27
+   },
+   {
+    "label": "es-e1a-ab-04-es-base",
+    "loadSeconds": 5.62,
+    "mainCpuToLoadedSeconds": 10.47,
+    "loadedResidentMB": 528,
+    "bodiesResidentMB": 538,
+    "peakFootprintMB": 614,
+    "mainMsPerTick": 10.86,
+    "renderMsPerTick": 7.1
+   },
+   {
+    "label": "es-e1a-ab-05-es-e1a",
+    "loadSeconds": 6.19,
+    "mainCpuToLoadedSeconds": 10.18,
+    "loadedResidentMB": 549,
+    "bodiesResidentMB": 527,
+    "peakFootprintMB": 591,
+    "mainMsPerTick": 10.77,
+    "renderMsPerTick": 6.95
+   }
+  ],
+  "summaries": [
+   {
+    "build": "es-e1a",
+    "runs": 3,
+    "startupSeconds": {
+     "median": -419710.87,
+     "min": -419713.63,
+     "max": -419710.74
+    },
+    "loadSeconds": {
+     "median": 5.87,
+     "min": 5.67,
+     "max": 6.19
+    },
+    "startToLoadedSeconds": {
+     "median": -419700.08,
+     "min": -419702.93,
+     "max": -419699.61
+    },
+    "peakResidentMB": {
+     "median": 591,
+     "min": 591,
+     "max": 620
+    },
+    "peakFootprintMB": {
+     "median": 601,
+     "min": 591,
+     "max": 634
+    },
+    "loadedResidentMB": {
+     "median": 576,
+     "min": 549,
+     "max": 591
+    },
+    "bodiesResidentMB": {
+     "median": 550,
+     "min": 527,
+     "max": 598
+    },
+    "mainMsPerTick": {
+     "median": 10.82,
+     "min": 10.77,
+     "max": 10.95
+    },
+    "renderMsPerTick": {
+     "median": 7.27,
+     "min": 6.95,
+     "max": 7.46
+    },
+    "processMsPerTick": {
+     "median": 27.34,
+     "min": 26.74,
+     "max": 27.6
+    },
+    "completeMsPerTick": {
+     "median": 7.3,
+     "min": 7.28,
+     "max": 7.3
+    },
+    "loadedSwapMB": {
+     "median": 22,
+     "min": 22,
+     "max": 22
+    },
+    "bodiesSwapMB": {
+     "median": 22,
+     "min": 22,
+     "max": 22
+    },
+    "ticksEndResidentMB": {
+     "median": 573,
+     "min": 566,
+     "max": 576
+    },
+    "ticksEndSwapMB": {
+     "median": 14,
+     "min": 14,
+     "max": 14
+    },
+    "ticksEndFootprintMB": {
+     "median": 587,
+     "min": 580,
+     "max": 590
+    },
+    "ticksEndPssMB": {
+     "median": 537,
+     "min": 535,
+     "max": 551
+    },
+    "cpuToEndSeconds": {
+     "median": 107.93,
+     "min": 107.75,
+     "max": 108.24
+    }
+   },
+   {
+    "build": "es-base",
+    "runs": 2,
+    "startupSeconds": {
+     "median": -419711.44499999995,
+     "min": -419712.16,
+     "max": -419710.73
+    },
+    "loadSeconds": {
+     "median": 6.175000000000001,
+     "min": 5.62,
+     "max": 6.73
+    },
+    "startToLoadedSeconds": {
+     "median": -419700.705,
+     "min": -419701.2,
+     "max": -419700.21
+    },
+    "peakResidentMB": {
+     "median": 591.5,
+     "min": 591,
+     "max": 592
+    },
+    "peakFootprintMB": {
+     "median": 604.0,
+     "min": 594,
+     "max": 614
+    },
+    "loadedResidentMB": {
+     "median": 537.5,
+     "min": 528,
+     "max": 547
+    },
+    "bodiesResidentMB": {
+     "median": 536.0,
+     "min": 534,
+     "max": 538
+    },
+    "mainMsPerTick": {
+     "median": 10.915,
+     "min": 10.86,
+     "max": 10.97
+    },
+    "renderMsPerTick": {
+     "median": 7.125,
+     "min": 7.1,
+     "max": 7.15
+    },
+    "processMsPerTick": {
+     "median": 27.22,
+     "min": 27.14,
+     "max": 27.3
+    },
+    "completeMsPerTick": {
+     "median": 7.32,
+     "min": 7.31,
+     "max": 7.33
+    },
+    "loadedSwapMB": {
+     "median": 22.0,
+     "min": 22,
+     "max": 22
+    },
+    "bodiesSwapMB": {
+     "median": 22.0,
+     "min": 22,
+     "max": 22
+    },
+    "ticksEndResidentMB": {
+     "median": 567.0,
+     "min": 564,
+     "max": 570
+    },
+    "ticksEndSwapMB": {
+     "median": 14.0,
+     "min": 14,
+     "max": 14
+    },
+    "ticksEndFootprintMB": {
+     "median": 581.0,
+     "min": 578,
+     "max": 584
+    },
+    "ticksEndPssMB": {
+     "median": 538.5,
+     "min": 534,
+     "max": 543
+    },
+    "cpuToEndSeconds": {
+     "median": 108.0,
+     "min": 107.84,
+     "max": 108.16
+    }
+   }
+  ]
+ },
+ "macAB": {
+  "runs": [
+   {
+    "label": "es-e1a-mac-ab-warmup",
+    "loadSeconds": 2.965,
+    "loadedResidentMB": 632,
+    "bodiesResidentMB": 556,
+    "peakResidentMB": 648,
+    "processMsPerTick": 2.989
+   },
+   {
+    "label": "es-e1a-mac-ab-01-frozen-unchecked-es-e1a",
+    "loadSeconds": 2.38,
+    "loadedResidentMB": 631,
+    "bodiesResidentMB": 671,
+    "peakResidentMB": 671,
+    "processMsPerTick": 3.089
+   },
+   {
+    "label": "es-e1a-mac-ab-02-frozen-unchecked-es-base",
+    "loadSeconds": 2.267,
+    "loadedResidentMB": 638,
+    "bodiesResidentMB": 577,
+    "peakResidentMB": 639,
+    "processMsPerTick": 3.122
+   },
+   {
+    "label": "es-e1a-mac-ab-03-frozen-unchecked-es-e1a",
+    "loadSeconds": 2.297,
+    "loadedResidentMB": 628,
+    "bodiesResidentMB": 672,
+    "peakResidentMB": 672,
+    "processMsPerTick": 3.078
+   },
+   {
+    "label": "es-e1a-mac-ab-04-frozen-unchecked-es-base",
+    "loadSeconds": 2.266,
+    "loadedResidentMB": 542,
+    "bodiesResidentMB": 590,
+    "peakResidentMB": 633,
+    "processMsPerTick": 3.033
+   },
+   {
+    "label": "es-e1a-mac-ab-05-frozen-unchecked-es-e1a",
+    "loadSeconds": 2.323,
+    "loadedResidentMB": 631,
+    "bodiesResidentMB": 672,
+    "peakResidentMB": 672,
+    "processMsPerTick": 2.811
+   },
+   {
+    "label": "es-e1a-mac-ab-06-frozen-unchecked-es-base",
+    "loadSeconds": 2.312,
+    "loadedResidentMB": 630,
+    "bodiesResidentMB": 558,
+    "peakResidentMB": 656,
+    "processMsPerTick": 3.022
+   }
+  ],
+  "summaries": [
+   {
+    "build": "frozen-unchecked-es-e1a",
+    "runs": 3,
+    "startupSeconds": {
+     "median": 0.169,
+     "min": 0.161,
+     "max": 0.17
+    },
+    "loadSeconds": {
+     "median": 2.323,
+     "min": 2.297,
+     "max": 2.38
+    },
+    "startToLoadedSeconds": {
+     "median": 2.795,
+     "min": 2.76,
+     "max": 2.846
+    },
+    "startedToLoadedSeconds": {
+     "median": 2.625,
+     "min": 2.599,
+     "max": 2.677
+    },
+    "peakResidentMB": {
+     "median": 672,
+     "min": 671,
+     "max": 672
+    },
+    "loadedResidentMB": {
+     "median": 631,
+     "min": 628,
+     "max": 631
+    },
+    "bodiesResidentMB": {
+     "median": 672,
+     "min": 671,
+     "max": 672
+    },
+    "processMsPerTick": {
+     "median": 3.078,
+     "min": 2.811,
+     "max": 3.089
+    },
+    "completeMsPerTick": {
+     "median": 1.2276,
+     "min": 1.1626,
+     "max": 1.2278
+    }
+   },
+   {
+    "build": "frozen-unchecked-es-base",
+    "runs": 3,
+    "startupSeconds": {
+     "median": 0.169,
+     "min": 0.159,
+     "max": 0.17
+    },
+    "loadSeconds": {
+     "median": 2.267,
+     "min": 2.266,
+     "max": 2.312
+    },
+    "startToLoadedSeconds": {
+     "median": 2.744,
+     "min": 2.732,
+     "max": 2.777
+    },
+    "startedToLoadedSeconds": {
+     "median": 2.574,
+     "min": 2.573,
+     "max": 2.608
+    },
+    "peakResidentMB": {
+     "median": 639,
+     "min": 633,
+     "max": 656
+    },
+    "loadedResidentMB": {
+     "median": 630,
+     "min": 542,
+     "max": 638
+    },
+    "bodiesResidentMB": {
+     "median": 577,
+     "min": 558,
+     "max": 590
+    },
+    "processMsPerTick": {
+     "median": 3.033,
+     "min": 3.022,
+     "max": 3.122
+    },
+    "completeMsPerTick": {
+     "median": 1.2545,
+     "min": 1.2545,
+     "max": 1.2673
+    }
+   }
+  ],
+  "note": "Both builds load in ~2.3 s in this session against 0.33 s in es-base's: the Mac was paging (3.3 M swapouts, load average 8.6), and the interleaved builds slowed alike."
+ },
+ "macHeap": {
+  "command": "load_memory.py GATE_OUT/ml-load-heap --local frozen-unchecked-es-e1a --local frozen-unchecked-es-base --runs 2 --snapshots",
+  "snapshots": {
+   "01-frozen-unchecked-es-e1a-heap-bodies": {
+    "nodes": 207838,
+    "liveBytes": 1653707632,
+    "footprint": "670.0M"
+   },
+   "01-frozen-unchecked-es-e1a-heap-loaded": {
+    "nodes": 204142,
+    "liveBytes": 1635422272,
+    "footprint": "631.5M"
+   },
+   "02-frozen-unchecked-es-base-heap-bodies": {
+    "nodes": 208239,
+    "liveBytes": 1654444912,
+    "footprint": "560.5M"
+   },
+   "02-frozen-unchecked-es-base-heap-loaded": {
+    "nodes": 203992,
+    "liveBytes": 1635120144,
+    "footprint": "628.8M"
+   },
+   "03-frozen-unchecked-es-e1a-heap-bodies": {
+    "nodes": 208084,
+    "liveBytes": 1654080944,
+    "footprint": "676.4M"
+   },
+   "03-frozen-unchecked-es-e1a-heap-loaded": {
+    "nodes": 204265,
+    "liveBytes": 1635718560,
+    "footprint": "636.2M"
+   },
+   "04-frozen-unchecked-es-base-heap-bodies": {
+    "nodes": 208281,
+    "liveBytes": 1654093472,
+    "footprint": "676.9M"
+   },
+   "04-frozen-unchecked-es-base-heap-loaded": {
+    "nodes": 204007,
+    "liveBytes": 1635122672,
+    "footprint": "637.8M"
+   }
+  },
+  "finding": "Same live heap: at the loaded event E1a holds 0.3-0.6 MB more (~200 more nodes of ~204,000, 0.03%); at body 600 equal or less. The footprint after the match varied by 116 MB between two identical es-base runs (560.5 vs 676.9 MB), so the gate's Mac bodiesResident difference (E1a 671-672 vs es-base 558-590 MB) is footprint variance; the phone decides memory (MEMORY_LOADING), and its ranges overlap."
+ },
+ "gate3": {
+  "script": "/Volumes/NTSD-Builds/tasks/engine-split/gates/gate3-es-e1a.sh",
+  "log": [
+   "trees 56cc10642131d0fee744b41482828da626a7ccc3 staged no-unstaged",
+   "== wasi",
+   "exit=0",
+   "{\"scenario\": \"vs\", \"exit\": 0, \"seconds\": 63.2, \"result\": \"equal\", \"differs\": [], \"node\": \"v26.7.0\"}",
+   "{\"frames\": 1832, \"mismatched\": 0, \"result\": \"identical\"}",
+   "== browser",
+   "build exit=0",
+   "exit=0",
+   "{\"scenario\": \"vs\", \"exit\": 0, \"seconds\": 72.1, \"result\": \"equal\", \"differs\": [], \"node\": \"v26.7.0\", \"browser\": \"Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) H",
+   "{\"scenario\": \"vs\", \"frames\": 1826, \"textless\": 1380, \"text\": 446, \"disagree\": 0, \"firstDisagreements\": []}",
+   "{\"frames\": 1826, \"textless\": 1380, \"text\": 446, \"disagree\": 0, \"result\": \"disagree\"}",
+   "== linux-headless",
+   "build exit=0",
+   "== windows",
+   "build exit=0",
+   "linux exit=0",
+   "{\"scenario\": \"vs\", \"exit\": 0, \"seconds\": 76.8, \"result\": \"equal\", \"differs\": []}",
+   "{\"frames\": 1832, \"mismatched\": 0, \"result\": \"identical\"}",
+   "windows exit=0",
+   "{\"scenario\": \"vs\", \"exit\": 0, \"seconds\": 70.3, \"result\": \"equal\", \"differs\": []}",
+   "{\"frames\": 1832, \"mismatched\": 0, \"result\": \"identical\"}",
+   "== ios",
+   "exit=1",
+   "    raise CalledProcessError(retcode, process.args,",
+   "subprocess.CalledProcessError: Command '['xcrun', 'simctl', 'bootstatus', 'FBFEC8E7-9504-4FA2-A435-F0B24406601E', '-b']' returned non-zero exit status 2.",
+   "{\"frames\": 3960, \"mismatched\": 15, \"result\": \"differs\"}",
+   "== packaged-app",
+   "build exit=0",
+   "exit=0",
+   "{\"scenario\": \"vs\", \"exit\": 0, \"seconds\": 64.2, \"result\": \"equal\", \"differs\": []}",
+   "{\"frames\": 3960, \"mismatched\": 8, \"result\": \"differs\"}",
+   "gate3_done"
+  ],
+  "verdicts": {
+   "wasi": "vs equal, 1,832 frames identical to m1-frames-ref",
+   "browser": "packed folder built and verified against this build; vs equal in Chromium; text in the same 446 of 1,826 frames as CoreText, no disagreement (the summary's 'disagree' counts the reference's playback scenario, not run here)",
+   "linux-headless": "static musl aarch64 in the swift:6.4.0-noble container: vs equal, 1,832 frames identical",
+   "windows": "NTSDHeadless.exe in the ntsd-xplat-test bottle: vs equal, 1,832 frames identical",
+   "packaged-app": "tools/build-native.sh's NTSD Native.app (flat folders, never the fallback): vs equal, its 6 frames and 1,826 digests identical to rt-4w-appkit (the 8 'mismatched' are the reference's playback frames, not run here)",
+   "ios": "open (harness): NTSDiOS built with this tree, but the iPad simulator FBFEC8E7 cannot boot: its data folder, and all of ~/Library/Developer/CoreSimulator/Devices, is missing (the folder's parent modified 2026-10-17 19:47; not in the storage migration's plan, queues or inventory). Moved to E1b's gate with a device set on /Volumes/NTSD-Builds."
+  }
+ },
+ "harnessErrors": [
+  "First WASI/web builds: `--swift-sdk wasm32-unknown-wasip1` matched two SDKs (swift-6.4.0-RELEASE_wasm and _wasm-embedded); rebuilt with --swift-sdk swift-6.4.0-RELEASE_wasm --triple wasm32-unknown-wasip1.",
+  "iOS simulator data missing (above)."
+ ],
+ "openGates": [
+  "iOS simulator vs (next increment's gate)",
+  "full acceptance: independent review covered the code; no Windows/clean-Mac device checks are in this step's scope"
+ ]
+}
