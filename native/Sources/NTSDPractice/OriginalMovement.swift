@@ -1,4 +1,5 @@
 import Foundation
+import NTSDCore
 
 /// Bit layout of the original replay input reader at 0x4198f0.
 /// Combat/defend inputs are deliberately absent from this movement milestone.

@@ -34,7 +34,7 @@ let macTargets: [Target] = portable ? [] : [
     .target(name: "NTSDMacPlatform", dependencies: ["NTSDCore", "NTSDRuntime"],
             swiftSettings: exclusivity,
             linkerSettings: [.linkedFramework("AppKit"), .linkedFramework("AVFoundation")]),
-    .executableTarget(name: "NTSDApp", dependencies: ["NTSDCore", "NTSDMacPlatform", "NTSDContent"], swiftSettings: exclusivity,
+    .executableTarget(name: "NTSDApp", dependencies: ["NTSDCore", "NTSDMacPlatform", "NTSDContent", "NTSDPractice"], swiftSettings: exclusivity,
                       linkerSettings: [.linkedFramework("AppKit"), .linkedFramework("SpriteKit"),
                                        .linkedFramework("AVFoundation")])]
 let macTestDependencies: [Target.Dependency] = portable ? [] : ["NTSDMacPlatform"]
@@ -121,6 +121,10 @@ let package = Package(
                 swiftSettings: exclusivity),
         .systemLibrary(name: "CZlib", path: "Sources/CZlib"),
         .target(name: "NTSDRuntime", dependencies: ["NTSDCore"], swiftSettings: crossModule + exclusivity),
+        // The game's side (ENGINE_SPLIT E3a): the Naruto/Sasuke practice model
+        // behind NTSDApp's lab and the movement/combat checks; not on the
+        // runtime path.
+        .target(name: "NTSDPractice", dependencies: ["NTSDCore"], swiftSettings: exclusivity),
         // The vendored decoder learns the byte order from TargetConditionals.h
         // on Apple platforms and only for x86 elsewhere; every non-Apple target
         // built here (aarch64, x86_64, wasm32) is little-endian (without it the
@@ -137,10 +141,10 @@ let package = Package(
         .executableTarget(name: "NTSDBGCheck", dependencies: ["NTSDReferenceChecks"]),
         .executableTarget(name: "NTSDStageCheck", dependencies: ["NTSDReferenceChecks"]),
         .executableTarget(name: "NTSDFrameCheck", dependencies: ["NTSDCore"]),
-        .executableTarget(name: "NTSDMovementCheck", dependencies: ["NTSDCore"]),
-        .executableTarget(name: "NTSDCombatCheck", dependencies: ["NTSDCore"]),
+        .executableTarget(name: "NTSDMovementCheck", dependencies: ["NTSDCore", "NTSDPractice"]),
+        .executableTarget(name: "NTSDCombatCheck", dependencies: ["NTSDCore", "NTSDPractice"]),
         .executableTarget(name: "NTSDStateCheck", dependencies: ["NTSDCore"]),
-        .testTarget(name: "NTSDCoreTests", dependencies: ["NTSDCore", "NTSDReferenceChecks", "NTSDRuntime", "NTSDMusicDecoder", "CZlib", "NTSDContent"] + macTestDependencies,
+        .testTarget(name: "NTSDCoreTests", dependencies: ["NTSDCore", "NTSDReferenceChecks", "NTSDRuntime", "NTSDMusicDecoder", "CZlib", "NTSDContent", "NTSDPractice"] + macTestDependencies,
                     exclude: portable ? ["Mac"] : [], resources: [.copy("Fixtures")], swiftSettings: exclusivity)
     ],
     swiftLanguageModes: [.v5]

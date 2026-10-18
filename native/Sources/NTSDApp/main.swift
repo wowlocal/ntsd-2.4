@@ -1,6 +1,7 @@
 import AppKit
 import SpriteKit
 import NTSDCore
+import NTSDPractice
 
 let arguments = CommandLine.arguments
 func argument(_ name: String) -> String? {

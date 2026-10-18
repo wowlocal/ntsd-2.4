@@ -1,5 +1,6 @@
 import Foundation
 import NTSDCore
+import NTSDPractice
 
 struct Corpus: Decodable {
     var headers: [Fields], definitions: [[String]], voiceDefinitions: [String], random: OriginalRandom, cases: [Case]

@@ -1,5 +1,6 @@
 import XCTest
 @testable import NTSDCore
+@testable import NTSDPractice
 
 final class OriginalDataTests: XCTestCase {
     func testLosslessLiteralsAndRepeatedFramesSurviveSwiftDecoding() throws {

@@ -1,4 +1,5 @@
 import Foundation
+import NTSDCore
 
 public typealias Fields = [String: String]
 

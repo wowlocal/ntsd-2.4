@@ -1,5 +1,6 @@
 import Foundation
 import NTSDCore
+import NTSDPractice
 
 struct Document: Decodable {
     let header: Fields, definitions: [String], cases: [Case]

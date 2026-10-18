@@ -1,6 +1,7 @@
 import AppKit
 import SpriteKit
 import NTSDCore
+import NTSDPractice
 
 final class MeleeScene: SKScene {
     let assets: Assets

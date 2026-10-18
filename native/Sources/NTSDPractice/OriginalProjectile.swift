@@ -1,4 +1,5 @@
 import Foundation
+import NTSDCore
 
 public struct ProjectileDefinition: Codable, Sendable {
     public var id: Int

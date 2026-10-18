@@ -1,6 +1,7 @@
 import Foundation
 import XCTest
 @testable import NTSDCore
+@testable import NTSDPractice
 
 final class OriginalMovementTests: XCTestCase {
     private struct Corpus: Decodable {

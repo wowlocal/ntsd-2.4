@@ -1,6 +1,7 @@
 import AppKit
 import SpriteKit
 import NTSDCore
+import NTSDPractice
 
 /// A static source-data viewer. It intentionally has no guessed game clock,
 /// movement, collisions, AI, damage, or automatic state transitions.

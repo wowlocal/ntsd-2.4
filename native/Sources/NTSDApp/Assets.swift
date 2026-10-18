@@ -2,6 +2,7 @@ import AppKit
 import SpriteKit
 import AVFoundation
 import NTSDCore
+import NTSDPractice
 
 final class Assets {
     let game: GameData

@@ -1,4 +1,5 @@
 import Foundation
+import NTSDCore
 
 public struct MeleeState: Codable, Equatable, Sendable {
     public var actors: [FighterState]

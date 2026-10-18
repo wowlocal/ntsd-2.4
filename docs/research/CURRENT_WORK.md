@@ -25,7 +25,10 @@ target `NTSDContent`, Core без `Bundle.module`, получает `OriginalCon
 E2 выполнен: идентичность контента (EXE SHA, digests манифестов, counts) в
 `NTSDContent.identity`, Core проверяет переданное; review без блокирующих замечаний, gate
 `es-e2` и все платформенные строки совпали: [evidence](../evidence/es-e2-content-identity.json).
-Следующая задача — E3a: Practice/Lab в игровой target `NTSDPractice`.
+E3a выполнен: Practice/Lab в игровом target `NTSDPractice`; review без замечаний, gate
+`es-e3a` совпал (один запуск из 20 превысил таймаут; повтор 20+20 чистый):
+[evidence](../evidence/es-e3a-practice.json). Следующая задача — E3b: строки идентичности
+(папка данных, имена очередей, сообщение остановки) из движка в игру.
 
 ## Internal build storage и VM quota исправлены — 2026-10-17
 
