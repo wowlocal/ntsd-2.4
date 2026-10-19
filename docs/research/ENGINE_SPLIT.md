@@ -1025,7 +1025,8 @@ From the survey ([report](../evidence/es-e5c-rest-plumbing.md) §1–3, §6).
   (every predicate checked over all 2³² values; tests added for D2–D4 and A65;
   no suite instantiates another). Gate `es-e5c2e`: 11 scenarios, frames, AppKit,
   unchecked, emulator, 20 clean launches, 29 suite runs, the engine's 110 tests,
-  `swift_beginAccess` 3,278/3,406 (the baseline); 18 suites with 51 tests; WASI
+  `swift_beginAccess` 3,278/3,406 (the baseline); 18 suites with 59 tests (first
+  written 51, a miscount; the evidence has 59); WASI
   vs identical; phone overlapping; Mac process time apart 3 against 3 (the new
   build faster), overlapping 4 against 4.
   [Evidence](../evidence/es-e5c2e-modes-roles.json).
