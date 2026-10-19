@@ -10,7 +10,7 @@ measurement from [TVOS_WEB](TVOS_WEB.md), [MEMORY_LOADING](MEMORY_LOADING.md) an
 engine from the game itself. to publish engine as the separate github repo";
 then, after the plan: "ok … when the plan is setteled start the loop in a
 separate branch" and "push automatically every step (on that new branch)".
-**Status:** E0–E3, E4a, E4b (all six hosts) and E4c-1 (the engine's self-contained tests) done; E5a, the game-profile survey and design, next.
+**Status:** E0–E3, E4a, E4b (all six hosts), E4c-1 (the engine's self-contained tests) and E5a (the game profile's survey and design) done; E5b, the record type and the copied tables, next.
 **Branch:** `exp/engine-split`, from `main` 380b448d. Worktree
 `/Volumes/NTSD-Builds/tasks/engine-split/worktree` (T7-backed APFS, see
 [BUILD_STORAGE_T7](BUILD_STORAGE_T7.md)). It tracks `origin/exp/engine-split`
@@ -158,7 +158,7 @@ A read-only survey of `native/` (three agents, 2026-10-18):
 | E2 | Content policy out of Core: the digest, count and EXE-SHA pins become the NTSD content identity the game passes; Core checks what it is given with the same checks and errors (2.8.3.3's content origin as the model, read only) | **done** ([evidence](../evidence/es-e2-content-identity.json)) |
 | E3 | Identity and Practice: user-data folder, wasm module, Android prefix/entry, queue/thread names, titles and messages become game configuration; Practice/Lab and its two checks move to the game side | **done**: E3a ([evidence](../evidence/es-e3a-practice.json)), E3b ([evidence](../evidence/es-e3b-game-identity.json)); diagnostic labels wait for D2 |
 | E4 | Two packages: `engine/Package.swift` (Core, Runtime, codecs, decoders, shims, host libraries, self-contained tests) and `native/Package.swift` depending on it by path; the unsafeFlags plan (SwiftPM rejects them in version-pinned dependencies) | E4a **done** ([evidence](../evidence/es-e4a-engine-package.json)); E4b: headless **done** ([evidence](../evidence/es-e4b1-headless-host.json)), browser **done** ([evidence](../evidence/es-e4b2-web-host.json)), SDL **done** ([evidence](../evidence/es-e4b3-sdl-host.json)), AppKit **done** ([evidence](../evidence/es-e4b4-appkit-host.json)), UIKit **done** ([evidence](../evidence/es-e4b5-uikit-host.json)), Android **done** ([evidence](../evidence/es-e4b6-android-host.json)); E4c-1 **done** ([evidence](../evidence/es-e4c1-engine-tests.json)); E4c-2 (split the 11 mixed test files, the War trio) queued |
-| E5 | Game profile: the ~90 ID sites and the AI dispatch behind a profile the game supplies; the engine defines the `0x44d000` record's layout and the game supplies `initial.bin`; the NTSD profile bit-exact (all gates plus the full fixture-driven suites); the API's fit with 2.8.3.3 checked read only | queued |
+| E5 | Game profile: the ID sites (100 rows, about 125 branch points; first estimated ~90) and the AI dispatch behind a profile the game supplies; the engine defines the `0x44d000` record's layout and the game supplies `initial.bin`; the NTSD profile bit-exact (all gates plus the full fixture-driven suites); the API's fit with 2.8.3.3 checked read only | E5a **done** (survey and design, [evidence](../evidence/es-e5a-design.json)); E5b next |
 | E6 | Classify each profile rule as LF2 2.0a or NTSD from the second reference; LF2 rules become the engine's default profile | needs D1 |
 | E7 | Engine stand-alone: the engine package builds alone (macOS, Linux container) and passes its tests with a from-scratch synthetic content pack; a scan finds no original bytes (files under `downloads/`, the resources, fixtures, `initial.bin`) | queued |
 | E8 | Publication: name, licence, a new repository with fresh history, a tag; this repository depends on it by revision; README credits | needs D2 and the user |
@@ -268,6 +268,99 @@ Plan:
   module, the Android entry symbol) go with the apps or become the engine's.
 - **E4c**: the self-contained tests move to `engine/Tests`; the
   fixture-driven suites stay with the game.
+
+## E5 design (2026-10-19, reviewed and revised)
+
+From two read-only surveys at `40611c4d` ([ID sites and AI](../evidence/es-e5a-id-sites.md),
+[record and tables](../evidence/es-e5a-record-tables.md)) and a read-only
+design review ([evidence](../evidence/es-e5a-design.json)). Which rules are
+LF2 2.0a's and which NTSD's stays open until D1 (E6); E5 moves all of them to
+the NTSD profile and leaves the engine with none.
+
+- **What there is.** 100 object-ID rows (about 125 branch points) in 27 Core
+  files, 15 stage-ID, 11 background-ID and about 35 mode rules; Runtime and
+  the hosts only report IDs. About 150 object-type and 260 frame-number rules
+  are generic mechanics and stay. The AI rolls `draw(0x3c,…)` whatever the ID
+  and then dispatches at `0x403a40` into 20 routines that read actor fields,
+  frame `+8`/`+0x2c` and three globals and write only button/command bytes and
+  the random state.
+- **Rules move, layout stays.** The ID rules and the AI become the game's. The
+  layout stays compile-time engine code: the `0x44d000` record, 400 actors of
+  `0x420`, frame stride `0x178`, about 2,200 address constants, and the
+  capacities and slots of stage and background IDs (D15, B11 and the
+  Random/built-in slots 100/99 of B1–B10, tied to `OriginalCatalogRegistry`'s
+  built-in record). The stage rules D1–D14 (decades, survival 50, the
+  stage→background map, labels, menu cycles) move. lib.dll's hooks (ITR kinds
+  80–89 and 800–825, effects ≥6000, states 4000–4999) stay behind
+  `bundledLibrary` in E5 and join the D1/E7 list. 2.8.3.3 changes the layout
+  (1,000 actors, stride `0x1b0`, globals +0x50000), a second layout in engine
+  code for that study; that its rules fit this API is an inference (no
+  recovered 2.8.3.3 rules, no ID-site file differs).
+- **The record.** The game keeps supplying `initial.bin` (the EXE's 8 KB
+  `.data` and zeros to `0xc3a8`) through its startup package. One engine type
+  backs the existing named constants for the base and the two sizes (`0xb440`,
+  `0xc3a8`) and the parts; the 138 `0x44d000` address sites stay as they are.
+- **Copied tables.** `OriginalWarTroops.fileWords` (`0x44d350`, 1,064 B) and
+  `OriginalTournamentLayout.words` (`0x44d120`, 504 B) duplicate `initial.bin`
+  and only tests use them: compared once with the game's record (a difference
+  is a recorded mismatch, neither side changes), then their tests read the
+  record and the tables leave the engine; whatever replaces `initializeFileData`
+  in the tests keeps its zeroing of `0x451b38..<0x451bb4`, `OriginalWarSetup`'s
+  comment follows, and
+  `sourceSHA256` moves into the test unchanged. The 151 front-menu rectangles
+  and the bitmap/sound name lists become game data; the DAT key, the COM GUIDs,
+  the C runtime's power-of-ten table and EXE strings stay engine constants
+  until D1 sets E7's policy.
+- **The profile's shape.** Engine-defined value types the game fills, carried
+  per session with the content (the content location or identity, which
+  already reach the loaders; not `OriginalGame`, since 2.8.3.3 picks its
+  content per session), with a profile identity in the content identity. One
+  named role per rule, not per object kind (122 alone against 122/123; three
+  different "30" ranges). Roles on catalog objects compile into per-ordinal
+  masks inside `OriginalLoadedCatalog` (as `frameAllocationOrder`), from the
+  finished header `+0x6f4`, so a hot site costs one array load; building them
+  never rejects or merges duplicate, negative or large IDs. IDs that are not
+  catalog ordinals (the stage spawn word before the pseudo-ID substitution,
+  pseudo-IDs 1000/3000/3001, the hero table, War-table words: A60–A63, A65,
+  A67) get `Int32` value predicates. Lookups keep their scans (first match;
+  War's unit binding last match). Only identical lists are shared (roster ×4,
+  Random ×4, reflection ×2, 122 → HP 200 ×3; War's 122 case writes three
+  fields and belongs to the War-life hook). Code hooks only at coarse points
+  (about 8; fusion alone spans five files): the AI special (after the entry
+  roll, with the same context), fusion, mission pseudo-IDs, War life, weapon
+  break, the ID-300 exemption, armour. The 20 routines move to a game target
+  with the NTSD profile.
+- **Bit-exactness.** Only the comparison changes: each site keeps its read,
+  accessor, error type and message in place (Runtime maps
+  `outsideVerifiedDomain`, so errors are outcomes), and reads an ID test
+  guards (possibly undefined storage, e.g. `word(0x458428)`) stay guarded. No
+  hoisting, caching or reordering of reads, throwing reads, random draws (and
+  their stream labels) or re-reads after writes; short-circuit order stays.
+  Profile numbers are `Double`s wrapped at the site with the pass's precision
+  (never pre-built `OriginalExtended`); exact literals and `Int32` wraparound
+  stay; each site keeps its iteration domain (`objectCount` against
+  `objects.count`, `max(objectCount,0)` against `objectCount > 0`) and its
+  `Int(UInt32)` conversions (`Int` is 32-bit on wasm32). The profile is
+  passed apart from `inout` pass state (an overlapping access goes unchecked
+  in shipping builds); its types live in the engine so cross-module
+  optimization still specializes the passes; gates use clean builds. No
+  runtime-path API gets an empty-profile default.
+- **Increments.** E5b: the record type behind the named constants, and the two
+  copied tables' comparison and removal. E5c-0: the plumbing and one role
+  (reflection) with the phone A/B. E5c-1: the hot-pass sites (contacts, hits,
+  physics, drawing). E5c-2: the menu and mode sites with D1–D14. E5d: the AI
+  special hook and the 20 routines in a game target (public pass primitives,
+  the target with the cross-module flags). E5e: the other coarse hooks. E5f:
+  menu rectangles and name lists as game data.
+- **Gates (each Core increment).** The mlgate set from clean builds; a WASI or
+  browser vs (the only 32-bit build); every `*Check` product built and the
+  reference checks of the passes that changed run; the game's full
+  fixture-driven suites (release test build) where rules move; the phone A/B
+  for hot passes (and phone and Mac A/Bs for E5d), with rule 5's follow-up;
+  per-host rows where a host changes. Each review checks a table mapping every
+  row to its role (the literal sets compared mechanically), that only
+  comparisons were replaced, no empty-profile default, error strings, event
+  and random-stream order, exclusivity, and the public surface added.
 
 ## Ledger
 
@@ -439,16 +532,26 @@ Plan:
   build, the engine's 35 suites run (one root-only failure, as at HEAD);
   the Mac A/B's load gap (identical machine code) gone 4 against 4.
   [Evidence](../evidence/es-e4c1-engine-tests.json).
+- 2026-10-19 E5a (read only): two surveys (100 object-ID rows in 27 Core
+  files; the AI's dispatch at `0x403a40`; `initial.bin` as the EXE's `.data`;
+  two engine tables that copy it, test-only; 2.8.3.3 changes the layout) and the
+  E5 design, reviewed: five required changes made and confirmed (the 122 role
+  ×3, value predicates for non-ordinal IDs, the profile per session with the
+  content, the bit-exactness constraints, E5c-0 and the extra gates).
+  [Evidence](../evidence/es-e5a-design.json).
 
 ## Next task
 
-E5a (read-only, no code change): survey and design the game profile. List,
-with file:line, every ID-specific site in `engine/Sources` (object, stage,
-background and frame IDs compared or tabled; the ~90 sites), the AI dispatch
-(the 20 routines and how an object ID selects one), the `0x44d000` record
-(`initial.bin`'s layout, where the engine reads it, which fields are NTSD
-data), and EXE data tables kept in engine code (`OriginalWarTroops.fileWords`
-from 0x44d350 and any others). Write the E5 design section: the profile's
-shape (what the game supplies, what stays the engine's), the increments, the
-gates (bit-exact NTSD: all gates plus the full fixture-driven suites), and how
-2.8.3.3 would fit (read only). Have it reviewed before any E5 code change.
+E5b (see the E5 design): (1) one engine type backs the existing named
+constants for the record's base `0x44d000`, its sizes `0xb440`/`0xc3a8` and its
+parts (`OriginalApplicationDispatchEntry`, `OriginalApplicationStartupInputs`,
+`OriginalApplicationMenuSession`, `OriginalMatchPreparation`); the 138 address
+sites stay. (2) `OriginalWarTroops.fileWords` and
+`OriginalTournamentLayout.words` are compared once with the game's
+`initial.bin` ranges (a difference is a recorded mismatch; neither side
+changes), then their tests read the record (keeping the zeroing of
+`0x451b38..<0x451bb4`), `sourceSHA256` moves into the test unchanged,
+`OriginalWarSetup`'s comment follows, and the tables leave the engine. Gates:
+review (the E5 checklist), the mlgate set, a WASI or browser vs, the `*Check`
+builds and their reference checks, the fixture-driven suites that use the
+tables.

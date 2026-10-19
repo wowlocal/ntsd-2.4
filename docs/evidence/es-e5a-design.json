@@ -1,0 +1,34 @@
+{
+ "study": "ENGINE_SPLIT",
+ "step": "E5a",
+ "base": "40611c4d",
+ "recordedUTC": "2026-10-19T07:34:00Z",
+ "kind": "read-only survey and design; no code change, no gate",
+ "surveys": {
+  "idSitesAndAI": {
+   "report": "docs/evidence/es-e5a-id-sites.md",
+   "sha256": "f0656be171834128570eec03df69bfe8f2b3c798729f435c5ec5d5d452f09f18",
+   "by": "a read-only agent, 2026-10-19",
+   "summary": "100 object-ID rows (about 125 branch points) in 27 Core files; 15 stage, 11 background, about 35 mode rules; about 150 object-type and 260 frame-number rules (generic); the AI's entry roll then dispatch at 0x403a40 into 20 routines; about 8 lib.dll hooks; no ID rules in Runtime or the hosts; no ID-site file differs on exp/ntsd-2.8.3.3"
+  },
+  "recordAndTables": {
+   "report": "docs/evidence/es-e5a-record-tables.md",
+   "sha256": "46b7e2a34706910e28a20ecd72cb02bb2691fe0b0be03239412d519d5e22f8a2",
+   "by": "a read-only agent, 2026-10-19 (initial.bin not opened: the manifest's structure, the packer, sizes and blob ids)",
+   "summary": "initial.bin is the EXE's 8 KB .data plus zeros to 0xc3a8; the layout is about 2,200 raw address constants (426 addresses, 133 files), not types; game data lies in the 8 KB part (tournament bracket, random-hero IDs, War tables, version word, replay key); OriginalWarTroops.fileWords and OriginalTournamentLayout.words duplicate it and only tests use them; front-menu rectangles and name lists likely NTSD data; DAT key, COM GUIDs, the C runtime table and EXE strings engine constants until D1; 2.8.3.3 changes the layout (1,000 actors, frame stride 0x1b0, globals +0x50000)"
+  }
+ },
+ "review": {
+  "by": "a separate read-only agent, 2026-10-19, on the design and the code",
+  "checked": "10 survey claims confirmed in the code (the AI entry roll before the ID read, the reflection list twice, the copied tables test-only, War's last-match binding, the record literals, Runtime's ID reads diagnostic only, the 122/123 draws, the header ID written once, the gravity literals); one wrong ('122 → HP 200 ×4' is ×3; War's case writes three fields)",
+  "required": [
+   "122 → HP 200 ×3, War's case in the War-life hook",
+   "Int32 value predicates for IDs that are not catalog ordinals (A60–A63, A65, A67)",
+   "the profile per session with the content location or identity, not OriginalGame (2.8.3.3 picks content per session)",
+   "constraints: only comparisons change (reads, accessors, errors and messages in place; guarded reads stay guarded), Double profile numbers wrapped at the site, iteration domains and Int(UInt32) conversions kept",
+   "E5c-0 (plumbing and one role with the phone A/B), hot-pass and menu/mode splits, the WASI row, *Check builds and reference checks, phone and Mac A/B for E5d, a per-row mapping table in each review; which stage/background rows move; lib.dll's place"
+  ],
+  "adopted": "all five, and the optional profile identity in the content identity, the 100-row count, the hook recount note, the 2.8.3.3 fit labelled an inference",
+  "userDecisions": "none needed for behaviour-neutral E5; for the user's attention without blocking: whether lib.dll's behaviour stays in the engine (D1/E7) and E7's policy on EXE strings and tables"
+ }
+}
