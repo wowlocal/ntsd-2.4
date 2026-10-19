@@ -76,7 +76,7 @@ public enum OriginalWorldCamera {
                 let id = try h.integer(at: 0x6f4,as: Int32.self)
                 // The mode/Stage exception is ALSO behind the ID gate (keptOnScreen:
                 // 122/123 in NTSD).
-                if try rules.keptOnScreen.contains(id) && (i(a,0x344) > 0 || (mode == 1 && g(0x450b94)/10 == 5)) {
+                if try rules.keptOnScreen.contains(id) && (i(a,0x344) > 0 || (mode == 1 && rules.survivalStages.contains(g(0x450b94)))) {
                     try lower(10);try upper(Double(width)-10)
                 } else {
                     if x < 0,try i(a,0x14) == 0 { try world.write(UInt8(0),at: 4+slot) }

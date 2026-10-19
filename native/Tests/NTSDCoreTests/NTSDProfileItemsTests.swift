@@ -85,20 +85,11 @@ final class NTSDProfileItemsCameraLinksTests: XCTestCase {
     /// A type-1 Object with this ID at x (5 by default) in an 800-wide arena, through
     /// the camera's bounds: its x afterwards.
     func cameraX(id: Int32,x: Double = 5,team: Int32 = 1,mode: Int32 = 0,stage: Int32 = 0,rules: OriginalGameRules) throws -> Double {
-        try camera(id: id,x: x,team: team,mode: mode,stage: stage,rules: rules).x
+        try NTSDProfileCamera.run(id: id,x: x,team: team,mode: mode,stage: stage,rules: rules).x
     }
     /// The same, with whether its slot stays active.
     func camera(id: Int32,x: Double,team: Int32,mode: Int32,stage: Int32,rules: OriginalGameRules) throws -> (x: Double,active: Bool) {
-        var world = try defined(0x7d8),actors = [try defined(0x420)],globals = try defined(0xb440)
-        try world.write(UInt8(1),at: 4)
-        try actors[0].writeBinary64(x,at: 0x58);try actors[0].writeBinary64(100,at: 0x68);try actors[0].write(team,at: 0x344)
-        try globals.write(stage,at: 0x450b94-0x44d000)
-        var header = try defined(0x7a4);try header.write(id,at: 0x6f4);try header.write(Int32(1),at: 0x6f8)
-        var bg = try defined(0x990);try bg.write(Int32(800),at: 0);try bg.write(Int32(400),at: 8)
-        let frame = try defined(0x178),h = header,b = bg
-        try OriginalWorldCamera.bounds(world: &world,actors: &actors,globals: &globals,mode: mode,header: { _ in h },frame: { _,_ in frame },
-                                       background: { _ in b },rules: rules)
-        return (try actors[0].binary64(at: 0x58),try world.integer(at: 4,as: UInt8.self) != 0)
+        try NTSDProfileCamera.run(id: id,x: x,team: team,mode: mode,stage: stage,rules: rules)
     }
     func testKeptOnScreenA42() throws {
         XCTAssertEqual(try cameraX(id: 122,rules: NTSDProfile.rules),10,"122 with a team is held 10 inside")
@@ -236,5 +227,25 @@ final class NTSDProfileItemsRequestedMissionTests: XCTestCase {
         r = try mission(id: 122,rules: rules(hp200: 124))
         XCTAssertTrue(r.events.contains(.constructor(seat: 20)));XCTAssertEqual(try r.actor.integer(at: 0x2fc,as: Int32.self),300,"the stage's HP")
         r = try mission(id: 124,rules: rules(hp200: 124));XCTAssertEqual(try r.actor.integer(at: 0x2fc,as: Int32.self),200)
+    }
+}
+
+/// The camera's bounds over one type-1 Object in an 800-wide arena (shared by the
+/// items and modes tests; no suite instantiates another).
+enum NTSDProfileCamera {
+    static func record(_ size: Int) throws -> OriginalStateRecord {
+        try .init(bytes: [UInt8](repeating: 0,count: size),defined: [Bool](repeating: true,count: size))
+    }
+    static func run(id: Int32,x: Double,team: Int32,mode: Int32,stage: Int32,rules: OriginalGameRules) throws -> (x: Double,active: Bool) {
+        var world = try record(0x7d8),actors = [try record(0x420)],globals = try record(0xb440)
+        try world.write(UInt8(1),at: 4)
+        try actors[0].writeBinary64(x,at: 0x58);try actors[0].writeBinary64(100,at: 0x68);try actors[0].write(team,at: 0x344)
+        try globals.write(stage,at: 0x450b94-0x44d000)
+        var header = try record(0x7a4);try header.write(id,at: 0x6f4);try header.write(Int32(1),at: 0x6f8)
+        var bg = try record(0x990);try bg.write(Int32(800),at: 0);try bg.write(Int32(400),at: 8)
+        let frame = try record(0x178),h = header,b = bg
+        try OriginalWorldCamera.bounds(world: &world,actors: &actors,globals: &globals,mode: mode,header: { _ in h },frame: { _,_ in frame },
+                                       background: { _ in b },rules: rules)
+        return (try actors[0].binary64(at: 0x58),try world.integer(at: 4,as: UInt8.self) != 0)
     }
 }

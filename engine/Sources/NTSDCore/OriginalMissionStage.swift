@@ -154,12 +154,12 @@ struct OriginalMissionStagePass {
                 let a = try index(seat)
                 guard try type(a) == 0 else { continue }
                 let id = try id(a);weight &+= 1
-                if id == 0x33 { weight &+= 1 }
-                if id == 0x34 { weight &+= 2 }
+                if id == rules.stageWeightPlus1 { weight &+= 1 }
+                if id == rules.stageWeightPlus2 { weight &+= 2 }
             }
             if try g(0x450c30) == -1 { weight = ftol(try ext(Double(weight))*ext(1.5)+ext(1.0)) }
             try setG(0x44f880,g(0x44f880) &+ 1)
-            if Self.tenths(s).0 == 5 { try setG(0x450ba0,1) }
+            if rules.survivalStages.contains(s) { try setG(0x450ba0,1) }
             if p >= 0 {
                 let next = try c(s,Self.phase+Int(p)*Self.phase)
                 p = next != -1 ? next : p &+ 1
@@ -176,7 +176,7 @@ struct OriginalMissionStagePass {
             s = try g(0x450b94)
             let bound = try c(s,8+Int(p)*Self.phase)
             try setG(0x450bb0,bound &- 0x31a);try setG(0x450bb4,bound)
-            if Self.tenths(s).0 == 5 {
+            if rules.survivalStages.contains(s) {
                 for seat in 0..<20 {
                     let a = try index(seat)
                     guard try i(a,0x2fc) <= 0 else { continue }
@@ -268,7 +268,7 @@ struct OriginalMissionStagePass {
         } else {
             if timer > 0 && timer < 100 {
                 let (q,r) = Self.tenths(s)
-                if q >= 5 { try bitmap(0x438202,0x451168,0xa5,0x12b,3) }
+                if !rules.numberedStages.contains(s) { try bitmap(0x438202,0x451168,0xa5,0x12b,3) }
                 else {
                     try bitmap(0x438162,0x451178,0x109,0x12b,0x19)
                     try bitmap(0x43817e,0x451178,0x1ea,0x12b,0x24)
@@ -365,7 +365,7 @@ struct OriginalMissionStagePass {
             } else if lives > 1 { try put(a,0x30c,0 &- lives) }
         }
         let s = try g(0x450b94)
-        if s < 0x32 {
+        if rules.numberedStages.contains(s) {
             let (q,r) = Self.tenths(s)
             try format(0x438759,[("STAGE ",q &+ 1,0),("-",r &+ 1,0)])
             try text(0x438777,color: 0xc8c8c8,x: 0x168)
@@ -400,8 +400,8 @@ struct OriginalMissionStagePass {
         } else { call(.fill,0x438925,[0,0x6d,0x31a,0x1b8,0]) }
         wipe = try g(0x450ba4) &+ 1;try setG(0x450ba4,wipe)
         guard wipe == 21 else { return }
-        let q = Self.tenths(try g(0x450b94)).0
-        if q == 4 {
+        let stage = try g(0x450b94),q = Self.tenths(stage).0
+        if rules.finalStageSet.contains(stage) {
             if try g(0x450b88) == 0 || g(0x44d020) == 10 { try setG(0x44d020,0x12c);return }
             try setG(0x450bdc,0x15e);return
         }

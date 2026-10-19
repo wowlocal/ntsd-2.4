@@ -52,6 +52,7 @@ public enum OriginalMatchSelection {
         checkpoint: (OriginalCharacterScreenCheckpoint,OriginalMatchPreparation) throws -> Void,
         demo: OriginalDemoStartProviders?,
         matchPrelude: (Int32) throws -> Void) throws -> OriginalCharacterScreenExit {
+        let rules = state.catalog.rules
         var candidate = state,local = locals,library = libraryText
         func error(_ message: String) -> OriginalStateError { .invalidStorage("Match selection: "+message) }
         func word(_ address: Int) throws -> Int32 { try candidate.global(address) }
@@ -180,7 +181,7 @@ public enum OriginalMatchSelection {
                 if option == 3 { try bitmap(0x451178,15,87,22) }
                 // 42cd5d/42cd6a produce the two local bytes; 42cd90..42cdad
                 // copy the nine-byte literal. No retained source stack input.
-                if decade < 5 { try text([UInt8(truncatingIfNeeded:decade &+ 0x31)],194,91,0xff9b9b) }
+                if rules.numberedStages.contains(stage) { try text([UInt8(truncatingIfNeeded:decade &+ 0x31)],194,91,0xff9b9b) }
                 else { try text(Array("Survival".utf8),174,91,0xff9b9b) }
             } else {
                 let arena = try word(0x44d024)

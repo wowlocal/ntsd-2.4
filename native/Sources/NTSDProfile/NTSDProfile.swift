@@ -24,5 +24,10 @@ public enum NTSDProfile {
         // candidates, the bracket's favourites.
         roster: .init(hiddenRoster: OriginalIDSet([30, 31, 32, 33, 34, 35, 36, 37, 38, 39, 50, 51, 52, 53, 54, 55, 56, 57, 58, 59]),
                       randomCandidates: OriginalIDRange(Int32.min..<30),
-                      bracketFavourites: OriginalIDSet([50, 51, 52, 53, 54, 55, 56, 57, 58, 59])))
+                      bracketFavourites: OriginalIDSet([50, 51, 52, 53, 54, 55, 56, 57, 58, 59])),
+        // Stage mode's stage numbers (survival, numbered, the last set), the players a mission
+        // stage weighs more, War's troops.
+        modes: .init(survivalStages: OriginalIDRange(50..<60), numberedStages: OriginalIDRange(Int32.min..<50),
+                     finalStageSet: OriginalIDRange(40..<50), stageWeightPlus1: 51, stageWeightPlus2: 52,
+                     warTroops: OriginalIDSet([30, 31, 32, 33, 34, 35, 36, 37, 39, 122, 123])))
 }

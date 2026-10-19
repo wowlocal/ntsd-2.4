@@ -20,8 +20,9 @@ public struct OriginalIDSet: Equatable, Sendable {
     }
 }
 
-/// A half-open range of object IDs for one rule of a game profile (ENGINE_SPLIT
-/// E5c-2a): `contains` is `lowerBound <= id && id < upperBound` for every Int32,
+/// A half-open range of object IDs (or stage numbers) for one rule of a game
+/// profile (ENGINE_SPLIT E5c-2a): `contains` is `lowerBound <= id && id < upperBound`
+/// for every Int32,
 /// the complement of the original's `id < lowerBound || id >= upperBound`. Two
 /// ranges are equal when their bounds are (two empty ranges may differ).
 public struct OriginalIDRange: Equatable, Sendable {
@@ -171,11 +172,39 @@ public struct OriginalGameRules: Equatable, Sendable {
             self.hiddenRoster = hiddenRoster; self.randomCandidates = randomCandidates; self.bracketFavourites = bracketFavourites
         }
     }
+    /// Modes: what the stage numbers mean in stage mode (OriginalMissionStage, the
+    /// camera, match selection) and which characters War counts as troops
+    /// (OriginalWarBattle). The decade arithmetic (ten stages a set, sixty stages)
+    /// stays engine code.
+    public struct Modes: Equatable, Sendable {
+        /// Survival stages: the blink flag at a stage's start, the dead players'
+        /// revive to HP 5, and (with `keptOnScreen`) the camera holding items.
+        public let survivalStages: OriginalIDRange
+        /// Numbered stages: "STAGE q-r" and the set/stage digits (the others show
+        /// the survival line or bitmap); match selection's set digit.
+        public let numberedStages: OriginalIDRange
+        /// The last stage set: its end does not advance to the next set (it goes
+        /// to the menu 0x12c, or waits through 0x450bdc). Survival and numbered
+        /// stages are not complements: stages from 60 are neither.
+        public let finalStageSet: OriginalIDRange
+        /// Players a mission stage's start counts one (`stageWeightPlus1`) or two
+        /// (`stageWeightPlus2`) extra in its weight, each tested on its own.
+        public let stageWeightPlus1: Int32, stageWeightPlus2: Int32
+        /// Characters War counts as troops (sides 1–2, seats from 20).
+        public let warTroops: OriginalIDSet
+        public init(survivalStages: OriginalIDRange, numberedStages: OriginalIDRange, finalStageSet: OriginalIDRange,
+                    stageWeightPlus1: Int32, stageWeightPlus2: Int32, warTroops: OriginalIDSet) {
+            self.survivalStages = survivalStages; self.numberedStages = numberedStages; self.finalStageSet = finalStageSet
+            self.stageWeightPlus1 = stageWeightPlus1; self.stageWeightPlus2 = stageWeightPlus2; self.warTroops = warTroops
+        }
+    }
     private final class Roles: Sendable {
         let profile: String, reflection: Reflection, armour: Armour, interaction: Interaction, impact: Impact, items: Items, roster: Roster
-        init(profile: String, reflection: Reflection, armour: Armour, interaction: Interaction, impact: Impact, items: Items, roster: Roster) {
+        let modes: Modes
+        init(profile: String, reflection: Reflection, armour: Armour, interaction: Interaction, impact: Impact, items: Items, roster: Roster,
+             modes: Modes) {
             self.profile = profile; self.reflection = reflection; self.armour = armour; self.interaction = interaction; self.impact = impact
-            self.items = items; self.roster = roster
+            self.items = items; self.roster = roster; self.modes = modes
         }
     }
     private let roles: Roles
@@ -187,6 +216,7 @@ public struct OriginalGameRules: Equatable, Sendable {
     public var impact: Impact { roles.impact }
     public var items: Items { roles.items }
     public var roster: Roster { roles.roster }
+    public var modes: Modes { roles.modes }
     public var reflectable: OriginalIDSet { roles.reflection.reflectable }
     public var reflector: Int32 { roles.reflection.reflector }
     public var rebinder: Int32 { roles.reflection.rebinder }
@@ -214,13 +244,20 @@ public struct OriginalGameRules: Equatable, Sendable {
     public var hiddenRoster: OriginalIDSet { roles.roster.hiddenRoster }
     public var randomCandidates: OriginalIDRange { roles.roster.randomCandidates }
     public var bracketFavourites: OriginalIDSet { roles.roster.bracketFavourites }
+    public var survivalStages: OriginalIDRange { roles.modes.survivalStages }
+    public var numberedStages: OriginalIDRange { roles.modes.numberedStages }
+    public var finalStageSet: OriginalIDRange { roles.modes.finalStageSet }
+    public var stageWeightPlus1: Int32 { roles.modes.stageWeightPlus1 }
+    public var stageWeightPlus2: Int32 { roles.modes.stageWeightPlus2 }
+    public var warTroops: OriginalIDSet { roles.modes.warTroops }
     public init(profile: String, reflection: Reflection, armour: Armour, interaction: Interaction, impact: Impact, items: Items,
-                roster: Roster) {
+                roster: Roster, modes: Modes) {
         roles = Roles(profile: profile, reflection: reflection, armour: armour, interaction: interaction, impact: impact, items: items,
-                      roster: roster)
+                      roster: roster, modes: modes)
     }
     public static func == (a: Self, b: Self) -> Bool {
         a.roles === b.roles || (a.profile == b.profile && a.reflection == b.reflection && a.armour == b.armour && a.interaction == b.interaction
-                                && a.impact == b.impact && a.items == b.items && a.roster == b.roster)
+                                && a.impact == b.impact && a.items == b.items && a.roster == b.roster
+                                && a.modes == b.modes)
     }
 }

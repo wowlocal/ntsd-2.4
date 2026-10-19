@@ -29,7 +29,7 @@ public enum OriginalWarBattle {
         let catalog = state.catalog
         guard try state.world.integer(at: 0x7d4,as: UInt32.self) == 0,
               let registry = catalog.registry.records[0x4d82380] else { throw OriginalStateError.invalidStorage("War battle catalog binding") }
-        var pass = OriginalWarBattlePass(world: state.world,actors: state.actors,globals: state.globals,objects: catalog.objects,
+        var pass = OriginalWarBattlePass(world: state.world,actors: state.actors,globals: state.globals,objects: catalog.objects,rules: catalog.rules,
             objectCount: try registry.integer(at: 0,as: Int32.self),backgrounds: state.backgrounds)
         try pass.run()
         for event in pass.events { try observe(event) }
@@ -42,6 +42,7 @@ struct OriginalWarBattlePass {
     var actors: [OriginalStateRecord]
     var globals: OriginalStateRecord
     let objects: [OriginalLoadedObject]
+    let rules: OriginalGameRules
     let objectCount: Int32
     let backgrounds: [OriginalStateRecord]
     var events: [OriginalWarBattleEvent] = []
@@ -103,7 +104,7 @@ struct OriginalWarBattlePass {
             let a = try index(seat),side = try i(a,0x344)
             if side > 0 && side < 3 && seat >= 20 {
                 let id = try header(object(a),0x6f4)
-                if (UInt32(bitPattern: id &- 30) <= 9 && id != 38) || id == 122 || id == 123 {
+                if rules.warTroops.contains(id) {
                     if count > 0 {
                         for c in 0..<count where try g(0x44d350+Int(c)*4) == id {
                             let n = (side &- 1) &* count &+ c

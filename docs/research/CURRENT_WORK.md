@@ -59,7 +59,8 @@ A8 теперь с прямым тестом: [evidence](../evidence/es-e5c1d-im
 E5c-2c выполнен: запрошенные предметы и стадия миссии (A48–A50, A64), у тестов движка свои синтетические правила:
 [evidence](../evidence/es-e5c2c-requested-mission-roles.json); обзор оставшихся строк с открытыми решениями F1–F11:
 [report](../evidence/es-e5c-rest-plumbing.md). E5c-2d выполнен: ростер (A70–A79); первый прогон гейта провален по числу swift_beginAccess и сохранён, новая база 3 278:
-[evidence](../evidence/es-e5c2d-roster-roles.json). Следующая задача — E5c-2e: режимы (стадии, A30, A65).
+[evidence](../evidence/es-e5c2d-roster-roles.json). E5c-2e выполнен: режимы (стадии выживания и нумерованные, последний набор, веса 51/52, войска War):
+[evidence](../evidence/es-e5c2e-modes-roles.json). Следующая задача — E5c-2f: прелюдия матча (D8, D9).
 
 ## Internal build storage и VM quota исправлены — 2026-10-17
 
