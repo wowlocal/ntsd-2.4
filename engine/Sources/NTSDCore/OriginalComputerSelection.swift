@@ -6,6 +6,7 @@ enum OriginalComputerSelection {
         target: UInt32, input: OriginalFrontScreenBodyInput,
         draw: (OriginalCharacterScreenDraw,OriginalStateRecord) throws -> Void,
         observe: (OriginalFrontScreenEvent) throws -> Void) throws {
+        let rules = state.catalog.rules
         var candidate = state,local = locals,library = libraryText
         func error(_ message: String) -> OriginalStateError { .invalidStorage("Computer selection: "+message) }
         func word(_ p: Int) throws -> Int32 { try candidate.global(p) }
@@ -87,8 +88,8 @@ enum OriginalComputerSelection {
                 guard candidate.catalog.objects.indices.contains(Int(ordinal)) else { throw error("Roster access") }
                 let header = candidate.catalog.objects[Int(ordinal)].header
                 if try header.integer(at:0x6f8,as:Int32.self) != 0 { continue }
-                let group = try header.integer(at:0x6f4,as:Int32.self)/10
-                if try (group == 3 || group == 5) && word(0x458428) != 1 { continue }
+                let id = try header.integer(at:0x6f4,as:Int32.self)
+                if try rules.hiddenRoster.contains(id) && word(0x458428) != 1 { continue }
                 try candidate.actors[actor(seat)].write(UInt32(bitPattern:ordinal),at:0x368);return
             }
             throw error("Roster traversal does not terminate")

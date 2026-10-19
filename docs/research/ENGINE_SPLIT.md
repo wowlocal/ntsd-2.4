@@ -10,7 +10,7 @@ measurement from [TVOS_WEB](TVOS_WEB.md), [MEMORY_LOADING](MEMORY_LOADING.md) an
 engine from the game itself. to publish engine as the separate github repo";
 then, after the plan: "ok … when the plan is setteled start the loop in a
 separate branch" and "push automatically every step (on that new branch)".
-**Status:** E0–E3, E4a, E4b (all six hosts), E4c-1 (the engine's self-contained tests), E5a (the game profile's survey and design) and E5b (the record type, the copied tables out), E4c-1a (a nondeterministic engine test corrected) E5c-0 (the profile's plumbing, reflection), E5c-1a (one storage, the reflectors), E5c-1b (armour), E5c-1c (special interactions) and E5c-1d (impact) done; E5c-2a, E5c-2b and E5c-2c (the items family: the random and requested spawns, camera, links, the mission stage) done; E5c-2d, the roster family, next.
+**Status:** E0–E3, E4a, E4b (all six hosts), E4c-1 (the engine's self-contained tests), E5a (the game profile's survey and design) and E5b (the record type, the copied tables out), E4c-1a (a nondeterministic engine test corrected) E5c-0 (the profile's plumbing, reflection), E5c-1a (one storage, the reflectors), E5c-1b (armour), E5c-1c (special interactions) and E5c-1d (impact) done; E5c-2a, E5c-2b and E5c-2c (the items family: the random and requested spawns, camera, links, the mission stage) and E5c-2d (the roster family) done; E5c-2e, the modes family, next.
 **Branch:** `exp/engine-split`, from `main` 380b448d. Worktree
 `/Volumes/NTSD-Builds/tasks/engine-split/worktree` (T7-backed APFS, see
 [BUILD_STORAGE_T7](BUILD_STORAGE_T7.md)). It tracks `origin/exp/engine-split`
@@ -158,7 +158,7 @@ A read-only survey of `native/` (three agents, 2026-10-18):
 | E2 | Content policy out of Core: the digest, count and EXE-SHA pins become the NTSD content identity the game passes; Core checks what it is given with the same checks and errors (2.8.3.3's content origin as the model, read only) | **done** ([evidence](../evidence/es-e2-content-identity.json)) |
 | E3 | Identity and Practice: user-data folder, wasm module, Android prefix/entry, queue/thread names, titles and messages become game configuration; Practice/Lab and its two checks move to the game side | **done**: E3a ([evidence](../evidence/es-e3a-practice.json)), E3b ([evidence](../evidence/es-e3b-game-identity.json)); diagnostic labels wait for D2 |
 | E4 | Two packages: `engine/Package.swift` (Core, Runtime, codecs, decoders, shims, host libraries, self-contained tests) and `native/Package.swift` depending on it by path; the unsafeFlags plan (SwiftPM rejects them in version-pinned dependencies) | E4a **done** ([evidence](../evidence/es-e4a-engine-package.json)); E4b: headless **done** ([evidence](../evidence/es-e4b1-headless-host.json)), browser **done** ([evidence](../evidence/es-e4b2-web-host.json)), SDL **done** ([evidence](../evidence/es-e4b3-sdl-host.json)), AppKit **done** ([evidence](../evidence/es-e4b4-appkit-host.json)), UIKit **done** ([evidence](../evidence/es-e4b5-uikit-host.json)), Android **done** ([evidence](../evidence/es-e4b6-android-host.json)); E4c-1 **done** ([evidence](../evidence/es-e4c1-engine-tests.json)), E4c-1a **done** ([evidence](../evidence/es-e4c1a-sorted-keys.json)); E4c-2 (split the 11 mixed test files, the War trio) queued |
-| E5 | Game profile: the ID sites (100 rows, about 125 branch points; first estimated ~90) and the AI dispatch behind a profile the game supplies; the engine defines the `0x44d000` record's layout and the game supplies `initial.bin`; the NTSD profile bit-exact (all gates plus the full fixture-driven suites); the API's fit with 2.8.3.3 checked read only | E5a **done** (survey and design, [evidence](../evidence/es-e5a-design.json)); E5b **done** ([evidence](../evidence/es-e5b-record-type.json)); E5c-0 **done** ([evidence](../evidence/es-e5c0-profile-plumbing.json)); E5c-1a **done** ([evidence](../evidence/es-e5c1a-reflector-roles.json)); E5c-1b **done** ([evidence](../evidence/es-e5c1b-armour-roles.json)); E5c-1c **done** ([evidence](../evidence/es-e5c1c-interaction-roles.json)); E5c-1d **done** ([evidence](../evidence/es-e5c1d-impact-roles.json)); E5c-2a **done** ([evidence](../evidence/es-e5c2a-items-roles.json)); E5c-2b **done** ([evidence](../evidence/es-e5c2b-camera-links-roles.json)); E5c-2c **done** ([evidence](../evidence/es-e5c2c-requested-mission-roles.json)); E5c-2d next |
+| E5 | Game profile: the ID sites (100 rows, about 125 branch points; first estimated ~90) and the AI dispatch behind a profile the game supplies; the engine defines the `0x44d000` record's layout and the game supplies `initial.bin`; the NTSD profile bit-exact (all gates plus the full fixture-driven suites); the API's fit with 2.8.3.3 checked read only | E5a **done** (survey and design, [evidence](../evidence/es-e5a-design.json)); E5b **done** ([evidence](../evidence/es-e5b-record-type.json)); E5c-0 **done** ([evidence](../evidence/es-e5c0-profile-plumbing.json)); E5c-1a **done** ([evidence](../evidence/es-e5c1a-reflector-roles.json)); E5c-1b **done** ([evidence](../evidence/es-e5c1b-armour-roles.json)); E5c-1c **done** ([evidence](../evidence/es-e5c1c-interaction-roles.json)); E5c-1d **done** ([evidence](../evidence/es-e5c1d-impact-roles.json)); E5c-2a **done** ([evidence](../evidence/es-e5c2a-items-roles.json)); E5c-2b **done** ([evidence](../evidence/es-e5c2b-camera-links-roles.json)); E5c-2c **done** ([evidence](../evidence/es-e5c2c-requested-mission-roles.json)); E5c-2d **done** ([evidence](../evidence/es-e5c2d-roster-roles.json)); E5c-2e next |
 | E6 | Classify each profile rule as LF2 2.0a or NTSD from the second reference; LF2 rules become the engine's default profile | needs D1 |
 | E7 | Engine stand-alone: the engine package builds alone (macOS, Linux container) and passes its tests with a from-scratch synthetic content pack; a scan finds no original bytes (files under `downloads/`, the resources, fixtures, `initial.bin`) | queued |
 | E8 | Publication: name, licence, a new repository with fresh history, a tag; this repository depends on it by revision; README credits | needs D2 and the user |
@@ -629,6 +629,58 @@ Order: E5c-2d roster, E5c-2e modes (mission, camera, War), E5c-2f prelude,
 E5c-2g mode label, then the hot passes E5c-1e physics, E5c-1f drawing, E5c-1g
 effects, E5c-1h lifecycle, E5c-1i object input, E5c-1j A28 (after F4).
 
+### E5c-2d note (2026-10-19, reviewed with its change; done)
+
+From the survey ([report](../evidence/es-e5c-rest-plumbing.md) §1, §2, §6).
+- **Test helper (F11).** `OriginalGameRules.with(...)` in the game's tests
+  (NTSDProfileTestRules.swift) copies a profile with the given families
+  replaced; the 9 test constructions use it, so a new family now edits only the
+  game's profile, the engine tests' value and the helper.
+- **Roster family (sixth).** `hiddenRoster` {30–39, 50–59} (A70 character
+  screen, A71 computer selection, A72/A73 the tournaments' setups:
+  `id/10 ∈ {3, 5}` is exactly that set for every `Int32`, Int32 division
+  truncating toward zero; 0x458428 stays read only for members),
+  `randomCandidates` `OriginalIDRange(Int32.min..<30)` (A74 continuation,
+  A75/A76 the tournaments, A77 War: `id < 30`; the type test, ordinal 0 and the
+  selected seats stay engine), `bracketFavourites` {50–59} (A78 tournament,
+  A79 team tournament: `id/10 == 5`; the coin flip's stream still follows the
+  first side's membership; one rule in both brackets, a sharing the design's
+  list did not name, recorded here). Each site reads the rules of the catalog
+  it already holds (`candidate.catalog.rules`, `catalog.rules`): no new
+  parameter, no public signature change.
+- **Tests.** A74 through `randomRosterCandidates` on a small declared catalog
+  (NTSD's profile: IDs below 30, a negative one included; a moved range: the 30s
+  and 40s; no seat selects ordinal 0), A77 through the War setup's own native
+  harness (its catalog builder takes the rules: the first seat's Random
+  candidates are ordinals 11…22 under NTSD's profile, 1…8 and 23 under a moved
+  range), A72 through the tournament setup with Right pressed (the roster stops
+  at 122 past the hidden 30s, at the first 30 with 0x458428 = 1, past a moved
+  set's two), A78 through the bracket to its checkpoint 0x433c22 (55 beats 5
+  without a coin flip; moved favourites reverse it, both members or none flip
+  on stream 0xfb or 0xfa). A70, A71, A73, A75/A76 and A79 rest on the mechanical
+  check and the loaded-catalog menu corpora under NTSD's profile.
+- **Review.** No code fix (the literal forms restored: all 8 engine files
+  byte-identical to HEAD). Required: the moved-profile tests the Next task
+  named (A72's hidden roster, A78's bracket), and Random's users (computer and
+  match selection) in the docs. Adopted with it: no seat selects ordinal 0 in
+  A74's test, a negative ID there, the engine rules' note on the menus.
+- **Access count (gate run `es-e5c2d`, failed).** Reading
+  `candidate.catalog.rules` inside the menus' nested functions (which capture
+  the local `var candidate`) raised the checked headless build's
+  `swift_beginAccess` count from 3,276 to 3,279 (the app 3,404 to 3,407); the
+  run is kept as failed and its extra rows were stopped. Fix: each of the seven
+  functions reads `let rules = state.catalog.rules` once at the top (a static
+  read of the `inout` parameter; `catalog` is a `let` and `candidate` is only
+  ever `state` or a copy, so the sites see the same rules). A clean build then
+  counts 3,278: a second read-only review disassembled `roster` in both
+  tournament setups (10 → 11 sites each, every other function unchanged) and
+  found the optimizer emitting the `write(flag,1)` exit block twice instead of
+  sharing it once `contains` is inlined; per path the number of dynamic
+  accesses is unchanged (no new check executed), on a key-press menu path. Two
+  other source forms gave the same count. Recorded as a dated change of the
+  static count's baseline (3,278 headless; the app as `es-e5c2d2` measures it),
+  not an unchanged row; earlier rows keep their 3,276.
+
 ## Ledger
 
 - 2026-10-18: plan agreed; branch `exp/engine-split` and its worktree created
@@ -905,20 +957,36 @@ effects, E5c-1h lifecycle, E5c-1i object input, E5c-1j A28 (after F4).
   overlapping 4 against 4; Mac overlapping. The items family is complete
   except the AI's rows (E5d). A survey of the remaining rows is recorded above.
   [Evidence](../evidence/es-e5c2c-requested-mission-roles.json).
+- 2026-10-19 E5c-2d: the tests' `with(...)` helper (F11) and a sixth family,
+  `Roster`: `hiddenRoster` {30–39, 50–59} (A70–A73), `randomCandidates`
+  `Int32.min..<30` (A74–A77), `bracketFavourites` {50–59} (A78/A79). Gate run
+  `es-e5c2d` failed its `swift_beginAccess` row (3,279 against 3,276: rules read
+  through the captured `candidate`); kept as failed, extra rows stopped. Fixed
+  by one static read of the rules per function; a second review found the
+  remaining +2 (3,278) to be a duplicated exit block in the two tournament
+  setups' `roster`, no new check on any path, and accepted it as recorded.
+  Gate run `es-e5c2d2`: 11 scenarios, frames, AppKit, unchecked, emulator, 20
+  clean launches, 29 suite runs, the engine's 110 tests; `swift_beginAccess`
+  3,278 headless and 3,406 app (+2 each, the app's per-function diff in the same
+  two functions only; **the new baseline from here on**); 23 suites with 67
+  tests (the menu, tournament and War corpora); WASI vs identical; phone and Mac
+  overlapping. [Evidence](../evidence/es-e5c2d-roster-roles.json).
 
 ## Next task
 
-E5c-2d (survey: [report](../evidence/es-e5c-rest-plumbing.md) §1, §2, §6). First
-the test helper of F11: an `OriginalGameRules` extension in the game's tests
-that copies a profile with some families replaced, so the existing test
-constructions use it. Then a sixth family `Roster`: `hiddenRoster`
-{30–39, 50–59} (A70–A73: listed only when 0x458428 == 1, which is read only
-for those IDs), `randomCandidates` `OriginalIDRange(Int32.min..<30)` (A74–A77:
-Random's candidates; the type test and ordinal 0 stay engine), and
-`bracketFavourites` {50–59} (A78/A79: a member beats a non-member; the stream
-label follows the first ID's test; a sharing to record). Each site reads the
-rules of the catalog it already holds (`candidate.catalog.rules`, no new
-parameter). Tests on a synthetic catalog (the `OriginalWarSetupNativeTests`
-pattern): A74's candidates, A70's cursor skip with 0x458428 0 and 1, A77's War
-candidates, A78's bracket, under NTSD's profile and moved ones. Gates as E5c-2c,
-with the menu suites (survey §6) in gate3.
+E5c-2e (survey: [report](../evidence/es-e5c-rest-plumbing.md) §1–3, §6): a
+seventh family `Modes`, settling F3 and F8 with its review. Proposed (F3's
+option B): the stage predicates move, the decade arithmetic stays engine code
+(10 per set, D15's wrap at 60, D1/D5/D12/D13): `survivalStages` 50..<60 (D2,
+D3, D14's stage half in the camera; later D10), `numberedStages`
+`Int32.min..<50` (D4 as `!contains`, D6; later D9 and the menu's `decade < 5`),
+`finalStageSet` 40..<50 (D7; its next-set formula stays), the mission spawn's
+weights `stageWeightPlus1` 51 and `stageWeightPlus2` 52 (A30, two independent
+tests as now), and `warTroops` {30–37, 39, 122, 123} (A65, the War battle pass
+taking `let rules` at its one construction). Every site already holds its
+catalog's rules except the War pass (one field). The label strings and the
+mode tests stay engine. Tests: the mission pass built directly (`hud`, the set
+end, the survival revive), the camera's survival case, the War troop count,
+under NTSD's profile and moved ones. Gates as E5c-2d (`swift_beginAccess`
+baseline 3,278 / 3,406), with the mission, camera, War battle, stage finale
+and match selection suites in gate3.

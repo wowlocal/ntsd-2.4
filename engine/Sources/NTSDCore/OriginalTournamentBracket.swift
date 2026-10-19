@@ -12,6 +12,7 @@ public enum OriginalTournamentBracket {
         draw: (OriginalCharacterScreenDraw,OriginalStateRecord) throws -> Void,
         observe: (OriginalFrontScreenEvent) throws -> Void,
         checkpoint: (OriginalCharacterScreenCheckpoint,OriginalMatchPreparation) throws -> Void) throws -> OriginalCharacterScreenExit {
+        let rules = state.catalog.rules
         var candidate=state,local=locals
         func error(_ s: String) -> OriginalStateError { .invalidStorage("Tournament bracket: "+s) }
         func word(_ a: Int) throws -> Int32 { try candidate.global(a) }
@@ -100,12 +101,12 @@ public enum OriginalTournamentBracket {
                         for index in [first,second] { let address=try 0x451384+seat(index)*4;try write(address,word(address) &+ 1) }
                     } else {
                         try sound(0x45560c);try write(0x4513d8,0)
-                        let a=try candidate.catalog.objects[object(first)].header.integer(at:0x6f4,as:Int32.self)/10
-                        let b=try candidate.catalog.objects[object(second)].header.integer(at:0x6f4,as:Int32.self)/10
+                        let a=try rules.bracketFavourites.contains(candidate.catalog.objects[object(first)].header.integer(at:0x6f4,as:Int32.self))
+                        let b=try rules.bracketFavourites.contains(candidate.catalog.objects[object(second)].header.integer(at:0x6f4,as:Int32.self))
                         let selected: Int32
-                        if a==5 && b != 5 { selected=0 }
-                        else if b==5 && a != 5 { selected=1 }
-                        else { selected=try candidate.drawMenuRandom(stream:a==5 ? 0xfb : 0xfa,range:2,observe:observe) }
+                        if a && !b { selected=0 }
+                        else if b && !a { selected=1 }
+                        else { selected=try candidate.drawMenuRandom(stream:a ? 0xfb : 0xfa,range:2,observe:observe) }
                         let winner=selected==0 ? first : second,loser=selected==0 ? second : first
                         // The source promotes the winner only after both score stores.
                         let win=try 0x451384+seat(winner)*4,lose=try 0x451384+seat(loser)*4

@@ -19,5 +19,10 @@ public enum NTSDProfile {
         // The random and requested item spawns (OriginalWorldHits, OriginalPostDrawCommands), the
         // mission stage's spawn, the camera, the held drinks (OriginalWorldLinks).
         items: .init(itemRange: OriginalIDRange(100..<200), scarceDropItems: OriginalIDSet([122, 123]), scarceRequestedItem: 122, spawnHP200: 122,
-                     keptOnScreen: OriginalIDSet([122, 123]), hpDrink: 122, mpDrink: 123))
+                     keptOnScreen: OriginalIDSet([122, 123]), hpDrink: 122, mpDrink: 123),
+        // The menus' roster: hidden characters (shown when 0x458428 is 1), Random's
+        // candidates, the bracket's favourites.
+        roster: .init(hiddenRoster: OriginalIDSet([30, 31, 32, 33, 34, 35, 36, 37, 38, 39, 50, 51, 52, 53, 54, 55, 56, 57, 58, 59]),
+                      randomCandidates: OriginalIDRange(Int32.min..<30),
+                      bracketFavourites: OriginalIDSet([50, 51, 52, 53, 54, 55, 56, 57, 58, 59])))
 }

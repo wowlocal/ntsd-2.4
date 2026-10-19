@@ -2,9 +2,10 @@
 
 /// ENGINE_SPLIT E5c-2c: the engine tests' own game rules (a game's profile, such
 /// as NTSD's, is not visible here). Synthetic: every ID role is −1 and every set
-/// empty (no record these tests build carries −1 or a set member at +0x6f4),
+/// or other range empty (no record these tests build carries −1 or a member at +0x6f4),
 /// except the item range 100..<200, which the requested-items tests' pools
-/// (Object ID 100) are built on.
+/// (Object ID 100) are built on. No engine test reaches the menus (Random would
+/// find no candidate there).
 extension OriginalGameRules {
     static let engineTests = OriginalGameRules(profile: "engine tests (synthetic)",
         reflection: .init(reflectable: OriginalIDSet([]), reflector: -1, rebinder: -1, heldRebinder: -1),
@@ -13,5 +14,6 @@ extension OriginalGameRules {
         interaction: .init(holdKind101: OriginalIDSet([]), pullImmune: OriginalIDSet([]), teamBypass: -1, countsAsCharacter: OriginalIDSet([])),
         impact: .init(vanishingAttacker: -1, spentAttacker: -1, heavyHeldWeapon: -1),
         items: .init(itemRange: OriginalIDRange(100..<200), scarceDropItems: OriginalIDSet([]), scarceRequestedItem: -1, spawnHP200: -1,
-                     keptOnScreen: OriginalIDSet([]), hpDrink: -1, mpDrink: -1))
+                     keptOnScreen: OriginalIDSet([]), hpDrink: -1, mpDrink: -1),
+        roster: .init(hiddenRoster: OriginalIDSet([]), randomCandidates: OriginalIDRange(0..<0), bracketFavourites: OriginalIDSet([])))
 }

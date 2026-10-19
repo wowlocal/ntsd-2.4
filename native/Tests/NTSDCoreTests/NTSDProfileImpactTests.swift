@@ -13,8 +13,7 @@ final class NTSDProfileImpactTests: XCTestCase {
     }
     func rules(heavy: Int32) -> OriginalGameRules {
         let n = NTSDProfile.rules
-        return OriginalGameRules(profile: "moved",reflection: n.reflection,armour: n.armour,interaction: n.interaction,
-            impact: .init(vanishingAttacker: n.vanishingAttacker,spentAttacker: n.spentAttacker,heavyHeldWeapon: heavy),items: n.items)
+        return n.with(impact: .init(vanishingAttacker: n.vanishingAttacker,spentAttacker: n.spentAttacker,heavyHeldWeapon: heavy))
     }
     /// A held attacker (+0x98 -1, facing right) with dvx 3 hits a type-4 defender at rest:
     /// the facing impulse gives the defender's +0x28 3; the heavy weapon then makes it 7.5, raised to 10.
@@ -41,11 +40,9 @@ final class NTSDProfileImpactTests: XCTestCase {
 
     func rules(vanishing: Int32? = nil,spent: Int32? = nil,reflector: Int32? = nil) -> OriginalGameRules {
         let n = NTSDProfile.rules
-        return OriginalGameRules(profile: "moved",
+        return n.with(
             reflection: .init(reflectable: n.reflectable,reflector: reflector ?? n.reflector,rebinder: n.rebinder,heldRebinder: n.heldRebinder),
-            armour: n.armour,interaction: n.interaction,
-            impact: .init(vanishingAttacker: vanishing ?? n.vanishingAttacker,spentAttacker: spent ?? n.spentAttacker,heavyHeldWeapon: n.heavyHeldWeapon),
-            items: n.items)
+            impact: .init(vanishingAttacker: vanishing ?? n.vanishingAttacker,spentAttacker: spent ?? n.spentAttacker,heavyHeldWeapon: n.heavyHeldWeapon))
     }
     /// damageHit by attacker actor 0 on defender actor 1 (World slots 0 and 1 active, the attacker's HP 100).
     func damage(attacker: Int32,defender: Int32,defenderType: Int32,attackerState: Int32 = 0,rules: OriginalGameRules) throws -> OriginalHitPass {

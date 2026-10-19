@@ -31,6 +31,7 @@ public enum OriginalWarSetup {
         beforeResource: (Int,OriginalStateRecord,OriginalWarMenuMemory,inout Environment) throws -> Void = { _,_,_,_ in },
         prepare: (inout OriginalMatchPreparation,inout OriginalWarBitmapScratch,inout Environment) throws -> Bool = { _,_,_ in false },
         checkpoint: (OriginalCharacterScreenCheckpoint,OriginalMatchPreparation,OriginalWarMenuMemory,inout Environment) throws -> Void = { _,_,_,_ in }) throws -> OriginalCharacterScreenExit {
+        let rules = state.catalog.rules
         var candidate=state,owned=memory,library=libraryText,context=environment
         var local: [Int:Int32]=[:]
         func error(_ s: String) -> OriginalStateError { .invalidStorage("War setup: "+s) }
@@ -274,7 +275,9 @@ public enum OriginalWarSetup {
                 if candidate.catalog.objects.count>1 {
                     for ordinal in 1..<candidate.catalog.objects.count where !selected.contains(Int32(ordinal)) {
                         let header=candidate.catalog.objects[ordinal].header
-                        if try header.integer(at:0x6f8,as:Int32.self)==0 && header.integer(at:0x6f4,as:Int32.self)<30 { choices.append(UInt32(ordinal)) }
+                        if try header.integer(at:0x6f8,as:Int32.self)==0 && rules.randomCandidates.contains(header.integer(at:0x6f4,as:Int32.self)) {
+                            choices.append(UInt32(ordinal))
+                        }
                     }
                 }
                 guard !choices.isEmpty else { throw error("Empty Random list needs original scratch provenance") }

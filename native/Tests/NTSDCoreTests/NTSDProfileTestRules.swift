@@ -1,0 +1,13 @@
+import NTSDCore
+
+/// ENGINE_SPLIT E5c-2d (survey F11): a copy of a profile with some families
+/// replaced, so a test names only the family it moves and a new family edits
+/// only this helper, the game's profile and the engine tests' value.
+extension OriginalGameRules {
+    func with(profile: String = "moved",reflection: Reflection? = nil,armour: Armour? = nil,interaction: Interaction? = nil,
+              impact: Impact? = nil,items: Items? = nil,roster: Roster? = nil) -> OriginalGameRules {
+        OriginalGameRules(profile: profile,reflection: reflection ?? self.reflection,armour: armour ?? self.armour,
+                          interaction: interaction ?? self.interaction,impact: impact ?? self.impact,items: items ?? self.items,
+                          roster: roster ?? self.roster)
+    }
+}

@@ -8,6 +8,7 @@ public enum OriginalTournamentSetup {
         observe: (OriginalFrontScreenEvent) throws -> Void,
         checkpoint: (OriginalCharacterScreenCheckpoint,OriginalMatchPreparation) throws -> Void,
         continueBracket: OriginalTournamentBracket.Continuation = OriginalTournamentBracket.unavailable) throws -> OriginalCharacterScreenExit {
+        let rules = state.catalog.rules
         var candidate=state,library=libraryText,local: [Int:Int32]=[:]
         let base=OriginalMatchPreparation.globalBase
         func error(_ message: String) -> OriginalStateError { .invalidStorage("Tournament setup: "+message) }
@@ -73,8 +74,8 @@ public enum OriginalTournamentSetup {
                 if direction<0 && ordinal < -1 { ordinal=count &- 1;try write(address,ordinal) }
                 let header=try object(ordinal).header
                 if try header.integer(at:0x6f8,as:Int32.self) == 0 {
-                    let group=try header.integer(at:0x6f4,as:Int32.self)/10
-                    if try (group != 3 && group != 5) || word(0x458428)==1 { return }
+                    let id=try header.integer(at:0x6f4,as:Int32.self)
+                    if try !rules.hiddenRoster.contains(id) || word(0x458428)==1 { return }
                 }
             }
             throw error("Roster traversal does not terminate")
@@ -90,7 +91,9 @@ public enum OriginalTournamentSetup {
                 var choices: [UInt32]=[]
                 for ordinal in 1..<candidate.catalog.objects.count where !selected.contains(Int32(ordinal)) {
                     let header=candidate.catalog.objects[ordinal].header
-                    if try header.integer(at:0x6f8,as:Int32.self)==0 && header.integer(at:0x6f4,as:Int32.self)<30 { choices.append(UInt32(ordinal)) }
+                    if try header.integer(at:0x6f8,as:Int32.self)==0 && rules.randomCandidates.contains(header.integer(at:0x6f4,as:Int32.self)) {
+                        choices.append(UInt32(ordinal))
+                    }
                 }
                 guard !choices.isEmpty else { throw error("Empty Random list needs original scratch provenance") }
                 try observe(.init("candidates",[UInt32(seat)]+choices))

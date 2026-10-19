@@ -10,10 +10,9 @@ import NTSDProfile
 final class NTSDProfileInteractionTests: XCTestCase {
     func profile(light: OriginalIDSet? = nil,pull: OriginalIDSet? = nil,bypass: Int32? = nil,character: OriginalIDSet? = nil) -> OriginalGameRules {
         let n = NTSDProfile.rules.interaction
-        return OriginalGameRules(profile: "moved",reflection: NTSDProfile.rules.reflection,armour: NTSDProfile.rules.armour,
+        return NTSDProfile.rules.with(
             interaction: .init(holdKind101: light ?? n.holdKind101,pullImmune: pull ?? n.pullImmune,teamBypass: bypass ?? n.teamBypass,
-                               countsAsCharacter: character ?? n.countsAsCharacter),impact: NTSDProfile.rules.impact,
-            items: NTSDProfile.rules.items)
+                               countsAsCharacter: character ?? n.countsAsCharacter))
     }
     let ntsd = NTSDProfile.rules
     func defined(_ size: Int) throws -> OriginalStateRecord {

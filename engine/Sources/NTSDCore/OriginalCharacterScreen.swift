@@ -59,6 +59,7 @@ public enum OriginalCharacterScreen {
         teamTournamentStage: OriginalTeamTournamentBracket.Continuation = OriginalTeamTournamentBracket.unavailable,
         warStage: OriginalWarSetup.Continuation = { _,_ in .selectionStage },
         selectionStage: (inout OriginalMatchPreparation,inout [Int:Int32],inout OriginalLibSurfaceText?) throws -> OriginalCharacterScreenExit = { _,_,_ in .selectionStage }) throws -> OriginalCharacterScreenExit {
+        let rules = state.catalog.rules
         var candidate = state, library = libraryText
         let base = OriginalMatchPreparation.globalBase
         var local: [Int:Int32] = [0x20:0,0x28:0,0x34:0,0x38:0,0x3c:Int32(bitPattern: selectionAtEntry)]
@@ -126,8 +127,8 @@ public enum OriginalCharacterScreen {
             guard candidate.catalog.objects.indices.contains(Int(ordinal)) else { throw error("Roster access outside catalog") }
             let header = candidate.catalog.objects[Int(ordinal)].header
             if try header.integer(at: 0x6f8,as: Int32.self) != 0 { return false }
-            let group = try header.integer(at: 0x6f4,as: Int32.self)/10
-            return try (group != 3 && group != 5) || word(0x458428) == 1
+            let id = try header.integer(at: 0x6f4,as: Int32.self)
+            return try !rules.hiddenRoster.contains(id) || word(0x458428) == 1
         }
         func roster(_ seat: Int,_ direction: Int32) throws {
             let selected = 0x451248+seat*4

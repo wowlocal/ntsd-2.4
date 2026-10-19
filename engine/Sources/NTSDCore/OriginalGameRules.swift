@@ -150,11 +150,32 @@ public struct OriginalGameRules: Equatable, Sendable {
             self.keptOnScreen = keptOnScreen; self.hpDrink = hpDrink; self.mpDrink = mpDrink
         }
     }
+    /// Roster: which characters the menus list only on request, which ones Random
+    /// picks from, and which ones a computer-only bracket match favours (the
+    /// character screen, computer selection, match selection, continuation, the
+    /// tournaments, War).
+    public struct Roster: Equatable, Sendable {
+        /// Characters the roster lists only when 0x458428 is 1 (that word is read
+        /// only for them): the character screen, computer selection and both
+        /// tournaments' setups.
+        public let hiddenRoster: OriginalIDSet
+        /// Characters Random picks from (type 0, never ordinal 0, not already
+        /// selected): OriginalMatchContinuation's candidates (continuation, computer
+        /// selection, match selection), both tournaments' setups and War.
+        public let randomCandidates: OriginalIDRange
+        /// Characters that beat a non-member in a computer-only bracket match (a
+        /// team with one beats a team without); otherwise a coin flip whose stream
+        /// follows the first side's membership.
+        public let bracketFavourites: OriginalIDSet
+        public init(hiddenRoster: OriginalIDSet, randomCandidates: OriginalIDRange, bracketFavourites: OriginalIDSet) {
+            self.hiddenRoster = hiddenRoster; self.randomCandidates = randomCandidates; self.bracketFavourites = bracketFavourites
+        }
+    }
     private final class Roles: Sendable {
-        let profile: String, reflection: Reflection, armour: Armour, interaction: Interaction, impact: Impact, items: Items
-        init(profile: String, reflection: Reflection, armour: Armour, interaction: Interaction, impact: Impact, items: Items) {
+        let profile: String, reflection: Reflection, armour: Armour, interaction: Interaction, impact: Impact, items: Items, roster: Roster
+        init(profile: String, reflection: Reflection, armour: Armour, interaction: Interaction, impact: Impact, items: Items, roster: Roster) {
             self.profile = profile; self.reflection = reflection; self.armour = armour; self.interaction = interaction; self.impact = impact
-            self.items = items
+            self.items = items; self.roster = roster
         }
     }
     private let roles: Roles
@@ -165,6 +186,7 @@ public struct OriginalGameRules: Equatable, Sendable {
     public var interaction: Interaction { roles.interaction }
     public var impact: Impact { roles.impact }
     public var items: Items { roles.items }
+    public var roster: Roster { roles.roster }
     public var reflectable: OriginalIDSet { roles.reflection.reflectable }
     public var reflector: Int32 { roles.reflection.reflector }
     public var rebinder: Int32 { roles.reflection.rebinder }
@@ -189,11 +211,16 @@ public struct OriginalGameRules: Equatable, Sendable {
     public var keptOnScreen: OriginalIDSet { roles.items.keptOnScreen }
     public var hpDrink: Int32 { roles.items.hpDrink }
     public var mpDrink: Int32 { roles.items.mpDrink }
-    public init(profile: String, reflection: Reflection, armour: Armour, interaction: Interaction, impact: Impact, items: Items) {
-        roles = Roles(profile: profile, reflection: reflection, armour: armour, interaction: interaction, impact: impact, items: items)
+    public var hiddenRoster: OriginalIDSet { roles.roster.hiddenRoster }
+    public var randomCandidates: OriginalIDRange { roles.roster.randomCandidates }
+    public var bracketFavourites: OriginalIDSet { roles.roster.bracketFavourites }
+    public init(profile: String, reflection: Reflection, armour: Armour, interaction: Interaction, impact: Impact, items: Items,
+                roster: Roster) {
+        roles = Roles(profile: profile, reflection: reflection, armour: armour, interaction: interaction, impact: impact, items: items,
+                      roster: roster)
     }
     public static func == (a: Self, b: Self) -> Bool {
         a.roles === b.roles || (a.profile == b.profile && a.reflection == b.reflection && a.armour == b.armour && a.interaction == b.interaction
-                                && a.impact == b.impact && a.items == b.items)
+                                && a.impact == b.impact && a.items == b.items && a.roster == b.roster)
     }
 }

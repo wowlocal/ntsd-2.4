@@ -15,7 +15,7 @@ final class OriginalWarSetupNativeTests: XCTestCase {
     func unknown(_ count: Int) throws -> OriginalStateRecord {
         try .init(bytes:[UInt8](repeating:0xa5,count:count),defined:[Bool](repeating:false,count:count))
     }
-    func catalog() throws -> OriginalLoadedCatalog {
+    func catalog(rules: OriginalGameRules = NTSDProfile.rules) throws -> OriginalLoadedCatalog {
         var parent=try OriginalCatalogRegistry.regionSizes.mapValues { try unknown($0) }
         let background=try unknown(0x990),stage=try unknown(OriginalStageLoader.stageSize)
         let backgrounds=[OriginalStateRecord](repeating:background,count:101)
@@ -27,7 +27,7 @@ final class OriginalWarSetupNativeTests: XCTestCase {
         let object="<bmp_begin> name: NativeTrial head: head.bmp small: small.bmp file(0-0): sheet.bmp w: 40 h: 40 row: 1 col: 1 <bmp_end>"
         let key=Array("SiuHungIsAGoodBearBecauseHeIsVeryGood".utf8)
         let stages=[UInt8](repeating:0,count:123)+Array("end".utf8).enumerated().map { $0.element &+ key[($0.offset+123)%key.count] }
-        return try .init(source:Array(source.utf8),fileName:"data.txt",translation:.raw,rules:NTSDProfile.rules,
+        return try .init(source:Array(source.utf8),fileName:"data.txt",translation:.raw,rules:rules,
             parentBacking:parent,backgroundBacking:backgrounds,stageBacking:[OriginalStateRecord](repeating:stage,count:60),
             fileSource:{ $0=="data\\stage.dat" ? stages : Array(object.utf8) },
             bitmapSource:{ .init(path:$0,present:true,width:80,height:80) })
@@ -83,6 +83,25 @@ final class OriginalWarSetupNativeTests: XCTestCase {
                 if failure=="latePreset" && cp.pc==0x439e76 { reached=true;throw Trial.injected }
                 if failure=="lateFinalize" && cp.pc==0x43a21f { reached=true;throw Trial.injected }
             })
+    }
+    /// ENGINE_SPLIT E5c-2d: Random's War candidates (A77) follow the profile's range:
+    /// IDs 1…12 (ordinals 11…22) under NTSD's, the 30s (ordinals 1…8 and 23) under a moved one.
+    func testRandomCandidatesFollowTheProfile() throws {
+        func firstChoices(_ rules: OriginalGameRules) throws -> [UInt32] {
+            var state=try initial(catalog(rules:rules)),memory=OriginalWarMenuMemory(),library: OriginalLibSurfaceText? = .init()
+            var buffer=Buffer(),reached=false
+            XCTAssertEqual(try run(&state,&memory,&library,&buffer,reached:&reached),.returned)
+            try set(&state,0x44d020,201)
+            for seat in 0..<8 { try set(&state,0x451228+seat*4,1) }
+            buffer=Buffer()
+            _ = try run(&state,&memory,&library,&buffer,reached:&reached)
+            let first=try XCTUnwrap(buffer.events.first { $0.kind=="candidates" })
+            XCTAssertEqual(first.arguments.first,0);return Array(first.arguments.dropFirst())
+        }
+        let n=NTSDProfile.rules
+        XCTAssertEqual(try firstChoices(n),(11...22).map(UInt32.init))
+        let moved=n.with(roster:.init(hiddenRoster:n.hiddenRoster,randomCandidates:OriginalIDRange(30..<40),bracketFavourites:n.bracketFavourites))
+        XCTAssertEqual(try firstChoices(moved),[1,2,3,4,5,6,7,8,23])
     }
     func testWholeMenuRollsBackAfterLateDependencies() throws {
         let loaded=try catalog(),fresh=try initial(loaded)

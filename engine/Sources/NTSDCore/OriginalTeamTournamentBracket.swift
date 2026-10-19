@@ -12,6 +12,7 @@ public enum OriginalTeamTournamentBracket {
         draw: (OriginalCharacterScreenDraw,OriginalStateRecord) throws -> Void,
         observe: (OriginalFrontScreenEvent) throws -> Void,
         checkpoint: (OriginalCharacterScreenCheckpoint,OriginalMatchPreparation) throws -> Void) throws -> OriginalCharacterScreenExit {
+        let rules = state.catalog.rules
         var candidate=state,local=locals
         func error(_ s: String) -> OriginalStateError { .invalidStorage("Team Tournament bracket: "+s) }
         func word(_ a: Int) throws -> Int32 { try candidate.global(a) }
@@ -100,7 +101,9 @@ public enum OriginalTeamTournamentBracket {
                         for index in members { let address=try 0x451384+seat(index)*4;try write(address,word(address) &+ 1) }
                     } else {
                         try sound(0x45560c);try write(0x451404,0)
-                        let special=try members.map { try candidate.catalog.objects[object($0)].header.integer(at:0x6f4,as:Int32.self)/10==5 }
+                        let special=try members.map {
+                            try rules.bracketFavourites.contains(candidate.catalog.objects[object($0)].header.integer(at:0x6f4,as:Int32.self))
+                        }
                         let a=special[0] || special[1],b=special[2] || special[3],selected: Int
                         if a && !b { selected=0 }
                         else if b && !a { selected=2 }

@@ -11,7 +11,7 @@ import NTSDProfile
 final class NTSDProfileItemsTests: XCTestCase {
     func rules(range: OriginalIDRange? = nil,scarce: OriginalIDSet? = nil,hp200: Int32? = nil) -> OriginalGameRules {
         let n = NTSDProfile.rules
-        return OriginalGameRules(profile: "moved",reflection: n.reflection,armour: n.armour,interaction: n.interaction,impact: n.impact,
+        return n.with(
             items: .init(itemRange: range ?? n.itemRange,scarceDropItems: scarce ?? n.scarceDropItems,scarceRequestedItem: n.scarceRequestedItem,
                          spawnHP200: hp200 ?? n.spawnHP200,
                          keptOnScreen: n.keptOnScreen,hpDrink: n.hpDrink,mpDrink: n.mpDrink))
@@ -75,7 +75,7 @@ final class NTSDProfileItemsTests: XCTestCase {
 final class NTSDProfileItemsCameraLinksTests: XCTestCase {
     func rules(kept: OriginalIDSet? = nil,hp: Int32? = nil,mp: Int32? = nil) -> OriginalGameRules {
         let n = NTSDProfile.rules
-        return OriginalGameRules(profile: "moved",reflection: n.reflection,armour: n.armour,interaction: n.interaction,impact: n.impact,
+        return n.with(
             items: .init(itemRange: n.itemRange,scarceDropItems: n.scarceDropItems,scarceRequestedItem: n.scarceRequestedItem,spawnHP200: n.spawnHP200,
                          keptOnScreen: kept ?? n.keptOnScreen,hpDrink: hp ?? n.hpDrink,mpDrink: mp ?? n.mpDrink))
     }
@@ -165,7 +165,7 @@ final class NTSDProfileItemsCameraLinksTests: XCTestCase {
 final class NTSDProfileItemsRequestedMissionTests: XCTestCase {
     func rules(range: OriginalIDRange? = nil,scarce: Int32? = nil,hp200: Int32? = nil) -> OriginalGameRules {
         let n = NTSDProfile.rules
-        return OriginalGameRules(profile: "moved",reflection: n.reflection,armour: n.armour,interaction: n.interaction,impact: n.impact,
+        return n.with(
             items: .init(itemRange: range ?? n.itemRange,scarceDropItems: n.scarceDropItems,scarceRequestedItem: scarce ?? n.scarceRequestedItem,
                          spawnHP200: hp200 ?? n.spawnHP200,keptOnScreen: n.keptOnScreen,hpDrink: n.hpDrink,mpDrink: n.mpDrink))
     }

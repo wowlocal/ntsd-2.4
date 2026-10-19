@@ -32,7 +32,7 @@ extension OriginalMatchPreparation {
         return try catalog.objects.indices.dropFirst().filter { ordinal in
             let object = catalog.objects[ordinal].header
             return try object.integer(at: 0x6f8, as: Int32.self) == 0
-                && object.integer(at: 0x6f4, as: Int32.self) < 30 && !selected.contains(Int32(ordinal))
+                && catalog.rules.randomCandidates.contains(object.integer(at: 0x6f4, as: Int32.self)) && !selected.contains(Int32(ordinal))
         }
     }
     /// Original 42d704..42e0d2 state effects. Confirmation is the original menu
