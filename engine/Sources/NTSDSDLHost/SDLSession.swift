@@ -4,7 +4,6 @@ import Foundation
 import CoreGraphics
 #endif
 import NTSDCore
-import NTSDContent
 import NTSDRuntime
 #if canImport(NTSDMacPlatform)
 import NTSDMacPlatform
@@ -34,9 +33,9 @@ final class SDLAudioFeed: @unchecked Sendable {
 /// AVFoundation; sockets are the shared BSD Winsock; on macOS, text uses the
 /// AppKit host's CoreText masks, so frames match the AppKit app.
 @MainActor final class SDLSessionHost: OriginalRuntimeSessionHost {
-    let arguments: [String], windows: SDLWindowHost, musicDirectory: String
-    func contentLocation(in appBundle: Bundle) -> OriginalContentLocation { NTSDContent.location(in:appBundle) }
-    var game: OriginalGameIdentity { NTSDContent.game }
+    let arguments: [String], windows: SDLWindowHost, musicDirectory: String, original: OriginalGame
+    func contentLocation(in appBundle: Bundle) -> OriginalContentLocation { original.content(appBundle) }
+    var game: OriginalGameIdentity { original.identity }
     weak var session: OriginalRuntimeSession?
     private weak var backend: OriginalRuntimeWindowBackend?
     private var gamepads: [OpaquePointer] = [], timers: [Timer] = []
@@ -50,8 +49,9 @@ final class SDLAudioFeed: @unchecked Sendable {
         Self.report(["event":"sdlText","font":made.font ?? NSNull()])
         return made
     }()
-    init(arguments: [String],windows: SDLWindowHost,musicDirectory: String) {
+    init(arguments: [String],windows: SDLWindowHost,musicDirectory: String,game: OriginalGame) {
         self.arguments = arguments; self.windows = windows; self.musicDirectory = musicDirectory
+        original = game
     }
     static func report(_ value: [String:Any]) { OriginalRuntimeSession.emit(value) }
     private func box(_ flags: SDL_MessageBoxFlags,_ title: String,_ text: String) {

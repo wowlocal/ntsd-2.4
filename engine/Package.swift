@@ -60,15 +60,28 @@ let webTargets: [Target] = web ? [
     .target(name: "NTSDWebHost", dependencies: ["NTSDCore", "NTSDRuntime", "NTSDMusicDecoder"],
             swiftSettings: [.enableExperimentalFeature("Extern")] + exclusivity)] : []
 
+// NTSD_SDL=1 adds the SDL3 host library (P6). NTSD_SDL_PREFIX names the SDL3
+// install (include/ and lib/); the game's app links SDL3 itself (its -L and
+// rpath), so this target carries only the include paths its clients share.
+let sdl = Context.environment["NTSD_SDL"] == "1"
+let sdlPrefix = Context.environment["NTSD_SDL_PREFIX"] ?? "/opt/homebrew/opt/sdl3"
+let sdlProducts: [Product] = sdl ? [.library(name: "NTSDSDLHost", targets: ["NTSDSDLHost"])] : []
+let sdlTargets: [Target] = sdl ? [
+    .systemLibrary(name: "CSDL3", path: "Sources/CSDL3"),
+    .target(name: "NTSDSDLHost", dependencies: ["NTSDCore", "NTSDRuntime", "NTSDMusicDecoder", "CSDL3"] + (portable ? [] : ["NTSDMacPlatform"])
+                + (freetypePrefix == nil ? [] : ["NTSDFreeTypeText"]),
+            swiftSettings: [.unsafeFlags(["-Xcc", "-I\(sdlPrefix)/include"]
+                                         + (freetypePrefix.map { ["-Xcc", "-I\($0)/include/freetype2"] } ?? []))] + exclusivity)] : []
+
 let package = Package(
     name: "NTSDEngine",
     platforms: [.macOS(.v14), .iOS(.v17)],
-    products: macProducts + freetypeProducts + webProducts + [
+    products: macProducts + freetypeProducts + webProducts + sdlProducts + [
         .library(name: "NTSDCore", targets: ["NTSDCore"]),
         .library(name: "NTSDRuntime", targets: ["NTSDRuntime"]),
         .library(name: "NTSDMusicDecoder", targets: ["NTSDMusicDecoder"]),
         .library(name: "NTSDHeadlessHost", targets: ["NTSDHeadlessHost"])],
-    targets: macTargets + freetypeTargets + webTargets + [
+    targets: macTargets + freetypeTargets + webTargets + sdlTargets + [
         .target(name: "NTSDReplayCodec", exclude: ["README.md", "upstream.json"],
                 publicHeadersPath: "include", cSettings: [.unsafeFlags(["-Wno-deprecated-non-prototype"])]),
         .target(name: "NTSDCore", dependencies: ["NTSDReplayCodec"], swiftSettings: crossModule + exclusivity),

@@ -45,9 +45,9 @@ let sdlProducts: [Product] = sdl ? [.executable(name: "NTSDSDL", targets: ["NTSD
 // NTSD_FREETYPE_PREFIX (include/freetype2, lib); without it text stays blank.
 let freetypePrefix = portable ? Context.environment["NTSD_FREETYPE_PREFIX"] : nil
 let sdlTargets: [Target] = sdl ? [
-    .systemLibrary(name: "CSDL3", path: "Sources/CSDL3"),
-    .executableTarget(name: "NTSDSDL", dependencies: [core, runtime, musicDecoder, "CSDL3", "NTSDContent"] + (portable ? [] : [macPlatform])
-                          + (freetypePrefix == nil ? [] : [freeTypeText]),
+    // The host itself, with CSDL3, is the engine's NTSDSDLHost (ENGINE_SPLIT E4b);
+    // its include paths are needed here too, and the app links SDL3.
+    .executableTarget(name: "NTSDSDL", dependencies: [engine("NTSDSDLHost"), "NTSDContent"],
                       swiftSettings: [.unsafeFlags(["-Xcc", "-I\(sdlPrefix)/include"]
                                                    + (freetypePrefix.map { ["-Xcc", "-I\($0)/include/freetype2"] } ?? []))] + exclusivity,
                       linkerSettings: [.unsafeFlags(["-L\(sdlPrefix)/lib"] + (freetypePrefix.map { ["-L\($0)/lib"] } ?? [])),

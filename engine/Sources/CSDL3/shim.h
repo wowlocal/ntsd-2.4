@@ -1,5 +1,6 @@
-// SDL3 for NTSDSDL. The include path and library come from NTSD_SDL_PREFIX
-// (Package.swift). Macros Swift cannot import are re-exported as constants.
+// SDL3 for the engine's NTSDSDLHost. The include path comes from NTSD_SDL_PREFIX
+// (engine/Package.swift), the library path from the game's app (native/Package.swift).
+// Macros Swift cannot import are re-exported as constants.
 #include <SDL3/SDL.h>
 
 static const SDL_InitFlags NTSD_SDL_INIT = SDL_INIT_VIDEO | SDL_INIT_AUDIO | SDL_INIT_GAMEPAD;
