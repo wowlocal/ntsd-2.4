@@ -165,7 +165,7 @@ check tool only.
 | T1 | iOS simulator: build, scripted scenarios unchanged, controls drawn and working by touch on iPhone and iPad | **done** |
 | T2 | Android: toolchain on the second Mac, APK build, emulator: scripted scenario unchanged, controls by touch | **done** |
 | T3 | Devices: the A12 (touch, a match with the buttons, the presenter's cost, the hidden state with a gamepad or keyboard), a real iPhone/iPad (touch, GCKeyboard on connect/disconnect) | needs the devices |
-| T4 | Independent review (two read-only rounds: 13 findings, then 6 minor, fixed or recorded above); merge into `main` (the user's call) | review done; merge open |
+| T4 | Independent review (two read-only rounds: 13 findings, then 6 minor, fixed or recorded above); merge into `main` (the user's call) | **done** (96d78b63, 2026-10-19) |
 
 ## Ledger
 
