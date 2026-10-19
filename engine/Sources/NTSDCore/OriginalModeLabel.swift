@@ -1,14 +1,14 @@
 /// Whole41b130/ret8, including global label storage and actual four-pass font
 /// mutation. Unknown modes retain the existing label before suffix selection.
 public enum OriginalModeLabel {
-    public static func draw(mode: Int32, alternateLine: UInt32, globals: inout OriginalStateRecord,
+    public static func draw(mode: Int32, alternateLine: UInt32, globals: inout OriginalStateRecord, rules: OriginalGameRules,
         resourceBitmap: (UInt32) throws -> (OriginalStateRecord, UInt32),
         performBlit: (OriginalBitmapBlit) throws -> Int32,
         detail: Bool = true,
         observe: (OriginalFrontScreenEvent) throws -> Void = { _ in }) throws {
         // All or nothing: in place on a copy, assigned when it completes.
         var staged = globals
-        try drawInPlace(mode: mode, alternateLine: alternateLine, globals: &staged, resourceBitmap: resourceBitmap,
+        try drawInPlace(mode: mode, alternateLine: alternateLine, globals: &staged, rules: rules, resourceBitmap: resourceBitmap,
                         performBlit: performBlit, detail: detail, observe: observe)
         globals = staged
     }
@@ -16,7 +16,7 @@ public enum OriginalModeLabel {
     /// literal stores rewrite its NUL and suffix every tick, so on a shared
     /// buffer each call copied the 92 KB globals. For callers that drop the
     /// globals when this throws.
-    public static func drawInPlace(mode: Int32, alternateLine: UInt32, globals staged: inout OriginalStateRecord,
+    public static func drawInPlace(mode: Int32, alternateLine: UInt32, globals staged: inout OriginalStateRecord, rules: OriginalGameRules,
         resourceBitmap: (UInt32) throws -> (OriginalStateRecord, UInt32),
         performBlit: (OriginalBitmapBlit) throws -> Int32,
         detail: Bool = true,
@@ -44,7 +44,7 @@ public enum OriginalModeLabel {
         case 0: try copy("VS mode ", [(0,4),(4,4),(8,1)])
         case 1:
             try copy("Stage mode ", [(0,4),(4,4),(8,4)])
-            if try staged.integer(at: 0x450b94-0x44d000, as: Int32.self)/10 == 5 {
+            if try rules.survivalStages.contains(staged.integer(at: 0x450b94-0x44d000, as: Int32.self)) {
                 try copy("Survival Stage ", [(0,4),(12,4),(8,4),(4,4)])
             }
         case 2: try copy("1 on 1 ", [(0,4),(4,4)])

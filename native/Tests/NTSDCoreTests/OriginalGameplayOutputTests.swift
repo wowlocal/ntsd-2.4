@@ -2,6 +2,7 @@ import Foundation
 import XCTest
 @testable import NTSDCore
 @testable import NTSDReferenceChecks
+import NTSDProfile
 
 final class OriginalGameplayOutputTests: XCTestCase {
     private struct Blob: Decodable { let count: Int, deflate: String }
@@ -61,7 +62,7 @@ final class OriginalGameplayOutputTests: XCTestCase {
             let results = c.spec.results ?? [-2147467259, 0, -1, 1]
             var events: [OriginalFrontScreenEvent] = [], blits = 0
             try OriginalGameplayOutput.apply(world: &world, globals: &globals, memory: &memory, input: c.input,
-                resourceBitmap: resource, performBlit: { _ in
+                rules: NTSDProfile.rules, resourceBitmap: resource, performBlit: { _ in
                     defer { blits += 1 }; return results[blits%results.count]
                 }, soundRequest: { _ in c.input.methodResult }, observe: { events.append($0) })
             XCTAssertEqual(globals, try record(c.globalsAfter), c.spec.label)
@@ -75,7 +76,7 @@ final class OriginalGameplayOutputTests: XCTestCase {
             if c.spec.label == "volume-before-sound" {
                 var trial = initial, writes = 0, stages: [UInt32] = [], soundMethods = 0
                 XCTAssertThrowsError(try OriginalGameplayOutput.apply(world: &world, globals: &trial, memory: &memory,
-                    input: c.input, resourceBitmap: resource, performBlit: { _ in 0 }, soundRequest: { event in
+                    input: c.input, rules: NTSDProfile.rules, resourceBitmap: resource, performBlit: { _ in 0 }, soundRequest: { event in
                         if event.kind == .method {
                             soundMethods += 1
                             if soundMethods == 8 { throw OriginalStateError.invalidStorage("Late output sound request") }
@@ -96,7 +97,7 @@ final class OriginalGameplayOutputTests: XCTestCase {
                 // while the sound queue's own staging rolls its writes back.
                 var placedWorld = world, placedMemory = memory; trial = initial; writes = 0; stages = []; soundMethods = 0
                 XCTAssertThrowsError(try OriginalGameplayOutput.applyInPlace(world: &placedWorld, globals: &trial, memory: &placedMemory,
-                    input: c.input, resourceBitmap: resource, performBlit: { _ in 0 }, soundRequest: { event in
+                    input: c.input, rules: NTSDProfile.rules, resourceBitmap: resource, performBlit: { _ in 0 }, soundRequest: { event in
                         if event.kind == .method {
                             soundMethods += 1
                             if soundMethods == 8 { throw OriginalStateError.invalidStorage("Late output sound request") }

@@ -29,6 +29,8 @@ public enum OriginalPausedGameplay {
         guard (library != nil) == (state.libraryCommands != nil) else {
             throw OriginalStateError.invalidStorage("Installed paused gameplay requires retained library owners")
         }
+        // The game's rules, read once from the caller's state (a static access).
+        let rules = state.catalog.rules
         var next = state, owned = context, retained = caller, installed = library
         let textRenderer: OriginalSurfaceText.Renderer? = library == nil ? nil : { bytes,target,background,color,x,y,result,dc,observer in
             try installed!.text.draw(bytes,target:target,background:background,color:color,
@@ -85,7 +87,7 @@ public enum OriginalPausedGameplay {
             observe: { try observe(.indicators, $0) })
         try emitCheckpoint(.indicators, next, owned)
         try OriginalGameplayOutput.returnFromDispatcher(world: &next.world, globals: &next.globals,
-            memory: &owned.memory, input: presentation, resourceBitmap: resourceBitmap,
+            memory: &owned.memory, input: presentation, rules: rules, resourceBitmap: resourceBitmap,
             performBlit: performBlit, soundRequest: soundRequest, textRenderer: textRenderer,
             observe: { try observe(.output, $0) })
         try emitCheckpoint(.output, next, owned)

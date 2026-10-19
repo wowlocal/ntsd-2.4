@@ -2,6 +2,7 @@ import Foundation
 import XCTest
 @testable import NTSDCore
 @testable import NTSDReferenceChecks
+import NTSDProfile
 
 final class OriginalModeLabelTests: XCTestCase {
     private struct Blob: Decodable { let count: Int, deflate: String }
@@ -57,7 +58,7 @@ final class OriginalModeLabelTests: XCTestCase {
             }
             let results = s.results ?? [-2147467259, 0, -1, 1]
             var events: [OriginalFrontScreenEvent] = [], blits = 0, written = [UInt8](repeating: 0, count: globals.bytes.count)
-            try OriginalModeLabel.draw(mode: s.mode ?? 0, alternateLine: s.alternate ?? 0, globals: &globals,
+            try OriginalModeLabel.draw(mode: s.mode ?? 0, alternateLine: s.alternate ?? 0, globals: &globals, rules: NTSDProfile.rules,
                 resourceBitmap: resource, performBlit: { _ in
                     defer { blits += 1 }; return results[blits%results.count]
                 }, observe: { event in
@@ -80,7 +81,7 @@ final class OriginalModeLabelTests: XCTestCase {
             totalEvents += events.count; totalBlits += blits
             if s.label == "mode-0-0-0" {
                 var trial = initial, passes = 0, writes = 0, labelWrites = 0
-                XCTAssertThrowsError(try OriginalModeLabel.draw(mode: 0, alternateLine: 0, globals: &trial,
+                XCTAssertThrowsError(try OriginalModeLabel.draw(mode: 0, alternateLine: 0, globals: &trial, rules: NTSDProfile.rules,
                     resourceBitmap: resource, performBlit: { _ in 0 }, observe: { event in
                         if event.kind == "labelWrite" { labelWrites += 1 }
                         if event.kind == "stringWrite" { writes += 1 }
@@ -96,7 +97,7 @@ final class OriginalModeLabelTests: XCTestCase {
                 // In place (CORE_REALTIME B2 P4g): the same events up to the same
                 // error; the label's stores stay in the caller's globals.
                 var placed = initial; passes = 0; writes = 0; labelWrites = 0
-                XCTAssertThrowsError(try OriginalModeLabel.drawInPlace(mode: 0, alternateLine: 0, globals: &placed,
+                XCTAssertThrowsError(try OriginalModeLabel.drawInPlace(mode: 0, alternateLine: 0, globals: &placed, rules: NTSDProfile.rules,
                     resourceBitmap: resource, performBlit: { _ in 0 }, observe: { event in
                         if event.kind == "labelWrite" { labelWrites += 1 }
                         if event.kind == "stringWrite" { writes += 1 }
@@ -123,9 +124,9 @@ final class OriginalModeLabelTests: XCTestCase {
                     var unique = try OriginalStateRecord(bytes: initial.bytes.map { $0 }, defined: initial.defined.map { $0 })
                     let before = identity(unique)
                     if inPlace {
-                        try OriginalModeLabel.drawInPlace(mode: 0, alternateLine: 0, globals: &unique, resourceBitmap: resource, performBlit: { _ in 0 })
+                        try OriginalModeLabel.drawInPlace(mode: 0, alternateLine: 0, globals: &unique, rules: NTSDProfile.rules, resourceBitmap: resource, performBlit: { _ in 0 })
                     } else {
-                        try OriginalModeLabel.draw(mode: 0, alternateLine: 0, globals: &unique, resourceBitmap: resource, performBlit: { _ in 0 })
+                        try OriginalModeLabel.draw(mode: 0, alternateLine: 0, globals: &unique, rules: NTSDProfile.rules, resourceBitmap: resource, performBlit: { _ in 0 })
                     }
                     XCTAssertEqual(Array(unique.bytes[label]), Array(globals.bytes[label]))
                     XCTAssertEqual(identity(unique) == before, inPlace, inPlace ? "in place: the caller's storage kept" : "default form: a copy")

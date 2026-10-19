@@ -84,6 +84,8 @@ public enum OriginalGameplayBody {
         guard (library != nil) == (state.libraryCommands != nil) else {
             throw OriginalStateError.invalidStorage("Installed gameplay requires retained library owners")
         }
+        // The game's rules, read once from the caller's state (a static access).
+        let rules = state.catalog.rules
         var next = state, owned = context, random = crt, retained = caller, installed = library
         let textRenderer: OriginalSurfaceText.Renderer? = library == nil ? nil : { bytes,target,background,color,x,y,result,dc,observer in
             try installed!.text.draw(bytes,target:target,background:background,color:color,
@@ -259,7 +261,7 @@ public enum OriginalGameplayBody {
             performBlit: performBlit, textRenderer: textRenderer, detail: detail, observe: { try observe(.drawing(.layout, $0)) })
         try emitCheckpoint(.layout, next, owned, random)
         try OriginalGameplayOutput.returnFromDispatcherInPlace(world: &next.world, globals: &next.globals,
-            memory: &owned.memory, input: presentation, resourceBitmap: resourceBitmap,
+            memory: &owned.memory, input: presentation, rules: rules, resourceBitmap: resourceBitmap,
             performBlit: performBlit, soundRequest: soundRequest, textRenderer: textRenderer, detail: detail, observe: { try observe(.drawing(.output, $0)) })
         try emitCheckpoint(.output, next, owned, random)
         state = next; context = owned; crt = random; caller = retained

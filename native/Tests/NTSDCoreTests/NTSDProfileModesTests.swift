@@ -5,7 +5,8 @@ import NTSDProfile
 /// ENGINE_SPLIT E5c-2e: the mission stage pass's stage start (`run`: D2's blink,
 /// D3's survival revive, D4's banner), stage line (`hud`, D6) and set end
 /// (`setTail`, D7), the camera's survival case (D14), War's troop count (A65) and
-/// the match prelude's arena and replay name (D8, D9) follow the profile. Synthetic records, the passes built directly.
+/// the match prelude's arena and replay name (D8, D9) and the mode label (D10)
+/// follow the profile. Synthetic records, the passes built directly.
 final class NTSDProfileModesTests: XCTestCase {
     func defined(_ size: Int) throws -> OriginalStateRecord {
         try .init(bytes: [UInt8](repeating: 0,count: size),defined: [Bool](repeating: true,count: size))
@@ -138,5 +139,25 @@ final class NTSDProfileModesTests: XCTestCase {
         XCTAssertEqual(try prelude(55,rules: moved).arena,9);XCTAssertEqual(try prelude(55,rules: moved).name,"_Stage_6.lfr")
         XCTAssertEqual(try prelude(10,rules: moved).arena,77);XCTAssertEqual(try prelude(10,rules: moved).name,"_Stage_2.lfr")
         XCTAssertEqual(try prelude(10,rules: modes(numbered: OriginalIDRange(Int32.min..<10))).name,"_Survival.lfr","a narrowed numbered range")
+    }
+    /// The mode label in stage mode for this stage: whether it writes "Survival Stage"
+    /// ("Stage mode " is three stores, "Survival Stage " four more; no difficulty
+    /// suffix). The label's font then finds no resource in these synthetic globals,
+    /// after the stores.
+    func survivalLabel(_ stage: Int32,rules: OriginalGameRules) throws -> Bool {
+        var g = try defined(0xb440),writes = 0
+        try g.write(stage,at: 0x450b94-0x44d000);try g.write(Int32(99),at: 0x450c30-0x44d000)
+        XCTAssertThrowsError(try OriginalModeLabel.draw(mode: 1,alternateLine: 0,globals: &g,rules: rules,
+            resourceBitmap: { _ in (try self.defined(0x1f50),0) },performBlit: { _ in 0 },observe: { if $0.kind == "labelWrite" { writes += 1 } })) {
+            XCTAssertEqual("\($0)","\(OriginalStateError.invalidStorage("Bitmap font: Null resource"))")
+        }
+        XCTAssertTrue([3,7].contains(writes),"\(writes) label stores")
+        return writes == 7
+    }
+    func testModeLabelD10() throws {
+        XCTAssertFalse(try survivalLabel(49,rules: NTSDProfile.rules));XCTAssertTrue(try survivalLabel(50,rules: NTSDProfile.rules))
+        XCTAssertTrue(try survivalLabel(59,rules: NTSDProfile.rules));XCTAssertFalse(try survivalLabel(60,rules: NTSDProfile.rules))
+        let moved = modes(survival: OriginalIDRange(60..<70))
+        XCTAssertFalse(try survivalLabel(55,rules: moved));XCTAssertTrue(try survivalLabel(65,rules: moved))
     }
 }

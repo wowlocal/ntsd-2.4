@@ -1,4 +1,5 @@
 import NTSDCore
+import NTSDProfile
 
 /// Compare output and both actual returns from independently rebuilt own state.
 /// Source machine frames establish provenance only; they never seed native state.
@@ -81,8 +82,10 @@ enum GameplayReturnReference {
         // outer flag clear, proving that the public composition still rolls back.
         var trial = state, trialMemory = context.memory, rejected = false, trialEvents = 0
         do {
+            // NTSD's rules: these checks' states come from catalogs LoadedCatalogReference
+            // loads with them (OriginalMatchPreparation.catalog is the engine's).
             try OriginalGameplayOutput.returnFromDispatcher(world: &trial.world, globals: &trial.globals,
-                memory: &trialMemory, input: p, resourceBitmap: resourceBitmap, performBlit: { _ in 0 }, soundRequest: { _ in 0 }) { event in
+                memory: &trialMemory, input: p, rules: NTSDProfile.rules, resourceBitmap: resourceBitmap, performBlit: { _ in 0 }, soundRequest: { _ in 0 }) { event in
                     trialEvents += 1
                     if event.kind == "dispatcherWrite" { throw error("Late dispatcher observer") }
                 }
@@ -91,7 +94,7 @@ enum GameplayReturnReference {
               trialMemory.replayPointers == context.memory.replayPointers, trialMemory.allocations == context.memory.allocations else { throw error("Whole output rollback") }
         var seen = 0, blits = 0
         try OriginalGameplayOutput.returnFromDispatcher(world: &state.world, globals: &state.globals, memory: &context.memory,
-            input: p, resourceBitmap: resourceBitmap, performBlit: { _ in
+            input: p, rules: NTSDProfile.rules, resourceBitmap: resourceBitmap, performBlit: { _ in
                 defer { blits += 1 }; return n.drawResults[blits%n.drawResults.count]
             }, soundRequest: { _ in 0 }, observe: { event in
                 guard seen < n.events.count, event == n.events[seen] else {
