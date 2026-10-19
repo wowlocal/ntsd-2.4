@@ -77,15 +77,23 @@ let sdlTargets: [Target] = sdl ? [
             swiftSettings: [.unsafeFlags(["-Xcc", "-I\(sdlPrefix)/include"]
                                          + (freetypePrefix.map { ["-Xcc", "-I\($0)/include/freetype2"] } ?? []))] + exclusivity)] : []
 
+// NTSD_IOS=1 (with NTSD_PORTABLE=1) adds the UIKit host library (P8, TVOS_WEB
+// T0): the iPad and the Apple TV, built for an iOS or tvOS triple.
+let ios = Context.environment["NTSD_IOS"] == "1"
+let iosProducts: [Product] = ios ? [.library(name: "NTSDUIKitHost", targets: ["NTSDUIKitHost"])] : []
+let iosTargets: [Target] = ios ? [
+    .target(name: "NTSDUIKitHost", dependencies: ["NTSDCore", "NTSDRuntime"], swiftSettings: exclusivity,
+            linkerSettings: [.linkedFramework("UIKit"), .linkedFramework("AVFoundation"), .linkedFramework("CoreText")])] : []
+
 let package = Package(
     name: "NTSDEngine",
     platforms: [.macOS(.v14), .iOS(.v17)],
-    products: macProducts + freetypeProducts + webProducts + sdlProducts + [
+    products: macProducts + freetypeProducts + webProducts + sdlProducts + iosProducts + [
         .library(name: "NTSDCore", targets: ["NTSDCore"]),
         .library(name: "NTSDRuntime", targets: ["NTSDRuntime"]),
         .library(name: "NTSDMusicDecoder", targets: ["NTSDMusicDecoder"]),
         .library(name: "NTSDHeadlessHost", targets: ["NTSDHeadlessHost"])],
-    targets: macTargets + freetypeTargets + webTargets + sdlTargets + [
+    targets: macTargets + freetypeTargets + webTargets + sdlTargets + iosTargets + [
         .target(name: "NTSDReplayCodec", exclude: ["README.md", "upstream.json"],
                 publicHeadersPath: "include", cSettings: [.unsafeFlags(["-Wno-deprecated-non-prototype"])]),
         .target(name: "NTSDCore", dependencies: ["NTSDReplayCodec"], swiftSettings: crossModule + exclusivity),

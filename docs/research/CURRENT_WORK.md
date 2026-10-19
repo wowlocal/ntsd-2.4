@@ -39,7 +39,8 @@ WASI и браузер (Chromium, WebKit) совпали: [evidence](../evidence
 E4b-3 выполнен: SDL-хост — `NTSDSDLHost` (с CSDL3); macOS/Linux/Windows SDL совпали с чистых
 сборок: [evidence](../evidence/es-e4b3-sdl-host.json). E4b-4 выполнен: AppKit-хост — `NTSDAppKitHost`,
 лаборатория осталась в игре; упакованное приложение совпало: [evidence](../evidence/es-e4b4-appkit-host.json).
-Следующая задача — E4b-5: UIKit-хост (iPad, Apple TV).
+E4b-5 выполнен: UIKit-хост — `NTSDUIKitHost`; симуляторы iPad и Apple TV совпали (vs, playback):
+[evidence](../evidence/es-e4b5-uikit-host.json). Следующая задача — E4b-6: Android-хост.
 
 ## Internal build storage и VM quota исправлены — 2026-10-17
 

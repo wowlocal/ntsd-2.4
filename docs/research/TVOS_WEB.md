@@ -36,7 +36,8 @@ the Core suites.
 
 ## Consumers and integration criteria
 
-- **Apple TV (tvOS).** The iOS host (`NTSDiOS`, UIKit) built for tvOS runs in
+- **Apple TV (tvOS).** The iOS host (`NTSDiOS`, UIKit; the engine's `NTSDUIKitHost`
+  since ENGINE_SPLIT E4b-5) built for tvOS runs in
   the Apple TV simulator: every app_e2e scenario equal and its frames identical
   to the `coretext` group (iOS draws text with CoreText). Then input as on a
   TV: the Siri Remote and game controllers through GameController (the AppKit

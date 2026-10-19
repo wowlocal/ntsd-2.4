@@ -39,7 +39,8 @@ final class NTSDSceneDelegate: UIResponder, UIWindowSceneDelegate {
             || UserDefaults.standard.bool(forKey:"NTSDOriginalWindow")
         window.rootViewController = controller; window.makeKeyAndVisible(); self.window = window
         MainActor.assumeIsolated {
-            let host = NTSDiOSSessionHost(arguments:CommandLine.arguments,view:controller.gameView,screen:scene.screen.bounds.size)
+            let host = NTSDiOSSessionHost(arguments:CommandLine.arguments,game:launchedGame!,view:controller.gameView,
+                                          screen:scene.screen.bounds.size)
             let game = OriginalRuntimeSession(arguments:CommandLine.arguments,host:host)
             host.session = game; controller.gameView.host = host
             self.host = host; self.session = game

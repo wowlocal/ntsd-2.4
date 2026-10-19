@@ -6,7 +6,6 @@ import GameController
 #endif
 import UIKit
 import NTSDCore
-import NTSDContent
 import NTSDRuntime
 
 /// A virtual original window: the iPad has one view, which shows the window
@@ -88,9 +87,9 @@ final class NTSDiOSCursor {}
 /// system font, Darwin sockets, and the app's Documents folder as the overlay
 /// (Caches on tvOS). The same host runs on the Apple TV (TVOS_WEB T0).
 @MainActor final class NTSDiOSSessionHost: OriginalRuntimeSessionHost {
-    let arguments: [String], windows: NTSDiOSWindowHost, musicDirectory: String
-    func contentLocation(in appBundle: Bundle) -> OriginalContentLocation { NTSDContent.location(in:appBundle) }
-    var game: OriginalGameIdentity { NTSDContent.game }
+    let arguments: [String], original: OriginalGame, windows: NTSDiOSWindowHost, musicDirectory: String
+    func contentLocation(in appBundle: Bundle) -> OriginalContentLocation { original.content(appBundle) }
+    var game: OriginalGameIdentity { original.identity }
     weak var session: OriginalRuntimeSession?
     private let engine = AVAudioEngine()
     private var activity: NSObjectProtocol?
@@ -98,8 +97,8 @@ final class NTSDiOSCursor {}
     private var cursor: (Int32,Int32) = (0,0)
     /// Touches as player-like clicks (hover, then a held press).
     lazy var touch = OriginalRuntimeTouchMouse { [unowned self] message,x,y,buttons in self.mouse(message,x:x,y:y,buttons:buttons) }
-    init(arguments: [String],view: NTSDGameView,screen: CGSize) {
-        self.arguments = arguments; windows = NTSDiOSWindowHost(screen:screen,view:view)
+    init(arguments: [String],game: OriginalGame,view: NTSDGameView,screen: CGSize) {
+        self.arguments = arguments; original = game; windows = NTSDiOSWindowHost(screen:screen,view:view)
         musicDirectory = Bundle.main.bundleURL.appendingPathComponent("OriginalMusic").path
     }
     var scripted: Bool { arguments.contains("--script") }

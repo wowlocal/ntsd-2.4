@@ -1,0 +1,518 @@
+{
+ "study": "ENGINE_SPLIT",
+ "step": "E4b-5",
+ "label": "es-e4b5",
+ "prev": "es-e4b4",
+ "base": "a07f46fb9d2df67dd0630f76438b858402b68178",
+ "recordedUTC": "2026-10-19T04:17:10Z",
+ "change": "The UIKit host (iPad and Apple TV) becomes the engine library NTSDUIKitHost (with NTSD_IOS=1; NTSDCore, NTSDRuntime; UIKit, AVFoundation, CoreText): NTSDApp.swift (app and scene delegates, view controller, game view) and NTSDiOSHost.swift (window host, music player, session host) by git mv, the session host taking the OriginalGame instead of NTSDContent, and the former NTSDiOS main (the --events-file redirect, UIApplicationMain with the app delegate) as NTSDUIKitHost.run(game:), which keeps the game in a module global for the scene delegate UIKit creates. The game's NTSDiOS is one call. The packagers' Info.plist names the scene delegate by its new module (NTSDUIKitHost.NTSDSceneDelegate; ios_app.py, ios_device.py).",
+ "testedTrees": {
+  "recorded": "native dccf9ed7e62b16c462b204ff996997afa69ee06b tools aa11e28da35f92b7737a2453ecc88a562b32b0b4 engine dfc230ec432c9a3395b77b5984b97f649682a9d0",
+  "equal": true
+ },
+ "checks": [
+  "iPad simulator (iOS 26.5) vs from a clean scratch, installed over an earlier build: {\"result\": \"equal\", \"differs\": []}",
+  "Apple TV simulator (tvOS 27.0, first use on the branch) vs from a clean scratch: {\"result\": \"equal\", \"differs\": []}",
+  "both: 6 frames and 1,826 digests identical to rt-4w-appkit"
+ ],
+ "review": {
+  "by": "a separate read-only agent, 2026-10-19, on the staged diff",
+  "verdict": "no required fix: the entry keeps the redirect and UIApplicationMain; the scene configuration's explicit delegateClass wins for a new session, the plist change keeps the manifest naming a real class; launchedGame is set before UIApplicationMain and so before any scene connects; the moved files reach the game only through the OriginalGame; manifests and tvOS branches unchanged in effect",
+  "question": "a scene session saved by an earlier build could carry the old delegate class on an install over it",
+  "answer": "the iPad app's saved session (Library/Saved Application State/local.ntsd.native.ios.savedState/KnownSceneSessions, written 2026-10-18 by an earlier build) archives only the configuration name 'Default', the role and the session identifier, no class: a restored session resolves its delegate through the Info.plist by that name, so the plist change is the one that keeps such installs working; the iPad rows installed over that app (simctl install keeps the data container) and passed",
+  "adopted": [
+   "the live TVOS_WEB description of the Apple TV host names NTSDUIKitHost (the dated 'Verified starting point' section is history and stays)"
+  ],
+  "notAdopted": [
+   "@MainActor on run(game:): only matters under strict concurrency (as for the AppKit host)"
+  ]
+ },
+ "gateScript": {
+  "run": "/Volumes/NTSD-Builds/tasks/engine-split/gates/gate-run-es-e4b5.sh",
+  "sha256": "ff45c38f20da2da022f816ed2fa8d2f155550c05c632172fc857b83dea36a14a"
+ },
+ "builds": [
+  "headless built (checked: 3276 beginAccess)",
+  "app built (checked: 3404 beginAccess)",
+  "unchecked headless built (0 beginAccess)"
+ ],
+ "launches": "launches: crashes 0 of 20",
+ "scenariosHeadless": [
+  {
+   "scenario": "vs",
+   "exit": 0,
+   "result": "equal",
+   "differs": []
+  },
+  {
+   "scenario": "mission",
+   "exit": 0,
+   "result": "equal",
+   "differs": []
+  },
+  {
+   "scenario": "demo",
+   "exit": 0,
+   "result": "equal",
+   "differs": []
+  },
+  {
+   "scenario": "war",
+   "exit": 0,
+   "result": "equal",
+   "differs": []
+  },
+  {
+   "scenario": "playback",
+   "exit": 0,
+   "result": "equal",
+   "differs": []
+  },
+  {
+   "scenario": "tournament",
+   "exit": 0,
+   "result": "equal",
+   "differs": []
+  },
+  {
+   "scenario": "altenter",
+   "exit": 0,
+   "result": "equal",
+   "differs": []
+  },
+  {
+   "scenario": "tournament-win",
+   "exit": 0,
+   "result": "equal",
+   "differs": []
+  },
+  {
+   "scenario": "team-tournament",
+   "exit": 0,
+   "result": "equal",
+   "differs": []
+  },
+  {
+   "scenario": "joystick",
+   "exit": 0,
+   "result": "equal",
+   "differs": []
+  },
+  {
+   "scenario": "title-joystick",
+   "exit": 0,
+   "result": "equal",
+   "differs": []
+  }
+ ],
+ "framesHeadlessVsM1": {
+  "frames": 1832,
+  "mismatched": 0,
+  "result": "identical"
+ },
+ "appkit": [
+  {
+   "scenario": "vs",
+   "exit": 0,
+   "seconds": 66.4,
+   "result": "equal",
+   "differs": []
+  },
+  {
+   "scenario": "playback",
+   "exit": 0,
+   "seconds": 69.9,
+   "result": "equal",
+   "differs": []
+  },
+  {
+   "frames": 3960,
+   "mismatched": 0,
+   "result": "identical"
+  }
+ ],
+ "uncheckedHeadless": [
+  {
+   "scenario": "vs",
+   "exit": 0,
+   "seconds": 67.2,
+   "result": "equal",
+   "differs": []
+  },
+  {
+   "scenario": "demo",
+   "exit": 0,
+   "seconds": 46.8,
+   "result": "equal",
+   "differs": []
+  },
+  {
+   "frames": 1832,
+   "mismatched": 0,
+   "result": "identical"
+  }
+ ],
+ "emulatorVs": {
+  "exit": "emu exit=0",
+  "frames": {
+   "frames": 1832,
+   "mismatched": 0,
+   "result": "identical"
+  }
+ },
+ "suites": [
+  "OriginalExclusivityChecksTests exit=0 1s \t Executed 1 test, with 0 failures (0 unexpected) in 0.002 (0.004) seconds",
+  "OriginalALACTrackTests exit=0 6s \t Executed 2 tests, with 0 failures (0 unexpected) in 5.626 (5.627) seconds",
+  "OriginalApplicationCatalogInputsTests exit=0 13s \t Executed 4 tests, with 0 failures (0 unexpected) in 13.105 (13.110) seconds",
+  "OriginalApplicationInterfaceInputsTests exit=0 0s \t Executed 3 tests, with 0 failures (0 unexpected) in 0.068 (0.069) seconds",
+  "OriginalApplicationLoadedLaunchTests exit=0 53s \t Executed 2 tests, with 0 failures (0 unexpected) in 52.775 (52.781) seconds",
+  "OriginalApplicationLoadingPrefixTests exit=0 23s \t Executed 2 tests, with 0 failures (0 unexpected) in 22.895 (22.897) seconds",
+  "OriginalApplicationLoadingSessionTests exit=0 0s \t Executed 3 tests, with 0 failures (0 unexpected) in 0.050 (0.052) seconds",
+  "OriginalApplicationMenuInputsTests exit=0 0s \t Executed 3 tests, with 0 failures (0 unexpected) in 0.114 (0.116) seconds",
+  "OriginalApplicationObservedBitmapTests exit=0 13s \t Executed 5 tests, with 0 failures (0 unexpected) in 12.624 (12.626) seconds",
+  "OriginalApplicationObservedGraphicsTests exit=0 37s \t Executed 5 tests, with 0 failures (0 unexpected) in 37.077 (37.080) seconds",
+  "OriginalApplicationObservedIterationTests exit=0 9s \t Executed 3 tests, with 0 failures (0 unexpected) in 9.045 (9.047) seconds",
+  "OriginalApplicationStartupInputsTests exit=0 1s \t Executed 4 tests, with 0 failures (0 unexpected) in 0.351 (0.352) seconds",
+  "OriginalCatalogChecksumTests exit=0 2s \t Executed 3 tests, with 0 failures (0 unexpected) in 2.304 (2.306) seconds",
+  "OriginalConcurrentInputsTests exit=0 3s \t Executed 7 tests, with 0 failures (0 unexpected) in 2.524 (2.526) seconds",
+  "OriginalDataTests exit=0 0s \t Executed 2 tests, with 0 failures (0 unexpected) in 0.739 (0.740) seconds",
+  "OriginalDIBValidationTests exit=0 1s \t Executed 2 tests, with 0 failures (0 unexpected) in 0.933 (0.935) seconds",
+  "OriginalFrameLoaderTests exit=0 1s \t Executed 2 tests, with 0 failures (0 unexpected) in 0.007 (0.008) seconds",
+  "OriginalLoadingReadAheadTests exit=0 1s \t Executed 5 tests, with 0 failures (0 unexpected) in 1.455 (1.456) seconds",
+  "OriginalLZ4Tests exit=0 7s \t Executed 6 tests, with 0 failures (0 unexpected) in 7.221 (7.223) seconds",
+  "OriginalMacBitmapBackendTests exit=0 3s \t Executed 5 tests, with 0 failures (0 unexpected) in 2.533 (2.536) seconds",
+  "OriginalMacMusicOutputTests exit=0 0s \t Executed 7 tests, with 0 failures (0 unexpected) in 0.026 (0.027) seconds",
+  "OriginalMacRuntimeLoadingTests exit=0 2s \t Executed 7 tests, with 0 failures (0 unexpected) in 1.703 (1.704) seconds",
+  "OriginalMacWindowGeometryTests exit=0 18s \t Executed 6 tests, with 0 failures (0 unexpected) in 18.447 (18.452) seconds",
+  "OriginalMeleeTests exit=0 2s \t Executed 5 tests, with 0 failures (0 unexpected) in 1.550 (1.552) seconds",
+  "OriginalMovementTests exit=0 0s \t Executed 2 tests, with 0 failures (0 unexpected) in 0.041 (0.043) seconds",
+  "OriginalReplayFileInputTests exit=0 0s \t Executed 1 test, with 0 failures (0 unexpected) in 0.228 (0.229) seconds",
+  "OriginalWord32BoundaryTests exit=0 1s \t Executed 6 tests, with 0 failures (0 unexpected) in 0.024 (0.025) seconds",
+  "PortableSHA256BlockFunctionTests exit=0 0s \t Executed 2 tests, with 0 failures (0 unexpected) in 0.184 (0.185) seconds",
+  "PortableSHA256Tests exit=0 6s \t Executed 3 tests, with 0 failures (0 unexpected) in 5.760 (5.761) seconds"
+ ],
+ "phoneAB": {
+  "summaries": [
+   {
+    "build": "es-e4b5",
+    "runs": 3,
+    "startupSeconds": {
+     "median": -419727.61,
+     "min": -419727.62,
+     "max": -419727.58
+    },
+    "loadSeconds": {
+     "median": 6.38,
+     "min": 6.09,
+     "max": 6.69
+    },
+    "startToLoadedSeconds": {
+     "median": -419715.97,
+     "min": -419716.05,
+     "max": -419715.54
+    },
+    "peakResidentMB": {
+     "median": 599,
+     "min": 586,
+     "max": 602
+    },
+    "peakFootprintMB": {
+     "median": 610,
+     "min": 606,
+     "max": 623
+    },
+    "loadedResidentMB": {
+     "median": 543,
+     "min": 519,
+     "max": 588
+    },
+    "bodiesResidentMB": {
+     "median": 557,
+     "min": 531,
+     "max": 569
+    },
+    "mainMsPerTick": {
+     "median": 10.98,
+     "min": 10.85,
+     "max": 11.02
+    },
+    "renderMsPerTick": {
+     "median": 7.59,
+     "min": 7.44,
+     "max": 7.62
+    },
+    "processMsPerTick": {
+     "median": 27.79,
+     "min": 27.53,
+     "max": 27.84
+    },
+    "completeMsPerTick": {
+     "median": 7.38,
+     "min": 7.26,
+     "max": 7.43
+    },
+    "loadedSwapMB": {
+     "median": 22,
+     "min": 22,
+     "max": 22
+    },
+    "bodiesSwapMB": {
+     "median": 22,
+     "min": 22,
+     "max": 22
+    },
+    "ticksEndResidentMB": {
+     "median": 592,
+     "min": 567,
+     "max": 605
+    },
+    "ticksEndSwapMB": {
+     "median": 14,
+     "min": 14,
+     "max": 14
+    },
+    "ticksEndFootprintMB": {
+     "median": 606,
+     "min": 581,
+     "max": 619
+    },
+    "ticksEndPssMB": {
+     "median": 556,
+     "min": 535,
+     "max": 570
+    },
+    "cpuToEndSeconds": {
+     "median": 95.88,
+     "min": 95.03,
+     "max": 96.19
+    }
+   },
+   {
+    "build": "es-e4b4",
+    "runs": 2,
+    "startupSeconds": {
+     "median": -419727.505,
+     "min": -419727.53,
+     "max": -419727.48
+    },
+    "loadSeconds": {
+     "median": 6.365,
+     "min": 6.28,
+     "max": 6.45
+    },
+    "startToLoadedSeconds": {
+     "median": -419715.95499999996,
+     "min": -419715.97,
+     "max": -419715.94
+    },
+    "peakResidentMB": {
+     "median": 599.0,
+     "min": 589,
+     "max": 609
+    },
+    "peakFootprintMB": {
+     "median": 604.5,
+     "min": 590,
+     "max": 619
+    },
+    "loadedResidentMB": {
+     "median": 573.5,
+     "min": 550,
+     "max": 597
+    },
+    "bodiesResidentMB": {
+     "median": 534.5,
+     "min": 533,
+     "max": 536
+    },
+    "mainMsPerTick": {
+     "median": 10.934999999999999,
+     "min": 10.93,
+     "max": 10.94
+    },
+    "renderMsPerTick": {
+     "median": 7.22,
+     "min": 7.13,
+     "max": 7.31
+    },
+    "processMsPerTick": {
+     "median": 27.355,
+     "min": 27.28,
+     "max": 27.43
+    },
+    "completeMsPerTick": {
+     "median": 7.365,
+     "min": 7.33,
+     "max": 7.4
+    },
+    "loadedSwapMB": {
+     "median": 22.0,
+     "min": 22,
+     "max": 22
+    },
+    "bodiesSwapMB": {
+     "median": 22.0,
+     "min": 22,
+     "max": 22
+    },
+    "ticksEndResidentMB": {
+     "median": 570.0,
+     "min": 568,
+     "max": 572
+    },
+    "ticksEndSwapMB": {
+     "median": 14.0,
+     "min": 14,
+     "max": 14
+    },
+    "ticksEndFootprintMB": {
+     "median": 584.0,
+     "min": 582,
+     "max": 586
+    },
+    "ticksEndPssMB": {
+     "median": 536.0,
+     "min": 534,
+     "max": 538
+    },
+    "cpuToEndSeconds": {
+     "median": 95.195,
+     "min": 94.95,
+     "max": 95.44
+    }
+   }
+  ],
+  "finding": "overlapping (the Android app does not contain the UIKit host)"
+ },
+ "macAB": {
+  "summaries": [
+   {
+    "build": "frozen-unchecked-es-e4b5",
+    "runs": 3,
+    "startupSeconds": {
+     "median": 0.057,
+     "min": 0.054,
+     "max": 0.058
+    },
+    "loadSeconds": {
+     "median": 0.336,
+     "min": 0.333,
+     "max": 0.337
+    },
+    "startToLoadedSeconds": {
+     "median": 0.712,
+     "min": 0.709,
+     "max": 0.72
+    },
+    "startedToLoadedSeconds": {
+     "median": 0.656,
+     "min": 0.655,
+     "max": 0.664
+    },
+    "peakResidentMB": {
+     "median": 682,
+     "min": 670,
+     "max": 687
+    },
+    "loadedResidentMB": {
+     "median": 670,
+     "min": 591,
+     "max": 681
+    },
+    "bodiesResidentMB": {
+     "median": 618,
+     "min": 611,
+     "max": 639
+    },
+    "processMsPerTick": {
+     "median": 2.844,
+     "min": 2.811,
+     "max": 2.878
+    },
+    "completeMsPerTick": {
+     "median": 1.1864,
+     "min": 1.1627,
+     "max": 1.2268
+    }
+   },
+   {
+    "build": "frozen-unchecked-es-e4b4",
+    "runs": 3,
+    "startupSeconds": {
+     "median": 0.058,
+     "min": 0.053,
+     "max": 0.059
+    },
+    "loadSeconds": {
+     "median": 0.336,
+     "min": 0.334,
+     "max": 0.339
+    },
+    "startToLoadedSeconds": {
+     "median": 0.726,
+     "min": 0.704,
+     "max": 0.734
+    },
+    "startedToLoadedSeconds": {
+     "median": 0.668,
+     "min": 0.647,
+     "max": 0.682
+    },
+    "peakResidentMB": {
+     "median": 697,
+     "min": 668,
+     "max": 704
+    },
+    "loadedResidentMB": {
+     "median": 678,
+     "min": 578,
+     "max": 682
+    },
+    "bodiesResidentMB": {
+     "median": 600,
+     "min": 598,
+     "max": 624
+    },
+    "processMsPerTick": {
+     "median": 2.844,
+     "min": 2.789,
+     "max": 2.878
+    },
+    "completeMsPerTick": {
+     "median": 1.1985,
+     "min": 1.1611,
+     "max": 1.2302
+    }
+   }
+  ],
+  "finding": "overlapping"
+ },
+ "gate3": {
+  "script": "/Volumes/NTSD-Builds/tasks/engine-split/gates/gate3-es-e4b5.sh",
+  "log": [
+   "trees a07f46fb9d2df67dd0630f76438b858402b68178 staged no-unstaged",
+   "== ios vs",
+   "exit=0",
+   "{\"result\": \"equal\", \"differs\": []}",
+   "{\"scenario\": \"vs\", \"frames\": 6, \"identical\": 6, \"differ\": [], \"missing\": [], \"digests\": {\"a\": 1826, \"b\": 1826, \"equal\": true, \"firstDifferentBody\": null}}",
+   "== ios playback",
+   "exit=0",
+   "{\"result\": \"equal\", \"differs\": []}",
+   "{\"scenario\": \"playback\", \"frames\": 7, \"identical\": 7, \"differ\": [], \"missing\": [], \"digests\": {\"a\": 2121, \"b\": 2121, \"equal\": true, \"firstDifferentBody\": null}}",
+   "== tvos vs",
+   "exit=0",
+   "{\"result\": \"equal\", \"differs\": []}",
+   "{\"scenario\": \"vs\", \"frames\": 6, \"identical\": 6, \"differ\": [], \"missing\": [], \"digests\": {\"a\": 1826, \"b\": 1826, \"equal\": true, \"firstDifferentBody\": null}}",
+   "== tvos playback",
+   "exit=0",
+   "{\"result\": \"equal\", \"differs\": []}",
+   "{\"scenario\": \"playback\", \"frames\": 7, \"identical\": 7, \"differ\": [], \"missing\": [], \"digests\": {\"a\": 2121, \"b\": 2121, \"equal\": true, \"firstDifferentBody\": null}}",
+   "gate3_done"
+  ],
+  "cleanBuilds": "one clean scratch per platform; the second scenario reuses that build",
+  "verdict": "iPad and Apple TV simulators: vs and playback equal, 13 frames and 3,947 digests identical to rt-4w-appkit on each"
+ },
+ "openGates": [
+  "a physical iPad or Apple TV (ios_device.py) was not run: its Info.plist entry changed exactly as ios_app.py's, which the simulator rows exercise, but the device packaging itself was not rebuilt or launched; device runs remain open"
+ ]
+}

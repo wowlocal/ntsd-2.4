@@ -77,7 +77,7 @@ def main():
                    "MinimumOSVersion": "17.0", "UILaunchScreen": {}, **p["plist"],
                    "UIApplicationSceneManifest": {"UIApplicationSupportsMultipleScenes": False, "UISceneConfigurations": {
                        "UIWindowSceneSessionRoleApplication": [{"UISceneConfigurationName": "Default",
-                                                               "UISceneDelegateClassName": "NTSDiOS.NTSDSceneDelegate"}]}}},
+                                                               "UISceneDelegateClassName": "NTSDUIKitHost.NTSDSceneDelegate"}]}}},
                   (app / "Info.plist").open("wb"))
     run(["codesign", "--force", "--sign", "-", str(app)])
     if SIM_SET: Path(SIM_SET).mkdir(parents=True, exist_ok=True)

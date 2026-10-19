@@ -55,11 +55,12 @@ let sdlTargets: [Target] = sdl ? [
                                        .unsafeFlags(["-Xlinker", "-rpath", "-Xlinker", "\(sdlPrefix)/lib"], .when(platforms: [.macOS, .linux]))])] : []
 
 // NTSD_IOS=1 (with NTSD_PORTABLE=1) adds the iPad host (P8), built for an
-// iOS triple and wrapped into an app by tools/crossplatform/ios_app.py.
+// iOS triple and wrapped into an app by tools/crossplatform/ios_app.py; the
+// host is the engine's NTSDUIKitHost (ENGINE_SPLIT E4b).
 let ios = Context.environment["NTSD_IOS"] == "1"
 let iosProducts: [Product] = ios ? [.executable(name: "NTSDiOS", targets: ["NTSDiOS"])] : []
 let iosTargets: [Target] = ios ? [
-    .executableTarget(name: "NTSDiOS", dependencies: [core, runtime, "NTSDContent"], swiftSettings: exclusivity,
+    .executableTarget(name: "NTSDiOS", dependencies: [engine("NTSDUIKitHost"), "NTSDContent"], swiftSettings: exclusivity,
                       linkerSettings: [.linkedFramework("UIKit"), .linkedFramework("AVFoundation"), .linkedFramework("CoreText")])] : []
 
 // NTSD_ANDROID=1 (with NTSD_PORTABLE=1) adds the Android host (P8): a
