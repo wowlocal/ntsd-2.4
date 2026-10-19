@@ -14,7 +14,7 @@ final class NTSDProfileArmourTests: XCTestCase {
         return OriginalGameRules(profile: "moved",reflection: NTSDProfile.rules.reflection,
             armour: .init(guardPenetrators: pen ?? a.guardPenetrators,steadyArmour: steady ?? a.steadyArmour,openingArmour: opening ?? a.openingArmour,
                           attackerArmour: attacker ?? a.attackerArmour,alwaysBlocked: blocked ?? a.alwaysBlocked,armourGuardSound: sound ?? a.armourGuardSound),
-            interaction: NTSDProfile.rules.interaction)
+            interaction: NTSDProfile.rules.interaction,impact: NTSDProfile.rules.impact)
     }
     func defined(_ size: Int) throws -> OriginalStateRecord {
         try .init(bytes: [UInt8](repeating: 0,count: size),defined: [Bool](repeating: true,count: size))

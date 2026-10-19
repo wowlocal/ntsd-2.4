@@ -13,5 +13,7 @@ public enum NTSDProfile {
                       alwaysBlocked: OriginalIDSet([124, 220, 221, 222]), armourGuardSound: OriginalIDSet([37, 6])),
         // Special interactions: OriginalHitSpecial, OriginalWorldContacts.
         interaction: .init(holdKind101: OriginalIDSet([120, 124]), pullImmune: OriginalIDSet([201, 202]), teamBypass: 212,
-                           countsAsCharacter: OriginalIDSet([201, 202])))
+                           countsAsCharacter: OriginalIDSet([201, 202])),
+        // What an attacker's hit does to it or to the defender's x impulse: OriginalHitDamage.
+        impact: .init(vanishingAttacker: 201, spentAttacker: 214, heavyHeldWeapon: 100))
 }

@@ -87,8 +87,8 @@ extension OriginalHitPass {
             else { try put(d,0x70,20) }
             try put(d,0x364,i(a,0x364))
         }
-        if try h(a,0x6f4) == 201 && h(d,0x6f8) == 0 { try world.write(UInt8(0),at: 4+attacker) }
-        if try h(a,0x6f4) == 214 && h(d,0x6f8) == 0 { try put(a,0x2fc,0) }
+        if try h(a,0x6f4) == rules.vanishingAttacker && h(d,0x6f8) == 0 { try world.write(UInt8(0),at: 4+attacker) }
+        if try h(a,0x6f4) == rules.spentAttacker && h(d,0x6f8) == 0 { try put(a,0x2fc,0) }
         if try h(d,0x6f8) == 3 { try projectileHit(attacker,defender) }
         if library != nil { try libraryHitEffect(d) }
         if try [3,30].contains(it(0x2c)) && h(d,0x6f8) == 0 && f(d,8,0x78) != 13 {
@@ -118,7 +118,7 @@ extension OriginalHitPass {
             let apply = try delta > scaled || (facing == 0 && v(d,0x28) > zero) || (facing == 1 && v(d,0x28) < zero)
             if apply { try facingImpulse(a,d,delta) }
             else if (facing == 1 && vx > zero) || (facing == 0 && vx < zero) { try store(d,0x28,-(vx*constant(0.55))) }
-            if try h(a,0x6f4) == 100 && i(a,0x98) < 0 {
+            if try h(a,0x6f4) == rules.heavyHeldWeapon && i(a,0x98) < 0 {
                 try store(d,0x28,v(d,0x28)*constant(2.5));try sound(d,13,observe: observe)
                 if try v(d,0x28) > zero && v(d,0x28) < constant(10) { try number(d,0x28,10) }
                 if try v(d,0x28) < zero && v(d,0x28) > constant(-10) { try number(d,0x28,-10) }

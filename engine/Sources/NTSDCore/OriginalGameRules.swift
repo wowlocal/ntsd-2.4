@@ -85,10 +85,25 @@ public struct OriginalGameRules: Equatable, Sendable {
             self.holdKind101 = holdKind101; self.pullImmune = pullImmune; self.teamBypass = teamBypass; self.countsAsCharacter = countsAsCharacter
         }
     }
+    /// What an attacker's hit does to the attacker or to the defender's x impulse
+    /// (+0x28) (OriginalHitDamage).
+    public struct Impact: Equatable, Sendable {
+        /// An attacker deactivated (its World activity byte cleared) when it hits a type-0 defender.
+        public let vanishingAttacker: Int32
+        /// An attacker whose HP goes to 0 when it hits a type-0 defender.
+        public let spentAttacker: Int32
+        /// A held attacker whose hit on a type-4 or type-6 defender multiplies the
+        /// defender's x impulse (+0x28) by 2.5 with sound 13; a non-zero result under
+        /// 10 in magnitude becomes ±10.
+        public let heavyHeldWeapon: Int32
+        public init(vanishingAttacker: Int32, spentAttacker: Int32, heavyHeldWeapon: Int32) {
+            self.vanishingAttacker = vanishingAttacker; self.spentAttacker = spentAttacker; self.heavyHeldWeapon = heavyHeldWeapon
+        }
+    }
     private final class Roles: Sendable {
-        let profile: String, reflection: Reflection, armour: Armour, interaction: Interaction
-        init(profile: String, reflection: Reflection, armour: Armour, interaction: Interaction) {
-            self.profile = profile; self.reflection = reflection; self.armour = armour; self.interaction = interaction
+        let profile: String, reflection: Reflection, armour: Armour, interaction: Interaction, impact: Impact
+        init(profile: String, reflection: Reflection, armour: Armour, interaction: Interaction, impact: Impact) {
+            self.profile = profile; self.reflection = reflection; self.armour = armour; self.interaction = interaction; self.impact = impact
         }
     }
     private let roles: Roles
@@ -97,6 +112,7 @@ public struct OriginalGameRules: Equatable, Sendable {
     public var reflection: Reflection { roles.reflection }
     public var armour: Armour { roles.armour }
     public var interaction: Interaction { roles.interaction }
+    public var impact: Impact { roles.impact }
     public var reflectable: OriginalIDSet { roles.reflection.reflectable }
     public var reflector: Int32 { roles.reflection.reflector }
     public var rebinder: Int32 { roles.reflection.rebinder }
@@ -111,10 +127,14 @@ public struct OriginalGameRules: Equatable, Sendable {
     public var pullImmune: OriginalIDSet { roles.interaction.pullImmune }
     public var teamBypass: Int32 { roles.interaction.teamBypass }
     public var countsAsCharacter: OriginalIDSet { roles.interaction.countsAsCharacter }
-    public init(profile: String, reflection: Reflection, armour: Armour, interaction: Interaction) {
-        roles = Roles(profile: profile, reflection: reflection, armour: armour, interaction: interaction)
+    public var vanishingAttacker: Int32 { roles.impact.vanishingAttacker }
+    public var spentAttacker: Int32 { roles.impact.spentAttacker }
+    public var heavyHeldWeapon: Int32 { roles.impact.heavyHeldWeapon }
+    public init(profile: String, reflection: Reflection, armour: Armour, interaction: Interaction, impact: Impact) {
+        roles = Roles(profile: profile, reflection: reflection, armour: armour, interaction: interaction, impact: impact)
     }
     public static func == (a: Self, b: Self) -> Bool {
-        a.roles === b.roles || (a.profile == b.profile && a.reflection == b.reflection && a.armour == b.armour && a.interaction == b.interaction)
+        a.roles === b.roles || (a.profile == b.profile && a.reflection == b.reflection && a.armour == b.armour && a.interaction == b.interaction
+                                && a.impact == b.impact)
     }
 }

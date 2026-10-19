@@ -53,7 +53,8 @@ E5a выполнен: обзор (100 мест с ID объектов, дисп�
 [evidence](../evidence/es-e5c0-profile-plumbing.json). E5c-1a выполнен: роли в одном хранилище, отражатели 209/8/213 —
 роли профиля: [evidence](../evidence/es-e5c1a-reflector-roles.json). E5c-1b выполнен: броня (A1–A6) — роли профиля,
 пороги остались в движке: [evidence](../evidence/es-e5c1b-armour-roles.json). E5c-1c выполнен: особые взаимодействия
-(A17–A19, A21–A23) — роли профиля: [evidence](../evidence/es-e5c1c-interaction-roles.json). Следующая задача — E5c-1d: урон (A9–A11).
+(A17–A19, A21–A23) — роли профиля: [evidence](../evidence/es-e5c1c-interaction-roles.json). E5c-1d выполнен: «удар» (A9–A11),
+A8 теперь с прямым тестом: [evidence](../evidence/es-e5c1d-impact-roles.json). Следующая задача — E5c-2a: предметы (A39–A41).
 
 ## Internal build storage и VM quota исправлены — 2026-10-17
 

@@ -10,7 +10,7 @@ measurement from [TVOS_WEB](TVOS_WEB.md), [MEMORY_LOADING](MEMORY_LOADING.md) an
 engine from the game itself. to publish engine as the separate github repo";
 then, after the plan: "ok … when the plan is setteled start the loop in a
 separate branch" and "push automatically every step (on that new branch)".
-**Status:** E0–E3, E4a, E4b (all six hosts), E4c-1 (the engine's self-contained tests), E5a (the game profile's survey and design) and E5b (the record type, the copied tables out), E4c-1a (a nondeterministic engine test corrected) E5c-0 (the profile's plumbing, reflection), E5c-1a (one storage, the reflectors), E5c-1b (armour) and E5c-1c (special interactions) done; E5c-1d, the damage rows, next.
+**Status:** E0–E3, E4a, E4b (all six hosts), E4c-1 (the engine's self-contained tests), E5a (the game profile's survey and design) and E5b (the record type, the copied tables out), E4c-1a (a nondeterministic engine test corrected) E5c-0 (the profile's plumbing, reflection), E5c-1a (one storage, the reflectors), E5c-1b (armour), E5c-1c (special interactions) and E5c-1d (impact) done; E5c-2a, the items family's first rows, next.
 **Branch:** `exp/engine-split`, from `main` 380b448d. Worktree
 `/Volumes/NTSD-Builds/tasks/engine-split/worktree` (T7-backed APFS, see
 [BUILD_STORAGE_T7](BUILD_STORAGE_T7.md)). It tracks `origin/exp/engine-split`
@@ -158,7 +158,7 @@ A read-only survey of `native/` (three agents, 2026-10-18):
 | E2 | Content policy out of Core: the digest, count and EXE-SHA pins become the NTSD content identity the game passes; Core checks what it is given with the same checks and errors (2.8.3.3's content origin as the model, read only) | **done** ([evidence](../evidence/es-e2-content-identity.json)) |
 | E3 | Identity and Practice: user-data folder, wasm module, Android prefix/entry, queue/thread names, titles and messages become game configuration; Practice/Lab and its two checks move to the game side | **done**: E3a ([evidence](../evidence/es-e3a-practice.json)), E3b ([evidence](../evidence/es-e3b-game-identity.json)); diagnostic labels wait for D2 |
 | E4 | Two packages: `engine/Package.swift` (Core, Runtime, codecs, decoders, shims, host libraries, self-contained tests) and `native/Package.swift` depending on it by path; the unsafeFlags plan (SwiftPM rejects them in version-pinned dependencies) | E4a **done** ([evidence](../evidence/es-e4a-engine-package.json)); E4b: headless **done** ([evidence](../evidence/es-e4b1-headless-host.json)), browser **done** ([evidence](../evidence/es-e4b2-web-host.json)), SDL **done** ([evidence](../evidence/es-e4b3-sdl-host.json)), AppKit **done** ([evidence](../evidence/es-e4b4-appkit-host.json)), UIKit **done** ([evidence](../evidence/es-e4b5-uikit-host.json)), Android **done** ([evidence](../evidence/es-e4b6-android-host.json)); E4c-1 **done** ([evidence](../evidence/es-e4c1-engine-tests.json)), E4c-1a **done** ([evidence](../evidence/es-e4c1a-sorted-keys.json)); E4c-2 (split the 11 mixed test files, the War trio) queued |
-| E5 | Game profile: the ID sites (100 rows, about 125 branch points; first estimated ~90) and the AI dispatch behind a profile the game supplies; the engine defines the `0x44d000` record's layout and the game supplies `initial.bin`; the NTSD profile bit-exact (all gates plus the full fixture-driven suites); the API's fit with 2.8.3.3 checked read only | E5a **done** (survey and design, [evidence](../evidence/es-e5a-design.json)); E5b **done** ([evidence](../evidence/es-e5b-record-type.json)); E5c-0 **done** ([evidence](../evidence/es-e5c0-profile-plumbing.json)); E5c-1a **done** ([evidence](../evidence/es-e5c1a-reflector-roles.json)); E5c-1b **done** ([evidence](../evidence/es-e5c1b-armour-roles.json)); E5c-1c **done** ([evidence](../evidence/es-e5c1c-interaction-roles.json)); E5c-1d next |
+| E5 | Game profile: the ID sites (100 rows, about 125 branch points; first estimated ~90) and the AI dispatch behind a profile the game supplies; the engine defines the `0x44d000` record's layout and the game supplies `initial.bin`; the NTSD profile bit-exact (all gates plus the full fixture-driven suites); the API's fit with 2.8.3.3 checked read only | E5a **done** (survey and design, [evidence](../evidence/es-e5a-design.json)); E5b **done** ([evidence](../evidence/es-e5b-record-type.json)); E5c-0 **done** ([evidence](../evidence/es-e5c0-profile-plumbing.json)); E5c-1a **done** ([evidence](../evidence/es-e5c1a-reflector-roles.json)); E5c-1b **done** ([evidence](../evidence/es-e5c1b-armour-roles.json)); E5c-1c **done** ([evidence](../evidence/es-e5c1c-interaction-roles.json)); E5c-1d **done** ([evidence](../evidence/es-e5c1d-impact-roles.json)); E5c-2a next |
 | E6 | Classify each profile rule as LF2 2.0a or NTSD from the second reference; LF2 rules become the engine's default profile | needs D1 |
 | E7 | Engine stand-alone: the engine package builds alone (macOS, Linux container) and passes its tests with a from-scratch synthetic content pack; a scan finds no original bytes (files under `downloads/`, the resources, fixtures, `initial.bin`) | queued |
 | E8 | Publication: name, licence, a new repository with fresh history, a tag; this repository depends on it by revision; README credits | needs D2 and the user |
@@ -487,6 +487,20 @@ the step).
   under a profile moving only that row; A22 (the held-owner filter) and A23
   (mode 1) are covered by the mapping only.
 
+### E5c-1d note (2026-10-19, reviewed with its change; done)
+
+- **Impact family.** Three single-ID equality tests in `OriginalHitDamage`
+  become `Int32` roles: `vanishingAttacker` 201 (A9: on a type-0 defender the
+  attacker is deactivated, its World activity byte cleared), `spentAttacker` 214
+  (A10: its HP goes to 0), `heavyHeldWeapon` 100 (A11, held: a type-4/6
+  defender's x impulse +0x28 ×2.5 with sound 13, a non-zero result under 10 in
+  magnitude becoming ±10). The conditions stay engine code.
+- **Tests.** A11 through `hitHorizontal` (impulse 10 and sound 13 under NTSD's
+  profile, 3 and no sound under a moved one); A9 and A10, and now A8 too,
+  through `damageHit` with a type-0 (A9, A10) or type-3 (A8) defender.
+- **Left in the hit and contact passes:** A7 (300) and A24–A26 (fusion), both
+  E5e hooks, and A39–A41 (the item spawn), with the items family.
+
 ## Ledger
 
 - 2026-10-18: plan agreed; branch `exp/engine-split` and its worktree created
@@ -724,13 +738,26 @@ the step).
   suite runs, the engine's 108 tests, `swift_beginAccess` 3,276; 11 suites;
   WASI vs identical; phone and Mac A/B overlapping.
   [Evidence](../evidence/es-e5c1c-interaction-roles.json).
+- 2026-10-19 E5c-1d: a fourth family, `Impact`: `vanishingAttacker` 201 (A9),
+  `spentAttacker` 214 (A10), `heavyHeldWeapon` 100 (A11). Reviewed (docs
+  corrected); direct `damageHit` tests now reach A9, A10 and A8 (mapping-only
+  since E5c-0), and `hitHorizontal` A11. Gate `es-e5c1d`: 11 scenarios, frames,
+  AppKit, unchecked, emulator, 20 clean launches, 29 suite runs, the engine's
+  108 tests, `swift_beginAccess` 3,276; 12 suites; WASI vs identical; phone peak
+  footprint apart 3 against 2, overlapping 4 against 4; Mac overlapping. The
+  hit and contact passes keep only A7 and A24–A26 (E5e hooks) and A39–A41 (items).
+  [Evidence](../evidence/es-e5c1d-impact-roles.json).
 
 ## Next task
 
-E5c-1d: the damage rows of the hit pass (`OriginalHitDamage`): A9 (201: the
-attacker vanishes when it hits a character), A10 (214: the attacker's HP goes
-to 0 then), A11 (a held 100: the defender's vx ×2.5, sound 13, |vx| ≥ 10), as
-`Int32` roles in a fourth family. A11 is reachable through `hitHorizontal`;
-A9 and A10 (in `damageHit`, like A8) by the mapping only. Then the items
-family with its passes' plumbing (post-draw commands, camera, links, mission
-stage). Gates as E5c-1c.
+E5c-2 (the items family; plumbing map: [report](../evidence/es-e5c2-plumbing.md)).
+E5c-2a first: a fifth family `Items` with an `OriginalIDRange` (two `Int32`
+bounds, half-open, exact for every `Int32`; also the form A46/A80 will use):
+`itemRange` 100..<200 (A39, and later A48: the same rule, "is an item for a
+spawn"; record the decision), `scarceDropItems` {122, 123} (A40: the stream-147
+draw before the mode test stays), `fullHPSpawn` 122 (A41, later A50 and A64) in
+the hit pass's item spawn (`OriginalWorldHits`, no plumbing). Synthetic tests
+through `advance` (an RNG table with `draw(146,200) = 0`) under NTSD's profile
+and moved ones. Then E5c-2b (camera, links: A42–A44) and E5c-2c (post-draw
+commands, mission stage: A48–A50, A64, with the engine tests' first own rules
+value). Gates as E5c-1d.
