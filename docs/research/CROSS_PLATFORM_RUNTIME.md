@@ -30,7 +30,7 @@ concentrated in a few places:
   BSD errno numbers;
 - NSAlert, NSOpenPanel and NSWorkspace defaults in RuntimeMusic, RuntimeMenu
   and RuntimeLoading, and the caps-lock default from NSEvent (Menu 38);
-- in the launcher (`NTSDApp/OriginalRuntimeLaunch`), GameController, NSEvent
+- in the launcher (`NTSDAppKitHost/OriginalRuntimeLaunch`, formerly in `NTSDApp`), GameController, NSEvent
   translation (284-321), NSAlert, the menu, focus notifications and App Nap.
   About 520 of its 701 lines (argument parsing, `iterate`, traces,
   `presentMusic`) are portable.

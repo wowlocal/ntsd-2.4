@@ -37,7 +37,9 @@ E4b-1 выполнен: headless-хост — библиотека движка 
 [evidence](../evidence/es-e4b1-headless-host.json). E4b-2 выполнен: браузерный хост — `NTSDWebHost`;
 WASI и браузер (Chromium, WebKit) совпали: [evidence](../evidence/es-e4b2-web-host.json).
 E4b-3 выполнен: SDL-хост — `NTSDSDLHost` (с CSDL3); macOS/Linux/Windows SDL совпали с чистых
-сборок: [evidence](../evidence/es-e4b3-sdl-host.json). Следующая задача — E4b-4: AppKit-хост.
+сборок: [evidence](../evidence/es-e4b3-sdl-host.json). E4b-4 выполнен: AppKit-хост — `NTSDAppKitHost`,
+лаборатория осталась в игре; упакованное приложение совпало: [evidence](../evidence/es-e4b4-appkit-host.json).
+Следующая задача — E4b-5: UIKit-хост (iPad, Apple TV).
 
 ## Internal build storage и VM quota исправлены — 2026-10-17
 

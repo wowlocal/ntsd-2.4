@@ -19,7 +19,7 @@ startup request is answered by new runtime code:
 | `NTSDMacPlatform/OriginalMacRuntimeMusic.swift` | DirectShow success path with owned COM identities/refcounts; output silent |
 | `NTSDMacPlatform/OriginalMacRuntimeHeap.swift` | runtime logical allocator (declared arena, zero backing) |
 | `NTSDMacPlatform/OriginalMacRuntimeStartup.swift` | startup composition and the user-data overlay |
-| `NTSDApp/OriginalRuntimeLaunch.swift`, `main.swift` | `--original` launch path |
+| `engine/Sources/NTSDAppKitHost/OriginalRuntimeLaunch.swift`, `AppKitLaunch.swift`, `NTSDApp/main.swift` | `--original` launch path (the engine's AppKit host since ENGINE_SPLIT E4b-4) |
 
 The window backend gained one additive accessor (`arrowCursorToken`). Core
 rules, expected bytes, masks, fixtures and existing tests are unchanged.

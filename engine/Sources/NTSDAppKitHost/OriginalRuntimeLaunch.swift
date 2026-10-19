@@ -1,16 +1,18 @@
 import AppKit
 import NTSDCore
-import NTSDContent
 import NTSDMacPlatform
 
 /// `--original` on macOS: the portable `OriginalRuntimeSession` (options in its
 /// documentation) on AppKit windows, AVFoundation output, GameController
 /// joysticks and Darwin sockets.
 final class OriginalRuntimeDelegate: NSObject, NSApplicationDelegate {
+    let arguments: [String], game: OriginalGame
     let exitAfterStartup: Bool
     private var host: OriginalMacSessionHost?
     private var session: OriginalRuntimeSession?
-    init(exitAfterStartup: Bool) { self.exitAfterStartup = exitAfterStartup }
+    init(arguments: [String],game: OriginalGame,exitAfterStartup: Bool) {
+        self.arguments = arguments; self.game = game; self.exitAfterStartup = exitAfterStartup
+    }
     func applicationDidFinishLaunching(_ notification: Notification) {
         MainActor.assumeIsolated {
             // A scalable window by default (WINDOW_SCALING S3); the original fixed
@@ -20,7 +22,7 @@ final class OriginalRuntimeDelegate: NSObject, NSApplicationDelegate {
             OriginalMacWindowHost.scalable = !arguments.contains("--original-window")
                 && !UserDefaults.standard.bool(forKey:"NTSDOriginalWindow")
                 && (!arguments.contains("--script") || arguments.contains("--scalable-window"))
-            let host = OriginalMacSessionHost(arguments:arguments)
+            let host = OriginalMacSessionHost(arguments:arguments,game:game)
             let session = OriginalRuntimeSession(arguments:arguments,host:host)
             host.session = session; self.host = host; self.session = session
             session.start()
@@ -35,7 +37,7 @@ final class OriginalRuntimeDelegate: NSObject, NSApplicationDelegate {
 
 /// The macOS session host.
 @MainActor final class OriginalMacSessionHost: OriginalRuntimeSessionHost {
-    let arguments: [String]
+    let arguments: [String], original: OriginalGame
     weak var session: OriginalRuntimeSession?
     /// The game's current window, for GetMessagePos under a held geometry.
     private weak var gameWindows: OriginalRuntimeWindowBackend?
@@ -45,7 +47,7 @@ final class OriginalRuntimeDelegate: NSObject, NSApplicationDelegate {
     /// stretch every scheduled iteration once the window is not frontmost.
     private var activity: NSObjectProtocol?
     private var soundOutput: OriginalMacSoundOutput?
-    init(arguments: [String]) { self.arguments = arguments }
+    init(arguments: [String],game: OriginalGame) { self.arguments = arguments; original = game }
     var startupHost: OriginalRuntimeStartupHost { .mac }
     func capsLock() -> Int32 { NSEvent.modifierFlags.contains(.capsLock) ? 1 : 0 }
     func makeSockets() -> any OriginalRuntimeSockets { OriginalMacWinsock() }
@@ -62,10 +64,11 @@ final class OriginalRuntimeDelegate: NSObject, NSApplicationDelegate {
     private let joysticks = OriginalGameControllerJoysticks()
     func connectedJoysticks() -> Int { joysticks.count }
     func startJoystickSampling(_ session: OriginalRuntimeSession) { joysticks.startSampling(session) }
-    func makeMusicOutput() throws -> OriginalMacMusicOutput { try .bundled(in:NTSDContent.location()) }
-    var musicDirectory: String { OriginalMacMusicOutput.directory(in:NTSDContent.location())?.path ?? "" }
-    func contentLocation(in appBundle: Bundle) -> OriginalContentLocation { NTSDContent.location(in:appBundle) }
-    var game: OriginalGameIdentity { NTSDContent.game }
+    /// The packaged tracks in the game's content of the main bundle.
+    func makeMusicOutput() throws -> OriginalMacMusicOutput { try .bundled(in:original.content(.main)) }
+    var musicDirectory: String { OriginalMacMusicOutput.directory(in:original.content(.main))?.path ?? "" }
+    func contentLocation(in appBundle: Bundle) -> OriginalContentLocation { original.content(appBundle) }
+    var game: OriginalGameIdentity { original.identity }
     func startSoundOutput(_ effects: OriginalMacSoundEffects,muted: Bool) throws -> String {
         let output = try OriginalMacSoundOutput(effects:effects)
         output.muted = muted; output.focused = NSApp.isActive; soundOutput = output

@@ -34,10 +34,14 @@ let exclusivity: [SwiftSetting] = uncheckedExclusivity
        .define("NTSD_UNCHECKED_EXCLUSIVITY", .when(configuration: .release))]
     : []
 
-let macProducts: [Product] = portable ? [] : [.library(name: "NTSDMacPlatform", targets: ["NTSDMacPlatform"])]
+let macProducts: [Product] = portable ? [] : [.library(name: "NTSDMacPlatform", targets: ["NTSDMacPlatform"]),
+                                              .library(name: "NTSDAppKitHost", targets: ["NTSDAppKitHost"])]
 let macTargets: [Target] = portable ? [] : [
     .target(name: "NTSDMacPlatform", dependencies: ["NTSDCore", "NTSDRuntime"],
             swiftSettings: exclusivity,
+            linkerSettings: [.linkedFramework("AppKit"), .linkedFramework("AVFoundation")]),
+    // The AppKit host (ENGINE_SPLIT E4b): runs a game given as an OriginalGame.
+    .target(name: "NTSDAppKitHost", dependencies: ["NTSDCore", "NTSDMacPlatform"], swiftSettings: exclusivity,
             linkerSettings: [.linkedFramework("AppKit"), .linkedFramework("AVFoundation")])]
 
 // FreeType glyph masks for the SDL host off Apple platforms and the Android

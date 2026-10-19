@@ -31,7 +31,7 @@ let macPlatform = engine("NTSDMacPlatform"), freeTypeText = engine("NTSDFreeType
 
 let macProducts: [Product] = portable ? [] : [.executable(name: "NTSDNative", targets: ["NTSDApp"])]
 let macTargets: [Target] = portable ? [] : [
-    .executableTarget(name: "NTSDApp", dependencies: [core, macPlatform, "NTSDContent", "NTSDPractice"], swiftSettings: exclusivity,
+    .executableTarget(name: "NTSDApp", dependencies: [core, macPlatform, engine("NTSDAppKitHost"), "NTSDContent", "NTSDPractice"], swiftSettings: exclusivity,
                       linkerSettings: [.linkedFramework("AppKit"), .linkedFramework("SpriteKit"),
                                        .linkedFramework("AVFoundation")])]
 let macTestDependencies: [Target.Dependency] = portable ? [] : [macPlatform]

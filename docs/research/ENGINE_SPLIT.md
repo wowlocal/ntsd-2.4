@@ -10,7 +10,7 @@ measurement from [TVOS_WEB](TVOS_WEB.md), [MEMORY_LOADING](MEMORY_LOADING.md) an
 engine from the game itself. to publish engine as the separate github repo";
 then, after the plan: "ok … when the plan is setteled start the loop in a
 separate branch" and "push automatically every step (on that new branch)".
-**Status:** E0–E3, E4a and E4b's headless, browser and SDL hosts done; the AppKit host next.
+**Status:** E0–E3, E4a and E4b's headless, browser, SDL and AppKit hosts done; the UIKit host next.
 **Branch:** `exp/engine-split`, from `main` 380b448d. Worktree
 `/Volumes/NTSD-Builds/tasks/engine-split/worktree` (T7-backed APFS, see
 [BUILD_STORAGE_T7](BUILD_STORAGE_T7.md)). It tracks `origin/exp/engine-split`
@@ -157,7 +157,7 @@ A read-only survey of `native/` (three agents, 2026-10-18):
 | E1b | Music: `OriginalMusic` leaves `NTSDMacPlatform` for `NTSDContent` (in the bundle on Mac builds only); the source paths in tools and hosts follow; the iOS simulator row with a device set on `/Volumes/NTSD-Builds` | **done** ([evidence](../evidence/es-e1b-music.json)); its packaged-app and iOS rows, and E1a's iOS row, closed after the Mac's audio came back ([evidence](../evidence/es-e1b-open-rows.json)) |
 | E2 | Content policy out of Core: the digest, count and EXE-SHA pins become the NTSD content identity the game passes; Core checks what it is given with the same checks and errors (2.8.3.3's content origin as the model, read only) | **done** ([evidence](../evidence/es-e2-content-identity.json)) |
 | E3 | Identity and Practice: user-data folder, wasm module, Android prefix/entry, queue/thread names, titles and messages become game configuration; Practice/Lab and its two checks move to the game side | **done**: E3a ([evidence](../evidence/es-e3a-practice.json)), E3b ([evidence](../evidence/es-e3b-game-identity.json)); diagnostic labels wait for D2 |
-| E4 | Two packages: `engine/Package.swift` (Core, Runtime, codecs, decoders, shims, host libraries, self-contained tests) and `native/Package.swift` depending on it by path; the unsafeFlags plan (SwiftPM rejects them in version-pinned dependencies) | E4a **done** ([evidence](../evidence/es-e4a-engine-package.json)); E4b: headless **done** ([evidence](../evidence/es-e4b1-headless-host.json)), browser **done** ([evidence](../evidence/es-e4b2-web-host.json)), SDL **done** ([evidence](../evidence/es-e4b3-sdl-host.json)), AppKit next |
+| E4 | Two packages: `engine/Package.swift` (Core, Runtime, codecs, decoders, shims, host libraries, self-contained tests) and `native/Package.swift` depending on it by path; the unsafeFlags plan (SwiftPM rejects them in version-pinned dependencies) | E4a **done** ([evidence](../evidence/es-e4a-engine-package.json)); E4b: headless **done** ([evidence](../evidence/es-e4b1-headless-host.json)), browser **done** ([evidence](../evidence/es-e4b2-web-host.json)), SDL **done** ([evidence](../evidence/es-e4b3-sdl-host.json)), AppKit **done** ([evidence](../evidence/es-e4b4-appkit-host.json)), UIKit next |
 | E5 | Game profile: the ~90 ID sites and the AI dispatch behind a profile the game supplies; the engine defines the `0x44d000` record's layout and the game supplies `initial.bin`; the NTSD profile bit-exact (all gates plus the full fixture-driven suites); the API's fit with 2.8.3.3 checked read only | queued |
 | E6 | Classify each profile rule as LF2 2.0a or NTSD from the second reference; LF2 rules become the engine's default profile | needs D1 |
 | E7 | Engine stand-alone: the engine package builds alone (macOS, Linux container) and passes its tests with a from-scratch synthetic content pack; a scan finds no original bytes (files under `downloads/`, the resources, fixtures, `initial.bin`) | queued |
@@ -395,15 +395,22 @@ Plan:
   SDL (GDI) equal with text in the same 446 frames. Method note: earlier
   per-host rows reused build folders; rows now build clean.
   [Evidence](../evidence/es-e4b3-sdl-host.json).
+- 2026-10-19 E4b-4: the AppKit host is the engine library `NTSDAppKitHost`
+  (`OriginalRuntimeLaunch.swift` by `git mv`, the arguments and the game passed
+  in, the app's runtime branch as its `run`); the lab and the dispatcher stay
+  in the game's `NTSDApp`. Reviewed (no required fix; two live docs updated).
+  Gate `es-e4b4`: 11 scenarios, frames, AppKit, unchecked, emulator, 20 clean
+  launches, 29 suite runs; the packaged app from a clean build: vs and
+  playback equal, frames identical to the AppKit reference; the lab's data
+  check. [Evidence](../evidence/es-e4b4-appkit-host.json).
 
 ## Next task
 
-E4b-4: the AppKit host (`OriginalRuntimeLaunch.swift`: the runtime delegate
-and `OriginalMacSessionHost`) becomes the engine library `NTSDAppKitHost`
-(Mac builds), with a public `run(arguments:game:)` holding the app's runtime
-branch (NSApplication, the delegate, the run) and `arguments` passed in
-instead of main.swift's global; the music through the game's content in the
-main bundle. The lab (`main.swift`'s lab parts, `Assets`, `OriginalScene`,
-`MeleeScene`, `MovementScene`) and the dispatcher stay in the game's
-`NTSDApp`. Gates: review, the mlgate set (its AppKit launches, vs and
-playback) and the packaged-app row from a clean build.
+E4b-5: the UIKit host (`NTSDiOS`: `NTSDApp.swift` and `NTSDiOSHost.swift`, the
+iPad and Apple TV) becomes the engine library `NTSDUIKitHost` (with
+`NTSD_IOS=1`), with a public `run(game:)` holding the former main (the
+events-file redirect, `UIApplicationMain` with its app delegate); the scene
+delegate, which UIKit creates, reads the game `run` was given. The game's
+`NTSDiOS` is one call. The scene delegate's class name in the packagers'
+Info.plist (`ios_app.py`, `ios_device.py`) follows its module. Gates: review,
+the mlgate set, the iPad and Apple TV simulator rows from clean builds.
