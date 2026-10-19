@@ -15,5 +15,7 @@ public enum NTSDProfile {
         interaction: .init(holdKind101: OriginalIDSet([120, 124]), pullImmune: OriginalIDSet([201, 202]), teamBypass: 212,
                            countsAsCharacter: OriginalIDSet([201, 202])),
         // What an attacker's hit does to it or to the defender's x impulse: OriginalHitDamage.
-        impact: .init(vanishingAttacker: 201, spentAttacker: 214, heavyHeldWeapon: 100))
+        impact: .init(vanishingAttacker: 201, spentAttacker: 214, heavyHeldWeapon: 100),
+        // The random item spawn: OriginalWorldHits.
+        items: .init(itemRange: OriginalIDRange(100..<200), scarceDropItems: OriginalIDSet([122, 123]), spawnHP200: 122))
 }

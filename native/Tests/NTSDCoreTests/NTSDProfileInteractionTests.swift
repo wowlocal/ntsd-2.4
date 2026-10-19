@@ -12,7 +12,8 @@ final class NTSDProfileInteractionTests: XCTestCase {
         let n = NTSDProfile.rules.interaction
         return OriginalGameRules(profile: "moved",reflection: NTSDProfile.rules.reflection,armour: NTSDProfile.rules.armour,
             interaction: .init(holdKind101: light ?? n.holdKind101,pullImmune: pull ?? n.pullImmune,teamBypass: bypass ?? n.teamBypass,
-                               countsAsCharacter: character ?? n.countsAsCharacter),impact: NTSDProfile.rules.impact)
+                               countsAsCharacter: character ?? n.countsAsCharacter),impact: NTSDProfile.rules.impact,
+            items: NTSDProfile.rules.items)
     }
     let ntsd = NTSDProfile.rules
     func defined(_ size: Int) throws -> OriginalStateRecord {

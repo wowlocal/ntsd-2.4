@@ -47,8 +47,8 @@ extension OriginalHitPass {
             if objectCount > 0 {
                 for n in 0..<Int(objectCount) {
                     let id = try header(n).integer(at: 0x6f4,as: Int32.self)
-                    if id < 100 || id >= 200 { continue }
-                    if [122,123].contains(id) {
+                    if !rules.itemRange.contains(id) { continue }
+                    if rules.scarceDropItems.contains(id) {
                         let include = try draw(147,2,observe: observe)
                         if include == 0 || [1,2,3,4].contains(mode) { continue }
                     }
@@ -92,7 +92,7 @@ extension OriginalHitPass {
             try world.write(UInt8(1),at: 4+slot)
             for other in 0..<400 where try world.integer(at: 4+other,as: UInt8.self) != 0 { try byte(index(other),0xf0+slot,0) }
             for offset in [0x40,0x48,0x50] { try number(index(slot),offset,0) }
-            if try h(index(slot),0x6f4) == 122 { try put(index(slot),0x2fc,200) }
+            if try h(index(slot),0x6f4) == rules.spawnHP200 { try put(index(slot),0x2fc,200) }
             for (integer,binary) in [(0x10,0x58),(0x14,0x60),(0x18,0x68)] { try put(index(slot),integer,OriginalCoordinateConversion.integer(v(index(slot),binary),sse2: sse2)) }
             try put(index(slot),0x354,99)
             }

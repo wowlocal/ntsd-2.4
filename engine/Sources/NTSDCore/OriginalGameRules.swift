@@ -20,6 +20,16 @@ public struct OriginalIDSet: Equatable, Sendable {
     }
 }
 
+/// A half-open range of object IDs for one rule of a game profile (ENGINE_SPLIT
+/// E5c-2a): `contains` is `lowerBound <= id && id < upperBound` for every Int32,
+/// the complement of the original's `id < lowerBound || id >= upperBound`. Two
+/// ranges are equal when their bounds are (two empty ranges may differ).
+public struct OriginalIDRange: Equatable, Sendable {
+    public let lowerBound: Int32, upperBound: Int32
+    public init(_ range: Range<Int32>) { lowerBound = range.lowerBound; upperBound = range.upperBound }
+    func contains(_ id: Int32) -> Bool { id >= lowerBound && id < upperBound }
+}
+
 /// A game's rules (ENGINE_SPLIT E5): the values the engine's passes test where
 /// the original tests object IDs, grouped by family. The game supplies them with
 /// its content identity; code hooks travel separately. Every role lives in one
@@ -100,10 +110,25 @@ public struct OriginalGameRules: Equatable, Sendable {
             self.vanishingAttacker = vanishingAttacker; self.spentAttacker = spentAttacker; self.heavyHeldWeapon = heavyHeldWeapon
         }
     }
+    /// Items: which Objects a random item spawn picks from and how it treats
+    /// some of them (OriginalWorldHits).
+    public struct Items: Equatable, Sendable {
+        /// The Objects a random item spawn picks from.
+        public let itemRange: OriginalIDRange
+        /// Items a random spawn keeps only on a coin flip (stream 147), and never in
+        /// game modes 1–4.
+        public let scarceDropItems: OriginalIDSet
+        /// The item a spawn creates with HP 200 (of the 500 a new Actor starts with).
+        public let spawnHP200: Int32
+        public init(itemRange: OriginalIDRange, scarceDropItems: OriginalIDSet, spawnHP200: Int32) {
+            self.itemRange = itemRange; self.scarceDropItems = scarceDropItems; self.spawnHP200 = spawnHP200
+        }
+    }
     private final class Roles: Sendable {
-        let profile: String, reflection: Reflection, armour: Armour, interaction: Interaction, impact: Impact
-        init(profile: String, reflection: Reflection, armour: Armour, interaction: Interaction, impact: Impact) {
+        let profile: String, reflection: Reflection, armour: Armour, interaction: Interaction, impact: Impact, items: Items
+        init(profile: String, reflection: Reflection, armour: Armour, interaction: Interaction, impact: Impact, items: Items) {
             self.profile = profile; self.reflection = reflection; self.armour = armour; self.interaction = interaction; self.impact = impact
+            self.items = items
         }
     }
     private let roles: Roles
@@ -113,6 +138,7 @@ public struct OriginalGameRules: Equatable, Sendable {
     public var armour: Armour { roles.armour }
     public var interaction: Interaction { roles.interaction }
     public var impact: Impact { roles.impact }
+    public var items: Items { roles.items }
     public var reflectable: OriginalIDSet { roles.reflection.reflectable }
     public var reflector: Int32 { roles.reflection.reflector }
     public var rebinder: Int32 { roles.reflection.rebinder }
@@ -130,11 +156,14 @@ public struct OriginalGameRules: Equatable, Sendable {
     public var vanishingAttacker: Int32 { roles.impact.vanishingAttacker }
     public var spentAttacker: Int32 { roles.impact.spentAttacker }
     public var heavyHeldWeapon: Int32 { roles.impact.heavyHeldWeapon }
-    public init(profile: String, reflection: Reflection, armour: Armour, interaction: Interaction, impact: Impact) {
-        roles = Roles(profile: profile, reflection: reflection, armour: armour, interaction: interaction, impact: impact)
+    public var itemRange: OriginalIDRange { roles.items.itemRange }
+    public var scarceDropItems: OriginalIDSet { roles.items.scarceDropItems }
+    public var spawnHP200: Int32 { roles.items.spawnHP200 }
+    public init(profile: String, reflection: Reflection, armour: Armour, interaction: Interaction, impact: Impact, items: Items) {
+        roles = Roles(profile: profile, reflection: reflection, armour: armour, interaction: interaction, impact: impact, items: items)
     }
     public static func == (a: Self, b: Self) -> Bool {
         a.roles === b.roles || (a.profile == b.profile && a.reflection == b.reflection && a.armour == b.armour && a.interaction == b.interaction
-                                && a.impact == b.impact)
+                                && a.impact == b.impact && a.items == b.items)
     }
 }
