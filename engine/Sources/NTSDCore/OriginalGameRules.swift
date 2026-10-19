@@ -66,10 +66,29 @@ public struct OriginalGameRules: Equatable, Sendable {
             self.attackerArmour = attackerArmour; self.alwaysBlocked = alwaysBlocked; self.armourGuardSound = armourGuardSound
         }
     }
+    /// Special interactions in the hit and contact passes (OriginalHitSpecial,
+    /// OriginalWorldContacts).
+    public struct Interaction: Equatable, Sendable {
+        /// Objects whose kind-7 pick-up (any type) or kind-2 pick-up as a type-1
+        /// weapon gives the holder hold kind 101 instead of 1 (the 4/6 overrides of
+        /// kind 7 still follow for types 4 and 6).
+        public let holdKind101: OriginalIDSet
+        /// Type 1, 4 and 6 Objects a pulling hit leaves as they are.
+        public let pullImmune: OriginalIDSet
+        /// A defender that passes the same-team filters (the actors' teams, and for
+        /// kind 5 the held owner's team): against any other attacker, and against
+        /// its own ID when the defender's frame %10 is 5 and the attacker's is 0.
+        public let teamBypass: Int32
+        /// Non-character attackers that count as characters in game mode 1.
+        public let countsAsCharacter: OriginalIDSet
+        public init(holdKind101: OriginalIDSet, pullImmune: OriginalIDSet, teamBypass: Int32, countsAsCharacter: OriginalIDSet) {
+            self.holdKind101 = holdKind101; self.pullImmune = pullImmune; self.teamBypass = teamBypass; self.countsAsCharacter = countsAsCharacter
+        }
+    }
     private final class Roles: Sendable {
-        let profile: String, reflection: Reflection, armour: Armour
-        init(profile: String, reflection: Reflection, armour: Armour) {
-            self.profile = profile; self.reflection = reflection; self.armour = armour
+        let profile: String, reflection: Reflection, armour: Armour, interaction: Interaction
+        init(profile: String, reflection: Reflection, armour: Armour, interaction: Interaction) {
+            self.profile = profile; self.reflection = reflection; self.armour = armour; self.interaction = interaction
         }
     }
     private let roles: Roles
@@ -77,6 +96,7 @@ public struct OriginalGameRules: Equatable, Sendable {
     public var profile: String { roles.profile }
     public var reflection: Reflection { roles.reflection }
     public var armour: Armour { roles.armour }
+    public var interaction: Interaction { roles.interaction }
     public var reflectable: OriginalIDSet { roles.reflection.reflectable }
     public var reflector: Int32 { roles.reflection.reflector }
     public var rebinder: Int32 { roles.reflection.rebinder }
@@ -87,10 +107,14 @@ public struct OriginalGameRules: Equatable, Sendable {
     public var attackerArmour: Int32 { roles.armour.attackerArmour }
     public var alwaysBlocked: OriginalIDSet { roles.armour.alwaysBlocked }
     public var armourGuardSound: OriginalIDSet { roles.armour.armourGuardSound }
-    public init(profile: String, reflection: Reflection, armour: Armour) {
-        roles = Roles(profile: profile, reflection: reflection, armour: armour)
+    public var holdKind101: OriginalIDSet { roles.interaction.holdKind101 }
+    public var pullImmune: OriginalIDSet { roles.interaction.pullImmune }
+    public var teamBypass: Int32 { roles.interaction.teamBypass }
+    public var countsAsCharacter: OriginalIDSet { roles.interaction.countsAsCharacter }
+    public init(profile: String, reflection: Reflection, armour: Armour, interaction: Interaction) {
+        roles = Roles(profile: profile, reflection: reflection, armour: armour, interaction: interaction)
     }
     public static func == (a: Self, b: Self) -> Bool {
-        a.roles === b.roles || (a.profile == b.profile && a.reflection == b.reflection && a.armour == b.armour)
+        a.roles === b.roles || (a.profile == b.profile && a.reflection == b.reflection && a.armour == b.armour && a.interaction == b.interaction)
     }
 }

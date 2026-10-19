@@ -194,7 +194,7 @@ struct OriginalContactPass {
                 if try kind < 4 || kind == 6 || (kind == 9 && h(d,0x6f8) == 0) || [10,11,15,16].contains(kind) {
                     let defenderState = try f(d,8)
                     if defenderState != 13 && defenderState != 10 {
-                        let special = try h(d,0x6f4) == 212 && (attackID != 212 || (i(d,0x70)%10 == 5 && i(a,0x70)%10 == 0))
+                        let special = try h(d,0x6f4) == rules.teamBypass && (attackID != rules.teamBypass || (i(d,0x70)%10 == 5 && i(a,0x70)%10 == 0))
                         if !special {
                             // Installed4177b9 uses the attacker's CURRENT frame.
                             // State20 reverses equality and resumes at41780b,
@@ -212,7 +212,7 @@ struct OriginalContactPass {
                 if kind == 5 {
                     let owner = try index(Int(i(a,0xa0)))
                     if try i(owner,0x364) == i(d,0x364) && i(owner,0x364) != 0 && f(d,8) != 13 && ![1,2,4,6].contains(h(d,0x6f8)) {
-                        if try h(d,0x6f4) != 212 || (attackID == 212 && (i(d,0x70)%10 != 5 || i(a,0x70)%10 != 0)) { continue interaction }
+                        if try h(d,0x6f4) != rules.teamBypass || (attackID == rules.teamBypass && (i(d,0x70)%10 != 5 || i(a,0x70)%10 != 0)) { continue interaction }
                     }
                 }
                 let bodyPointer = try bodyFrame.integer(at: 0x134,as: UInt32.self) &+ UInt32(truncatingIfNeeded: bodyIndex*40)
@@ -224,7 +224,7 @@ struct OriginalContactPass {
                 var status = 0
                 if try f(d,8) == 12 && it(0x1c) <= 40 && kind != 10 && kind != 11 { status = 2 }
                 if mode == 1 {
-                    var allowed = try (h(a,0x6f8) == 0 || [201,202].contains(h(a,0x6f4))) && i(a,0x364) != 5
+                    var allowed = try (h(a,0x6f8) == 0 || rules.countsAsCharacter.contains(h(a,0x6f4))) && i(a,0x364) != 5
                     if try i(a,0x98) < 0 {
                         let slot = Int(try i(a,0xa0))
                         if try active(slot) == 1 {

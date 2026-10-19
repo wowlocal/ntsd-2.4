@@ -9,10 +9,10 @@ import NTSDProfile
 final class NTSDProfileReflectionTests: XCTestCase {
     /// No reflection rule (no reflectable Object, no reflector); NTSD's other families.
     static let empty = OriginalGameRules(profile: "empty",reflection: .init(reflectable: OriginalIDSet([]),reflector: .max,rebinder: .max,heldRebinder: .max),
-                                         armour: NTSDProfile.rules.armour)
+                                         armour: NTSDProfile.rules.armour,interaction: NTSDProfile.rules.interaction)
     /// The same reflectables with other reflector IDs: behaviour must follow the profile, not 209/8/213.
     static let moved = OriginalGameRules(profile: "moved",reflection: .init(reflectable: NTSDProfile.rules.reflectable,reflector: 210,rebinder: 9,heldRebinder: 214),
-                                         armour: NTSDProfile.rules.armour)
+                                         armour: NTSDProfile.rules.armour,interaction: NTSDProfile.rules.interaction)
 
     func defined(_ size: Int) throws -> OriginalStateRecord {
         try .init(bytes: [UInt8](repeating: 0,count: size),defined: [Bool](repeating: true,count: size))

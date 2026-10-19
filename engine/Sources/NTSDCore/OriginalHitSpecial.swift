@@ -11,7 +11,7 @@ extension OriginalHitPass {
             if try i(a,0x98) != 0 { return }
             try put(a,0x98,1);try put(d,0x98,-1);try put(d,0x364,i(a,0x364))
             try put(a,0x9c,Int32(defender));try put(d,0xa0,Int32(attacker));try put(d,0x354,Int32(attacker));try add(a,0x35c,1)
-            if try [120,124].contains(h(d,0x6f4)) { try put(a,0x98,101) }
+            if try rules.holdKind101.contains(h(d,0x6f4)) { try put(a,0x98,101) }
             if try h(d,0x6f8) == 4 { try put(a,0x98,4);try put(d,0x98,-4) }
             if try h(d,0x6f8) == 6 {
                 if try i(d,0x2fc) > 0 { try put(a,0x98,6) }
@@ -29,7 +29,7 @@ extension OriginalHitPass {
                     try put(d,0x98,0 &- i(a,0x98))
                 } else {
                     try put(a,0x98,type)
-                    if try type == 1 && [120,124].contains(h(d,0x6f4)) { try put(a,0x98,101) }
+                    if try type == 1 && rules.holdKind101.contains(h(d,0x6f4)) { try put(a,0x98,101) }
                     try put(d,0x98,0 &- type)
                 }
                 //Type4/6 link writes precede the team copy in the source.
@@ -101,7 +101,7 @@ extension OriginalHitPass {
             let team = try i(d,0x344)
             if (1...2).contains(team) { let o = 0x451b68-0x44d000+Int(team)*4;try globals.write(globals.integer(at: o,as: Int32.self) &+ 11,at: o) }
         } else if [1,4,6].contains(type) {
-            if try [201,202].contains(h(d,0x6f4)) { return }
+            if try rules.pullImmune.contains(h(d,0x6f4)) { return }
             if try f(d,8) != 1000 { try put(d,0x70,0) }
         } else if type == 2 {
             if try f(d,8) != 2000 { try put(d,0x70,0) }

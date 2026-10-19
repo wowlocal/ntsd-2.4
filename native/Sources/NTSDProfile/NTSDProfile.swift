@@ -10,5 +10,8 @@ public enum NTSDProfile {
         reflection: .init(reflectable: OriginalIDSet([200, 203, 205, 206, 207, 215, 216]), reflector: 209, rebinder: 8, heldRebinder: 213),
         // The automatic guards: OriginalActorHits.guarded, OriginalHitGuard.
         armour: .init(guardPenetrators: OriginalIDSet([214, 208]), steadyArmour: 37, openingArmour: 6, attackerArmour: 52,
-                      alwaysBlocked: OriginalIDSet([124, 220, 221, 222]), armourGuardSound: OriginalIDSet([37, 6])))
+                      alwaysBlocked: OriginalIDSet([124, 220, 221, 222]), armourGuardSound: OriginalIDSet([37, 6])),
+        // Special interactions: OriginalHitSpecial, OriginalWorldContacts.
+        interaction: .init(holdKind101: OriginalIDSet([120, 124]), pullImmune: OriginalIDSet([201, 202]), teamBypass: 212,
+                           countsAsCharacter: OriginalIDSet([201, 202])))
 }
