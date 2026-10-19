@@ -1,0 +1,717 @@
+{
+ "study": "ENGINE_SPLIT",
+ "step": "E4b-6",
+ "label": "es-e4b6",
+ "prev": "es-e4b5",
+ "base": "1b82b506cf8c7bbbe81af5b3600a74e0dcab3268",
+ "recordedUTC": "2026-10-19T05:26:33Z",
+ "change": "The Android host becomes the engine library NTSDAndroidHost with the C target CAndroidNative (with NTSD_ANDROID=1): NTSDAndroidApp, NTSDAndroidAudio, NTSDAndroidGamepads, NTSDAndroidHost and CAndroidNative (entry.c with ANativeActivity_onCreate, sha256.c, the header) by git mv. NTSDAndroidApp takes the OriginalGame and the content bundle's folder name (resources, formerly the literal NTSDNative_NTSDContent.bundle, SwiftPM's name for the game's target) and passes the game to the session host (content and identity through it instead of NTSDContent); public NTSDAndroidHost.create(_:game:resources:) forwards to it. The @_cdecl(\"ntsd_android_on_create\") function the C entry calls stays in the game's dynamic library NTSDAndroid (NTSDAndroidEntry.swift) as its one call. android_speed.py's 'Android window drawing' phase matches the draw's new mangled form too.",
+ "testedTrees": {
+  "recorded": "native 49939a1f9acdd2b897afc7f575c368c265ccca54 tools 879a0b0089651c1aa2acf02332e2a705322ef395 engine 6dbba157d6224a4cd3dfddb831759c044b58be8b",
+  "equal": true
+ },
+ "checks": [
+  "a clean APK build (NTSD_ANDROID_SCRATCH on NTSD-Builds) and the emulator's vs: equal, 1,832 frames identical to android-app-ref",
+  "libNTSDAndroid.so: ANativeActivity_onCreate exported (T), ntsd_android_on_create local (t), the same binding as es-e4b5's APK"
+ ],
+ "review": {
+  "by": "a separate read-only agent, 2026-10-19, on the staged diff, then on the fix",
+  "verdict": "equivalent: the entry path and its order, the arguments' order (args.txt, --events-file, --tz, --resources with the same literal, --music-dir), content and identity through runtimeGame; the C entry resolves the game's hidden symbol within the one shared object and stays a root under --gc-sections; the game's import CAndroidNative is sound (module maps of reachable C targets); swift settings identical (FreeType include, exclusivity, no CMO), 2,161 swift_beginAccess calls in both libraries, and every host function the same size except startIfReady, deinits, contentLocation and game",
+  "required": "android_speed.py keyed the window host's draw on WindowHostC4draw, which the module rename mangles as 0a6WindowB0C4draw: a --profile run would have reported that phase as 0%",
+  "fixed": "the phase takes a tuple of both forms (each library has exactly one match: old 1/0, new 0/1); confirmed by the reviewer (no other PHASES entry or consumer affected)",
+  "adopted": [
+   "NTSDAndroidApp.swift's header names NTSDAndroidHost",
+   "the card's identity strings list Android's program name NTSDAndroid (argv[0])"
+  ],
+  "notes": [
+   "String(reflecting:) of DataError in the androidDataError event now prints the NTSDAndroidHost module: a failure-path diagnostic only, consumed by nothing",
+   "other studies' 'Allowed paths' scope lines (CORE_REALTIME.md, MEMORY_LOADING.md) left unchanged, as for E4a's moves"
+  ]
+ },
+ "gateScript": {
+  "run": "/Volumes/NTSD-Builds/tasks/engine-split/gates/gate-run-es-e4b6.sh",
+  "sha256": "ff45c38f20da2da022f816ed2fa8d2f155550c05c632172fc857b83dea36a14a"
+ },
+ "builds": [
+  "headless built (checked: 3276 beginAccess)",
+  "app built (checked: 3404 beginAccess)",
+  "unchecked headless built (0 beginAccess)"
+ ],
+ "launches": "launches: crashes 0 of 20",
+ "scenariosHeadless": [
+  {
+   "scenario": "vs",
+   "exit": 0,
+   "result": "equal",
+   "differs": []
+  },
+  {
+   "scenario": "mission",
+   "exit": 0,
+   "result": "equal",
+   "differs": []
+  },
+  {
+   "scenario": "demo",
+   "exit": 0,
+   "result": "equal",
+   "differs": []
+  },
+  {
+   "scenario": "war",
+   "exit": 0,
+   "result": "equal",
+   "differs": []
+  },
+  {
+   "scenario": "playback",
+   "exit": 0,
+   "result": "equal",
+   "differs": []
+  },
+  {
+   "scenario": "tournament",
+   "exit": 0,
+   "result": "equal",
+   "differs": []
+  },
+  {
+   "scenario": "altenter",
+   "exit": 0,
+   "result": "equal",
+   "differs": []
+  },
+  {
+   "scenario": "tournament-win",
+   "exit": 0,
+   "result": "equal",
+   "differs": []
+  },
+  {
+   "scenario": "team-tournament",
+   "exit": 0,
+   "result": "equal",
+   "differs": []
+  },
+  {
+   "scenario": "joystick",
+   "exit": 0,
+   "result": "equal",
+   "differs": []
+  },
+  {
+   "scenario": "title-joystick",
+   "exit": 0,
+   "result": "equal",
+   "differs": []
+  }
+ ],
+ "framesHeadlessVsM1": {
+  "frames": 1832,
+  "mismatched": 0,
+  "result": "identical"
+ },
+ "appkit": [
+  {
+   "scenario": "vs",
+   "exit": 0,
+   "seconds": 66.7,
+   "result": "equal",
+   "differs": []
+  },
+  {
+   "scenario": "playback",
+   "exit": 0,
+   "seconds": 69.6,
+   "result": "equal",
+   "differs": []
+  },
+  {
+   "frames": 3960,
+   "mismatched": 0,
+   "result": "identical"
+  }
+ ],
+ "uncheckedHeadless": [
+  {
+   "scenario": "vs",
+   "exit": 0,
+   "seconds": 67.3,
+   "result": "equal",
+   "differs": []
+  },
+  {
+   "scenario": "demo",
+   "exit": 0,
+   "seconds": 46.7,
+   "result": "equal",
+   "differs": []
+  },
+  {
+   "frames": 1832,
+   "mismatched": 0,
+   "result": "identical"
+  }
+ ],
+ "emulatorVs": {
+  "exit": "emu exit=0",
+  "frames": {
+   "frames": 1832,
+   "mismatched": 0,
+   "result": "identical"
+  }
+ },
+ "suites": [
+  "OriginalExclusivityChecksTests exit=0 1s \t Executed 1 test, with 0 failures (0 unexpected) in 0.002 (0.004) seconds",
+  "OriginalALACTrackTests exit=0 6s \t Executed 2 tests, with 0 failures (0 unexpected) in 5.633 (5.634) seconds",
+  "OriginalApplicationCatalogInputsTests exit=0 13s \t Executed 4 tests, with 0 failures (0 unexpected) in 13.198 (13.202) seconds",
+  "OriginalApplicationInterfaceInputsTests exit=0 1s \t Executed 3 tests, with 0 failures (0 unexpected) in 0.067 (0.069) seconds",
+  "OriginalApplicationLoadedLaunchTests exit=0 53s \t Executed 2 tests, with 0 failures (0 unexpected) in 53.084 (53.085) seconds",
+  "OriginalApplicationLoadingPrefixTests exit=0 23s \t Executed 2 tests, with 0 failures (0 unexpected) in 23.075 (23.078) seconds",
+  "OriginalApplicationLoadingSessionTests exit=0 0s \t Executed 3 tests, with 0 failures (0 unexpected) in 0.053 (0.055) seconds",
+  "OriginalApplicationMenuInputsTests exit=0 0s \t Executed 3 tests, with 0 failures (0 unexpected) in 0.114 (0.116) seconds",
+  "OriginalApplicationObservedBitmapTests exit=0 13s \t Executed 5 tests, with 0 failures (0 unexpected) in 12.560 (12.565) seconds",
+  "OriginalApplicationObservedGraphicsTests exit=0 37s \t Executed 5 tests, with 0 failures (0 unexpected) in 36.995 (36.998) seconds",
+  "OriginalApplicationObservedIterationTests exit=0 9s \t Executed 3 tests, with 0 failures (0 unexpected) in 9.032 (9.035) seconds",
+  "OriginalApplicationStartupInputsTests exit=0 1s \t Executed 4 tests, with 0 failures (0 unexpected) in 0.325 (0.328) seconds",
+  "OriginalCatalogChecksumTests exit=0 2s \t Executed 3 tests, with 0 failures (0 unexpected) in 2.281 (2.284) seconds",
+  "OriginalConcurrentInputsTests exit=0 2s \t Executed 7 tests, with 0 failures (0 unexpected) in 2.447 (2.449) seconds",
+  "OriginalDataTests exit=0 1s \t Executed 2 tests, with 0 failures (0 unexpected) in 0.709 (0.710) seconds",
+  "OriginalDIBValidationTests exit=0 1s \t Executed 2 tests, with 0 failures (0 unexpected) in 0.935 (0.937) seconds",
+  "OriginalFrameLoaderTests exit=0 0s \t Executed 2 tests, with 0 failures (0 unexpected) in 0.006 (0.007) seconds",
+  "OriginalLoadingReadAheadTests exit=0 2s \t Executed 5 tests, with 0 failures (0 unexpected) in 1.461 (1.462) seconds",
+  "OriginalLZ4Tests exit=0 7s \t Executed 6 tests, with 0 failures (0 unexpected) in 7.332 (7.334) seconds",
+  "OriginalMacBitmapBackendTests exit=0 3s \t Executed 5 tests, with 0 failures (0 unexpected) in 2.624 (2.627) seconds",
+  "OriginalMacMusicOutputTests exit=0 0s \t Executed 7 tests, with 0 failures (0 unexpected) in 0.022 (0.023) seconds",
+  "OriginalMacRuntimeLoadingTests exit=0 2s \t Executed 7 tests, with 0 failures (0 unexpected) in 1.638 (1.640) seconds",
+  "OriginalMacWindowGeometryTests exit=0 18s \t Executed 6 tests, with 0 failures (0 unexpected) in 18.197 (18.202) seconds",
+  "OriginalMeleeTests exit=0 2s \t Executed 5 tests, with 0 failures (0 unexpected) in 1.542 (1.544) seconds",
+  "OriginalMovementTests exit=0 0s \t Executed 2 tests, with 0 failures (0 unexpected) in 0.040 (0.041) seconds",
+  "OriginalReplayFileInputTests exit=0 0s \t Executed 1 test, with 0 failures (0 unexpected) in 0.240 (0.243) seconds",
+  "OriginalWord32BoundaryTests exit=0 0s \t Executed 6 tests, with 0 failures (0 unexpected) in 0.020 (0.021) seconds",
+  "PortableSHA256BlockFunctionTests exit=0 1s \t Executed 2 tests, with 0 failures (0 unexpected) in 0.189 (0.191) seconds",
+  "PortableSHA256Tests exit=0 6s \t Executed 3 tests, with 0 failures (0 unexpected) in 6.325 (6.329) seconds"
+ ],
+ "phoneAB": {
+  "summaries": [
+   {
+    "build": "es-e4b6",
+    "runs": 3,
+    "startupSeconds": {
+     "median": -419727.52,
+     "min": -419727.58,
+     "max": -419726.92
+    },
+    "loadSeconds": {
+     "median": 6.72,
+     "min": 6.26,
+     "max": 6.9
+    },
+    "startToLoadedSeconds": {
+     "median": -419715.86,
+     "min": -419716.12,
+     "max": -419715.1
+    },
+    "peakResidentMB": {
+     "median": 594,
+     "min": 583,
+     "max": 595
+    },
+    "peakFootprintMB": {
+     "median": 605,
+     "min": 588,
+     "max": 609
+    },
+    "loadedResidentMB": {
+     "median": 582,
+     "min": 557,
+     "max": 583
+    },
+    "bodiesResidentMB": {
+     "median": 548,
+     "min": 546,
+     "max": 558
+    },
+    "mainMsPerTick": {
+     "median": 10.88,
+     "min": 10.76,
+     "max": 10.91
+    },
+    "renderMsPerTick": {
+     "median": 7.06,
+     "min": 6.98,
+     "max": 7.14
+    },
+    "processMsPerTick": {
+     "median": 27.19,
+     "min": 26.66,
+     "max": 27.26
+    },
+    "completeMsPerTick": {
+     "median": 7.3,
+     "min": 7.24,
+     "max": 7.31
+    },
+    "loadedSwapMB": {
+     "median": 22,
+     "min": 22,
+     "max": 22
+    },
+    "bodiesSwapMB": {
+     "median": 22,
+     "min": 22,
+     "max": 22
+    },
+    "ticksEndResidentMB": {
+     "median": 567,
+     "min": 567,
+     "max": 572
+    },
+    "ticksEndSwapMB": {
+     "median": 14,
+     "min": 14,
+     "max": 14
+    },
+    "ticksEndFootprintMB": {
+     "median": 581,
+     "min": 581,
+     "max": 586
+    },
+    "ticksEndPssMB": {
+     "median": 536,
+     "min": 532,
+     "max": 537
+    },
+    "cpuToEndSeconds": {
+     "median": 94.28,
+     "min": 94.23,
+     "max": 95.5
+    }
+   },
+   {
+    "build": "es-e4b5",
+    "runs": 2,
+    "startupSeconds": {
+     "median": -419727.58,
+     "min": -419727.59,
+     "max": -419727.57
+    },
+    "loadSeconds": {
+     "median": 6.585,
+     "min": 6.15,
+     "max": 7.02
+    },
+    "startToLoadedSeconds": {
+     "median": -419715.735,
+     "min": -419715.84,
+     "max": -419715.63
+    },
+    "peakResidentMB": {
+     "median": 589.0,
+     "min": 586,
+     "max": 592
+    },
+    "peakFootprintMB": {
+     "median": 598.0,
+     "min": 598,
+     "max": 598
+    },
+    "loadedResidentMB": {
+     "median": 544.0,
+     "min": 520,
+     "max": 568
+    },
+    "bodiesResidentMB": {
+     "median": 539.0,
+     "min": 535,
+     "max": 543
+    },
+    "mainMsPerTick": {
+     "median": 10.885000000000002,
+     "min": 10.8,
+     "max": 10.97
+    },
+    "renderMsPerTick": {
+     "median": 7.42,
+     "min": 7.17,
+     "max": 7.67
+    },
+    "processMsPerTick": {
+     "median": 27.509999999999998,
+     "min": 27.11,
+     "max": 27.91
+    },
+    "completeMsPerTick": {
+     "median": 7.325,
+     "min": 7.28,
+     "max": 7.37
+    },
+    "loadedSwapMB": {
+     "median": 22.0,
+     "min": 22,
+     "max": 22
+    },
+    "bodiesSwapMB": {
+     "median": 22.0,
+     "min": 22,
+     "max": 22
+    },
+    "ticksEndResidentMB": {
+     "median": 570.0,
+     "min": 568,
+     "max": 572
+    },
+    "ticksEndSwapMB": {
+     "median": 14.0,
+     "min": 14,
+     "max": 14
+    },
+    "ticksEndFootprintMB": {
+     "median": 584.0,
+     "min": 582,
+     "max": 586
+    },
+    "ticksEndPssMB": {
+     "median": 536.5,
+     "min": 534,
+     "max": 539
+    },
+    "cpuToEndSeconds": {
+     "median": 95.74000000000001,
+     "min": 95.01,
+     "max": 96.47
+    }
+   }
+  ],
+  "finding": "3 against 2: everything overlaps except renderMsPerTick (es-e4b6 6.98-7.14 ms, es-e4b5 7.17-7.67 ms, the faster direction)",
+  "followUp": {
+   "command": "load_memory.py ... --apk es-e4b6 --apk es-e4b5 (x4 each, interleaved) --ticks 600,1800 --sounds --music --warmup --restore-stayon",
+   "summaries": [
+    {
+     "build": "es-e4b6",
+     "runs": 4,
+     "startupSeconds": {
+      "median": -419727.51,
+      "min": -419727.6,
+      "max": -419727.38
+     },
+     "loadSeconds": {
+      "median": 6.455,
+      "min": 5.35,
+      "max": 6.6
+     },
+     "startToLoadedSeconds": {
+      "median": -419715.82,
+      "min": -419715.96,
+      "max": -419715.55
+     },
+     "peakResidentMB": {
+      "median": 597.0,
+      "min": 584,
+      "max": 607
+     },
+     "peakFootprintMB": {
+      "median": 604.0,
+      "min": 592,
+      "max": 624
+     },
+     "loadedResidentMB": {
+      "median": 569.0,
+      "min": 530,
+      "max": 573
+     },
+     "bodiesResidentMB": {
+      "median": 551.5,
+      "min": 535,
+      "max": 570
+     },
+     "mainMsPerTick": {
+      "median": 10.955,
+      "min": 10.86,
+      "max": 11.0
+     },
+     "renderMsPerTick": {
+      "median": 7.52,
+      "min": 7.46,
+      "max": 7.57
+     },
+     "processMsPerTick": {
+      "median": 27.68,
+      "min": 27.23,
+      "max": 27.78
+     },
+     "completeMsPerTick": {
+      "median": 7.3149999999999995,
+      "min": 7.25,
+      "max": 7.35
+     },
+     "loadedSwapMB": {
+      "median": 22.0,
+      "min": 22,
+      "max": 22
+     },
+     "bodiesSwapMB": {
+      "median": 22.0,
+      "min": 22,
+      "max": 22
+     },
+     "ticksEndResidentMB": {
+      "median": 585.0,
+      "min": 571,
+      "max": 606
+     },
+     "ticksEndSwapMB": {
+      "median": 14.0,
+      "min": 14,
+      "max": 14
+     },
+     "ticksEndFootprintMB": {
+      "median": 599.0,
+      "min": 585,
+      "max": 620
+     },
+     "ticksEndPssMB": {
+      "median": 552.0,
+      "min": 539,
+      "max": 575
+     },
+     "cpuToEndSeconds": {
+      "median": 95.46000000000001,
+      "min": 93.71,
+      "max": 96.16
+     }
+    },
+    {
+     "build": "es-e4b5",
+     "runs": 4,
+     "startupSeconds": {
+      "median": -419727.59,
+      "min": -419727.63,
+      "max": -419727.57
+     },
+     "loadSeconds": {
+      "median": 6.199999999999999,
+      "min": 5.61,
+      "max": 6.78
+     },
+     "startToLoadedSeconds": {
+      "median": -419715.86,
+      "min": -419716.06,
+      "max": -419715.78
+     },
+     "peakResidentMB": {
+      "median": 601.5,
+      "min": 588,
+      "max": 614
+     },
+     "peakFootprintMB": {
+      "median": 606.0,
+      "min": 596,
+      "max": 616
+     },
+     "loadedResidentMB": {
+      "median": 578.5,
+      "min": 563,
+      "max": 589
+     },
+     "bodiesResidentMB": {
+      "median": 538.0,
+      "min": 535,
+      "max": 567
+     },
+     "mainMsPerTick": {
+      "median": 10.835,
+      "min": 10.4,
+      "max": 10.99
+     },
+     "renderMsPerTick": {
+      "median": 7.324999999999999,
+      "min": 6.64,
+      "max": 7.61
+     },
+     "processMsPerTick": {
+      "median": 27.295,
+      "min": 25.56,
+      "max": 27.78
+     },
+     "completeMsPerTick": {
+      "median": 7.295,
+      "min": 7.27,
+      "max": 7.39
+     },
+     "loadedSwapMB": {
+      "median": 22.0,
+      "min": 22,
+      "max": 22
+     },
+     "bodiesSwapMB": {
+      "median": 22.0,
+      "min": 22,
+      "max": 22
+     },
+     "ticksEndResidentMB": {
+      "median": 569.0,
+      "min": 556,
+      "max": 573
+     },
+     "ticksEndSwapMB": {
+      "median": 14.0,
+      "min": 14,
+      "max": 30
+     },
+     "ticksEndFootprintMB": {
+      "median": 585.0,
+      "min": 582,
+      "max": 587
+     },
+     "ticksEndPssMB": {
+      "median": 538.0,
+      "min": 536,
+      "max": 542
+     },
+     "cpuToEndSeconds": {
+      "median": 95.035,
+      "min": 93.36,
+      "max": 96.4
+     }
+    }
+   ],
+   "finding": "4 against 4 overlaps everywhere: render 7.46-7.57 against 6.64-7.61 ms (this step's median now the higher), main, process, complete, load, footprint and PSS"
+  }
+ },
+ "macAB": {
+  "summaries": [
+   {
+    "build": "frozen-unchecked-es-e4b6",
+    "runs": 3,
+    "startupSeconds": {
+     "median": 0.059,
+     "min": 0.051,
+     "max": 0.061
+    },
+    "loadSeconds": {
+     "median": 0.332,
+     "min": 0.328,
+     "max": 0.338
+    },
+    "startToLoadedSeconds": {
+     "median": 0.7,
+     "min": 0.694,
+     "max": 0.718
+    },
+    "startedToLoadedSeconds": {
+     "median": 0.64,
+     "min": 0.635,
+     "max": 0.668
+    },
+    "peakResidentMB": {
+     "median": 697,
+     "min": 678,
+     "max": 724
+    },
+    "loadedResidentMB": {
+     "median": 678,
+     "min": 677,
+     "max": 682
+    },
+    "bodiesResidentMB": {
+     "median": 621,
+     "min": 603,
+     "max": 724
+    },
+    "processMsPerTick": {
+     "median": 2.878,
+     "min": 2.856,
+     "max": 2.933
+    },
+    "completeMsPerTick": {
+     "median": 1.2159,
+     "min": 1.1982,
+     "max": 1.2245
+    }
+   },
+   {
+    "build": "frozen-unchecked-es-e4b5",
+    "runs": 3,
+    "startupSeconds": {
+     "median": 0.058,
+     "min": 0.057,
+     "max": 0.065
+    },
+    "loadSeconds": {
+     "median": 0.328,
+     "min": 0.327,
+     "max": 0.33
+    },
+    "startToLoadedSeconds": {
+     "median": 0.697,
+     "min": 0.691,
+     "max": 0.704
+    },
+    "startedToLoadedSeconds": {
+     "median": 0.64,
+     "min": 0.626,
+     "max": 0.648
+    },
+    "peakResidentMB": {
+     "median": 688,
+     "min": 674,
+     "max": 698
+    },
+    "loadedResidentMB": {
+     "median": 683,
+     "min": 674,
+     "max": 686
+    },
+    "bodiesResidentMB": {
+     "median": 604,
+     "min": 603,
+     "max": 625
+    },
+    "processMsPerTick": {
+     "median": 2.844,
+     "min": 2.822,
+     "max": 2.889
+    },
+    "completeMsPerTick": {
+     "median": 1.1795,
+     "min": 1.1749,
+     "max": 1.204
+    }
+   }
+  ],
+  "finding": "overlapping"
+ },
+ "gate3": {
+  "script": "/Volumes/NTSD-Builds/tasks/engine-split/gates/gate3-es-e4b6.sh",
+  "log": [
+   "trees 1b82b506cf8c7bbbe81af5b3600a74e0dcab3268 staged no-unstaged",
+   "== emulator playback (apks/es-e4b6.apk, sha256 5d1473b4efb6b89f)",
+   "exit=0",
+   "{\"scenario\": \"playback\", \"seconds\": 61.2, \"result\": \"equal\", \"differs\": []}",
+   "{\"scenario\": \"playback\", \"error\": \"different body sets\", \"counts\": [2121, 0, 2121]}",
+   "== phone profile es-e4b6",
+   "exit=0",
+   "{\"samples\": 18733, \"Android window drawing\": 10.4, \"inclusive\": {\"gameplay session\": 12.6, \"gameplay body\": 11.2, \"Android window drawing\": 10.4, \"observed iteration\": 5.2, \"display perform\": 2.2, \"loaded menu attempt\": 1.9, \"loaded cycle\": 1.4, \"bindings store\": 1.1, \"bindings read\": 0.5, \"loaded match entry\": 0.0}}",
+   "== phone profile es-e4b5",
+   "exit=0",
+   "{\"samples\": 18323, \"Android window drawing\": 10.4, \"inclusive\": {\"gameplay session\": 12.9, \"gameplay body\": 11.4, \"Android window drawing\": 10.4, \"observed iteration\": 5.2, \"display perform\": 2.1, \"loaded menu attempt\": 2.0, \"loaded cycle\": 1.4, \"bindings store\": 1.2, \"bindings read\": 0.7, \"loaded match entry\": 0.0}}",
+   "gate3_done"
+  ],
+  "playback": {
+   "thisApk": "the gate's APK on the emulator: the scenario equal against its frozen reference",
+   "textAwareFrames": "not applicable: m1-frames-ref has no playback bodies ('different body sets', counts 2121/0/2121); a harness coverage gap, not a mismatch",
+   "previousApk": {
+    "log": [
+     "{\"scenario\": \"playback\", \"seconds\": 61.2, \"result\": \"equal\", \"differs\": []}"
+    ],
+    "install": "es-e4b5's debug APK (version code 794) refused over 795 as a downgrade by android_app.py's install -r; installed by hand with adb install -r -d, then the scenario run with --no-install",
+    "frames": "this APK's playback against es-e4b5's: 7 frames and 2,121 digests identical, 2,128 frames identical"
+   }
+  },
+  "profiles": "20 s simpleperf on the A12 for each APK: 'Android window drawing' 10.4% in both (es-e4b6 18,733 samples, es-e4b5 18,323), every other phase within 0.3 points"
+ },
+ "openGates": [
+  "android_app.py --release (signing with the Keychain's release key) was not built: it runs the same swift build; only the package name and signing differ"
+ ]
+}

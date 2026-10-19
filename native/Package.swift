@@ -27,7 +27,7 @@ let exclusivity: [SwiftSetting] = uncheckedExclusivity
 // The engine's products (../engine, package identity "engine").
 func engine(_ product: String) -> Target.Dependency { .product(name: product, package: "engine") }
 let core = engine("NTSDCore"), runtime = engine("NTSDRuntime"), musicDecoder = engine("NTSDMusicDecoder")
-let macPlatform = engine("NTSDMacPlatform"), freeTypeText = engine("NTSDFreeTypeText")
+let macPlatform = engine("NTSDMacPlatform")
 
 let macProducts: [Product] = portable ? [] : [.executable(name: "NTSDNative", targets: ["NTSDApp"])]
 let macTargets: [Target] = portable ? [] : [
@@ -69,8 +69,9 @@ let iosTargets: [Target] = ios ? [
 let android = Context.environment["NTSD_ANDROID"] == "1"
 let androidProducts: [Product] = android ? [.library(name: "NTSDAndroid", type: .dynamic, targets: ["NTSDAndroid"])] : []
 let androidTargets: [Target] = android ? [
-    .target(name: "CAndroidNative", linkerSettings: [.linkedLibrary("android"), .linkedLibrary("log"), .linkedLibrary("aaudio")]),
-    .target(name: "NTSDAndroid", dependencies: [core, runtime, musicDecoder, "CAndroidNative", "NTSDContent"] + (freetypePrefix == nil ? [] : [freeTypeText]),
+    // The host, with CAndroidNative's NativeActivity entry, is the engine's
+    // NTSDAndroidHost (ENGINE_SPLIT E4b); its FreeType include path is needed here too.
+    .target(name: "NTSDAndroid", dependencies: [engine("NTSDAndroidHost"), "NTSDContent"],
             swiftSettings: [.unsafeFlags(freetypePrefix.map { ["-Xcc", "-I\($0)/include/freetype2"] } ?? [])] + exclusivity)] : []
 
 // NTSD_WEB=1 (with NTSD_PORTABLE=1) adds the browser host (TVOS_WEB W2b),

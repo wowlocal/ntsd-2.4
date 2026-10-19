@@ -3,7 +3,8 @@ import Foundation
 import NTSDCore
 import NTSDRuntime
 
-// NTSDAndroid (P8, docs/research/CROSS_PLATFORM.md): the original game through
+// NTSDAndroidHost (P8, docs/research/CROSS_PLATFORM.md; the game's NTSDAndroid
+// library until ENGINE_SPLIT E4b-6): the original game through
 // OriginalRuntimeSession in an Android NativeActivity. Android calls the
 // activity's callbacks on the process main thread, which is also where the
 // runtime's main actor runs: the dispatch main queue is drained from the main
@@ -18,28 +19,25 @@ import NTSDRuntime
 // `--original-window` there shows the original window: the frame at one
 // device pixel per pixel, centred (WINDOW_SCALING S5).
 
-@_cdecl("ntsd_android_on_create")
-func ntsdAndroidOnCreate(_ activity: UnsafeMutablePointer<ANativeActivity>) {
-    MainActor.assumeIsolated { NTSDAndroidApp.create(activity) }
-}
-
 @MainActor final class NTSDAndroidApp {
     static var shared: NTSDAndroidApp?
     let activity: UnsafeMutablePointer<ANativeActivity>, files: URL, data: URL
+    /// The game, and its content bundle's folder name among the extracted data.
+    let game: OriginalGame, resources: String
     private(set) var surface: OpaquePointer?
     private var input: OpaquePointer?
     private(set) var looper: OpaquePointer?
     private var dataReady = false, session: OriginalRuntimeSession?
     private(set) var host: NTSDAndroidSessionHost?
 
-    init(_ activity: UnsafeMutablePointer<ANativeActivity>) {
-        self.activity = activity
+    init(_ activity: UnsafeMutablePointer<ANativeActivity>,game: OriginalGame,resources: String) {
+        self.activity = activity; self.game = game; self.resources = resources
         files = URL(fileURLWithPath:String(cString:activity.pointee.internalDataPath),isDirectory:true)
         data = files.appendingPathComponent("ntsd-data",isDirectory:true)
     }
 
-    static func create(_ activity: UnsafeMutablePointer<ANativeActivity>) {
-        let app = NTSDAndroidApp(activity); shared = app
+    static func create(_ activity: UnsafeMutablePointer<ANativeActivity>,game: OriginalGame,resources: String) {
+        let app = NTSDAndroidApp(activity,game:game,resources:resources); shared = app
         app.looper = ALooper_forThread()
         // The main queue's eventfd on the main looper: each wake drains it.
         _ = ALooper_addFd(app.looper,_dispatch_get_main_queue_handle_4CF(),Int32(ALOOPER_POLL_CALLBACK),Int32(ALOOPER_EVENT_INPUT),
@@ -205,7 +203,7 @@ func ntsdAndroidOnCreate(_ activity: UnsafeMutablePointer<ANativeActivity>) {
             freopen(arguments[i+1],"w",stdout); setvbuf(stdout,nil,_IOLBF,0)
         }
         if let i = arguments.firstIndex(of:"--tz"),i+1 < arguments.count { setenv("TZ",arguments[i+1],1); tzset() }
-        arguments += ["--resources",data.appendingPathComponent("NTSDNative_NTSDContent.bundle").path]
+        arguments += ["--resources",data.appendingPathComponent(resources).path]
         let music = arguments.firstIndex(of:"--music-dir").flatMap { $0+1 < arguments.count ? arguments[$0+1] : nil }
             ?? data.appendingPathComponent("OriginalMusic").path
         let config = AConfiguration_new(); defer { AConfiguration_delete(config) }
@@ -219,7 +217,7 @@ func ntsdAndroidOnCreate(_ activity: UnsafeMutablePointer<ANativeActivity>) {
         let dp = CGSize(width:Double(ANativeWindow_getWidth(surface))/density,height:Double(ANativeWindow_getHeight(surface))/density)
         let fit = max(1,800/dp.width,600/dp.height)
         let screen = CGSize(width:(dp.width*fit).rounded(.down),height:(dp.height*fit).rounded(.down))
-        let host = NTSDAndroidSessionHost(arguments:arguments,screen:screen,density:density,musicDirectory:music,files:files)
+        let host = NTSDAndroidSessionHost(arguments:arguments,game:game,screen:screen,density:density,musicDirectory:music,files:files)
         host.windows.app = self; host.windows.setSurface(surface)
         let session = OriginalRuntimeSession(arguments:arguments,host:host)
         host.session = session; self.host = host; self.session = session

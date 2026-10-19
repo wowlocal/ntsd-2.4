@@ -40,7 +40,9 @@ E4b-3 выполнен: SDL-хост — `NTSDSDLHost` (с CSDL3); macOS/Linux/W
 сборок: [evidence](../evidence/es-e4b3-sdl-host.json). E4b-4 выполнен: AppKit-хост — `NTSDAppKitHost`,
 лаборатория осталась в игре; упакованное приложение совпало: [evidence](../evidence/es-e4b4-appkit-host.json).
 E4b-5 выполнен: UIKit-хост — `NTSDUIKitHost`; симуляторы iPad и Apple TV совпали (vs, playback):
-[evidence](../evidence/es-e4b5-uikit-host.json). Следующая задача — E4b-6: Android-хост.
+[evidence](../evidence/es-e4b5-uikit-host.json). E4b-6 выполнен: Android-хост — `NTSDAndroidHost` (с CAndroidNative), точка входа `@_cdecl` осталась в игре;
+телефон 4 против 4 перекрывается: [evidence](../evidence/es-e4b6-android-host.json). E4b завершён (все шесть хостов).
+Следующая задача — E4c: самодостаточные тесты движка.
 
 ## Internal build storage и VM quota исправлены — 2026-10-17
 

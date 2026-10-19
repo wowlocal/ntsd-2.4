@@ -1,7 +1,6 @@
 import CAndroidNative
 import Foundation
 import NTSDCore
-import NTSDContent
 import NTSDRuntime
 #if canImport(NTSDFreeTypeText)
 import NTSDFreeTypeText
@@ -229,9 +228,9 @@ final class NTSDAndroidCursor {}
 /// with Android's system sans-serif, AAudio for the effects mixer and the
 /// packaged music decoded by NTSDMusicDecoder (as on Linux).
 @MainActor final class NTSDAndroidSessionHost: OriginalRuntimeSessionHost {
-    let arguments: [String], windows: NTSDAndroidWindowHost, musicDirectory: String, files: URL, density: Double
-    func contentLocation(in appBundle: Bundle) -> OriginalContentLocation { NTSDContent.location(in:appBundle) }
-    var game: OriginalGameIdentity { NTSDContent.game }
+    let arguments: [String], original: OriginalGame, windows: NTSDAndroidWindowHost, musicDirectory: String, files: URL, density: Double
+    func contentLocation(in appBundle: Bundle) -> OriginalContentLocation { original.content(appBundle) }
+    var game: OriginalGameIdentity { original.identity }
     weak var session: OriginalRuntimeSession?
     private var effects: NTSDAndroidStream?, feed: NTSDAndroidEffectsFeed?, effectsMuted = false
     private var players: [() -> NTSDAndroidMusicPlayer?] = [], focused = true
@@ -239,8 +238,8 @@ final class NTSDAndroidCursor {}
     private var cursor: (Int32,Int32) = (0,0)
     /// Touches as player-like clicks (hover, then a held press).
     lazy var touch = OriginalRuntimeTouchMouse { [unowned self] message,x,y,buttons in self.mouse(message,x:x,y:y,buttons:buttons) }
-    init(arguments: [String],screen: CGSize,density: Double,musicDirectory: String,files: URL) {
-        self.arguments = arguments; windows = NTSDAndroidWindowHost(screen:screen)
+    init(arguments: [String],game: OriginalGame,screen: CGSize,density: Double,musicDirectory: String,files: URL) {
+        self.arguments = arguments; original = game; windows = NTSDAndroidWindowHost(screen:screen)
         windows.original = arguments.contains("--original-window")
         self.musicDirectory = musicDirectory; self.files = files; self.density = density
     }

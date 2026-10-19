@@ -45,11 +45,13 @@ PACKAGE = "local.ntsd.port"
 FILES = f"/data/user/0/{PACKAGE}/files"
 DEFAULT_LIB = Path("/Volumes/X5/ntsd-2.4-research/crossplatform/build-android-aarch64/out/Products/Release-android-aarch64")
 
-# Inclusive phases of a gameplay cycle (symbol substrings).
+# Inclusive phases of a gameplay cycle (symbol substrings, or a tuple of
+# alternatives: the window host's draw is mangled differently since it moved to
+# the engine's NTSDAndroidHost module, ENGINE_SPLIT E4b-6).
 PHASES = {
     "front-buffer drawing": "OriginalMacDisplayBackendC12performFront",
     "display perform": "OriginalMacDisplayBackendC7perform",
-    "Android window drawing": "WindowHostC4draw",
+    "Android window drawing": ("WindowHostC4draw", "0a6WindowB0C4draw"),
     "gameplay session": "OriginalApplicationGameplaySessionV7advance",
     "gameplay body": "OriginalGameplayBody",
     "loaded cycle": "OriginalApplicationLoadedCycleSessionV7advance",
@@ -183,7 +185,7 @@ def record_profile(serial, seconds, out, label, lib, call_graph="fp", frequency=
         names = [symbol] + [chain.entries[i].symbol.symbol_name for i in range(chain.nr)]
         own[symbol[:100]] += 1
         for phase, key in PHASES.items():
-            if any(key in n for n in names):
+            if any(k in n for k in ((key,) if isinstance(key, str) else key) for n in names):
                 inclusive[phase] += 1
     report.Close()
     result = {"samples": total, "seconds": seconds,
