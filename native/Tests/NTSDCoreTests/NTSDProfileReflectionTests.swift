@@ -7,7 +7,9 @@ import NTSDProfile
 /// profile (the corpus fixtures load only IDs 2, 7, 8 and 51 and never reach it).
 /// Synthetic records; with no rule, IDs 200 and 209 behave like any other ID there.
 final class NTSDProfileReflectionTests: XCTestCase {
-    static let empty = OriginalGameRules(profile: "empty", reflectable: OriginalIDSet([]))
+    static let empty = OriginalGameRules(profile: "empty", reflectable: OriginalIDSet([]),reflector: .max,rebinder: .max,heldRebinder: .max)
+    /// The same reflectables with other reflector IDs: behaviour must follow the profile, not 209/8/213.
+    static let moved = OriginalGameRules(profile: "moved", reflectable: NTSDProfile.rules.reflectable,reflector: 210,rebinder: 9,heldRebinder: 214)
 
     func defined(_ size: Int) throws -> OriginalStateRecord {
         try .init(bytes: [UInt8](repeating: 0,count: size),defined: [Bool](repeating: true,count: size))
@@ -52,12 +54,12 @@ final class NTSDProfileReflectionTests: XCTestCase {
 
     /// OriginalHitDamage's projectileHit (42f70f..): a 209 attacker takes over a defender whose ID the rule
     /// lists (A14); an 8 attacker (A15) or a held 213 (A16) rebinds it to the first 209 Object (here Object 2).
-    func projectileHit(attacker: Int32,defender: Int32,held: Bool = false,rules: OriginalGameRules) throws -> OriginalStateRecord {
+    func projectileHit(attacker: Int32,defender: Int32,held: Bool = false,reflectorObject: Int32 = 209,rules: OriginalGameRules) throws -> OriginalStateRecord {
         var world = try defined(0x7d8),actors = [try defined(0x420),try defined(0x420)]
         for slot in 0..<2 { try world.write(UInt32(slot),at: 0x194+slot*4);try actors[slot].write(UInt32(slot),at: 0x368) }
         try actors[0].write(Int32(5),at: 0x364);try actors[1].write(Int32(9),at: 0x364)
         if held { try actors[0].write(Int32(-1),at: 0x98);try actors[0].write(Int32(0),at: 0xa0) }
-        let headers = [try header(attacker),try header(defender),try header(209)],frame = try defined(0x178)
+        let headers = [try header(attacker),try header(defender),try header(reflectorObject)],frame = try defined(0x178)
         var pass = OriginalHitPass(world: world,actors: actors,globals: try defined(0xb440),memory: OriginalContactFrameMemory([]),
             crt: OriginalCRTRandom(state: 1),objectCount: 3,header: { headers[$0] },frame: { _,_ in frame },rules: rules,sse2: false)
         pass.itrWords = [Int32](repeating: 0,count: 20)
@@ -84,6 +86,22 @@ final class NTSDProfileReflectionTests: XCTestCase {
             XCTAssertEqual(try projectileHit(attacker: attacker,defender: 201,held: held,rules: NTSDProfile.rules),
                            try projectileHit(attacker: attacker,defender: 201,held: held,rules: Self.empty))
         }
+    }
+
+    /// E5c-1a: the reflector, rebinder and held rebinder are the profile's (A13–A16, A20; A8 by mapping only).
+    func testReflectorIDsComeFromTheProfile() throws {
+        // A14: 210 takes over a reflectable defender under the moved profile; 209 no longer does.
+        XCTAssertEqual(try projectileHit(attacker: 210,defender: 200,reflectorObject: 210,rules: Self.moved).integer(at: 0x368,as: UInt32.self),0)
+        XCTAssertEqual(try projectileHit(attacker: 209,defender: 200,reflectorObject: 210,rules: Self.moved).integer(at: 0x70,as: Int32.self),30)
+        // A15/A16 with A13: 9 and a held 214 rebind to the first 210 Object.
+        for (attacker,held) in [(Int32(9),false),(Int32(214),true)] {
+            XCTAssertEqual(try projectileHit(attacker: attacker,defender: 200,held: held,reflectorObject: 210,rules: Self.moved).integer(at: 0x368,as: UInt32.self),2)
+            XCTAssertEqual(try projectileHit(attacker: attacker,defender: 200,held: held,reflectorObject: 210,rules: NTSDProfile.rules).integer(at: 0x368,as: UInt32.self),1)
+        }
+        // A20: a reflectable attacker skips its interaction on the profile's reflector only.
+        let on210 = try contacts(attacker: 200,defender: 210,rules: Self.moved),plain = try contacts(attacker: 200,defender: 210,rules: NTSDProfile.rules)
+        XCTAssertNotEqual(on210.events,plain.events)
+        XCTAssertEqual(try contacts(attacker: 200,defender: 209,rules: Self.moved).events,try contacts(attacker: 2,defender: 2,rules: NTSDProfile.rules).events)
     }
 
     /// The rules travel from the game's identity into the loaded catalog.

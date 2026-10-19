@@ -176,7 +176,7 @@ struct OriginalContactPass {
             guard bodyCount > 0 else { continue }
             for bodyIndex in 0..<Int(bodyCount) {
                 let attackID = try h(a,0x6f4)
-                if try rules.reflectable.contains(attackID) && h(d,0x6f4) == 209 && it(0) != 9 { continue interaction }
+                if try rules.reflectable.contains(attackID) && h(d,0x6f4) == rules.reflector && it(0) != 9 { continue interaction }
                 let kind = try it(0)
                 if try kind == 3 && h(d,0x6f8) != 0 { continue interaction }
                 if kind == 0 {

@@ -5,6 +5,7 @@ import NTSDCore
 /// which NTSD's stays open until the second reference (D1, E6).
 public enum NTSDProfile {
     public static let rules = OriginalGameRules(profile: "NTSD 2.4 2.0a",
-        // Objects a reflector (209, 8, 213) sends back: OriginalHitDamage, OriginalWorldContacts.
-        reflectable: OriginalIDSet([200, 203, 205, 206, 207, 215, 216]))
+        // Objects a reflector sends back, the reflector, and the attackers whose hit (8)
+        // or held hit (213) rebinds them to it: OriginalHitDamage, OriginalWorldContacts.
+        reflectable: OriginalIDSet([200, 203, 205, 206, 207, 215, 216]), reflector: 209, rebinder: 8, heldRebinder: 213)
 }

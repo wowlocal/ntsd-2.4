@@ -22,13 +22,35 @@ public struct OriginalIDSet: Equatable, Sendable {
 
 /// A game's rules (ENGINE_SPLIT E5): the values the engine's passes test where
 /// the original tests object IDs. The game supplies them with its content
-/// identity; code hooks travel separately.
+/// identity; code hooks travel separately. Every role lives in one immutable
+/// storage, so a pass's copy of the rules is one reference (E5c-1a).
 public struct OriginalGameRules: Equatable, Sendable {
+    private final class Roles: Sendable {
+        let profile: String, reflectable: OriginalIDSet, reflector: Int32, rebinder: Int32, heldRebinder: Int32
+        init(profile: String, reflectable: OriginalIDSet, reflector: Int32, rebinder: Int32, heldRebinder: Int32) {
+            self.profile = profile; self.reflectable = reflectable; self.reflector = reflector
+            self.rebinder = rebinder; self.heldRebinder = heldRebinder
+        }
+    }
+    private let roles: Roles
     /// The profile these rules come from (e.g. "NTSD 2.4 2.0a").
-    public let profile: String
+    public var profile: String { roles.profile }
     /// Objects a reflector sends back (OriginalHitDamage, OriginalWorldContacts).
-    public let reflectable: OriginalIDSet
-    public init(profile: String, reflectable: OriginalIDSet) {
-        self.profile = profile; self.reflectable = reflectable
+    public var reflectable: OriginalIDSet { roles.reflectable }
+    /// The reflecting Object: it keeps or takes over a reflectable ball, a
+    /// reflectable attacker skips its interactions on it, and reflected balls
+    /// are rebound to its first Object (OriginalHitDamage, OriginalWorldContacts).
+    public var reflector: Int32 { roles.reflector }
+    /// An attacker whose hit rebinds a reflectable defender to the reflector.
+    public var rebinder: Int32 { roles.rebinder }
+    /// A held attacker whose hit rebinds a reflectable defender to the reflector
+    /// and credits the holder.
+    public var heldRebinder: Int32 { roles.heldRebinder }
+    public init(profile: String, reflectable: OriginalIDSet, reflector: Int32, rebinder: Int32, heldRebinder: Int32) {
+        roles = Roles(profile: profile, reflectable: reflectable, reflector: reflector, rebinder: rebinder, heldRebinder: heldRebinder)
+    }
+    public static func == (a: Self, b: Self) -> Bool {
+        a.roles === b.roles || (a.profile == b.profile && a.reflectable == b.reflectable && a.reflector == b.reflector
+                                && a.rebinder == b.rebinder && a.heldRebinder == b.heldRebinder)
     }
 }
