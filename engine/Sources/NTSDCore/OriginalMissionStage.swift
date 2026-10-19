@@ -28,7 +28,7 @@ public enum OriginalMissionStage {
         guard try state.world.integer(at: 0x7d4,as: UInt32.self) == 0,
               let registry = catalog.registry.records[0x4d82380] else { throw OriginalStateError.invalidStorage("Mission stage catalog binding") }
         var pass = OriginalMissionStagePass(world: state.world,actors: state.actors,globals: state.globals,stages: state.stages,
-            objects: catalog.objects,objectCount: try registry.integer(at: 0,as: Int32.self),backgrounds: state.backgrounds,
+            objects: catalog.objects,rules: catalog.rules,objectCount: try registry.integer(at: 0,as: Int32.self),backgrounds: state.backgrounds,
             precision: state.arithmeticPrecision,sse2: sse2,target: target)
         try pass.run()
         for event in pass.events { try observe(event) }
@@ -43,6 +43,7 @@ struct OriginalMissionStagePass {
     var globals: OriginalStateRecord
     var stages: [OriginalStateRecord]
     let objects: [OriginalLoadedObject]
+    let rules: OriginalGameRules
     let objectCount: Int32
     let backgrounds: [OriginalStateRecord]
     let precision: OriginalArithmeticPrecision
@@ -472,7 +473,7 @@ struct OriginalMissionStagePass {
             try put(a,0x70,c(s,base+0xc8));try put(a,0x364,5)
             try put(a,0x14,c(s,base+0xcc));try putDouble(a,0x60,Double(i(a,0x14)));try putDouble(a,0x48,0.0)
         }
-        if try objects[ordinal].header.integer(at: 0x6f4,as: Int32.self) == 0x7a { try put(a,0x2fc,200) }
+        if try objects[ordinal].header.integer(at: 0x6f4,as: Int32.self) == rules.spawnHP200 { try put(a,0x2fc,200) }
         try setC(s,base,c(s,base) &+ 1)
     }
 

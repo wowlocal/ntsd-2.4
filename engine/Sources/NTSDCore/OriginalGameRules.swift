@@ -111,15 +111,23 @@ public struct OriginalGameRules: Equatable, Sendable {
         }
     }
     /// Items: which Objects a random item spawn picks from and how it treats
-    /// some of them (OriginalWorldHits), which ones the camera keeps in the
-    /// arena (OriginalWorldCamera), and the held drinks (OriginalWorldLinks).
+    /// some of them (OriginalWorldHits), which ones a requested item spawn
+    /// creates (OriginalPostDrawCommands), the item a mission stage's spawn gives
+    /// HP 200 (OriginalMissionStage), which ones the camera keeps in the arena
+    /// (OriginalWorldCamera), and the held drinks (OriginalWorldLinks).
     public struct Items: Equatable, Sendable {
-        /// The Objects a random item spawn picks from.
+        /// The items: a random item spawn picks one of them; a requested spawn
+        /// (0x450bb8 = 1) creates an Actor for every one of them it keeps.
         public let itemRange: OriginalIDRange
         /// Items a random spawn keeps only on a coin flip (stream 147), and never in
         /// game modes 1–4.
         public let scarceDropItems: OriginalIDSet
-        /// The item a spawn creates with HP 200 (of the 500 a new Actor starts with).
+        /// The item (inside `itemRange`) a requested spawn (0x450bb8 = 1) keeps
+        /// only when a coin flip (stream 208) comes up 1; no mode test.
+        public let scarceRequestedItem: Int32
+        /// The item a spawn (random, requested, or a mission stage's) creates with
+        /// HP 200: of the 500 a new Actor starts with in the random and requested
+        /// spawns; in a mission stage's, of the stage's maximum HP.
         public let spawnHP200: Int32
         /// Objects of a type other than 0 and 3 that the camera holds within
         /// [10, width − 10] while their team (+0x344) is positive or, in mode 1,
@@ -135,9 +143,10 @@ public struct OriginalGameRules: Equatable, Sendable {
         /// to 150 under the item's +0x2f4/+0x308 test). Spent, it is dropped
         /// (stream 137).
         public let mpDrink: Int32
-        public init(itemRange: OriginalIDRange, scarceDropItems: OriginalIDSet, spawnHP200: Int32, keptOnScreen: OriginalIDSet,
-                    hpDrink: Int32, mpDrink: Int32) {
-            self.itemRange = itemRange; self.scarceDropItems = scarceDropItems; self.spawnHP200 = spawnHP200
+        public init(itemRange: OriginalIDRange, scarceDropItems: OriginalIDSet, scarceRequestedItem: Int32, spawnHP200: Int32,
+                    keptOnScreen: OriginalIDSet, hpDrink: Int32, mpDrink: Int32) {
+            self.itemRange = itemRange; self.scarceDropItems = scarceDropItems; self.scarceRequestedItem = scarceRequestedItem
+            self.spawnHP200 = spawnHP200
             self.keptOnScreen = keptOnScreen; self.hpDrink = hpDrink; self.mpDrink = mpDrink
         }
     }
@@ -175,6 +184,7 @@ public struct OriginalGameRules: Equatable, Sendable {
     public var heavyHeldWeapon: Int32 { roles.impact.heavyHeldWeapon }
     public var itemRange: OriginalIDRange { roles.items.itemRange }
     public var scarceDropItems: OriginalIDSet { roles.items.scarceDropItems }
+    public var scarceRequestedItem: Int32 { roles.items.scarceRequestedItem }
     public var spawnHP200: Int32 { roles.items.spawnHP200 }
     public var keptOnScreen: OriginalIDSet { roles.items.keptOnScreen }
     public var hpDrink: Int32 { roles.items.hpDrink }

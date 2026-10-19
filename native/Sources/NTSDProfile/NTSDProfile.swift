@@ -16,7 +16,8 @@ public enum NTSDProfile {
                            countsAsCharacter: OriginalIDSet([201, 202])),
         // What an attacker's hit does to it or to the defender's x impulse: OriginalHitDamage.
         impact: .init(vanishingAttacker: 201, spentAttacker: 214, heavyHeldWeapon: 100),
-        // The random item spawn (OriginalWorldHits), the camera, the held drinks (OriginalWorldLinks).
-        items: .init(itemRange: OriginalIDRange(100..<200), scarceDropItems: OriginalIDSet([122, 123]), spawnHP200: 122,
+        // The random and requested item spawns (OriginalWorldHits, OriginalPostDrawCommands), the
+        // mission stage's spawn, the camera, the held drinks (OriginalWorldLinks).
+        items: .init(itemRange: OriginalIDRange(100..<200), scarceDropItems: OriginalIDSet([122, 123]), scarceRequestedItem: 122, spawnHP200: 122,
                      keptOnScreen: OriginalIDSet([122, 123]), hpDrink: 122, mpDrink: 123))
 }

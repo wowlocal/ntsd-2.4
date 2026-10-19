@@ -155,7 +155,7 @@ final class OriginalRequestSlotWordTests: XCTestCase {
             var q = p, word = start, events: [OriginalPostDrawCommandEvent] = []
             try OriginalPostDrawCommands.apply(world: &q.world, actors: &q.actors, globals: &q.globals, requestSlot: &word,
                 sse2: false, objectCount: 1, header: { _ in header }, frame: { _, number in try Pool.frame(frames, number) },
-                background: { _ in background }, observe: { events.append($0) })
+                background: { _ in background }, rules: .engineTests, observe: { events.append($0) })
             return (word, events, q)
         }
         let (word, events, rebuilt) = try run(.value(0))

@@ -10,7 +10,7 @@ measurement from [TVOS_WEB](TVOS_WEB.md), [MEMORY_LOADING](MEMORY_LOADING.md) an
 engine from the game itself. to publish engine as the separate github repo";
 then, after the plan: "ok … when the plan is setteled start the loop in a
 separate branch" and "push automatically every step (on that new branch)".
-**Status:** E0–E3, E4a, E4b (all six hosts), E4c-1 (the engine's self-contained tests), E5a (the game profile's survey and design) and E5b (the record type, the copied tables out), E4c-1a (a nondeterministic engine test corrected) E5c-0 (the profile's plumbing, reflection), E5c-1a (one storage, the reflectors), E5c-1b (armour), E5c-1c (special interactions) and E5c-1d (impact) done; E5c-2a (the items family's first rows) and E5c-2b (camera and links) done; E5c-2c, post-draw commands and the mission stage, next.
+**Status:** E0–E3, E4a, E4b (all six hosts), E4c-1 (the engine's self-contained tests), E5a (the game profile's survey and design) and E5b (the record type, the copied tables out), E4c-1a (a nondeterministic engine test corrected) E5c-0 (the profile's plumbing, reflection), E5c-1a (one storage, the reflectors), E5c-1b (armour), E5c-1c (special interactions) and E5c-1d (impact) done; E5c-2a, E5c-2b and E5c-2c (the items family: the random and requested spawns, camera, links, the mission stage) done; E5c-2d, the roster family, next.
 **Branch:** `exp/engine-split`, from `main` 380b448d. Worktree
 `/Volumes/NTSD-Builds/tasks/engine-split/worktree` (T7-backed APFS, see
 [BUILD_STORAGE_T7](BUILD_STORAGE_T7.md)). It tracks `origin/exp/engine-split`
@@ -158,7 +158,7 @@ A read-only survey of `native/` (three agents, 2026-10-18):
 | E2 | Content policy out of Core: the digest, count and EXE-SHA pins become the NTSD content identity the game passes; Core checks what it is given with the same checks and errors (2.8.3.3's content origin as the model, read only) | **done** ([evidence](../evidence/es-e2-content-identity.json)) |
 | E3 | Identity and Practice: user-data folder, wasm module, Android prefix/entry, queue/thread names, titles and messages become game configuration; Practice/Lab and its two checks move to the game side | **done**: E3a ([evidence](../evidence/es-e3a-practice.json)), E3b ([evidence](../evidence/es-e3b-game-identity.json)); diagnostic labels wait for D2 |
 | E4 | Two packages: `engine/Package.swift` (Core, Runtime, codecs, decoders, shims, host libraries, self-contained tests) and `native/Package.swift` depending on it by path; the unsafeFlags plan (SwiftPM rejects them in version-pinned dependencies) | E4a **done** ([evidence](../evidence/es-e4a-engine-package.json)); E4b: headless **done** ([evidence](../evidence/es-e4b1-headless-host.json)), browser **done** ([evidence](../evidence/es-e4b2-web-host.json)), SDL **done** ([evidence](../evidence/es-e4b3-sdl-host.json)), AppKit **done** ([evidence](../evidence/es-e4b4-appkit-host.json)), UIKit **done** ([evidence](../evidence/es-e4b5-uikit-host.json)), Android **done** ([evidence](../evidence/es-e4b6-android-host.json)); E4c-1 **done** ([evidence](../evidence/es-e4c1-engine-tests.json)), E4c-1a **done** ([evidence](../evidence/es-e4c1a-sorted-keys.json)); E4c-2 (split the 11 mixed test files, the War trio) queued |
-| E5 | Game profile: the ID sites (100 rows, about 125 branch points; first estimated ~90) and the AI dispatch behind a profile the game supplies; the engine defines the `0x44d000` record's layout and the game supplies `initial.bin`; the NTSD profile bit-exact (all gates plus the full fixture-driven suites); the API's fit with 2.8.3.3 checked read only | E5a **done** (survey and design, [evidence](../evidence/es-e5a-design.json)); E5b **done** ([evidence](../evidence/es-e5b-record-type.json)); E5c-0 **done** ([evidence](../evidence/es-e5c0-profile-plumbing.json)); E5c-1a **done** ([evidence](../evidence/es-e5c1a-reflector-roles.json)); E5c-1b **done** ([evidence](../evidence/es-e5c1b-armour-roles.json)); E5c-1c **done** ([evidence](../evidence/es-e5c1c-interaction-roles.json)); E5c-1d **done** ([evidence](../evidence/es-e5c1d-impact-roles.json)); E5c-2a **done** ([evidence](../evidence/es-e5c2a-items-roles.json)); E5c-2b **done** ([evidence](../evidence/es-e5c2b-camera-links-roles.json)); E5c-2c next |
+| E5 | Game profile: the ID sites (100 rows, about 125 branch points; first estimated ~90) and the AI dispatch behind a profile the game supplies; the engine defines the `0x44d000` record's layout and the game supplies `initial.bin`; the NTSD profile bit-exact (all gates plus the full fixture-driven suites); the API's fit with 2.8.3.3 checked read only | E5a **done** (survey and design, [evidence](../evidence/es-e5a-design.json)); E5b **done** ([evidence](../evidence/es-e5b-record-type.json)); E5c-0 **done** ([evidence](../evidence/es-e5c0-profile-plumbing.json)); E5c-1a **done** ([evidence](../evidence/es-e5c1a-reflector-roles.json)); E5c-1b **done** ([evidence](../evidence/es-e5c1b-armour-roles.json)); E5c-1c **done** ([evidence](../evidence/es-e5c1c-interaction-roles.json)); E5c-1d **done** ([evidence](../evidence/es-e5c1d-impact-roles.json)); E5c-2a **done** ([evidence](../evidence/es-e5c2a-items-roles.json)); E5c-2b **done** ([evidence](../evidence/es-e5c2b-camera-links-roles.json)); E5c-2c **done** ([evidence](../evidence/es-e5c2c-requested-mission-roles.json)); E5c-2d next |
 | E6 | Classify each profile rule as LF2 2.0a or NTSD from the second reference; LF2 rules become the engine's default profile | needs D1 |
 | E7 | Engine stand-alone: the engine package builds alone (macOS, Linux container) and passes its tests with a from-scratch synthetic content pack; a scan finds no original bytes (files under `downloads/`, the resources, fixtures, `initial.bin`) | queued |
 | E8 | Publication: name, licence, a new repository with fresh history, a tag; this repository depends on it by revision; README credits | needs D2 and the user |
@@ -556,6 +556,79 @@ From the plumbing map ([report](../evidence/es-e5c2-plumbing.md) §1–2).
   (twice a tick), and the MP drink's 500 cap and 150 setting. Adopted with it:
   the camera doc names +0x344 and the deactivation, the two extra test cases.
 
+### E5c-2c note (2026-10-19, reviewed with its change; done)
+
+From the plumbing map ([report](../evidence/es-e5c2-plumbing.md) §1–2, §4).
+- **Plumbing.** `OriginalPostDrawCommands`' private `Body` holds `let rules`;
+  both internal `apply(world:)` overloads take a required `rules:` (after
+  `background:`), passed through the slot-word overload and the copying call;
+  `run` passes `catalog.rules` from its local catalog copy.
+  `OriginalMissionStagePass` holds `let rules` from `catalog.rules` in its one
+  construction. No public or package signature of the passes changes (the
+  public surface added: `Items.init`'s new parameter and the two
+  `scarceRequestedItem` accessors); the 14 explicit native test calls pass
+  NTSD's rules.
+- **The engine tests' own rules.** `OriginalGameRules.engineTests`
+  (engine/Tests/NTSDEngineTests/EngineTestRules.swift): synthetic, every ID role
+  −1 and every set empty, except the item range 100..<200 the requested-items
+  pools (Object ID 100) are built on; `OriginalRequestSlotWordTests` uses it.
+  The engine's tests still build records with IDs (999, 998, 217, 2) for sites
+  that keep their literals (the post-draw lifecycle's, E5c-2's later rows).
+- **Roles (Items).** `itemRange` again (A48: the same rule as A39),
+  `scarceRequestedItem` 122 (A49: a coin flip on stream 208 only on an ID match,
+  no mode test; its own role, not `scarceDropItems`), `spawnHP200` again (A50,
+  and A64 in the mission stage's spawn, where the original compares with 0x7a).
+  The library path (0x450bb8 = 3) compares the DLL's requested ID instead and
+  has no ID rule.
+- **Tests.** The requested spawn through `apply(world:)` with 0x450bb8 = 1 and an
+  RNG table whose first draw over 2 is chosen (A48 range, A49 coin flip and
+  its absence under a moved role, A50 HP 200 or 500), and the mission pass's
+  `spawn` built directly (A64: HP 200 or the stage's 300), under NTSD's profile
+  and moved ones.
+- **Review.** No code fix (literals restored, plumbing removed: both files
+  byte-identical to HEAD). Required: the claim that the engine tests name no
+  game IDs (they do, for sites still literal) withdrawn; the item range's doc
+  says a requested spawn creates every kept item; HP 200 is of 500 only in the
+  random and requested spawns. Adopted with it: the engine rules' doc, the
+  scarce requested item's range condition, the public surface listed.
+
+### The remaining role rows (survey 2026-10-19; decisions open)
+
+A read-only survey ([report](../evidence/es-e5c-rest-plumbing.md)) mapped the
+rows still literal outside E5d (AI) and E5e (hooks): physics A33–A38, drawing
+A45–A46, the post-draw effects and lifecycle (A29, A31, A32, A47, A55–A59),
+the War troop list A65, the roster and menus A70–A79, and the stage rules
+D1–D14. A66/A68 read their IDs from the record (no literal), A69 left in E5b,
+A100's 101 is a hold kind, not an ID. Its findings, each to be settled with its
+increment's review and recorded there:
+- **F1.** Five ID literals the E5a table missed: `OriginalPostDrawSlotPrefix`
+  217/218, `OriginalPostDrawLifecycle` 998 and 999 ×2, `OriginalMatchSelection`
+  `decade < 5`; when they move, `OriginalGameRules.engineTests` must carry
+  217/218/998/999 or `OriginalRequestSlotWordTests` changes outcome.
+- **F2.** D14's stage half (`OriginalWorldCamera` `g(0x450b94)/10 == 5`) is still
+  literal (E5c-2b moved the ID half).
+- **F3.** The stage decades: the survey recommends the decade arithmetic (10,
+  the wrap at 60 = D15's capacity) stay engine code and only the predicates
+  (survival 50..<60, numbered stages below 50, the final set 40..<50) and D8's
+  stage→background map move; the design's wording moves "decades" too.
+- **F4.** The fusion hook is narrower than the design's "five files": A27 has no
+  literal; A28 (6 → 300), A29 and A30 ({51, 52}) read no fusion field and can be
+  roles.
+- **F5.** A35's thrown gravities stay engine values; the profile names the three
+  Objects (the E5c-1b precedent).
+- **F6/F7.** A45 and A57 read the header twice; a set test reads it once (a pure
+  read: the same outcome). A46 as one set of the 19 unlabelled IDs instead of a
+  range with an exception.
+- **F8.** Shared roles: survival (D2/D3/D10/D14), numbered stages (D4/D6/D9 and
+  F1's menu row), the bracket pair A78/A79; A45 and A55 stay separate.
+- **F10.** Unlike E5c-1/2, physics, scheduler, prelude, mode label and gameplay
+  output change public signatures (a `rules:` parameter).
+- **F11.** Every new family edits all 11 `OriginalGameRules(` constructions; a
+  test helper cuts that to the profile, the engine tests' value and the helper.
+Order: E5c-2d roster, E5c-2e modes (mission, camera, War), E5c-2f prelude,
+E5c-2g mode label, then the hot passes E5c-1e physics, E5c-1f drawing, E5c-1g
+effects, E5c-1h lifecycle, E5c-1i object input, E5c-1j A28 (after F4).
+
 ## Ledger
 
 - 2026-10-18: plan agreed; branch `exp/engine-split` and its worktree created
@@ -821,19 +894,31 @@ From the plumbing map ([report](../evidence/es-e5c2-plumbing.md) §1–2).
   is a miscount, the evidence has 54); WASI vs identical; phone
   overlapping; Mac load time apart 3 against 3 (the new build faster),
   overlapping 4 against 4. [Evidence](../evidence/es-e5c2b-camera-links-roles.json).
+- 2026-10-19 E5c-2c: `rules:` plumbed into post-draw commands and the mission
+  stage's pass; `itemRange` (A48), a new `scarceRequestedItem` 122 (A49),
+  `spawnHP200` (A50, A64); the engine tests' own synthetic rules value. Reviewed
+  (docs corrected; no code fix). Gate `es-e5c2c`: 11 scenarios, frames,
+  AppKit, unchecked, emulator, 20 clean launches, 29 suite runs, the engine's
+  110 tests, `swift_beginAccess` 3,276; 21 suites with 70 tests (post-draw,
+  lib-stage and mission corpora included); WASI vs identical; phone main,
+  render and process time apart 3 against 2 (the new build faster),
+  overlapping 4 against 4; Mac overlapping. The items family is complete
+  except the AI's rows (E5d). A survey of the remaining rows is recorded above.
+  [Evidence](../evidence/es-e5c2c-requested-mission-roles.json).
 
 ## Next task
 
-E5c-2c (plumbing map: [report](../evidence/es-e5c2-plumbing.md) §1–2, §4):
-`OriginalPostDrawCommands`' `Body` takes `let rules` and both internal
-`apply(world:)` overloads a required `rules:` (`catalog.rules` from `run`);
-`OriginalMissionStagePass` takes `let rules` (`catalog.rules` in `apply`). The
-explicit test calls (OriginalPostDrawCommandsTests ×6, OriginalLibStageCommandsTests
-×8) pass NTSD's rules; the engine's OriginalRequestSlotWordTests gets the engine
-tests' first own rules value (synthetic, built in the engine's tests: no
-NTSDProfile there). Roles: `itemRange` again (A48), a new `scarceRequestedItem`
-122 (A49: the stream-208 coin flip only on an ID match), `spawnHP200` again
-(A50, and A64 in the mission stage's spawn, `== 0x7a`). Tests: the requested
-item spawn (`0x450bb8 = 1`) and the mission spawn under NTSD's profile and
-moved ones. Gates as E5c-2b, with the post-draw, lib-stage and mission suites
-in gate3. Then E5c-2's remaining rows (menus and modes, D1–D14) per the E5 design.
+E5c-2d (survey: [report](../evidence/es-e5c-rest-plumbing.md) §1, §2, §6). First
+the test helper of F11: an `OriginalGameRules` extension in the game's tests
+that copies a profile with some families replaced, so the existing test
+constructions use it. Then a sixth family `Roster`: `hiddenRoster`
+{30–39, 50–59} (A70–A73: listed only when 0x458428 == 1, which is read only
+for those IDs), `randomCandidates` `OriginalIDRange(Int32.min..<30)` (A74–A77:
+Random's candidates; the type test and ordinal 0 stay engine), and
+`bracketFavourites` {50–59} (A78/A79: a member beats a non-member; the stream
+label follows the first ID's test; a sharing to record). Each site reads the
+rules of the catalog it already holds (`candidate.catalog.rules`, no new
+parameter). Tests on a synthetic catalog (the `OriginalWarSetupNativeTests`
+pattern): A74's candidates, A70's cursor skip with 0x458428 0 and 1, A77's War
+candidates, A78's bracket, under NTSD's profile and moved ones. Gates as E5c-2c,
+with the menu suites (survey §6) in gate3.

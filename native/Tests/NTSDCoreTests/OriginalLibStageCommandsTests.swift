@@ -2,6 +2,7 @@ import Foundation
 import XCTest
 @testable import NTSDCore
 @testable import NTSDReferenceChecks
+import NTSDProfile
 
 final class OriginalLibStageCommandsTests: XCTestCase {
     private struct Patch: Decodable {
@@ -107,7 +108,7 @@ final class OriginalLibStageCommandsTests: XCTestCase {
             do {
                 try OriginalPostDrawCommands.apply(world: &world, actors: &actors, globals: &globals, retainedSpawnSlot: &retained,
                     sse2: item.sse2 == 1, objectCount: item.count ?? 4, library: .init(requestedObjectID: item.requestedID), header: { ownHeaders[$0] },
-                    frame: { ownFrames[$0][Int($1)] }, background: { try XCTUnwrap(backgrounds[$0]) }, observe: { event in
+                    frame: { ownFrames[$0][Int($1)] }, background: { try XCTUnwrap(backgrounds[$0]) }, rules: NTSDProfile.rules, observe: { event in
                         switch event {
                         case let .random(stream, range, result):
                             events.append(.init(kind: "random", arguments: [stream, range, result].map(UInt32.init(bitPattern:))))
@@ -159,7 +160,7 @@ final class OriginalLibStageCommandsTests: XCTestCase {
         var retained: Int32?, events: [OriginalPostDrawCommandEvent] = []
         XCTAssertThrowsError(try OriginalPostDrawCommands.apply(world: &world, actors: &actors, globals: &globals,
             retainedSpawnSlot: &retained, sse2: false, objectCount: 1, library: .init(requestedObjectID: 100), header: { _ in header }, frame: { _, _ in frame },
-            background: { _ in bg }, observe: { events.append($0) })) { error in
+            background: { _ in bg }, rules: NTSDProfile.rules, observe: { events.append($0) })) { error in
                 guard case let OriginalStateError.invalidStorage(message) = error else { return XCTFail("Unexpected error: \(error)") }
                 XCTAssertEqual(message, "Post-draw commands: Retained caller slot provenance")
             }
@@ -174,7 +175,7 @@ final class OriginalLibStageCommandsTests: XCTestCase {
         try header.write(Int32(200), at: 0x6f4); events.removeAll()
         try OriginalPostDrawCommands.apply(world: &world, actors: &actors, globals: &globals,
             retainedSpawnSlot: &retained, sse2: false, objectCount: 1, library: .init(requestedObjectID: 100), header: { _ in header }, frame: { _, _ in frame },
-            background: { _ in bg }, observe: { events.append($0) })
+            background: { _ in bg }, rules: NTSDProfile.rules, observe: { events.append($0) })
         XCTAssertTrue(events.isEmpty); XCTAssertNil(retained)
     }
 
@@ -185,7 +186,7 @@ final class OriginalLibStageCommandsTests: XCTestCase {
         var retained: Int32? = 77, events: [OriginalPostDrawCommandEvent] = []
         XCTAssertThrowsError(try OriginalPostDrawCommands.apply(world: &world, actors: &actors, globals: &globals,
             retainedSpawnSlot: &retained, sse2: false, objectCount: 2, library: .init(requestedObjectID: 100), header: { _ in header }, frame: { _, _ in frame },
-            background: { _ in bg }, observe: { event in
+            background: { _ in bg }, rules: NTSDProfile.rules, observe: { event in
                 events.append(event)
                 if event == .reconstruct(slot: 51) { throw OriginalStateError.invalidStorage("Second construction") }
             }))
@@ -205,7 +206,7 @@ final class OriginalLibStageCommandsTests: XCTestCase {
         var retained: Int32? = -1, events: [OriginalPostDrawCommandEvent] = []
         XCTAssertThrowsError(try OriginalPostDrawCommands.apply(world: &world, actors: &actors, globals: &globals,
             retainedSpawnSlot: &retained, sse2: false, objectCount: 1, library: .init(requestedObjectID: 100), header: { _ in header }, frame: { _, _ in frame },
-            background: { _ in bg }, observe: { event in
+            background: { _ in bg }, rules: NTSDProfile.rules, observe: { event in
                 events.append(event)
                 if events.count == 2 { throw OriginalStateError.invalidStorage("Second music observer") }
             }))
@@ -226,7 +227,7 @@ final class OriginalLibStageCommandsTests: XCTestCase {
                     retainedSpawnSlot: &retained, sse2: false, objectCount: count,
                     library: .init(requestedObjectID: 0), header: { _ in
                         reads += 1; throw OriginalStateError.invalidStorage("Unavailable first header")
-                    }, frame: { _, _ in frame }, background: { _ in bg })
+                    }, frame: { _, _ in frame }, background: { _ in bg }, rules: NTSDProfile.rules)
                 XCTAssertEqual(count, 0)
             } catch { XCTAssertEqual(count, 1) }
             XCTAssertEqual(world, beforeWorld); XCTAssertEqual(actors, beforeActors); XCTAssertEqual(globals, beforeGlobals)
@@ -247,7 +248,7 @@ final class OriginalLibStageCommandsTests: XCTestCase {
             do {
                 try OriginalPostDrawCommands.apply(world:&world,actors:&actors,globals:&globals,
                     retainedSpawnSlot:&retained,sse2:false,objectCount:count,library:unknown,
-                    header:{ _ in reads += 1;return header },frame:{ _,_ in frame },background:{ _ in bg })
+                    header:{ _ in reads += 1;return header },frame:{ _,_ in frame },background:{ _ in bg },rules:NTSDProfile.rules)
                 XCTAssertEqual(count,0)
             } catch {
                 XCTAssertEqual(count,1)
@@ -261,6 +262,6 @@ final class OriginalLibStageCommandsTests: XCTestCase {
         try globals.write(Int32(0),at:0x450bb8-0x44d000)
         try OriginalPostDrawCommands.apply(world:&world,actors:&actors,globals:&globals,
             retainedSpawnSlot:&retained,sse2:false,objectCount:1,library:unknown,
-            header:{ _ in XCTFail("No command header read");return header },frame:{ _,_ in frame },background:{ _ in bg })
+            header:{ _ in XCTFail("No command header read");return header },frame:{ _,_ in frame },background:{ _ in bg },rules:NTSDProfile.rules)
     }
 }

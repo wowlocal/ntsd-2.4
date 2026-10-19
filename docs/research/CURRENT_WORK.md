@@ -56,7 +56,9 @@ E5a выполнен: обзор (100 мест с ID объектов, дисп�
 (A17–A19, A21–A23) — роли профиля: [evidence](../evidence/es-e5c1c-interaction-roles.json). E5c-1d выполнен: «удар» (A9–A11),
 A8 теперь с прямым тестом: [evidence](../evidence/es-e5c1d-impact-roles.json). E5c-2a выполнен: тип диапазона ID и семейство «предметы» в проходе ударов
 (A39–A41): [evidence](../evidence/es-e5c2a-items-roles.json). E5c-2b выполнен: камера и связи (A42–A44): [evidence](../evidence/es-e5c2b-camera-links-roles.json).
-Следующая задача — E5c-2c: команды после отрисовки и стадия миссии (A48–A50, A64).
+E5c-2c выполнен: запрошенные предметы и стадия миссии (A48–A50, A64), у тестов движка свои синтетические правила:
+[evidence](../evidence/es-e5c2c-requested-mission-roles.json); обзор оставшихся строк с открытыми решениями F1–F11:
+[report](../evidence/es-e5c-rest-plumbing.md). Следующая задача — E5c-2d: ростер (A70–A79).
 
 ## Internal build storage и VM quota исправлены — 2026-10-17
 

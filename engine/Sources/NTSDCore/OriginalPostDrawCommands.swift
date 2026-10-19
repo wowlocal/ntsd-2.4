@@ -45,29 +45,29 @@ public enum OriginalPostDrawCommands {
                 return catalog.objects[n].frameStorage[Int(f)]
             }, background: { n in
                 guard backgrounds.indices.contains(Int(n)) else { throw error("Background binding") }; return backgrounds[Int(n)]
-            }, observe: observe, inPlace: inPlace)
+            }, rules: catalog.rules, observe: observe, inPlace: inPlace)
     }
     private static func error(_ text: String) -> OriginalStateError { .invalidStorage("Post-draw commands: "+text) }
     static func apply(world: inout OriginalStateRecord, actors: inout [OriginalStateRecord], globals: inout OriginalStateRecord,
                       retainedSpawnSlot: inout Int32?, sse2: Bool, objectCount: Int32, library: OriginalLibStageCommands? = nil,
                       header: (Int) throws -> OriginalStateRecord, frame: (Int, Int32) throws -> OriginalStateRecord,
-                      background: (Int32) throws -> OriginalStateRecord,
+                      background: (Int32) throws -> OriginalStateRecord, rules: OriginalGameRules,
                       observe: (OriginalPostDrawCommandEvent) throws -> Void = { _ in }) throws {
         var word = retainedSpawnSlot.map(OriginalRequestSlotWord.value)
         try apply(world: &world, actors: &actors, globals: &globals, requestSlot: &word, sse2: sse2, objectCount: objectCount,
-                  library: library, header: header, frame: frame, background: background, observe: observe)
+                  library: library, header: header, frame: frame, background: background, rules: rules, observe: observe)
         if case .value(let slot) = word { retainedSpawnSlot = slot }
     }
     static func apply(world: inout OriginalStateRecord, actors: inout [OriginalStateRecord], globals: inout OriginalStateRecord,
                       requestSlot: inout OriginalRequestSlotWord?, sse2: Bool, objectCount: Int32, library: OriginalLibStageCommands? = nil,
                       header: (Int) throws -> OriginalStateRecord, frame: (Int, Int32) throws -> OriginalStateRecord,
-                      background: (Int32) throws -> OriginalStateRecord,
+                      background: (Int32) throws -> OriginalStateRecord, rules: OriginalGameRules,
                       observe: (OriginalPostDrawCommandEvent) throws -> Void = { _ in }, inPlace: Bool = false) throws {
         guard inPlace else {
             // All or nothing: in place on copies, assigned when it completes.
             var copiedWorld = world, copies = actors, copiedGlobals = globals, copiedSlot = requestSlot
             try apply(world: &copiedWorld, actors: &copies, globals: &copiedGlobals, requestSlot: &copiedSlot, sse2: sse2, objectCount: objectCount,
-                      library: library, header: header, frame: frame, background: background, observe: observe, inPlace: true)
+                      library: library, header: header, frame: frame, background: background, rules: rules, observe: observe, inPlace: true)
             world = copiedWorld; actors = copies; globals = copiedGlobals; requestSlot = copiedSlot
             return
         }
@@ -79,7 +79,7 @@ public enum OriginalPostDrawCommands {
                         // on every path (CORE_REALTIME B2 P4).
                         var body = Body(world: inPlaceTake(&world, leaving: .vacant), actors: inPlaceTake(&actors, leaving: []),
                             globals: inPlaceTake(&globals, leaving: .vacant), requestSlot: requestSlot,
-                            sse2: sse2, objectCount: objectCount, library: library, header: headers, frame: frames, background: backgrounds, observe: observer)
+                            sse2: sse2, objectCount: objectCount, library: library, rules: rules, header: headers, frame: frames, background: backgrounds, observe: observer)
                         defer { world = body.world; actors = body.actors; globals = body.globals; requestSlot = body.requestSlot }
                         try body.run()
                     }
@@ -92,6 +92,7 @@ public enum OriginalPostDrawCommands {
         var requestSlot: OriginalRequestSlotWord?
         let sse2: Bool, objectCount: Int32
         let library: OriginalLibStageCommands?
+        let rules: OriginalGameRules
         let header: (Int) throws -> OriginalStateRecord, frame: (Int, Int32) throws -> OriginalStateRecord
         let background: (Int32) throws -> OriginalStateRecord
         let observe: (OriginalPostDrawCommandEvent) throws -> Void
@@ -128,8 +129,8 @@ public enum OriginalPostDrawCommands {
                         if requestedObjectID == 0 { return }
                         if id != requestedObjectID { continue }
                     } else {
-                        if id < 100 || id >= 200 { continue }
-                        if try id == 122 && draw(208, 2) == 0 { continue }
+                        if !rules.itemRange.contains(id) { continue }
+                        if try id == rules.scarceRequestedItem && draw(208, 2) == 0 { continue }
                     }
                     candidates.append(n)
                 }
@@ -154,7 +155,7 @@ public enum OriginalPostDrawCommands {
                 try world.write(UInt8(1), at: 4+slot)
                 for other in 0..<400 where try active(other) != 0 { try actors[index(other)].write(UInt8(0), at: 0xf0+slot) }
                 for offset in [0x40, 0x48, 0x50] { try actors[index(slot)].writeBinary64(0, at: offset) }
-                if try h(index(slot), 0x6f4) == 122 { try put(index(slot), 0x2fc, 200) }
+                if try h(index(slot), 0x6f4) == rules.spawnHP200 { try put(index(slot), 0x2fc, 200) }
                 for (integer, binary) in [(0x10, 0x58), (0x14, 0x60), (0x18, 0x68)] {
                     let a = try index(slot)
                     try put(a, integer, OriginalCoordinateConversion.integer(actors[a].binary64(at: binary), sse2: sse2))

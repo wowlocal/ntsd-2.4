@@ -12,7 +12,8 @@ final class NTSDProfileItemsTests: XCTestCase {
     func rules(range: OriginalIDRange? = nil,scarce: OriginalIDSet? = nil,hp200: Int32? = nil) -> OriginalGameRules {
         let n = NTSDProfile.rules
         return OriginalGameRules(profile: "moved",reflection: n.reflection,armour: n.armour,interaction: n.interaction,impact: n.impact,
-            items: .init(itemRange: range ?? n.itemRange,scarceDropItems: scarce ?? n.scarceDropItems,spawnHP200: hp200 ?? n.spawnHP200,
+            items: .init(itemRange: range ?? n.itemRange,scarceDropItems: scarce ?? n.scarceDropItems,scarceRequestedItem: n.scarceRequestedItem,
+                         spawnHP200: hp200 ?? n.spawnHP200,
                          keptOnScreen: n.keptOnScreen,hpDrink: n.hpDrink,mpDrink: n.mpDrink))
     }
     func defined(_ size: Int) throws -> OriginalStateRecord {
@@ -75,7 +76,7 @@ final class NTSDProfileItemsCameraLinksTests: XCTestCase {
     func rules(kept: OriginalIDSet? = nil,hp: Int32? = nil,mp: Int32? = nil) -> OriginalGameRules {
         let n = NTSDProfile.rules
         return OriginalGameRules(profile: "moved",reflection: n.reflection,armour: n.armour,interaction: n.interaction,impact: n.impact,
-            items: .init(itemRange: n.itemRange,scarceDropItems: n.scarceDropItems,spawnHP200: n.spawnHP200,
+            items: .init(itemRange: n.itemRange,scarceDropItems: n.scarceDropItems,scarceRequestedItem: n.scarceRequestedItem,spawnHP200: n.spawnHP200,
                          keptOnScreen: kept ?? n.keptOnScreen,hpDrink: hp ?? n.hpDrink,mpDrink: mp ?? n.mpDrink))
     }
     func defined(_ size: Int) throws -> OriginalStateRecord {
@@ -155,5 +156,85 @@ final class NTSDProfileItemsCameraLinksTests: XCTestCase {
         // the HP drink's +5 at HP 0).
         r = try drink(id: 122,hp: 1,rules: rules(mp: 122));XCTAssertEqual(r.itemHP,0);XCTAssertEqual(r.holderMP,5)
         XCTAssertTrue(spent(r.events,stream: 136));XCTAssertFalse(spent(r.events,stream: 137))
+    }
+}
+
+/// ENGINE_SPLIT E5c-2c: the requested item spawn (OriginalPostDrawCommands with
+/// 0x450bb8 = 1: A48–A50) and the mission stage's spawn (A64) take their IDs from
+/// the profile. Synthetic records: one Actor for the free slot (50, or seat 20).
+final class NTSDProfileItemsRequestedMissionTests: XCTestCase {
+    func rules(range: OriginalIDRange? = nil,scarce: Int32? = nil,hp200: Int32? = nil) -> OriginalGameRules {
+        let n = NTSDProfile.rules
+        return OriginalGameRules(profile: "moved",reflection: n.reflection,armour: n.armour,interaction: n.interaction,impact: n.impact,
+            items: .init(itemRange: range ?? n.itemRange,scarceDropItems: n.scarceDropItems,scarceRequestedItem: scarce ?? n.scarceRequestedItem,
+                         spawnHP200: hp200 ?? n.spawnHP200,keptOnScreen: n.keptOnScreen,hpDrink: n.hpDrink,mpDrink: n.mpDrink))
+    }
+    func defined(_ size: Int) throws -> OriginalStateRecord {
+        try .init(bytes: [UInt8](repeating: 0,count: size),defined: [Bool](repeating: true,count: size))
+    }
+    /// Globals with an RNG table of ones whose first draw over 2 is `firstOf2`.
+    func globals(firstOf2: Int32) throws -> OriginalStateRecord {
+        var globals = try defined(0xb440)
+        for n in 0..<3000 { try globals.write(UInt8(1),at: 0x44ff90-0x44d000+n) }
+        try globals.write(UInt8(firstOf2 == 0 ? 1 : 2),at: 0x44ff90-0x44d000+1)
+        return globals
+    }
+    /// The requested item spawn over these catalog IDs: the Actor, the events.
+    func requested(_ ids: [Int32],coin: Int32 = 1,rules: OriginalGameRules) throws -> (actor: OriginalStateRecord,events: [OriginalPostDrawCommandEvent]) {
+        var world = try defined(0x7d8),actors = [try defined(0x420)],globals = try globals(firstOf2: coin)
+        try globals.write(Int32(1),at: 0x450bb8-0x44d000)
+        let headers = try ids.map { id -> OriginalStateRecord in var h = try defined(0x7a4);try h.write(id,at: 0x6f4);try h.write(Int32(1),at: 0x6f8);return h }
+        var bg = try defined(16);try bg.write(Int32(800),at: 0);try bg.write(Int32(400),at: 8)
+        let frame = try defined(0x178),b = bg
+        var slot: OriginalRequestSlotWord? = nil,events: [OriginalPostDrawCommandEvent] = []
+        try OriginalPostDrawCommands.apply(world: &world,actors: &actors,globals: &globals,requestSlot: &slot,sse2: false,objectCount: Int32(ids.count),
+            header: { headers[$0] },frame: { _,_ in frame },background: { _ in b },rules: rules,observe: { events.append($0) })
+        return (actors[0],events)
+    }
+    func spawned(_ r: (actor: OriginalStateRecord,events: [OriginalPostDrawCommandEvent])) throws -> UInt32? {
+        r.events.contains(.reconstruct(slot: 50)) ? try r.actor.integer(at: 0x368,as: UInt32.self) : nil
+    }
+    let draw208 = { (e: OriginalPostDrawCommandEvent) -> Bool in if case .random(stream: 208,_,_) = e { return true };return false }
+    func testRequestedItemRangeA48() throws {
+        XCTAssertEqual(try spawned(requested([150,350],rules: NTSDProfile.rules)),0)
+        XCTAssertEqual(try spawned(requested([150,350],rules: rules(range: OriginalIDRange(300..<400)))),1)
+        XCTAssertNil(try spawned(requested([99,200],rules: NTSDProfile.rules)),"no item: no spawn")
+        XCTAssertEqual(try spawned(requested([99,200],rules: rules(range: OriginalIDRange(0..<100)))),0)
+    }
+    func testScarceRequestedItemA49() throws {
+        // The coin flip (stream 208) comes up 0: 122 is not kept under NTSD's profile.
+        let ntsd = try requested([122],coin: 0,rules: NTSDProfile.rules)
+        XCTAssertTrue(ntsd.events.contains(where: draw208));XCTAssertNil(try spawned(ntsd))
+        XCTAssertEqual(try spawned(requested([122],coin: 1,rules: NTSDProfile.rules)),0)
+        let moved = try requested([122],coin: 0,rules: rules(scarce: 124))
+        XCTAssertFalse(moved.events.contains(where: draw208));XCTAssertEqual(try spawned(moved),0)
+        XCTAssertNil(try spawned(requested([124],coin: 0,rules: rules(scarce: 124))))
+    }
+    func testRequestedSpawnHP200A50() throws {
+        var r = try requested([122],rules: NTSDProfile.rules);XCTAssertEqual(try spawned(r),0)
+        XCTAssertEqual(try r.actor.integer(at: 0x2fc,as: Int32.self),200)
+        r = try requested([122],rules: rules(hp200: 124));XCTAssertEqual(try spawned(r),0)
+        XCTAssertEqual(try r.actor.integer(at: 0x2fc,as: Int32.self),500,"a new Actor's HP")
+        r = try requested([124],rules: rules(hp200: 124));XCTAssertEqual(try spawned(r),0)
+        XCTAssertEqual(try r.actor.integer(at: 0x2fc,as: Int32.self),200)
+    }
+    /// The mission stage's spawn (437400) of this ID with HP 300 into seat 20: the Actor, the events.
+    func mission(id: Int32,rules: OriginalGameRules) throws -> (actor: OriginalStateRecord,events: [OriginalMissionStageEvent]) {
+        var stage = try defined(0x100)
+        for (o,v): (Int,Int32) in [(0xac,id),(0xb0,100),(0xb4,300)] { try stage.write(v,at: o) }
+        var header = try defined(0x7a4);try header.write(id,at: 0x6f4);try header.write(Int32(1),at: 0x6f8)
+        var bg = try defined(16);try bg.write(Int32(400),at: 8)
+        var pass = OriginalMissionStagePass(world: try defined(0x7d8),actors: [try defined(0x420)],globals: try globals(firstOf2: 1),stages: [stage],
+            objects: [OriginalLoadedObject(header: header,nameTail: try defined(0x3c),frames: [],frameStorage: [],weaponSoundPaths: [:])],
+            rules: rules,objectCount: 1,backgrounds: [bg],precision: .bits64,sse2: false,target: 0)
+        try pass.spawn(0,0,0)
+        return (pass.actors[0],pass.events)
+    }
+    func testMissionSpawnHP200A64() throws {
+        var r = try mission(id: 122,rules: NTSDProfile.rules)
+        XCTAssertTrue(r.events.contains(.constructor(seat: 20)));XCTAssertEqual(try r.actor.integer(at: 0x2fc,as: Int32.self),200)
+        r = try mission(id: 122,rules: rules(hp200: 124))
+        XCTAssertTrue(r.events.contains(.constructor(seat: 20)));XCTAssertEqual(try r.actor.integer(at: 0x2fc,as: Int32.self),300,"the stage's HP")
+        r = try mission(id: 124,rules: rules(hp200: 124));XCTAssertEqual(try r.actor.integer(at: 0x2fc,as: Int32.self),200)
     }
 }
