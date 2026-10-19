@@ -816,8 +816,9 @@ From the plumbing map ([report](../evidence/es-e5c2-plumbing.md) §1–2).
   pass; `keptOnScreen` {122, 123} (A42), `hpDrink` 122 (A43), `mpDrink` 123
   (A44). Reviewed (role docs corrected; two test cases added). Gate `es-e5c2b`:
   11 scenarios, frames, AppKit, unchecked, emulator, 20 clean launches, 29 suite
-  runs, the engine's 110 tests, `swift_beginAccess` 3,276; 17 suites with 55
-  tests (camera, links and cpoints corpora included); WASI vs identical; phone
+  runs, the engine's 110 tests, `swift_beginAccess` 3,276; 17 suites with 54
+  tests (camera, links and cpoints corpora included; the commit message's 55
+  is a miscount, the evidence has 54); WASI vs identical; phone
   overlapping; Mac load time apart 3 against 3 (the new build faster),
   overlapping 4 against 4. [Evidence](../evidence/es-e5c2b-camera-links-roles.json).
 
