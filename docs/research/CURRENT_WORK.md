@@ -42,7 +42,9 @@ E4b-3 выполнен: SDL-хост — `NTSDSDLHost` (с CSDL3); macOS/Linux/W
 E4b-5 выполнен: UIKit-хост — `NTSDUIKitHost`; симуляторы iPad и Apple TV совпали (vs, playback):
 [evidence](../evidence/es-e4b5-uikit-host.json). E4b-6 выполнен: Android-хост — `NTSDAndroidHost` (с CAndroidNative), точка входа `@_cdecl` осталась в игре;
 телефон 4 против 4 перекрывается: [evidence](../evidence/es-e4b6-android-host.json). E4b завершён (все шесть хостов).
-Следующая задача — E4c: самодостаточные тесты движка.
+E4c-1 выполнен: 38 файлов тестов (105 тестов) — в `NTSDEngineTests`, список тестов сошёлся (838 → 106 + 733);
+[evidence](../evidence/es-e4c1-engine-tests.json). E4c-2 (смешанные файлы, тройка War) отложен.
+Следующая задача — E5a: обзор и проект профиля игры (только чтение).
 
 ## Internal build storage и VM quota исправлены — 2026-10-17
 

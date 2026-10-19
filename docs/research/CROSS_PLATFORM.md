@@ -152,6 +152,10 @@ ONLINE GAME is checked with `pair_probe.py` on each host and across hosts
 - Linux tests cross-build with the generated glibc SDK
   `ntsd-6.4.0-ubuntu24.04-aarch64`; the static musl SDK has no XCTest. Run
   them in the `swift:6.4.0-noble` container, which supplies the Swift runtime.
+- Since ENGINE_SPLIT E4c the engine package has its own self-contained tests
+  (`engine/Tests/NTSDEngineTests`): build and run them the same way with
+  `--package-path engine` (its own scratch path); on Linux,
+  `run_linux_suites.py --module NTSDEngineTests` runs them from that build.
 - Before every commit, check `git diff --cached --stat` for entries that
   belong to another increment. `git mv` stages a rename immediately, and a
   partial commit takes the whole index.

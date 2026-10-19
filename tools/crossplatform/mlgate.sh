@@ -14,7 +14,8 @@
 #    playback + frames, unchecked vs and Demo + frames, then load_memory.py A/B
 #    of the unchecked binaries (3 runs each, interleaved, with the game
 #    thread's and the process's ms per tick over bodies 600-1500);
-#  - the named Core suites (and the exclusivity check) in the release test build.
+#  - the named Core suites (and the exclusivity check) in the release test build,
+#    then the engine package's own tests (ENGINE_SPLIT E4c) in its release test build.
 # Copied from X5 crossplatform/ml-tools/mlgate.sh (SHA-256 3312b3e9…f89d0b) for
 # ENGINE_SPLIT E0. Unset variables keep that script's paths and behaviour:
 #  GATE_REPO     tree to gate (default the main worktree)
@@ -100,16 +101,24 @@ PY
   echo "mac A/B exit=$?"; grep -E '^\{"summary' $X/logs/$L-mac-ab.log | cut -c1-1000
 ) &
 (
-  rm -rf "${B3:?}"
+  rm -rf "${B3:?}" "${B3:?}-engine"
   env -u NTSD_UNCHECKED_EXCLUSIVITY $XB --package-path native --scratch-path $B3 --build-system native -c release --build-tests -Xswiftc -enable-testing > $X/logs/$L-tests-build.log 2>&1
   code=$?; echo "bundle exit=$code"; grep -E 'error:' $X/logs/$L-tests-build.log | head -6 | cut -c1-250
   [ $code -eq 0 ] || exit 1
   BA=$(find $B3 -maxdepth 4 -name 'NTSDNativePackageTests.xctest' | head -1)
   for c in OriginalExclusivityChecksTests $SUITES; do
     start=$(date +%s); xcrun xctest -XCTest NTSDCoreTests.$c "$BA" > $X/logs/$L-$c.log 2>&1; code=$?
-    echo "$c exit=$code $(( $(date +%s)-start ))s $(grep -E 'Executed [0-9]+ tests?' $X/logs/$L-$c.log | tail -1 | sed 's/^ *//')"
+    echo "$c exit=$code $(( $(date +%s)-start ))s $(grep -E 'Executed [0-9]+ tests?' $X/logs/$L-$c.log | tail -1 | sed 's/^ *//')$(grep -qE 'Executed 0 tests' $X/logs/$L-$c.log && echo ' NO TESTS RAN')"
     [ $code -eq 0 ] || grep -E 'error:' $X/logs/$L-$c.log | head -6 | cut -c1-300
   done
+  # The engine's self-contained tests (ENGINE_SPLIT E4c), with its exclusivity check,
+  # built after the named suites ran so that a failing engine build skips nothing else.
+  env -u NTSD_UNCHECKED_EXCLUSIVITY $XB --package-path engine --scratch-path $B3-engine --build-system native -c release --build-tests -Xswiftc -enable-testing > $X/logs/$L-engine-tests-build.log 2>&1
+  code=$?; echo "engine bundle exit=$code"; grep -E 'error:' $X/logs/$L-engine-tests-build.log | head -6 | cut -c1-250
+  BE=$(find $B3-engine -maxdepth 4 -name 'NTSDEnginePackageTests.xctest' | head -1)
+  start=$(date +%s); xcrun xctest "$BE" > $X/logs/$L-engine-tests.log 2>&1; code=$?
+  echo "NTSDEngineTests exit=$code $(( $(date +%s)-start ))s $(grep -E 'Executed [0-9]+ tests?' $X/logs/$L-engine-tests.log | tail -1 | sed 's/^ *//')$(grep -qE 'Executed 0 tests' $X/logs/$L-engine-tests.log && echo ' NO TESTS RAN')"
+  [ $code -eq 0 ] || grep -E 'error:' $X/logs/$L-engine-tests.log | head -6 | cut -c1-300
   echo suites_done
 ) &
 wait

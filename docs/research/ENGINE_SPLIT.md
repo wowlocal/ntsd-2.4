@@ -10,7 +10,7 @@ measurement from [TVOS_WEB](TVOS_WEB.md), [MEMORY_LOADING](MEMORY_LOADING.md) an
 engine from the game itself. to publish engine as the separate github repo";
 then, after the plan: "ok … when the plan is setteled start the loop in a
 separate branch" and "push automatically every step (on that new branch)".
-**Status:** E0–E3, E4a and E4b (all six hosts) done; E4c, the engine's self-contained tests, next.
+**Status:** E0–E3, E4a, E4b (all six hosts) and E4c-1 (the engine's self-contained tests) done; E5a, the game-profile survey and design, next.
 **Branch:** `exp/engine-split`, from `main` 380b448d. Worktree
 `/Volumes/NTSD-Builds/tasks/engine-split/worktree` (T7-backed APFS, see
 [BUILD_STORAGE_T7](BUILD_STORAGE_T7.md)). It tracks `origin/exp/engine-split`
@@ -157,7 +157,7 @@ A read-only survey of `native/` (three agents, 2026-10-18):
 | E1b | Music: `OriginalMusic` leaves `NTSDMacPlatform` for `NTSDContent` (in the bundle on Mac builds only); the source paths in tools and hosts follow; the iOS simulator row with a device set on `/Volumes/NTSD-Builds` | **done** ([evidence](../evidence/es-e1b-music.json)); its packaged-app and iOS rows, and E1a's iOS row, closed after the Mac's audio came back ([evidence](../evidence/es-e1b-open-rows.json)) |
 | E2 | Content policy out of Core: the digest, count and EXE-SHA pins become the NTSD content identity the game passes; Core checks what it is given with the same checks and errors (2.8.3.3's content origin as the model, read only) | **done** ([evidence](../evidence/es-e2-content-identity.json)) |
 | E3 | Identity and Practice: user-data folder, wasm module, Android prefix/entry, queue/thread names, titles and messages become game configuration; Practice/Lab and its two checks move to the game side | **done**: E3a ([evidence](../evidence/es-e3a-practice.json)), E3b ([evidence](../evidence/es-e3b-game-identity.json)); diagnostic labels wait for D2 |
-| E4 | Two packages: `engine/Package.swift` (Core, Runtime, codecs, decoders, shims, host libraries, self-contained tests) and `native/Package.swift` depending on it by path; the unsafeFlags plan (SwiftPM rejects them in version-pinned dependencies) | E4a **done** ([evidence](../evidence/es-e4a-engine-package.json)); E4b: headless **done** ([evidence](../evidence/es-e4b1-headless-host.json)), browser **done** ([evidence](../evidence/es-e4b2-web-host.json)), SDL **done** ([evidence](../evidence/es-e4b3-sdl-host.json)), AppKit **done** ([evidence](../evidence/es-e4b4-appkit-host.json)), UIKit **done** ([evidence](../evidence/es-e4b5-uikit-host.json)), Android **done** ([evidence](../evidence/es-e4b6-android-host.json)); E4c next |
+| E4 | Two packages: `engine/Package.swift` (Core, Runtime, codecs, decoders, shims, host libraries, self-contained tests) and `native/Package.swift` depending on it by path; the unsafeFlags plan (SwiftPM rejects them in version-pinned dependencies) | E4a **done** ([evidence](../evidence/es-e4a-engine-package.json)); E4b: headless **done** ([evidence](../evidence/es-e4b1-headless-host.json)), browser **done** ([evidence](../evidence/es-e4b2-web-host.json)), SDL **done** ([evidence](../evidence/es-e4b3-sdl-host.json)), AppKit **done** ([evidence](../evidence/es-e4b4-appkit-host.json)), UIKit **done** ([evidence](../evidence/es-e4b5-uikit-host.json)), Android **done** ([evidence](../evidence/es-e4b6-android-host.json)); E4c-1 **done** ([evidence](../evidence/es-e4c1-engine-tests.json)); E4c-2 (split the 11 mixed test files, the War trio) queued |
 | E5 | Game profile: the ~90 ID sites and the AI dispatch behind a profile the game supplies; the engine defines the `0x44d000` record's layout and the game supplies `initial.bin`; the NTSD profile bit-exact (all gates plus the full fixture-driven suites); the API's fit with 2.8.3.3 checked read only | queued |
 | E6 | Classify each profile rule as LF2 2.0a or NTSD from the second reference; LF2 rules become the engine's default profile | needs D1 |
 | E7 | Engine stand-alone: the engine package builds alone (macOS, Linux container) and passes its tests with a from-scratch synthetic content pack; a scan finds no original bytes (files under `downloads/`, the resources, fixtures, `initial.bin`) | queued |
@@ -425,16 +425,30 @@ Plan:
   the phase in both libraries (10.4%); phone 3 against 2 left render apart
   (faster), the 4-against-4 follow-up overlaps everywhere.
   [Evidence](../evidence/es-e4b6-android-host.json).
+- 2026-10-19 E4c-1: 38 test files (105 tests) move by `git mv` to the engine
+  test target `NTSDEngineTests`, the exclusivity check is copied, and the
+  moved suites' Linux init lines move with them; `swift test list`: 838 before,
+  106 + 733 after, none lost. The rest stays: 11 files mix synthetic tests
+  with content reads (E4c-2 splits them), the War trio waits for a game suite's
+  own helpers, and the classification found original data in the engine
+  (`OriginalWarTroops`' table from 0x44d350, for E5/E7). Review: one required
+  fix (the Linux suite runners take the module), made and confirmed. Gate
+  `es-e4c1b` (`es-e4c1` stopped at its builds for the fix and a memory
+  shortage): 11 scenarios, frames, AppKit, unchecked, emulator, 20 clean
+  launches, 29 suite runs, the engine's 106 tests; Linux: both test targets
+  build, the engine's 35 suites run (one root-only failure, as at HEAD);
+  the Mac A/B's load gap (identical machine code) gone 4 against 4.
+  [Evidence](../evidence/es-e4c1-engine-tests.json).
 
 ## Next task
 
-E4c: the engine's self-contained tests. Classify every file of
-`native/Tests/NTSDCoreTests` (and its `Mac` folder): self-contained when it
-needs neither the game's targets (`NTSDContent`, `NTSDPractice`,
-`NTSDReferenceChecks`, `CZlib`) nor `Fixtures` nor original bytes inlined
-from the EXE or the data (E7's scan); those move by `git mv` to an engine test
-target, the rest stay with the game. Record the classification and the
-per-suite test counts before and after (the total unchanged). The gate's
-suite runner follows: the engine's suites run from the engine package's test
-build. Gates: review, the mlgate set with the suites split across both
-packages.
+E5a (read-only, no code change): survey and design the game profile. List,
+with file:line, every ID-specific site in `engine/Sources` (object, stage,
+background and frame IDs compared or tabled; the ~90 sites), the AI dispatch
+(the 20 routines and how an object ID selects one), the `0x44d000` record
+(`initial.bin`'s layout, where the engine reads it, which fields are NTSD
+data), and EXE data tables kept in engine code (`OriginalWarTroops.fileWords`
+from 0x44d350 and any others). Write the E5 design section: the profile's
+shape (what the game supplies, what stays the engine's), the increments, the
+gates (bit-exact NTSD: all gates plus the full fixture-driven suites), and how
+2.8.3.3 would fit (read only). Have it reviewed before any E5 code change.

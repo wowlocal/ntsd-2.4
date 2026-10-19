@@ -5,4 +5,5 @@ set -e
 mkdir -p "$(dirname "$NTSD_REPO")" "$(dirname "$NTSD_BUILD")"
 ln -sfn /repo "$NTSD_REPO"
 ln -sfn /build "$NTSD_BUILD"
-exec "$NTSD_BUILD/NTSDCoreTests-test-runner" "$@"
+# NTSD_TEST_MODULE: the game's NTSDCoreTests (default) or the engine's NTSDEngineTests.
+exec "$NTSD_BUILD/${NTSD_TEST_MODULE:-NTSDCoreTests}-test-runner" "$@"

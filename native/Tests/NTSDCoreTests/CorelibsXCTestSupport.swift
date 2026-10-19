@@ -17,7 +17,6 @@ extension OriginalActorHitsTests { convenience init() { self.init(name: "helper"
 extension OriginalActorInputTests { convenience init() { self.init(name: "helper", testClosure: { _ in }) } }
 extension OriginalActorPhysicsTests { convenience init() { self.init(name: "helper", testClosure: { _ in }) } }
 extension OriginalActorSchedulerTests { convenience init() { self.init(name: "helper", testClosure: { _ in }) } }
-extension OriginalAllocationRangesTests { convenience init() { self.init(name: "helper", testClosure: { _ in }) } }
 extension OriginalApplicationActiveBodyTests { convenience init() { self.init(name: "helper", testClosure: { _ in }) } }
 extension OriginalApplicationActiveCommandsTests { convenience init() { self.init(name: "helper", testClosure: { _ in }) } }
 extension OriginalApplicationActiveContactsTests { convenience init() { self.init(name: "helper", testClosure: { _ in }) } }
@@ -54,7 +53,6 @@ extension OriginalApplicationInitializedLoadingTests { convenience init() { self
 extension OriginalApplicationInitializedMenuTests { convenience init() { self.init(name: "helper", testClosure: { _ in }) } }
 extension OriginalApplicationInputTests { convenience init() { self.init(name: "helper", testClosure: { _ in }) } }
 extension OriginalApplicationInterfaceInputsTests { convenience init() { self.init(name: "helper", testClosure: { _ in }) } }
-extension OriginalApplicationIterationDeliveryTests { convenience init() { self.init(name: "helper", testClosure: { _ in }) } }
 extension OriginalApplicationLoadedCharacterTests { convenience init() { self.init(name: "helper", testClosure: { _ in }) } }
 extension OriginalApplicationLoadedCycleTests { convenience init() { self.init(name: "helper", testClosure: { _ in }) } }
 extension OriginalApplicationLoadedLaunchTests { convenience init() { self.init(name: "helper", testClosure: { _ in }) } }
@@ -81,7 +79,6 @@ extension OriginalApplicationTimerTests { convenience init() { self.init(name: "
 extension OriginalApplicationWindowInspectionTests { convenience init() { self.init(name: "helper", testClosure: { _ in }) } }
 extension OriginalApplicationWindowStartupTests { convenience init() { self.init(name: "helper", testClosure: { _ in }) } }
 extension OriginalArithmeticPrecisionTests { convenience init() { self.init(name: "helper", testClosure: { _ in }) } }
-extension OriginalAudioBytesUniformTests { convenience init() { self.init(name: "helper", testClosure: { _ in }) } }
 extension OriginalBackgroundTests { convenience init() { self.init(name: "helper", testClosure: { _ in }) } }
 extension OriginalBitmapDrawingTests { convenience init() { self.init(name: "helper", testClosure: { _ in }) } }
 extension OriginalBitmapFontTests { convenience init() { self.init(name: "helper", testClosure: { _ in }) } }
@@ -97,23 +94,16 @@ extension OriginalCharacterAITests { convenience init() { self.init(name: "helpe
 extension OriginalCharacterMenuMusicSurfaceTests { convenience init() { self.init(name: "helper", testClosure: { _ in }) } }
 extension OriginalCharacterMenuSurfaceTests { convenience init() { self.init(name: "helper", testClosure: { _ in }) } }
 extension OriginalCharacterScreenTests { convenience init() { self.init(name: "helper", testClosure: { _ in }) } }
-extension OriginalClosedStreamContentsTests { convenience init() { self.init(name: "helper", testClosure: { _ in }) } }
 extension OriginalConcurrentInputsTests { convenience init() { self.init(name: "helper", testClosure: { _ in }) } }
-extension OriginalConcurrentLoopTests { convenience init() { self.init(name: "helper", testClosure: { _ in }) } }
 extension OriginalContinuousGameplayTests { convenience init() { self.init(name: "helper", testClosure: { _ in }) } }
 extension OriginalCoordinatePrecisionTests { convenience init() { self.init(name: "helper", testClosure: { _ in }) } }
 extension OriginalCRTTests { convenience init() { self.init(name: "helper", testClosure: { _ in }) } }
 extension OriginalDIBValidationTests { convenience init() { self.init(name: "helper", testClosure: { _ in }) } }
 extension OriginalDataTests { convenience init() { self.init(name: "helper", testClosure: { _ in }) } }
-extension OriginalDecimalMaterializationTests { convenience init() { self.init(name: "helper", testClosure: { _ in }) } }
-extension OriginalDefinedBitsTests { convenience init() { self.init(name: "helper", testClosure: { _ in }) } }
 extension OriginalDemoMusicTests { convenience init() { self.init(name: "helper", testClosure: { _ in }) } }
 extension OriginalDiagnosticNumberTests { convenience init() { self.init(name: "helper", testClosure: { _ in }) } }
 extension OriginalDIBPixelsTests { convenience init() { self.init(name: "helper", testClosure: { _ in }) } }
-extension OriginalFileTranslationTests { convenience init() { self.init(name: "helper", testClosure: { _ in }) } }
-extension OriginalFrameHeapIndexTests { convenience init() { self.init(name: "helper", testClosure: { _ in }) } }
 extension OriginalFrameLoaderTests { convenience init() { self.init(name: "helper", testClosure: { _ in }) } }
-extension OriginalFrameRecordCompactTests { convenience init() { self.init(name: "helper", testClosure: { _ in }) } }
 extension OriginalFreshCharacterMenuTests { convenience init() { self.init(name: "helper", testClosure: { _ in }) } }
 extension OriginalFreshLibraryMenuTests { convenience init() { self.init(name: "helper", testClosure: { _ in }) } }
 extension OriginalFrontControlSettingsTests { convenience init() { self.init(name: "helper", testClosure: { _ in }) } }
@@ -143,7 +133,6 @@ extension OriginalGameplayResultLayoutTests { convenience init() { self.init(nam
 extension OriginalGameplayResultRecordingTests { convenience init() { self.init(name: "helper", testClosure: { _ in }) } }
 extension OriginalGameplayReturnTests { convenience init() { self.init(name: "helper", testClosure: { _ in }) } }
 extension OriginalGraphEventsTests { convenience init() { self.init(name: "helper", testClosure: { _ in }) } }
-extension OriginalInPlaceObjectLoadTests { convenience init() { self.init(name: "helper", testClosure: { _ in }) } }
 extension OriginalInitialInterfaceSurfaceTests { convenience init() { self.init(name: "helper", testClosure: { _ in }) } }
 extension OriginalInitialInterfaceTests { convenience init() { self.init(name: "helper", testClosure: { _ in }) } }
 extension OriginalInitializedGameplayTests { convenience init() { self.init(name: "helper", testClosure: { _ in }) } }
@@ -152,7 +141,6 @@ extension OriginalInitialPoolAndInterfaceTests { convenience init() { self.init(
 extension OriginalInputControlTests { convenience init() { self.init(name: "helper", testClosure: { _ in }) } }
 extension OriginalInputStartupTests { convenience init() { self.init(name: "helper", testClosure: { _ in }) } }
 extension OriginalLZ4Tests { convenience init() { self.init(name: "helper", testClosure: { _ in }) } }
-extension OriginalLatin1Tests { convenience init() { self.init(name: "helper", testClosure: { _ in }) } }
 extension OriginalLibActorControlTests { convenience init() { self.init(name: "helper", testClosure: { _ in }) } }
 extension OriginalLibActorHitsTests { convenience init() { self.init(name: "helper", testClosure: { _ in }) } }
 extension OriginalLibCharacterRosterTests { convenience init() { self.init(name: "helper", testClosure: { _ in }) } }
@@ -185,7 +173,6 @@ extension OriginalLibWorldContactsTests { convenience init() { self.init(name: "
 extension OriginalLoadedCatalogFilesTests { convenience init() { self.init(name: "helper", testClosure: { _ in }) } }
 extension OriginalLoadedCatalogTests { convenience init() { self.init(name: "helper", testClosure: { _ in }) } }
 extension OriginalLoadingAudioTests { convenience init() { self.init(name: "helper", testClosure: { _ in }) } }
-extension OriginalLoadingFilesInPlaceTests { convenience init() { self.init(name: "helper", testClosure: { _ in }) } }
 extension OriginalLoadingFilesTests { convenience init() { self.init(name: "helper", testClosure: { _ in }) } }
 extension OriginalLoadingReadAheadTests { convenience init() { self.init(name: "helper", testClosure: { _ in }) } }
 extension OriginalLocalInputTests { convenience init() { self.init(name: "helper", testClosure: { _ in }) } }
@@ -224,12 +211,9 @@ extension OriginalNetworkMenuTests { convenience init() { self.init(name: "helpe
 extension OriginalNetworkNotificationTests { convenience init() { self.init(name: "helper", testClosure: { _ in }) } }
 extension OriginalObjectInputTests { convenience init() { self.init(name: "helper", testClosure: { _ in }) } }
 extension OriginalObjectTests { convenience init() { self.init(name: "helper", testClosure: { _ in }) } }
-extension OriginalPCMSamplesTests { convenience init() { self.init(name: "helper", testClosure: { _ in }) } }
-extension OriginalPagedStageTests { convenience init() { self.init(name: "helper", testClosure: { _ in }) } }
 extension OriginalPausedGameplayTests { convenience init() { self.init(name: "helper", testClosure: { _ in }) } }
 extension OriginalPlaybackInformationTests { convenience init() { self.init(name: "helper", testClosure: { _ in }) } }
 extension OriginalPlaybackPrologueTests { convenience init() { self.init(name: "helper", testClosure: { _ in }) } }
-extension OriginalPosixFileFactsTests { convenience init() { self.init(name: "helper", testClosure: { _ in }) } }
 extension OriginalPostDrawCommandsTests { convenience init() { self.init(name: "helper", testClosure: { _ in }) } }
 extension OriginalPostDrawLifecycleTests { convenience init() { self.init(name: "helper", testClosure: { _ in }) } }
 extension OriginalPostDrawOpointTests { convenience init() { self.init(name: "helper", testClosure: { _ in }) } }
@@ -246,13 +230,10 @@ extension OriginalReplayPlaybackStartTests { convenience init() { self.init(name
 extension OriginalReplayPlaybackTests { convenience init() { self.init(name: "helper", testClosure: { _ in }) } }
 extension OriginalReplayTickTests { convenience init() { self.init(name: "helper", testClosure: { _ in }) } }
 extension OriginalReplayWriterTests { convenience init() { self.init(name: "helper", testClosure: { _ in }) } }
-extension OriginalRequestSlotWordTests { convenience init() { self.init(name: "helper", testClosure: { _ in }) } }
 extension OriginalResultLayoutTests { convenience init() { self.init(name: "helper", testClosure: { _ in }) } }
 extension OriginalResultRecordingTests { convenience init() { self.init(name: "helper", testClosure: { _ in }) } }
-extension OriginalRetainedHistoryTests { convenience init() { self.init(name: "helper", testClosure: { _ in }) } }
 extension OriginalSettingsLoadingTests { convenience init() { self.init(name: "helper", testClosure: { _ in }) } }
 extension OriginalSettingsWritingTests { convenience init() { self.init(name: "helper", testClosure: { _ in }) } }
-extension OriginalSharedFrameSlotTests { convenience init() { self.init(name: "helper", testClosure: { _ in }) } }
 extension OriginalStageEndingTests { convenience init() { self.init(name: "helper", testClosure: { _ in }) } }
 extension OriginalStageFinaleTests { convenience init() { self.init(name: "helper", testClosure: { _ in }) } }
 extension OriginalStageTests { convenience init() { self.init(name: "helper", testClosure: { _ in }) } }
@@ -263,7 +244,6 @@ extension OriginalStartupPanelTests { convenience init() { self.init(name: "help
 extension OriginalStartupStorageTests { convenience init() { self.init(name: "helper", testClosure: { _ in }) } }
 extension OriginalStateTests { convenience init() { self.init(name: "helper", testClosure: { _ in }) } }
 extension OriginalSurfaceSourceColorsTests { convenience init() { self.init(name: "helper", testClosure: { _ in }) } }
-extension OriginalSurfaceUnknownTests { convenience init() { self.init(name: "helper", testClosure: { _ in }) } }
 extension OriginalWarBattleTests { convenience init() { self.init(name: "helper", testClosure: { _ in }) } }
 extension OriginalWarDependenciesTests { convenience init() { self.init(name: "helper", testClosure: { _ in }) } }
 extension OriginalWarSetupNativeTests { convenience init() { self.init(name: "helper", testClosure: { _ in }) } }

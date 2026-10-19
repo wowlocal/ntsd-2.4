@@ -3,8 +3,10 @@
 suite per container, and append one JSON line per suite.
 
 Usage: run_linux_suites.py BUILD_DIR OUT.jsonl [--jobs N] [--timeout SECONDS] [--only A,B] [--platform linux/amd64]
+                           [--module NAME]
 
-BUILD_DIR is the Linux products directory holding NTSDCoreTests-test-runner.
+BUILD_DIR is the Linux products directory holding NAME-test-runner: the game's
+NTSDCoreTests (the default) or the engine package's NTSDEngineTests (ENGINE_SPLIT E4c).
 The repository and BUILD_DIR are mounted read-only into swift:6.4.0-noble and
 their macOS absolute paths are recreated by tools/crossplatform/linux-test-run.sh,
 so #filePath and Bundle.module resolve. Suites already in OUT.jsonl are skipped,
@@ -19,10 +21,12 @@ TOOLS = os.path.dirname(os.path.abspath(__file__))
 
 
 PLATFORM = []
+MODULE = ["NTSDCoreTests"]
 
 
 def docker(build, args, timeout):
     cmd = ["docker", "run", "--rm", *PLATFORM, "-e", f"NTSD_REPO={REPO}", "-e", f"NTSD_BUILD={build}",
+           "-e", f"NTSD_TEST_MODULE={MODULE[0]}",
            "-v", f"{REPO}:/repo:ro", "-v", f"{build}:/build:ro", "-v", f"{TOOLS}:/tools:ro",
            IMAGE, "/tools/linux-test-run.sh", *args]
     return subprocess.run(cmd, capture_output=True, text=True, timeout=timeout)
@@ -32,7 +36,7 @@ def suites(build):
     out = docker(build, ["--list-tests"], 600).stdout
     names = []
     for line in out.splitlines():
-        m = re.match(r"^\s*NTSDCoreTests\.([A-Za-z0-9_]+)/", line.strip())
+        m = re.match(r"^\s*" + re.escape(MODULE[0]) + r"\.([A-Za-z0-9_]+)/", line.strip())
         if m and m.group(1) not in names:
             names.append(m.group(1))
     return names
@@ -41,7 +45,7 @@ def suites(build):
 def run(build, suite, timeout, logdir):
     start = time.time()
     try:
-        p = docker(build, [f"NTSDCoreTests.{suite}"], timeout)
+        p = docker(build, [f"{MODULE[0]}.{suite}"], timeout)
         text, code = p.stdout + p.stderr, p.returncode
     except subprocess.TimeoutExpired as e:
         text = (e.stdout or b"").decode() if isinstance(e.stdout, bytes) else (e.stdout or "")
@@ -62,8 +66,10 @@ def main():
     a.add_argument("build"); a.add_argument("out")
     a.add_argument("--jobs", type=int, default=2); a.add_argument("--timeout", type=int, default=7200)
     a.add_argument("--only", default=""); a.add_argument("--platform", default="")
+    a.add_argument("--module", default="NTSDCoreTests")
     o = a.parse_args()
     if o.platform: PLATFORM[:] = ["--platform", o.platform]
+    MODULE[0] = o.module
     logdir = os.path.splitext(o.out)[0] + "-logs"
     os.makedirs(logdir, exist_ok=True)
     done = set()

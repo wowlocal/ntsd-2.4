@@ -119,6 +119,11 @@ let package = Package(
         .target(name: "NTSDMusicDecoder", dependencies: ["CALAC"], swiftSettings: exclusivity),
         // The hosts (ENGINE_SPLIT E4b): each runs a game given as an OriginalGame.
         .target(name: "NTSDHeadlessHost", dependencies: ["NTSDCore", "NTSDRuntime"], swiftSettings: exclusivity),
+        // The engine's self-contained tests (ENGINE_SPLIT E4c): synthetic inputs
+        // only; the fixture-driven suites and those reading the game's content stay
+        // with the game (native/Tests/NTSDCoreTests). Mac/ builds only on an Apple host.
+        .testTarget(name: "NTSDEngineTests", dependencies: ["NTSDCore", "NTSDRuntime"] + (portable ? [] : ["NTSDMacPlatform"]),
+                    exclude: portable ? ["Mac"] : [], swiftSettings: exclusivity),
     ],
     swiftLanguageModes: [.v5]
 )
