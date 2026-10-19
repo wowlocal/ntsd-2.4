@@ -21,7 +21,9 @@ from pathlib import Path
 ROOT = Path(__file__).resolve().parents[2]
 spec = importlib.util.spec_from_file_location("app_e2e", ROOT / "tools/app_e2e.py")
 app_e2e = importlib.util.module_from_spec(spec); spec.loader.exec_module(app_e2e)
-X5 = Path("/Volumes/X5/ntsd-2.4-research/crossplatform")
+# Work folder (scratch, dependencies, debug key); NTSD_CROSSPLATFORM_WORK on a
+# Mac without X5 (TOUCH_CONTROLS: the second Mac builds on its own disk).
+X5 = Path(os.environ.get("NTSD_CROSSPLATFORM_WORK", "/Volumes/X5/ntsd-2.4-research/crossplatform"))
 # Per platform: target, SDK, default simulator, bundle identifier and the
 # platform's Info.plist keys.
 PLATFORMS = {

@@ -22,7 +22,9 @@ import argparse, os, plistlib, shutil, subprocess, sys
 from pathlib import Path
 
 ROOT = Path(__file__).resolve().parents[2]
-X5 = Path("/Volumes/X5/ntsd-2.4-research/crossplatform")
+# Work folder (scratch, dependencies, debug key); NTSD_CROSSPLATFORM_WORK on a
+# Mac without X5 (TOUCH_CONTROLS: the second Mac builds on its own disk).
+X5 = Path(os.environ.get("NTSD_CROSSPLATFORM_WORK", "/Volumes/X5/ntsd-2.4-research/crossplatform"))
 BUNDLE_ID = "local.ntsd.native.ios"
 IPHONE_BUNDLE_ID = "local.ntsd.native.iphone"
 

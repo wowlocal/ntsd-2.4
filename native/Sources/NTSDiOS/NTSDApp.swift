@@ -1,8 +1,7 @@
 import UIKit
+import GameController
 import NTSDRuntime
 #if os(tvOS)
-import GameController
-
 /// On tvOS controller input reaches the game only through GameController
 /// (TVOS_WEB T1b): with UIKit interaction off, a gamepad's buttons are not
 /// also delivered as presses (its B arrives as Menu there) and the Siri
@@ -26,6 +25,9 @@ final class NTSDAppDelegate: UIResponder, UIApplicationDelegate {
 final class NTSDSceneDelegate: UIResponder, UIWindowSceneDelegate {
     var window: UIWindow?
     private var host: NTSDiOSSessionHost?, session: OriginalRuntimeSession?
+    #if !os(tvOS)
+    private var inputDevices: NTSDInputDevices?
+    #endif
     /// The screen the game is told: the device screen's bounds in points,
     /// landscape (the app runs landscape only), scaled up (same aspect) to at
     /// least 800x600, the desktop the original was made for, as on Android.
@@ -56,6 +58,17 @@ final class NTSDSceneDelegate: UIResponder, UIWindowSceneDelegate {
             let game = OriginalRuntimeSession(arguments:CommandLine.arguments,host:host)
             host.session = game; controller.gameView.host = host
             self.host = host; self.session = game
+            #if !os(tvOS)
+            // The on-screen controls (TOUCH_CONTROLS): shown while no keyboard
+            // or gamepad is connected (off in scripted checks unless
+            // `--touch-controls on|off` says otherwise), their settings in
+            // Application Support/controls.txt.
+            let support = try? FileManager.default.url(for:.applicationSupportDirectory,in:.userDomainMask,appropriateFor:nil,create:true)
+            let controls = OriginalTouchControls(config:support?.appendingPathComponent("controls.txt"))
+            controls.forced = OriginalTouchControls.forced(CommandLine.arguments) ?? (host.scripted ? false : nil)
+            let devices = NTSDInputDevices(controls)
+            controller.gameView.attach(controls,devices:devices); inputDevices = devices
+            #endif
             // Start once UIKit has finished connecting the scene: CoreAudio's
             // setup needs the main thread free (it deadlocked inside this
             // callback). A run-loop block rather than a main-queue block: the
@@ -66,6 +79,47 @@ final class NTSDSceneDelegate: UIResponder, UIWindowSceneDelegate {
         }
     }
 }
+
+#if !os(tvOS)
+/// Whether a keyboard or gamepad is connected, for the on-screen controls,
+/// which show only without one (TOUCH_CONTROLS): GameController's keyboard
+/// and extended gamepads, or a hardware key press (should a keyboard go
+/// unreported), forgotten when a keyboard disconnects. Asked again on the
+/// next turn after each notification too (a departing device may still be
+/// listed while its notification is delivered), when the app becomes active
+/// and for a touch while they are hidden.
+@MainActor final class NTSDInputDevices {
+    let controls: OriginalTouchControls
+    private var typed = false
+    init(_ controls: OriginalTouchControls) {
+        self.controls = controls
+        for name in [Notification.Name.GCKeyboardDidConnect,.GCKeyboardDidDisconnect,.GCControllerDidConnect,.GCControllerDidDisconnect,
+                     UIApplication.didBecomeActiveNotification] {
+            NotificationCenter.default.addObserver(forName:name,object:nil,queue:.main) { [weak self] note in
+                let disconnected = note.name == .GCKeyboardDidDisconnect
+                MainActor.assumeIsolated { if disconnected { self?.typed = false }; self?.update() }
+                DispatchQueue.main.async { MainActor.assumeIsolated { self?.update() } }
+            }
+        }
+        update()
+    }
+    func keyPressed() { if !typed { typed = true; update() } }
+    /// A touch while they are hidden: the keyboard or gamepad may be gone.
+    func touched() { if controls.hardwareConnected { update() } }
+    private var reported: [String]?
+    /// Reported at launch and on each change (`iosTouchControls`).
+    private func update() {
+        let keyboard = GCKeyboard.coalesced != nil
+        let gamepads = GCController.controllers().filter { $0.extendedGamepad != nil }.map(\.productCategory)   // not names: they may be the owner's
+        controls.hardwareConnected = typed || keyboard || !gamepads.isEmpty
+        let state = ["\(keyboard)","\(typed)","\(controls.active)"]+gamepads
+        if state != reported {
+            reported = state
+            OriginalRuntimeSession.emit(["event":"iosTouchControls","keyboard":keyboard,"keyPressed":typed,"gamepads":gamepads,"shown":controls.active])
+        }
+    }
+}
+#endif
 
 final class NTSDGameViewController: NTSDRootViewController {
     let gameView = NTSDGameView()
@@ -101,7 +155,8 @@ final class NTSDGameViewController: NTSDRootViewController {
 
 /// Shows the presented framebuffer scaled to fit (nearest) — or, in the
 /// original format, at one point per pixel at the centre — maps touches to
-/// the left mouse button and keyboard presses to the shared HID key table.
+/// the on-screen controls and the left mouse button and keyboard presses to
+/// the shared HID key table.
 final class NTSDGameView: UIView {
     weak var host: NTSDiOSSessionHost?
     private(set) var frameSize = CGSize.zero
@@ -123,7 +178,12 @@ final class NTSDGameView: UIView {
         if oneToOne && layer.contentsScale != 1 { layer.contentsScale = 1 }
     }
     override func didMoveToWindow() { super.didMoveToWindow(); gravity() }
-    override func layoutSubviews() { super.layoutSubviews(); gravity() }
+    override func layoutSubviews() {
+        super.layoutSubviews(); gravity()
+        #if !os(tvOS)
+        if controlsLayer.frame != controlsFrame { controlsLayer.frame = controlsFrame; showControls() }
+        #endif
+    }
     /// Points per frame pixel.
     private var scale: CGFloat {
         oneToOne ? 1 : min(bounds.width/frameSize.width,bounds.height/frameSize.height)
@@ -131,7 +191,9 @@ final class NTSDGameView: UIView {
     override init(frame: CGRect) {
         super.init(frame:frame); backgroundColor = .black
         #if !os(tvOS)
-        isMultipleTouchEnabled = false
+        isMultipleTouchEnabled = true
+        controlsLayer.actions = ["contents":NSNull(),"bounds":NSNull(),"position":NSNull()]
+        layer.addSublayer(controlsLayer)
         #endif
         layer.contentsGravity = .resizeAspect; layer.magnificationFilter = .nearest
         // An output switched between 1080p and 4K (or an external screen) may reset the layer's scale.
@@ -154,18 +216,104 @@ final class NTSDGameView: UIView {
     // The Siri Remote's touch surface sends indirect touches: on tvOS they
     // must not become mouse clicks (its input comes through GameController).
     #if !os(tvOS)
-    override func touchesBegan(_ touches: Set<UITouch>,with event: UIEvent?) { touch(touches) { $0.began(x:$1,y:$2) } }
-    override func touchesMoved(_ touches: Set<UITouch>,with event: UIEvent?) { touch(touches) { $0.moved(x:$1,y:$2) } }
-    override func touchesEnded(_ touches: Set<UITouch>,with event: UIEvent?) { touch(touches) { $0.ended(x:$1,y:$2) } }
-    override func touchesCancelled(_ touches: Set<UITouch>,with event: UIEvent?) { touch(touches) { $0.ended(x:$1,y:$2) } }
-    private func touch(_ touches: Set<UITouch>,_ phase: (OriginalRuntimeTouchMouse,Int32,Int32) -> Void) {
-        guard let t = touches.first,let host else { return }
-        let (x,y) = clientPoint(t.location(in:self))
-        MainActor.assumeIsolated { phase(host.touch,x,y) }
+    /// The on-screen controls (TOUCH_CONTROLS) on their own layer over the
+    /// picture, in points within the left and right safe-area insets (a
+    /// landscape iPhone's Dynamic Island; the iPad has none), rendered again
+    /// at up to two pixels per point when they change or that area does.
+    /// Every touch goes through them; one that begins on empty screen is the
+    /// touch mouse.
+    private var controls: OriginalTouchControls?, devices: NTSDInputDevices?
+    private let controlsLayer = CALayer()
+    private var controlsFrame: CGRect { bounds.inset(by:UIEdgeInsets(top:0,left:safeAreaInsets.left,bottom:0,right:safeAreaInsets.right)) }
+    override func safeAreaInsetsDidChange() { super.safeAreaInsetsDidChange(); setNeedsLayout() }
+    /// A view point in the controls' canvas, and back.
+    private func canvasPoint(_ t: UITouch) -> (x: Float,y: Float) {
+        let p = t.location(in:self),o = controlsFrame.origin
+        return (Float(p.x-o.x),Float(p.y-o.y))
+    }
+    private var touchIDs: [ObjectIdentifier: Int] = [:], lastTouchID = 0
+    func attach(_ controls: OriginalTouchControls,devices: NTSDInputDevices) {
+        controls.key = { [weak self] usage,down in
+            if let key = OriginalHIDKeys.key(usage:usage) { self?.host?.key(key,down:down,characters:down ? OriginalTouchControls.characters(usage) : nil) }
+        }
+        controls.mouse = { [weak self] phase,x,y in
+            guard let self,let host = self.host else { return }
+            let o = self.controlsFrame.origin
+            let (cx,cy) = self.clientPoint(CGPoint(x:o.x+CGFloat(x),y:o.y+CGFloat(y)))
+            switch phase {
+            case .began: host.touch.began(x:cx,y:cy)
+            case .moved: host.touch.moved(x:cx,y:cy)
+            case .ended: host.touch.ended(x:cx,y:cy)
+            }
+        }
+        controls.changed = { [weak self] in self?.showControls() }
+        self.controls = controls; self.devices = devices; showControls()
+    }
+    /// Rasterized off the main (game) thread, one picture at a time; the
+    /// newest waiting picture follows (`rendering`, `waiting`: main thread).
+    private static let renderQueue = DispatchQueue(label:"NTSD.touchControls",qos:.userInteractive)
+    private var rendering = false, waiting: (OriginalTouchControls.Picture?,Int,Int,Float)?
+    private func showControls() {
+        let size = controlsFrame.size
+        guard let controls,size.width > 0,size.height > 0 else { controlsLayer.contents = nil; return }
+        controls.layout(width:Float(size.width),height:Float(size.height),maxUnit:OriginalTouchControls.maxUnitPoints)
+        // Up to two pixels per point, and about 3 million pixels (a 13-inch
+        // iPad at 1.48).
+        let scale = min(2,max(1,traitCollection.displayScale),max(1,(3_000_000/(size.width*size.height)).squareRoot()))
+        waiting = (controls.picture,Int((size.width*scale).rounded()),Int((size.height*scale).rounded()),OriginalTouchControls.maxUnitPoints*Float(scale))
+        renderNext()
+    }
+    private func renderNext() {
+        guard !rendering,let (picture,width,height,maxUnit) = waiting else { return }
+        waiting = nil
+        guard let picture else { controlsLayer.contents = nil; return }
+        rendering = true
+        Self.renderQueue.async { [weak self] in
+            let image = Self.image(picture.render(width:width,height:height,maxUnit:maxUnit))
+            DispatchQueue.main.async { MainActor.assumeIsolated {
+                guard let self else { return }
+                self.rendering = false; self.controlsLayer.contents = image
+                self.renderNext()
+            } }
+        }
+    }
+    /// R,G,B,A bytes, premultiplied.
+    private nonisolated static func image(_ o: OriginalTouchOverlay) -> CGImage? {
+        guard o.width > 0,o.height > 0,let space = CGColorSpace(name:CGColorSpace.sRGB),
+              let provider = CGDataProvider(data:o.pixels.withUnsafeBytes { Data($0) } as CFData) else { return nil }
+        return CGImage(width:o.width,height:o.height,bitsPerComponent:8,bitsPerPixel:32,bytesPerRow:o.width*4,space:space,
+                       bitmapInfo:CGBitmapInfo(rawValue:CGImageAlphaInfo.premultipliedLast.rawValue),
+                       provider:provider,decode:nil,shouldInterpolate:true,intent:.defaultIntent)
+    }
+    private func touchID(_ t: UITouch) -> Int {
+        if let id = touchIDs[ObjectIdentifier(t)] { return id }
+        lastTouchID += 1; touchIDs[ObjectIdentifier(t)] = lastTouchID; return lastTouchID
+    }
+    // The Siri Remote's touch surface sends indirect touches: on tvOS they
+    // must not become mouse clicks (its input comes through GameController).
+    override func touchesBegan(_ touches: Set<UITouch>,with event: UIEvent?) {
+        devices?.touched()
+        for t in touches { let p = canvasPoint(t); controls?.began(touchID(t),x:p.x,y:p.y) }
+    }
+    override func touchesMoved(_ touches: Set<UITouch>,with event: UIEvent?) {
+        for t in touches { let p = canvasPoint(t); controls?.moved(touchID(t),x:p.x,y:p.y) }
+    }
+    override func touchesEnded(_ touches: Set<UITouch>,with event: UIEvent?) { lift(touches) }
+    override func touchesCancelled(_ touches: Set<UITouch>,with event: UIEvent?) { lift(touches) }
+    private func lift(_ touches: Set<UITouch>) {
+        for t in touches {
+            let p = canvasPoint(t); controls?.ended(touchID(t),x:p.x,y:p.y); touchIDs[ObjectIdentifier(t)] = nil
+        }
     }
     #endif
     func handle(_ presses: Set<UIPress>,down: Bool) -> Bool {
         var handled = false
+        #if !os(tvOS)
+        // A keyboard is there: the on-screen controls hide (and let go)
+        // before its key goes to the game. Only a key going down: a late
+        // release after the keyboard left must not bring it back.
+        if down,presses.contains(where:{ $0.key.map { OriginalHIDKeys.key(usage:UInt32($0.keyCode.rawValue)) != nil } ?? false }) { devices?.keyPressed() }
+        #endif
         for press in presses {
             guard let key = press.key,let mapped = OriginalHIDKeys.key(usage:UInt32(key.keyCode.rawValue)) else { continue }
             handled = true

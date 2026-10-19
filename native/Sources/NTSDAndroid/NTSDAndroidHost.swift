@@ -42,6 +42,15 @@ final class NTSDAndroidCursor {}
         /// The last frame's presentation: one to one (the original window) or fitted.
         var oneToOne = false
         func withLock<T>(_ body: () -> T) -> T { lock.lock(); defer { lock.unlock() }; return body() }
+        /// The on-screen controls drawn over each frame (TOUCH_CONTROLS): set
+        /// on the main thread under their own lock, so it never waits for a
+        /// draw; the drawing thread rasterizes a new picture once, at the
+        /// buffer's size, and blends the kept overlay (under `lock`).
+        let pictureLock = NSLock()
+        /// Device pixels per dp, for the controls' unit cap (set once).
+        var density: Float = 1
+        var picture: OriginalTouchControls.Picture?, pictureVersion = 0
+        var overlay: OriginalTouchOverlay?, overlayVersion = -1
     }
     let target = Target()
     /// The surface draw (black bars, channel swap, post: ~3.4 ms per frame on
@@ -51,10 +60,12 @@ final class NTSDAndroidCursor {}
     /// than one draw), so every frame is drawn, in order, as soon as the
     /// presenter is free; nothing is dropped. A synchronous present waits
     /// until the presenter has drawn every frame handed to it, so it never
-    /// overtakes one. Counts go out every 300 frames (`androidPresent`).
+    /// overtakes one. Counts go out every 300 frames (`androidPresent`). A
+    /// redraw of the last frame (the on-screen controls changed) is drawn here
+    /// too, unless a new frame comes first.
     final class Presenter: @unchecked Sendable {
         private let condition = NSCondition()
-        private var pending: OriginalFramebuffer?, pendingOneToOne = false
+        private var pending: OriginalFramebuffer?, pendingOneToOne = false, redrawing = false
         private var submitted = 0,drawn = 0,waits = 0
         init(_ target: Target) {
             let thread = Thread { [self] in
@@ -83,12 +94,20 @@ final class NTSDAndroidCursor {}
             pending = frame; pendingOneToOne = oneToOne; submitted += 1
             condition.broadcast(); condition.unlock()
         }
+        func redraw() { condition.lock(); redrawing = true; condition.broadcast(); condition.unlock() }
         private func run(_ target: Target) {
             while true {
                 condition.lock()
-                while pending == nil { condition.wait() }
-                let frame = pending!,oneToOne = pendingOneToOne; pending = nil
+                while pending == nil && !redrawing { condition.wait() }
+                // A redraw waits up to a frame of the game's (which carries
+                // the controls too) before drawing the last one again.
+                if pending == nil {
+                    let deadline = Date().addingTimeInterval(0.034)
+                    while pending == nil && condition.wait(until:deadline) {}
+                }
+                let next = pending,oneToOne = pendingOneToOne; pending = nil; redrawing = false
                 condition.broadcast(); condition.unlock()
+                guard let frame = next else { NTSDAndroidWindowHost.redraw(target); continue }
                 NTSDAndroidWindowHost.show(frame,target,oneToOne:oneToOne)
                 condition.lock(); drawn += 1
                 let counts = drawn % 300 == 0 ? (submitted,drawn,waits) : nil
@@ -153,7 +172,17 @@ final class NTSDAndroidCursor {}
         target.withLock { target.frame = frame; target.oneToOne = oneToOne; if let surface = target.surface { draw(surface,frame,target) } }
     }
     /// Redraws the last frame (a new or invalidated surface).
-    func redraw() { target.withLock { if let surface = target.surface,let frame = target.frame { Self.draw(surface,frame,target) } } }
+    func redraw() { Self.redraw(target) }
+    private nonisolated static func redraw(_ target: Target) {
+        target.withLock { if let surface = target.surface,let frame = target.frame { draw(surface,frame,target) } }
+    }
+    /// The on-screen controls' picture over the frames from now on (nil:
+    /// none), and the last frame again on the presenter's thread (on this
+    /// one before there is a presenter).
+    func showControls(_ picture: OriginalTouchControls.Picture?) {
+        target.pictureLock.lock(); target.picture = picture; target.pictureVersion += 1; target.pictureLock.unlock()
+        if let presenter { presenter.redraw() } else { redraw() }
+    }
     /// The buffer size that fits the frame into the surface's aspect; one to
     /// one, the surface's own size when it holds the frame.
     private nonisolated static func buffer(_ surface: OpaquePointer,_ width: Int,_ height: Int,_ oneToOne: Bool) -> (Int32,Int32) {
@@ -195,7 +224,21 @@ final class NTSDAndroidCursor {}
                 for y in 0..<h { Self.swapChannels(src+y*frame.width,dst+(y0+y)*stride+x0,w) }
             }
         }
+        target.pictureLock.lock(); let picture = target.picture,version = target.pictureVersion; target.pictureLock.unlock()
+        if let picture {
+            if version != target.overlayVersion || target.overlay?.width != width || target.overlay?.height != height {
+                target.overlay = picture.render(width:width,height:height,maxUnit:controlsUnit(width:width,height:height,surface:surface,target.density))
+                target.overlayVersion = version
+            }
+            target.overlay?.blend(over:dst,stride:stride)
+        }
         _ = ANativeWindow_unlockAndPost(surface)
+    }
+    /// The on-screen controls' unit cap (48 dp) in pixels of a drawn buffer of
+    /// this size: the buffer is stretched to the surface.
+    nonisolated static func controlsUnit(width: Int,height: Int,surface: OpaquePointer,_ density: Float) -> Float {
+        let sh = Float(ANativeWindow_getHeight(surface))
+        return sh > 0 ? OriginalTouchControls.maxUnitPoints*density*Float(height)/sh : .infinity
     }
     /// B,G,R,X words to R,G,B,X with X = 0xFF (little-endian), four at a time.
     nonisolated static func swapChannels(_ from: UnsafePointer<UInt32>,_ to: UnsafeMutablePointer<UInt32>,_ count: Int) {
@@ -212,13 +255,18 @@ final class NTSDAndroidCursor {}
             i += 1
         }
     }
-    /// A surface pixel as the drawn frame's client point.
-    func clientPoint(_ x: Float,_ y: Float,surface: OpaquePointer) -> (Int32,Int32)? {
+    /// A surface pixel as a pixel of the drawn buffer (the on-screen
+    /// controls' canvas), with the buffer's size.
+    func canvasPoint(_ x: Float,_ y: Float,surface: OpaquePointer) -> (x: Float,y: Float,width: Int32,height: Int32)? {
         guard let size = shownSize else { return nil }
         let sw = Float(ANativeWindow_getWidth(surface)),sh = Float(ANativeWindow_getHeight(surface))
         guard sw > 0,sh > 0 else { return nil }
         let (bw,bh) = Self.buffer(surface,size.width,size.height,shownOneToOne)
-        let bx = x*Float(bw)/sw,by = y*Float(bh)/sh
+        return (x*Float(bw)/sw,y*Float(bh)/sh,bw,bh)
+    }
+    /// A pixel of a drawn buffer of this size as the drawn frame's client point.
+    func clientPoint(canvas bx: Float,_ by: Float,width bw: Float,height bh: Float) -> (Int32,Int32)? {
+        guard let size = shownSize else { return nil }
         return (Int32((bx-Float((Int(bw)-size.width)/2)).rounded(.down)),Int32((by-Float((Int(bh)-size.height)/2)).rounded(.down)))
     }
 }
@@ -236,10 +284,51 @@ final class NTSDAndroidCursor {}
     private var cursor: (Int32,Int32) = (0,0)
     /// Touches as player-like clicks (hover, then a held press).
     lazy var touch = OriginalRuntimeTouchMouse { [unowned self] message,x,y,buttons in self.mouse(message,x:x,y:y,buttons:buttons) }
+    /// The on-screen controls (TOUCH_CONTROLS), over the drawn buffer's
+    /// pixels: shown while no keyboard or gamepad is connected (off in
+    /// scripted checks unless `--touch-controls on`), their settings in
+    /// files/controls.txt. A finger on empty screen is the touch mouse.
+    let controls: OriginalTouchControls
+    /// The input devices seen when Android was last asked which are connected.
+    private var inputDevices = Set<Int32>()
     init(arguments: [String],screen: CGSize,density: Double,musicDirectory: String,files: URL) {
-        self.arguments = arguments; windows = NTSDAndroidWindowHost(screen:screen)
+        self.arguments = arguments; windows = NTSDAndroidWindowHost(screen:screen); windows.target.density = Float(density)
         windows.original = arguments.contains("--original-window")
         self.musicDirectory = musicDirectory; self.files = files; self.density = density
+        controls = OriginalTouchControls(config:files.appendingPathComponent("controls.txt"))
+        controls.forced = OriginalTouchControls.forced(arguments) ?? (arguments.contains("--script") ? false : nil)
+        controls.key = { [unowned self] usage,down in
+            if let key = OriginalHIDKeys.key(usage:usage) { self.key(key,down:down,characters:down ? OriginalTouchControls.characters(usage) : nil) }
+        }
+        controls.mouse = { [unowned self] phase,x,y in
+            let canvas = self.controls.canvas
+            guard let (cx,cy) = self.windows.clientPoint(canvas:x,y,width:canvas.width,height:canvas.height) else { return }
+            switch phase {
+            case .began: self.touch.began(x:cx,y:cy)
+            case .moved: self.touch.moved(x:cx,y:cy)
+            case .ended: self.touch.ended(x:cx,y:cy)
+            }
+        }
+        controls.changed = { [unowned self] in self.windows.showControls(self.controls.picture) }
+    }
+    /// Asks Android which keyboards and gamepads are connected (the on-screen
+    /// controls hide while one is): at launch, on a configuration change or
+    /// focus, for an event from a device not seen then, and for a touch while
+    /// they are hidden (the device may be gone).
+    func checkInputDevices() {
+        guard let app = NTSDAndroidApp.shared else { return }
+        let found = NTSDAndroidGamepads.connectedHardware(app.activity)
+        inputDevices = found.devices; controls.hardwareConnected = found.connected
+        // Reported at launch and on each change (`androidTouchControls`).
+        if reportedControls != controls.active {
+            reportedControls = controls.active
+            Self.report(["event":"androidTouchControls","connected":found.connected,"by":found.kinds,"devices":found.devices.count,"shown":controls.active])
+        }
+    }
+    private var reportedControls: Bool?
+    func noteInputDevice(_ id: Int32) {
+        guard !inputDevices.contains(id) else { return }
+        checkInputDevices(); inputDevices.insert(id)   // asked once per new device, whatever Android answered
     }
     static func report(_ value: [String:Any]) { OriginalRuntimeSession.emit(value) }
     /// The next message-loop iteration on a timerfd on the main looper
@@ -357,7 +446,10 @@ final class NTSDAndroidCursor {}
     /// DirectSound silences the game's buffers while its window is not
     /// foreground (as the SDL host follows).
     private func applyGain() { feed?.silent.store(effectsMuted || !focused,ordering:.relaxed) }
-    func setFocused(_ value: Bool) { focused = value; applyGain(); if !value { gamepads.reset() } }
+    func setFocused(_ value: Bool) {
+        focused = value; applyGain()
+        if value { checkInputDevices() } else { gamepads.reset(); controls.releaseKeys() }
+    }
     /// Declared Android convention: in the background the app's audio output
     /// stops (the game keeps running); it resumes where it was.
     func setForeground(_ value: Bool) {

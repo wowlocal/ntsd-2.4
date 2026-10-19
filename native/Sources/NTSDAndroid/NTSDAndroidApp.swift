@@ -16,7 +16,9 @@ import NTSDRuntime
 // there sends the event lines to a file, and `--tz NAME` sets the process time
 // zone (an app inherits the zygote's environment, not the harness's TZ).
 // `--original-window` there shows the original window: the frame at one
-// device pixel per pixel, centred (WINDOW_SCALING S5).
+// device pixel per pixel, centred (WINDOW_SCALING S5). `--touch-controls
+// on|off` there forces the on-screen controls, which otherwise show while no
+// keyboard or gamepad is connected (TOUCH_CONTROLS).
 
 @_cdecl("ntsd_android_on_create")
 func ntsdAndroidOnCreate(_ activity: UnsafeMutablePointer<ANativeActivity>) {
@@ -65,6 +67,9 @@ func ntsdAndroidOnCreate(_ activity: UnsafeMutablePointer<ANativeActivity>) {
             if focused != 0, let activity { ntsd_android_hide_system_bars(activity) }
             MainActor.assumeIsolated { NTSDAndroidApp.shared?.host?.setFocused(focused != 0) }
         }
+        // A keyboard plugged in or out changes the configuration (the manifest
+        // keeps the activity): the on-screen controls follow (TOUCH_CONTROLS).
+        callbacks.pointee.onConfigurationChanged = { _ in MainActor.assumeIsolated { NTSDAndroidApp.shared?.host?.checkInputDevices() } }
         callbacks.pointee.onDestroy = { _ in Foundation.exit(0) }
         ntsd_android_hide_system_bars(activity)
         // The packaged inputs' SHA-256 with the CPU's SHA-2 instructions, after
@@ -221,6 +226,7 @@ func ntsdAndroidOnCreate(_ activity: UnsafeMutablePointer<ANativeActivity>) {
         let screen = CGSize(width:(dp.width*fit).rounded(.down),height:(dp.height*fit).rounded(.down))
         let host = NTSDAndroidSessionHost(arguments:arguments,screen:screen,density:density,musicDirectory:music,files:files)
         host.windows.app = self; host.windows.setSurface(surface)
+        host.checkInputDevices(); host.windows.showControls(host.controls.picture)
         let session = OriginalRuntimeSession(arguments:arguments,host:host)
         host.session = session; self.host = host; self.session = session
         session.start()
@@ -245,10 +251,17 @@ func ntsdAndroidOnCreate(_ activity: UnsafeMutablePointer<ANativeActivity>) {
     }
     private func handle(_ event: OpaquePointer) -> Bool {
         guard let host else { return false }
+        host.noteInputDevice(AInputEvent_getDeviceId(event))
         if host.gamepads.handle(event) { return true }
         switch AInputEvent_getType(event) {
         case Int32(AINPUT_EVENT_TYPE_MOTION):
-            guard let surface,let (x,y) = host.windows.clientPoint(AMotionEvent_getX(event,0),AMotionEvent_getY(event,0),surface:surface) else { return true }
+            guard let surface else { return true }
+            // The touch screen through the on-screen controls; a mouse or
+            // touchpad stays the touch mouse by its first pointer, as before.
+            let touchscreen = Int32(AINPUT_SOURCE_TOUCHSCREEN)
+            if AInputEvent_getSource(event) & touchscreen == touchscreen { touches(event,host:host,surface:surface); return true }
+            guard let p = host.windows.canvasPoint(AMotionEvent_getX(event,0),AMotionEvent_getY(event,0),surface:surface),
+                  let (x,y) = host.windows.clientPoint(canvas:p.x,p.y,width:Float(p.width),height:Float(p.height)) else { return true }
             switch AMotionEvent_getAction(event) & Int32(AMOTION_EVENT_ACTION_MASK) {
             case Int32(AMOTION_EVENT_ACTION_DOWN): host.touch.began(x:x,y:y)
             case Int32(AMOTION_EVENT_ACTION_MOVE): host.touch.moved(x:x,y:y)
@@ -266,6 +279,37 @@ func ntsdAndroidOnCreate(_ activity: UnsafeMutablePointer<ANativeActivity>) {
             return true
         default:
             return false
+        }
+    }
+    /// A motion event's pointers to the on-screen controls, as pixels of the
+    /// drawn buffer (TOUCH_CONTROLS): a finger that begins on empty screen —
+    /// every first finger while they are hidden — is the touch mouse, as
+    /// before; a second finger there is ignored.
+    private func touches(_ event: OpaquePointer,host: NTSDAndroidSessionHost,surface: OpaquePointer) {
+        let action = AMotionEvent_getAction(event),controls = host.controls
+        let index = Int((action & Int32(AMOTION_EVENT_ACTION_POINTER_INDEX_MASK)) >> Int32(AMOTION_EVENT_ACTION_POINTER_INDEX_SHIFT))
+        func pointer(_ i: Int) -> (id: Int,x: Float,y: Float)? {
+            guard i < Int(AMotionEvent_getPointerCount(event)),
+                  let p = host.windows.canvasPoint(AMotionEvent_getX(event,i),AMotionEvent_getY(event,i),surface:surface) else { return nil }
+            controls.layout(width:Float(p.width),height:Float(p.height),
+                            maxUnit:NTSDAndroidWindowHost.controlsUnit(width:Int(p.width),height:Int(p.height),surface:surface,host.windows.target.density))
+            return (Int(AMotionEvent_getPointerId(event,i)),p.x,p.y)
+        }
+        let all = 0..<Int(AMotionEvent_getPointerCount(event))
+        switch action & Int32(AMOTION_EVENT_ACTION_MASK) {
+        case Int32(AMOTION_EVENT_ACTION_DOWN),Int32(AMOTION_EVENT_ACTION_POINTER_DOWN):
+            if controls.hardwareConnected { host.checkInputDevices() }   // hidden: the keyboard or gamepad may be gone
+            // The first finger down: any finger still held lost its lift (an
+            // event while the surface was gone).
+            if action & Int32(AMOTION_EVENT_ACTION_MASK) == Int32(AMOTION_EVENT_ACTION_DOWN) { controls.liftAll() }
+            if let p = pointer(index) { controls.began(p.id,x:p.x,y:p.y) }
+        case Int32(AMOTION_EVENT_ACTION_MOVE):
+            for i in all { if let p = pointer(i) { controls.moved(p.id,x:p.x,y:p.y) } }
+        case Int32(AMOTION_EVENT_ACTION_UP),Int32(AMOTION_EVENT_ACTION_POINTER_UP):
+            if let p = pointer(index) { controls.ended(p.id,x:p.x,y:p.y) }
+        case Int32(AMOTION_EVENT_ACTION_CANCEL):
+            for i in all { if let p = pointer(i) { controls.ended(p.id,x:p.x,y:p.y) } }
+        default: break
         }
     }
 }
