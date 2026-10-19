@@ -1,5 +1,6 @@
 import Foundation
 import NTSDCore
+import NTSDProfile
 
 /// Continue the entire verified selection parent, keeping its own state and
 /// resources. Expected snapshots are comparison outputs, never engine inputs.
@@ -372,7 +373,9 @@ public enum MatchLaunchReference {
             }
             let prelude = try section(0,0x42d1ff),t = c.localTime
             var preludeEvents: [OriginalMatchPreludeEvent] = []
-            let fileName = try OriginalMatchPrelude.apply(globals: &state.globals,localTime: .init(year:t[0],month:t[1],dayOfWeek:t[2],day:t[3],hour:t[4],minute:t[5],second:t[6],milliseconds:t[7])) { preludeEvents.append($0) }
+            // NTSD's rules: these checks' states come from catalogs LoadedCatalogReference
+            // loads with them (OriginalMatchPreparation.catalog is the engine's).
+            let fileName = try OriginalMatchPrelude.apply(globals: &state.globals,localTime: .init(year:t[0],month:t[1],dayOfWeek:t[2],day:t[3],hour:t[4],minute:t[5],second:t[6],milliseconds:t[7]),rules: NTSDProfile.rules) { preludeEvents.append($0) }
             guard let pe = prelude.events,pe.map(\.kind) == ["localTime","format","format","soundRequest"],pe[0].values == t,
                   pe[1].format == Array("%4d%02d%02d_%02d%02d%02d".utf8),pe[2].format == Array("%s.lfr".utf8),
                   pe[1].result == pe[1].bytes.map({ UInt32($0.count) }),pe[2].result == UInt32(fileName.utf8.count),

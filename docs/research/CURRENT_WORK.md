@@ -60,7 +60,8 @@ E5c-2c выполнен: запрошенные предметы и стадия
 [evidence](../evidence/es-e5c2c-requested-mission-roles.json); обзор оставшихся строк с открытыми решениями F1–F11:
 [report](../evidence/es-e5c-rest-plumbing.md). E5c-2d выполнен: ростер (A70–A79); первый прогон гейта провален по числу swift_beginAccess и сохранён, новая база 3 278:
 [evidence](../evidence/es-e5c2d-roster-roles.json). E5c-2e выполнен: режимы (стадии выживания и нумерованные, последний набор, веса 51/52, войска War):
-[evidence](../evidence/es-e5c2e-modes-roles.json). Следующая задача — E5c-2f: прелюдия матча (D8, D9).
+[evidence](../evidence/es-e5c2e-modes-roles.json). E5c-2f выполнен: прелюдия матча (арены стадий D8, суффикс реплея D9): [evidence](../evidence/es-e5c2f-prelude-roles.json).
+Следующая задача — E5c-2g: надпись режима (D10).
 
 ## Internal build storage и VM quota исправлены — 2026-10-17
 

@@ -4,16 +4,18 @@ import NTSDProfile
 
 /// ENGINE_SPLIT E5c-2e: the mission stage pass's stage start (`run`: D2's blink,
 /// D3's survival revive, D4's banner), stage line (`hud`, D6) and set end
-/// (`setTail`, D7), the camera's survival case (D14) and War's troop count (A65)
-/// follow the profile. Synthetic records, the passes built directly.
+/// (`setTail`, D7), the camera's survival case (D14), War's troop count (A65) and
+/// the match prelude's arena and replay name (D8, D9) follow the profile. Synthetic records, the passes built directly.
 final class NTSDProfileModesTests: XCTestCase {
     func defined(_ size: Int) throws -> OriginalStateRecord {
         try .init(bytes: [UInt8](repeating: 0,count: size),defined: [Bool](repeating: true,count: size))
     }
-    func modes(survival: OriginalIDRange? = nil,numbered: OriginalIDRange? = nil,final: OriginalIDRange? = nil,troops: OriginalIDSet? = nil) -> OriginalGameRules {
+    func modes(survival: OriginalIDRange? = nil,numbered: OriginalIDRange? = nil,final: OriginalIDRange? = nil,troops: OriginalIDSet? = nil,
+               backgrounds: [Int32: Int32]? = nil) -> OriginalGameRules {
         let n = NTSDProfile.rules
         return n.with(modes: .init(survivalStages: survival ?? n.survivalStages,numberedStages: numbered ?? n.numberedStages,
-            finalStageSet: final ?? n.finalStageSet,stageWeightPlus1: n.stageWeightPlus1,stageWeightPlus2: n.stageWeightPlus2,warTroops: troops ?? n.warTroops))
+            finalStageSet: final ?? n.finalStageSet,stageWeightPlus1: n.stageWeightPlus1,stageWeightPlus2: n.stageWeightPlus2,warTroops: troops ?? n.warTroops,
+            stageBackgrounds: backgrounds ?? n.stageBackgrounds))
     }
     func pass(stage: Int32,rules: OriginalGameRules,globals set: [(Int,Int32)] = []) throws -> OriginalMissionStagePass {
         var globals = try defined(0xb440)
@@ -116,5 +118,25 @@ final class NTSDProfileModesTests: XCTestCase {
         XCTAssertTrue(r.past);XCTAssertEqual(r.reserve,1);XCTAssertFalse(r.spawned,"31 is a troop: the limit is reached")
         r = try war(rules: modes(troops: OriginalIDSet([32])))
         XCTAssertTrue(r.past);XCTAssertEqual(r.reserve,0);XCTAssertTrue(r.spawned,"31 is no troop under a moved list")
+    }
+    /// The match prelude in stage mode for this stage, from arena 77: the arena it
+    /// leaves and the replay name's suffix.
+    func prelude(_ stage: Int32,rules: OriginalGameRules) throws -> (arena: Int32,name: String) {
+        var g = try defined(OriginalMatchPreparation.globalSize)
+        for (a,v): (Int,Int32) in [(0x451160,1),(0x450b94,stage),(0x44d024,77)] { try g.write(v,at: a-OriginalMatchPreparation.globalBase) }
+        let name = try OriginalMatchPrelude.apply(globals: &g,localTime: .init(year: 2026,month: 10,dayOfWeek: 1,day: 19,hour: 20,minute: 0,second: 0,milliseconds: 0),
+                                                  rules: rules)
+        return (try g.integer(at: 0x44d024-OriginalMatchPreparation.globalBase,as: Int32.self),String(name.dropFirst(15)))
+    }
+    func testPreludeD8D9() throws {
+        let n = NTSDProfile.rules
+        XCTAssertEqual(try prelude(10,rules: n).arena,2);XCTAssertEqual(try prelude(10,rules: n).name,"_Stage_2.lfr")
+        XCTAssertEqual(try prelude(49,rules: n).arena,77,"no set start: the arena stays");XCTAssertEqual(try prelude(49,rules: n).name,"_Stage_5.lfr")
+        XCTAssertEqual(try prelude(50,rules: n).arena,6);XCTAssertEqual(try prelude(50,rules: n).name,"_Survival.lfr")
+        XCTAssertEqual(try prelude(55,rules: n).arena,77);XCTAssertEqual(try prelude(55,rules: n).name,"_Survival.lfr")
+        let moved = modes(numbered: OriginalIDRange(Int32.min..<60),backgrounds: [55: 9])
+        XCTAssertEqual(try prelude(55,rules: moved).arena,9);XCTAssertEqual(try prelude(55,rules: moved).name,"_Stage_6.lfr")
+        XCTAssertEqual(try prelude(10,rules: moved).arena,77);XCTAssertEqual(try prelude(10,rules: moved).name,"_Stage_2.lfr")
+        XCTAssertEqual(try prelude(10,rules: modes(numbered: OriginalIDRange(Int32.min..<10))).name,"_Survival.lfr","a narrowed numbered range")
     }
 }

@@ -67,10 +67,10 @@ extension OriginalApplicationLoadedMenuSession.Attempt {
         allocateReplay: @escaping (Int,inout E) throws -> UInt32) throws -> OriginalApplicationLoadedMenuSession.PendingReturn {
         typealias Boundary = OriginalApplicationLoadedMenuSession.Boundary
         try launchPoint("entry")
-        var globals = model.globals
+        var globals = model.globals;let rules = model.catalog.rules
         _ = try OriginalMatchPrelude.apply(globals:&globals,readLocalTime:{
             let time = try localTime(&self.environment);self.operations.append(.localTime(time));return time
-        },observe:prelude)
+        },rules:rules,observe:prelude)
         model.globals = globals;try launchPoint("prelude")
 
         var prepared = model,library = model.libraryCommands!

@@ -173,7 +173,7 @@ public struct OriginalGameRules: Equatable, Sendable {
         }
     }
     /// Modes: what the stage numbers mean in stage mode (OriginalMissionStage, the
-    /// camera, match selection) and which characters War counts as troops
+    /// camera, match selection, the match prelude) and which characters War counts as troops
     /// (OriginalWarBattle). The decade arithmetic (ten stages a set, sixty stages)
     /// stays engine code.
     public struct Modes: Equatable, Sendable {
@@ -192,10 +192,14 @@ public struct OriginalGameRules: Equatable, Sendable {
         public let stageWeightPlus1: Int32, stageWeightPlus2: Int32
         /// Characters War counts as troops (sides 1–2, seats from 20).
         public let warTroops: OriginalIDSet
+        /// The arena (background ordinal) a stage-mode match starts on, by stage
+        /// (OriginalMatchPrelude); other stages keep the arena they have.
+        public let stageBackgrounds: [Int32: Int32]
         public init(survivalStages: OriginalIDRange, numberedStages: OriginalIDRange, finalStageSet: OriginalIDRange,
-                    stageWeightPlus1: Int32, stageWeightPlus2: Int32, warTroops: OriginalIDSet) {
+                    stageWeightPlus1: Int32, stageWeightPlus2: Int32, warTroops: OriginalIDSet, stageBackgrounds: [Int32: Int32]) {
             self.survivalStages = survivalStages; self.numberedStages = numberedStages; self.finalStageSet = finalStageSet
             self.stageWeightPlus1 = stageWeightPlus1; self.stageWeightPlus2 = stageWeightPlus2; self.warTroops = warTroops
+            self.stageBackgrounds = stageBackgrounds
         }
     }
     private final class Roles: Sendable {
@@ -250,6 +254,7 @@ public struct OriginalGameRules: Equatable, Sendable {
     public var stageWeightPlus1: Int32 { roles.modes.stageWeightPlus1 }
     public var stageWeightPlus2: Int32 { roles.modes.stageWeightPlus2 }
     public var warTroops: OriginalIDSet { roles.modes.warTroops }
+    public var stageBackgrounds: [Int32: Int32] { roles.modes.stageBackgrounds }
     public init(profile: String, reflection: Reflection, armour: Armour, interaction: Interaction, impact: Impact, items: Items,
                 roster: Roster, modes: Modes) {
         roles = Roles(profile: profile, reflection: reflection, armour: armour, interaction: interaction, impact: impact, items: items,

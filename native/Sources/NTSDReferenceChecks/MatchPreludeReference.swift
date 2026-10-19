@@ -1,5 +1,6 @@
 import Foundation
 import NTSDCore
+import NTSDProfile
 
 /// Uses recorded stimuli, then compares the prelude before the existing complete
 /// preparation/recording comparison. No expected post-state becomes native input.
@@ -59,7 +60,9 @@ public enum MatchPreludeReference {
             }
             try check(prelude.beforeGlobals)
             var events: [OriginalMatchPreludeEvent] = []
-            let name = try OriginalMatchPrelude.apply(globals: &state.globals, localTime: prelude.localTime) { events.append($0) }
+            // NTSD's rules: these checks' states come from catalogs LoadedCatalogReference
+            // loads with them (OriginalMatchPreparation.catalog is the engine's).
+            let name = try OriginalMatchPrelude.apply(globals: &state.globals, localTime: prelude.localTime, rules: NTSDProfile.rules) { events.append($0) }
             guard name == prelude.fileName, events == (try prelude.events.map { try $0.native() }) else { throw error("\(item.label): filename/event order") }
             // The CRT executes in the reference VM. Native output is compared
             // above; preserve the reference's formatting entry/return evidence.

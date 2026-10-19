@@ -10,7 +10,7 @@ measurement from [TVOS_WEB](TVOS_WEB.md), [MEMORY_LOADING](MEMORY_LOADING.md) an
 engine from the game itself. to publish engine as the separate github repo";
 then, after the plan: "ok … when the plan is setteled start the loop in a
 separate branch" and "push automatically every step (on that new branch)".
-**Status:** E0–E3, E4a, E4b (all six hosts), E4c-1 (the engine's self-contained tests), E5a (the game profile's survey and design) and E5b (the record type, the copied tables out), E4c-1a (a nondeterministic engine test corrected) E5c-0 (the profile's plumbing, reflection), E5c-1a (one storage, the reflectors), E5c-1b (armour), E5c-1c (special interactions) and E5c-1d (impact) done; E5c-2a, E5c-2b and E5c-2c (the items family: the random and requested spawns, camera, links, the mission stage) E5c-2d (the roster family) and E5c-2e (the modes family) done; E5c-2f, the match prelude, next.
+**Status:** E0–E3, E4a, E4b (all six hosts), E4c-1 (the engine's self-contained tests), E5a (the game profile's survey and design) and E5b (the record type, the copied tables out), E4c-1a (a nondeterministic engine test corrected) E5c-0 (the profile's plumbing, reflection), E5c-1a (one storage, the reflectors), E5c-1b (armour), E5c-1c (special interactions) and E5c-1d (impact) done; E5c-2a, E5c-2b and E5c-2c (the items family: the random and requested spawns, camera, links, the mission stage) E5c-2d (the roster family), E5c-2e (the modes family) and E5c-2f (the match prelude) done; E5c-2g, the mode label, next.
 **Branch:** `exp/engine-split`, from `main` 380b448d. Worktree
 `/Volumes/NTSD-Builds/tasks/engine-split/worktree` (T7-backed APFS, see
 [BUILD_STORAGE_T7](BUILD_STORAGE_T7.md)). It tracks `origin/exp/engine-split`
@@ -158,7 +158,7 @@ A read-only survey of `native/` (three agents, 2026-10-18):
 | E2 | Content policy out of Core: the digest, count and EXE-SHA pins become the NTSD content identity the game passes; Core checks what it is given with the same checks and errors (2.8.3.3's content origin as the model, read only) | **done** ([evidence](../evidence/es-e2-content-identity.json)) |
 | E3 | Identity and Practice: user-data folder, wasm module, Android prefix/entry, queue/thread names, titles and messages become game configuration; Practice/Lab and its two checks move to the game side | **done**: E3a ([evidence](../evidence/es-e3a-practice.json)), E3b ([evidence](../evidence/es-e3b-game-identity.json)); diagnostic labels wait for D2 |
 | E4 | Two packages: `engine/Package.swift` (Core, Runtime, codecs, decoders, shims, host libraries, self-contained tests) and `native/Package.swift` depending on it by path; the unsafeFlags plan (SwiftPM rejects them in version-pinned dependencies) | E4a **done** ([evidence](../evidence/es-e4a-engine-package.json)); E4b: headless **done** ([evidence](../evidence/es-e4b1-headless-host.json)), browser **done** ([evidence](../evidence/es-e4b2-web-host.json)), SDL **done** ([evidence](../evidence/es-e4b3-sdl-host.json)), AppKit **done** ([evidence](../evidence/es-e4b4-appkit-host.json)), UIKit **done** ([evidence](../evidence/es-e4b5-uikit-host.json)), Android **done** ([evidence](../evidence/es-e4b6-android-host.json)); E4c-1 **done** ([evidence](../evidence/es-e4c1-engine-tests.json)), E4c-1a **done** ([evidence](../evidence/es-e4c1a-sorted-keys.json)); E4c-2 (split the 11 mixed test files, the War trio) queued |
-| E5 | Game profile: the ID sites (100 rows, about 125 branch points; first estimated ~90) and the AI dispatch behind a profile the game supplies; the engine defines the `0x44d000` record's layout and the game supplies `initial.bin`; the NTSD profile bit-exact (all gates plus the full fixture-driven suites); the API's fit with 2.8.3.3 checked read only | E5a **done** (survey and design, [evidence](../evidence/es-e5a-design.json)); E5b **done** ([evidence](../evidence/es-e5b-record-type.json)); E5c-0 **done** ([evidence](../evidence/es-e5c0-profile-plumbing.json)); E5c-1a **done** ([evidence](../evidence/es-e5c1a-reflector-roles.json)); E5c-1b **done** ([evidence](../evidence/es-e5c1b-armour-roles.json)); E5c-1c **done** ([evidence](../evidence/es-e5c1c-interaction-roles.json)); E5c-1d **done** ([evidence](../evidence/es-e5c1d-impact-roles.json)); E5c-2a **done** ([evidence](../evidence/es-e5c2a-items-roles.json)); E5c-2b **done** ([evidence](../evidence/es-e5c2b-camera-links-roles.json)); E5c-2c **done** ([evidence](../evidence/es-e5c2c-requested-mission-roles.json)); E5c-2d **done** ([evidence](../evidence/es-e5c2d-roster-roles.json)); E5c-2e **done** ([evidence](../evidence/es-e5c2e-modes-roles.json)); E5c-2f next |
+| E5 | Game profile: the ID sites (100 rows, about 125 branch points; first estimated ~90) and the AI dispatch behind a profile the game supplies; the engine defines the `0x44d000` record's layout and the game supplies `initial.bin`; the NTSD profile bit-exact (all gates plus the full fixture-driven suites); the API's fit with 2.8.3.3 checked read only | E5a **done** (survey and design, [evidence](../evidence/es-e5a-design.json)); E5b **done** ([evidence](../evidence/es-e5b-record-type.json)); E5c-0 **done** ([evidence](../evidence/es-e5c0-profile-plumbing.json)); E5c-1a **done** ([evidence](../evidence/es-e5c1a-reflector-roles.json)); E5c-1b **done** ([evidence](../evidence/es-e5c1b-armour-roles.json)); E5c-1c **done** ([evidence](../evidence/es-e5c1c-interaction-roles.json)); E5c-1d **done** ([evidence](../evidence/es-e5c1d-impact-roles.json)); E5c-2a **done** ([evidence](../evidence/es-e5c2a-items-roles.json)); E5c-2b **done** ([evidence](../evidence/es-e5c2b-camera-links-roles.json)); E5c-2c **done** ([evidence](../evidence/es-e5c2c-requested-mission-roles.json)); E5c-2d **done** ([evidence](../evidence/es-e5c2d-roster-roles.json)); E5c-2e **done** ([evidence](../evidence/es-e5c2e-modes-roles.json)); E5c-2f **done** ([evidence](../evidence/es-e5c2f-prelude-roles.json)); E5c-2g next |
 | E6 | Classify each profile rule as LF2 2.0a or NTSD from the second reference; LF2 rules become the engine's default profile | needs D1 |
 | E7 | Engine stand-alone: the engine package builds alone (macOS, Linux container) and passes its tests with a from-scratch synthetic content pack; a scan finds no original bytes (files under `downloads/`, the resources, fixtures, `initial.bin`) | queued |
 | E8 | Publication: name, licence, a new repository with fresh history, a tag; this repository depends on it by revision; README credits | needs D2 and the user |
@@ -728,6 +728,35 @@ From the survey ([report](../evidence/es-e5c-rest-plumbing.md) §1–3, §6).
   the design bullet's annotation, `finalStageSet`'s wording, survival and
   numbered not complements, the boundary cases.
 
+### E5c-2f note (2026-10-19, reviewed with its change; done)
+
+From the survey ([report](../evidence/es-e5c-rest-plumbing.md) §1, §3, §6).
+- **Plumbing (F10: a public signature change).** Both public
+  `OriginalMatchPrelude.apply` overloads take a required `rules:` after the
+  local time; the one forwards it. `Modes.init` gains a required
+  `stageBackgrounds:` (its four constructions updated). Callers: the application's match launch
+  (`model.catalog.rules`, read next to its `model.globals` read), and the
+  MatchLaunch and MatchPrelude reference checks, which pass `NTSDProfile.rules`
+  (`OriginalMatchPreparation.catalog` is internal to the engine; these checks
+  build their states from catalogs loaded with NTSD's rules, so the value is
+  the same and the engine's public surface does not grow).
+- **Roles (Modes).** `stageBackgrounds` `[Int32: Int32]` = [0: 1, 10: 2, 20: 3,
+  30: 4, 40: 5, 50: 6] (D8: the dictionary literal, the same lookup; other
+  stages keep their arena), and D9's replay name suffix through
+  `numberedStages` (`group < 5` with `group = stage/10` is `stage < 50` for every
+  `Int32`; the strings and `group+1` stay; D9's block keeps its single 0x450b94
+  read, D8's block its own).
+- **Tests.** The prelude in stage mode from arena 77: stages 10 (arena 2,
+  "_Stage_2"), 49 (arena kept, "_Stage_5"), 50 (arena 6, "_Survival"), 55 (arena
+  kept, "_Survival") under NTSD's profile; a moved map [55: 9] and numbered
+  range below 60 give 55 arena 9 and "_Stage_6", 10 keeps its arena; a
+  numbered range below 10 makes 10 "_Survival".
+- **Review.** No fix required (literals restored: both engine files
+  byte-identical to HEAD; the reference checks' catalogs are all loaded with
+  NTSD's rules). Adopted: the narrowed-range case, the docs, the call-site
+  comments. The clean release build counts 3,278 (the baseline; the launch's
+  `model` read sits next to its `model.globals` read).
+
 ## Ledger
 
 - 2026-10-18: plan agreed; branch `exp/engine-split` and its worktree created
@@ -1030,20 +1059,27 @@ From the survey ([report](../evidence/es-e5c-rest-plumbing.md) §1–3, §6).
   vs identical; phone overlapping; Mac process time apart 3 against 3 (the new
   build faster), overlapping 4 against 4.
   [Evidence](../evidence/es-e5c2e-modes-roles.json).
+- 2026-10-19 E5c-2f: the match prelude takes the rules (both public overloads);
+  `stageBackgrounds` (D8) and D9's suffix through `numberedStages`. Reviewed (no
+  fix required). Gate `es-e5c2f`: 11 scenarios, frames, AppKit, unchecked,
+  emulator, 20 clean launches, 29 suite runs, the engine's 110 tests,
+  `swift_beginAccess` 3,278/3,406; 16 suites with 55 tests; WASI vs
+  identical; phone render and process time apart 3 against 2 (the new build
+  slower; the prelude runs once a match), overlapping 4 against 4; Mac
+  overlapping. [Evidence](../evidence/es-e5c2f-prelude-roles.json).
 
 ## Next task
 
-E5c-2f (survey: [report](../evidence/es-e5c-rest-plumbing.md) §1, §3, §6): the
-match prelude. Both public `OriginalMatchPrelude.apply` overloads take a
-required `rules:` (F10: a public signature change); its three callers pass the
-rules of the state they hold (`OriginalApplicationMatchLaunchSession`, the
-MatchLaunch and MatchPrelude reference checks). A Modes role
-`stageBackgrounds` `[Int32: Int32]` = [0: 1, 10: 2, 20: 3, 30: 4, 40: 5, 50: 6]
-(D8: the arena a stage-mode match starts on; other stages keep it), and D9's
-replay name suffix through `numberedStages` (`_Stage_n` / `_Survival`; the
-strings stay engine). The single 0x450b94 read stays single. Measure the
-`swift_beginAccess` count with a clean release build before the gate (the
-launch session reads a class property). Tests: the prelude in mode 1 for
-stages 10, 49, 50, 55 under NTSD's profile and moved ones. Gates as E5c-2e,
-with the match prelude, match launch, continuation and application launch
-suites in gate3.
+E5c-2g (survey: [report](../evidence/es-e5c-rest-plumbing.md) §1, §6): the mode
+label (D10, sharing `survivalStages` with D2/D3/D14). `OriginalModeLabel.draw`
+and `drawInPlace` take a required `rules:`, and so do the four
+`OriginalGameplayOutput` entry points (public `returnFromDispatcher`, `apply`,
+`applyInPlace`; package `returnFromDispatcherInPlace`); the gameplay body and
+paused gameplay read `let rules = state.catalog.rules` once from their `inout`
+state (a static read; the body runs every tick); the gameplay return reference
+check passes NTSD's rules; the 8 explicit test calls pass NTSD's rules. Test:
+the label's stores in stage mode for stages 49, 50, 59, 60 and under a moved
+range. Measure `swift_beginAccess` with a clean release build before the gate.
+Gates as E5c-2f (a per-tick path: the phone A/B with rule 5), with the mode
+label, gameplay output, gameplay return, paused gameplay and gameplay body
+suites in gate3. Then the hot passes (E5c-1e physics onward, survey §6).

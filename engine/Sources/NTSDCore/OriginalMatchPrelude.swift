@@ -23,17 +23,19 @@ public enum OriginalMatchPreludeEvent: Equatable {
 /// and menu-state 44d020 bindings. This is not menu selection, enabled music,
 /// device output or a complete match start. Device words are opaque resource
 /// handles supplied by an adapter; this native code never dereferences them.
+/// The game's rules give stage mode's starting arenas and the replay name's
+/// numbered-stage test (ENGINE_SPLIT E5c-2f).
 public enum OriginalMatchPrelude {
     @discardableResult
-    public static func apply(globals: inout OriginalStateRecord, localTime: OriginalLocalTime,
+    public static func apply(globals: inout OriginalStateRecord, localTime: OriginalLocalTime, rules: OriginalGameRules,
                              observe: (OriginalMatchPreludeEvent) throws -> Void = { _ in }) throws -> String {
-        try apply(globals:&globals,readLocalTime:{ localTime },observe:observe)
+        try apply(globals:&globals,readLocalTime:{ localTime },rules:rules,observe:observe)
     }
 
     /// Request platform time at its actual point in the prelude, after menu
     /// state stores and before filename formatting. A failed provider rolls back.
     @discardableResult
-    public static func apply(globals: inout OriginalStateRecord, readLocalTime: () throws -> OriginalLocalTime,
+    public static func apply(globals: inout OriginalStateRecord, readLocalTime: () throws -> OriginalLocalTime, rules: OriginalGameRules,
                              observe: (OriginalMatchPreludeEvent) throws -> Void = { _ in }) throws -> String {
         guard globals.byteCount == OriginalMatchPreparation.globalSize else { throw error("Global storage size") }
         var state = globals
@@ -45,7 +47,7 @@ public enum OriginalMatchPrelude {
             let stage = try read(0x450b94)
             try write(0x450b9c, 70)
             for address in [0x450ba8, 0x450bac, 0x450ba4, 0x44d028] { try write(address, 0) }
-            if let arena = [Int32(0): Int32(1), 10: 2, 20: 3, 30: 4, 40: 5, 50: 6][stage] {
+            if let arena = rules.stageBackgrounds[stage] {
                 try write(0x44d024, arena)
             }
             try write(0x44fb6c, -1); try write(0x450ba0, 0); try write(0x44f880, -1)
@@ -65,8 +67,8 @@ public enum OriginalMatchPrelude {
             + "_" + decimal(localTime.hour, width: 2, padding: "0")
             + decimal(localTime.minute, width: 2, padding: "0") + decimal(localTime.second, width: 2, padding: "0")
         if mode == 1 {
-            let group = try read(0x450b94)/10 // signed division toward zero
-            name += group < 5 ? "_Stage_\(group+1)" : "_Survival"
+            let stage = try read(0x450b94),group = stage/10 // signed division toward zero
+            name += rules.numberedStages.contains(stage) ? "_Stage_\(group+1)" : "_Survival"
         }
         if mode == 0 { name += "_VS" }
         name += ".lfr"
