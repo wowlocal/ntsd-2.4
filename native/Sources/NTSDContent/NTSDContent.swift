@@ -22,6 +22,8 @@ public enum NTSDContent {
         arenaManifestSHA256:"60652ed8df36c7ff0bbaa167dcf1dd7be07140dac766c529d275f0705fc40519")
     /// NTSD's name in the stop message and its user-data folder (E3b).
     public static let game = OriginalGameIdentity(name:"NTSD",userDataFolder:"NTSD Native")
+    /// NTSD as the engine's hosts run it (E4b).
+    public static let runtimeGame = OriginalGame(identity:game,content:{ location(in:$0) })
     /// The packages as the engine finds them: `appBundle`'s folders, else `bundle`.
     public static func location(in appBundle: Bundle = .main) -> OriginalContentLocation {
         .init(appBundle:appBundle,identity:identity,fallback:fallback)

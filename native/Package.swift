@@ -111,7 +111,7 @@ let package = Package(
         // behind NTSDApp's lab and the movement/combat checks; not on the
         // runtime path.
         .target(name: "NTSDPractice", dependencies: [core], swiftSettings: exclusivity),
-        .executableTarget(name: "NTSDHeadless", dependencies: [core, runtime, "NTSDContent"], swiftSettings: exclusivity),
+        .executableTarget(name: "NTSDHeadless", dependencies: [engine("NTSDHeadlessHost"), "NTSDContent"], swiftSettings: exclusivity),
         .target(name: "NTSDReferenceChecks", dependencies: [core, "CZlib"]),
         .executableTarget(name: "NTSDBootstrapCheck", dependencies: ["NTSDReferenceChecks"]),
         .executableTarget(name: "NTSDCatalogCheck", dependencies: ["NTSDReferenceChecks"]),

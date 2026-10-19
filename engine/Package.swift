@@ -57,7 +57,8 @@ let package = Package(
     products: macProducts + freetypeProducts + [
         .library(name: "NTSDCore", targets: ["NTSDCore"]),
         .library(name: "NTSDRuntime", targets: ["NTSDRuntime"]),
-        .library(name: "NTSDMusicDecoder", targets: ["NTSDMusicDecoder"])],
+        .library(name: "NTSDMusicDecoder", targets: ["NTSDMusicDecoder"]),
+        .library(name: "NTSDHeadlessHost", targets: ["NTSDHeadlessHost"])],
     targets: macTargets + freetypeTargets + [
         .target(name: "NTSDReplayCodec", exclude: ["README.md", "upstream.json"],
                 publicHeadersPath: "include", cSettings: [.unsafeFlags(["-Wno-deprecated-non-prototype"])]),
@@ -71,6 +72,8 @@ let package = Package(
                 cSettings: [.define("TARGET_RT_LITTLE_ENDIAN", to: "1", .when(platforms: [.linux, .android, .windows, .wasi]))],
                 cxxSettings: [.define("TARGET_RT_LITTLE_ENDIAN", to: "1", .when(platforms: [.linux, .android, .windows, .wasi]))]),
         .target(name: "NTSDMusicDecoder", dependencies: ["CALAC"], swiftSettings: exclusivity),
+        // The hosts (ENGINE_SPLIT E4b): each runs a game given as an OriginalGame.
+        .target(name: "NTSDHeadlessHost", dependencies: ["NTSDCore", "NTSDRuntime"], swiftSettings: exclusivity),
     ],
     swiftLanguageModes: [.v5]
 )

@@ -32,7 +32,9 @@ E3a выполнен: Practice/Lab в игровом target `NTSDPractice`; revi
 [evidence](../evidence/es-e3b-game-identity.json). E4a выполнен: движок — отдельный локальный
 пакет `engine/`, `native/` зависит от него по пути; флаги движка сохраняются в обеих системах
 сборки; все gates и A/B 4×4 на A12 совпали: [evidence](../evidence/es-e4a-engine-package.json).
-Следующая задача — E4b: хосты на библиотеки движка и тонкие приложения игры.
+E4b-1 выполнен: headless-хост — библиотека движка `NTSDHeadlessHost`, игра передаёт
+`OriginalGame`; gate и строки WASI/Linux/Windows/Android совпали:
+[evidence](../evidence/es-e4b1-headless-host.json). Следующая задача — E4b-2: браузерный хост.
 
 ## Internal build storage и VM quota исправлены — 2026-10-17
 

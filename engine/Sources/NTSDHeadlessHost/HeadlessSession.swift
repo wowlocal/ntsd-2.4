@@ -3,19 +3,19 @@ import Foundation
 import CoreGraphics
 #endif
 import NTSDCore
-import NTSDContent
 import NTSDRuntime
 
 /// The headless session host: offscreen windows, framebuffer PNG captures,
 /// silent music and sound, scripted input only, and the shared sockets for
 /// loopback ONLINE GAME probes.
 @MainActor final class HeadlessSessionHost: OriginalRuntimeSessionHost {
-    let arguments: [String], windows: HeadlessWindowHost, musicDirectory: String
-    func contentLocation(in appBundle: Bundle) -> OriginalContentLocation { NTSDContent.location(in:appBundle) }
-    var game: OriginalGameIdentity { NTSDContent.game }
+    let arguments: [String], windows: HeadlessWindowHost, musicDirectory: String, original: OriginalGame
+    func contentLocation(in appBundle: Bundle) -> OriginalContentLocation { original.content(appBundle) }
+    var game: OriginalGameIdentity { original.identity }
     weak var session: OriginalRuntimeSession?
-    init(arguments: [String],screen: CGSize,caption: CGFloat,musicDirectory: String) {
+    init(arguments: [String],screen: CGSize,caption: CGFloat,musicDirectory: String,game: OriginalGame) {
         self.arguments = arguments; windows = HeadlessWindowHost(screen:screen,caption:caption); self.musicDirectory = musicDirectory
+        original = game
     }
     static func report(_ value: [String:Any]) { OriginalRuntimeSession.emit(value) }
     var startupHost: OriginalRuntimeStartupHost {
