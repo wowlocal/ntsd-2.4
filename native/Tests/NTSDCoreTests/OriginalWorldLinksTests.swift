@@ -2,6 +2,7 @@ import Foundation
 import XCTest
 @testable import NTSDCore
 @testable import NTSDReferenceChecks
+import NTSDProfile
 
 final class OriginalWorldLinksTests: XCTestCase {
     private struct Patch: Decodable {
@@ -85,7 +86,7 @@ final class OriginalWorldLinksTests: XCTestCase {
             for inPlace in [false,true] {
             var actors = startActors,globals = startGlobals,events: [Event] = []
             try OriginalWorldLinks.apply(world: world,actors: &actors,globals: &globals,sse2Conversion: item.sse2 == 1,precision: OriginalArithmeticPrecision(controlWord: UInt16(c.fpcw)),
-                header: { ownHeaders[$0] },frame: { ownFrames[$0][Int($1)] },background: { _ in bg },observe: { event in
+                header: { ownHeaders[$0] },frame: { ownFrames[$0][Int($1)] },background: { _ in bg },rules: NTSDProfile.rules,observe: { event in
                     if case let .random(slot,stream,range,result) = event { events.append(.init(slot: slot,kind: "random",arguments: [stream,range,result].map(UInt32.init(bitPattern:)))) }
                 },inPlace: inPlace)
             let records = [world]+actors
@@ -110,7 +111,7 @@ final class OriginalWorldLinksTests: XCTestCase {
         var weapon = header;try weapon.write(Int32(1),at: 0x6f8)
         let beforeActors = actors,beforeGlobals = globals
         var depths: [Int] = [],draws: [OriginalWorldLinksEvent] = []
-        XCTAssertThrowsError(try OriginalWorldLinks.apply(world: world,actors: &actors,globals: &globals,header: { $0 == 0 ? header : weapon },frame: { _,_ in frame },background: { _ in bg },observe: { event in
+        XCTAssertThrowsError(try OriginalWorldLinks.apply(world: world,actors: &actors,globals: &globals,header: { $0 == 0 ? header : weapon },frame: { _,_ in frame },background: { _ in bg },rules: NTSDProfile.rules,observe: { event in
             draws.append(event);throw OriginalStateError.invalidStorage("Stop after original RNG")
         },afterDepth: { slot,actor in depths.append(slot);XCTAssertEqual(try actor.integer(at: 0x18,as: Int32.self),600) }))
         XCTAssertEqual(depths,[0]);XCTAssertEqual(draws,[.random(slot: 1,stream: 138,range: 16,result: 2)])
@@ -118,7 +119,7 @@ final class OriginalWorldLinksTests: XCTestCase {
         // In place (CORE_REALTIME B2 P4): the same error after the same draw,
         // slot 0's depth and the draw kept, nothing left vacant.
         depths = [];draws = []
-        XCTAssertThrowsError(try OriginalWorldLinks.apply(world: world,actors: &actors,globals: &globals,header: { $0 == 0 ? header : weapon },frame: { _,_ in frame },background: { _ in bg },observe: { event in
+        XCTAssertThrowsError(try OriginalWorldLinks.apply(world: world,actors: &actors,globals: &globals,header: { $0 == 0 ? header : weapon },frame: { _,_ in frame },background: { _ in bg },rules: NTSDProfile.rules,observe: { event in
             draws.append(event);throw OriginalStateError.invalidStorage("Stop after original RNG")
         },afterDepth: { slot,_ in depths.append(slot) },inPlace: true)) { XCTAssertEqual("\($0)","\(OriginalStateError.invalidStorage("Stop after original RNG"))") }
         XCTAssertEqual(depths,[0]);XCTAssertEqual(draws,[.random(slot: 1,stream: 138,range: 16,result: 2)])

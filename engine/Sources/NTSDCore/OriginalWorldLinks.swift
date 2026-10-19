@@ -33,19 +33,19 @@ public enum OriginalWorldLinks {
                 return catalog.objects[index].frameStorage[Int(number)]
             },background: { index in
                 guard backgrounds.indices.contains(Int(index)) else { throw error("Background binding") };return backgrounds[Int(index)]
-            },observe: observe,afterDepth: afterDepth,inPlace: inPlace)
+            },rules: catalog.rules,observe: observe,afterDepth: afterDepth,inPlace: inPlace)
     }
     private static func error(_ text: String) -> OriginalStateError { .invalidStorage("World links: "+text) }
     static func apply(world: OriginalStateRecord,actors: inout [OriginalStateRecord],globals: inout OriginalStateRecord,
                       sse2Conversion: Bool = false,precision: OriginalArithmeticPrecision = .bits64,header: (Int) throws -> OriginalStateRecord,
-                      frame: (Int,Int32) throws -> OriginalStateRecord,background: (Int32) throws -> OriginalStateRecord,
+                      frame: (Int,Int32) throws -> OriginalStateRecord,background: (Int32) throws -> OriginalStateRecord,rules: OriginalGameRules,
                       observe: (OriginalWorldLinksEvent) throws -> Void = { _ in },
                       afterDepth: (Int,OriginalStateRecord) throws -> Void = { _,_ in },inPlace: Bool = false) throws {
         guard inPlace else {
             // All or nothing: in place on copies, assigned when it completes.
             var copies = actors,copiedGlobals = globals
             try apply(world: world,actors: &copies,globals: &copiedGlobals,sse2Conversion: sse2Conversion,precision: precision,header: header,
-                      frame: frame,background: background,observe: observe,afterDepth: afterDepth,inPlace: true)
+                      frame: frame,background: background,rules: rules,observe: observe,afterDepth: afterDepth,inPlace: true)
             actors = copies;globals = copiedGlobals
             return
         }
@@ -98,7 +98,7 @@ public enum OriginalWorldLinks {
             let holder = try index(Int(owner))
             guard try i(holder,0x9c) == Int32(slot) else { try put(a,0x98,0);continue }
             if try f(holder,8) == 17 {
-                if try h(a,0x6f4) == 122 && i(a,0x2fc) > 0 {
+                if try h(a,0x6f4) == rules.hpDrink && i(a,0x2fc) > 0 {
                     try put(a,0x2fc,i(a,0x2fc) &- 1)
                     if try i(a,0x2fc)%5 == 0 {
                         try put(holder,0x300,i(holder,0x300) &+ 2);try put(holder,0x2fc,i(holder,0x2fc) &+ 4)
@@ -111,7 +111,7 @@ public enum OriginalWorldLinks {
                     }
                     if try i(a,0x2fc) <= 0 { try exhausted(a,holder,slot,136);continue }
                 }
-                if try h(a,0x6f4) == 123 && i(a,0x2fc) > 0 {
+                if try h(a,0x6f4) == rules.mpDrink && i(a,0x2fc) > 0 {
                     try put(a,0x2fc,i(a,0x2fc) &- 2);try put(holder,0x308,i(holder,0x308) &+ 3)
                     if try i(holder,0x308) > 500 { try put(holder,0x308,500) }
                     if try i(a,0x2f4) > -1 && i(a,0x308) > 150 { try put(holder,0x308,150) }

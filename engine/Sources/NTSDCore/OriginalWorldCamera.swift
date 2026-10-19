@@ -33,7 +33,7 @@ public enum OriginalWorldCamera {
                 return try OriginalCPointPass.headerFrame(f,header: catalog.objects[n].header,object: n,site: "camera")
             },background: { n in
                 guard backgrounds.indices.contains(Int(n)) else { throw error("Background binding") };return backgrounds[Int(n)]
-            })
+            },rules: catalog.rules)
         try OriginalBackgroundDrawing.draw(backgrounds: &next.backgrounds,globals: next.globals,target: target,bitmap: { token in
             guard token != 0,Int(token)-1 < bitmaps.count,!released.contains(Int(token)-1) else { throw error("Bitmap binding") }
             return try (bitmaps[Int(token)-1].storage,surface(Int(token)-1))
@@ -43,7 +43,7 @@ public enum OriginalWorldCamera {
     /// Bounds and camera calculations are a child of apply, not a complete tick.
     static func bounds(world: inout OriginalStateRecord,actors: inout [OriginalStateRecord],globals: inout OriginalStateRecord,
         mode: Int32,sse2Conversion: Bool = false,header: (Int) throws -> OriginalStateRecord,
-        frame: (Int,Int32) throws -> OriginalStateRecord,background: (Int32) throws -> OriginalStateRecord) throws {
+        frame: (Int,Int32) throws -> OriginalStateRecord,background: (Int32) throws -> OriginalStateRecord,rules: OriginalGameRules) throws {
         func g(_ address: Int) throws -> Int32 { try globals.integer(at: address-0x44d000,as: Int32.self) }
         func active(_ slot: Int) throws -> Bool { try world.integer(at: 4+slot,as: UInt8.self) != 0 }
         func index(_ slot: Int) throws -> Int {
@@ -74,8 +74,9 @@ public enum OriginalWorldCamera {
                 if try g(0x450bb4) > 0 && x > Double(g(0x450bb4)) && i(a,0x364) != 5 && i(a,8) == 0 { try upper(Double(g(0x450bb4))) }
             } else {
                 let id = try h.integer(at: 0x6f4,as: Int32.self)
-                // The mode/Stage exception is ALSO behind the ID122/123 gate.
-                if try (id == 122 || id == 123) && (i(a,0x344) > 0 || (mode == 1 && g(0x450b94)/10 == 5)) {
+                // The mode/Stage exception is ALSO behind the ID gate (keptOnScreen:
+                // 122/123 in NTSD).
+                if try rules.keptOnScreen.contains(id) && (i(a,0x344) > 0 || (mode == 1 && g(0x450b94)/10 == 5)) {
                     try lower(10);try upper(Double(width)-10)
                 } else {
                     if x < 0,try i(a,0x14) == 0 { try world.write(UInt8(0),at: 4+slot) }

@@ -2,6 +2,7 @@ import Foundation
 import XCTest
 @testable import NTSDCore
 @testable import NTSDReferenceChecks
+import NTSDProfile
 
 final class OriginalWorldCPointsTests: XCTestCase {
     private struct Patch: Decodable {
@@ -112,7 +113,7 @@ final class OriginalWorldCPointsTests: XCTestCase {
                 if item.stage == "cleanup" || item.stage == "caller" { try pass.cleanup() }
                 if item.stage == "caller" {
                     try OriginalWorldLinks.apply(world: world,actors: &pass.actors,globals: &pass.globals,sse2Conversion: item.sse2 == 1,
-                        header: { ownHeaders[$0] },frame: { ownFrames[$0][Int($1)] },background: { _ in bg },observe: { event in
+                        header: { ownHeaders[$0] },frame: { ownFrames[$0][Int($1)] },background: { _ in bg },rules: NTSDProfile.rules,observe: { event in
                             if case let .random(slot,stream,range,result) = event { events.append(.init(slot: slot,kind: "random",arguments: [stream,range,result].map(UInt32.init(bitPattern:)))) }
                         })
                 }

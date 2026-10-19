@@ -2,6 +2,7 @@ import Foundation
 import XCTest
 @testable import NTSDCore
 @testable import NTSDReferenceChecks
+import NTSDProfile
 
 final class OriginalWorldCameraTests: XCTestCase {
     private struct Patch: Decodable {
@@ -111,7 +112,7 @@ final class OriginalWorldCameraTests: XCTestCase {
                 if item.stage != "background" {
                     let entryBackground = backgrounds[arena]
                     try OriginalWorldCamera.bounds(world: &world,actors: &actors,globals: &globals,mode: item.mode ?? 0,sse2Conversion: item.sse2 == 1,
-                        header: { ownHeaders[$0] },frame: { ownFrames[$0][Int($1)] },background: { _ in entryBackground })
+                        header: { ownHeaders[$0] },frame: { ownFrames[$0][Int($1)] },background: { _ in entryBackground },rules: NTSDProfile.rules)
                 }
                 try OriginalBackgroundDrawing.draw(backgrounds: &backgrounds,globals: globals,target: item.target ?? c.drawTarget,
                     bitmap: { (bitmaps[Int($0)-1],c.bitmapSurface) },fillBacking: {

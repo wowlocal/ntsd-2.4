@@ -111,7 +111,8 @@ public struct OriginalGameRules: Equatable, Sendable {
         }
     }
     /// Items: which Objects a random item spawn picks from and how it treats
-    /// some of them (OriginalWorldHits).
+    /// some of them (OriginalWorldHits), which ones the camera keeps in the
+    /// arena (OriginalWorldCamera), and the held drinks (OriginalWorldLinks).
     public struct Items: Equatable, Sendable {
         /// The Objects a random item spawn picks from.
         public let itemRange: OriginalIDRange
@@ -120,8 +121,24 @@ public struct OriginalGameRules: Equatable, Sendable {
         public let scarceDropItems: OriginalIDSet
         /// The item a spawn creates with HP 200 (of the 500 a new Actor starts with).
         public let spawnHP200: Int32
-        public init(itemRange: OriginalIDRange, scarceDropItems: OriginalIDSet, spawnHP200: Int32) {
+        /// Objects of a type other than 0 and 3 that the camera holds within
+        /// [10, width − 10] while their team (+0x344) is positive or, in mode 1,
+        /// on stages 50–59; otherwise such an Object past an edge with y (+0x14)
+        /// 0 is deactivated.
+        public let keptOnScreen: OriginalIDSet
+        /// The drink that, held by an Actor in state 17, loses 1 HP each links
+        /// pass (twice a tick); at every 5th and 6th of its HP it restores some of
+        /// the holder's HP and MP. Spent, it is dropped (stream 136).
+        public let hpDrink: Int32
+        /// The drink that, held by an Actor in state 17, loses 2 HP each links
+        /// pass (twice a tick) and adds 3 to the holder's MP (capped at 500, and set
+        /// to 150 under the item's +0x2f4/+0x308 test). Spent, it is dropped
+        /// (stream 137).
+        public let mpDrink: Int32
+        public init(itemRange: OriginalIDRange, scarceDropItems: OriginalIDSet, spawnHP200: Int32, keptOnScreen: OriginalIDSet,
+                    hpDrink: Int32, mpDrink: Int32) {
             self.itemRange = itemRange; self.scarceDropItems = scarceDropItems; self.spawnHP200 = spawnHP200
+            self.keptOnScreen = keptOnScreen; self.hpDrink = hpDrink; self.mpDrink = mpDrink
         }
     }
     private final class Roles: Sendable {
@@ -159,6 +176,9 @@ public struct OriginalGameRules: Equatable, Sendable {
     public var itemRange: OriginalIDRange { roles.items.itemRange }
     public var scarceDropItems: OriginalIDSet { roles.items.scarceDropItems }
     public var spawnHP200: Int32 { roles.items.spawnHP200 }
+    public var keptOnScreen: OriginalIDSet { roles.items.keptOnScreen }
+    public var hpDrink: Int32 { roles.items.hpDrink }
+    public var mpDrink: Int32 { roles.items.mpDrink }
     public init(profile: String, reflection: Reflection, armour: Armour, interaction: Interaction, impact: Impact, items: Items) {
         roles = Roles(profile: profile, reflection: reflection, armour: armour, interaction: interaction, impact: impact, items: items)
     }
