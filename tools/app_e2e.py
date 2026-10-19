@@ -450,6 +450,7 @@ def compare(reference, observed):
 
 
 def main():
+    global KEPT
     parser = argparse.ArgumentParser(description=__doc__)
     parser.add_argument("--build", action="store_true", help="Build the release app first")
     parser.add_argument("--record", action="store_true", help="Write the reference from this run")
@@ -457,7 +458,10 @@ def main():
     parser.add_argument("--app", type=Path, default=APP, help="Executable to run, e.g. the packaged .app's")
     parser.add_argument("--skip-quit", action="store_true", help="Do not run the main-menu Quit check")
     parser.add_argument("--scenario", choices=["all", *SCENARIOS], default="all")
+    parser.add_argument("--output", type=Path, help="Task-owned directory for retained captures")
     args = parser.parse_args()
+    if args.output is not None:
+        KEPT = args.output.resolve()
     if args.build:
         build()
     failed = False

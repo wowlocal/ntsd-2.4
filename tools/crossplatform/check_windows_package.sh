@@ -8,7 +8,7 @@
 #    selected through NTSD_SDL_* (CrossOver drops SDL_* variables).
 set -euo pipefail
 ARCHIVE=$(cd "$(dirname "$1")" && pwd)/$(basename "$1"); OUT=$2; TOOLS=$(cd "$(dirname "$0")" && pwd)
-CX="/Applications/CrossOver.app/Contents/SharedSupport/CrossOver/bin"; BOTTLE=ntsd-xplat-pkg
+CX="/Applications/CrossOver.app/Contents/SharedSupport/CrossOver/bin"; BOTTLE=${NTSD_WINE_BOTTLE:-ntsd-xplat-pkg}
 rm -rf "${OUT:?}"; mkdir -p "$OUT/run/overlay"; OUT=$(cd "$OUT" && pwd)
 (cd "$OUT" && unzip -q "$ARCHIVE")
 PKG="$OUT/ntsd-windows-x86_64"
