@@ -1,5 +1,27 @@
 # Текущая передача работы
 
+## Экранные контролы на Android, iPhone и iPad — 2026-10-19
+
+По просьбе пользователя (предложение StormPixels в Discord, zip
+`be9b00cf…a542`, «use it however you like»): экранные кнопки (крестовина,
+A/J/D, F1–F9 и Esc, настройки положения, размера, клавиш и прозрачности)
+общим модулем `OriginalTouchControls` для Android, iPhone и iPad
+([TOUCH_CONTROLS](TOUCH_CONTROLS.md)). Показываются, только пока не подключены
+клавиатура или геймпад (решение пользователя), жмут те же клавиши, что
+клавиатура; Core, сессия и кадры не меняются; палец на пустом месте — мышь,
+как раньше. Исправлено против предложения: клавиши по умолчанию — Player 1
+оригинального `data/control.txt` (W S A D J K L; в предложении стрелки
+двигали Player 2), рисование вне игрового потока, safe area iPhone (Dynamic
+Island), размер по физическому размеру (≤48 pt/dp на единицу, места от
+нижних углов) — по замечаниям пользователя. Два независимых ревью.
+Проверено: инструмент `touch_controls_check.swift` ALL PASS; vs equal в
+симуляторах iPhone/iPad и через приложение в эмуляторе Android; касаниями в
+симуляторе iPhone пройден путь до матча VS и ходьба. Ветка `exp/touch-controls`
+(в ней же cherry-pick отдельной iPhone-сборки f340f1e2), в `main` не влито —
+решение пользователя. Открыто: проверки на A12 и реальных iPhone/iPad.
+Второй Mac: сборки во внутреннем рабочем каталоге `~/Developer/ntsd-2.4-work`
+(`NTSD_CROSSPLATFORM_WORK`) по выбору пользователя.
+
 ## Internal build storage и VM quota исправлены — 2026-10-17
 
 [Storage result](BUILD_STORAGE_T7.md): все 28 internal build/cache/output roots

@@ -1,0 +1,74 @@
+{
+ "study": "TOUCH_CONTROLS",
+ "step": "T0-T2: on-screen touch controls on Android, iPhone and iPad (shared module, both hosts, simulator and emulator checks)",
+ "request": "user 2026-10-19: forwarded StormPixels' Discord proposal (on-screen controls for Android, with a settings panel) and its zip; then \"думаю имеет смысл on screen контролы показывать на айфонах тоже, если не подключена клава/геймпад\", \"и на айпаде тоже если клавиатуры/геймпада нет\"; on screenshots: \"слегка пересекается с dynamic island\", \"не слишком большие контролы для айпада? ты будто некорректно обрабатываешь скейл\"",
+ "proposal": {
+  "file": "ntsd-onscreen-controls-proposal.zip",
+  "sha256": "be9b00cf8dc87be4bbd635116120799fcd9fe9cf2cb4660d7cc0422a0d97a542",
+  "contents": ["NTSDAndroidControls.swift (34309 B)", "NTSDAndroidHost.swift.patch", "NTSDAndroidApp.swift.changes.txt", "README.txt"],
+  "terms": "author: \"use it however you like ... No credit needed\"",
+  "read": "in full before use; no network, processes or files beyond its own files/controls.txt"
+ },
+ "environment": {
+  "mac": "second Mac (Mac17,6), first NTSD build there; build outputs on its internal disk at the user's choice (2026-10-19), work folder /Users/mike/Developer/ntsd-2.4-work via NTSD_CROSSPLATFORM_WORK",
+  "android": "Homebrew android-commandlinetools: build-tools 36.1.0, cmake 4.1.2, platform 35, NDK 30.0.16248370, emulator 37.2.12, AVD ntsd-xplat-api35 (pixel_tablet, android-35 google_apis arm64-v8a, 4 GB); Swift 6.4.0 (swift.org pkg) with swift-6.4.0-RELEASE_android (checksum 21fb5551...0b43 verified); FreeType 2.13.3 by build_android_deps.sh (tarball SHA-256 verified)",
+  "ios": "Xcode 27.1 (Swift 6.4, swiftlang-6.4.0.34.1), iOS 26.5 simulators 'iPhone 17 Pro' (C5D62E90-DDB9-4FDF-8E37-E016D9A06847) and 'iPad Air 13-inch (M4)' (77DB2A17-1E35-433A-B3C5-97889D727831), created for these checks",
+  "data": "git lfs objects for native/** (1430 files) and the baseline EXE fetched from origin; filters installed with `git lfs install --local --skip-repo` (core.hooksPath not set: the tracked post-commit hook pushes after each commit); EXE SHA-256 3f7ac67c5890ef979ee24a6dae5528056e7f631725c292cf9cb0a928ebeff71c as pinned",
+  "base": "exp/touch-controls from main 380b448d with f340f1e2 (separate iPhone build, release/native-preview-20261013) cherry-picked as 39238e3d"
+ },
+ "sources": {
+  "native/Sources/NTSDRuntime/OriginalTouchControls.swift": "347c04e658efd9d4ae196b57f24c653aec834ecc26de6261e82798b01c7310b6",
+  "native/Sources/NTSDAndroid/NTSDAndroidApp.swift": "2785951d15a3507da9e56cec47558fe42b2d5c109d294c306171547ea1eedad0",
+  "native/Sources/NTSDAndroid/NTSDAndroidHost.swift": "9e218912df879b9235eeb4412be40937f0fa6129027a21fef14f0bac3f79020d",
+  "native/Sources/NTSDAndroid/NTSDAndroidGamepads.swift": "ab57facecb5cafcf4bfbe6bdc6d151479cb6dc7a620c1337015f2bed88c79056",
+  "native/Sources/NTSDiOS/NTSDApp.swift": "31b4fd746802d5f6b9799cfa6f19764f1e5155a4e8d2922b472c8e58ae96348d",
+  "tools/crossplatform/touch_controls_check.swift": "d982cd75ab62a8641fffa6e10dec2e721239f2022b39ecb44a8d36535d453711",
+  "apk": "ntsd.apk (debug, local.ntsd.port) sha256 ced158e599f00a5e71915893e61f72213b53b5b1a2ded60e0ce60b1074c51849, built after the sources above"
+ },
+ "firstRuns": [
+  "iPhone vs before the LFS objects were checked out: differs (boundary NSOSStatusErrorDomain 1954115647 'typ?': the music files were LFS pointers) — environment, not code",
+  "android_app.py packaging before the EXE was fetched: struct.error in icon() (the EXE was an LFS pointer) — environment",
+  "iPhone simulator, default launch: controls hidden — iosTouchControls keyboard=true, gamepads=['Gamepad'] (the simulator reports the Mac's keyboard); forced on with --touch-controls on: drawn",
+  "iPhone simulator, mode menu: the 'A' button (key A, the proposal's default) did not select; original data/control.txt line 1 '0 87 83 65 68 74 75 76 3 2 1' = Player 1 W S A D J K L; defaults changed to those keys",
+  "user screenshot: the left button met the Dynamic Island; iOS canvas inset by the left/right safe area",
+  "user screenshot: buttons ~194 pt on the 13-inch iPad; unit capped at 48 pt/dp, default places anchored to the bottom corners"
+ ],
+ "checks": {
+  "checkTool": "touch_controls_check.swift on the final shared file: ALL PASS (settings parse/clamp/legacy/round trip; the proposal's places on the A12 canvas within 0.6 px; iPad unit cap; keys and mouse through fingers incl. sliding, several fingers, lost lifts, focus loss, shared key, diagonals, F5 on a 4:3 iPad, settings and drag, keyboards/gamepads coming and going; overlay tiles cover every painted pixel, premultiplied; balance: problem runs 0/3000)",
+  "scenarios (scripted, controls off; final builds)": [
+   "iPhone 17 Pro simulator vs: {\"result\": \"equal\", \"differs\": []}",
+   "iPad Air 13-inch (M4) simulator vs: {\"result\": \"equal\", \"differs\": []}",
+   "Android emulator (ntsd-xplat-api35) vs through the app: {\"scenario\": \"vs\", \"seconds\": 54.3, \"result\": \"equal\", \"differs\": []}"
+  ],
+  "interactive iPhone simulator (XCUITest driver from the scratch area, one finger at a time; build before the unit cap and the second review's fixes)": [
+   "controls drawn inside the safe area, clear of the Dynamic Island",
+   "touch on START (mouse through the controls): mode menu",
+   "'v' twice: cursor VS Mode -> Tournament; '^' twice: back",
+   "'A' (J): VS Mode -> Character Selection; held 'A': Player 1 joined; '>' then 'A' twice: Naruto, Independent; 'A' through the prompts; '^' twice to Fight!, 'A': VS match (Naruto vs Kakuzu)",
+   "'>' held 1.5 s in the match: Naruto walked right",
+   "'F' then 'F1': grid below F, PAUSE shown",
+   "'SET': panel with the buttons ringed; DONE closes",
+   "top-centre toggle: the seven buttons hidden, F/SET/toggle kept"
+  ],
+  "interactive iPad simulator (final unit cap; before the button-letter scale)": [
+   "F grid opens below F, clear of the show/hide button (1366x1024)",
+   "buttons ~82 pt in the bottom corners (iPadOS 26 showed the app in a window; the controls follow the view)",
+   "the user's 'show off' kept (toggled on for the screenshot and back off); the old file's default places read back as corner places"
+  ],
+  "interactive Android emulator (adb input, one finger)": [
+   "androidTouchControls {by: [], connected: false, devices: 13, shown: true}: the emulator's built-in alphabetic keyboard (IsExternal false) does not hide them",
+   "touch on START, 'A' (J) into VS mode, held 'A': Player 1 joined (build before the unit cap)",
+   "'SET' panel drawn through the presenter's redraw; DONE wrote files/controls.txt",
+   "final APK: buttons capped (~41 dp radius) in the bottom corners of the 2560x1600 tablet"
+  ]
+ },
+ "review": [
+  "round 1 (independent, read-only): 13 findings (show/hide button over F5 on 4:3 iPads; Android built-in devices counted as keyboards; shared key released early; focus loss ending the touch mouse; iOS hide after forwarding a key; disconnect timing; lost lifts; main-thread rendering; characters; isVirtual failure default; diagonal claim; simulator/emulator keyboards) — fixed or recorded",
+  "round 2 (independent, read-only): no blocking defects; the seven fixes verified (VK->HID of the new defaults, background render isolation with Thread Sanitizer, presenter stress 600 frames, JNI refs/exceptions, safe-area round trip); 6 minor findings — 5 fixed (key-down only, iOS re-check on active and touch, overlay freeze while dragging, dropped drag saved, touch-screen-only routing) plus device names out of the reports; 1 recorded (non-external Android keyboards)"
+ ],
+ "open": [
+  "T3 devices: Galaxy A12 (match by the buttons, presenter cost, gamepad/keyboard hiding them, notch, several fingers); real iPhone/iPad (GCKeyboard and gamepads connecting/leaving, several fingers)",
+  "non-external Android keyboards (pogo-pin covers, DeX) do not hide the controls",
+  "merge into main: the user's decision"
+ ]
+}

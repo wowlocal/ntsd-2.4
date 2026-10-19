@@ -34,7 +34,9 @@ from pathlib import Path
 ROOT = Path(__file__).resolve().parents[2]
 spec = importlib.util.spec_from_file_location("app_e2e", ROOT / "tools/app_e2e.py")
 app_e2e = importlib.util.module_from_spec(spec); spec.loader.exec_module(app_e2e)
-X5 = Path("/Volumes/X5/ntsd-2.4-research/crossplatform")
+# Work folder (scratch, dependencies, debug key); NTSD_CROSSPLATFORM_WORK on a
+# Mac without X5 (TOUCH_CONTROLS: the second Mac builds on its own disk).
+X5 = Path(os.environ.get("NTSD_CROSSPLATFORM_WORK", "/Volumes/X5/ntsd-2.4-research/crossplatform"))
 SDK = Path("/opt/homebrew/share/android-commandlinetools")
 NDK = SDK / "ndk/30.0.16248370"
 TOOLS = SDK / "build-tools/36.1.0"
@@ -85,7 +87,10 @@ def build(out, release=False):
     env = {**os.environ, "NTSD_PORTABLE": "1", "NTSD_ANDROID": "1", "NTSD_UNCHECKED_EXCLUSIVITY": "1", "ANDROID_HOME": str(SDK), "ANDROID_NDK_ROOT": str(NDK),
            "NTSD_FREETYPE_PREFIX": str(X5 / "android-deps/freetype/install-aarch64")}   # build_android_deps.sh
     common = [SWIFT, "build", "--package-path", ROOT / "native", "--scratch-path", X5 / "build-android-aarch64",
-              "--swift-sdk", "aarch64-unknown-linux-android28", "-c", "release", "--static-swift-stdlib", "--product", "NTSDAndroid"]
+              # The SDK by its id with the triple: a Mac that also has another
+              # Android SDK for this triple (6.3.3) leaves the triple alone ambiguous.
+              "--swift-sdk", "swift-6.4.0-RELEASE_android", "--triple", "aarch64-unknown-linux-android28",
+              "-c", "release", "--static-swift-stdlib", "--product", "NTSDAndroid"]
     subprocess.run([str(c) for c in common], env=env, check=True)
     products = X5 / "build-android-aarch64/out/Products/Release-android-aarch64"
     stage = out / "stage"; shutil.rmtree(stage, ignore_errors=True)
