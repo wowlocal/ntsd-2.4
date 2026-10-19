@@ -34,7 +34,9 @@ E3a выполнен: Practice/Lab в игровом target `NTSDPractice`; revi
 сборки; все gates и A/B 4×4 на A12 совпали: [evidence](../evidence/es-e4a-engine-package.json).
 E4b-1 выполнен: headless-хост — библиотека движка `NTSDHeadlessHost`, игра передаёт
 `OriginalGame`; gate и строки WASI/Linux/Windows/Android совпали:
-[evidence](../evidence/es-e4b1-headless-host.json). Следующая задача — E4b-2: браузерный хост.
+[evidence](../evidence/es-e4b1-headless-host.json). E4b-2 выполнен: браузерный хост — `NTSDWebHost`;
+WASI и браузер (Chromium, WebKit) совпали: [evidence](../evidence/es-e4b2-web-host.json).
+Следующая задача — E4b-3: SDL-хост.
 
 ## Internal build storage и VM quota исправлены — 2026-10-17
 

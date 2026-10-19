@@ -10,7 +10,7 @@ measurement from [TVOS_WEB](TVOS_WEB.md), [MEMORY_LOADING](MEMORY_LOADING.md) an
 engine from the game itself. to publish engine as the separate github repo";
 then, after the plan: "ok … when the plan is setteled start the loop in a
 separate branch" and "push automatically every step (on that new branch)".
-**Status:** E0–E3, E4a and E4b's headless host done; E4b's browser host next.
+**Status:** E0–E3, E4a and E4b's headless and browser hosts done; the SDL host next.
 **Branch:** `exp/engine-split`, from `main` 380b448d. Worktree
 `/Volumes/NTSD-Builds/tasks/engine-split/worktree` (T7-backed APFS, see
 [BUILD_STORAGE_T7](BUILD_STORAGE_T7.md)). It tracks `origin/exp/engine-split`
@@ -155,7 +155,7 @@ A read-only survey of `native/` (three agents, 2026-10-18):
 | E1b | Music: `OriginalMusic` leaves `NTSDMacPlatform` for `NTSDContent` (in the bundle on Mac builds only); the source paths in tools and hosts follow; the iOS simulator row with a device set on `/Volumes/NTSD-Builds` | **done** ([evidence](../evidence/es-e1b-music.json)); its packaged-app and iOS rows, and E1a's iOS row, closed after the Mac's audio came back ([evidence](../evidence/es-e1b-open-rows.json)) |
 | E2 | Content policy out of Core: the digest, count and EXE-SHA pins become the NTSD content identity the game passes; Core checks what it is given with the same checks and errors (2.8.3.3's content origin as the model, read only) | **done** ([evidence](../evidence/es-e2-content-identity.json)) |
 | E3 | Identity and Practice: user-data folder, wasm module, Android prefix/entry, queue/thread names, titles and messages become game configuration; Practice/Lab and its two checks move to the game side | **done**: E3a ([evidence](../evidence/es-e3a-practice.json)), E3b ([evidence](../evidence/es-e3b-game-identity.json)); diagnostic labels wait for D2 |
-| E4 | Two packages: `engine/Package.swift` (Core, Runtime, codecs, decoders, shims, host libraries, self-contained tests) and `native/Package.swift` depending on it by path; the unsafeFlags plan (SwiftPM rejects them in version-pinned dependencies) | E4a **done** ([evidence](../evidence/es-e4a-engine-package.json)); E4b: headless **done** ([evidence](../evidence/es-e4b1-headless-host.json)), browser next |
+| E4 | Two packages: `engine/Package.swift` (Core, Runtime, codecs, decoders, shims, host libraries, self-contained tests) and `native/Package.swift` depending on it by path; the unsafeFlags plan (SwiftPM rejects them in version-pinned dependencies) | E4a **done** ([evidence](../evidence/es-e4a-engine-package.json)); E4b: headless **done** ([evidence](../evidence/es-e4b1-headless-host.json)), browser **done** ([evidence](../evidence/es-e4b2-web-host.json)), SDL next |
 | E5 | Game profile: the ~90 ID sites and the AI dispatch behind a profile the game supplies; the engine defines the `0x44d000` record's layout and the game supplies `initial.bin`; the NTSD profile bit-exact (all gates plus the full fixture-driven suites); the API's fit with 2.8.3.3 checked read only | queued |
 | E6 | Classify each profile rule as LF2 2.0a or NTSD from the second reference; LF2 rules become the engine's default profile | needs D1 |
 | E7 | Engine stand-alone: the engine package builds alone (macOS, Linux container) and passes its tests with a from-scratch synthetic content pack; a scan finds no original bytes (files under `downloads/`, the resources, fixtures, `initial.bin`) | queued |
@@ -375,13 +375,23 @@ Plan:
   `swift_beginAccess` calls unchanged; vs equal with identical frames from
   the new library on WASI, Linux, Windows and Android headless.
   [Evidence](../evidence/es-e4b1-headless-host.json).
+- 2026-10-19 E4b-2: the browser host is the engine library `NTSDWebHost`
+  (five files by `git mv`, the main body as its `run`); the game's `NTSDWeb`
+  is one call. Reviewed (no required fix; the built module's 12 `ntsd` and 34
+  WASI imports and its exports equal E4a's). Gate `es-e4b2`: 11 scenarios,
+  frames, AppKit, unchecked, emulator, 20 clean launches, 29 suite runs; WASI
+  vs equal with identical frames; the packed browser vs equal with text in
+  the same 446 frames in Chromium and WebKit. The phone's footprint ranges
+  touched with identical Android code. [Evidence](../evidence/es-e4b2-web-host.json).
 
 ## Next task
 
-E4b-2: the browser host (`NTSDWeb`: `WebSession`, `WebWindows`, `WebAudio`,
-`WebGlyphs`, `WebPage` with its `@_extern(wasm, module: "ntsd")` imports)
-becomes the engine library `NTSDWebHost` the same way; the game's `NTSDWeb`
-keeps a main calling it with `NTSDContent.runtimeGame` and its `/music`
-default. The import module name stays (renaming it with `wasi-worker.js` is
-D2's). Gates: review, the mlgate set (Package.swift changes), the wasm builds
-and the browser row (packed, verified), plus WASI.
+E4b-3: the SDL host (`NTSDSDL`: `SDLSession`, `SDLWindows`, `SDLKeys`,
+`SDLMusic`, `SDLGlyphs`, and `CSDL3`) becomes the engine library
+`NTSDSDLHost` (with NTSD_SDL=1, the SDL include flags, the macOS
+`NTSDMacPlatform` and FreeType dependencies as today); its run keeps SDL's
+hints and initialisation, the drivers event, the Mac frame metrics and the
+scalable policy, and the "OriginalMusic beside the executable" rule before
+the game's own default; the link flags stay on the game's app. Gates: review,
+the mlgate set, and the SDL rows (macOS SDL, Linux SDL with FreeType,
+Windows SDL with GDI text) against their text groups.

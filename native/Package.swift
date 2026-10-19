@@ -75,13 +75,12 @@ let androidTargets: [Target] = android ? [
 // NTSD_WEB=1 (with NTSD_PORTABLE=1) adds the browser host (TVOS_WEB W2b),
 // built for wasm32-unknown-wasip1 only (it uses the WASI-only main queue and
 // sockets stub) and run in a page's worker by tools/crossplatform/web_run.mjs;
-// its page functions are wasm imports (@_extern(wasm), the experimental Extern
-// feature).
+// the host, with its page functions (wasm imports), is the engine's NTSDWebHost
+// (ENGINE_SPLIT E4b).
 let web = Context.environment["NTSD_WEB"] == "1"
 let webProducts: [Product] = web ? [.executable(name: "NTSDWeb", targets: ["NTSDWeb"])] : []
 let webTargets: [Target] = web ? [
-    .executableTarget(name: "NTSDWeb", dependencies: [core, runtime, musicDecoder, "NTSDContent"],
-                      swiftSettings: [.enableExperimentalFeature("Extern")] + exclusivity)] : []
+    .executableTarget(name: "NTSDWeb", dependencies: [engine("NTSDWebHost"), "NTSDContent"], swiftSettings: exclusivity)] : []
 
 let package = Package(
     name: "NTSDNative",

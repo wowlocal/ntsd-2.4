@@ -1,6 +1,5 @@
 import Foundation
 import NTSDCore
-import NTSDContent
 import NTSDRuntime
 
 /// The browser session host (TVOS_WEB W2b): the original game in a page, run
@@ -14,16 +13,17 @@ import NTSDRuntime
 /// `none` text group); no sockets (WASI has none); the overlay in /save when
 /// the page mounts one.
 @MainActor final class WebSessionHost: OriginalRuntimeSessionHost {
-    let arguments: [String], windows: WebWindowHost, musicDirectory: String
-    func contentLocation(in appBundle: Bundle) -> OriginalContentLocation { NTSDContent.location(in:appBundle) }
-    var game: OriginalGameIdentity { NTSDContent.game }
+    let arguments: [String], windows: WebWindowHost, musicDirectory: String, original: OriginalGame
+    func contentLocation(in appBundle: Bundle) -> OriginalContentLocation { original.content(appBundle) }
+    var game: OriginalGameIdentity { original.identity }
     weak var session: OriginalRuntimeSession?
     var scripted: Bool { arguments.contains("--script") }
     private var caps = false, cursor: (Int32,Int32) = (0,0), pumping = false, gamepadCount = -1
     /// The page's sound output; none in a scripted run or without an AudioContext.
     private lazy var mixer: WebAudioMixer? = scripted ? nil : WebAudioMixer()
-    init(arguments: [String],screen: CGSize,caption: CGFloat,musicDirectory: String) {
+    init(arguments: [String],screen: CGSize,caption: CGFloat,musicDirectory: String,game: OriginalGame) {
         self.arguments = arguments; windows = WebWindowHost(screen:screen,caption:caption); self.musicDirectory = musicDirectory
+        original = game
     }
     static func report(_ value: [String:Any]) { OriginalRuntimeSession.emit(value) }
     var startupHost: OriginalRuntimeStartupHost {

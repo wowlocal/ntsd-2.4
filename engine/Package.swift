@@ -51,15 +51,24 @@ let freetypeTargets: [Target] = freetypePrefix != nil ? [
             swiftSettings: [.unsafeFlags(["-Xcc", "-I\(freetypePrefix!)/include/freetype2"])] + exclusivity,
             linkerSettings: [.unsafeFlags(["-L\(freetypePrefix!)/lib"])])] : []
 
+// NTSD_WEB=1 (with NTSD_PORTABLE=1) adds the browser host library (TVOS_WEB
+// W2b), built for wasm32-unknown-wasip1 only; its page functions are wasm
+// imports (@_extern(wasm), the experimental Extern feature).
+let web = Context.environment["NTSD_WEB"] == "1"
+let webProducts: [Product] = web ? [.library(name: "NTSDWebHost", targets: ["NTSDWebHost"])] : []
+let webTargets: [Target] = web ? [
+    .target(name: "NTSDWebHost", dependencies: ["NTSDCore", "NTSDRuntime", "NTSDMusicDecoder"],
+            swiftSettings: [.enableExperimentalFeature("Extern")] + exclusivity)] : []
+
 let package = Package(
     name: "NTSDEngine",
     platforms: [.macOS(.v14), .iOS(.v17)],
-    products: macProducts + freetypeProducts + [
+    products: macProducts + freetypeProducts + webProducts + [
         .library(name: "NTSDCore", targets: ["NTSDCore"]),
         .library(name: "NTSDRuntime", targets: ["NTSDRuntime"]),
         .library(name: "NTSDMusicDecoder", targets: ["NTSDMusicDecoder"]),
         .library(name: "NTSDHeadlessHost", targets: ["NTSDHeadlessHost"])],
-    targets: macTargets + freetypeTargets + [
+    targets: macTargets + freetypeTargets + webTargets + [
         .target(name: "NTSDReplayCodec", exclude: ["README.md", "upstream.json"],
                 publicHeadersPath: "include", cSettings: [.unsafeFlags(["-Wno-deprecated-non-prototype"])]),
         .target(name: "NTSDCore", dependencies: ["NTSDReplayCodec"], swiftSettings: crossModule + exclusivity),
