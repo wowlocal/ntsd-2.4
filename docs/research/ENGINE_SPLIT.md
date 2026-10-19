@@ -10,7 +10,7 @@ measurement from [TVOS_WEB](TVOS_WEB.md), [MEMORY_LOADING](MEMORY_LOADING.md) an
 engine from the game itself. to publish engine as the separate github repo";
 then, after the plan: "ok … when the plan is setteled start the loop in a
 separate branch" and "push automatically every step (on that new branch)".
-**Status:** E0–E3, E4a, E4b (all six hosts), E4c-1 (the engine's self-contained tests), E5a (the game profile's survey and design) and E5b (the record type, the copied tables out), E4c-1a (a nondeterministic engine test corrected) E5c-0 (the profile's plumbing, reflection) and E5c-1a (one storage, the reflectors) done; E5c-1b, the armour rows, next.
+**Status:** E0–E3, E4a, E4b (all six hosts), E4c-1 (the engine's self-contained tests), E5a (the game profile's survey and design) and E5b (the record type, the copied tables out), E4c-1a (a nondeterministic engine test corrected) E5c-0 (the profile's plumbing, reflection), E5c-1a (one storage, the reflectors) and E5c-1b (armour) done; E5c-1c, the items family, next.
 **Branch:** `exp/engine-split`, from `main` 380b448d. Worktree
 `/Volumes/NTSD-Builds/tasks/engine-split/worktree` (T7-backed APFS, see
 [BUILD_STORAGE_T7](BUILD_STORAGE_T7.md)). It tracks `origin/exp/engine-split`
@@ -158,7 +158,7 @@ A read-only survey of `native/` (three agents, 2026-10-18):
 | E2 | Content policy out of Core: the digest, count and EXE-SHA pins become the NTSD content identity the game passes; Core checks what it is given with the same checks and errors (2.8.3.3's content origin as the model, read only) | **done** ([evidence](../evidence/es-e2-content-identity.json)) |
 | E3 | Identity and Practice: user-data folder, wasm module, Android prefix/entry, queue/thread names, titles and messages become game configuration; Practice/Lab and its two checks move to the game side | **done**: E3a ([evidence](../evidence/es-e3a-practice.json)), E3b ([evidence](../evidence/es-e3b-game-identity.json)); diagnostic labels wait for D2 |
 | E4 | Two packages: `engine/Package.swift` (Core, Runtime, codecs, decoders, shims, host libraries, self-contained tests) and `native/Package.swift` depending on it by path; the unsafeFlags plan (SwiftPM rejects them in version-pinned dependencies) | E4a **done** ([evidence](../evidence/es-e4a-engine-package.json)); E4b: headless **done** ([evidence](../evidence/es-e4b1-headless-host.json)), browser **done** ([evidence](../evidence/es-e4b2-web-host.json)), SDL **done** ([evidence](../evidence/es-e4b3-sdl-host.json)), AppKit **done** ([evidence](../evidence/es-e4b4-appkit-host.json)), UIKit **done** ([evidence](../evidence/es-e4b5-uikit-host.json)), Android **done** ([evidence](../evidence/es-e4b6-android-host.json)); E4c-1 **done** ([evidence](../evidence/es-e4c1-engine-tests.json)), E4c-1a **done** ([evidence](../evidence/es-e4c1a-sorted-keys.json)); E4c-2 (split the 11 mixed test files, the War trio) queued |
-| E5 | Game profile: the ID sites (100 rows, about 125 branch points; first estimated ~90) and the AI dispatch behind a profile the game supplies; the engine defines the `0x44d000` record's layout and the game supplies `initial.bin`; the NTSD profile bit-exact (all gates plus the full fixture-driven suites); the API's fit with 2.8.3.3 checked read only | E5a **done** (survey and design, [evidence](../evidence/es-e5a-design.json)); E5b **done** ([evidence](../evidence/es-e5b-record-type.json)); E5c-0 **done** ([evidence](../evidence/es-e5c0-profile-plumbing.json)); E5c-1a **done** ([evidence](../evidence/es-e5c1a-reflector-roles.json)); E5c-1b next |
+| E5 | Game profile: the ID sites (100 rows, about 125 branch points; first estimated ~90) and the AI dispatch behind a profile the game supplies; the engine defines the `0x44d000` record's layout and the game supplies `initial.bin`; the NTSD profile bit-exact (all gates plus the full fixture-driven suites); the API's fit with 2.8.3.3 checked read only | E5a **done** (survey and design, [evidence](../evidence/es-e5a-design.json)); E5b **done** ([evidence](../evidence/es-e5b-record-type.json)); E5c-0 **done** ([evidence](../evidence/es-e5c0-profile-plumbing.json)); E5c-1a **done** ([evidence](../evidence/es-e5c1a-reflector-roles.json)); E5c-1b **done** ([evidence](../evidence/es-e5c1b-armour-roles.json)); E5c-1c next |
 | E6 | Classify each profile rule as LF2 2.0a or NTSD from the second reference; LF2 rules become the engine's default profile | needs D1 |
 | E7 | Engine stand-alone: the engine package builds alone (macOS, Linux container) and passes its tests with a from-scratch synthetic content pack; a scan finds no original bytes (files under `downloads/`, the resources, fixtures, `initial.bin`) | queued |
 | E8 | Publication: name, licence, a new repository with fresh history, a tag; this repository depends on it by revision; README credits | needs D2 and the user |
@@ -442,6 +442,30 @@ the step).
   moved profile (reflector 210, rebinder 9, held rebinder 214) shows A13–A16 and
   A20 follow the profile, not 209/8/213. A8 stays covered by mapping only.
 
+### E5c-1b note (2026-10-19, reviewed with its change; done)
+
+- **Families.** `OriginalGameRules` takes one public value per family
+  (`Reflection`, `Armour`), so its initializer grows by family, not by role;
+  the sites keep reading flat accessors (`rules.steadyArmour`) through the one
+  storage.
+- **Armour (A1–A6).** The engine keeps each rule's thresholds and conditions
+  (15, 1, the frame/state window, effect-based penetration); the profile names
+  the Objects: `guardPenetrators` {214, 208} (A1, A4: one list, used twice in
+  `guarded`), `steadyArmour` 37 (A2), `openingArmour` 6 (A3), `attackerArmour` 52
+  (A4), `alwaysBlocked` {124, 220, 221, 222} (A5), `armourGuardSound` {37, 6}
+  (A6, its own list: not derived from A2/A3). Single-ID tests stay equality.
+- **Design revision.** The E5 design listed armour among the coarse code
+  hooks (the survey also sketched guard thresholds as data). Here the IDs
+  become roles and the thresholds and conditions (15, 1, frame < 20, states
+  5/4/7, effect-based penetration) stay engine code: they are the EXE's, the
+  same for every Object the profile names. E5e's armour hook is dropped for
+  NTSD 2.4 and reopens only if D1/E6 or 2.8.3.3 shows a game with other
+  thresholds (they would then become profile values). A5 (the defend block)
+  is not armour in the survey's grouping; it shares the `guarded` site and
+  the family.
+- **Tests.** For each row, a synthetic `guarded`/`guardHit` case that holds
+  under NTSD's profile and changes under a profile moving only that row's IDs.
+
 ## Ledger
 
 - 2026-10-18: plan agreed; branch `exp/engine-split` and its worktree created
@@ -659,15 +683,23 @@ the step).
   20 clean launches, 29 suite runs, the engine's 108 tests, `swift_beginAccess`
   3,276; the changed passes' 9 suites; WASI vs identical; phone and Mac A/B
   overlapping. [Evidence](../evidence/es-e5c1a-reflector-roles.json).
+- 2026-10-19 E5c-1b: the rules grouped by family (`Reflection`, `Armour`);
+  the armour rows A1–A6 become roles (`guardPenetrators`, `steadyArmour`,
+  `openingArmour`, `attackerArmour`, `alwaysBlocked`, `armourGuardSound`), the
+  thresholds staying engine code (the E5 design's armour hook dropped for NTSD
+  2.4). Reviewed (no behaviour change; design revision recorded). Gate
+  `es-e5c1b`: 11 scenarios, frames, AppKit, unchecked, emulator, 20 clean
+  launches, 29 suite runs, the engine's 108 tests, `swift_beginAccess` 3,276;
+  10 suites with the armour tests; WASI vs identical. Phone: main 3 against 2
+  apart, 4 against 4 touching (process lower), profiles unchanged; Mac A/B noisy
+  (the user's release builds ran meanwhile).
+  [Evidence](../evidence/es-e5c1b-armour-roles.json).
 
 ## Next task
 
-E5c-1b: the armour rows (A1–A6 in `OriginalActorHits.guarded` and
-`OriginalHitGuard`). The engine keeps each rule's thresholds and conditions;
-the profile supplies the IDs: `guardPenetrators` {214, 208} (A1 and A4, the
-same list), `steadyArmour` 37 (A2: guards while `+0xb8` ≤ 15 unless
-penetrating), `openingArmour` 6 (A3: ≤ 1 and frame < 20 or state 5/4/7),
-`attackerArmour` 52 (A4: ≤ 15 unless the attacker penetrates),
-`alwaysBlocked` {124, 220, 221, 222} (A5), `armourGuardSound` {37, 6} (A6, its
-own list). A short note, the change and synthetic tests with a moved profile
-(each row must follow it), reviewed together; gates as E5c-1a.
+E5c-1c: the items family in the hot passes: the item ID ranges (A39, A48:
+100…199, open-ended range tests as `Int32` bounds the profile supplies, the
+note decides their form), the drinks 122/123 (A40 with its mode exclusion, A42,
+A43, A44, A49: 122 only), and 122 → HP 200 (A41, A50, A64: one shared role;
+War's case stays with the War-life hook). A short note, the change and
+synthetic tests with a moved profile, reviewed together; gates as E5c-1b.

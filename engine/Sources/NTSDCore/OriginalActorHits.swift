@@ -190,12 +190,12 @@ struct OriginalHitPass {
         let defense = try it(0x40)
         if try defense != 100 && ![8,11,12,13,14,16,18].contains(field(body,8)) {
             let id = try h(d,0x6f4),effect = try it(0x2c),attackID = try h(a,0x6f4)
-            let penetrates = [2,3].contains(effect/10) || [2,3].contains(effect) || [214,208].contains(attackID)
-            if try id == 37 && i(d,0xb8) <= 15 && !penetrates { return true }
-            if try id == 6 && i(d,0xb8) <= 1 && !penetrates && (i(d,0x70) < 20 || [5,4,7].contains(f(d,8))) { return true }
-            if try id == 52 && i(d,0xb8) <= 15 && ![214,208].contains(attackID) { return true }
+            let penetrates = [2,3].contains(effect/10) || [2,3].contains(effect) || rules.guardPenetrators.contains(attackID)
+            if try id == rules.steadyArmour && i(d,0xb8) <= 15 && !penetrates { return true }
+            if try id == rules.openingArmour && i(d,0xb8) <= 1 && !penetrates && (i(d,0x70) < 20 || [5,4,7].contains(f(d,8))) { return true }
+            if try id == rules.attackerArmour && i(d,0xb8) <= 15 && !rules.guardPenetrators.contains(attackID) { return true }
         }
-        return try field(body,8) == 7 && defense <= 60 && i(d,0x2fc) > 0 && (b(a,0x80) != b(d,0x80) || it(0x14) < 0 || [124,220,221,222].contains(h(a,0x6f4)))
+        return try field(body,8) == 7 && defense <= 60 && i(d,0x2fc) > 0 && (b(a,0x80) != b(d,0x80) || it(0x14) < 0 || rules.alwaysBlocked.contains(h(a,0x6f4)))
     }
     // Shared damage/statistic writes. Guard divides the scaled injury by10.
     mutating func damage(_ a: Int,_ d: Int,guarded: Bool = false) throws {

@@ -7,7 +7,7 @@ extension OriginalHitPass {
         if try h(d,0x6f8) != 0 { return }
         if try h(a,0x6f8) == 3 {
             if try h(a,0xac) > -1 { try sound(a,h(a,0xac),catalog: true,observe: observe) }
-        } else { try sound(d,[37,6].contains(h(d,0x6f4)) ? 17 : 1,observe: observe) }
+        } else { try sound(d,rules.armourGuardSound.contains(h(d,0x6f4)) ? 17 : 1,observe: observe) }
         try damage(a,d,guarded: true);try durability(d)
         if try i(d,0x2fc) <= 0 { try put(d,0xb0,80) }
         try put(d,0x88,0);try add(d,0xb8,it(0x40));try add(d,0x20,1)

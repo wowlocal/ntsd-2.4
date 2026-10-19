@@ -51,7 +51,8 @@ E5a выполнен: обзор (100 мест с ID объектов, дисп�
 [evidence](../evidence/es-e4c1a-sorted-keys.json). E5c-0 выполнен: профиль игры (`OriginalGameRules`, цель `NTSDProfile`)
 идёт от идентичности контента к каталогу и проходам; отражение — первая роль:
 [evidence](../evidence/es-e5c0-profile-plumbing.json). E5c-1a выполнен: роли в одном хранилище, отражатели 209/8/213 —
-роли профиля: [evidence](../evidence/es-e5c1a-reflector-roles.json). Следующая задача — E5c-1b: броня (A1–A6).
+роли профиля: [evidence](../evidence/es-e5c1a-reflector-roles.json). E5c-1b выполнен: броня (A1–A6) — роли профиля,
+пороги остались в движке: [evidence](../evidence/es-e5c1b-armour-roles.json). Следующая задача — E5c-1c: предметы.
 
 ## Internal build storage и VM quota исправлены — 2026-10-17
 
