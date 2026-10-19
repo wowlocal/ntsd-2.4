@@ -3,6 +3,7 @@ import Foundation
 import CryptoKit
 #endif
 import NTSDCore
+import NTSDProfile
 
 /// Full catalog comparison against a single execution of 4122f0 and its children.
 /// Only established header/registry/device pointers are rebound. Raw Frame words,
@@ -200,7 +201,7 @@ public enum LoadedCatalogReference {
         let catalog: OriginalLoadedCatalog
         if useLoadingFiles {
             var registryDelivered = false
-            let result = try OriginalLoadedCatalog.loadWithFiles(files: .init(translation: corpus.translation), fileName: corpus.fileName,
+            let result = try OriginalLoadedCatalog.loadWithFiles(files: .init(translation: corpus.translation), fileName: corpus.fileName, rules: NTSDProfile.rules,
                 initialChecksum: corpus.initialChecksum, initialSoundBytes: initialSoundBytes, fill: corpus.bitmapFill,
                 parentBacking: parent, backgroundBacking: backgrounds, stageBacking: stageBacking,
                 fileSource: { path in
@@ -247,7 +248,7 @@ public enum LoadedCatalogReference {
             catalog = result.catalog
             try onLoadingFiles(result.files)
         } else {
-            catalog = try OriginalLoadedCatalog(source: blob(corpus.source), fileName: corpus.fileName, translation: corpus.translation,
+            catalog = try OriginalLoadedCatalog(source: blob(corpus.source), fileName: corpus.fileName, translation: corpus.translation, rules: NTSDProfile.rules,
                 initialChecksum: corpus.initialChecksum, initialSoundBytes: initialSoundBytes, fill: corpus.bitmapFill,
                 parentBacking: parent, backgroundBacking: backgrounds, stageBacking: stageBacking,
                 fileSource: fileSource, bitmapSource: bitmapSource, frameAllocation: frameAllocation, weaponSoundAllocation: weaponSoundAllocation,

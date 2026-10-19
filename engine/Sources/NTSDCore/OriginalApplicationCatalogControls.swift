@@ -6,6 +6,8 @@ extension OriginalApplicationCatalogSession {
         public let files: [String:[UInt8]], bitmaps: [String:OriginalApplicationStartupInputs.Bitmap]
         public let presentation: OriginalMenuPresentationInput
         public let drawResult: Int32, graphicsResult: Int32, allocationFill: UInt8
+        /// The game's rules the loaded catalog carries (ENGINE_SPLIT E5c).
+        public let rules: OriginalGameRules
         /// Declared runtime policy: the catalog block's registry, background and
         /// stage backing counts as initialized with `allocationFill` (a fresh
         /// large Windows heap block is demand-zero pages). Verification keeps false.
@@ -16,11 +18,11 @@ extension OriginalApplicationCatalogSession {
         /// false: the catalog corpora declared the decoder without it.
         public let scanfLookahead: Bool
         public init(files: [String:[UInt8]],bitmaps: [String:OriginalApplicationStartupInputs.Bitmap],
-                    presentation: OriginalMenuPresentationInput,drawResult: Int32,graphicsResult: Int32,allocationFill: UInt8,allocationDefined: Bool = false,
+                    presentation: OriginalMenuPresentationInput,drawResult: Int32,graphicsResult: Int32,allocationFill: UInt8,rules: OriginalGameRules,allocationDefined: Bool = false,
                     scanfLookahead: Bool = false) throws {
             guard files[OriginalLoadingFiles.temporaryPath] == nil else { throw Boundary.input("External temporary file") }
             self.files = files;self.bitmaps = bitmaps;self.presentation = presentation
-            self.drawResult = drawResult;self.graphicsResult = graphicsResult;self.allocationFill = allocationFill;self.allocationDefined = allocationDefined
+            self.drawResult = drawResult;self.graphicsResult = graphicsResult;self.allocationFill = allocationFill;self.rules = rules;self.allocationDefined = allocationDefined
             self.scanfLookahead = scanfLookahead
         }
     }

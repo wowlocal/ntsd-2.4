@@ -30,11 +30,13 @@ public struct OriginalLoadedCatalog {
     let frameAllocationOrder: [Int]
     public let checksum: UInt32, soundCount: Int
     public let soundBytes: [UInt8]
+    /// The game's rules the passes test object IDs against (ENGINE_SPLIT E5c).
+    public let rules: OriginalGameRules
 
     /// Bitmap provider resolves both file paths and the four embedded EXE keys.
     /// Raw Frame addresses may be supplied by a reference allocator; the native
     /// default uses a logical 32-bit arena, never host pointers.
-    public init(source: [UInt8], fileName: String, translation: OriginalFileTranslation,
+    public init(source: [UInt8], fileName: String, translation: OriginalFileTranslation, rules: OriginalGameRules,
                 initialChecksum: UInt32 = 0, initialSoundBytes: [UInt8]? = nil, fill: UInt8 = 0xa5,
                 parentBacking: [Int: OriginalStateRecord], backgroundBacking: [OriginalStateRecord],
                 stageBacking: [OriginalStateRecord],
@@ -52,7 +54,7 @@ public struct OriginalLoadedCatalog {
                 onStore: (OriginalCatalogRegistry.Store) throws -> Void = { _ in },
                 onChild: (OriginalCatalogChildObservation) throws -> Void = { _ in },
                 onStage: (String, Int, Int?, OriginalStateRecord) throws -> Void = { _, _, _, _ in }) throws {
-        try self.init(source: { source }, fileName: fileName, translation: translation,
+        try self.init(source: { source }, fileName: fileName, translation: translation, rules: rules,
             initialChecksum: initialChecksum, initialSoundBytes: initialSoundBytes, fill: fill,
             parentBacking: parentBacking, backgroundBacking: backgroundBacking, stageBacking: stageBacking,
             fileSource: fileSource, bitmapSource: bitmapSource, constructBitmap: constructBitmap,
@@ -63,7 +65,7 @@ public struct OriginalLoadedCatalog {
 
     /// Deferred file delivery preserves the parent's built-in-resource/time/open
     /// order. No original CRT or file handle is part of the native runtime.
-    public init(source: () throws -> [UInt8], fileName: String, translation: OriginalFileTranslation,
+    public init(source: () throws -> [UInt8], fileName: String, translation: OriginalFileTranslation, rules: OriginalGameRules,
                 initialChecksum: UInt32 = 0, initialSoundBytes: [UInt8]? = nil, fill: UInt8 = 0xa5,
                 parentBacking: [Int: OriginalStateRecord], backgroundBacking: [OriginalStateRecord],
                 stageBacking: [OriginalStateRecord],
@@ -81,7 +83,7 @@ public struct OriginalLoadedCatalog {
                 onStore: (OriginalCatalogRegistry.Store) throws -> Void = { _ in },
                 onChild: (OriginalCatalogChildObservation) throws -> Void = { _ in },
                 onStage: (String, Int, Int?, OriginalStateRecord) throws -> Void = { _, _, _, _ in }) throws {
-        try self.init(source: source, fileName: fileName, translation: translation,
+        try self.init(source: source, fileName: fileName, translation: translation, rules: rules,
             initialChecksum: initialChecksum, initialSoundBytes: initialSoundBytes, fill: fill,
             parentBacking: parentBacking, backgroundBacking: backgroundBacking, stageBacking: stageBacking,
             fileSource: fileSource, bitmapSource: bitmapSource, constructBitmap: constructBitmap,
@@ -94,7 +96,7 @@ public struct OriginalLoadedCatalog {
     /// bytes produced by its preceding decoder; registry close precedes Stage.
     /// This result publishes catalog and files together. Callers must also stage
     /// graphics/audio/global callbacks until the enclosing iteration commits.
-    public static func loadWithFiles(files: OriginalLoadingFiles, fileName: String,
+    public static func loadWithFiles(files: OriginalLoadingFiles, fileName: String, rules: OriginalGameRules,
                 initialChecksum: UInt32 = 0, initialSoundBytes: [UInt8]? = nil, fill: UInt8 = 0xa5,
                 parentBacking: [Int: OriginalStateRecord], backgroundBacking: [OriginalStateRecord],
                 stageBacking: [OriginalStateRecord],
@@ -117,7 +119,7 @@ public struct OriginalLoadedCatalog {
                 onStage: (String, Int, Int?, OriginalStateRecord) throws -> Void = { _, _, _, _ in }) throws -> (catalog: Self, files: OriginalLoadingFiles) {
         let session = FileSession(files: files, source: fileSource, allocate: fileAllocation, observe: onFile)
         let translation = files.translation
-        let catalog = try Self(source: { try session.openCatalog(fileName) }, fileName: fileName, translation: translation,
+        let catalog = try Self(source: { try session.openCatalog(fileName) }, fileName: fileName, translation: translation, rules: rules,
             initialChecksum: initialChecksum, initialSoundBytes: initialSoundBytes, fill: fill,
             parentBacking: parentBacking, backgroundBacking: backgroundBacking, stageBacking: stageBacking,
             fileSource: fileSource, bitmapSource: bitmapSource, constructBitmap: constructBitmap,
@@ -127,7 +129,7 @@ public struct OriginalLoadedCatalog {
         return (catalog, session.files)
     }
 
-    private init(source: () throws -> [UInt8], fileName: String, translation: OriginalFileTranslation,
+    private init(source: () throws -> [UInt8], fileName: String, translation: OriginalFileTranslation, rules: OriginalGameRules,
                 initialChecksum: UInt32 = 0, initialSoundBytes: [UInt8]? = nil, fill: UInt8 = 0xa5,
                 parentBacking: [Int: OriginalStateRecord], backgroundBacking: [OriginalStateRecord],
                 stageBacking: [OriginalStateRecord],
@@ -250,6 +252,7 @@ public struct OriginalLoadedCatalog {
         frameAllocationOrder = allocations.indices.sorted { allocations[$0].address < allocations[$1].address }
         self.resources = resources
         self.checksum = registry.checksum; self.soundCount = resources.sounds.count; self.soundBytes = resources.sounds.bytes
+        self.rules = rules
     }
     private final class FileSession {
         var files: OriginalLoadingFiles

@@ -1,6 +1,7 @@
 import Foundation
 import XCTest
 @testable import NTSDCore
+import NTSDProfile
 @testable import NTSDReferenceChecks
 
 final class OriginalLibWorldContactsTests: XCTestCase {
@@ -89,7 +90,7 @@ final class OriginalLibWorldContactsTests: XCTestCase {
             for p in item.globals ?? [] { try patch(&globals,p.offset-0x44d000,p.bytes) }
             let memory = OriginalContactFrameMemory(allocations)
             var pass = OriginalContactPass(world: world,actors: actors,globals: globals,objectCount: item.count ?? 4,
-                header: { ownHeaders[$0] },frame: { ownFrames[$0][Int($1)] },heapWord: { try memory.word($0) },bundledLibrary: true)
+                header: { ownHeaders[$0] },frame: { ownFrames[$0][Int($1)] },heapWord: { try memory.word($0) },rules: NTSDProfile.rules,bundledLibrary: true)
             func observe(_ event: OriginalWorldContactsEvent) throws {
                 switch event {
                 case let .random(attacker,defender,stream,range,result): events.append(.init(kind: "random",arguments: [UInt32(attacker),UInt32(defender)]+[stream,range,result].map(UInt32.init(bitPattern:))))
@@ -98,7 +99,7 @@ final class OriginalLibWorldContactsTests: XCTestCase {
             }
             do {
                 switch item.entry ?? 0x419380 {
-                case 0x41eed8: try OriginalLibWorldContacts.apply(world: &pass.world,actors: &pass.actors,globals: &pass.globals,objectCount: item.count ?? 4,header: { ownHeaders[$0] },frame: { ownFrames[$0][Int($1)] },heapWord: { try memory.word($0) },observe: observe)
+                case 0x41eed8: try OriginalLibWorldContacts.apply(world: &pass.world,actors: &pass.actors,globals: &pass.globals,objectCount: item.count ?? 4,header: { ownHeaders[$0] },frame: { ownFrames[$0][Int($1)] },heapWord: { try memory.word($0) },rules: NTSDProfile.rules,observe: observe)
                 case 0x419380: try pass.collect(mode: item.mode ?? 0,observe: observe)
                 case 0x4064d0: try pass.fusion(observe: observe)
                 case 0x417400: let pair = item.pair ?? [0,1];try pass.pair(pair[0],pair[1],mode: item.mode ?? 0,observe: observe)
@@ -145,7 +146,7 @@ final class OriginalLibWorldContactsTests: XCTestCase {
         let memory = OriginalContactFrameMemory([.init(address: 0x51000000,kind: .interactions,storage: boxes)])
         let beforeWorld = world,beforeActors = actors,beforeGlobals = globals
         var seen: [OriginalWorldContactsEvent] = []
-        XCTAssertThrowsError(try OriginalLibWorldContacts.apply(world: &world,actors: &actors,globals: &globals,objectCount: 1,header: { _ in header },frame: { _,_ in frame },heapWord: { try memory.word($0) },observe: { event in
+        XCTAssertThrowsError(try OriginalLibWorldContacts.apply(world: &world,actors: &actors,globals: &globals,objectCount: 1,header: { _ in header },frame: { _,_ in frame },heapWord: { try memory.word($0) },rules: NTSDProfile.rules,observe: { event in
             seen.append(event);throw OriginalStateError.invalidStorage("Stop after tie RNG")
         }))
         XCTAssertEqual(seen,undefinedCategory ? [] : [.random(attacker: 0,defender: 1,stream: 133,range: 2,result: 0)])

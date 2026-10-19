@@ -1,5 +1,6 @@
 import Foundation
 import NTSDCore
+import NTSDProfile
 
 /// NTSD 2.4's content packages (ENGINE_SPLIT E1): the game's side of the
 /// engine's OriginalContentLocation.
@@ -19,7 +20,8 @@ public enum NTSDContent {
         interfaceManifestSHA256:"9f8cb29ac2546c0718e7c83541972b6e4589c64488ec057027b4fe4edd55af82",
         menuManifestSHA256:"f0c363739088e477c8b51b597374f29bccae9f63d7d09f7169128c57b01b1161",
         warMenuManifestSHA256:"784c222b2313833f37219eae36b2424a61d4d0f2f257e5aaff083a82aaa5406a",
-        arenaManifestSHA256:"60652ed8df36c7ff0bbaa167dcf1dd7be07140dac766c529d275f0705fc40519")
+        arenaManifestSHA256:"60652ed8df36c7ff0bbaa167dcf1dd7be07140dac766c529d275f0705fc40519",
+        rules:NTSDProfile.rules)
     /// NTSD's name in the stop message and its user-data folder (E3b).
     public static let game = OriginalGameIdentity(name:"NTSD",userDataFolder:"NTSD Native")
     /// NTSD as the engine's hosts run it (E4b).

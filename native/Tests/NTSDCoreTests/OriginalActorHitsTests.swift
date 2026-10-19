@@ -1,6 +1,7 @@
 import Foundation
 import XCTest
 @testable import NTSDCore
+import NTSDProfile
 @testable import NTSDReferenceChecks
 
 final class OriginalActorHitsTests: XCTestCase {
@@ -106,7 +107,7 @@ final class OriginalActorHitsTests: XCTestCase {
             for p in item.globals ?? [] { try patch(&globals,p.offset-0x44d000,p.bytes) }
             var pass = OriginalHitPass(world: world,actors: actors,globals: globals,memory: OriginalContactFrameMemory(allocations),
                 crt: OriginalCRTRandom(state: item.crtSeed ?? 1),objectCount: item.count ?? 4,
-                header: { ownHeaders[$0] },frame: { ownFrames[$0][Int($1)] },sse2: (item.sse2 ?? 0) != 0,precision: try OriginalArithmeticPrecision(controlWord: UInt16(c.fpcw)))
+                header: { ownHeaders[$0] },frame: { ownFrames[$0][Int($1)] },rules: NTSDProfile.rules,sse2: (item.sse2 ?? 0) != 0,precision: try OriginalArithmeticPrecision(controlWord: UInt16(c.fpcw)))
             func observe(_ event: OriginalHitEvent) throws {
                 switch event {
                 case let .random(stream,range,result): events.append(.init(kind: "random",arguments: [stream,range,result].map(UInt32.init(bitPattern:))))

@@ -46,11 +46,13 @@ public struct OriginalApplicationCatalogSession {
         public let volumeReplies: [Int32]
         public let messages: [MessageInput], presentation: OriginalMenuPresentationInput
         public let drawResult: Int32, graphicsResult: Int32, allocationFill: UInt8
+        public let rules: OriginalGameRules
         public var allocationDefined = false, scanfLookahead = false
         public init(files: [String:[UInt8]], bitmaps: [String:OriginalApplicationStartupInputs.Bitmap],
             allocationTokens: [UInt32], bitmapReplies: [API.Response], fileAllocations: [OriginalLoadingFileAllocation],
             waves: [OriginalWavePlatform], volumeReplies: [Int32], times: [UInt32], messages: [MessageInput],
-            presentation: OriginalMenuPresentationInput, drawResult: Int32, graphicsResult: Int32, allocationFill: UInt8) throws {
+            presentation: OriginalMenuPresentationInput, drawResult: Int32, graphicsResult: Int32, allocationFill: UInt8,
+            rules: OriginalGameRules) throws {
             guard bitmapReplies.allSatisfy({ $0.writes.isEmpty }), files[OriginalLoadingFiles.temporaryPath] == nil else {
                 throw Boundary.input("Captured bitmap writes or external temporary file")
             }
@@ -59,6 +61,7 @@ public struct OriginalApplicationCatalogSession {
             self.volumeReplies = volumeReplies
             self.times = times; self.messages = messages; self.presentation = presentation
             self.drawResult = drawResult; self.graphicsResult = graphicsResult; self.allocationFill = allocationFill
+            self.rules = rules
         }
     }
     public struct Allocation: Equatable {
@@ -114,7 +117,7 @@ public struct OriginalApplicationCatalogSession {
         afterChild: @escaping (OriginalCatalogChildObservation,Snapshot) throws -> Void = { _,_ in },
         beforeCommit: (PendingPool) throws -> Void = { _ in }) throws -> PendingPool {
         let resources = try Resources(files:inputs.files,bitmaps:inputs.bitmaps,presentation:inputs.presentation,
-            drawResult:inputs.drawResult,graphicsResult:inputs.graphicsResult,allocationFill:inputs.allocationFill,
+            drawResult:inputs.drawResult,graphicsResult:inputs.graphicsResult,allocationFill:inputs.allocationFill,rules:inputs.rules,
             allocationDefined:inputs.allocationDefined,scanfLookahead:inputs.scanfLookahead)
         return try load(resources:resources,makeControls:{ Self.fixedControls(inputs) },
                         observe:observe,afterChild:afterChild,beforeCommit:beforeCommit)
@@ -387,7 +390,7 @@ public struct OriginalApplicationCatalogSession {
             // sentinel into every slot but fills only those stage.dat names,
             // so the others copy one page instead of 1.35 MB each (MEMORY_LOADING M6).
             let bg = try backing(OriginalBackgroundLoader.recordSize),stage = try backing(OriginalStageLoader.stageSize).paged()
-            let result = try OriginalLoadedCatalog.loadWithFiles(files:.init(translation:.text,scanfLookahead:inputs.scanfLookahead),fileName:name,
+            let result = try OriginalLoadedCatalog.loadWithFiles(files:.init(translation:.text,scanfLookahead:inputs.scanfLookahead),fileName:name,rules:inputs.rules,
                 initialChecksum:word(0x44f620),initialSoundBytes:state.full.bytes(in:(0x455638-0x44d000)..<(0x458438-0x44d000)),
                 fill:inputs.allocationFill,parentBacking:parent,backgroundBacking:Array(repeating:bg,count:101),stageBacking:Array(repeating:stage,count:60),
                 fileSource:file,fileAllocation:{ path,mode in

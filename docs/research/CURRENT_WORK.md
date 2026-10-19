@@ -48,7 +48,9 @@ E5a выполнен: обзор (100 мест с ID объектов, дисп�
 [evidence](../evidence/es-e5a-design.json). E5b выполнен: `OriginalRecordLayout`, машинный код совпал; скопированные таблицы ушли из движка (равны
 `initial.bin`): [evidence](../evidence/es-e5b-record-type.json). Следующая задача — E4c-1a: исправить
 недетерминированный тест движка (порядок ключей JSON), затем E5c-0. E4c-1a выполнен (`.sortedKeys`, 30/30 и 10/10):
-[evidence](../evidence/es-e4c1a-sorted-keys.json). Следующая задача — E5c-0: каркас профиля и первая роль (отражение).
+[evidence](../evidence/es-e4c1a-sorted-keys.json). E5c-0 выполнен: профиль игры (`OriginalGameRules`, цель `NTSDProfile`)
+идёт от идентичности контента к каталогу и проходам; отражение — первая роль:
+[evidence](../evidence/es-e5c0-profile-plumbing.json). Следующая задача — E5c-1: места в горячих проходах.
 
 ## Internal build storage и VM quota исправлены — 2026-10-17
 

@@ -1,5 +1,6 @@
 import XCTest
 @testable import NTSDCore
+import NTSDProfile
 
 /// APPLICATION_CATALOG_CHECKSUM.md: the catalog checksum 44f620 over the app's
 /// own catalog package, through the owned file session the app uses. With
@@ -18,7 +19,7 @@ final class OriginalCatalogChecksumTests: XCTestCase {
         parent[0x4d81060] = backgrounds[99]; parent[0x4d819f0] = backgrounds[100]
         var next: UInt32 = 0x100
         let result = try OriginalLoadedCatalog.loadWithFiles(files: .init(translation: .text, scanfLookahead: scanfLookahead),
-            fileName: "data\\data.txt", parentBacking: parent, backgroundBacking: backgrounds,
+            fileName: "data\\data.txt", rules: NTSDProfile.rules, parentBacking: parent, backgroundBacking: backgrounds,
             stageBacking: [OriginalStateRecord](repeating: stage, count: 60),
             fileSource: { path in
                 guard let bytes = try inputs.file(path) else { throw OriginalStateError.invalidStorage("Missing catalog file \(path)") }

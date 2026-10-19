@@ -41,7 +41,7 @@ extension OriginalHitPass {
         } else if try h(d,0x6f8) > 0 && h(d,0xa4) > -1 { try sound(d,h(d,0xa4),catalog: true,observe: observe) }
         try hitHorizontal(a,d,observe: observe)
         if try f(a,8) == 3000 {
-            let keep = try h(d,0x6f8) != 0 && h(a,0x6f4) == 209 && (Self.reflectable.contains(h(d,0x6f4)) || (h(d,0x6f4) == 209 && i(d,0x70) == 40))
+            let keep = try h(d,0x6f8) != 0 && h(a,0x6f4) == 209 && (rules.reflectable.contains(h(d,0x6f4)) || (h(d,0x6f4) == 209 && i(d,0x70) == 40))
             if !keep { try put(a,0x70,10);try put(a,0x88,0);try number(a,0x40,0);try number(a,0x50,Double(f(a,0x18))) }
         }
         if try i(d,0xb0) == 80 {
@@ -132,7 +132,6 @@ extension OriginalHitPass {
         if try b(a,0x80) == 0 { try store(d,0x28,delta+v(d,0x28)) }
         if try b(a,0x80) == 1 { try store(d,0x28,v(d,0x28)-delta) }
     }
-    static let reflectable: Set<Int32> = [200,203,205,206,207,215,216]
     mutating func copyCredit(_ from: Int,_ to: Int) throws { try put(to,0x364,i(from,0x364));try put(to,0x354,i(from,0x354)) }
     mutating func rebindReflection(_ d: Int) throws {
         if let replacement = try find(209) {
@@ -146,16 +145,16 @@ extension OriginalHitPass {
             if try i(a,0x98) < 0 { try copyCredit(index(Int(i(a,0xa0))),d) } else { try copyCredit(a,d) }
             try byte(d,0xeb,1);try put(d,0x88,0)
             for o in [0x30,0x28,0x38] { try number(d,o,0) }
-            if try h(a,0x6f4) == 209 && Self.reflectable.contains(h(d,0x6f4)) {
+            if try h(a,0x6f4) == 209 && rules.reflectable.contains(h(d,0x6f4)) {
                 try copyCredit(a,d);try put(d,0x368,Int32(object(a)))
                 for o in [0x70,0x74,0x78] { try put(d,o,40) }
             } else if try (h(a,0x6f8) == 0 || i(a,0x98) < 0) && ![2,20].contains(it(0x2c)) {
                 try put(d,0x70,30)
-                if try h(a,0x6f4) == 8 && Self.reflectable.contains(h(d,0x6f4)) { try rebindReflection(d) }
+                if try h(a,0x6f4) == 8 && rules.reflectable.contains(h(d,0x6f4)) { try rebindReflection(d) }
             } else { try put(d,0x70,20) }
             if try i(a,0x98) < 0 {
                 try put(d,0,i(a,0xa0))
-                if try h(a,0x6f4) == 213 && Self.reflectable.contains(h(d,0x6f4)) { try rebindReflection(d);try copyCredit(index(Int(i(a,0xa0))),d) }
+                if try h(a,0x6f4) == 213 && rules.reflectable.contains(h(d,0x6f4)) { try rebindReflection(d);try copyCredit(index(Int(i(a,0xa0))),d) }
             } else { try put(d,0,Int32(attacker)) }
         }
         if try (f(d,8) == 3005 && f(a,8) == 3005) || (f(d,8) == 3006 && f(a,8) == 3006) {

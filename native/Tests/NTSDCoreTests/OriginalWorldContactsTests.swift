@@ -1,6 +1,7 @@
 import Foundation
 import XCTest
 @testable import NTSDCore
+import NTSDProfile
 @testable import NTSDReferenceChecks
 
 final class OriginalWorldContactsTests: XCTestCase {
@@ -90,7 +91,7 @@ final class OriginalWorldContactsTests: XCTestCase {
             for p in item.globals ?? [] { try patch(&globals,p.offset-0x44d000,p.bytes) }
             let memory = OriginalContactFrameMemory(allocations)
             var pass = OriginalContactPass(world: world,actors: actors,globals: globals,objectCount: item.count ?? 4,
-                header: { ownHeaders[$0] },frame: { ownFrames[$0][Int($1)] },heapWord: { try memory.word($0) })
+                header: { ownHeaders[$0] },frame: { ownFrames[$0][Int($1)] },heapWord: { try memory.word($0) },rules: NTSDProfile.rules)
             func observe(_ event: OriginalWorldContactsEvent) throws {
                 switch event {
                 case let .random(attacker,defender,stream,range,result): events.append(.init(kind: "random",arguments: [UInt32(attacker),UInt32(defender)]+[stream,range,result].map(UInt32.init(bitPattern:))))
@@ -103,7 +104,7 @@ final class OriginalWorldContactsTests: XCTestCase {
                 for inPlace in [false,true] {
                     var placedWorld = world,placedActors = actors,placedGlobals = globals,seen: [Event] = []
                     try OriginalWorldContacts.apply(world: &placedWorld,actors: &placedActors,globals: &placedGlobals,objectCount: item.count ?? 4,
-                        header: { ownHeaders[$0] },frame: { ownFrames[$0][Int($1)] },heapWord: { try memory.word($0) },observe: { event in
+                        header: { ownHeaders[$0] },frame: { ownFrames[$0][Int($1)] },heapWord: { try memory.word($0) },rules: NTSDProfile.rules,observe: { event in
                             switch event {
                             case let .random(attacker,defender,stream,range,result): seen.append(.init(kind: "random",arguments: [UInt32(attacker),UInt32(defender)]+[stream,range,result].map(UInt32.init(bitPattern:))))
                             case let .reconstruct(slot,created): seen.append(.init(kind: "reconstruct",arguments: [UInt32(slot),UInt32(created)]))
@@ -156,7 +157,7 @@ final class OriginalWorldContactsTests: XCTestCase {
         let memory = OriginalContactFrameMemory([.init(address: 0x51000000,kind: .interactions,storage: boxes)])
         let beforeWorld = world,beforeActors = actors,beforeGlobals = globals
         var seen: [OriginalWorldContactsEvent] = []
-        XCTAssertThrowsError(try OriginalWorldContacts.apply(world: &world,actors: &actors,globals: &globals,objectCount: 1,header: { _ in header },frame: { _,_ in frame },heapWord: { try memory.word($0) },observe: { event in
+        XCTAssertThrowsError(try OriginalWorldContacts.apply(world: &world,actors: &actors,globals: &globals,objectCount: 1,header: { _ in header },frame: { _,_ in frame },heapWord: { try memory.word($0) },rules: NTSDProfile.rules,observe: { event in
             seen.append(event);throw OriginalStateError.invalidStorage("Stop after tie RNG")
         }))
         XCTAssertEqual(seen,[.random(attacker: 0,defender: 1,stream: 133,range: 2,result: 0)])
@@ -164,7 +165,7 @@ final class OriginalWorldContactsTests: XCTestCase {
         // In place (CORE_REALTIME B2 P4): the same error after the same draw,
         // the prefix's writes and the draw kept, nothing left vacant.
         seen = []
-        XCTAssertThrowsError(try OriginalWorldContacts.apply(world: &world,actors: &actors,globals: &globals,objectCount: 1,header: { _ in header },frame: { _,_ in frame },heapWord: { try memory.word($0) },observe: { event in
+        XCTAssertThrowsError(try OriginalWorldContacts.apply(world: &world,actors: &actors,globals: &globals,objectCount: 1,header: { _ in header },frame: { _,_ in frame },heapWord: { try memory.word($0) },rules: NTSDProfile.rules,observe: { event in
             seen.append(event);throw OriginalStateError.invalidStorage("Stop after tie RNG")
         },inPlace: true)) { XCTAssertEqual("\($0)","\(OriginalStateError.invalidStorage("Stop after tie RNG"))") }
         XCTAssertEqual(seen,[.random(attacker: 0,defender: 1,stream: 133,range: 2,result: 0)])

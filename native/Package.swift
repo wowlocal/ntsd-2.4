@@ -104,7 +104,10 @@ let package = Package(
         // by the engine through OriginalContentLocation. The music joins the
         // bundle in Mac builds only, as NTSDMacPlatform's did (E1b); the portable
         // packagers copy it beside the program themselves.
-        .target(name: "NTSDContent", dependencies: [core], exclude: portable ? ["Resources/OriginalMusic"] : [], resources: [.copy("Resources/OriginalStartup"), .copy("Resources/OriginalCommonSounds"), .copy("Resources/OriginalLoadingInterface"), .copy("Resources/OriginalCharacterMenu"), .copy("Resources/OriginalWarMenu"), .copy("Resources/OriginalMatchArenas"), .copy("Resources/OriginalCatalog")]
+        // NTSD 2.4's game profile (ENGINE_SPLIT E5): the rules the engine tests
+        // object IDs against; no resources.
+        .target(name: "NTSDProfile", dependencies: [core], swiftSettings: exclusivity),
+        .target(name: "NTSDContent", dependencies: [core, "NTSDProfile"], exclude: portable ? ["Resources/OriginalMusic"] : [], resources: [.copy("Resources/OriginalStartup"), .copy("Resources/OriginalCommonSounds"), .copy("Resources/OriginalLoadingInterface"), .copy("Resources/OriginalCharacterMenu"), .copy("Resources/OriginalWarMenu"), .copy("Resources/OriginalMatchArenas"), .copy("Resources/OriginalCatalog")]
                     + (portable ? [] : [.copy("Resources/OriginalMusic")]),
                 swiftSettings: exclusivity),
         .systemLibrary(name: "CZlib", path: "Sources/CZlib"),
@@ -113,7 +116,7 @@ let package = Package(
         // runtime path.
         .target(name: "NTSDPractice", dependencies: [core], swiftSettings: exclusivity),
         .executableTarget(name: "NTSDHeadless", dependencies: [engine("NTSDHeadlessHost"), "NTSDContent"], swiftSettings: exclusivity),
-        .target(name: "NTSDReferenceChecks", dependencies: [core, "CZlib"]),
+        .target(name: "NTSDReferenceChecks", dependencies: [core, "CZlib", "NTSDProfile"]),
         .executableTarget(name: "NTSDBootstrapCheck", dependencies: ["NTSDReferenceChecks"]),
         .executableTarget(name: "NTSDCatalogCheck", dependencies: ["NTSDReferenceChecks"]),
         .executableTarget(name: "NTSDObjectCheck", dependencies: ["NTSDReferenceChecks"]),
@@ -123,7 +126,7 @@ let package = Package(
         .executableTarget(name: "NTSDMovementCheck", dependencies: [core, "NTSDPractice"]),
         .executableTarget(name: "NTSDCombatCheck", dependencies: [core, "NTSDPractice"]),
         .executableTarget(name: "NTSDStateCheck", dependencies: [core]),
-        .testTarget(name: "NTSDCoreTests", dependencies: [core, "NTSDReferenceChecks", runtime, musicDecoder, "CZlib", "NTSDContent", "NTSDPractice"] + macTestDependencies,
+        .testTarget(name: "NTSDCoreTests", dependencies: [core, "NTSDReferenceChecks", runtime, musicDecoder, "CZlib", "NTSDContent", "NTSDPractice", "NTSDProfile"] + macTestDependencies,
                     exclude: portable ? ["Mac"] : [], resources: [.copy("Fixtures")], swiftSettings: exclusivity)
     ],
     swiftLanguageModes: [.v5]

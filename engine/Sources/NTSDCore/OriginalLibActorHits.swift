@@ -29,11 +29,11 @@ public enum OriginalLibActorHits {
                              globals: inout OriginalStateRecord,allocations: inout [OriginalFrameAllocation],
                              crt: inout OriginalCRTRandom,library: inout OriginalLibHitState,objectCount: Int32,
                              header: @escaping (Int) throws -> OriginalStateRecord,
-                             frame: @escaping (Int,Int32) throws -> OriginalStateRecord,
+                             frame: @escaping (Int,Int32) throws -> OriginalStateRecord,rules: OriginalGameRules,
                              sse2: Bool = false,precision: OriginalArithmeticPrecision = .bits64,
                              observe: (OriginalHitEvent) throws -> Void = { _ in }) throws {
         var pass = OriginalHitPass(world: world,actors: actors,globals: globals,memory: OriginalContactFrameMemory(allocations),
-            crt: crt,objectCount: objectCount,header: header,frame: frame,sse2: sse2,precision: precision,library: library)
+            crt: crt,objectCount: objectCount,header: header,frame: frame,rules: rules,sse2: sse2,precision: precision,library: library)
         try pass.resolve(slot,observe: observe)
         world = pass.world;actors = pass.actors;globals = pass.globals;allocations = pass.memory.allocations
         crt = pass.crt;library = pass.library!

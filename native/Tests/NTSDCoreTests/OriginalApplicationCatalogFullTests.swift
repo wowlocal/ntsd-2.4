@@ -1,6 +1,7 @@
 import Foundation
 import XCTest
 import NTSDCore
+import NTSDContent
 
 /// Complete owned Native composition in an explicitly declared platform
 /// environment. Full game records come from the retained controlled catalogs;
@@ -178,7 +179,7 @@ final class OriginalApplicationCatalogFullTests: XCTestCase {
         let p = try JSONDecoder().decode(OriginalMenuPresentationInput.self,from:JSONSerialization.data(withJSONObject:[
             "targetSurface":target,"methodResult":0,"queryResult":0,"audioGetResult":0,"audioSetResult":0,
             "queriedAudio":0,"audioVolume":0,"dcResult":0,"dc":0x12345678,"postResult":0]))
-        return try .init(files:r.files,bitmaps:r.images,presentation:p,drawResult:0,graphicsResult:0,allocationFill:0xa5)
+        return try .init(files:r.files,bitmaps:r.images,presentation:p,drawResult:0,graphicsResult:0,allocationFill:0xa5,rules:NTSDContent.identity.rules)
     }
     func checkPublication(_ p: C.PendingPool,_ r: R,_ provider: Provider) throws {
         let expectedWaves = provider.waveInputs
@@ -203,6 +204,7 @@ final class OriginalApplicationCatalogFullTests: XCTestCase {
         XCTAssertEqual(try p.snapshot.state.full.integer(at:0x458438-0x44d000,as:UInt32.self),400)
         XCTAssertTrue(Array(p.snapshot.state.full.bytes[(0x455638-0x44d000)..<(0x458438-0x44d000)]) == (try r.cache(400,entry:provider.entryCache)),"Whole published cache")
         XCTAssertEqual(try p.snapshot.state.full.integer(at:0x44f620-0x44d000,as:UInt32.self),p.catalog.checksum)
+        XCTAssertEqual(p.catalog.rules,NTSDContent.identity.rules,"the game's identity's rules reach the loaded catalog (ENGINE_SPLIT E5c-0)")
         let projection = try OriginalApplicationCatalogGraphicsComparison(resources:r.images,golden:r.golden,entry:p.entry)
         var events: [OriginalApplicationCatalogGraphicsComparison.Event] = []
         XCTAssertEqual(Array(p.snapshot.operations.prefix(p.entry.stagedOperations.count)),p.entry.stagedOperations.map(C.Operation.preceding))

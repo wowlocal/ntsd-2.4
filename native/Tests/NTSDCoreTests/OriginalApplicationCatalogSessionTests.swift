@@ -1,6 +1,7 @@
 import Foundation
 import XCTest
 import NTSDCore
+import NTSDProfile
 
 /// Three saved whole-child prefixes, reached through actual Native startup,
 /// menu and common loading. The twentieth child cancels the full loader; this
@@ -23,7 +24,7 @@ final class OriginalApplicationCatalogSessionTests: XCTestCase {
             messages:r.c.events.filter { $0.kind == "peekMessage" }.map { e in
                 XCTAssertEqual(e.result,0)
                 return .init(name:"PeekMessageA",response:.init(result:try XCTUnwrap(e.result)))
-            },presentation:presentation,drawResult:0,graphicsResult:0,allocationFill:0xa5)
+            },presentation:presentation,drawResult:0,graphicsResult:0,allocationFill:0xa5,rules:NTSDProfile.rules)
     }
     func withEntry(_ r: R,ownerAtLoading: ((OriginalApplicationMenuSession) throws -> Void)? = nil,_ body: @escaping (OriginalApplicationLoadingSession.PendingCatalog,C.StartupSounds) throws -> Void) throws {
         let fr = try I.F.Resources(),br = try I.Body.Resources(fr),mr = try I.M.Resources(br,fr),ir = try I.Resources(mr)

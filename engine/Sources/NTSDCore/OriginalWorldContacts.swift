@@ -30,16 +30,16 @@ public enum OriginalWorldContacts {
                 //419380 reads Object+7a4+f·178 unchecked, like the cpoints: a Frame
                 //wholly outside the Object reads as absent (APPLICATION_OUT_OF_OBJECT_FRAMES.md).
                 return try OriginalCPointPass.headerFrame(f,header: catalog.objects[n].header,object: n,site: "contacts")
-            },heapWord: { try memory.word($0) },bundledLibrary: bundledLibrary,observe: observe,inPlace: inPlace)
+            },heapWord: { try memory.word($0) },rules: catalog.rules,bundledLibrary: bundledLibrary,observe: observe,inPlace: inPlace)
     }
     static func apply(world: inout OriginalStateRecord,actors: inout [OriginalStateRecord],globals: inout OriginalStateRecord,
                       objectCount: Int32,header: @escaping (Int) throws -> OriginalStateRecord,
                       frame: @escaping (Int,Int32) throws -> OriginalStateRecord,heapWord: @escaping (UInt32) throws -> Int32,
-                      bundledLibrary: Bool = false,
+                      rules: OriginalGameRules,bundledLibrary: Bool = false,
                       observe: (OriginalWorldContactsEvent) throws -> Void = { _ in },inPlace: Bool = false) throws {
         guard inPlace else {
             // All or nothing: the pass runs on copies, assigned when it completes.
-            var pass = OriginalContactPass(world: world,actors: actors,globals: globals,objectCount: objectCount,header: header,frame: frame,heapWord: heapWord,bundledLibrary: bundledLibrary)
+            var pass = OriginalContactPass(world: world,actors: actors,globals: globals,objectCount: objectCount,header: header,frame: frame,heapWord: heapWord,rules: rules,bundledLibrary: bundledLibrary)
             try pass.advance(observe: observe)
             world = pass.world;actors = pass.actors;globals = pass.globals
             return
@@ -48,7 +48,7 @@ public enum OriginalWorldContacts {
         // path (CORE_REALTIME B2 P4).
         var pass = OriginalContactPass(world: inPlaceTake(&world,leaving: .vacant),actors: inPlaceTake(&actors,leaving: []),
                                        globals: inPlaceTake(&globals,leaving: .vacant),objectCount: objectCount,header: header,frame: frame,
-                                       heapWord: heapWord,bundledLibrary: bundledLibrary)
+                                       heapWord: heapWord,rules: rules,bundledLibrary: bundledLibrary)
         defer { world = pass.world;actors = pass.actors;globals = pass.globals }
         try pass.advance(observe: observe)
     }
@@ -97,6 +97,8 @@ struct OriginalContactPass {
     let header: (Int) throws -> OriginalStateRecord
     let frame: (Int,Int32) throws -> OriginalStateRecord
     let heapWord: (UInt32) throws -> Int32
+    /// The game's rules (ENGINE_SPLIT E5c), from the catalog the pass was made with.
+    let rules: OriginalGameRules
     var bundledLibrary = false
 
     // Installed4176ac: category checks precede the unchanged invulnerability
@@ -174,7 +176,7 @@ struct OriginalContactPass {
             guard bodyCount > 0 else { continue }
             for bodyIndex in 0..<Int(bodyCount) {
                 let attackID = try h(a,0x6f4)
-                if try [200,203,205,206,207,215,216].contains(attackID) && h(d,0x6f4) == 209 && it(0) != 9 { continue interaction }
+                if try rules.reflectable.contains(attackID) && h(d,0x6f4) == 209 && it(0) != 9 { continue interaction }
                 let kind = try it(0)
                 if try kind == 3 && h(d,0x6f8) != 0 { continue interaction }
                 if kind == 0 {

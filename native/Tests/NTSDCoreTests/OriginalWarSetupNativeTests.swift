@@ -1,5 +1,6 @@
 import XCTest
 import NTSDCore
+import NTSDProfile
 
 /// Native-only transaction checks using a small declared catalog. These are
 /// not the574 original calls, source equivalence, raster or device observations.
@@ -26,7 +27,7 @@ final class OriginalWarSetupNativeTests: XCTestCase {
         let object="<bmp_begin> name: NativeTrial head: head.bmp small: small.bmp file(0-0): sheet.bmp w: 40 h: 40 row: 1 col: 1 <bmp_end>"
         let key=Array("SiuHungIsAGoodBearBecauseHeIsVeryGood".utf8)
         let stages=[UInt8](repeating:0,count:123)+Array("end".utf8).enumerated().map { $0.element &+ key[($0.offset+123)%key.count] }
-        return try .init(source:Array(source.utf8),fileName:"data.txt",translation:.raw,
+        return try .init(source:Array(source.utf8),fileName:"data.txt",translation:.raw,rules:NTSDProfile.rules,
             parentBacking:parent,backgroundBacking:backgrounds,stageBacking:[OriginalStateRecord](repeating:stage,count:60),
             fileSource:{ $0=="data\\stage.dat" ? stages : Array(object.utf8) },
             bitmapSource:{ .init(path:$0,present:true,width:80,height:80) })

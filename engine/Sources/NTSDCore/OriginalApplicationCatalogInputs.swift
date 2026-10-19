@@ -16,6 +16,8 @@ public struct OriginalApplicationCatalogInputs: Equatable {
     public let files: [String:[UInt8]]
     public let bitmaps: [String:OriginalApplicationStartupInputs.Bitmap]
     public let music: [String:[UInt8]]
+    /// The game's rules from the identity the package was checked against.
+    public let rules: OriginalGameRules
     private let fileNames: Set<String>
 
     public static func bundled(in content: OriginalContentLocation) throws -> Self {
@@ -105,7 +107,7 @@ public struct OriginalApplicationCatalogInputs: Equatable {
             }
         }
         guard files.count == identity.catalog.files,bitmaps.count == identity.catalog.bitmaps,music.count == identity.catalog.music else { throw Boundary.invalid("Input roles") }
-        return .init(files:files,bitmaps:bitmaps,music:music,fileNames:Set(files.keys))
+        return .init(files:files,bitmaps:bitmaps,music:music,rules:identity.rules,fileNames:Set(files.keys))
     }
     public func file(_ name: String) throws -> [UInt8]? {
         guard fileNames.contains(name) else { throw Boundary.unsupportedName(name) }
@@ -119,6 +121,6 @@ public struct OriginalApplicationCatalogInputs: Equatable {
     public func replacingFile(_ name: String,with bytes: [UInt8]?) throws -> Self {
         guard fileNames.contains(name) else { throw Boundary.unsupportedName(name) }
         var changed = files;changed[name] = bytes
-        return .init(files:changed,bitmaps:bitmaps,music:music,fileNames:fileNames)
+        return .init(files:changed,bitmaps:bitmaps,music:music,rules:rules,fileNames:fileNames)
     }
 }

@@ -216,7 +216,8 @@ public struct OriginalRuntimeLoadingPackages {
             },drawResult:0,presentationResult:0)
             var catalog = try Catalog(pending:common,startup:startupSounds)
             let resources = try Catalog.Resources(files:self.catalogInputs.files,bitmaps:self.catalogInputs.bitmaps,
-                presentation:self.presentation(common.target),drawResult:0,graphicsResult:0,allocationFill:0,allocationDefined:true,scanfLookahead:true)
+                presentation:self.presentation(common.target),drawResult:0,graphicsResult:0,allocationFill:0,rules:self.catalogInputs.rules,
+                allocationDefined:true,scanfLookahead:true)
             let loaded = try catalog.load(resources:resources,makeControls:{
                 .init(allocate:{ _,count in self.counts.allocations += 1; return try heap.reserve(count) },
                     bitmap:{ try self.bitmap($0) },

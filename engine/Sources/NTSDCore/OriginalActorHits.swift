@@ -27,7 +27,7 @@ public enum OriginalActorHits {
             },frame: { n,f in
                 guard catalog.objects.indices.contains(n),catalog.objects[n].frameStorage.indices.contains(Int(f)) else { throw OriginalStateError.invalidStorage("Hit Frame binding") }
                 return catalog.objects[n].frameStorage[Int(f)]
-            },sse2: sse2,precision: state.arithmeticPrecision,library: library)
+            },rules: catalog.rules,sse2: sse2,precision: state.arithmeticPrecision,library: library)
     }
     /// `makePass` with the caller's world, actors, globals and frame
     /// allocations moved into the pass (CORE_REALTIME B2 P4); `publish` writes
@@ -48,7 +48,7 @@ public enum OriginalActorHits {
             },frame: { n,f in
                 guard catalog.objects.indices.contains(n),catalog.objects[n].frameStorage.indices.contains(Int(f)) else { throw OriginalStateError.invalidStorage("Hit Frame binding") }
                 return catalog.objects[n].frameStorage[Int(f)]
-            },sse2: sse2,precision: state.arithmeticPrecision,library: library)
+            },rules: catalog.rules,sse2: sse2,precision: state.arithmeticPrecision,library: library)
     }
     static func publish(_ pass: OriginalHitPass,state: inout OriginalMatchPreparation,crt: inout OriginalCRTRandom) {
         state.world = pass.world;state.actors = pass.actors;state.globals = pass.globals
@@ -65,6 +65,8 @@ struct OriginalHitPass {
     let objectCount: Int32
     let header: (Int) throws -> OriginalStateRecord
     let frame: (Int,Int32) throws -> OriginalStateRecord
+    /// The game's rules (ENGINE_SPLIT E5c), from the catalog the pass was made with.
+    let rules: OriginalGameRules
     let sse2: Bool
     var precision: OriginalArithmeticPrecision = .bits64
     var library: OriginalLibHitState? = nil

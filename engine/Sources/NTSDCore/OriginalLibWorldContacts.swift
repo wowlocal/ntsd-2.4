@@ -14,10 +14,10 @@ public enum OriginalLibWorldContacts {
                              globals: inout OriginalStateRecord,objectCount: Int32,
                              header: @escaping (Int) throws -> OriginalStateRecord,
                              frame: @escaping (Int,Int32) throws -> OriginalStateRecord,
-                             heapWord: @escaping (UInt32) throws -> Int32,
+                             heapWord: @escaping (UInt32) throws -> Int32,rules: OriginalGameRules,
                              observe: (OriginalWorldContactsEvent) throws -> Void = { _ in }) throws {
         try OriginalWorldContacts.apply(world: &world,actors: &actors,globals: &globals,
             objectCount: objectCount,header: header,frame: frame,heapWord: heapWord,
-            bundledLibrary: true,observe: observe)
+            rules: rules,bundledLibrary: true,observe: observe)
     }
 }

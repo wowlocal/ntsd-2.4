@@ -1,6 +1,7 @@
 import Foundation
 import XCTest
 @testable import NTSDCore
+import NTSDProfile
 @testable import NTSDReferenceChecks
 
 final class OriginalLibActorHitsTests: XCTestCase {
@@ -100,7 +101,7 @@ final class OriginalLibActorHitsTests: XCTestCase {
             for p in item.globals ?? [] { try patch(&globals,p.offset-0x44d000,p.bytes) }
             var pass = OriginalHitPass(world: world,actors: actors,globals: globals,memory: OriginalContactFrameMemory(allocations),
                 crt: OriginalCRTRandom(state: item.crtSeed ?? 1),objectCount: item.count ?? 4,
-                header: { ownHeaders[$0] },frame: { ownFrames[$0][Int($1)] },sse2: (item.sse2 ?? 0) != 0,precision: try OriginalArithmeticPrecision(controlWord: UInt16(item.fpcw)),library: libraryState)
+                header: { ownHeaders[$0] },frame: { ownFrames[$0][Int($1)] },rules: NTSDProfile.rules,sse2: (item.sse2 ?? 0) != 0,precision: try OriginalArithmeticPrecision(controlWord: UInt16(item.fpcw)),library: libraryState)
             func observe(_ event: OriginalHitEvent) throws {
                 switch event {
                 case let .random(stream,range,result): events.append(.init(kind: "random",arguments: [stream,range,result].map(UInt32.init(bitPattern:))))
@@ -119,7 +120,7 @@ final class OriginalLibActorHitsTests: XCTestCase {
                     var allocations = pass.memory.allocations,crt = pass.crt,library = libraryState
                     try OriginalLibActorHits.apply(slot: item.attacker ?? 0,world: &pass.world,actors: &pass.actors,globals: &pass.globals,
                         allocations: &allocations,crt: &crt,library: &library,objectCount: item.count ?? 4,
-                        header: { ownHeaders[$0] },frame: { ownFrames[$0][Int($1)] },sse2: (item.sse2 ?? 0) != 0,
+                        header: { ownHeaders[$0] },frame: { ownFrames[$0][Int($1)] },rules: NTSDProfile.rules,sse2: (item.sse2 ?? 0) != 0,
                         precision: try OriginalArithmeticPrecision(controlWord: UInt16(item.fpcw)),observe: observe)
                     pass.memory = OriginalContactFrameMemory(allocations);pass.crt = crt;pass.library = library
                 }
@@ -190,7 +191,7 @@ final class OriginalLibActorHitsTests: XCTestCase {
         var events: [OriginalHitEvent] = []
         XCTAssertThrowsError(try OriginalLibActorHits.apply(slot: 0,world: &t.world,actors: &t.actors,globals: &t.globals,
             allocations: &t.allocations,crt: &t.crt,library: &t.library,objectCount: 1,
-            header: { _ in header },frame: { _,_ in frame },observe: { event in
+            header: { _ in header },frame: { _,_ in frame },rules: NTSDProfile.rules,observe: { event in
                 events.append(event);throw Stop.afterBinding
             })) { error in XCTAssertTrue(error is Stop) }
         XCTAssertEqual(events,[.builtinSound(x: 0,index: 0)])
@@ -206,7 +207,7 @@ final class OriginalLibActorHitsTests: XCTestCase {
             allocations: &t.allocations,crt: &t.crt,library: &t.library,objectCount: 1,
             header: { _ in header },frame: { _,n in
                 if n == 89 { sawStrideFrame = true;return unknown };return frame
-            })) { error in
+            },rules: NTSDProfile.rules)) { error in
                 guard case OriginalStateError.undefinedBytes(offset: 8,count: 1) = error else { return XCTFail("Unexpected error: \(error)") }
             }
         XCTAssertTrue(sawStrideFrame)
