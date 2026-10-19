@@ -1,0 +1,21 @@
+{
+ "study": "ENGINE_SPLIT",
+ "step": "E4c-1a",
+ "base": "b8585b4c",
+ "recordedUTC": "2026-10-19T09:25:41Z",
+ "kind": "a test correction (test file only); no engine or game code changes",
+ "problem": "OriginalAudioBytesUniformTests.testEqualityAndCodingAreTheArrays compared two JSONEncoder outputs byte for byte; JSONEncoder writes an object's keys in its internal dictionary's hash order, so the encodings of OriginalAudioBytes and of the legacy Arrays struct (the same two keys) differed at random: 5 of 10 runs failed from es-e5b's gate bundle, once in three on Linux (es-e4c1); the gate row has run the whole engine bundle since E4c-1",
+ "change": "encoder.outputFormatting = .sortedKeys on the one encoder both encodings use, and a comment naming the cause; no expected value, tolerance or decode check changes",
+ "checks": {
+  "macOS": "the suite 30 times from a clean release engine test build: 30 passed; the whole engine bundle: 106 tests, 0 failures",
+  "linux": "the engine's Linux test target rebuilt (glibc SDK); the suite 10 times in swift:6.4.0-noble as uid 1000: 10 passed"
+ },
+ "review": {
+  "by": "a separate read-only agent, 2026-10-19",
+  "verdict": "no required fix: the cause is the key order of a keyed container with fixed keys (reproduced outside the repository: 8 of 12 unsorted runs failed, 12 of 12 sorted passed); the claim still fails on wrong key names, value encodings or extra/missing keys; no production code compares or hashes this JSON (engine/Sources has no JSONEncoder; Runtime's JSONSerialization uses .sortedKeys); no other test compares unsorted JSONEncoder bytes",
+  "adopted": [
+   "the comment names the cause"
+  ]
+ },
+ "gate": "a test-only change: the next increment's gate (E5c-0) runs the whole engine bundle with it"
+}

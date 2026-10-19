@@ -44,7 +44,10 @@ final class OriginalAudioBytesUniformTests: XCTestCase {
         let arrays = OriginalAudioBytes(bytes: Array(repeating: 7, count: 33), defined: Array(repeating: true, count: 33))
         XCTAssertEqual(uniform, arrays); XCTAssertEqual(arrays, uniform)
         XCTAssertNotEqual(uniform, OriginalAudioBytes(bytes: Array(repeating: 7, count: 32), defined: Array(repeating: true, count: 32)))
-        let encoder = JSONEncoder()
+        // Sorted keys: JSONEncoder writes keys in its internal dictionary's hash
+        // order, which varies between encodings (ENGINE_SPLIT E4c-1a); the claim
+        // is the same JSON as the arrays.
+        let encoder = JSONEncoder(); encoder.outputFormatting = .sortedKeys
         let legacy = try encoder.encode(Arrays(bytes: Array(repeating: 7, count: 33), defined: Array(repeating: true, count: 33)))
         XCTAssertEqual(try encoder.encode(uniform), legacy); XCTAssertEqual(try encoder.encode(arrays), legacy)
         let decoded = try JSONDecoder().decode(OriginalAudioBytes.self, from: legacy)
