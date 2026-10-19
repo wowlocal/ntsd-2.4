@@ -28,7 +28,7 @@ final class OriginalWarDependenciesTests: XCTestCase {
     }
     func initial() throws -> OriginalStateRecord {
         var g=try OriginalStateRecord(bytes:[UInt8](repeating:0,count:OriginalMatchPreparation.globalSize),defined:[Bool](repeating:false,count:OriginalMatchPreparation.globalSize))
-        try OriginalWarTroops.initializeFileData(&g)
+        try NTSDInitialRecordData.initializeWarFileData(&g)
         return g
     }
     func apply(_ op: Operation,to g: inout OriginalStateRecord,observe: OriginalWarTroops.Store) throws {

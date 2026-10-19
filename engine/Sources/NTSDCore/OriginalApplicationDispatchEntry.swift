@@ -4,7 +4,7 @@
 /// operation is a stage boundary, not a completed dispatcher or tick. Its caller
 /// must stage the whole loop iteration and buffer external effects until commit.
 public enum OriginalApplicationDispatchEntry {
-    public static let globalSize = 0xc3a8
+    public static let globalSize = OriginalRecordLayout.size
     public struct GameEntry: Equatable, Sendable {
         public let worldAddress: UInt32, target: UInt32
     }

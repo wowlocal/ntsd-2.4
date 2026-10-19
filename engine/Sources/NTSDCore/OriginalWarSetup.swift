@@ -1,7 +1,7 @@
 /// Owned War bitmaps and Object bindings retained across438b40 calls.
 /// Unit globals use ordinal+1, so original NULL stays distinct from Object0.
-/// Initialize the literal PE globals once with OriginalWarTroops.initializeFileData
-/// before entering this menu; retained input/global values are never reset here.
+/// The PE globals (0x44d350..<0x44d778) come initialized with the game's record
+/// (initial.bin) before this menu; retained input/global values are never reset here.
 public struct OriginalWarMenuMemory: Equatable, Sendable {
     public internal(set) var bitmaps: [UInt32:OriginalLoadedBitmap] = [:]
     public internal(set) var unitObjects: [Int:Int] = [:]

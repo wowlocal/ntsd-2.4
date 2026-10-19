@@ -139,7 +139,7 @@ public struct OriginalApplicationStartupInputs: Equatable {
         let raw = try read("manifest.json")
         guard digest(raw) == identity.startup.manifestSHA256 else { throw Boundary.invalid("Manifest digest") }
         let manifest = try JSONDecoder().decode(Manifest.self,from:Data(raw))
-        guard manifest.version == 1,manifest.globalAddress == 0x44d000,manifest.globalCount == 0xc3a8,
+        guard manifest.version == 1,manifest.globalAddress == OriginalRecordLayout.base,manifest.globalCount == OriginalRecordLayout.size,
               manifest.exeSHA256 == identity.exeSHA256,
               manifest.absentFiles == identity.startup.absentFiles,manifest.entries.count == identity.startup.entries else { throw Boundary.invalid("Manifest contract") }
         // Entries are read and verified on all cores and taken in manifest
@@ -183,7 +183,7 @@ public struct OriginalApplicationStartupInputs: Equatable {
             }
         }
         guard actual == Set(payload.keys).union(["manifest.json"]),let bytes = payload["initial.bin"],let mask = payload["initial.mask"],
-              bytes.count == 0xc3a8,mask.count == bytes.count,mask.allSatisfy({ $0 == 1 }) else { throw Boundary.invalid("Package composition or PE masks") }
+              bytes.count == OriginalRecordLayout.size,mask.count == bytes.count,mask.allSatisfy({ $0 == 1 }) else { throw Boundary.invalid("Package composition or PE masks") }
         let initial = try OriginalStateRecord(bytes:bytes,defined:mask.map { $0 == 1 })
         var bitmaps: [String:Bitmap] = [:],files: [String:[UInt8]] = [:]
         // The bitmaps decode (and compress, OriginalBitmapBytes) on all cores and

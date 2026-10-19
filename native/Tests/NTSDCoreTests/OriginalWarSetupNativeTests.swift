@@ -35,7 +35,7 @@ final class OriginalWarSetupNativeTests: XCTestCase {
         let bootstrap=try OriginalWorldBootstrap(worldBacking:[UInt8](repeating:0xa5,count:OriginalStateRecord.worldPrefixSize),
             actorBacking:[[UInt8]](repeating:[UInt8](repeating:0xa5,count:OriginalStateRecord.actorSize),count:400),selector:4)
         var g=try unknown(OriginalMatchPreparation.globalSize)
-        try OriginalWarTroops.initializeFileData(&g)
+        try NTSDInitialRecordData.initializeWarFileData(&g)
         for (a,v): (Int,Int32) in [(0x451160,4),(0x44d020,200),(0x4512c8,3),(0x457578,1),(0x455608,0x26006000),
             (0x45116c,0x20001000),(0x451178,0x20002000),(0x4511a0,0x20003000),(0x44eecc,1),
             (0x45560c,0x60000001),(0x455610,0x60000002),(0x455614,0x60000003),(0x44d024,100),(0x44d028,1),

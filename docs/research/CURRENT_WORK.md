@@ -45,7 +45,9 @@ E4b-5 выполнен: UIKit-хост — `NTSDUIKitHost`; симуляторы
 E4c-1 выполнен: 38 файлов тестов (105 тестов) — в `NTSDEngineTests`, список тестов сошёлся (838 → 106 + 733);
 [evidence](../evidence/es-e4c1-engine-tests.json). E4c-2 (смешанные файлы, тройка War) отложен.
 E5a выполнен: обзор (100 мест с ID объектов, диспетчер ИИ, `initial.bin`) и проект E5 с ревью:
-[evidence](../evidence/es-e5a-design.json). Следующая задача — E5b: тип записи и скопированные таблицы.
+[evidence](../evidence/es-e5a-design.json). E5b выполнен: `OriginalRecordLayout`, машинный код совпал; скопированные таблицы ушли из движка (равны
+`initial.bin`): [evidence](../evidence/es-e5b-record-type.json). Следующая задача — E4c-1a: исправить
+недетерминированный тест движка (порядок ключей JSON), затем E5c-0.
 
 ## Internal build storage и VM quota исправлены — 2026-10-17
 

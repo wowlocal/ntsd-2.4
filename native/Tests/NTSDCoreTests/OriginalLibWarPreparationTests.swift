@@ -283,8 +283,8 @@ final class OriginalLibWarPreparationTests: XCTestCase {
         // native VC80/422ac0 producer. Source snapshots never choose its bytes.
         var random=OriginalCRTRandom(state:item.spec.control ? 0xffffffff : 17),produced=globals
         try random.rebuildGameTable(globals:&produced)
-        try OriginalTournamentLayout.initialize(globals:&produced)
-        try OriginalWarTroops.initializeFileData(&produced)
+        try NTSDInitialRecordData.initializeTournamentLayout(globals:&produced)
+        try NTSDInitialRecordData.initializeWarFileData(&produced)
         try produced.write(Int32(item.spec.control ? 3 : 0),at:0x451b80-base)
         for (address,count) in [(0x44d350,0x428),(0x451b38,0x7c)] {
             let span=address-base..<address-base+count

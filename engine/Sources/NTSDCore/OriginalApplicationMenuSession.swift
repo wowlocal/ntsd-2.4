@@ -5,14 +5,14 @@ import Foundation
 /// core neither consumes a host queue nor performs graphics/audio/file IO.
 public struct OriginalApplicationMenuSession {
     public typealias Loop = OriginalApplicationMessageLoop
-    private static let globalCount = 0xb440, outerStart = 0xb440
+    private static let globalCount = OriginalRecordLayout.globalsSize, outerStart = OriginalRecordLayout.globalsSize
     private static let worldStart = 0xbb00, replayStart = 0xb8a8, counterOffset = 0xb580
     /// The parts `State.full` is held in (CORE_REALTIME B1): globals, the
     /// outer local, the loop counter, the saved playback, the replay alias, the
     /// rest of the outer block, World, the tail (key-scan words, host name).
     /// Production slices and replaces of `full` are exactly one part or lie
     /// inside one (the network host name at 0xc2d8, catalog global stores).
-    static let partStarts = [0, 0xb440, 0xb580, 0xb588, 0xb8a8, 0xb8b0, 0xbb00, 0xc2d8]
+    static let partStarts = OriginalRecordLayout.partStarts
 
     public enum Boundary: Error, Equatable {
         case dependency(String)

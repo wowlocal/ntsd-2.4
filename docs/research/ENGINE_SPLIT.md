@@ -10,7 +10,7 @@ measurement from [TVOS_WEB](TVOS_WEB.md), [MEMORY_LOADING](MEMORY_LOADING.md) an
 engine from the game itself. to publish engine as the separate github repo";
 then, after the plan: "ok … when the plan is setteled start the loop in a
 separate branch" and "push automatically every step (on that new branch)".
-**Status:** E0–E3, E4a, E4b (all six hosts), E4c-1 (the engine's self-contained tests) and E5a (the game profile's survey and design) done; E5b, the record type and the copied tables, next.
+**Status:** E0–E3, E4a, E4b (all six hosts), E4c-1 (the engine's self-contained tests), E5a (the game profile's survey and design) and E5b (the record type, the copied tables out) done; E4c-1a, a nondeterministic engine test's correction, next.
 **Branch:** `exp/engine-split`, from `main` 380b448d. Worktree
 `/Volumes/NTSD-Builds/tasks/engine-split/worktree` (T7-backed APFS, see
 [BUILD_STORAGE_T7](BUILD_STORAGE_T7.md)). It tracks `origin/exp/engine-split`
@@ -158,7 +158,7 @@ A read-only survey of `native/` (three agents, 2026-10-18):
 | E2 | Content policy out of Core: the digest, count and EXE-SHA pins become the NTSD content identity the game passes; Core checks what it is given with the same checks and errors (2.8.3.3's content origin as the model, read only) | **done** ([evidence](../evidence/es-e2-content-identity.json)) |
 | E3 | Identity and Practice: user-data folder, wasm module, Android prefix/entry, queue/thread names, titles and messages become game configuration; Practice/Lab and its two checks move to the game side | **done**: E3a ([evidence](../evidence/es-e3a-practice.json)), E3b ([evidence](../evidence/es-e3b-game-identity.json)); diagnostic labels wait for D2 |
 | E4 | Two packages: `engine/Package.swift` (Core, Runtime, codecs, decoders, shims, host libraries, self-contained tests) and `native/Package.swift` depending on it by path; the unsafeFlags plan (SwiftPM rejects them in version-pinned dependencies) | E4a **done** ([evidence](../evidence/es-e4a-engine-package.json)); E4b: headless **done** ([evidence](../evidence/es-e4b1-headless-host.json)), browser **done** ([evidence](../evidence/es-e4b2-web-host.json)), SDL **done** ([evidence](../evidence/es-e4b3-sdl-host.json)), AppKit **done** ([evidence](../evidence/es-e4b4-appkit-host.json)), UIKit **done** ([evidence](../evidence/es-e4b5-uikit-host.json)), Android **done** ([evidence](../evidence/es-e4b6-android-host.json)); E4c-1 **done** ([evidence](../evidence/es-e4c1-engine-tests.json)); E4c-2 (split the 11 mixed test files, the War trio) queued |
-| E5 | Game profile: the ID sites (100 rows, about 125 branch points; first estimated ~90) and the AI dispatch behind a profile the game supplies; the engine defines the `0x44d000` record's layout and the game supplies `initial.bin`; the NTSD profile bit-exact (all gates plus the full fixture-driven suites); the API's fit with 2.8.3.3 checked read only | E5a **done** (survey and design, [evidence](../evidence/es-e5a-design.json)); E5b next |
+| E5 | Game profile: the ID sites (100 rows, about 125 branch points; first estimated ~90) and the AI dispatch behind a profile the game supplies; the engine defines the `0x44d000` record's layout and the game supplies `initial.bin`; the NTSD profile bit-exact (all gates plus the full fixture-driven suites); the API's fit with 2.8.3.3 checked read only | E5a **done** (survey and design, [evidence](../evidence/es-e5a-design.json)); E5b **done** ([evidence](../evidence/es-e5b-record-type.json)); E5c-0 next |
 | E6 | Classify each profile rule as LF2 2.0a or NTSD from the second reference; LF2 rules become the engine's default profile | needs D1 |
 | E7 | Engine stand-alone: the engine package builds alone (macOS, Linux container) and passes its tests with a from-scratch synthetic content pack; a scan finds no original bytes (files under `downloads/`, the resources, fixtures, `initial.bin`) | queued |
 | E8 | Publication: name, licence, a new repository with fresh history, a tag; this repository depends on it by revision; README credits | needs D2 and the user |
@@ -539,19 +539,28 @@ the NTSD profile and leaves the engine with none.
   ×3, value predicates for non-ordinal IDs, the profile per session with the
   content, the bit-exactness constraints, E5c-0 and the extra gates).
   [Evidence](../evidence/es-e5a-design.json).
+- 2026-10-19 E5b: `OriginalRecordLayout` backs the record's named constants
+  (machine code identical in every shared function, from same-path clean
+  builds); the two copied tables leave the engine after comparing equal to
+  `initial.bin` word for word, and the game tests read the record instead.
+  Reviewed (no required fix). Gate `es-e5b`: 11 scenarios, frames, AppKit,
+  unchecked, emulator, 20 clean launches, 29 suite runs, the 8 table and
+  startup suites; WASI vs (32-bit) identical; every `*Check` product built.
+  The engine bundle's one failure is a nondeterministic test (5 of 10 from the
+  same binary, JSON key order), not E5b's: corrected next (E4c-1a). Phone
+  3 against 2 apart on load and main, 4 against 4 overlapping. Notes: the
+  bracket card's links went stale in E4a; the War trio now reads the record
+  (E4c-2 needs synthetic War words); 2.8.3.3 still calls the removed APIs.
+  [Evidence](../evidence/es-e5b-record-type.json).
 
 ## Next task
 
-E5b (see the E5 design): (1) one engine type backs the existing named
-constants for the record's base `0x44d000`, its sizes `0xb440`/`0xc3a8` and its
-parts (`OriginalApplicationDispatchEntry`, `OriginalApplicationStartupInputs`,
-`OriginalApplicationMenuSession`, `OriginalMatchPreparation`); the 138 address
-sites stay. (2) `OriginalWarTroops.fileWords` and
-`OriginalTournamentLayout.words` are compared once with the game's
-`initial.bin` ranges (a difference is a recorded mismatch; neither side
-changes), then their tests read the record (keeping the zeroing of
-`0x451b38..<0x451bb4`), `sourceSHA256` moves into the test unchanged,
-`OriginalWarSetup`'s comment follows, and the tables leave the engine. Gates:
-review (the E5 checklist), the mlgate set, a WASI or browser vs, the `*Check`
-builds and their reference checks, the fixture-driven suites that use the
-tables.
+E4c-1a (a test correction, separately reviewed):
+`OriginalAudioBytesUniformTests.testEqualityAndCodingAreTheArrays` compares two
+`JSONEncoder` outputs byte for byte, and their key order varies between
+encodings (5 of 10 runs fail from one binary; once in three on Linux), so the
+engine bundle's gate row fails at random. Encode with `.sortedKeys` (both the
+value's and the legacy arrays'), which keeps the claim (the same JSON as the
+arrays) and its decode check; no expected value changes. Check: the test 30
+times on macOS and the engine's Linux suites; the next gate covers it. Then
+E5c-0 (the profile's plumbing and the reflection role, see the E5 design).

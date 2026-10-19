@@ -166,7 +166,7 @@ final class OriginalLibTeamTournamentPreparationTests: XCTestCase {
         // native VC80/422ac0 producer. Source snapshots never choose its bytes.
         var random=OriginalCRTRandom(state:item.spec.control ? 0xffffffff : 17),produced=globals
         try random.rebuildGameTable(globals:&produced)
-        try OriginalTournamentLayout.initialize(globals:&produced)
+        try NTSDInitialRecordData.initializeTournamentLayout(globals:&produced)
         let layoutStart=0x44d120-base
         XCTAssertEqual(Array(produced.bytes[layoutStart..<layoutStart+504]),Array(globals.bytes[layoutStart..<layoutStart+504]))
         XCTAssertTrue(globals.defined[layoutStart..<layoutStart+504].allSatisfy { $0 })

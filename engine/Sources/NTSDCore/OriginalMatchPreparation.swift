@@ -11,8 +11,8 @@ public enum OriginalMatchPreparationEvent {
 /// an enabled path requires its caller to provide that continuation.
 /// Actor/Object/World references are non-null ordinals; BG refs are index+1.
 public struct OriginalMatchPreparation {
-    public static let globalBase = 0x44d000
-    public static let globalSize = 0x458440 - globalBase
+    public static let globalBase = OriginalRecordLayout.base
+    public static let globalSize = OriginalRecordLayout.globalsSize
     /// Explicit arithmetic context; historical fixtures default to CW037f precision.
     /// Original startup selects53 bits; threading/Windows provenance is separate.
     public var arithmeticPrecision: OriginalArithmeticPrecision
