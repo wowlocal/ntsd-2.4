@@ -10,7 +10,7 @@ measurement from [TVOS_WEB](TVOS_WEB.md), [MEMORY_LOADING](MEMORY_LOADING.md) an
 engine from the game itself. to publish engine as the separate github repo";
 then, after the plan: "ok … when the plan is setteled start the loop in a
 separate branch" and "push automatically every step (on that new branch)".
-**Status:** E0–E3, E4a, E4b (all six hosts), E4c-1 (the engine's self-contained tests), E5a (the game profile's survey and design) and E5b (the record type, the copied tables out), E4c-1a (a nondeterministic engine test corrected) E5c-0 (the profile's plumbing, reflection), E5c-1a (one storage, the reflectors), E5c-1b (armour), E5c-1c (special interactions) and E5c-1d (impact) done; E5c-2a, E5c-2b and E5c-2c (the items family: the random and requested spawns, camera, links, the mission stage) E5c-2d (the roster family), E5c-2e (the modes family), E5c-2f (the match prelude) and E5c-2g (the mode label) done: E5c-2's menu and mode rows are in the profile; E5c-1e (physics), E5c-1f (drawing) and E5c-1g (the post-draw effects) and E5c-1h (the slot prefix, scheduler and round restore) and E5c-1i (the object input) and E5c-1j (A28, the input chain) done: every E5c row is in the profile; E5d-1a (the AI's target roles) and E5d-1b (its fight roles) done: every object-ID literal of the generic AI is in the profile; E5d-2 (the special-move hook) and E5d-3 (the 20 routines in the game) done: the AI's NTSD code is the game's; E5e (the coarse hooks) surveyed: roles, no new hook; E5e-1 (the ID-300 roles) done; E5e-2, the mission pseudo-IDs, next.
+**Status:** E0–E3, E4a, E4b (all six hosts), E4c-1 (the engine's self-contained tests), E5a (the game profile's survey and design) and E5b (the record type, the copied tables out), E4c-1a (a nondeterministic engine test corrected) E5c-0 (the profile's plumbing, reflection), E5c-1a (one storage, the reflectors), E5c-1b (armour), E5c-1c (special interactions) and E5c-1d (impact) done; E5c-2a, E5c-2b and E5c-2c (the items family: the random and requested spawns, camera, links, the mission stage) E5c-2d (the roster family), E5c-2e (the modes family), E5c-2f (the match prelude) and E5c-2g (the mode label) done: E5c-2's menu and mode rows are in the profile; E5c-1e (physics), E5c-1f (drawing) and E5c-1g (the post-draw effects) and E5c-1h (the slot prefix, scheduler and round restore) and E5c-1i (the object input) and E5c-1j (A28, the input chain) done: every E5c row is in the profile; E5d-1a (the AI's target roles) and E5d-1b (its fight roles) done: every object-ID literal of the generic AI is in the profile; E5d-2 (the special-move hook) and E5d-3 (the 20 routines in the game) done: the AI's NTSD code is the game's; E5e (the coarse hooks) surveyed: roles, no new hook; E5e-1 (the ID-300 roles) and E5e-2 (the mission pseudo-IDs) done; E5e-3, War life, next.
 **Branch:** `exp/engine-split`, from `main` 380b448d. Worktree
 `/Volumes/NTSD-Builds/tasks/engine-split/worktree` (T7-backed APFS, see
 [BUILD_STORAGE_T7](BUILD_STORAGE_T7.md)). It tracks `origin/exp/engine-split`
@@ -158,7 +158,7 @@ A read-only survey of `native/` (three agents, 2026-10-18):
 | E2 | Content policy out of Core: the digest, count and EXE-SHA pins become the NTSD content identity the game passes; Core checks what it is given with the same checks and errors (2.8.3.3's content origin as the model, read only) | **done** ([evidence](../evidence/es-e2-content-identity.json)) |
 | E3 | Identity and Practice: user-data folder, wasm module, Android prefix/entry, queue/thread names, titles and messages become game configuration; Practice/Lab and its two checks move to the game side | **done**: E3a ([evidence](../evidence/es-e3a-practice.json)), E3b ([evidence](../evidence/es-e3b-game-identity.json)); diagnostic labels wait for D2 |
 | E4 | Two packages: `engine/Package.swift` (Core, Runtime, codecs, decoders, shims, host libraries, self-contained tests) and `native/Package.swift` depending on it by path; the unsafeFlags plan (SwiftPM rejects them in version-pinned dependencies) | E4a **done** ([evidence](../evidence/es-e4a-engine-package.json)); E4b: headless **done** ([evidence](../evidence/es-e4b1-headless-host.json)), browser **done** ([evidence](../evidence/es-e4b2-web-host.json)), SDL **done** ([evidence](../evidence/es-e4b3-sdl-host.json)), AppKit **done** ([evidence](../evidence/es-e4b4-appkit-host.json)), UIKit **done** ([evidence](../evidence/es-e4b5-uikit-host.json)), Android **done** ([evidence](../evidence/es-e4b6-android-host.json)); E4c-1 **done** ([evidence](../evidence/es-e4c1-engine-tests.json)), E4c-1a **done** ([evidence](../evidence/es-e4c1a-sorted-keys.json)); E4c-2 (split the 11 mixed test files, the War trio) queued |
-| E5 | Game profile: the ID sites (100 rows, about 125 branch points; first estimated ~90) and the AI dispatch behind a profile the game supplies; the engine defines the `0x44d000` record's layout and the game supplies `initial.bin`; the NTSD profile bit-exact (all gates plus the full fixture-driven suites); the API's fit with 2.8.3.3 checked read only | E5a **done** (survey and design, [evidence](../evidence/es-e5a-design.json)); E5b **done** ([evidence](../evidence/es-e5b-record-type.json)); E5c-0 **done** ([evidence](../evidence/es-e5c0-profile-plumbing.json)); E5c-1a **done** ([evidence](../evidence/es-e5c1a-reflector-roles.json)); E5c-1b **done** ([evidence](../evidence/es-e5c1b-armour-roles.json)); E5c-1c **done** ([evidence](../evidence/es-e5c1c-interaction-roles.json)); E5c-1d **done** ([evidence](../evidence/es-e5c1d-impact-roles.json)); E5c-2a **done** ([evidence](../evidence/es-e5c2a-items-roles.json)); E5c-2b **done** ([evidence](../evidence/es-e5c2b-camera-links-roles.json)); E5c-2c **done** ([evidence](../evidence/es-e5c2c-requested-mission-roles.json)); E5c-2d **done** ([evidence](../evidence/es-e5c2d-roster-roles.json)); E5c-2e **done** ([evidence](../evidence/es-e5c2e-modes-roles.json)); E5c-2f **done** ([evidence](../evidence/es-e5c2f-prelude-roles.json)); E5c-2g **done** ([evidence](../evidence/es-e5c2g-mode-label-roles.json)); E5c-1e **done** ([evidence](../evidence/es-e5c1e-physics-roles.json)); E5c-1f **done** ([evidence](../evidence/es-e5c1f-drawing-roles.json)); E5c-1g **done** ([evidence](../evidence/es-e5c1g-effects-roles.json)); E5c-1h **done** ([evidence](../evidence/es-e5c1h-lifecycle-roles.json)); E5c-1i **done** ([evidence](../evidence/es-e5c1i-object-input-roles.json)); E5c-1j **done** ([evidence](../evidence/es-e5c1j-input-roles.json)); E5d: [survey](../evidence/es-e5d-plumbing.md), E5d-1a **done** ([evidence](../evidence/es-e5d1a-ai-target-roles.json)), E5d-1b **done** ([evidence](../evidence/es-e5d1b-ai-fight-roles.json)), E5d-2 **done** ([evidence](../evidence/es-e5d2-ai-special-hook.json)), E5d-3 **done** ([evidence](../evidence/es-e5d3-ai-routines-in-game.json)); E5e: [survey](../evidence/es-e5e-plumbing.md), E5e-1 **done** ([evidence](../evidence/es-e5e1-id300-roles.json)), E5e-2 next |
+| E5 | Game profile: the ID sites (100 rows, about 125 branch points; first estimated ~90) and the AI dispatch behind a profile the game supplies; the engine defines the `0x44d000` record's layout and the game supplies `initial.bin`; the NTSD profile bit-exact (all gates plus the full fixture-driven suites); the API's fit with 2.8.3.3 checked read only | E5a **done** (survey and design, [evidence](../evidence/es-e5a-design.json)); E5b **done** ([evidence](../evidence/es-e5b-record-type.json)); E5c-0 **done** ([evidence](../evidence/es-e5c0-profile-plumbing.json)); E5c-1a **done** ([evidence](../evidence/es-e5c1a-reflector-roles.json)); E5c-1b **done** ([evidence](../evidence/es-e5c1b-armour-roles.json)); E5c-1c **done** ([evidence](../evidence/es-e5c1c-interaction-roles.json)); E5c-1d **done** ([evidence](../evidence/es-e5c1d-impact-roles.json)); E5c-2a **done** ([evidence](../evidence/es-e5c2a-items-roles.json)); E5c-2b **done** ([evidence](../evidence/es-e5c2b-camera-links-roles.json)); E5c-2c **done** ([evidence](../evidence/es-e5c2c-requested-mission-roles.json)); E5c-2d **done** ([evidence](../evidence/es-e5c2d-roster-roles.json)); E5c-2e **done** ([evidence](../evidence/es-e5c2e-modes-roles.json)); E5c-2f **done** ([evidence](../evidence/es-e5c2f-prelude-roles.json)); E5c-2g **done** ([evidence](../evidence/es-e5c2g-mode-label-roles.json)); E5c-1e **done** ([evidence](../evidence/es-e5c1e-physics-roles.json)); E5c-1f **done** ([evidence](../evidence/es-e5c1f-drawing-roles.json)); E5c-1g **done** ([evidence](../evidence/es-e5c1g-effects-roles.json)); E5c-1h **done** ([evidence](../evidence/es-e5c1h-lifecycle-roles.json)); E5c-1i **done** ([evidence](../evidence/es-e5c1i-object-input-roles.json)); E5c-1j **done** ([evidence](../evidence/es-e5c1j-input-roles.json)); E5d: [survey](../evidence/es-e5d-plumbing.md), E5d-1a **done** ([evidence](../evidence/es-e5d1a-ai-target-roles.json)), E5d-1b **done** ([evidence](../evidence/es-e5d1b-ai-fight-roles.json)), E5d-2 **done** ([evidence](../evidence/es-e5d2-ai-special-hook.json)), E5d-3 **done** ([evidence](../evidence/es-e5d3-ai-routines-in-game.json)); E5e: [survey](../evidence/es-e5e-plumbing.md), E5e-1 **done** ([evidence](../evidence/es-e5e1-id300-roles.json)), E5e-2 **done** ([evidence](../evidence/es-e5e2-mission-pseudo-ids.json)), E5e-3 next |
 | E6 | Classify each profile rule as LF2 2.0a or NTSD from the second reference; LF2 rules become the engine's default profile | needs D1 |
 | E7 | Engine stand-alone: the engine package builds alone (macOS, Linux container) and passes its tests with a from-scratch synthetic content pack; a scan finds no original bytes (files under `downloads/`, the resources, fixtures, `initial.bin`) | queued |
 | E8 | Publication: name, licence, a new repository with fresh history, a tag; this repository depends on it by revision; README credits | needs D2 and the user |
@@ -1286,6 +1286,41 @@ From a read-only survey ([report](../evidence/es-e5e-plumbing.md)).
   in this `resolve` skipped). Adopted: an injury of 20 so the moved case loses
   HP, MP asserted with HP in A51. `swift_beginAccess` before the gate: 3,278.
 
+### E5e-2 note (2026-10-20, reviewed with its change; done)
+
+- **Roles (into `Modes`).** `heroSpawnWord` 1000 (A61), `troopSpawnWord` 3000
+  (A62), `troopOrBossSpawnWord` 3001 (A63), `spawnTroops` 30..<32 and
+  `bossTroop` 32. The two troop draws become `draw(stream, upper &− lower) &+
+  lower` with `spawnTroops`' bounds: `draw(0x111, 2) &+ 0x1e` and `draw(0x113,
+  2) &+ 0x1e` for NTSD's (the same range in the events, the same result). The
+  hero table's layout and cursor, the 50 swaps (streams 0x10f/0x110, range 10),
+  the 1-in-7 (stream 0x112) and HP ×4 stay engine; the `else if` order, the
+  difficulty factors before the substitution and the first-match catalog scan
+  after it are kept.
+- **Plumbing.** None (the mission stage pass holds `rules`). Public surface
+  added: five `Modes` fields, their init parameters and flat accessors.
+- **Tests.** `NTSDProfileMissionSpawnTests` (2): the pass's `spawn` with each
+  word: the hero table's entry and the cursor (with and without the shuffle),
+  both troop draws (stream and range in the events, a moved range widening
+  the draw to 3), the boss branch from the counter whose 1-in-7 roll is 0 (HP
+  1,200), each under NTSD's profile and a moved one (a moved word leaves the
+  old one an ordinary word the catalog lacks); exact troop IDs.
+- **Shape changed from the plan.** The E5e note and the survey named two
+  roles, `troopBase` 30 and `troopChoices` 2; one `OriginalIDRange`
+  `spawnTroops` holds both (the width derived with `&-`), as a troop range is
+  one fact. An empty or wrapped range draws 0 without advancing the random
+  state (`OriginalRandom.next`'s guard, as 0x417170) and spawns `lowerBound`:
+  the doc says so; nothing traps.
+- **Review.** No code defect (literals restored: identical to HEAD apart
+  from the `let troops` lines; the draws' streams, ranges and results equal
+  for NTSD's values; the branch order and the comparisons on the spawn word
+  kept; no new throwing read or draw; the other such literals are frame
+  states, offsets, sizes, sleeps and positions). Required: the shape change
+  recorded, the range edge in the doc. Adopted: the doc's cursor and shuffle
+  details, exact troop IDs, the boss case's next draw (0x114, no 0x113),
+  positive tests for moved troop words, `let troops` inside the troop branch.
+  `swift_beginAccess` before the gate: 3,278.
+
 ## Ledger
 
 - 2026-10-18: plan agreed; branch `exp/engine-split` and its worktree created
@@ -1701,18 +1736,26 @@ From a read-only survey ([report](../evidence/es-e5e-plumbing.md)).
   launches, 29 suite runs, the engine's 110 tests, 3,278/3,406; 24 suites
   with 99 tests; WASI vs identical; phone and Mac overlapping.
   [Evidence](../evidence/es-e5e1-id300-roles.json).
+- 2026-10-20 E5e-2: the mission pseudo-IDs into `Modes` (`heroSpawnWord`,
+  `troopSpawnWord`, `troopOrBossSpawnWord`, `spawnTroops` 30..<32, `bossTroop`).
+  Reviewed (no code defect; the shape change and the range edge recorded).
+  `swift_beginAccess` measured first (3,278). Gate `es-e5e2`: 11 scenarios,
+  frames, AppKit, unchecked, emulator, 20 clean launches, 29 suite runs, the
+  engine's 110 tests, 3,278/3,406; 21 suites with 86 tests; WASI vs
+  identical; phone and Mac overlapping.
+  [Evidence](../evidence/es-e5e2-mission-pseudo-ids.json).
 
 ## Next task
 
-E5e-2 (the E5e note above; survey [report](../evidence/es-e5e-plumbing.md) §3):
-the mission pseudo-IDs into `Modes`: `heroSpawnWord` 1000 (A61: the hero table
-at 0x44d324, its cursor 0x44d34c, the 50 swaps on streams 0x10f/0x110 stay
-engine), `troopSpawnWord` 3000 (A62) and `troopOrBossSpawnWord` 3001 (A63),
-`spawnTroops` 30..<32 (one range for both troop draws: `draw(stream, upper −
-lower) &+ lower`, exactly `draw(…, 2) &+ 0x1e` for NTSD's) and `bossTroop` 32
-(A63's 1-in-7 on stream 0x112 and its HP ×4 stay engine). The `else if` order
-and the first-match catalog scan after them are kept. Tests: the mission
-`spawn` with each word (the hero table's entry and cursor, both troop draws,
-the boss branch at the counter that rolls 0) under NTSD's profile and a moved
-one. Gates as E5e-1 without the phone A/B's hot-pass weight (cold), with the
-mission stage suites in gate3.
+E5e-3 (the E5e note above; survey [report](../evidence/es-e5e-plumbing.md) §4):
+War life (A67, `OriginalWarBattle`'s reserve spawn) into `Modes` as two
+tables: `warUnitLife` [36: 250, 37: 200, 35: 200, 32: 200, 39: 150, 33: 150,
+34: 100, 31: 50, 30: 50, 122: 200] (the 500 default engine) and
+`warSideZeroMarks` [37: 0x72] (side 0, type 0: +0x318 0x8c first, then the
+unit's mark; both stores kept). The chain's `at43` only ever holds for unit 37
+and its assignments are disjoint, so life is a function of the unit: a test
+compares the old chain (kept in the test as the reference) with the table for
+every unit in a wide range and the extremes. Tests also through the War
+pass's spawn for each unit, side and type, under NTSD's profile and a moved
+one. Gates with `OriginalWarBattleTests` (1,410 cases) and the
+`OriginalLibWar*` suites in gate3.

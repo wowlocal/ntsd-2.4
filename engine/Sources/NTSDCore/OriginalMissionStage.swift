@@ -422,7 +422,7 @@ struct OriginalMissionStagePass {
         let difficulty = try g(0x450c30)
         if difficulty == -1,id != rules.fixedDifficultyHP { hp = ftol(try ext(Double(hp))*ext(1.5)) }
         else if difficulty == 2,id != rules.fixedDifficultyHP { hp = ftol(try ext(Double(hp))*ext(0.75)) }
-        if id == 0x3e8 {
+        if id == rules.heroSpawnWord {
             var at = try g(0x44d34c)
             if at == 10 || at == -1 {
                 for _ in 0..<50 {
@@ -433,11 +433,12 @@ struct OriginalMissionStagePass {
                 at = 0
             }
             id = try g(0x44d324+Int(at)*4);try setG(0x44d34c,at &+ 1)
-        } else if id == 0xbb8 {
-            id = try draw(0x111,2) &+ 0x1e
-        } else if id == 0xbb9 {
-            if try draw(0x112,7) == 0 { id = 0x20;hp &*= 4 }
-            else { id = try draw(0x113,2) &+ 0x1e }
+        } else if id == rules.troopSpawnWord {
+            let troops = rules.spawnTroops
+            id = try draw(0x111,troops.upperBound &- troops.lowerBound) &+ troops.lowerBound
+        } else if id == rules.troopOrBossSpawnWord {
+            if try draw(0x112,7) == 0 { id = rules.bossTroop;hp &*= 4 }
+            else { let troops = rules.spawnTroops;id = try draw(0x113,troops.upperBound &- troops.lowerBound) &+ troops.lowerBound }
         }
         var ordinal: Int?
         for n in 0..<Int(max(objectCount,0)) {

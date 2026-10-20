@@ -16,7 +16,9 @@ final class NTSDProfileExemptionTests: XCTestCase {
                       modes: .init(survivalStages: n.survivalStages,numberedStages: n.numberedStages,finalStageSet: n.finalStageSet,
                                    stageWeightPlus1: n.stageWeightPlus1,stageWeightPlus2: n.stageWeightPlus2,warTroops: n.warTroops,
                                    stageBackgrounds: n.stageBackgrounds,killRequestSpared: spared ?? n.killRequestSpared,
-                                   fixedDifficultyHP: fixed ?? n.fixedDifficultyHP))
+                                   fixedDifficultyHP: fixed ?? n.fixedDifficultyHP,heroSpawnWord: n.heroSpawnWord,
+                                   troopSpawnWord: n.troopSpawnWord,troopOrBossSpawnWord: n.troopOrBossSpawnWord,
+                                   spawnTroops: n.spawnTroops,bossTroop: n.bossTroop))
     }
 
     /// A7: damageHit by attacker actor 0 (ID 7) with injury 20 (+0x44) on a type-0 defender

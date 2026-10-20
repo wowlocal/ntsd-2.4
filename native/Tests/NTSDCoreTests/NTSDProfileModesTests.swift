@@ -16,7 +16,9 @@ final class NTSDProfileModesTests: XCTestCase {
         let n = NTSDProfile.rules
         return n.with(modes: .init(survivalStages: survival ?? n.survivalStages,numberedStages: numbered ?? n.numberedStages,
             finalStageSet: final ?? n.finalStageSet,stageWeightPlus1: n.stageWeightPlus1,stageWeightPlus2: n.stageWeightPlus2,warTroops: troops ?? n.warTroops,
-            stageBackgrounds: backgrounds ?? n.stageBackgrounds,killRequestSpared: n.killRequestSpared,fixedDifficultyHP: n.fixedDifficultyHP))
+            stageBackgrounds: backgrounds ?? n.stageBackgrounds,killRequestSpared: n.killRequestSpared,fixedDifficultyHP: n.fixedDifficultyHP,
+            heroSpawnWord: n.heroSpawnWord,troopSpawnWord: n.troopSpawnWord,troopOrBossSpawnWord: n.troopOrBossSpawnWord,
+            spawnTroops: n.spawnTroops,bossTroop: n.bossTroop))
     }
     func pass(stage: Int32,rules: OriginalGameRules,globals set: [(Int,Int32)] = []) throws -> OriginalMissionStagePass {
         var globals = try defined(0xb440)

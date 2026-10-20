@@ -219,12 +219,30 @@ public struct OriginalGameRules: Equatable, Sendable {
         /// A mission stage spawn word the difficulty's HP factor (×1.5 at −1,
         /// ×0.75 at 2) skips (A60; tested before the pseudo-IDs are replaced).
         public let fixedDifficultyHP: Int32
+        /// The mission stage's pseudo spawn words (A61–A63), each replaced before
+        /// the catalog scan: `heroSpawnWord` by the entry at the cursor (0x44d34c)
+        /// of the ten-word hero table at 0x44d324 (game data in the record), the
+        /// cursor then stored plus one; at a cursor of 10 or −1 the table is
+        /// first shuffled by 50 swaps (streams 0x10f/0x110, range 10) and the
+        /// cursor restarts at 0. `troopSpawnWord` by a troop drawn from
+        /// `spawnTroops` (stream 0x111: `draw(upper &− lower) &+ lower`);
+        /// `troopOrBossSpawnWord` by `bossTroop` on a 1-in-7 roll (stream 0x112)
+        /// with four times the HP (after the difficulty factor, wrapping), else a
+        /// troop drawn from `spawnTroops` (stream 0x113). An empty or wrapped
+        /// range draws 0 without advancing the random state, so it spawns
+        /// `lowerBound`.
+        public let heroSpawnWord: Int32, troopSpawnWord: Int32, troopOrBossSpawnWord: Int32
+        public let spawnTroops: OriginalIDRange
+        public let bossTroop: Int32
         public init(survivalStages: OriginalIDRange, numberedStages: OriginalIDRange, finalStageSet: OriginalIDRange,
                     stageWeightPlus1: Int32, stageWeightPlus2: Int32, warTroops: OriginalIDSet, stageBackgrounds: [Int32: Int32],
-                    killRequestSpared: Int32, fixedDifficultyHP: Int32) {
+                    killRequestSpared: Int32, fixedDifficultyHP: Int32, heroSpawnWord: Int32, troopSpawnWord: Int32,
+                    troopOrBossSpawnWord: Int32, spawnTroops: OriginalIDRange, bossTroop: Int32) {
             self.survivalStages = survivalStages; self.numberedStages = numberedStages; self.finalStageSet = finalStageSet
             self.stageWeightPlus1 = stageWeightPlus1; self.stageWeightPlus2 = stageWeightPlus2; self.warTroops = warTroops
             self.stageBackgrounds = stageBackgrounds; self.killRequestSpared = killRequestSpared; self.fixedDifficultyHP = fixedDifficultyHP
+            self.heroSpawnWord = heroSpawnWord; self.troopSpawnWord = troopSpawnWord; self.troopOrBossSpawnWord = troopOrBossSpawnWord
+            self.spawnTroops = spawnTroops; self.bossTroop = bossTroop
         }
     }
     /// Physics: the Objects the actor physics moves or drops their own way
@@ -485,6 +503,11 @@ public struct OriginalGameRules: Equatable, Sendable {
     public var stageBackgrounds: [Int32: Int32] { roles.modes.stageBackgrounds }
     public var killRequestSpared: Int32 { roles.modes.killRequestSpared }
     public var fixedDifficultyHP: Int32 { roles.modes.fixedDifficultyHP }
+    public var heroSpawnWord: Int32 { roles.modes.heroSpawnWord }
+    public var troopSpawnWord: Int32 { roles.modes.troopSpawnWord }
+    public var troopOrBossSpawnWord: Int32 { roles.modes.troopOrBossSpawnWord }
+    public var spawnTroops: OriginalIDRange { roles.modes.spawnTroops }
+    public var bossTroop: Int32 { roles.modes.bossTroop }
     public var extraDrift: Int32 { roles.physics.extraDrift }
     public var reverseDrift: Int32 { roles.physics.reverseDrift }
     public var lowGravityThrow: Int32 { roles.physics.lowGravityThrow }
