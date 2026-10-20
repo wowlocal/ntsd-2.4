@@ -1228,6 +1228,37 @@ routines of `OriginalCharacterAISpecial.swift`.
   release test build). Required: the cross-module bullet corrected (above).
   Adopted: the stale-build note; `NTSDProfileCharacterAITests` in gate3.
 
+### E5e note (2026-10-20, from the survey)
+
+From a read-only survey ([report](../evidence/es-e5e-plumbing.md)).
+- **No new hook.** All five coarse points become profile roles where only the
+  comparison changes, with three small tables; the AI's special moves (E5d-2)
+  stay the only code hook. This revises the E5 design's hook list ("fusion,
+  mission pseudo-IDs, War life, weapon break, the ID-300 exemption"), as
+  E5c-1b dropped the armour hook: each mechanism stays engine code and only
+  its IDs move; every pass involved already holds `rules` (no public pass
+  signature changes).
+- **Granularity.** The ID-300 exemption is three roles (A7 in the hits, A51 in
+  the commands' recovery, A60 on the mission spawn word: different passes,
+  behaviours and value domains, F9). Fusion: `fusers` {7, 8}, the partner sum
+  15 (exact for every value, a pair table would not be) and `fusedForm` 51
+  (A25 and A26 share it); A27 and route 8 fix the record's layout, which
+  stays engine. The mission pseudo-IDs: single roles (1000, 3000, 3001, the
+  boss 32, the troop base 30 and the draw's range 2); the shuffle, the hero
+  table's layout, 1-in-7, ×4 and the streams stay engine. War life: a table
+  `[Int32: Int32]` (the 500 default and both +0x318 stores engine; a mechanical
+  check that life is a function of the unit). The weapon break: A52 a table,
+  A53 its own role, A54 per-branch roles with the shapes engine (a table form
+  needs three action kinds; deferred to D1 or 2.8.3.3); `engineTests` must
+  carry [100: 5] for `OriginalRequestSlotWordTests`.
+- **Increments.** E5e-1 the three 300 roles (hot: phone A/B); E5e-2 the mission
+  pseudo-IDs; E5e-3 War life; E5e-4 fusion (phone A/B); E5e-5 the weapon
+  break. Each with the three constructions, synthetic tests under NTSD's
+  profile and a moved one, a mapping-table review and the survey's gate3
+  suites.
+- **For the user:** nothing blocks E5e; D1 would show which of these are LF2
+  2.0a's (inference: fusion and the 300 rule).
+
 ## Ledger
 
 - 2026-10-18: plan agreed; branch `exp/engine-split` and its worktree created
@@ -1638,14 +1669,17 @@ routines of `OriginalCharacterAISpecial.swift`.
 
 ## Next task
 
-E5e-0: a read-only survey of the coarse hooks (the E5 design's "code hooks
-only at coarse points"), as E5d's: the ID-300 exemption (A7 in
-`OriginalHitDamage`, A51 in the post-draw commands, A60 in the mission
-stage), fusion (A24–A26 in `OriginalWorldFusion`, with A27's and the input's
-reads of the fusion record), the mission pseudo-IDs (A61–A63), War life
-(A67) and the weapon break (A52–A54, with A53's `find(999)`). For each: the
-sites and their reads, writes, random streams and errors; the callers up to
-the per-tick body; whether a hook (a protocol in the rules, as E5d-2's) or
-roles fit better (E5c-1b dropped the armour hook for roles); the public
-surface; the tests and corpora; the increments. Then E5e's increments, E5f
-(menu rectangles and name lists) and E4c-2/E7; E6 and E8 wait for D1/D2.
+E5e-1 (the E5e note above; survey [report](../evidence/es-e5e-plumbing.md) §1):
+the three ID-300 roles. `Impact` gains `hitConverted` 300 (A7,
+`OriginalHitDamage.damageHit`: no damage, and with a body whose first word is
+above 1000, team 1 at frame word − 1000 with freeze ±3; the early return
+skips the attacker's remaining contacts). `Modes` gains `killRequestSpared`
+300 (A51, the post-draw commands' `recover`: request 2 at 0x450bb8 with
+0x451160 = 1 zeroes team-5 characters' HP and MP except this Object's; the
+header read stays last in its chain) and `fixedDifficultyHP` 300 (A60, the
+mission stage's `spawn`: the difficulty's ×1.5/×0.75 skips this spawn word).
+No plumbing (each pass holds `rules`). Tests: `damageHit` with a body word of
+1005, `recover` with 0x450bb8 = 2, the mission `spawn` at difficulty −1 and 2,
+each under NTSD's profile and a moved one. Gates as a hot pass (the phone
+A/B), with the actor hits, lib actor hits, gameplay hits, post-draw
+commands and mission stage suites in gate3.

@@ -73,7 +73,8 @@ E5d-1a выполнен: роли выбора цели ИИ (A80–A86): [evide
 E5d-1b выполнен: роли боя ИИ (A87–A91, A93–A98): [evidence](../evidence/es-e5d1b-ai-fight-roles.json).
 E5d-2 выполнен: хук спецприёмов ИИ (процедуры пока в движке): [evidence](../evidence/es-e5d2-ai-special-hook.json).
 E5d-3 выполнен: 20 процедур ИИ в игре (NTSDProfile): [evidence](../evidence/es-e5d3-ai-routines-in-game.json).
-Следующая задача — E5e-0: обзор грубых хуков (300, слияние, псевдо-ID миссий, жизнь War, поломка оружия).
+E5e-0 выполнен: обзор грубых хуков ([обзор](../evidence/es-e5e-plumbing.md)): новых хуков не нужно, всё — роли и три таблицы.
+Следующая задача — E5e-1: три роли исключения ID 300 (A7, A51, A60).
 
 ## Internal build storage и VM quota исправлены — 2026-10-17
 
