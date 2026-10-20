@@ -10,10 +10,10 @@ public enum OriginalActorControlEvent: Equatable {
 /// The400-slot caller and physics are separate stages. No host physics/AI.
 public enum OriginalActorControl {
     public static func apply(actor: inout OriginalStateRecord, object: OriginalLoadedObject,
-                             globals: inout OriginalStateRecord, phase _: Int32, mode _: Int32,
+                             globals: inout OriginalStateRecord, rules: OriginalGameRules, phase _: Int32, mode _: Int32,
                              precision: OriginalArithmeticPrecision = .bits64,
                              observe: (OriginalActorControlEvent) throws -> Void = { _ in }) throws {
-        try apply(actor: &actor, header: object.header, globals: &globals, frame: { index in
+        try apply(actor: &actor, header: object.header, globals: &globals, rules: rules, frame: { index in
             guard object.frameStorage.indices.contains(Int(index)) else {
                 throw OriginalStateError.invalidStorage("Actor control frame outside Object: \(index)")
             }
@@ -22,21 +22,22 @@ public enum OriginalActorControl {
     }
 
     static func apply(actor: inout OriginalStateRecord, header: OriginalStateRecord,
-                      globals: inout OriginalStateRecord, frame: (Int32) throws -> OriginalStateRecord,
+                      globals: inout OriginalStateRecord, rules: OriginalGameRules, frame: (Int32) throws -> OriginalStateRecord,
                       precision: OriginalArithmeticPrecision = .bits64,
                       bundledLibrary: Bool = false,
                       observe: (OriginalActorControlEvent) throws -> Void = { _ in }, inPlace: Bool = false) throws {
         guard inPlace else {
             // All or nothing: in place on copies, assigned when it completes.
             var candidate = actor, owned = globals
-            try apply(actor: &candidate, header: header, globals: &owned, frame: frame, precision: precision,
+            try apply(actor: &candidate, header: header, globals: &owned, rules: rules, frame: frame, precision: precision,
                       bundledLibrary: bundledLibrary, observe: observe, inPlace: true)
             actor = candidate; globals = owned
             return
         }
         // The caller's actor and globals: input on the actor, then moved into
         // the body and written back on every path (CORE_REALTIME B2 P4).
-        try OriginalActorInput.apply(actor: &actor, sourceID: header.integer(at: 0x6f4, as: Int32.self), globals: globals, frame: frame, inPlace: true)
+        try OriginalActorInput.apply(actor: &actor, sourceID: header.integer(at: 0x6f4, as: Int32.self), globals: globals, rules: rules, frame: frame,
+                                     inPlace: true)
         try withoutActuallyEscaping(frame) { frames in
             try withoutActuallyEscaping(observe) { observer in
                 var body = Body(actor: inPlaceTake(&actor, leaving: .vacant), globals: inPlaceTake(&globals, leaving: .vacant), header: header,

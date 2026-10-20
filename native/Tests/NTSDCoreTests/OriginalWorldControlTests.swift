@@ -2,6 +2,7 @@ import Foundation
 import XCTest
 @testable import NTSDCore
 @testable import NTSDReferenceChecks
+import NTSDProfile
 
 final class OriginalWorldControlTests: XCTestCase {
     func testFailureAfterEarlierActorRollsBackWholePoolAndRNG() throws {
@@ -19,7 +20,7 @@ final class OriginalWorldControlTests: XCTestCase {
         var drew = false,firstReturned = false
         XCTAssertThrowsError(try OriginalWorldControl.apply(world: world,actors: &actors,globals: &globals,objectCount: 1,header: { index in
             guard index == 0 else { throw OriginalStateError.invalidStorage("Missing second Actor Object") };return header
-        },frame: { _,_ in frame },observe: { slot,event in
+        },frame: { _,_ in frame },rules: NTSDProfile.rules,observe: { slot,event in
             if slot == 0,case .random = event { drew = true }
         },afterActorControl: { slot,_ in if slot == 0 { firstReturned = true } }))
         XCTAssertTrue(drew);XCTAssertTrue(firstReturned)
@@ -28,7 +29,7 @@ final class OriginalWorldControlTests: XCTestCase {
         // the first Actor's writes and the draw kept, nothing left vacant.
         XCTAssertThrowsError(try OriginalWorldControl.apply(world: world,actors: &actors,globals: &globals,objectCount: 1,header: { index in
             guard index == 0 else { throw OriginalStateError.invalidStorage("Missing second Actor Object") };return header
-        },frame: { _,_ in frame },inPlace: true)) { XCTAssertEqual("\($0)","\(OriginalStateError.invalidStorage("Missing second Actor Object"))") }
+        },frame: { _,_ in frame },rules: NTSDProfile.rules,inPlace: true)) { XCTAssertEqual("\($0)","\(OriginalStateError.invalidStorage("Missing second Actor Object"))") }
         XCTAssertEqual(actors.count,400);XCTAssertEqual(globals.byteCount,0xb440)
         XCTAssertTrue(actors.allSatisfy { $0.byteCount == 0x420 })
         XCTAssertNotEqual(actors[0],beforeActors[0]);XCTAssertNotEqual(globals,beforeGlobals)
@@ -51,7 +52,7 @@ final class OriginalWorldControlTests: XCTestCase {
         for inPlace in [false,true] {
             var draws: [Int] = []
             XCTAssertThrowsError(try OriginalWorldControl.apply(world: world,actors: &actors,globals: &globals,objectCount: 1,header: { _ in header },
-                frame: { _,_ in frame },observe: { slot,event in
+                frame: { _,_ in frame },rules: NTSDProfile.rules,observe: { slot,event in
                     guard case .random = event else { return }
                     draws.append(slot);if slot == 1 { throw failure }
                 },inPlace: inPlace)) { XCTAssertEqual("\($0)","\(failure)") }
@@ -89,7 +90,7 @@ final class OriginalWorldControlTests: XCTestCase {
             let records = actors.prefix(2).map(identity),beforeFirst = MatchPreparationReference.digest(Data(actors[0].bytes))
             var draws = 0
             try OriginalWorldControl.apply(world: world,actors: &actors,globals: &globals,objectCount: 1,header: { _ in header },
-                frame: { _,_ in frame },observe: { _,event in if case .random = event { draws += 1 } },inPlace: inPlace)
+                frame: { _,_ in frame },rules: NTSDProfile.rules,observe: { _,event in if case .random = event { draws += 1 } },inPlace: inPlace)
             XCTAssertGreaterThan(draws,0);XCTAssertNotEqual(MatchPreparationReference.digest(Data(actors[0].bytes)),beforeFirst)
             let same = actors.withUnsafeBufferPointer { $0.baseAddress } == buffer && identity(globals) == globalsStorage
                 && actors.prefix(2).map(identity) == records
@@ -191,7 +192,7 @@ final class OriginalWorldControlTests: XCTestCase {
             for inPlace in [false,true] {
             var actors = startActors,globals = startGlobals,events: [Event] = []
             try OriginalWorldControl.apply(world: world,actors: &actors,globals: &globals,objectCount: item.count ?? 4,
-                header: { headers[$0] },frame: { ownFrames[$0][Int($1)] },
+                header: { headers[$0] },frame: { ownFrames[$0][Int($1)] },rules: NTSDProfile.rules,
                 precision: try (item.fpcw ?? c.fpcw).map { try OriginalArithmeticPrecision(controlWord: $0) } ?? .bits64,observe: { slot,event in
                     switch event {
                     case let .random(stream,range,result):events.append(.init(slot: slot,kind: "random",arguments: [stream,range,result].map(UInt32.init(bitPattern:))))

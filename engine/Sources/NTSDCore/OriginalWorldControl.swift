@@ -30,21 +30,22 @@ public enum OriginalWorldControl {
         },frame: { index,number in
             guard catalog.objects.indices.contains(index),catalog.objects[index].frameStorage.indices.contains(Int(number)) else { throw error("Frame binding") }
             return catalog.objects[index].frameStorage[Int(number)]
-        },precision: state.arithmeticPrecision,bundledLibrary: bundledLibrary,observe: observe,afterActorControl: afterActorControl,inPlace: inPlace)
+        },rules: catalog.rules,precision: state.arithmeticPrecision,bundledLibrary: bundledLibrary,observe: observe,afterActorControl: afterActorControl,
+                  inPlace: inPlace)
     }
 
     private static func error(_ text: String) -> OriginalStateError { .invalidStorage("World control: "+text) }
 
     static func apply(world: OriginalStateRecord,actors: inout [OriginalStateRecord],globals: inout OriginalStateRecord,
                       objectCount: Int32,header: (Int) throws -> OriginalStateRecord,
-                      frame: (Int,Int32) throws -> OriginalStateRecord,
+                      frame: (Int,Int32) throws -> OriginalStateRecord, rules: OriginalGameRules,
                       precision: OriginalArithmeticPrecision = .bits64, bundledLibrary: Bool = false,
                       observe: (Int,OriginalActorControlEvent) throws -> Void = { _,_ in },
                       afterActorControl: (Int,OriginalStateRecord) throws -> Void = { _,_ in }, inPlace: Bool = false) throws {
         guard inPlace else {
             // All or nothing: in place on copies, assigned when it completes.
             var copies = actors,owned = globals
-            try apply(world: world,actors: &copies,globals: &owned,objectCount: objectCount,header: header,frame: frame,precision: precision,
+            try apply(world: world,actors: &copies,globals: &owned,objectCount: objectCount,header: header,frame: frame,rules: rules,precision: precision,
                       bundledLibrary: bundledLibrary,observe: observe,afterActorControl: afterActorControl,inPlace: true)
             actors = copies;globals = owned
             return
@@ -66,7 +67,7 @@ public enum OriginalWorldControl {
             // the pass on a throw; CORE_REALTIME B2 P4), done before the
             // surrounding World rules inspect or mutate any aliased allocation.
             let actorHeader = try header(o)
-            try OriginalActorControl.apply(actor: &pool[i],header: actorHeader,globals: &owned,
+            try OriginalActorControl.apply(actor: &pool[i],header: actorHeader,globals: &owned,rules: rules,
                 frame: { try frame(o,$0) },precision: precision,bundledLibrary: bundledLibrary,observe: { try observe(slot,$0) },inPlace: true)
             try afterActorControl(slot,pool[i])
             if try state(i) == 400,try owned.integer(at: 0x450bd8-0x44d000,as: Int32.self) == 0 {

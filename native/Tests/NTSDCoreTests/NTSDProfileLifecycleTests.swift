@@ -3,18 +3,19 @@ import XCTest
 import NTSDProfile
 
 /// ENGINE_SPLIT E5c-1h: the slot prefix (A29, A31, N1), the scheduler's
-/// invulnerability on rising (A47) and the round restore (A32) follow the profile.
+/// invulnerability on rising (A47), the round restore (A32) and the input's held-back
+/// transformation (A28) follow the profile.
 /// Synthetic records.
 final class NTSDProfileLifecycleTests: XCTestCase {
     func zero(_ size: Int) throws -> OriginalStateRecord {
         try .init(bytes: [UInt8](repeating: 0, count: size), defined: [Bool](repeating: true, count: size))
     }
     func lifecycle(regen: OriginalIDSet? = nil, form: Int32? = nil, pieces: Int32? = nil, last: Int32? = nil, lying: OriginalIDSet? = nil,
-                   from: Int32? = nil, to: Int32? = nil) -> OriginalGameRules {
+                   from: Int32? = nil, to: Int32? = nil, guarded: Int32? = nil) -> OriginalGameRules {
         let n = NTSDProfile.rules
         return n.with(lifecycle: .init(halfHPRegen: regen ?? n.halfHPRegen, state9995Object: form ?? n.state9995Object, pieces: pieces ?? n.pieces,
             lastPiece: last ?? n.lastPiece, noRiseInvulnerability: lying ?? n.noRiseInvulnerability, roundRevertFrom: from ?? n.roundRevertFrom,
-            roundRevertTo: to ?? n.roundRevertTo))
+            roundRevertTo: to ?? n.roundRevertTo, guardedTransformer: guarded ?? n.guardedTransformer))
     }
     /// The slot prefix for slot 0 (a character) over Objects with these IDs: the
     /// pool afterwards, or the error.
@@ -117,5 +118,25 @@ final class NTSDProfileLifecycleTests: XCTestCase {
         XCTAssertEqual(try revert(ids: [50, 6, 1], rules: lifecycle(from: 77)), 0)
         XCTAssertEqual(try revert(ids: [50, 6, 1], rules: lifecycle(to: 1)), 2)
         XCTAssertEqual(try revert(ids: [77, 6, 1], rules: lifecycle(from: 77)), 1)
+    }
+    /// Combo 8 (the hit_ja route) complete (progress 3 at +0xdc) for a character with
+    /// this source ID and HP, its frame's hit_ja (+0x48) 300: whether the combo
+    /// transferred (progress back to 0) or was held back (progress 3 kept).
+    func comboTransferred(source: Int32, hp: Int32, rules: OriginalGameRules) throws -> Bool {
+        var actor = try OriginalStateRecord.actor(over: [UInt8](repeating: 0, count: OriginalStateRecord.actorSize))
+        try actor.write(UInt8(3), at: 0xd4+8); try actor.write(hp, at: 0x2fc); try actor.write(Int32(-1), at: 0x324)
+        let globals = try zero(OriginalMatchPreparation.globalSize)
+        var current = try zero(0x178); try current.write(Int32(300), at: 0x48)
+        let c = current, target = try zero(0x178)
+        try OriginalActorInput.recognizeCombos(actor: &actor, sourceID: source, globals: globals, rules: rules, frame: { $0 == 0 ? c : target })
+        return try actor.integer(at: 0xd4+8, as: UInt8.self) == 0
+    }
+    func testGuardedTransformerA28() throws {
+        let n = NTSDProfile.rules
+        XCTAssertFalse(try comboTransferred(source: 6, hp: 200, rules: n), "6 above 177 HP: held back")
+        XCTAssertTrue(try comboTransferred(source: 6, hp: 177, rules: n))
+        XCTAssertTrue(try comboTransferred(source: 7, hp: 200, rules: n))
+        XCTAssertTrue(try comboTransferred(source: 6, hp: 200, rules: lifecycle(guarded: 7)))
+        XCTAssertFalse(try comboTransferred(source: 7, hp: 200, rules: lifecycle(guarded: 7)))
     }
 }

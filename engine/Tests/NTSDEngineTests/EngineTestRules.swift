@@ -27,5 +27,5 @@ extension OriginalGameRules {
                        commandEffect: 998, deathParticles: 999, fireParticles: 999, burstChild: -1, escortChild: -1),
         // The request-slot tests' slot prefix pool is built on Object 217.
         lifecycle: .init(halfHPRegen: OriginalIDSet([]), state9995Object: -1, pieces: 217, lastPiece: 218, noRiseInvulnerability: OriginalIDSet([]),
-                         roundRevertFrom: -1, roundRevertTo: -1))
+                         roundRevertFrom: -1, roundRevertTo: -1, guardedTransformer: -1))
 }

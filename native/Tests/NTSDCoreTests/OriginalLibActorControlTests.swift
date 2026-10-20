@@ -5,6 +5,7 @@ import CryptoKit
 import XCTest
 @testable import NTSDCore
 @testable import NTSDReferenceChecks
+import NTSDProfile
 
 final class OriginalLibActorControlTests: XCTestCase {
     private struct Patch: Decodable {
@@ -79,7 +80,7 @@ final class OriginalLibActorControlTests: XCTestCase {
             let object = OriginalLoadedObject(header: ownHeader,nameTail: tail,frames: [],frameStorage: ownFrames,weaponSoundPaths: [:])
             var events: [Event] = []
             do {
-                try OriginalLibActorControl.apply(actor: &actor,object: object,globals: &owned,phase: 1,mode: 0,
+                try OriginalLibActorControl.apply(actor: &actor,object: object,globals: &owned,rules: NTSDProfile.rules,phase: 1,mode: 0,
                     precision: OriginalArithmeticPrecision(controlWord: item.fpcw),observe: { event in
                         switch event {
                         case let .random(stream,range,result):events.append(.init(kind: "random",arguments: [stream,range,result].map(UInt32.init(bitPattern:))))
@@ -109,7 +110,7 @@ final class OriginalLibActorControlTests: XCTestCase {
         try frames[41].write(Int32(85),at: 8)
         let object = try OriginalLoadedObject(header: zero(0x7a4),nameTail: zero(0x3c),frames: [],frameStorage: frames,weaponSoundPaths: [:])
         let before = actor,globalsBefore = owned
-        XCTAssertThrowsError(try OriginalLibActorControl.apply(actor: &actor,object: object,globals: &owned,phase: 1,mode: 0)) { error in
+        XCTAssertThrowsError(try OriginalLibActorControl.apply(actor: &actor,object: object,globals: &owned,rules: NTSDProfile.rules,phase: 1,mode: 0)) { error in
             guard case let OriginalStateError.invalidStorage(message) = error else { return XCTFail("Unexpected \(error)") }
             XCTAssertEqual(message,"Library Actor control frame outside Object: 42")
         }

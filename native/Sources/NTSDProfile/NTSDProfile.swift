@@ -42,5 +42,6 @@ public enum NTSDProfile {
                        commandEffect: 998, deathParticles: 999, fireParticles: 999, burstChild: 225, escortChild: 219),
         // The slot prefix, the scheduler's invulnerability on rising, the round restore.
         lifecycle: .init(halfHPRegen: OriginalIDSet([51, 52]), state9995Object: 50, pieces: 217, lastPiece: 218,
-                         noRiseInvulnerability: OriginalIDSet([30, 31, 32, 33, 34, 35, 36, 37, 39]), roundRevertFrom: 50, roundRevertTo: 6))
+                         noRiseInvulnerability: OriginalIDSet([30, 31, 32, 33, 34, 35, 36, 37, 39]), roundRevertFrom: 50, roundRevertTo: 6,
+                         guardedTransformer: 6))
 }

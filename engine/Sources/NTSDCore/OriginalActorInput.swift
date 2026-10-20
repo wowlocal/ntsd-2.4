@@ -5,9 +5,9 @@ import Foundation
 /// follow this component; this is not an entire control routine or tick.
 public enum OriginalActorInput {
     public static func apply(actor: inout OriginalStateRecord, object: OriginalLoadedObject,
-                             globals: OriginalStateRecord) throws {
+                             globals: OriginalStateRecord, rules: OriginalGameRules) throws {
         try apply(actor: &actor, sourceID: object.header.integer(at: 0x6f4, as: Int32.self),
-                  globals: globals, frame: { index in
+                  globals: globals, rules: rules, frame: { index in
             guard object.frameStorage.indices.contains(Int(index)) else {
                 throw OriginalStateError.invalidStorage("Actor input frame outside Object: \(index)")
             }
@@ -20,15 +20,16 @@ public enum OriginalActorInput {
     /// only for callers that drop it when this throws); otherwise on a copy
     /// assigned only when all three complete.
     static func apply(actor: inout OriginalStateRecord, sourceID: Int32,
-                      globals: OriginalStateRecord, frame: (Int32) throws -> OriginalStateRecord, inPlace: Bool = false) throws {
+                      globals: OriginalStateRecord, rules: OriginalGameRules, frame: (Int32) throws -> OriginalStateRecord,
+                      inPlace: Bool = false) throws {
         guard inPlace else {
             var candidate = actor
-            try apply(actor: &candidate, sourceID: sourceID, globals: globals, frame: frame, inPlace: true)
+            try apply(actor: &candidate, sourceID: sourceID, globals: globals, rules: rules, frame: frame, inPlace: true)
             actor = candidate
             return
         }
         try captureEdges(actor: &actor)
-        try recognizeCombos(actor: &actor, sourceID: sourceID, globals: globals, frame: frame)
+        try recognizeCombos(actor: &actor, sourceID: sourceID, globals: globals, rules: rules, frame: frame)
         try applyFrameInput(actor: &actor, globals: globals, frame: frame)
     }
 
@@ -101,7 +102,8 @@ public enum OriginalActorInput {
     ///412800..413077. Each later recognizer observes transfers and buffer
     /// clears made by earlier recognizers, using the actor's NEW current frame.
     static func recognizeCombos(actor: inout OriginalStateRecord, sourceID: Int32,
-                                globals: OriginalStateRecord, frame: (Int32) throws -> OriginalStateRecord) throws {
+                                globals: OriginalStateRecord, rules: OriginalGameRules,
+                                frame: (Int32) throws -> OriginalStateRecord) throws {
         let routes: [(direction: Int, key: UInt8, finish: Int, finishKey: UInt8, field: Int, facing: UInt8?)] = [
             (0xc2,0x52,0xbe,0x61,0x30,0),(0xc3,0x4c,0xbe,0x61,0x30,1),
             (0xc4,0x55,0xbe,0x61,0x34,nil),(0xc5,0x44,0xbe,0x61,0x38,nil),
@@ -132,9 +134,9 @@ public enum OriginalActorInput {
             guard try actor.integer(at: progress, as: UInt8.self) == 3 else { continue }
             let current = try frame(actor.integer(at: 0x70, as: Int32.self))
             let target = try current.integer(at: route.field, as: Int32.self)
-            //412fdd..41300f: original source-ID6/hit_ja300/HP177 exception.
+            //412fdd..41300f: original source-ID6/hit_ja300/HP177 exception (the ID: guardedTransformer).
             // This leaves progress3 intact, before either transfer or invalidation.
-            if try index == 8 && sourceID == 6 && target == 300 &&
+            if try index == 8 && sourceID == rules.guardedTransformer && target == 300 &&
                 actor.integer(at: 0x2fc, as: Int32.self) > 177 &&
                 globals.integer(at: 0x458428-OriginalMatchPreparation.globalBase, as: Int32.self) == 0 { continue }
             if try target != 0 && (index != 8 || actor.integer(at: 0x324, as: Int32.self) == -1) &&

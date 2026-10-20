@@ -67,7 +67,9 @@ E5c-1f выполнен: отрисовка (тень A45, подпись «Com�
 E5c-1g выполнен: эффекты после отрисовки (дети opoint, эффект команды, частицы): [evidence](../evidence/es-e5c1g-effects-roles.json).
 E5c-1h выполнен: префикс слота, планировщик, откат раунда: [evidence](../evidence/es-e5c1h-lifecycle-roles.json).
 E5c-1i выполнен: ввод объектов (A58, A59): [evidence](../evidence/es-e5c1i-object-input-roles.json).
-Следующая задача — E5c-1j: подавление комбо 6 → 300 (A28).
+E5c-1j выполнен: подавление комбо 6 → 300 (A28), правила по цепочке ввода: [evidence](../evidence/es-e5c1j-input-roles.json).
+Все строки E5c в профиле. План E5d (ИИ): [обзор](../evidence/es-e5d-plumbing.md).
+Следующая задача — E5d-1a: роли выбора цели ИИ (A80–A86).
 
 ## Internal build storage и VM quota исправлены — 2026-10-17
 

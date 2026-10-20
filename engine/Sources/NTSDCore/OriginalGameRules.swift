@@ -282,7 +282,8 @@ public struct OriginalGameRules: Equatable, Sendable {
     }
     /// Lifecycle: the slot prefix's Objects (OriginalPostDrawSlotPrefix), the
     /// characters the scheduler gives no invulnerability on rising
-    /// (OriginalActorScheduler) and the
+    /// (OriginalActorScheduler), the input's held-back transformation
+    /// (OriginalActorInput) and the
     /// round restore's reverted form (OriginalMatchRound).
     public struct Lifecycle: Equatable, Sendable {
         /// Characters whose MP regenerates from half their HP.
@@ -301,10 +302,16 @@ public struct OriginalGameRules: Equatable, Sendable {
         /// A character with Object `roundRevertFrom` reverts at a round restore to
         /// the first Object `roundRevertTo` (when 0x458428 is 0).
         public let roundRevertFrom: Int32, roundRevertTo: Int32
+        /// The character whose combo 8 (the hit_ja route) to frame 300 is held back
+        /// while its HP is above 177 and 0x458428 is 0 (OriginalActorInput). In NTSD
+        /// the same character as `roundRevertTo`; that its frame 300 leads to the
+        /// `state9995Object` form is the survey's inference, not checked against the DAT.
+        public let guardedTransformer: Int32
         public init(halfHPRegen: OriginalIDSet, state9995Object: Int32, pieces: Int32, lastPiece: Int32, noRiseInvulnerability: OriginalIDSet,
-                    roundRevertFrom: Int32, roundRevertTo: Int32) {
+                    roundRevertFrom: Int32, roundRevertTo: Int32, guardedTransformer: Int32) {
             self.halfHPRegen = halfHPRegen; self.state9995Object = state9995Object; self.pieces = pieces; self.lastPiece = lastPiece
             self.noRiseInvulnerability = noRiseInvulnerability; self.roundRevertFrom = roundRevertFrom; self.roundRevertTo = roundRevertTo
+            self.guardedTransformer = guardedTransformer
         }
     }
     private final class Roles: Sendable {
@@ -390,6 +397,7 @@ public struct OriginalGameRules: Equatable, Sendable {
     public var noRiseInvulnerability: OriginalIDSet { roles.lifecycle.noRiseInvulnerability }
     public var roundRevertFrom: Int32 { roles.lifecycle.roundRevertFrom }
     public var roundRevertTo: Int32 { roles.lifecycle.roundRevertTo }
+    public var guardedTransformer: Int32 { roles.lifecycle.guardedTransformer }
     public init(profile: String, reflection: Reflection, armour: Armour, interaction: Interaction, impact: Impact, items: Items,
                 roster: Roster, modes: Modes, physics: Physics, drawing: Drawing, effects: Effects, lifecycle: Lifecycle) {
         roles = Roles(profile: profile, reflection: reflection, armour: armour, interaction: interaction, impact: impact, items: items,

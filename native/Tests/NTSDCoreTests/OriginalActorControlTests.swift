@@ -5,6 +5,7 @@ import CryptoKit
 import XCTest
 @testable import NTSDCore
 @testable import NTSDReferenceChecks
+import NTSDProfile
 
 final class OriginalActorControlTests: XCTestCase {
     private struct Patch: Decodable {
@@ -127,7 +128,7 @@ final class OriginalActorControlTests: XCTestCase {
         let beforeActor = actor,beforeGlobals = globals
         let current = try OriginalStateRecord(bytes: [UInt8](repeating: 0,count: 0x178),defined: [Bool](repeating: true,count: 0x178))
         var drew = false
-        XCTAssertThrowsError(try OriginalActorControl.apply(actor: &actor,header: header,globals: &globals,frame: { index in
+        XCTAssertThrowsError(try OriginalActorControl.apply(actor: &actor,header: header,globals: &globals,rules: NTSDProfile.rules,frame: { index in
             guard index == 0 else { throw OriginalStateError.invalidStorage("Missing selected attack frame") }
             return current
         },observe: { event in
@@ -138,7 +139,7 @@ final class OriginalActorControlTests: XCTestCase {
         // In place (CORE_REALTIME B2 P4): the same error after the draw, the
         // partial writes kept and no field left vacant.
         drew = false
-        XCTAssertThrowsError(try OriginalActorControl.apply(actor: &actor,header: header,globals: &globals,frame: { index in
+        XCTAssertThrowsError(try OriginalActorControl.apply(actor: &actor,header: header,globals: &globals,rules: NTSDProfile.rules,frame: { index in
             guard index == 0 else { throw OriginalStateError.invalidStorage("Missing selected attack frame") }
             return current
         },observe: { event in
@@ -160,7 +161,7 @@ final class OriginalActorControlTests: XCTestCase {
         let before = actor,beforeGlobals = globals
         let failure = OriginalStateError.invalidStorage("No frames")
         for inPlace in [false,true] {
-            XCTAssertThrowsError(try OriginalActorControl.apply(actor: &actor,header: header,globals: &globals,frame: { _ in throw failure },inPlace: inPlace)) {
+            XCTAssertThrowsError(try OriginalActorControl.apply(actor: &actor,header: header,globals: &globals,rules: NTSDProfile.rules,frame: { _ in throw failure },inPlace: inPlace)) {
                 XCTAssertEqual("\($0)","\(failure)")
             }
             XCTAssertEqual(globals,beforeGlobals)
@@ -202,7 +203,7 @@ final class OriginalActorControlTests: XCTestCase {
             var actor = startActor,globals = startGlobals
             var events: [Event] = []
             do {
-                try OriginalActorControl.apply(actor: &actor,header: header,globals: &globals,frame: { index in
+                try OriginalActorControl.apply(actor: &actor,header: header,globals: &globals,rules: NTSDProfile.rules,frame: { index in
                     guard (0..<400).contains(index) else { throw OriginalStateError.invalidStorage("Probe frame index \(index)") }
                     if let object { return object.frameStorage[Int(index)] }
                     return frames[index] ?? emptyFrame
