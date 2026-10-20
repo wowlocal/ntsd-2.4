@@ -2,8 +2,8 @@ import XCTest
 @testable import NTSDCore
 import NTSDProfile
 
-/// ENGINE_SPLIT E5d-1a/1b: the character AI's target choice (A80–A86) and fight
-/// (A87–A91, A93–A98) follow the profile. Synthetic records; the pass's steps are run directly.
+/// ENGINE_SPLIT E5d-1a/1b/2: the character AI's target choice (A80–A86), fight
+/// (A87–A91, A93–A98) and special-move hook follow the profile. Synthetic records; the pass's steps are run directly.
 final class NTSDProfileCharacterAITests: XCTestCase {
     func zero(_ size: Int) throws -> OriginalStateRecord {
         try .init(bytes: [UInt8](repeating: 0, count: size), defined: [Bool](repeating: true, count: size))
@@ -275,5 +275,42 @@ final class NTSDProfileCharacterAITests: XCTestCase {
         // The short dasher's dash (A97's second use) attacks at 200 (beyond the close attack's 80); it draws no stream.
         XCTAssertTrue(try run(1, n, x: 200).attack); XCTAssertFalse(try run(5, n, x: 200).attack)
         XCTAssertTrue(try run(5, characterAI(short: 5), x: 200).attack); XCTAssertFalse(try run(1, characterAI(short: 5), x: 200).attack)
+    }
+    /// Stateless special moves for the tests: each stores the own id it was given
+    /// in the command byte +0xd4, then ends or goes on with `fight`.
+    struct EndsFight: OriginalCharacterAISpecial {
+        func special(own: Int32,_ ai: inout OriginalCharacterAIPass,s: Int,t: Int,slot: Int,_ l: OriginalCharacterAIPass.Locals) throws -> Bool {
+            try ai.byte(s,0xd4,UInt8(truncatingIfNeeded: own)); return true
+        }
+    }
+    struct GoesOn: OriginalCharacterAISpecial {
+        func special(own: Int32,_ ai: inout OriginalCharacterAIPass,s: Int,t: Int,slot: Int,_ l: OriginalCharacterAIPass.Locals) throws -> Bool {
+            try ai.byte(s,0xd4,UInt8(truncatingIfNeeded: own)); return false
+        }
+    }
+    func testSpecialMoveHookE5d2() throws {
+        let n = NTSDProfile.rules, ends = n.with(characterAISpecial: EndsFight()), goes = n.with(characterAISpecial: GoesOn())
+        // The entry roll comes first: with 0x44f618 = 5 its range is 6; from counter 0 it rolls 2
+        // (no call), from counter 4 it rolls 0 (the hook gets the own id).
+        func special(_ rules: OriginalGameRules, counter: Int32) throws -> (result: Bool, seen: UInt8, streams: [Int32]) {
+            var p = try pass(own: 7), l = OriginalCharacterAIPass.Locals()
+            try p.setG(0x44f618, 5); try p.setG(0x450c34, counter)
+            let result = try p.special(0, 1, slot: 10, l, rules: rules)
+            return (result, try p.actors[0].integer(at: 0xd4, as: UInt8.self), streams(p))
+        }
+        for (rules, counter, result, seen): (OriginalGameRules, Int32, Bool, UInt8) in [(ends, 0, false, 0), (ends, 4, true, 7), (goes, 4, false, 7)] {
+            let r = try special(rules, counter: counter)
+            XCTAssertEqual(r.result, result); XCTAssertEqual(r.seen, seen); XCTAssertEqual(r.streams, [0x3c])
+        }
+        // True ends `fight` right after the roll; false goes on to the approach and tactics.
+        XCTAssertEqual(try fight(pass(own: 3, other: 3, x: 50), rules: ends), [0x14, 0x3c])
+        let goesOn = try fight(pass(own: 3, other: 3, x: 50), rules: goes)
+        XCTAssertGreaterThan(goesOn.count, 2)
+        XCTAssertEqual(goesOn, try fight(pass(own: 3, other: 3, x: 50), rules: n), "false goes on as NTSD's own (no routine for 3)")
+        // NTSD's routines are the engine's until E5d-3; rules differ by the hook's type.
+        XCTAssertTrue(n.characterAISpecial is OriginalCharacterAIBuiltInSpecial)
+        XCTAssertNotEqual(n, n.with(profile: n.profile, characterAISpecial: EndsFight()))
+        XCTAssertNotEqual(ends, goes); XCTAssertEqual(ends, n.with(characterAISpecial: EndsFight()))
+        XCTAssertEqual(n, n.with(profile: n.profile))
     }
 }

@@ -71,7 +71,8 @@ E5c-1j выполнен: подавление комбо 6 → 300 (A28), пра
 Все строки E5c в профиле. План E5d (ИИ): [обзор](../evidence/es-e5d-plumbing.md).
 E5d-1a выполнен: роли выбора цели ИИ (A80–A86): [evidence](../evidence/es-e5d1a-ai-target-roles.json).
 E5d-1b выполнен: роли боя ИИ (A87–A91, A93–A98): [evidence](../evidence/es-e5d1b-ai-fight-roles.json).
-Следующая задача — E5d-2: хук спецприёмов ИИ (процедуры пока в движке).
+E5d-2 выполнен: хук спецприёмов ИИ (процедуры пока в движке): [evidence](../evidence/es-e5d2-ai-special-hook.json).
+Следующая задача — E5d-3: 20 процедур ИИ в игру (NTSDProfile).
 
 ## Internal build storage и VM quota исправлены — 2026-10-17
 

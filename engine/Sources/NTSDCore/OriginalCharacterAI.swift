@@ -35,7 +35,17 @@ public enum OriginalCharacterAI {
     }
 }
 
-struct OriginalCharacterAIPass {
+/// The game's special moves (ENGINE_SPLIT E5d-2): the character AI's 403a40
+/// calls it after its entry roll (stream 0x3c) came out 0 and the character's
+/// own Object id was read; true ends `fight` for this call, false goes on. It
+/// runs on the pass in place. Conformers are value types without stored
+/// properties: two game rules are equal only with conformers of the same type
+/// (a class conformer would also add a retain and release per call).
+public protocol OriginalCharacterAISpecial: Sendable {
+    func special(own: Int32,_ ai: inout OriginalCharacterAIPass,s: Int,t: Int,slot: Int,_ l: OriginalCharacterAIPass.Locals) throws -> Bool
+}
+
+public struct OriginalCharacterAIPass {
     var world: OriginalStateRecord
     var actors: [OriginalStateRecord]
     var globals: OriginalStateRecord
@@ -128,7 +138,7 @@ struct OriginalCharacterAIPass {
         try fight(s,slot: slot,mode: mode,&l,rules: rules)
     }
 
-    struct Locals {
+    public struct Locals {
         var nearest38: Int32 = 10000,lying48: Int32 = 10000,item50: Int32 = 10000,target: Int32 = -1,bg: Int32 = 0
         var aligned34: Int32 = 0,allies10: Int32 = 0,hurt1c: Int32 = 0,healthy18: Int32 = 0,avoid2c: Int32 = 0
         var down3c: Int32 = 0,up40: Int32 = 0,left14: Int32 = 0,right20: Int32 = 0,ball30: Int32 = 0,near48: Int32 = 0,seen44: Int32 = 0
@@ -370,7 +380,7 @@ struct OriginalCharacterAIPass {
             if try i(t,0x18) > i(s,0x18) &+ 2 { try press(s,.down) } else if try i(t,0x18) < i(s,0x18) &+ -2 { try press(s,.up) }
             return
         }
-        if try special(s,t,slot: slot,l) { return }
+        if try special(s,t,slot: slot,l,rules: rules) { return }
         if try !far(s,t) { try approach(s,t,slot: slot,mode: mode,&l,rules: rules) }
         if try i(s,0x98) > 0, try !weapon(s,t,slot: slot,l,rules: rules) { return }
         try tactics(s,t,slot: slot,mode: mode,&l,rules: rules)
@@ -507,33 +517,12 @@ struct OriginalCharacterAIPass {
         if try abs(i(t,0x18) &- i(s,0x18)) <= 3, try abs(i(t,0x10) &- i(s,0x10)) <= 6 { try release(s,.attack); try press(s,.attack) }
     }
 
-    /// 403a40: the entry roll, then the block for the AI's own Object id.
-    mutating func special(_ s: Int,_ t: Int,slot: Int,_ l: Locals) throws -> Bool {
+    /// 403a40: the entry roll, then the game's special moves for the AI's own
+    /// Object id (ENGINE_SPLIT E5d-2: `rules.characterAISpecial`).
+    mutating func special(_ s: Int,_ t: Int,slot: Int,_ l: Locals,rules: OriginalGameRules) throws -> Bool {
         if try draw(0x3c,g(0x44f618) &+ 1) > 0 { return false }
         let own = try id(s)
-        switch own {
-        case 1: return try sakura1(s,t,l)
-        case 2: return try naruto2(s,t,slot: slot,l)
-        case 4: return try sai4(s,t)
-        case 5: return try shino5(s,t)
-        case 6: return try hsasori6(s,t)
-        case 7: return try lee7(s,t,l)
-        case 8: return try chiyo8(s,t,l)
-        case 9: return try itachi9(s,t,l)
-        case 10: return try deidara10(s,t,slot: slot,l)
-        case 11: return try sasuke11(s,t,l)
-        case 32: return try hunter32(s,t,l)
-        case 33: return try clone33(s,t,l)
-        case 34: return try kidomaru34(s,slot: slot,l)
-        case 35: return try sakon35(s,t)
-        case 36: return try tayuya36(s,t)
-        case 38: return try sasukeCS38(s,t)
-        case 39: return try sand39(s,t)
-        case 50: return try pein50(s,t)
-        case 51: return try sasori51(s,t)
-        case 52: return try kyubi52(s,t,l)
-        default: return false
-        }
+        return try rules.characterAISpecial.special(own: own,&self,s: s,t: t,slot: slot,l)
     }
 
     /// 408cb0: weapon use; false ends the AI for this call.

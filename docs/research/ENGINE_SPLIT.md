@@ -10,7 +10,7 @@ measurement from [TVOS_WEB](TVOS_WEB.md), [MEMORY_LOADING](MEMORY_LOADING.md) an
 engine from the game itself. to publish engine as the separate github repo";
 then, after the plan: "ok … when the plan is setteled start the loop in a
 separate branch" and "push automatically every step (on that new branch)".
-**Status:** E0–E3, E4a, E4b (all six hosts), E4c-1 (the engine's self-contained tests), E5a (the game profile's survey and design) and E5b (the record type, the copied tables out), E4c-1a (a nondeterministic engine test corrected) E5c-0 (the profile's plumbing, reflection), E5c-1a (one storage, the reflectors), E5c-1b (armour), E5c-1c (special interactions) and E5c-1d (impact) done; E5c-2a, E5c-2b and E5c-2c (the items family: the random and requested spawns, camera, links, the mission stage) E5c-2d (the roster family), E5c-2e (the modes family), E5c-2f (the match prelude) and E5c-2g (the mode label) done: E5c-2's menu and mode rows are in the profile; E5c-1e (physics), E5c-1f (drawing) and E5c-1g (the post-draw effects) and E5c-1h (the slot prefix, scheduler and round restore) and E5c-1i (the object input) and E5c-1j (A28, the input chain) done: every E5c row is in the profile; E5d-1a (the AI's target roles) and E5d-1b (its fight roles) done: every object-ID literal of the generic AI is in the profile; E5d-2, the special-move hook, next.
+**Status:** E0–E3, E4a, E4b (all six hosts), E4c-1 (the engine's self-contained tests), E5a (the game profile's survey and design) and E5b (the record type, the copied tables out), E4c-1a (a nondeterministic engine test corrected) E5c-0 (the profile's plumbing, reflection), E5c-1a (one storage, the reflectors), E5c-1b (armour), E5c-1c (special interactions) and E5c-1d (impact) done; E5c-2a, E5c-2b and E5c-2c (the items family: the random and requested spawns, camera, links, the mission stage) E5c-2d (the roster family), E5c-2e (the modes family), E5c-2f (the match prelude) and E5c-2g (the mode label) done: E5c-2's menu and mode rows are in the profile; E5c-1e (physics), E5c-1f (drawing) and E5c-1g (the post-draw effects) and E5c-1h (the slot prefix, scheduler and round restore) and E5c-1i (the object input) and E5c-1j (A28, the input chain) done: every E5c row is in the profile; E5d-1a (the AI's target roles) and E5d-1b (its fight roles) done: every object-ID literal of the generic AI is in the profile; E5d-2 (the special-move hook) done; E5d-3, the routines into the game, next.
 **Branch:** `exp/engine-split`, from `main` 380b448d. Worktree
 `/Volumes/NTSD-Builds/tasks/engine-split/worktree` (T7-backed APFS, see
 [BUILD_STORAGE_T7](BUILD_STORAGE_T7.md)). It tracks `origin/exp/engine-split`
@@ -158,7 +158,7 @@ A read-only survey of `native/` (three agents, 2026-10-18):
 | E2 | Content policy out of Core: the digest, count and EXE-SHA pins become the NTSD content identity the game passes; Core checks what it is given with the same checks and errors (2.8.3.3's content origin as the model, read only) | **done** ([evidence](../evidence/es-e2-content-identity.json)) |
 | E3 | Identity and Practice: user-data folder, wasm module, Android prefix/entry, queue/thread names, titles and messages become game configuration; Practice/Lab and its two checks move to the game side | **done**: E3a ([evidence](../evidence/es-e3a-practice.json)), E3b ([evidence](../evidence/es-e3b-game-identity.json)); diagnostic labels wait for D2 |
 | E4 | Two packages: `engine/Package.swift` (Core, Runtime, codecs, decoders, shims, host libraries, self-contained tests) and `native/Package.swift` depending on it by path; the unsafeFlags plan (SwiftPM rejects them in version-pinned dependencies) | E4a **done** ([evidence](../evidence/es-e4a-engine-package.json)); E4b: headless **done** ([evidence](../evidence/es-e4b1-headless-host.json)), browser **done** ([evidence](../evidence/es-e4b2-web-host.json)), SDL **done** ([evidence](../evidence/es-e4b3-sdl-host.json)), AppKit **done** ([evidence](../evidence/es-e4b4-appkit-host.json)), UIKit **done** ([evidence](../evidence/es-e4b5-uikit-host.json)), Android **done** ([evidence](../evidence/es-e4b6-android-host.json)); E4c-1 **done** ([evidence](../evidence/es-e4c1-engine-tests.json)), E4c-1a **done** ([evidence](../evidence/es-e4c1a-sorted-keys.json)); E4c-2 (split the 11 mixed test files, the War trio) queued |
-| E5 | Game profile: the ID sites (100 rows, about 125 branch points; first estimated ~90) and the AI dispatch behind a profile the game supplies; the engine defines the `0x44d000` record's layout and the game supplies `initial.bin`; the NTSD profile bit-exact (all gates plus the full fixture-driven suites); the API's fit with 2.8.3.3 checked read only | E5a **done** (survey and design, [evidence](../evidence/es-e5a-design.json)); E5b **done** ([evidence](../evidence/es-e5b-record-type.json)); E5c-0 **done** ([evidence](../evidence/es-e5c0-profile-plumbing.json)); E5c-1a **done** ([evidence](../evidence/es-e5c1a-reflector-roles.json)); E5c-1b **done** ([evidence](../evidence/es-e5c1b-armour-roles.json)); E5c-1c **done** ([evidence](../evidence/es-e5c1c-interaction-roles.json)); E5c-1d **done** ([evidence](../evidence/es-e5c1d-impact-roles.json)); E5c-2a **done** ([evidence](../evidence/es-e5c2a-items-roles.json)); E5c-2b **done** ([evidence](../evidence/es-e5c2b-camera-links-roles.json)); E5c-2c **done** ([evidence](../evidence/es-e5c2c-requested-mission-roles.json)); E5c-2d **done** ([evidence](../evidence/es-e5c2d-roster-roles.json)); E5c-2e **done** ([evidence](../evidence/es-e5c2e-modes-roles.json)); E5c-2f **done** ([evidence](../evidence/es-e5c2f-prelude-roles.json)); E5c-2g **done** ([evidence](../evidence/es-e5c2g-mode-label-roles.json)); E5c-1e **done** ([evidence](../evidence/es-e5c1e-physics-roles.json)); E5c-1f **done** ([evidence](../evidence/es-e5c1f-drawing-roles.json)); E5c-1g **done** ([evidence](../evidence/es-e5c1g-effects-roles.json)); E5c-1h **done** ([evidence](../evidence/es-e5c1h-lifecycle-roles.json)); E5c-1i **done** ([evidence](../evidence/es-e5c1i-object-input-roles.json)); E5c-1j **done** ([evidence](../evidence/es-e5c1j-input-roles.json)); E5d: [survey](../evidence/es-e5d-plumbing.md), E5d-1a **done** ([evidence](../evidence/es-e5d1a-ai-target-roles.json)), E5d-1b **done** ([evidence](../evidence/es-e5d1b-ai-fight-roles.json)), E5d-2 next |
+| E5 | Game profile: the ID sites (100 rows, about 125 branch points; first estimated ~90) and the AI dispatch behind a profile the game supplies; the engine defines the `0x44d000` record's layout and the game supplies `initial.bin`; the NTSD profile bit-exact (all gates plus the full fixture-driven suites); the API's fit with 2.8.3.3 checked read only | E5a **done** (survey and design, [evidence](../evidence/es-e5a-design.json)); E5b **done** ([evidence](../evidence/es-e5b-record-type.json)); E5c-0 **done** ([evidence](../evidence/es-e5c0-profile-plumbing.json)); E5c-1a **done** ([evidence](../evidence/es-e5c1a-reflector-roles.json)); E5c-1b **done** ([evidence](../evidence/es-e5c1b-armour-roles.json)); E5c-1c **done** ([evidence](../evidence/es-e5c1c-interaction-roles.json)); E5c-1d **done** ([evidence](../evidence/es-e5c1d-impact-roles.json)); E5c-2a **done** ([evidence](../evidence/es-e5c2a-items-roles.json)); E5c-2b **done** ([evidence](../evidence/es-e5c2b-camera-links-roles.json)); E5c-2c **done** ([evidence](../evidence/es-e5c2c-requested-mission-roles.json)); E5c-2d **done** ([evidence](../evidence/es-e5c2d-roster-roles.json)); E5c-2e **done** ([evidence](../evidence/es-e5c2e-modes-roles.json)); E5c-2f **done** ([evidence](../evidence/es-e5c2f-prelude-roles.json)); E5c-2g **done** ([evidence](../evidence/es-e5c2g-mode-label-roles.json)); E5c-1e **done** ([evidence](../evidence/es-e5c1e-physics-roles.json)); E5c-1f **done** ([evidence](../evidence/es-e5c1f-drawing-roles.json)); E5c-1g **done** ([evidence](../evidence/es-e5c1g-effects-roles.json)); E5c-1h **done** ([evidence](../evidence/es-e5c1h-lifecycle-roles.json)); E5c-1i **done** ([evidence](../evidence/es-e5c1i-object-input-roles.json)); E5c-1j **done** ([evidence](../evidence/es-e5c1j-input-roles.json)); E5d: [survey](../evidence/es-e5d-plumbing.md), E5d-1a **done** ([evidence](../evidence/es-e5d1a-ai-target-roles.json)), E5d-1b **done** ([evidence](../evidence/es-e5d1b-ai-fight-roles.json)), E5d-2 **done** ([evidence](../evidence/es-e5d2-ai-special-hook.json)), E5d-3 next |
 | E6 | Classify each profile rule as LF2 2.0a or NTSD from the second reference; LF2 rules become the engine's default profile | needs D1 |
 | E7 | Engine stand-alone: the engine package builds alone (macOS, Linux container) and passes its tests with a from-scratch synthetic content pack; a scan finds no original bytes (files under `downloads/`, the resources, fixtures, `initial.bin`) | queued |
 | E8 | Publication: name, licence, a new repository with fresh history, a tag; this repository depends on it by revision; README credits | needs D2 and the user |
@@ -1135,6 +1135,49 @@ routines of `OriginalCharacterAISpecial.swift`.
   Object: the same Objects and property. `swift_beginAccess` measured before
   the gate: 3,278.
 
+### E5d-2 note (2026-10-20, reviewed with its change; done)
+
+- **The hook.** `OriginalCharacterAISpecial: Sendable`, one requirement
+  `special(own:_:s:t:slot:_:) throws -> Bool` on the pass in place (`inout
+  OriginalCharacterAIPass`) with its `Locals`. `special` (0x403a40) keeps the
+  entry roll (stream 0x3c, range 0x44f618 + 1) and the own-ID read, then calls
+  `rules.characterAISpecial`; its result ends `fight` or goes on as before.
+  The rules reach it as a parameter from `fight` (E5d-1b's chain).
+- **Carrier.** `OriginalGameRules`' storage holds the conformer beside the
+  families (an init parameter, `characterAISpecial`, apart from the
+  `Equatable` families); `==` compares the conformer's type
+  (`ObjectIdentifier` of its metatype), so conformers are stateless. This
+  revises E5c-0's "code hooks travel separately" (the type's doc follows).
+- **Routines.** Still in the engine: the switch (A92) moved verbatim into a
+  temporary public conformer `OriginalCharacterAIBuiltInSpecial` (calling
+  `ai.<routine>`), which NTSD's profile passes until E5d-3 moves the routines
+  and the conformer into the game. `engineTests` gets an always-false
+  `NoSpecialMoves` in the engine's tests (no runtime default).
+- **Public surface added.** The protocol, `OriginalCharacterAIPass` and its
+  `Locals` as public types (members internal: E5d-3 decides which become
+  public), the temporary conformer, `characterAISpecial` (accessor and init
+  parameter; the `with` test helper takes it too). `Key`, which the E5d note
+  and the survey listed for this step, stays internal: the hook does not name
+  it; E5d-3 makes it public with the primitives the routines call.
+- **Cost.** `&self` from the mutating `special` is a statically checked
+  access; `rules` is a parameter and the conformer a `let` in the storage, so
+  no `swift_beginAccess` is added (measured before the gate: 3,278). Per call
+  past the roll: one witness call and the existential's copy, no retain for an
+  empty-struct conformer.
+- **Tests.** `NTSDProfileCharacterAITests.testSpecialMoveHookE5d2`: with test
+  conformers that store the own ID and end or go on: no call when the entry
+  roll is above 0, the own ID passed when it is 0, `fight` ending right after
+  the roll on true and going on on false, NTSD's conformer the built-in one,
+  rules unequal across conformer types and equal for the same type, and a
+  going-on `fight` drawing exactly as under NTSD's own conformer. The routines
+  themselves stay covered by `OriginalCharacterAITests`' corpora.
+- **Review.** No code defect (the switch byte-identical after stripping `ai.`;
+  the roll and ID read before the call; errors and partial writes as before;
+  no dynamic exclusivity; every construction and caller covered; the
+  signature covers all 20 routines). Required: the note on `Key`. Adopted:
+  the cost line, the protocol doc on value-type conformers, per-component
+  assertions, the going-on comparison with NTSD's own, the rewrapped doc.
+
 ## Ledger
 
 - 2026-10-18: plan agreed; branch `exp/engine-split` and its worktree created
@@ -1521,20 +1564,32 @@ routines of `OriginalCharacterAISpecial.swift`.
   runs, the engine's 110 tests, 3,278/3,406; 20 suites with 86 tests;
   WASI vs identical; phone and Mac overlapping.
   [Evidence](../evidence/es-e5d1b-ai-fight-roles.json).
+- 2026-10-20 E5d-2: the AI's special moves behind `OriginalCharacterAISpecial`,
+  carried in the rules (compared by type); the switch in a temporary engine
+  conformer NTSD's profile passes. Reviewed (no code defect; `Key`'s deferral
+  noted). `swift_beginAccess` measured first (3,278). Gate `es-e5d2`: 11
+  scenarios, frames, AppKit, unchecked, emulator, 20 clean launches, 29 suite
+  runs, the engine's 110 tests, 3,278/3,406; 20 suites with 87 tests (the
+  AI's corpora through the hook); WASI vs identical; Mac overlapping; phone
+  3v2 load apart, the 4v4 follow-up overlapping in main, render, process and
+  peak, load apart the other way (noise).
+  [Evidence](../evidence/es-e5d2-ai-special-hook.json).
 
 ## Next task
 
-E5d-2 (the E5d note above; survey [report](../evidence/es-e5d-plumbing.md) §3,
-§4): the special-move hook with the routines still in the engine. A public
-protocol `OriginalCharacterAISpecial: Sendable` with `special(own:_:s:t:slot:_:)
-throws -> Bool` (`inout OriginalCharacterAIPass`, its `Locals`), carried in
-`OriginalGameRules`' storage (an init parameter apart from the `Equatable`
-families; `==` compares the conformer's type); `special` keeps the entry roll
-(0x3c) and the own-ID read, then calls `rules.characterAISpecial` (rules as a
-parameter from `fight`). `OriginalCharacterAIPass` and `Locals` become public
-types (members internal). A temporary public engine conformer holds today's
-switch (A92) until E5d-3 moves the routines; NTSD's profile passes it;
-`engineTests` gets an always-false conformer in the engine's tests (no runtime
-default). Tests: the order (no hook call when the roll is above 0; the hook
-sees the own ID), true ending `fight` and false going on, unequal rules for
-different conformer types. Gates as E5d-1b, the phone and Mac A/Bs above all.
+E5d-3 (the E5d note above; survey [report](../evidence/es-e5d-plumbing.md) §2,
+§4): the 20 routines into the game. `git mv`
+`engine/Sources/NTSDCore/OriginalCharacterAISpecial.swift` to
+`native/Sources/NTSDProfile/` (with `import NTSDCore`); its conformer becomes
+the game's (`NTSDCharacterAISpecial`), NTSD's profile passes it and the
+engine's temporary one goes. `frameField` stays in the engine as a public
+primitive. Public in the engine: `Key` and its cases, the four `Locals`
+fields the routines read (`nearest38`, `ball30`, `aligned34`, `tState`), and
+the primitives `i`, `draw`, `g`, `press`, `release`, `byte`, `facing`,
+`ftol`, `index`, `type`, `active`, `state`, `id` and `abs` (the pass's own
+`abs` must stay the one the routines resolve: a test drives `dx` at
+`Int32.min`). Decide `public` against `@_spi` and whether `NTSDProfile` needs
+the cross-module flag (inference: the engine's own flag is what lets the
+primitives inline); check with `nm` that the release `NTSDProfile` object
+calls no unspecialised generic read. Gates as E5d-2, the phone and Mac A/Bs
+above all, with rule 5's follow-up.

@@ -51,5 +51,7 @@ public enum NTSDProfile {
                                            OriginalIDFrames(32, frames: 240...245)],
                            drinks: OriginalIDSet([122, 123]), rangedBand: OriginalIDSet([4, 5, 31]), rangedJoiner: 36,
                            meleeWeapons: OriginalIDSet([100, 101, 120, 121, 124]), rollingWeapon: 124, thrownWeapons: OriginalIDSet([150, 151]),
-                           dashCounters: OriginalIDSet([2, 4, 6, 9, 10, 11, 8, 7, 33, 34]), dashJumper: 34, shortDasher: 1))
+                           dashCounters: OriginalIDSet([2, 4, 6, 9, 10, 11, 8, 7, 33, 34]), dashJumper: 34, shortDasher: 1),
+        // The AI's special moves: still the engine's routines until E5d-3.
+        characterAISpecial: OriginalCharacterAIBuiltInSpecial())
 }

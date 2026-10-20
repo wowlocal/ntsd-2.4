@@ -40,8 +40,9 @@ public struct OriginalIDFrames: Equatable, Sendable {
 
 /// A game's rules (ENGINE_SPLIT E5): the values the engine's passes test where
 /// the original tests object IDs, grouped by family. The game supplies them with
-/// its content identity; code hooks travel separately. Every role lives in one
-/// immutable storage, so a pass's copy of the rules is one reference (E5c-1a).
+/// its content identity; the AI's special moves travel with them as a code hook
+/// (E5d-2). Every role lives in one immutable storage, so a pass's copy of the
+/// rules is one reference (E5c-1a).
 public struct OriginalGameRules: Equatable, Sendable {
     /// Reflection (OriginalHitDamage, OriginalWorldContacts).
     public struct Reflection: Equatable, Sendable {
@@ -404,11 +405,13 @@ public struct OriginalGameRules: Equatable, Sendable {
     private final class Roles: Sendable {
         let profile: String, reflection: Reflection, armour: Armour, interaction: Interaction, impact: Impact, items: Items, roster: Roster
         let modes: Modes, physics: Physics, drawing: Drawing, effects: Effects, lifecycle: Lifecycle, characterAI: CharacterAI
+        let characterAISpecial: any OriginalCharacterAISpecial
         init(profile: String, reflection: Reflection, armour: Armour, interaction: Interaction, impact: Impact, items: Items, roster: Roster,
-             modes: Modes, physics: Physics, drawing: Drawing, effects: Effects, lifecycle: Lifecycle, characterAI: CharacterAI) {
+             modes: Modes, physics: Physics, drawing: Drawing, effects: Effects, lifecycle: Lifecycle, characterAI: CharacterAI,
+             characterAISpecial: any OriginalCharacterAISpecial) {
             self.profile = profile; self.reflection = reflection; self.armour = armour; self.interaction = interaction; self.impact = impact
             self.items = items; self.roster = roster; self.modes = modes; self.physics = physics; self.drawing = drawing; self.effects = effects
-            self.lifecycle = lifecycle; self.characterAI = characterAI
+            self.lifecycle = lifecycle; self.characterAI = characterAI; self.characterAISpecial = characterAISpecial
         }
     }
     private let roles: Roles
@@ -426,6 +429,8 @@ public struct OriginalGameRules: Equatable, Sendable {
     public var effects: Effects { roles.effects }
     public var lifecycle: Lifecycle { roles.lifecycle }
     public var characterAI: CharacterAI { roles.characterAI }
+    /// The game's special moves: a code hook, compared by its type.
+    public var characterAISpecial: any OriginalCharacterAISpecial { roles.characterAISpecial }
     public var reflectable: OriginalIDSet { roles.reflection.reflectable }
     public var reflector: Int32 { roles.reflection.reflector }
     public var rebinder: Int32 { roles.reflection.rebinder }
@@ -507,16 +512,17 @@ public struct OriginalGameRules: Equatable, Sendable {
     public var shortDasher: Int32 { roles.characterAI.shortDasher }
     public init(profile: String, reflection: Reflection, armour: Armour, interaction: Interaction, impact: Impact, items: Items,
                 roster: Roster, modes: Modes, physics: Physics, drawing: Drawing, effects: Effects, lifecycle: Lifecycle,
-                characterAI: CharacterAI) {
+                characterAI: CharacterAI, characterAISpecial: any OriginalCharacterAISpecial) {
         roles = Roles(profile: profile, reflection: reflection, armour: armour, interaction: interaction, impact: impact, items: items,
                       roster: roster, modes: modes, physics: physics, drawing: drawing, effects: effects, lifecycle: lifecycle,
-                      characterAI: characterAI)
+                      characterAI: characterAI, characterAISpecial: characterAISpecial)
     }
     public static func == (a: Self, b: Self) -> Bool {
         a.roles === b.roles || (a.profile == b.profile && a.reflection == b.reflection && a.armour == b.armour && a.interaction == b.interaction
                                 && a.impact == b.impact && a.items == b.items && a.roster == b.roster
                                 && a.modes == b.modes && a.physics == b.physics
                                 && a.drawing == b.drawing && a.effects == b.effects && a.lifecycle == b.lifecycle
-                                && a.characterAI == b.characterAI)
+                                && a.characterAI == b.characterAI
+                                && ObjectIdentifier(type(of: a.characterAISpecial)) == ObjectIdentifier(type(of: b.characterAISpecial)))
     }
 }

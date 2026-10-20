@@ -1,3 +1,35 @@
+/// NTSD's special moves (ENGINE_SPLIT E5d-2): 403a40's blocks by the AI's own
+/// Object id behind the game's hook. They stay in the engine until E5d-3 moves
+/// them into the game, which then supplies its own conformer.
+public struct OriginalCharacterAIBuiltInSpecial: OriginalCharacterAISpecial {
+    public init() {}
+    public func special(own: Int32,_ ai: inout OriginalCharacterAIPass,s: Int,t: Int,slot: Int,_ l: OriginalCharacterAIPass.Locals) throws -> Bool {
+        switch own {
+        case 1: return try ai.sakura1(s,t,l)
+        case 2: return try ai.naruto2(s,t,slot: slot,l)
+        case 4: return try ai.sai4(s,t)
+        case 5: return try ai.shino5(s,t)
+        case 6: return try ai.hsasori6(s,t)
+        case 7: return try ai.lee7(s,t,l)
+        case 8: return try ai.chiyo8(s,t,l)
+        case 9: return try ai.itachi9(s,t,l)
+        case 10: return try ai.deidara10(s,t,slot: slot,l)
+        case 11: return try ai.sasuke11(s,t,l)
+        case 32: return try ai.hunter32(s,t,l)
+        case 33: return try ai.clone33(s,t,l)
+        case 34: return try ai.kidomaru34(s,slot: slot,l)
+        case 35: return try ai.sakon35(s,t)
+        case 36: return try ai.tayuya36(s,t)
+        case 38: return try ai.sasukeCS38(s,t)
+        case 39: return try ai.sand39(s,t)
+        case 50: return try ai.pein50(s,t)
+        case 51: return try ai.sasori51(s,t)
+        case 52: return try ai.kyubi52(s,t,l)
+        default: return false
+        }
+    }
+}
+
 /// 403a40 blocks by the AI's own Object id. A block returns true after it
 /// sets a command byte (+0xd4..0xdc = 3) or presses buttons and ends the AI
 /// call; false continues the chain, which no later block matches.
