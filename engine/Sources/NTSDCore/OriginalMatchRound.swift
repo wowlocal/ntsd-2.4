@@ -156,6 +156,7 @@ extension OriginalMatchPreparation {
     /// Whole41ddf2..41e0e1, with live seat/Actor accesses. A later seat can see
     /// an Actor activated or reconstructed earlier in this same400-seat loop.
     private mutating func restoreRoundActors(observe: (OriginalMatchRoundEvent) throws -> Void) throws {
+        let rules = catalog.rules
         guard let registry = catalog.registry.records[0x4d82380] else { throw Self.error("Round catalog count") }
         let count = try registry.integer(at: 0,as: Int32.self)
         guard count >= 0 && count <= catalog.objects.count else { throw Self.error("Round catalog extent") }
@@ -172,8 +173,8 @@ extension OriginalMatchPreparation {
                 }
                 continue
             }
-            if try sourceID(roundObject(actor)) == 50 && global(0x458428) == 0 {
-                if let ordinal = try firstObject(6) { try actors[actor].write(UInt32(ordinal),at: 0x368) }
+            if try sourceID(roundObject(actor)) == rules.roundRevertFrom && global(0x458428) == 0 {
+                if let ordinal = try firstObject(rules.roundRevertTo) { try actors[actor].write(UInt32(ordinal),at: 0x368) }
                 continue
             }
             guard try actors[actor].integer(at: 0x328,as: Int32.self) > -1 else { continue }

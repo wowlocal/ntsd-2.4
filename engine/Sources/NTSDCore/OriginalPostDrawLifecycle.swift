@@ -334,7 +334,7 @@ public enum OriginalPostDrawLifecycle {
                 let headers = header, frames = frame, current = slot
                 let active = try OriginalPostDrawSlotPrefix.apply(world: &world, actors: &actors, globals: &globals, slot: current,
                     retainedObjectIndex: &scratch.particleObject, requestSlot: &scratch.requestSlot, objectCount: objectCount, library: &library,
-                    header: headers, frame: frames, observe: converted, inPlace: true)
+                    header: headers, frame: frames, rules: rules, observe: converted, inPlace: true)
                 if !active { return }
             }
             let continuation = try OriginalPostDrawOpoint.apply(world: &world, actors: &actors, slot: slot,

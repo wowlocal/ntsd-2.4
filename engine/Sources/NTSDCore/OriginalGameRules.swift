@@ -269,13 +269,41 @@ public struct OriginalGameRules: Equatable, Sendable {
             self.commandEffect = commandEffect; self.deathParticles = deathParticles; self.fireParticles = fireParticles
         }
     }
+    /// Lifecycle: the slot prefix's Objects (OriginalPostDrawSlotPrefix), the
+    /// characters the scheduler gives no invulnerability on rising
+    /// (OriginalActorScheduler) and the
+    /// round restore's reverted form (OriginalMatchRound).
+    public struct Lifecycle: Equatable, Sendable {
+        /// Characters whose MP regenerates from half their HP.
+        public let halfHPRegen: OriginalIDSet
+        /// The Object a character (type 0) in state 9995 becomes, at frame 0.
+        public let state9995Object: Int32
+        /// The pieces a character in state 9996 sheds (+0x88 = 1): `pieces` for the
+        /// first four, `lastPiece` for the fifth; a missing one keeps the retained
+        /// index.
+        public let pieces: Int32, lastPiece: Int32
+        /// Special characters (team 5, or +0x344 not 0) that, in modes 1 and 4, get
+        /// no invulnerability countdown (+8 = 15) when they leave a frame in state 14
+        /// for one not in state 13 (difficulty 2, 0x450c30, skips it for every
+        /// special character first).
+        public let noRiseInvulnerability: OriginalIDSet
+        /// A character with Object `roundRevertFrom` reverts at a round restore to
+        /// the first Object `roundRevertTo` (when 0x458428 is 0).
+        public let roundRevertFrom: Int32, roundRevertTo: Int32
+        public init(halfHPRegen: OriginalIDSet, state9995Object: Int32, pieces: Int32, lastPiece: Int32, noRiseInvulnerability: OriginalIDSet,
+                    roundRevertFrom: Int32, roundRevertTo: Int32) {
+            self.halfHPRegen = halfHPRegen; self.state9995Object = state9995Object; self.pieces = pieces; self.lastPiece = lastPiece
+            self.noRiseInvulnerability = noRiseInvulnerability; self.roundRevertFrom = roundRevertFrom; self.roundRevertTo = roundRevertTo
+        }
+    }
     private final class Roles: Sendable {
         let profile: String, reflection: Reflection, armour: Armour, interaction: Interaction, impact: Impact, items: Items, roster: Roster
-        let modes: Modes, physics: Physics, drawing: Drawing, effects: Effects
+        let modes: Modes, physics: Physics, drawing: Drawing, effects: Effects, lifecycle: Lifecycle
         init(profile: String, reflection: Reflection, armour: Armour, interaction: Interaction, impact: Impact, items: Items, roster: Roster,
-             modes: Modes, physics: Physics, drawing: Drawing, effects: Effects) {
+             modes: Modes, physics: Physics, drawing: Drawing, effects: Effects, lifecycle: Lifecycle) {
             self.profile = profile; self.reflection = reflection; self.armour = armour; self.interaction = interaction; self.impact = impact
             self.items = items; self.roster = roster; self.modes = modes; self.physics = physics; self.drawing = drawing; self.effects = effects
+            self.lifecycle = lifecycle
         }
     }
     private let roles: Roles
@@ -291,6 +319,7 @@ public struct OriginalGameRules: Equatable, Sendable {
     public var physics: Physics { roles.physics }
     public var drawing: Drawing { roles.drawing }
     public var effects: Effects { roles.effects }
+    public var lifecycle: Lifecycle { roles.lifecycle }
     public var reflectable: OriginalIDSet { roles.reflection.reflectable }
     public var reflector: Int32 { roles.reflection.reflector }
     public var rebinder: Int32 { roles.reflection.rebinder }
@@ -341,15 +370,22 @@ public struct OriginalGameRules: Equatable, Sendable {
     public var commandEffect: Int32 { roles.effects.commandEffect }
     public var deathParticles: Int32 { roles.effects.deathParticles }
     public var fireParticles: Int32 { roles.effects.fireParticles }
+    public var halfHPRegen: OriginalIDSet { roles.lifecycle.halfHPRegen }
+    public var state9995Object: Int32 { roles.lifecycle.state9995Object }
+    public var pieces: Int32 { roles.lifecycle.pieces }
+    public var lastPiece: Int32 { roles.lifecycle.lastPiece }
+    public var noRiseInvulnerability: OriginalIDSet { roles.lifecycle.noRiseInvulnerability }
+    public var roundRevertFrom: Int32 { roles.lifecycle.roundRevertFrom }
+    public var roundRevertTo: Int32 { roles.lifecycle.roundRevertTo }
     public init(profile: String, reflection: Reflection, armour: Armour, interaction: Interaction, impact: Impact, items: Items,
-                roster: Roster, modes: Modes, physics: Physics, drawing: Drawing, effects: Effects) {
+                roster: Roster, modes: Modes, physics: Physics, drawing: Drawing, effects: Effects, lifecycle: Lifecycle) {
         roles = Roles(profile: profile, reflection: reflection, armour: armour, interaction: interaction, impact: impact, items: items,
-                      roster: roster, modes: modes, physics: physics, drawing: drawing, effects: effects)
+                      roster: roster, modes: modes, physics: physics, drawing: drawing, effects: effects, lifecycle: lifecycle)
     }
     public static func == (a: Self, b: Self) -> Bool {
         a.roles === b.roles || (a.profile == b.profile && a.reflection == b.reflection && a.armour == b.armour && a.interaction == b.interaction
                                 && a.impact == b.impact && a.items == b.items && a.roster == b.roster
                                 && a.modes == b.modes && a.physics == b.physics
-                                && a.drawing == b.drawing && a.effects == b.effects)
+                                && a.drawing == b.drawing && a.effects == b.effects && a.lifecycle == b.lifecycle)
     }
 }

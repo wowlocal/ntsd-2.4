@@ -5,6 +5,7 @@ import CryptoKit
 import XCTest
 @testable import NTSDCore
 @testable import NTSDReferenceChecks
+import NTSDProfile
 
 final class OriginalActorSchedulerTests: XCTestCase {
     private struct Patch: Decodable {
@@ -86,7 +87,7 @@ final class OriginalActorSchedulerTests: XCTestCase {
                     mode: item.mode ?? 0, slot: item.slot ?? 0, frame: { number in
                         guard (0..<400).contains(number) else { throw OriginalStateError.invalidStorage("Probe frame outside Object") }
                         return frames[number] ?? frameBase
-                    }, observe: { event in
+                    }, rules: NTSDProfile.rules, observe: { event in
                         switch event {
                         case let .catalogSound(x, index):
                             events.append(.init(kind: "catalogSound", arguments: [x, index].map(UInt32.init(bitPattern:))))
@@ -120,7 +121,7 @@ final class OriginalActorSchedulerTests: XCTestCase {
             let header = try zero(0x7a4)
             try OriginalActorScheduler.apply(actor: &actor, header: header, globals: &globals, mode: 0, slot: 60, frame: { number in
                 number >= 401 ? OriginalCPointPass.beyondAllocation : try zero(0x178)
-            }, observe: { _ in sounds += 1 })
+            }, rules: NTSDProfile.rules, observe: { _ in sounds += 1 })
             return (actor,sounds)
         }
         let (ground,groundSounds) = try run(y: 0)
@@ -142,7 +143,7 @@ final class OriginalActorSchedulerTests: XCTestCase {
             try next.write(Int32(3005), at: 8);try next.write(Int32(1), at: 0xc);try next.write(Int32(213), at: 0x10)
             try OriginalActorScheduler.apply(actor: &actor, header: header, globals: &globals, mode: 0, slot: 60, frame: { number in
                 number == 211 ? current : number == 212 ? next : try zero(0x178)
-            })
+            }, rules: NTSDProfile.rules)
             return actor
         }
         // The loader's header for a DAT without jump fields: only id/type written.
@@ -174,7 +175,7 @@ final class OriginalActorSchedulerTests: XCTestCase {
             mode: 0, slot: 0, frame: { number in
                 guard number == 0 else { throw OriginalStateError.invalidStorage("Unavailable next/previous frame") }
                 return first
-            }, observe: { _ in sounds += 1 }))
+            }, rules: NTSDProfile.rules, observe: { _ in sounds += 1 }))
         XCTAssertEqual(sounds, 1)
         XCTAssertEqual(actor, beforeActor)
         XCTAssertEqual(globals, beforeGlobals)
@@ -197,7 +198,7 @@ final class OriginalActorSchedulerTests: XCTestCase {
         let beforeActor = actor, beforeGlobals = globals
         var sounds: [OriginalActorScheduleEvent] = []
         XCTAssertThrowsError(try OriginalActorScheduler.apply(actor: &actor, object: object, globals: &globals,
-            mode: 0, slot: 0, observe: { event in
+            mode: 0, slot: 0, rules: NTSDProfile.rules, observe: { event in
                 sounds.append(event)
                 if sounds.count == 2 { throw OriginalStateError.invalidStorage("Late observer failure") }
             }))

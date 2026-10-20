@@ -2,6 +2,7 @@ import Foundation
 import XCTest
 @testable import NTSDCore
 @testable import NTSDReferenceChecks
+import NTSDProfile
 
 final class OriginalPostDrawSlotPrefixTests: XCTestCase {
     private struct Patch: Decodable {
@@ -105,7 +106,7 @@ final class OriginalPostDrawSlotPrefixTests: XCTestCase {
             do {
                 let scheduled = try OriginalPostDrawSlotPrefix.apply(world: &world, actors: &actors, globals: &globals,
                     slot: item.slot, retainedObjectIndex: &retained, requestSlot: &requestSlot, objectCount: item.count ?? 4, library: &library,
-                    header: { ownHeaders[$0] }, frame: { ownFrames[$0][Int($1)] }, observe: { event in
+                    header: { ownHeaders[$0] }, frame: { ownFrames[$0][Int($1)] }, rules: NTSDProfile.rules, observe: { event in
                         switch event {
                         case let .random(slot, stream, range, result):
                             events.append(.init(slot: slot, kind: "random", arguments: [stream, range, result].map(UInt32.init(bitPattern:))))
@@ -138,7 +139,7 @@ final class OriginalPostDrawSlotPrefixTests: XCTestCase {
                 var (w, a, g, r) = start, q: OriginalRequestSlotWord?, l: OriginalLibTransformBacking?
                 XCTAssertThrowsError(try OriginalPostDrawSlotPrefix.apply(world: &w, actors: &a, globals: &g, slot: item.slot,
                     retainedObjectIndex: &r, requestSlot: &q, objectCount: item.count ?? 4, library: &l,
-                    header: { ownHeaders[$0] }, frame: { ownFrames[$0][Int($1)] }, observe: { event in
+                    header: { ownHeaders[$0] }, frame: { ownFrames[$0][Int($1)] }, rules: NTSDProfile.rules, observe: { event in
                         if case .catalogSound = event { throw OriginalStateError.invalidStorage("Scheduler sound") }
                     }), item.label)
                 XCTAssertEqual(w, start.0, item.label); XCTAssertEqual(a, start.1, item.label); XCTAssertEqual(g, start.2, item.label)
@@ -167,7 +168,7 @@ final class OriginalPostDrawSlotPrefixTests: XCTestCase {
         let beforeWorld = world, beforeActors = actors, beforeGlobals = globals
         var retained: Int32? = 3, seen: [OriginalPostDrawSlotEvent] = []
         XCTAssertThrowsError(try OriginalPostDrawSlotPrefix.apply(world: &world, actors: &actors, globals: &globals,
-            slot: 0, retainedObjectIndex: &retained, objectCount: 1, header: { _ in header }, frame: { _, _ in frame }, observe: { event in
+            slot: 0, retainedObjectIndex: &retained, objectCount: 1, header: { _ in header }, frame: { _, _ in frame }, rules: NTSDProfile.rules, observe: { event in
                 seen.append(event)
                 if case .random(_, 156, _, _) = event { throw OriginalStateError.invalidStorage("Late particle observer") }
             }))
@@ -181,12 +182,12 @@ final class OriginalPostDrawSlotPrefixTests: XCTestCase {
         var retained: Int32?, seen: [OriginalPostDrawSlotEvent] = []
         let beforeWorld = world, beforeActors = actors, beforeGlobals = globals
         XCTAssertThrowsError(try OriginalPostDrawSlotPrefix.apply(world: &world, actors: &actors, globals: &globals,
-            slot: 0, retainedObjectIndex: &retained, objectCount: 0, header: { _ in header }, frame: { _, _ in frame }, observe: { seen.append($0) }))
+            slot: 0, retainedObjectIndex: &retained, objectCount: 0, header: { _ in header }, frame: { _, _ in frame }, rules: NTSDProfile.rules, observe: { seen.append($0) }))
         XCTAssertEqual(world, beforeWorld); XCTAssertEqual(actors, beforeActors); XCTAssertEqual(globals, beforeGlobals)
         XCTAssertNil(retained); XCTAssertTrue(seen.isEmpty)
         for i in 50..<400 { try world.write(UInt8(1), at: 4+i) }
         XCTAssertTrue(try OriginalPostDrawSlotPrefix.apply(world: &world, actors: &actors, globals: &globals,
-            slot: 0, retainedObjectIndex: &retained, objectCount: 0, header: { _ in header }, frame: { _, _ in frame }, observe: { seen.append($0) }))
+            slot: 0, retainedObjectIndex: &retained, objectCount: 0, header: { _ in header }, frame: { _, _ in frame }, rules: NTSDProfile.rules, observe: { seen.append($0) }))
         XCTAssertNil(retained)
         XCTAssertFalse(seen.contains { if case .reconstruct = $0 { return true }; return false })
     }

@@ -2,6 +2,7 @@ import Foundation
 import XCTest
 @testable import NTSDCore
 @testable import NTSDReferenceChecks
+import NTSDProfile
 
 /// Saved normalized source pools and declared allocation bindings. The original
 /// DLL is never executed here; source faults are separate rejection trials.
@@ -168,7 +169,7 @@ final class OriginalLibTransformTests: XCTestCase {
         var events: [Event] = []
         let scheduled = try OriginalPostDrawSlotPrefix.apply(world: &state.world, actors: &state.actors, globals: &state.globals,
             slot: input.slot, retainedObjectIndex: &state.retained, objectCount: input.count ?? 4, library: &state.backing,
-            header: { base.headers[$0] }, frame: { base.frames[$0][Int($1)] }, observe: { event in
+            header: { base.headers[$0] }, frame: { base.frames[$0][Int($1)] }, rules: NTSDProfile.rules, observe: { event in
                 let value: Event
                 switch event {
                 case let .random(slot, stream, range, result):

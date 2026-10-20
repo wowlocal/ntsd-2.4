@@ -137,7 +137,7 @@ final class OriginalRequestSlotWordTests: XCTestCase {
         let header = p.header, frames = p.frames
         try OriginalPostDrawSlotPrefix.apply(world: &p.world, actors: &p.actors, globals: &p.globals, slot: 1,
             retainedObjectIndex: &retained, requestSlot: &word, objectCount: 1, library: &library,
-            header: { _ in header }, frame: { _, number in try Pool.frame(frames, number) }, observe: { event in
+            header: { _ in header }, frame: { _, number in try Pool.frame(frames, number) }, rules: .engineTests, observe: { event in
                 if case let .random(_, stream, _, result) = event { draws[stream] = result }
             })
         XCTAssertEqual(word, .value(try XCTUnwrap(draws[162])))

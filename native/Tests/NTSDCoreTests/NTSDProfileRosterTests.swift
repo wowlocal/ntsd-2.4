@@ -7,35 +7,11 @@ import NTSDProfile
 /// favourites (A78) follow the profile. A small declared catalog (the
 /// OriginalWarSetupNativeTests pattern), every Object type 0.
 final class NTSDProfileRosterTests: XCTestCase {
-    func unknown(_ count: Int) throws -> OriginalStateRecord {
-        try .init(bytes:[UInt8](repeating:0xa5,count:count),defined:[Bool](repeating:false,count:count))
-    }
     enum Stop: Error { case here }
-    func defined(_ count: Int) throws -> OriginalStateRecord {
-        try .init(bytes:[UInt8](repeating:0,count:count),defined:[Bool](repeating:true,count:count))
-    }
     /// A state over these catalog IDs: globals unknown but the eight selected seats
     /// (−1, none), or (`zeroGlobals`) all zero with an RNG table of ones.
     func state(ids: [Int],rules: OriginalGameRules,zeroGlobals: Bool = false) throws -> OriginalMatchPreparation {
-        var parent=try OriginalCatalogRegistry.regionSizes.mapValues { try unknown($0) }
-        let background=try unknown(0x990),stage=try unknown(OriginalStageLoader.stageSize)
-        let backgrounds=[OriginalStateRecord](repeating:background,count:101)
-        parent[0x4d81060]=backgrounds[99];parent[0x4d819f0]=backgrounds[100]
-        let source="<object> "+ids.enumerated().map { "id: \($0.element) type: 0 file: object\($0.offset).txt" }.joined(separator:" ")+" <object_end>"
-        let object="<bmp_begin> name: RosterTrial head: head.bmp small: small.bmp file(0-0): sheet.bmp w: 40 h: 40 row: 1 col: 1 <bmp_end>"
-        let key=Array("SiuHungIsAGoodBearBecauseHeIsVeryGood".utf8)
-        let stages=[UInt8](repeating:0,count:123)+Array("end".utf8).enumerated().map { $0.element &+ key[($0.offset+123)%key.count] }
-        let catalog=try OriginalLoadedCatalog(source:Array(source.utf8),fileName:"data.txt",translation:.raw,rules:rules,
-            parentBacking:parent,backgroundBacking:backgrounds,stageBacking:[OriginalStateRecord](repeating:stage,count:60),
-            fileSource:{ $0=="data\\stage.dat" ? stages : Array(object.utf8) },
-            bitmapSource:{ .init(path:$0,present:true,width:80,height:80) })
-        let bootstrap=try OriginalWorldBootstrap(worldBacking:[UInt8](repeating:0xa5,count:OriginalStateRecord.worldPrefixSize),
-            actorBacking:[[UInt8]](repeating:[UInt8](repeating:0xa5,count:OriginalStateRecord.actorSize),count:400),selector:4)
-        let base=OriginalMatchPreparation.globalBase
-        var g=try zeroGlobals ? defined(OriginalMatchPreparation.globalSize) : unknown(OriginalMatchPreparation.globalSize)
-        if zeroGlobals { for i in 0..<3000 { try g.write(UInt8(1),at:0x44ff90+i-base) } }
-        else { for seat in 0..<8 { try g.write(Int32(-1),at:0x451248+seat*4-base) } }
-        return try .init(catalog:catalog,bootstrap:bootstrap,globals:g)
+        try NTSDProfileCatalog.state(ids: ids,rules: rules,zeroGlobals: zeroGlobals)
     }
     func testRandomCandidatesA74() throws {
         let ids=[1,5,29,30,35,49,50,2,-3]
@@ -98,5 +74,37 @@ final class NTSDProfileRosterTests: XCTestCase {
         XCTAssertNil(r.stream);XCTAssertEqual(r.scores,[1,2],"5 beats 55")
         r=try bracket(ids:ids,rules:favourites([55,5]));XCTAssertEqual(r.stream,0xfb,"both: a flip, the first a member")
         r=try bracket(ids:ids,rules:favourites([]));XCTAssertEqual(r.stream,0xfa,"neither")
+    }
+}
+
+/// A match preparation over a small declared catalog (shared by the roster and
+/// lifecycle tests).
+enum NTSDProfileCatalog {
+    static func unknown(_ count: Int) throws -> OriginalStateRecord {
+        try .init(bytes:[UInt8](repeating:0xa5,count:count),defined:[Bool](repeating:false,count:count))
+    }
+    static func defined(_ count: Int) throws -> OriginalStateRecord {
+        try .init(bytes:[UInt8](repeating:0,count:count),defined:[Bool](repeating:true,count:count))
+    }
+    static func state(ids: [Int],rules: OriginalGameRules,zeroGlobals: Bool = false) throws -> OriginalMatchPreparation {
+        var parent=try OriginalCatalogRegistry.regionSizes.mapValues { try NTSDProfileCatalog.unknown($0) }
+        let background=try NTSDProfileCatalog.unknown(0x990),stage=try NTSDProfileCatalog.unknown(OriginalStageLoader.stageSize)
+        let backgrounds=[OriginalStateRecord](repeating:background,count:101)
+        parent[0x4d81060]=backgrounds[99];parent[0x4d819f0]=backgrounds[100]
+        let source="<object> "+ids.enumerated().map { "id: \($0.element) type: 0 file: object\($0.offset).txt" }.joined(separator:" ")+" <object_end>"
+        let object="<bmp_begin> name: RosterTrial head: head.bmp small: small.bmp file(0-0): sheet.bmp w: 40 h: 40 row: 1 col: 1 <bmp_end>"
+        let key=Array("SiuHungIsAGoodBearBecauseHeIsVeryGood".utf8)
+        let stages=[UInt8](repeating:0,count:123)+Array("end".utf8).enumerated().map { $0.element &+ key[($0.offset+123)%key.count] }
+        let catalog=try OriginalLoadedCatalog(source:Array(source.utf8),fileName:"data.txt",translation:.raw,rules:rules,
+            parentBacking:parent,backgroundBacking:backgrounds,stageBacking:[OriginalStateRecord](repeating:stage,count:60),
+            fileSource:{ $0=="data\\stage.dat" ? stages : Array(object.utf8) },
+            bitmapSource:{ .init(path:$0,present:true,width:80,height:80) })
+        let bootstrap=try OriginalWorldBootstrap(worldBacking:[UInt8](repeating:0xa5,count:OriginalStateRecord.worldPrefixSize),
+            actorBacking:[[UInt8]](repeating:[UInt8](repeating:0xa5,count:OriginalStateRecord.actorSize),count:400),selector:4)
+        let base=OriginalMatchPreparation.globalBase
+        var g=try zeroGlobals ? defined(OriginalMatchPreparation.globalSize) : unknown(OriginalMatchPreparation.globalSize)
+        if zeroGlobals { for i in 0..<3000 { try g.write(UInt8(1),at:0x44ff90+i-base) } }
+        else { for seat in 0..<8 { try g.write(Int32(-1),at:0x451248+seat*4-base) } }
+        return try .init(catalog:catalog,bootstrap:bootstrap,globals:g)
     }
 }

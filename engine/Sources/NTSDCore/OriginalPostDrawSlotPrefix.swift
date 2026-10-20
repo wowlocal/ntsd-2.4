@@ -28,7 +28,7 @@ public enum OriginalPostDrawSlotPrefix {
                     throw error("Frame binding")
                 }
                 return catalog.objects[index].frameStorage[Int(number)]
-            }, observe: observe)
+            }, rules: catalog.rules, observe: observe)
     }
 
     /// Whole installed-library prefix. Backing ownership commits together with
@@ -49,7 +49,7 @@ public enum OriginalPostDrawSlotPrefix {
             }, frame: { index, number in
                 guard catalog.objects.indices.contains(index), catalog.objects[index].frameStorage.indices.contains(Int(number)) else { throw error("Frame binding") }
                 return catalog.objects[index].frameStorage[Int(number)]
-            }, observe: observe)
+            }, rules: catalog.rules, observe: observe)
         backing = library!; return active
     }
 
@@ -58,23 +58,23 @@ public enum OriginalPostDrawSlotPrefix {
     @discardableResult
     static func apply(world: inout OriginalStateRecord, actors: inout [OriginalStateRecord], globals: inout OriginalStateRecord,
                       slot: Int, retainedObjectIndex: inout Int32?, objectCount: Int32,
-                      header: (Int) throws -> OriginalStateRecord, frame: (Int, Int32) throws -> OriginalStateRecord,
+                      header: (Int) throws -> OriginalStateRecord, frame: (Int, Int32) throws -> OriginalStateRecord, rules: OriginalGameRules,
                       observe: (OriginalPostDrawSlotEvent) throws -> Void = { _ in }) throws -> Bool {
         var library: OriginalLibTransformBacking?
         return try apply(world: &world, actors: &actors, globals: &globals, slot: slot,
             retainedObjectIndex: &retainedObjectIndex, objectCount: objectCount, library: &library,
-            header: header, frame: frame, observe: observe)
+            header: header, frame: frame, rules: rules, observe: observe)
     }
 
     @discardableResult
     static func apply(world: inout OriginalStateRecord, actors: inout [OriginalStateRecord], globals: inout OriginalStateRecord,
                       slot: Int, retainedObjectIndex: inout Int32?, objectCount: Int32,
                       library: inout OriginalLibTransformBacking?,
-                      header: (Int) throws -> OriginalStateRecord, frame: (Int, Int32) throws -> OriginalStateRecord,
+                      header: (Int) throws -> OriginalStateRecord, frame: (Int, Int32) throws -> OriginalStateRecord, rules: OriginalGameRules,
                       observe: (OriginalPostDrawSlotEvent) throws -> Void = { _ in }) throws -> Bool {
         var requestSlot: OriginalRequestSlotWord?
         return try apply(world: &world, actors: &actors, globals: &globals, slot: slot, retainedObjectIndex: &retainedObjectIndex,
-            requestSlot: &requestSlot, objectCount: objectCount, library: &library, header: header, frame: frame, observe: observe)
+            requestSlot: &requestSlot, objectCount: objectCount, library: &library, header: header, frame: frame, rules: rules, observe: observe)
     }
 
     /// The same prefix with the body's frame word SP+34 (APPLICATION_REQUESTED_ITEMS_SLOT_PLAN.md).
@@ -82,7 +82,7 @@ public enum OriginalPostDrawSlotPrefix {
     static func apply(world: inout OriginalStateRecord, actors: inout [OriginalStateRecord], globals: inout OriginalStateRecord,
                       slot: Int, retainedObjectIndex: inout Int32?, requestSlot: inout OriginalRequestSlotWord?, objectCount: Int32,
                       library: inout OriginalLibTransformBacking?,
-                      header: (Int) throws -> OriginalStateRecord, frame: (Int, Int32) throws -> OriginalStateRecord,
+                      header: (Int) throws -> OriginalStateRecord, frame: (Int, Int32) throws -> OriginalStateRecord, rules: OriginalGameRules,
                       observe: (OriginalPostDrawSlotEvent) throws -> Void = { _ in }, inPlace: Bool = false) throws -> Bool {
         guard (0..<400).contains(slot) else { throw error("Slot extent") }
         guard inPlace else {
@@ -90,7 +90,7 @@ public enum OriginalPostDrawSlotPrefix {
             // when it completes.
             var w = world, a = actors, g = globals, r = retainedObjectIndex, q = requestSlot, l = library
             let active = try apply(world: &w, actors: &a, globals: &g, slot: slot, retainedObjectIndex: &r, requestSlot: &q,
-                                   objectCount: objectCount, library: &l, header: header, frame: frame, observe: observe, inPlace: true)
+                                   objectCount: objectCount, library: &l, header: header, frame: frame, rules: rules, observe: observe, inPlace: true)
             world = w; actors = a; globals = g; retainedObjectIndex = r; requestSlot = q; library = l
             return active
         }
@@ -106,7 +106,7 @@ public enum OriginalPostDrawSlotPrefix {
                         world = body.world; actors = body.actors; globals = body.globals; retainedObjectIndex = body.retained
                         library = body.library; requestSlot = body.requestSlot
                     }
-                    return try body.run()
+                    return try body.run(rules: rules)
                 }
             }
         }
@@ -150,10 +150,10 @@ public enum OriginalPostDrawSlotPrefix {
             try observe(.random(slot: slot, stream: stream, range: range, result: result))
             return result
         }
-        mutating func particles(_ parent: Int) throws {
+        mutating func particles(_ parent: Int, rules: OriginalGameRules) throws {
             for ordinal in 0..<5 {
                 guard let free = try (50..<400).first(where: { try active($0) == 0 }) else { break }
-                if let found = try find(ordinal == 4 ? 218 : 217) { retained = found }
+                if let found = try find(ordinal == 4 ? rules.lastPiece : rules.pieces) { retained = found }
                 //41f734 consumes the old caller +70 on lookup failure. It does
                 //not skip creation or silently choose a default Object.
                 guard let retained else { throw error("Retained catalog index provenance") }
@@ -191,7 +191,7 @@ public enum OriginalPostDrawSlotPrefix {
                 let facing = try draw(165, 2); try actors[child].write(UInt8(truncatingIfNeeded: facing), at: 0x80)
             }
         }
-        mutating func resources(_ actor: Int) throws {
+        mutating func resources(_ actor: Int, rules: OriginalGameRules) throws {
             if try i(actor, 0x2fc) > 0 && i(actor, 0x2fc) < i(actor, 0x300) && g(0x450bd0) == 0 {
                 try put(actor, 0x2fc, i(actor, 0x2fc) &+ 1)
             }
@@ -207,15 +207,17 @@ public enum OriginalPostDrawSlotPrefix {
             if try i(actor, 0x308) >= 500 || g(0x450bd4) != 0 || i(actor, 8) < 0 { return }
             var hp = try min(i(actor, 0x2fc), 500)
             let source = try header(object(actor)).integer(at: 0x6f4, as: Int32.self)
-            if source == 51 || source == 52 { hp /= 2 }
+            if rules.halfHPRegen.contains(source) { hp /= 2 }
             let amount = (Int32(500) &- hp)/100 &+ 1
             try put(actor, 0x308, i(actor, 0x308) &+ amount)
         }
-        mutating func run() throws -> Bool {
+        /// The game's rules come as a parameter, not a field: the Body is built per
+        /// slot per tick (ENGINE_SPLIT E5c-1h, the E5c-1e lesson).
+        mutating func run(rules: OriginalGameRules) throws -> Bool {
             if try active(slot) == 0 { return false }
             let actorIndex = try index(slot)
             if try type(actorIndex) == 0 && currentState(actorIndex) == 9995 {
-                if let replacement = try find(50) { try put(actorIndex, 0x368, replacement) }
+                if let replacement = try find(rules.state9995Object) { try put(actorIndex, 0x368, replacement) }
                 try put(actorIndex, 0x70, 0)
             }
             let state = try currentState(actorIndex)
@@ -234,16 +236,16 @@ public enum OriginalPostDrawSlotPrefix {
                 // the original8000-range reset path before the common tail.
             }
             if try type(actorIndex) == 0 && currentState(actorIndex) == 9996 && i(actorIndex, 0x88) == 1 {
-                try particles(actorIndex)
+                try particles(actorIndex, rules: rules)
             }
-            if try type(actorIndex) == 0 { try resources(actorIndex) }
+            if try type(actorIndex) == 0 { try resources(actorIndex, rules: rules) }
             let objectIndex = try object(actorIndex), mode = try g(0x451160)
             // The scheduler writes this body's actor and globals in place: this
             // body is dropped when it throws (CORE_REALTIME B2). The closures
             // read locals, not this body, while its fields are passed inout.
             let chosen = try header(objectIndex), frames = frame, observer = observe, current = slot
             try OriginalActorScheduler.apply(actor: &actors[actorIndex], header: chosen, globals: &globals,
-                mode: mode, slot: Int32(current), frame: { try frames(objectIndex, $0) }, observe: { event in
+                mode: mode, slot: Int32(current), frame: { try frames(objectIndex, $0) }, rules: rules, observe: { event in
                     switch event {
                     case let .catalogSound(x, index): try observer(.catalogSound(slot: current, x: x, index: index))
                     }

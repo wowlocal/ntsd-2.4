@@ -9,14 +9,14 @@ public enum OriginalActorScheduleEvent: Equatable {
 /// Actor/global changes are staged together; enclosing ticks must buffer events.
 public enum OriginalActorScheduler {
     public static func apply(actor: inout OriginalStateRecord, object: OriginalLoadedObject,
-                             globals: inout OriginalStateRecord, mode: Int32, slot: Int32,
+                             globals: inout OriginalStateRecord, mode: Int32, slot: Int32, rules: OriginalGameRules,
                              observe: (OriginalActorScheduleEvent) throws -> Void = { _ in }) throws {
         try apply(actor: &actor, header: object.header, globals: &globals, mode: mode, slot: slot, frame: { index in
             guard object.frameStorage.indices.contains(Int(index)) else {
                 throw OriginalStateError.invalidStorage("Scheduler frame outside Object: \(index)")
             }
             return object.frameStorage[Int(index)]
-        }, observe: observe)
+        }, rules: rules, observe: observe)
     }
 
     /// `inPlace` (CORE_REALTIME B2): the caller's actor and globals are moved
@@ -25,13 +25,13 @@ public enum OriginalActorScheduler {
     /// when this throws. Otherwise all or nothing, as before.
     static func apply(actor: inout OriginalStateRecord, header: OriginalStateRecord,
                       globals: inout OriginalStateRecord, mode: Int32, slot: Int32,
-                      frame: (Int32) throws -> OriginalStateRecord,
+                      frame: (Int32) throws -> OriginalStateRecord, rules: OriginalGameRules,
                       observe: (OriginalActorScheduleEvent) throws -> Void = { _ in }, inPlace: Bool = false) throws {
         guard inPlace else {
             // All or nothing: the pass runs in place on copies, assigned only
             // when it completes.
             var candidate = actor, owned = globals
-            try apply(actor: &candidate, header: header, globals: &owned, mode: mode, slot: slot, frame: frame, observe: observe, inPlace: true)
+            try apply(actor: &candidate, header: header, globals: &owned, mode: mode, slot: slot, frame: frame, rules: rules, observe: observe, inPlace: true)
             actor = candidate; globals = owned
             return
         }
@@ -40,7 +40,7 @@ public enum OriginalActorScheduler {
                 var body = Body(actor: inPlaceTake(&actor, leaving: .vacant), globals: inPlaceTake(&globals, leaving: .vacant),
                                 header: header, mode: mode, slot: slot, frame: frames, observe: observer)
                 defer { actor = body.actor; globals = body.globals }
-                try body.run()
+                try body.run(rules: rules)
             }
         }
     }
@@ -81,7 +81,9 @@ public enum OriginalActorScheduler {
             // Preserve finite, infinity and signed-zero bits through the store.
             try actor.writeBinary64(negative ? -value : value, at: destination)
         }
-        mutating func run() throws {
+        /// The game's rules come as a parameter, not a field: the Body is built per
+        /// Actor per tick (ENGINE_SPLIT E5c-1h, the E5c-1e lesson).
+        mutating func run(rules: OriginalGameRules) throws {
             if try i(0xb4) != 0 && h(0x6f8) != 3 { return }
             if try i(0xec) > 0 { try set(0xec, i(0xec) &- 1) }
             if try i(0x98) < 0 { return }
@@ -146,7 +148,7 @@ public enum OriginalActorScheduler {
                         if try special && g(0x450c30) == 2 { delay = false }
                         else if (mode == 1 || mode == 4) && special {
                             let sourceID = try h(0x6f4)
-                            if sourceID / 10 == 3 && sourceID != 38 { delay = false }
+                            if rules.noRiseInvulnerability.contains(sourceID) { delay = false }
                         }
                         if delay { try set(8, 15) }
                     }
