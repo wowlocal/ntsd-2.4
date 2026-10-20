@@ -78,7 +78,9 @@ E5e-1 выполнен: три роли исключения ID 300 (A7, A51, A6
 E5e-2 выполнен: псевдо-ID миссий (A61–A63): [evidence](../evidence/es-e5e2-mission-pseudo-ids.json).
 E5e-3 выполнен: жизнь отрядов War (A67) таблицей: [evidence](../evidence/es-e5e3-war-life.json).
 E5e-4 выполнен: слияние (A24–A26), семейство Fusion: [evidence](../evidence/es-e5e4-fusion.json).
-Следующая задача — E5e-5: поломка оружия (A52–A54).
+E5e-5 выполнен: поломка оружия (A52–A54), семейство WeaponBreak: [evidence](../evidence/es-e5e5-weapon-break.json).
+Все объектные ID-правила таблицы E5a теперь в профиле. Обзор E5f: [обзор](../evidence/es-e5f-plumbing.md).
+Следующая задача — E5f-1: прямоугольники и имена меню фронта в профиль (через путь запуска).
 
 ## Internal build storage и VM quota исправлены — 2026-10-17
 

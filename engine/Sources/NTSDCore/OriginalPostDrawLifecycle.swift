@@ -192,12 +192,14 @@ public enum OriginalPostDrawLifecycle {
             guard try [1, 2, 4, 6].contains(type(parent)), try i(parent, 0x31c) < 0 else { return false }
             try put(parent, 0x31c, 0)
             let originalID = try source(parent)
-            let count = [101: 7, 218: 7, 100: 5, 213: 5, 217: 5, 201: 3, 150: 13, 151: 15, 120: 3, 124: 3, 121: 4, 122: 9, 123: 9][Int(originalID)] ?? 0
+            // The weapon's IDs: the profile's (ENGINE_SPLIT E5e-5); every test below still re-reads the parent.
+            let breaking = rules.weaponBreak
+            let count = Int(breaking.fragments[originalID] ?? 0)
             let soundID = try header(object(parent)).integer(at: 0xac, as: Int32.self)
             if soundID > -1 { try sound(parent, soundID, builtin: false) }
             for ordinal in 0..<count {
                 guard let selected = try free() else { break }
-                if let found = try find(999) { scratch.weaponObject = found }
+                if let found = try find(breaking.fragmentObject) { scratch.weaponObject = found }
                 guard let retained = scratch.weaponObject else { throw error("Weapon Object index provenance") }
                 let child = try construct(selected, retained)
                 scratch.requestSlot = .actor(selected) // 420537
@@ -207,37 +209,37 @@ public enum OriginalPostDrawLifecycle {
                 for (integer, value) in [(0x18, 0x68), (0x14, 0x60), (0x10, 0x58)] { try number(child, value, Double(i(child, integer))) }
                 //Each independent ID check reloads the parent after construction
                 //and preceding child writes. An alias can change which rules run.
-                if try [150, 151, 213].contains(source(parent)) { try velocityDraw(child, 168, 20, base: 8) }
-                if try [100, 201, 101, 120, 121, 122, 123, 124, 217, 218].contains(source(parent)) { try velocityDraw(child, 169, 8, base: 6) }
+                if try breaking.highToss.contains(source(parent)) { try velocityDraw(child, 168, 20, base: 8) }
+                if try breaking.lowToss.contains(source(parent)) { try velocityDraw(child, 169, 8, base: 6) }
                 let vx = try draw(170, 11); try number(child, 0x40, Double(vx)-5)
-                if try source(parent) == 150 { try frameDraw(child, ordinal < 5 ? 171 : 172, ordinal < 5 ? 0 : 4) }
-                if try source(parent) == 100 { try frameDraw(child, ordinal < 2 ? 173 : 174, ordinal < 2 ? 10 : 14) }
-                if try source(parent) == 213 { try frameDraw(child, ordinal < 2 ? 175 : 176, ordinal < 2 ? 150 : 154) }
-                if try source(parent) == 101 {
+                if try source(parent) == breaking.frames0 { try frameDraw(child, ordinal < 5 ? 171 : 172, ordinal < 5 ? 0 : 4) }
+                if try source(parent) == breaking.frames10 { try frameDraw(child, ordinal < 2 ? 173 : 174, ordinal < 2 ? 10 : 14) }
+                if try source(parent) == breaking.frames150 { try frameDraw(child, ordinal < 2 ? 175 : 176, ordinal < 2 ? 150 : 154) }
+                if try source(parent) == breaking.frames20 {
                     if ordinal < 5 { let base = try draw(177, 2)*4+20; try frameDraw(child, 178, base) }
                     else { try frameDraw(child, 179, 30) }
                 }
-                if try source(parent) == 151 {
+                if try source(parent) == breaking.frames40 {
                     try frameDraw(child, ordinal < 2 ? 180 : ordinal < 5 ? 181 : ordinal < 8 ? 182 : 183,
                                   ordinal < 2 ? 40 : ordinal < 5 ? 44 : ordinal < 8 ? 50 : 54)
                 }
-                if try source(parent) == 120 {
+                if try source(parent) == breaking.frames54 {
                     if ordinal < 2 { try frameDraw(child, 184, 54) }
                     else if ordinal < 5 { try frameDraw(child, 185, 30) }
                 }
-                if try source(parent) == 124 { try frameDraw(child, 186, 170) }
-                if try source(parent) == 121 { try frameDraw(child, 187, 60) }
-                if try source(parent) == 122 {
+                if try source(parent) == breaking.frame170 { try frameDraw(child, 186, 170) }
+                if try source(parent) == breaking.frame60 { try frameDraw(child, 187, 60) }
+                if try source(parent) == breaking.frames70 {
                     if ordinal < 1 { try frameDraw(child, 188, 70) }
                     else if ordinal < 3 { try frameDraw(child, 189, 80) }
                     else { try frameDraw(child, 190, 74); try velocityDraw(child, 191, 18, base: 4) }
                 }
-                if try source(parent) == 123 {
+                if try source(parent) == breaking.frames160 {
                     if ordinal < 1 { try frameDraw(child, 192, 160) }
                     else if ordinal < 3 { try frameDraw(child, 193, 164) }
                     else { try frameDraw(child, 194, 74); try velocityDraw(child, 195, 18, base: 4) }
                 }
-                if try [217, 218].contains(source(parent)) { try frameDraw(child, 196, 174) }
+                if try breaking.frame174.contains(source(parent)) { try frameDraw(child, 196, 174) }
                 scratch.weaponSlot = Int32(selected)
             }
             try world.write(UInt8(0), at: 4+slot)

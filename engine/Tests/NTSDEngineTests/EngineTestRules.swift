@@ -4,8 +4,9 @@
 /// as NTSD's, is not visible here). Synthetic: every ID role is −1 and every set
 /// or other range empty (no record these tests build carries −1 or a member at +0x6f4),
 /// except the item range 100..<200, which the requested-items tests' pools
-/// (Object ID 100) are built on, and the effects' 998/999 (the lifecycle
-/// pools: three of the request-slot tests depend on them). No engine test reaches the menus (Random would
+/// (Object ID 100) are built on, the effects' 998/999 (the lifecycle
+/// pools: three of the request-slot tests depend on them) and the weapon break's
+/// rows for Object 100 (the request-slot weapon test). No engine test reaches the menus (Random would
 /// find no candidate there), stage mode, the camera or War.
 extension OriginalGameRules {
     static let engineTests = OriginalGameRules(profile: "engine tests (synthetic)",
@@ -31,6 +32,10 @@ extension OriginalGameRules {
         lifecycle: .init(halfHPRegen: OriginalIDSet([]), state9995Object: -1, pieces: 217, lastPiece: 218, noRiseInvulnerability: OriginalIDSet([]),
                          roundRevertFrom: -1, roundRevertTo: -1, guardedTransformer: -1),
         fusion: .init(fusers: OriginalIDSet([]), fusionPartnerSum: -1, fusedForm: -1),
+        // The request-slot weapon test breaks Object 100: its rows, as NTSD's.
+        weaponBreak: .init(fragments: [100: 5], fragmentObject: 999, highToss: OriginalIDSet([]), lowToss: OriginalIDSet([100]),
+                           frames0: -1, frames10: 100, frames150: -1, frames20: -1, frames40: -1, frames54: -1, frame170: -1,
+                           frame60: -1, frames70: -1, frames160: -1, frame174: OriginalIDSet([])),
         characterAI: .init(stageAllyBound: -1, healBall: -1, healers: OriginalIDSet([]), stateDanger: -1, frameDanger: -1,
                            pickupItems: OriginalIDRange(0..<0), pickupExtra: -1, soughtDrink: -1, avoidedDrink: -1, idleDefenders: [],
                            drinks: OriginalIDSet([]), rangedBand: OriginalIDSet([]), rangedJoiner: -1, meleeWeapons: OriginalIDSet([]),

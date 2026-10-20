@@ -50,6 +50,13 @@ public enum NTSDProfile {
                          guardedTransformer: 6),
         // Fusion: 7 and 8 fuse into 51 (their IDs add to 15).
         fusion: .init(fusers: OriginalIDSet([7, 8]), fusionPartnerSum: 15, fusedForm: 51),
+        // A weapon's break: its pieces, their Object and each weapon's draws.
+        weaponBreak: .init(fragments: [101: 7, 218: 7, 100: 5, 213: 5, 217: 5, 201: 3, 150: 13, 151: 15, 120: 3, 124: 3, 121: 4, 122: 9,
+                                       123: 9],
+                           fragmentObject: 999, highToss: OriginalIDSet([150, 151, 213]),
+                           lowToss: OriginalIDSet([100, 201, 101, 120, 121, 122, 123, 124, 217, 218]),
+                           frames0: 150, frames10: 100, frames150: 213, frames20: 101, frames40: 151, frames54: 120, frame170: 124,
+                           frame60: 121, frames70: 122, frames160: 123, frame174: OriginalIDSet([217, 218])),
         // The character AI's target choice and fight.
         characterAI: .init(stageAllyBound: 30, healBall: 200, healers: OriginalIDSet([2, 34]), stateDanger: 211, frameDanger: 212,
                            pickupItems: OriginalIDRange(100..<200), pickupExtra: 213, soughtDrink: 122, avoidedDrink: 123,

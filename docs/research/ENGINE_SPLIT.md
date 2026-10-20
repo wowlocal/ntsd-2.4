@@ -10,7 +10,7 @@ measurement from [TVOS_WEB](TVOS_WEB.md), [MEMORY_LOADING](MEMORY_LOADING.md) an
 engine from the game itself. to publish engine as the separate github repo";
 then, after the plan: "ok … when the plan is setteled start the loop in a
 separate branch" and "push automatically every step (on that new branch)".
-**Status:** E0–E3, E4a, E4b (all six hosts), E4c-1 (the engine's self-contained tests), E5a (the game profile's survey and design) and E5b (the record type, the copied tables out), E4c-1a (a nondeterministic engine test corrected) E5c-0 (the profile's plumbing, reflection), E5c-1a (one storage, the reflectors), E5c-1b (armour), E5c-1c (special interactions) and E5c-1d (impact) done; E5c-2a, E5c-2b and E5c-2c (the items family: the random and requested spawns, camera, links, the mission stage) E5c-2d (the roster family), E5c-2e (the modes family), E5c-2f (the match prelude) and E5c-2g (the mode label) done: E5c-2's menu and mode rows are in the profile; E5c-1e (physics), E5c-1f (drawing) and E5c-1g (the post-draw effects) and E5c-1h (the slot prefix, scheduler and round restore) and E5c-1i (the object input) and E5c-1j (A28, the input chain) done: every E5c row is in the profile; E5d-1a (the AI's target roles) and E5d-1b (its fight roles) done: every object-ID literal of the generic AI is in the profile; E5d-2 (the special-move hook) and E5d-3 (the 20 routines in the game) done: the AI's NTSD code is the game's; E5e (the coarse hooks) surveyed: roles, no new hook; E5e-1 (the ID-300 roles), E5e-2 (the mission pseudo-IDs), E5e-3 (War life) and E5e-4 (fusion) done; E5e-5, the weapon break, next.
+**Status:** E0–E3, E4a, E4b (all six hosts), E4c-1 (the engine's self-contained tests), E5a (the game profile's survey and design) and E5b (the record type, the copied tables out), E4c-1a (a nondeterministic engine test corrected) E5c-0 (the profile's plumbing, reflection), E5c-1a (one storage, the reflectors), E5c-1b (armour), E5c-1c (special interactions) and E5c-1d (impact) done; E5c-2a, E5c-2b and E5c-2c (the items family: the random and requested spawns, camera, links, the mission stage) E5c-2d (the roster family), E5c-2e (the modes family), E5c-2f (the match prelude) and E5c-2g (the mode label) done: E5c-2's menu and mode rows are in the profile; E5c-1e (physics), E5c-1f (drawing) and E5c-1g (the post-draw effects) and E5c-1h (the slot prefix, scheduler and round restore) and E5c-1i (the object input) and E5c-1j (A28, the input chain) done: every E5c row is in the profile; E5d-1a (the AI's target roles) and E5d-1b (its fight roles) done: every object-ID literal of the generic AI is in the profile; E5d-2 (the special-move hook) and E5d-3 (the 20 routines in the game) done: the AI's NTSD code is the game's; E5e (the coarse hooks) surveyed: roles, no new hook; E5e-1 (the ID-300 roles), E5e-2 (the mission pseudo-IDs), E5e-3 (War life), E5e-4 (fusion) and E5e-5 (the weapon break) done: every object-ID rule of the E5a table is the game's; E5f (menu rectangles and name lists) next, from a survey.
 **Branch:** `exp/engine-split`, from `main` 380b448d. Worktree
 `/Volumes/NTSD-Builds/tasks/engine-split/worktree` (T7-backed APFS, see
 [BUILD_STORAGE_T7](BUILD_STORAGE_T7.md)). It tracks `origin/exp/engine-split`
@@ -158,7 +158,7 @@ A read-only survey of `native/` (three agents, 2026-10-18):
 | E2 | Content policy out of Core: the digest, count and EXE-SHA pins become the NTSD content identity the game passes; Core checks what it is given with the same checks and errors (2.8.3.3's content origin as the model, read only) | **done** ([evidence](../evidence/es-e2-content-identity.json)) |
 | E3 | Identity and Practice: user-data folder, wasm module, Android prefix/entry, queue/thread names, titles and messages become game configuration; Practice/Lab and its two checks move to the game side | **done**: E3a ([evidence](../evidence/es-e3a-practice.json)), E3b ([evidence](../evidence/es-e3b-game-identity.json)); diagnostic labels wait for D2 |
 | E4 | Two packages: `engine/Package.swift` (Core, Runtime, codecs, decoders, shims, host libraries, self-contained tests) and `native/Package.swift` depending on it by path; the unsafeFlags plan (SwiftPM rejects them in version-pinned dependencies) | E4a **done** ([evidence](../evidence/es-e4a-engine-package.json)); E4b: headless **done** ([evidence](../evidence/es-e4b1-headless-host.json)), browser **done** ([evidence](../evidence/es-e4b2-web-host.json)), SDL **done** ([evidence](../evidence/es-e4b3-sdl-host.json)), AppKit **done** ([evidence](../evidence/es-e4b4-appkit-host.json)), UIKit **done** ([evidence](../evidence/es-e4b5-uikit-host.json)), Android **done** ([evidence](../evidence/es-e4b6-android-host.json)); E4c-1 **done** ([evidence](../evidence/es-e4c1-engine-tests.json)), E4c-1a **done** ([evidence](../evidence/es-e4c1a-sorted-keys.json)); E4c-2 (split the 11 mixed test files, the War trio) queued |
-| E5 | Game profile: the ID sites (100 rows, about 125 branch points; first estimated ~90) and the AI dispatch behind a profile the game supplies; the engine defines the `0x44d000` record's layout and the game supplies `initial.bin`; the NTSD profile bit-exact (all gates plus the full fixture-driven suites); the API's fit with 2.8.3.3 checked read only | E5a **done** (survey and design, [evidence](../evidence/es-e5a-design.json)); E5b **done** ([evidence](../evidence/es-e5b-record-type.json)); E5c-0 **done** ([evidence](../evidence/es-e5c0-profile-plumbing.json)); E5c-1a **done** ([evidence](../evidence/es-e5c1a-reflector-roles.json)); E5c-1b **done** ([evidence](../evidence/es-e5c1b-armour-roles.json)); E5c-1c **done** ([evidence](../evidence/es-e5c1c-interaction-roles.json)); E5c-1d **done** ([evidence](../evidence/es-e5c1d-impact-roles.json)); E5c-2a **done** ([evidence](../evidence/es-e5c2a-items-roles.json)); E5c-2b **done** ([evidence](../evidence/es-e5c2b-camera-links-roles.json)); E5c-2c **done** ([evidence](../evidence/es-e5c2c-requested-mission-roles.json)); E5c-2d **done** ([evidence](../evidence/es-e5c2d-roster-roles.json)); E5c-2e **done** ([evidence](../evidence/es-e5c2e-modes-roles.json)); E5c-2f **done** ([evidence](../evidence/es-e5c2f-prelude-roles.json)); E5c-2g **done** ([evidence](../evidence/es-e5c2g-mode-label-roles.json)); E5c-1e **done** ([evidence](../evidence/es-e5c1e-physics-roles.json)); E5c-1f **done** ([evidence](../evidence/es-e5c1f-drawing-roles.json)); E5c-1g **done** ([evidence](../evidence/es-e5c1g-effects-roles.json)); E5c-1h **done** ([evidence](../evidence/es-e5c1h-lifecycle-roles.json)); E5c-1i **done** ([evidence](../evidence/es-e5c1i-object-input-roles.json)); E5c-1j **done** ([evidence](../evidence/es-e5c1j-input-roles.json)); E5d: [survey](../evidence/es-e5d-plumbing.md), E5d-1a **done** ([evidence](../evidence/es-e5d1a-ai-target-roles.json)), E5d-1b **done** ([evidence](../evidence/es-e5d1b-ai-fight-roles.json)), E5d-2 **done** ([evidence](../evidence/es-e5d2-ai-special-hook.json)), E5d-3 **done** ([evidence](../evidence/es-e5d3-ai-routines-in-game.json)); E5e: [survey](../evidence/es-e5e-plumbing.md), E5e-1 **done** ([evidence](../evidence/es-e5e1-id300-roles.json)), E5e-2 **done** ([evidence](../evidence/es-e5e2-mission-pseudo-ids.json)), E5e-3 **done** ([evidence](../evidence/es-e5e3-war-life.json)), E5e-4 **done** ([evidence](../evidence/es-e5e4-fusion.json)), E5e-5 next |
+| E5 | Game profile: the ID sites (100 rows, about 125 branch points; first estimated ~90) and the AI dispatch behind a profile the game supplies; the engine defines the `0x44d000` record's layout and the game supplies `initial.bin`; the NTSD profile bit-exact (all gates plus the full fixture-driven suites); the API's fit with 2.8.3.3 checked read only | E5a **done** (survey and design, [evidence](../evidence/es-e5a-design.json)); E5b **done** ([evidence](../evidence/es-e5b-record-type.json)); E5c-0 **done** ([evidence](../evidence/es-e5c0-profile-plumbing.json)); E5c-1a **done** ([evidence](../evidence/es-e5c1a-reflector-roles.json)); E5c-1b **done** ([evidence](../evidence/es-e5c1b-armour-roles.json)); E5c-1c **done** ([evidence](../evidence/es-e5c1c-interaction-roles.json)); E5c-1d **done** ([evidence](../evidence/es-e5c1d-impact-roles.json)); E5c-2a **done** ([evidence](../evidence/es-e5c2a-items-roles.json)); E5c-2b **done** ([evidence](../evidence/es-e5c2b-camera-links-roles.json)); E5c-2c **done** ([evidence](../evidence/es-e5c2c-requested-mission-roles.json)); E5c-2d **done** ([evidence](../evidence/es-e5c2d-roster-roles.json)); E5c-2e **done** ([evidence](../evidence/es-e5c2e-modes-roles.json)); E5c-2f **done** ([evidence](../evidence/es-e5c2f-prelude-roles.json)); E5c-2g **done** ([evidence](../evidence/es-e5c2g-mode-label-roles.json)); E5c-1e **done** ([evidence](../evidence/es-e5c1e-physics-roles.json)); E5c-1f **done** ([evidence](../evidence/es-e5c1f-drawing-roles.json)); E5c-1g **done** ([evidence](../evidence/es-e5c1g-effects-roles.json)); E5c-1h **done** ([evidence](../evidence/es-e5c1h-lifecycle-roles.json)); E5c-1i **done** ([evidence](../evidence/es-e5c1i-object-input-roles.json)); E5c-1j **done** ([evidence](../evidence/es-e5c1j-input-roles.json)); E5d: [survey](../evidence/es-e5d-plumbing.md), E5d-1a **done** ([evidence](../evidence/es-e5d1a-ai-target-roles.json)), E5d-1b **done** ([evidence](../evidence/es-e5d1b-ai-fight-roles.json)), E5d-2 **done** ([evidence](../evidence/es-e5d2-ai-special-hook.json)), E5d-3 **done** ([evidence](../evidence/es-e5d3-ai-routines-in-game.json)); E5e: [survey](../evidence/es-e5e-plumbing.md), E5e-1 **done** ([evidence](../evidence/es-e5e1-id300-roles.json)), E5e-2 **done** ([evidence](../evidence/es-e5e2-mission-pseudo-ids.json)), E5e-3 **done** ([evidence](../evidence/es-e5e3-war-life.json)), E5e-4 **done** ([evidence](../evidence/es-e5e4-fusion.json)), E5e-5 **done** ([evidence](../evidence/es-e5e5-weapon-break.json)); E5f: [survey](../evidence/es-e5f-plumbing.md), E5f-1 next |
 | E6 | Classify each profile rule as LF2 2.0a or NTSD from the second reference; LF2 rules become the engine's default profile | needs D1 |
 | E7 | Engine stand-alone: the engine package builds alone (macOS, Linux container) and passes its tests with a from-scratch synthetic content pack; a scan finds no original bytes (files under `downloads/`, the resources, fixtures, `initial.bin`) | queued |
 | E8 | Publication: name, licence, a new repository with fresh history, a tag; this repository depends on it by revision; README credits | needs D2 and the user |
@@ -1389,6 +1389,74 @@ From a read-only survey ([report](../evidence/es-e5e-plumbing.md)).
   per-slot `rules.fusers` read is the pattern the contact pass already uses
   (`reflectable`, `countsAsCharacter`): the phone A/B decides.
 
+### E5e-5 note (2026-10-20, reviewed with its change; done)
+
+- **Family (fifteenth).** `WeaponBreak`, the post-draw lifecycle's `weapon`:
+  `fragments` [101: 7, 218: 7, 100: 5, 213: 5, 217: 5, 201: 3, 150: 13, 151: 15,
+  120: 3, 124: 3, 121: 4, 122: 9, 123: 9] (A52: the dictionary built at every
+  call becomes the profile's; `Int32` keys, so the lookup is the old
+  `[Int(originalID)] ?? 0` for every value; counts ≥ 0 checked by a
+  precondition when the profile is built), `fragmentObject` 999 (A53: `find`
+  after `free()`, the kept Object and its error unchanged), `highToss` {150,
+  151, 213} and `lowToss` {100, 201, 101, 120, 121, 122, 123, 124, 217, 218}
+  (A54's two speed draws, streams 168 and 169), and one role per frame branch
+  named by its first frame: `frames0` 150, `frames10` 100, `frames150` 213,
+  `frames20` 101, `frames40` 151, `frames54` 120, `frame170` 124, `frame60` 121,
+  `frames70` 122, `frames160` 123, `frame174` {217, 218}. Each of the thirteen
+  per-piece tests (fourteen reads with A52's) keeps its own `source(parent)` re-read, its streams, ranges, frame bases
+  and ordinal tiers; the branch shapes (three action kinds) stay engine code.
+  The family is read once into `breaking` at the top of `weapon` (immutable).
+- **Departure from the Next task.** It named `Effects` and the fields
+  `weaponFragments`, `weaponFragmentObject`, `highTossPieces`, `lowTossPieces`;
+  fifteen fields would have doubled `Effects`, so the break is its own family
+  (as `Fusion`) with names that read under `weaponBreak.`.
+- **Plumbing.** None (the lifecycle's body holds `rules`);
+  `OriginalGameRules.init` gains `weaponBreak:` after `fusion:`; `==` compares
+  it. Three constructions: the profile, `engineTests` (100's rows as NTSD's:
+  [100: 5], 999, 100 in `lowToss`, `frames10` 100; the rest −1/empty, so the
+  request-slot weapon test keeps its draws and outcome; the engine's 110 tests
+  pass) and the `with` helper.
+- **Tests.** `NTSDProfileWeaponBreakTests` (2): the lifecycle's weapon creation
+  for each listed weapon (its pieces) and an unlisted one (none), moved counts,
+  the piece Object missing (the error) and moved; each weapon's own streams and
+  the first piece's draw order (166, 167, the toss, 170), and moved toss sets,
+  frame branch and 174 set; every weapon's exact streams and ranges against a
+  specification of HEAD's branches (tiers, 177→178, 190→191 pinned), each of
+  the ten single frame roles moved onto 7, and `==`. The frame bases and the
+  speeds themselves rest on the unchanged engine literals.
+- **Review.** No behavioural defect (literals restored: identical to HEAD;
+  the table equal for every `Int32`, also on wasm32; `find` after `free()`;
+  each test's re-read, streams, ranges, bases and tiers kept; the hoisted
+  family read pure; every construction updated; only one engine test breaks a
+  weapon, needing [100: 5]). Required: thirteen tests, the departure
+  recorded, exact draw sequences. Adopted: the doc's gaps, `==`, every frame
+  role moved, `breaking` for the local (`rules.pieces` is Lifecycle's), the
+  precondition's wording, a throwing test frame closure.
+  `swift_beginAccess` before the gate: 3,278.
+
+### E5f note (2026-10-20, from the survey)
+
+From a read-only survey ([report](../evidence/es-e5f-plumbing.md)).
+- **What moves.** The front menu's rectangles (9 sheets, 151 frames, `.text`
+  immediates: no game file carries them) and six ordered name lists (front 24,
+  interface 10, menu 11, War 2, common WAVs 18, menu WAVs 5) become a public
+  `Interface` family of `OriginalGameRules`; the manifest checks that compare
+  four of the lists with the pinned manifests stay (same check, same error).
+  Arrays, not dictionaries: the write order (sheets, frames, x/y/width/height,
+  the count after the frames, the null-bitmap exit) is the contract the front
+  corpus (145 cases, 497,585 writes) checks.
+- **Startup carries the rules.** The front menu runs before any catalog: the
+  rules travel on the startup inputs (from the content identity) to the
+  bootstrap's session state, a path only NTSDRuntime among the hosts touches;
+  the catalog keeps its own copy (the two match by construction).
+- **What stays (D1/E7).** The music tracks and labels, `MENU_BACK` and its
+  count, the built-in background names, the tournament and result coordinates,
+  EXE strings; the panel atlas and BATTLEMODE rectangles are optional (E5f-4).
+- **Increments.** E5f-1 the rectangles and front names with the startup
+  plumbing; E5f-2a interface and common sounds; E5f-2b menu and War names;
+  E5f-3 the menu WAVs; E5f-4 (optional) the panel and BATTLEMODE rectangles.
+  Cold paths: the mlgate set's A/Bs suffice (load time the measure to watch).
+
 ## Ledger
 
 - 2026-10-18: plan agreed; branch `exp/engine-split` and its worktree created
@@ -1828,24 +1896,27 @@ From a read-only survey ([report](../evidence/es-e5e-plumbing.md)).
   (the contacts, round and input corpora); WASI vs identical; Mac overlapping;
   phone 3v2 load apart, the 4v4 follow-up overlapping everywhere.
   [Evidence](../evidence/es-e5e4-fusion.json).
+- 2026-10-20 E5e-5: the weapon break as a `WeaponBreak` family (A52–A54;
+  `engineTests` carries 100's rows). Reviewed (no behavioural defect; exact
+  draw sequences tested, every frame role moved). `swift_beginAccess`
+  measured first (3,278). Gate `es-e5e5`: 11 scenarios, frames, AppKit,
+  unchecked, emulator, 20 clean launches, 29 suite runs, the engine's 110
+  tests, 3,278/3,406; 27 suites with 104 tests (the post-draw corpora); WASI vs
+  identical; Mac overlapping; phone 3v2 load apart by 0.01 s, the 4v4
+  overlapping everywhere. Every object-ID rule of the E5a table is now in the
+  profile; the E5f survey is recorded. [Evidence](../evidence/es-e5e5-weapon-break.json).
 
 ## Next task
 
-E5e-5 (the E5e note above; survey [report](../evidence/es-e5e-plumbing.md) §5):
-the weapon break (`OriginalPostDrawLifecycle.weapon`, on `.weaponCreation`,
-cold) into `Effects`: `weaponFragments` [101: 7, 218: 7, 100: 5, 213: 5, 217:
-5, 201: 3, 150: 13, 151: 15, 120: 3, 124: 3, 121: 4, 122: 9, 123: 9] (A52: the
-dictionary built at every call becomes the profile's; counts ≥ 0, checked
-when the profile is built; a weapon not listed breaks into none),
-`weaponFragmentObject` 999 (A53: `find` per fragment after `free()`, the
-retained Object and its error kept), and A54's per-branch roles: two sets for
-the vertical draws (`highTossPieces` {150, 151, 213}: stream 168; `lowTossPieces`
-{100, 201, 101, 120, 121, 122, 123, 124, 217, 218}: stream 169) and one role
-per frame branch named by its frames (150, 100, 213, 101, 151, 120, 124, 121,
-122, 123 and {217, 218}); every branch keeps its own `source(parent)` re-read,
-its streams, ranges, frame bases and ordinal tiers. `engineTests` must carry
-100's rows ([100: 5], 999, 100 in the low set and its frame branch) so
-`OriginalRequestSlotWordTests` keeps its outcome. Tests: each ID's break
-(counts, draw order and streams, frames) under NTSD's profile and moved roles,
-and 999 missing. Gates with the post-draw lifecycle suites and the engine
-tests in gate3.
+E5f-1 (the E5f note above; survey [report](../evidence/es-e5f-plumbing.md) §3,
+§4): the front menu's rectangles and names into an `Interface` family. The
+rules ride the startup path (`OriginalApplicationStartupInputs.rules`, from the
+identity and kept by `replacingFile`, through the Runtime's startup, the window
+and observed startups, the host session and the bootstrap to its session
+state); `OriginalFrontMenuResources.load` and `OriginalStageEnding.endingSheet`
+take the family; `OriginalFrontMenuRectangles.swift` leaves the engine for the
+game (the extractor writes and checks it there against the pinned EXE). Tests:
+the profile's ENDING frames against `original-stage-ending.json`, a front load
+under moved, reordered and renamed sheets, a moved ENDING sheet, `==`. Gates
+with the front, menu, startup, ENDING and sound suites the survey lists in
+gate3. Then E5f-2a, E5f-2b, E5f-3.

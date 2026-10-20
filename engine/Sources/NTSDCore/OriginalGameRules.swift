@@ -390,6 +390,35 @@ public struct OriginalGameRules: Equatable, Sendable {
             self.fusers = fusers; self.fusionPartnerSum = fusionPartnerSum; self.fusedForm = fusedForm
         }
     }
+    /// A weapon's break (OriginalPostDrawLifecycle, on a weapon creation: an
+    /// Object of type 1, 2, 4 or 6 whose +0x31c went below 0). `fragments`: how
+    /// many pieces each weapon breaks into at most (a weapon not listed: none;
+    /// counts are not negative; the loop stops when no slot from 50 is free);
+    /// each piece takes the catalog Object `fragmentObject` (found after its
+    /// slot; the last one found is kept for later pieces and calls). Each
+    /// piece's own draws then follow its weapon, each test re-reading the
+    /// weapon's ID: `highToss` and `lowToss` draw its upward speed (streams 168
+    /// and 169), and one role per frame branch picks its frame among four from
+    /// that branch's bases (named by the first base; streams 171–196, the
+    /// ordinal tiers, 101's base drawn from 177 and the speed redrawn by the 70
+    /// and 160 branches (191, 195) are engine code).
+    public struct WeaponBreak: Equatable, Sendable {
+        public let fragments: [Int32: Int32]
+        public let fragmentObject: Int32
+        public let highToss: OriginalIDSet, lowToss: OriginalIDSet
+        public let frames0: Int32, frames10: Int32, frames150: Int32, frames20: Int32, frames40: Int32, frames54: Int32
+        public let frame170: Int32, frame60: Int32, frames70: Int32, frames160: Int32
+        public let frame174: OriginalIDSet
+        public init(fragments: [Int32: Int32], fragmentObject: Int32, highToss: OriginalIDSet, lowToss: OriginalIDSet,
+                    frames0: Int32, frames10: Int32, frames150: Int32, frames20: Int32, frames40: Int32, frames54: Int32,
+                    frame170: Int32, frame60: Int32, frames70: Int32, frames160: Int32, frame174: OriginalIDSet) {
+            precondition(fragments.values.allSatisfy { $0 >= 0 }, "A weapon's piece count is not negative")
+            self.fragments = fragments; self.fragmentObject = fragmentObject; self.highToss = highToss; self.lowToss = lowToss
+            self.frames0 = frames0; self.frames10 = frames10; self.frames150 = frames150; self.frames20 = frames20
+            self.frames40 = frames40; self.frames54 = frames54; self.frame170 = frame170; self.frame60 = frame60
+            self.frames70 = frames70; self.frames160 = frames160; self.frame174 = frame174
+        }
+    }
     /// The character AI (OriginalCharacterAI): the IDs its target choice and fight test.
     /// The names follow the AI's own tests, not what the Objects are in the DAT.
     public struct CharacterAI: Equatable, Sendable {
@@ -472,14 +501,17 @@ public struct OriginalGameRules: Equatable, Sendable {
     }
     private final class Roles: Sendable {
         let profile: String, reflection: Reflection, armour: Armour, interaction: Interaction, impact: Impact, items: Items, roster: Roster
-        let modes: Modes, physics: Physics, drawing: Drawing, effects: Effects, lifecycle: Lifecycle, fusion: Fusion, characterAI: CharacterAI
+        let modes: Modes, physics: Physics, drawing: Drawing, effects: Effects, lifecycle: Lifecycle, fusion: Fusion
+        let weaponBreak: WeaponBreak, characterAI: CharacterAI
         let characterAISpecial: any OriginalCharacterAISpecial
         init(profile: String, reflection: Reflection, armour: Armour, interaction: Interaction, impact: Impact, items: Items, roster: Roster,
-             modes: Modes, physics: Physics, drawing: Drawing, effects: Effects, lifecycle: Lifecycle, fusion: Fusion, characterAI: CharacterAI,
+             modes: Modes, physics: Physics, drawing: Drawing, effects: Effects, lifecycle: Lifecycle, fusion: Fusion,
+             weaponBreak: WeaponBreak, characterAI: CharacterAI,
              characterAISpecial: any OriginalCharacterAISpecial) {
             self.profile = profile; self.reflection = reflection; self.armour = armour; self.interaction = interaction; self.impact = impact
             self.items = items; self.roster = roster; self.modes = modes; self.physics = physics; self.drawing = drawing; self.effects = effects
-            self.lifecycle = lifecycle; self.fusion = fusion; self.characterAI = characterAI; self.characterAISpecial = characterAISpecial
+            self.lifecycle = lifecycle; self.fusion = fusion; self.weaponBreak = weaponBreak; self.characterAI = characterAI
+            self.characterAISpecial = characterAISpecial
         }
     }
     private let roles: Roles
@@ -497,6 +529,7 @@ public struct OriginalGameRules: Equatable, Sendable {
     public var effects: Effects { roles.effects }
     public var lifecycle: Lifecycle { roles.lifecycle }
     public var fusion: Fusion { roles.fusion }
+    public var weaponBreak: WeaponBreak { roles.weaponBreak }
     public var characterAI: CharacterAI { roles.characterAI }
     /// The game's special moves: a code hook, compared by its type.
     public var characterAISpecial: any OriginalCharacterAISpecial { roles.characterAISpecial }
@@ -594,16 +627,17 @@ public struct OriginalGameRules: Equatable, Sendable {
     public var shortDasher: Int32 { roles.characterAI.shortDasher }
     public init(profile: String, reflection: Reflection, armour: Armour, interaction: Interaction, impact: Impact, items: Items,
                 roster: Roster, modes: Modes, physics: Physics, drawing: Drawing, effects: Effects, lifecycle: Lifecycle,
-                fusion: Fusion, characterAI: CharacterAI, characterAISpecial: any OriginalCharacterAISpecial) {
+                fusion: Fusion, weaponBreak: WeaponBreak, characterAI: CharacterAI, characterAISpecial: any OriginalCharacterAISpecial) {
         roles = Roles(profile: profile, reflection: reflection, armour: armour, interaction: interaction, impact: impact, items: items,
                       roster: roster, modes: modes, physics: physics, drawing: drawing, effects: effects, lifecycle: lifecycle,
-                      fusion: fusion, characterAI: characterAI, characterAISpecial: characterAISpecial)
+                      fusion: fusion, weaponBreak: weaponBreak, characterAI: characterAI, characterAISpecial: characterAISpecial)
     }
     public static func == (a: Self, b: Self) -> Bool {
         a.roles === b.roles || (a.profile == b.profile && a.reflection == b.reflection && a.armour == b.armour && a.interaction == b.interaction
                                 && a.impact == b.impact && a.items == b.items && a.roster == b.roster
                                 && a.modes == b.modes && a.physics == b.physics
                                 && a.drawing == b.drawing && a.effects == b.effects && a.lifecycle == b.lifecycle && a.fusion == b.fusion
+                                && a.weaponBreak == b.weaponBreak
                                 && a.characterAI == b.characterAI
                                 && ObjectIdentifier(type(of: a.characterAISpecial)) == ObjectIdentifier(type(of: b.characterAISpecial)))
     }
