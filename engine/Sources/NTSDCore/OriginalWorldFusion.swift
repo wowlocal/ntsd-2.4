@@ -1,5 +1,5 @@
 // Whole4064d0..406a1f, called unconditionally at the end of419380.
-// Source IDs7/8/51 are explicit EXE branches. Catalog entries remain ordinals;
+// Source IDs7/8/51 are explicit EXE branches (ENGINE_SPLIT E5e-4: rules.fusion's roles). Catalog entries remain ordinals;
 // duplicate IDs and World Actor aliases retain their original ordered effects.
 extension OriginalContactPass {
     mutating func fusion(observe: (OriginalWorldContactsEvent) throws -> Void = { _ in }) throws {
@@ -7,11 +7,11 @@ extension OriginalContactPass {
             let a = try index(slot)
             if try i(a,0x338) > 0 { try put(a,0x338,i(a,0x338) &- 1) }
             guard try active(slot) == 1 else { continue }
-            if try [7,8].contains(h(a,0x6f4)) && i(a,0x2fc) > 0 && f(a,8) == 2 && i(a,0x338) == 0 &&
+            if try rules.fusers.contains(h(a,0x6f4)) && i(a,0x2fc) > 0 && f(a,8) == 2 && i(a,0x338) == 0 &&
                 (i(a,0x2fc) < 177 || globals.integer(at: 0x458428-0x44d000,as: Int32.self) == 1) {
                 for other in 0..<20 where try active(other) == 1 {
                     let d = try index(other)
-                    guard try h(d,0x6f4) == 15 &- h(a,0x6f4) else { continue }
+                    guard try h(d,0x6f4) == rules.fusionPartnerSum &- h(a,0x6f4) else { continue }
                     let otherHP = try i(d,0x2fc)
                     guard otherHP > 0,try i(a,0x364) == i(d,0x364),try i(d,0x338) == 0,
                           try otherHP < 177 || globals.integer(at: 0x458428-0x44d000,as: Int32.self) == 1,
@@ -23,7 +23,7 @@ extension OriginalContactPass {
                           try i(a,0x10) > i(d,0x10) || other > 9,slot < 10 else { continue }
                     var replacement: Int?
                     if objectCount > 0 {
-                        for n in 0..<Int(objectCount) where try header(n).integer(at: 0x6f4,as: Int32.self) == 51 { replacement = n;break }
+                        for n in 0..<Int(objectCount) where try header(n).integer(at: 0x6f4,as: Int32.self) == rules.fusedForm { replacement = n;break }
                     }
                     guard let replacement else { continue }
                     try put(a,0x2fc,i(a,0x2fc) &+ otherHP);try put(a,0x300,i(a,0x300) &+ i(d,0x300))
@@ -37,7 +37,7 @@ extension OriginalContactPass {
                     try actors[a].write(UInt32(replacement),at: 0x368);try put(a,0x308,500);try world.write(UInt8(0),at: 4+other)
                     // No early break: the source continues, reloading the new ID.
                 }
-            } else if try h(a,0x6f4) == 51 && i(a,0x328) == 1 && (i(a,0x70) < 9 || i(a,0x70) > 260) && i(a,0x338) <= 0 {
+            } else if try h(a,0x6f4) == rules.fusedForm && i(a,0x328) == 1 && (i(a,0x70) < 9 || i(a,0x70) > 260) && i(a,0x338) <= 0 {
                 let other = Int(try i(a,0x32c))
                 try put(a,0x328,-1);try put(a,0x338,900)
                 if objectCount > 0 {

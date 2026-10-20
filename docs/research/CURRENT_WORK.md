@@ -77,7 +77,8 @@ E5e-0 выполнен: обзор грубых хуков ([обзор](../evid
 E5e-1 выполнен: три роли исключения ID 300 (A7, A51, A60): [evidence](../evidence/es-e5e1-id300-roles.json).
 E5e-2 выполнен: псевдо-ID миссий (A61–A63): [evidence](../evidence/es-e5e2-mission-pseudo-ids.json).
 E5e-3 выполнен: жизнь отрядов War (A67) таблицей: [evidence](../evidence/es-e5e3-war-life.json).
-Следующая задача — E5e-4: слияние (A24–A26).
+E5e-4 выполнен: слияние (A24–A26), семейство Fusion: [evidence](../evidence/es-e5e4-fusion.json).
+Следующая задача — E5e-5: поломка оружия (A52–A54).
 
 ## Internal build storage и VM quota исправлены — 2026-10-17
 

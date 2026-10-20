@@ -48,6 +48,8 @@ public enum NTSDProfile {
         lifecycle: .init(halfHPRegen: OriginalIDSet([51, 52]), state9995Object: 50, pieces: 217, lastPiece: 218,
                          noRiseInvulnerability: OriginalIDSet([30, 31, 32, 33, 34, 35, 36, 37, 39]), roundRevertFrom: 50, roundRevertTo: 6,
                          guardedTransformer: 6),
+        // Fusion: 7 and 8 fuse into 51 (their IDs add to 15).
+        fusion: .init(fusers: OriginalIDSet([7, 8]), fusionPartnerSum: 15, fusedForm: 51),
         // The character AI's target choice and fight.
         characterAI: .init(stageAllyBound: 30, healBall: 200, healers: OriginalIDSet([2, 34]), stateDanger: 211, frameDanger: 212,
                            pickupItems: OriginalIDRange(100..<200), pickupExtra: 213, soughtDrink: 122, avoidedDrink: 123,

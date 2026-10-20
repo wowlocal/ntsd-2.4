@@ -363,6 +363,33 @@ public struct OriginalGameRules: Equatable, Sendable {
             self.guardedTransformer = guardedTransformer
         }
     }
+    /// Fusion (OriginalWorldFusion, the tail of each contact pass, which is
+    /// skipped when 0x44d05c = 2; slots 0..<20). An active slot whose Object is
+    /// one of `fusers`, with HP above 0, in state 2, its timer (+0x338) at 0 and
+    /// HP below 177 (or 0x458428 = 1), fuses with an active slot of the same
+    /// team (+0x364) whose Object ID is `fusionPartnerSum` minus its own (that
+    /// one also with HP above 0, timer 0, HP below 177 or 0x458428 = 1, a frame
+    /// in 0..<400, in state 2 or (not 14, y 0, slot above 9), less than 50 away
+    /// in x and 8 in z, and to the left of the first or in a slot above 9; the
+    /// first in a slot below 10) into the first catalog Object `fusedForm`: the
+    /// HP merged, frame 290, +0x328 1, the partner's slot at +0x32c, timer
+    /// 4500, both IDs at +0x330/+0x334, MP 500, the partner's slot deactivated.
+    /// Only when that test fails: a `fusedForm` whose +0x328 is 1, at a frame
+    /// below 9 or above 260 with its timer at or below 0, splits back into the
+    /// two saved IDs (the partner reconstructed and reactivated in its slot;
+    /// HP halved, frame 112, timer 900, MP 0, the team copied). The record
+    /// layout, thresholds and timers are engine code (A27 and the input's
+    /// route 8 read it too). A `fusionPartnerSum` twice a fuser's ID pairs two
+    /// of that ID, which the defuse cannot restore (its scan matches +0x330
+    /// first): the partner stays inactive.
+    public struct Fusion: Equatable, Sendable {
+        public let fusers: OriginalIDSet
+        public let fusionPartnerSum: Int32
+        public let fusedForm: Int32
+        public init(fusers: OriginalIDSet, fusionPartnerSum: Int32, fusedForm: Int32) {
+            self.fusers = fusers; self.fusionPartnerSum = fusionPartnerSum; self.fusedForm = fusedForm
+        }
+    }
     /// The character AI (OriginalCharacterAI): the IDs its target choice and fight test.
     /// The names follow the AI's own tests, not what the Objects are in the DAT.
     public struct CharacterAI: Equatable, Sendable {
@@ -445,14 +472,14 @@ public struct OriginalGameRules: Equatable, Sendable {
     }
     private final class Roles: Sendable {
         let profile: String, reflection: Reflection, armour: Armour, interaction: Interaction, impact: Impact, items: Items, roster: Roster
-        let modes: Modes, physics: Physics, drawing: Drawing, effects: Effects, lifecycle: Lifecycle, characterAI: CharacterAI
+        let modes: Modes, physics: Physics, drawing: Drawing, effects: Effects, lifecycle: Lifecycle, fusion: Fusion, characterAI: CharacterAI
         let characterAISpecial: any OriginalCharacterAISpecial
         init(profile: String, reflection: Reflection, armour: Armour, interaction: Interaction, impact: Impact, items: Items, roster: Roster,
-             modes: Modes, physics: Physics, drawing: Drawing, effects: Effects, lifecycle: Lifecycle, characterAI: CharacterAI,
+             modes: Modes, physics: Physics, drawing: Drawing, effects: Effects, lifecycle: Lifecycle, fusion: Fusion, characterAI: CharacterAI,
              characterAISpecial: any OriginalCharacterAISpecial) {
             self.profile = profile; self.reflection = reflection; self.armour = armour; self.interaction = interaction; self.impact = impact
             self.items = items; self.roster = roster; self.modes = modes; self.physics = physics; self.drawing = drawing; self.effects = effects
-            self.lifecycle = lifecycle; self.characterAI = characterAI; self.characterAISpecial = characterAISpecial
+            self.lifecycle = lifecycle; self.fusion = fusion; self.characterAI = characterAI; self.characterAISpecial = characterAISpecial
         }
     }
     private let roles: Roles
@@ -469,6 +496,7 @@ public struct OriginalGameRules: Equatable, Sendable {
     public var drawing: Drawing { roles.drawing }
     public var effects: Effects { roles.effects }
     public var lifecycle: Lifecycle { roles.lifecycle }
+    public var fusion: Fusion { roles.fusion }
     public var characterAI: CharacterAI { roles.characterAI }
     /// The game's special moves: a code hook, compared by its type.
     public var characterAISpecial: any OriginalCharacterAISpecial { roles.characterAISpecial }
@@ -542,6 +570,9 @@ public struct OriginalGameRules: Equatable, Sendable {
     public var roundRevertFrom: Int32 { roles.lifecycle.roundRevertFrom }
     public var roundRevertTo: Int32 { roles.lifecycle.roundRevertTo }
     public var guardedTransformer: Int32 { roles.lifecycle.guardedTransformer }
+    public var fusers: OriginalIDSet { roles.fusion.fusers }
+    public var fusionPartnerSum: Int32 { roles.fusion.fusionPartnerSum }
+    public var fusedForm: Int32 { roles.fusion.fusedForm }
     public var stageAllyBound: Int32 { roles.characterAI.stageAllyBound }
     public var healBall: Int32 { roles.characterAI.healBall }
     public var healers: OriginalIDSet { roles.characterAI.healers }
@@ -563,16 +594,16 @@ public struct OriginalGameRules: Equatable, Sendable {
     public var shortDasher: Int32 { roles.characterAI.shortDasher }
     public init(profile: String, reflection: Reflection, armour: Armour, interaction: Interaction, impact: Impact, items: Items,
                 roster: Roster, modes: Modes, physics: Physics, drawing: Drawing, effects: Effects, lifecycle: Lifecycle,
-                characterAI: CharacterAI, characterAISpecial: any OriginalCharacterAISpecial) {
+                fusion: Fusion, characterAI: CharacterAI, characterAISpecial: any OriginalCharacterAISpecial) {
         roles = Roles(profile: profile, reflection: reflection, armour: armour, interaction: interaction, impact: impact, items: items,
                       roster: roster, modes: modes, physics: physics, drawing: drawing, effects: effects, lifecycle: lifecycle,
-                      characterAI: characterAI, characterAISpecial: characterAISpecial)
+                      fusion: fusion, characterAI: characterAI, characterAISpecial: characterAISpecial)
     }
     public static func == (a: Self, b: Self) -> Bool {
         a.roles === b.roles || (a.profile == b.profile && a.reflection == b.reflection && a.armour == b.armour && a.interaction == b.interaction
                                 && a.impact == b.impact && a.items == b.items && a.roster == b.roster
                                 && a.modes == b.modes && a.physics == b.physics
-                                && a.drawing == b.drawing && a.effects == b.effects && a.lifecycle == b.lifecycle
+                                && a.drawing == b.drawing && a.effects == b.effects && a.lifecycle == b.lifecycle && a.fusion == b.fusion
                                 && a.characterAI == b.characterAI
                                 && ObjectIdentifier(type(of: a.characterAISpecial)) == ObjectIdentifier(type(of: b.characterAISpecial)))
     }
