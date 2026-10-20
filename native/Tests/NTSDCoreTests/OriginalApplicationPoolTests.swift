@@ -1,6 +1,7 @@
 import Foundation
 import XCTest
 import NTSDCore
+import NTSDProfile
 
 final class OriginalApplicationPoolTests: XCTestCase {
     typealias P = OriginalApplicationPoolSession
@@ -175,7 +176,7 @@ final class OriginalApplicationPoolTests: XCTestCase {
             let golden = try OriginalApplicationInterfaceInputsTests.golden.get()
             for i in 0..<10 {
                 let image = UInt32(0x7a100000)+UInt32(i)*16,surface = UInt32(0x7b100000)+UInt32(i)*16
-                let im = try XCTUnwrap(a.images[image]),s = try XCTUnwrap(a.surfaces[surface]),name = OriginalInitialInterfaceLoading.paths[i]
+                let im = try XCTUnwrap(a.images[image]),s = try XCTUnwrap(a.surfaces[surface]),name = NTSDProfile.rules.interface.interfaceBitmaps[i]
                 XCTAssertEqual(im.bitmap,try OriginalApplicationInterfaceInputsTests.inputs.get().bitmaps[name])
                 XCTAssertTrue(im.deleted);try golden.compare(im.bitmap.pixels,name)
                 let item = try XCTUnwrap(golden.reference.resources.first { $0.name == name })

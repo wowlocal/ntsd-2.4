@@ -1,6 +1,7 @@
 import Foundation
 import XCTest
 import NTSDCore
+import NTSDProfile
 
 final class OriginalApplicationLoadingSessionTests: XCTestCase {
     typealias Inputs = OriginalApplicationLoadingInputs
@@ -14,7 +15,7 @@ final class OriginalApplicationLoadingSessionTests: XCTestCase {
     }
     func testBundledCommonSoundsAreOwnedAndRetainDistinctNames() throws {
         let copy = try temporaryCopy(),owned = try Inputs.load(directory:copy)
-        let files = try OriginalInitialSoundLoading.paths.map { try owned.file($0) }
+        let files = try NTSDProfile.rules.interface.commonSounds.map { try owned.file($0) }
         XCTAssertEqual(files.count,18);XCTAssertEqual(files.reduce(0) { $0+$1.count },351_078)
         XCTAssertEqual(files[0],files[14]);XCTAssertEqual(files[1],files[17])
         XCTAssertEqual(Set(files.map { Data($0) }).count,16)

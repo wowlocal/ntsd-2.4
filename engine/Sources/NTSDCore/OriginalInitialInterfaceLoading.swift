@@ -50,12 +50,13 @@ public enum OriginalBitmapConstructor {
 /// effects in the enclosing candidate; this loader stages only its own globals
 /// and bitmap records until all ten stores and the loading-flag clear succeed.
 public struct OriginalInitialInterfaceLoading {
-    public static let paths = ["PAUSE", "DEMO", "SCORE_BOARD1", "SCORE_BOARD2", "SCORE_BOARD3", "SCORE_BOARD4", "WIN_ALIVE", "WIN_DEAD", "LOSE_DEAD", "BARS"]
     public static let slots = [0x44ff8c, 0x44f8f8, 0x44fcb4, 0x44fd8c, 0x44f88c, 0x44f87c, 0x44fd90, 0x44fd94, 0x44fb64, 0x44fd7c]
     public private(set) var bitmaps: [UInt32: OriginalLoadedBitmap] = [:]
     public init() {}
 
-    public mutating func load(globals: inout OriginalStateRecord,
+    /// `names`: the game's bitmap names, one per slot (ENGINE_SPLIT E5f-2a:
+    /// `Interface.interfaceBitmaps`).
+    public mutating func load(globals: inout OriginalStateRecord, names: [String],
                               allocate: (Int) throws -> OriginalInterfaceAllocation,
                               source: (Int, String) throws -> OriginalBitmapInput,
                               deviceResult: (Int) throws -> (surface: UInt32, colorKeyResult: Int32),
@@ -68,8 +69,9 @@ public struct OriginalInitialInterfaceLoading {
               try state.integer(at: 0x44d05c-base, as: Int32.self) == 1 else {
             throw OriginalStateError.invalidStorage("Initial interface loading context")
         }
+        guard names.count == Self.slots.count else { throw OriginalStateError.invalidStorage("Initial interface names: one per slot") }
         let device = try state.integer(at: 0x457578-base, as: UInt32.self)
-        for (index,path) in Self.paths.enumerated() {
+        for (index,path) in names.enumerated() {
             try observe(.init(.allocate, [0x1f50]))
             let allocation = try allocate(index)
             if allocation.address != 0 {

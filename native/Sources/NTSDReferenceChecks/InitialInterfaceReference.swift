@@ -1,5 +1,6 @@
 import Foundation
 import NTSDCore
+import NTSDProfile
 
 public enum InitialInterfaceReference {
     public struct Result {
@@ -96,7 +97,7 @@ public enum InitialInterfaceReference {
                 constructor = { index,allocation,device,path in
                     guard device == expectedDevice, allocation.address == item.allocations[index].address,
                           allocation.backing == (try hex(item.allocations[index].backing)),
-                          path == OriginalInitialInterfaceLoading.paths[index], let output = inputs[index] else {
+                          path == NTSDProfile.rules.interface.interfaceBitmaps[index], let output = inputs[index] else {
                         throw error("Supplied constructor binding")
                     }
                     result.providedConstructors += 1
@@ -105,7 +106,7 @@ public enum InitialInterfaceReference {
                         colorKeyResult: output.colorKeyResult) { events.append($0) }
                 }
             }
-            try loader.load(globals: &globals, allocate: { index in
+            try loader.load(globals: &globals, names: NTSDProfile.rules.interface.interfaceBitmaps, allocate: { index in
                 let a = item.allocations[index]
                 return try .init(address: a.address, backing: hex(a.backing))
             }, source: { index,path in

@@ -97,7 +97,8 @@ public struct OriginalApplicationLoadingSession {
                 try emit(.blit(q,result:drawResult));try observe(.front(event));return drawResult
             })
         }
-        let common = try OriginalInitialLoadingCommon.load(globals:initial,targetSurface:entry.target,fileSource:inputs.file,
+        let common = try OriginalInitialLoadingCommon.load(globals:initial,targetSurface:entry.target,
+            soundNames:inputs.rules.interface.commonSounds,fileSource:inputs.file,
             preparation:{ index,path,destination in
                 let device = try state.full.integer(at:0x44eecc-0x44d000,as:UInt32.self)
                 let preparation = try prepareWave(index,path,destination,device)

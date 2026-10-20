@@ -1,6 +1,7 @@
 import Foundation
 import XCTest
 import NTSDCore
+import NTSDProfile
 @testable import NTSDReferenceChecks
 
 final class OriginalInitialInterfaceSurfaceTests: XCTestCase {
@@ -96,8 +97,8 @@ final class OriginalInitialInterfaceSurfaceTests: XCTestCase {
             XCTAssertEqual(e.kind,.construct)
             let expected=try next("construct"), i=try XCTUnwrap(expected.index)
             XCTAssertEqual(e.arguments,[g.currentWrapper,0x40,0]); XCTAssertEqual(expected.address,g.currentWrapper)
-            XCTAssertEqual(e.strings,[Array(OriginalInitialInterfaceLoading.paths[i].utf8)])
-            XCTAssertEqual(expected.path,OriginalInitialInterfaceLoading.paths[i])
+            XCTAssertEqual(e.strings,[Array(NTSDProfile.rules.interface.interfaceBitmaps[i].utf8)])
+            XCTAssertEqual(expected.path,NTSDProfile.rules.interface.interfaceBitmaps[i])
         }
         func perform(_ q: API.Request,_ g: inout Context) throws -> API.Response {
             let e=try next(q.kind), expected=try XCTUnwrap(e.request), captured=try XCTUnwrap(e.response), key=try XCTUnwrap(e.key)
@@ -162,7 +163,7 @@ final class OriginalInitialInterfaceSurfaceTests: XCTestCase {
         var loader=OriginalInitialInterfaceLoading(), context=Context()
         let before=globals, beforeContext=context
         do {
-            try loader.loadWithSurfaceLoading(globals:&globals,context:&context,allocate:a.allocate,perform:a.perform,afterBitmap:a.stored,observe:a.observe)
+            try loader.loadWithSurfaceLoading(globals:&globals,names:NTSDProfile.rules.interface.interfaceBitmaps,context:&context,allocate:a.allocate,perform:a.perform,afterBitmap:a.stored,observe:a.observe)
             XCTAssertNil(failure)
         } catch {
             guard failure != nil, case Stop.injected = error else { throw error }

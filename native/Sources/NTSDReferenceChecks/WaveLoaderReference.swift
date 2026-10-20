@@ -1,5 +1,6 @@
 import Foundation
 import NTSDCore
+import NTSDProfile
 
 public enum WaveLoaderReference {
     public struct Result {
@@ -90,7 +91,7 @@ public enum WaveLoaderReference {
             guard startup.loads.count == 18, startup.endPC == "0x41bfeb", startup.stackAfter == 0x1000effc,
                   try globals.integer(at: 0x458348-OriginalMatchPreparation.globalBase, as: UInt32.self) == startup.mode else { throw error("Startup context") }
             var events: [OriginalInitialSoundEvent] = []
-            try OriginalInitialSoundLoading.load(globals: &globals, targetSurface: startup.targetSurface, fileSource: { path in
+            try OriginalInitialSoundLoading.load(globals: &globals, targetSurface: startup.targetSurface, names: NTSDProfile.rules.interface.commonSounds, fileSource: { path in
                 guard let key = sourceHashes[path] else { throw error("Startup source path") }
                 return try blob(key)
             }, platform: { index, path, destination in

@@ -1,10 +1,12 @@
 /// The exact content packages a game ships (ENGINE_SPLIT E2): the reference EXE
 /// they were made from, each package's manifest digest and the counts its
 /// manifest must declare. The loaders check a package against the identity the
-/// game supplies with its OriginalContentLocation; the names the EXE loads, the
-/// manifest format and the global record's layout stay the engine's. The engine
-/// still models one EXE (globals at 0x44d000, its load lists), so `exeSHA256`
-/// must name that EXE; `rules` carry the game's profile (E5).
+/// game supplies with its OriginalContentLocation; the manifest format and the
+/// global record's layout stay the engine's, while the load lists the engine
+/// has moved (E5f: the front menu's, the initial interface's, the common WAVs')
+/// come from `rules.interface`. The engine still models one EXE (globals at
+/// 0x44d000), so `exeSHA256` must name that EXE; `rules` carry the game's
+/// profile (E5).
 public struct OriginalContentIdentity: Equatable, Sendable {
     public struct Catalog: Equatable, Sendable {
         public let manifestSHA256: String

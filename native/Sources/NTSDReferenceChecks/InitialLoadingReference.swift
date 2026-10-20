@@ -1,5 +1,6 @@
 import Foundation
 import NTSDCore
+import NTSDProfile
 
 public enum InitialLoadingReference {
     public struct Result {
@@ -112,7 +113,7 @@ public enum InitialLoadingReference {
         var comparison: CatalogSoundsReference.Result?, timerIndex = 0
         let timerInputs = c.progressCalls.filter { $0.kind == .timeGetTime }.map(\.returned)
         let native = try OriginalInitialLoading.load(globals: before, world: world, actorBacking: actorBacking,
-            targetSurface: c.common.loads[0].savedRegisters[2], fileSource: { path in
+            targetSurface: c.common.loads[0].savedRegisters[2], soundNames: NTSDProfile.rules.interface.commonSounds, fileSource: { path in
                 guard let item = c.common.loads.first(where: { $0.path == Array(path.utf8) }) else { throw error("Common WAV source") }
                 return try blob(item.file)
             }, wavePlatform: { index,path,destination in

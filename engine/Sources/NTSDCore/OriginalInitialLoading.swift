@@ -103,8 +103,9 @@ public struct OriginalInitialLoading {
         }
     }
 
+    /// `soundNames`: the game's common WAVs (ENGINE_SPLIT E5f-2a: `Interface.commonSounds`).
     public static func load(globals initialGlobals: OriginalStateRecord, world: OriginalStateRecord,
-                            actorBacking: [[UInt8]], targetSurface: UInt32,
+                            actorBacking: [[UInt8]], targetSurface: UInt32, soundNames: [String],
                             fileSource: (String) throws -> [UInt8],
                             wavePlatform: (Int, String, UInt32) throws -> OriginalWavePlatform,
                             loadCatalog: (UInt32, [UInt8], (OriginalLoadingProgress.Request) throws -> Void) throws -> OriginalInitialCatalogResources,
@@ -128,7 +129,7 @@ public struct OriginalInitialLoading {
               try initialGlobals.integer(at: 0x458438-base, as: Int32.self) == 0 else {
             throw OriginalStateError.invalidStorage("First loading requires flag1 and an empty sound registry")
         }
-        let prefix = try OriginalInitialLoadingCommon.load(globals:initialGlobals,targetSurface:targetSurface,
+        let prefix = try OriginalInitialLoadingCommon.load(globals:initialGlobals,targetSurface:targetSurface,soundNames:soundNames,
             fileSource:fileSource,platform:wavePlatform,audio:audio,afterPrologue:afterPrologue,
             afterWave:afterCommonWave,observe:observeCommon)
         var globals = prefix.globals

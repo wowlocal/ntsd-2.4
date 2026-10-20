@@ -29,7 +29,7 @@ public struct OriginalInitialLoadingContinuation {
         observeInterface: (OriginalInterfaceEvent, inout Context) throws -> Void = { _,_ in },
         beforeCommit: (OriginalInitialLoading, inout Context) throws -> Void = { _,_ in }) throws -> OriginalInitialLoading {
         var environment = context
-        let pool = try OriginalInitialPoolAndInterface.load(world: world, globals: globals,
+        let pool = try OriginalInitialPoolAndInterface.load(world: world, globals: globals, interfaceNames: resources.catalog.rules.interface.interfaceBitmaps,
             firstObjectWord90: { try resources.catalog.objects[0].header.integer(at: 0x90, as: Int32.self) },
             context: &environment, allocateActor: allocateActor, allocateInterface: allocateInterface,
             perform: perform, afterActorConstructor: afterActorConstructor, afterPool: afterPool,
@@ -57,7 +57,7 @@ public struct OriginalInitialLoadingContinuation {
             afterActorConstructor: { _,_,_,_ in }, afterPool: { value,staging,_ in try afterPool(value,staging) },
             loadInterface: { state,_ in
                 var interface = OriginalInitialInterfaceLoading()
-                try interface.load(globals: &state, allocate: allocateInterface, source: interfaceSource,
+                try interface.load(globals: &state, names: resources.catalog.rules.interface.interfaceBitmaps, allocate: allocateInterface, source: interfaceSource,
                     deviceResult: interfaceDevice, afterBitmap: afterBitmap, observe: observeInterface)
                 return interface
             })

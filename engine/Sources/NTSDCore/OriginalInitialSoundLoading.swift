@@ -10,11 +10,9 @@ public struct OriginalInitialSoundEvent: Codable, Equatable, Sendable {
 /// Loading prefix41be98..41bfeb: before the catalog/400-slot pool allocation.
 /// Shared fixed resources are listed in the EXE, not inferred from characters.
 public enum OriginalInitialSoundLoading {
-    public static let paths = ["data\\001.wav","data\\002.wav","data\\006.wav","data\\010.wav","data\\011.wav","data\\004.wav",
-        "data\\016.wav","data\\017.wav","data\\020.wav","data\\021.wav","data\\025.wav","data\\032.wav",
-        "data\\033.wav","data\\039.wav","data\\065.wav","data\\066.wav","data\\068.wav","data\\085.wav"]
-
-    public static func load(globals: inout OriginalStateRecord, targetSurface: UInt32,
+    /// The common WAVs' destinations, from 0x451db0 (one word each).
+    public static let destinationCount = 18
+    public static func load(globals: inout OriginalStateRecord, targetSurface: UInt32, names: [String],
                             fileSource: (String) throws -> [UInt8],
                             platform: (Int, String, UInt32) throws -> OriginalWavePlatform,
                             afterWave: (Int, OriginalWaveLoadResult, OriginalStateRecord) throws -> Void = { _, _, _ in },
@@ -22,12 +20,14 @@ public enum OriginalInitialSoundLoading {
                             store: (Int, [UInt8]) throws -> Void = { _, _ in },
                             audio: OriginalWaveRequest.Factory? = nil,
                             observe: (OriginalInitialSoundEvent) throws -> Void = { _ in }) throws {
-        try load(globals:&globals,targetSurface:targetSurface,fileSource:fileSource,
+        try load(globals:&globals,targetSurface:targetSurface,names:names,fileSource:fileSource,
             preparation:{ .legacy(try platform($0,$1,$2),audio) },afterWave:afterWave,
             attemptedWave:attemptedWave,store:store,observe:observe)
     }
 
-    public static func load(globals: inout OriginalStateRecord, targetSurface: UInt32,
+    /// `names`: the game's common WAVs, one per destination from 0x451db0
+    /// (ENGINE_SPLIT E5f-2a: `Interface.commonSounds`).
+    public static func load(globals: inout OriginalStateRecord, targetSurface: UInt32, names: [String],
                             fileSource: (String) throws -> [UInt8],
                             preparation: (Int, String, UInt32) throws -> OriginalWavePreparation,
                             afterWave: (Int, OriginalWaveLoadResult, OriginalStateRecord) throws -> Void = { _, _, _ in },
@@ -41,6 +41,7 @@ public enum OriginalInitialSoundLoading {
               try candidate.integer(at: 0x44d05c-base, as: Int32.self) == 1 else {
             throw OriginalStateError.invalidStorage("Initial sound loading context")
         }
+        guard names.count == Self.destinationCount else { throw OriginalStateError.invalidStorage("Initial sound names: one per destination") }
         try observe(.init(presentation: .init(.bitmap, [candidate.integer(at: 0x45118c-base, as: UInt32.self),
                                                        0,0,UInt32.max,0,0,targetSurface])))
         for (address, count) in [(0x457588,1600),(0x453e10,320)] {
@@ -49,7 +50,7 @@ public enum OriginalInitialSoundLoading {
                 try store(address+i, [0,0,0,0])
             }
         }
-        for (index,path) in paths.enumerated() {
+        for (index,path) in names.enumerated() {
             let destination = UInt32(0x451db0+index*4), input = try preparation(index,path,destination)
             guard input.destination == destination,
                   try candidate.integer(at: 0x44eecc-base, as: UInt32.self) == input.device else {

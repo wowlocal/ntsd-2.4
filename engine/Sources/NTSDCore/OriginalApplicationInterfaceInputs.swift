@@ -33,7 +33,7 @@ public struct OriginalApplicationInterfaceInputs: Equatable {
         let manifest = try JSONDecoder().decode(Manifest.self,from:data)
         guard manifest.version == 1,
               manifest.exeSHA256 == identity.exeSHA256,
-              manifest.entries.map(\.name) == OriginalInitialInterfaceLoading.paths else { throw Boundary.invalid("Manifest contract") }
+              manifest.entries.map(\.name) == identity.rules.interface.interfaceBitmaps else { throw Boundary.invalid("Manifest contract") }
         var bitmaps: [String:OriginalApplicationStartupInputs.Bitmap] = [:]
         for entry in manifest.entries {
             guard entry.path == entry.name+".dib" else { throw Boundary.invalid("Resource path") }

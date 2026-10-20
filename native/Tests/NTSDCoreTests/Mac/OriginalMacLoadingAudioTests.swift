@@ -1,6 +1,7 @@
 import AppKit
 import XCTest
 @testable import NTSDCore
+import NTSDProfile
 @testable import NTSDMacPlatform
 @testable import NTSDRuntime
 
@@ -195,7 +196,7 @@ import XCTest
                 var loader = OriginalRegisteredSoundLoading()
                 let device = try common.state.full.integer(at:0x44eecc-0x44d000,as:UInt32.self)
                 for index in 0..<3 {
-                    let path = OriginalInitialSoundLoading.paths[index == 2 ? 0 : index]
+                    let path = NTSDProfile.rules.interface.commonSounds[index == 2 ? 0 : index]
                     try registered(&loader,registration(index,path),XCTUnwrap(r.files[path]),device,audio)
                 }
                 _ = try exchange.finish(audio.cursor)

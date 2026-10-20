@@ -9,7 +9,7 @@ public struct OriginalInitialLoadingCommon {
     /// Two distinct10-byte command arrays; intervening private padding is unknown.
     public let commands: [[UInt8]]
 
-    public static func load(globals initial: OriginalStateRecord, targetSurface: UInt32,
+    public static func load(globals initial: OriginalStateRecord, targetSurface: UInt32, soundNames: [String],
                             fileSource: (String) throws -> [UInt8],
                             platform: (Int, String, UInt32) throws -> OriginalWavePlatform,
                             audio: OriginalWaveRequest.Factory? = nil,
@@ -19,12 +19,13 @@ public struct OriginalInitialLoadingCommon {
                             store: (Int, [UInt8]) throws -> Void = { _, _ in },
                             observe: (OriginalInitialSoundEvent) throws -> Void = { _ in },
                             beforeCommit: (Self) throws -> Void = { _ in }) throws -> Self {
-        try load(globals:initial,targetSurface:targetSurface,fileSource:fileSource,
+        try load(globals:initial,targetSurface:targetSurface,soundNames:soundNames,fileSource:fileSource,
             preparation:{ .legacy(try platform($0,$1,$2),audio) },afterPrologue:afterPrologue,
             afterWave:afterWave,attemptedWave:attemptedWave,store:store,observe:observe,beforeCommit:beforeCommit)
     }
 
-    public static func load(globals initial: OriginalStateRecord, targetSurface: UInt32,
+    /// `soundNames`: the game's common WAVs (ENGINE_SPLIT E5f-2a: `Interface.commonSounds`).
+    public static func load(globals initial: OriginalStateRecord, targetSurface: UInt32, soundNames: [String],
                             fileSource: (String) throws -> [UInt8],
                             preparation: (Int, String, UInt32) throws -> OriginalWavePreparation,
                             ownedWave: (Int, OriginalWaveOwnership) throws -> Void = { _,_ in },
@@ -37,7 +38,7 @@ public struct OriginalInitialLoadingCommon {
         var globals = initial, sounds: [OriginalWaveLoadResult] = []
         let paused = try OriginalInitialLoading.begin(globals:&globals,store:store)
         try afterPrologue(globals,paused)
-        try OriginalInitialSoundLoading.load(globals:&globals,targetSurface:targetSurface,
+        try OriginalInitialSoundLoading.load(globals:&globals,targetSurface:targetSurface,names:soundNames,
             fileSource:fileSource,preparation:preparation,afterWave:{ i,wave,state in
                 sounds.append(wave);try afterWave(i,wave,state)
             },attemptedWave:attemptedWave,store:store,ownedWave:ownedWave,observe:observe)

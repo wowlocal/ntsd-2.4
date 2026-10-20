@@ -10,7 +10,7 @@ public struct OriginalInitialPoolAndInterface {
     /// Actor and bitmap work succeeds. Buffer external effects in that context.
     /// Numeric bitmap failures follow the original continuation; thrown failures
     /// retain the caller's context and produce no new pool/interface result.
-    public static func load<Context>(world: OriginalStateRecord, globals: OriginalStateRecord,
+    public static func load<Context>(world: OriginalStateRecord, globals: OriginalStateRecord, interfaceNames: [String],
         firstObjectWord90: Int32, context: inout Context,
         allocateActor: (Int, Int, inout Context) throws -> [UInt8],
         allocateInterface: (Int, inout Context) throws -> OriginalInterfaceAllocation,
@@ -19,13 +19,15 @@ public struct OriginalInitialPoolAndInterface {
         afterPool: (OriginalWorldBootstrap, Bool, inout Context) throws -> Void = { _,_,_ in },
         afterBitmap: (Int, OriginalStateRecord, inout Context) throws -> Void = { _,_,_ in },
         observeInterface: (OriginalInterfaceEvent, inout Context) throws -> Void = { _,_ in }) throws -> Self {
-        try load(world: world, globals: globals, firstObjectWord90: { firstObjectWord90 }, context: &context,
+        try load(world: world, globals: globals, interfaceNames: interfaceNames, firstObjectWord90: { firstObjectWord90 }, context: &context,
             allocateActor: allocateActor, allocateInterface: allocateInterface, perform: perform,
             afterActorConstructor: afterActorConstructor, afterPool: afterPool, afterBitmap: afterBitmap,
             observeInterface: observeInterface)
     }
 
-    public static func load<Context>(world: OriginalStateRecord, globals: OriginalStateRecord,
+    /// `interfaceNames`: the game's interface bitmaps (ENGINE_SPLIT E5f-2a:
+    /// `Interface.interfaceBitmaps`).
+    public static func load<Context>(world: OriginalStateRecord, globals: OriginalStateRecord, interfaceNames: [String],
         firstObjectWord90: () throws -> Int32, context: inout Context,
         allocateActor: (Int, Int, inout Context) throws -> [UInt8],
         allocateInterface: (Int, inout Context) throws -> OriginalInterfaceAllocation,
@@ -38,7 +40,7 @@ public struct OriginalInitialPoolAndInterface {
             allocateActor: allocateActor, afterActorConstructor: afterActorConstructor, afterPool: afterPool,
             loadInterface: { state, environment in
                 var interface = OriginalInitialInterfaceLoading()
-                try interface.loadWithSurfaceLoading(globals: &state, context: &environment,
+                try interface.loadWithSurfaceLoading(globals: &state, names: interfaceNames, context: &environment,
                     allocate: allocateInterface, perform: perform, afterBitmap: afterBitmap, observe: observeInterface)
                 return interface
             })

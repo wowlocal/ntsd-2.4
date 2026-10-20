@@ -1,6 +1,7 @@
 import Foundation
 import XCTest
 import NTSDCore
+import NTSDProfile
 @testable import NTSDReferenceChecks
 
 /// Reuse the immutable whole UI corpus. Constructor states are independently
@@ -77,7 +78,7 @@ final class OriginalInitialPoolAndInterfaceTests: XCTestCase {
         var context=Context(),result: OriginalInitialPoolAndInterface?
         let before=context
         do {
-            result=try OriginalInitialPoolAndInterface.load(world:world,globals:globals,
+            result=try OriginalInitialPoolAndInterface.load(world:world,globals:globals,interfaceNames:NTSDProfile.rules.interface.interfaceBitmaps,
                 firstObjectWord90:{
                     let read=wordReads[wordReadIndex],helper=constructors.helpers[400+wordReadIndex]
                     XCTAssertEqual(constructors.index,401+wordReadIndex)

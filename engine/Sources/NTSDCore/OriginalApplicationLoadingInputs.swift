@@ -12,6 +12,9 @@ public struct OriginalApplicationLoadingInputs: Equatable {
         let version: Int,exeSHA256: String,entries: [Entry]
     }
     private let files: [String:[UInt8]]
+    /// The game's rules, from the content identity (ENGINE_SPLIT E5f-2a: the
+    /// common WAVs' names come from `rules.interface.commonSounds`).
+    public let rules: OriginalGameRules
     public static func bundled(in content: OriginalContentLocation) throws -> Self {
         try load(directory:bundledDirectory(in:content),identity:content.identity)
     }
@@ -37,7 +40,7 @@ public struct OriginalApplicationLoadingInputs: Equatable {
         guard digest(raw) == identity.loadingManifestSHA256 else { throw Boundary.invalid("Manifest digest") }
         let manifest = try JSONDecoder().decode(Manifest.self,from:Data(raw))
         guard manifest.version == 1,manifest.exeSHA256 == identity.exeSHA256,
-              manifest.entries.map(\.name) == OriginalInitialSoundLoading.paths else { throw Boundary.invalid("Manifest contract") }
+              manifest.entries.map(\.name) == identity.rules.interface.commonSounds else { throw Boundary.invalid("Manifest contract") }
         var files: [String:[UInt8]] = [:],names = Set(["manifest.json"])
         for item in manifest.entries {
             let filename = String(item.name.dropFirst(5))
@@ -48,7 +51,7 @@ public struct OriginalApplicationLoadingInputs: Equatable {
         }
         let actual = try FileManager.default.contentsOfDirectory(atPath:directory.path)
         guard Set(actual) == names else { throw Boundary.invalid("Package composition") }
-        return .init(files:files)
+        return .init(files:files,rules:identity.rules)
     }
     public func file(_ name: String) throws -> [UInt8] {
         guard let bytes = files[name] else { throw Boundary.unsupportedName(name) }

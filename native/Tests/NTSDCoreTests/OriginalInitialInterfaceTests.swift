@@ -1,6 +1,7 @@
 import Foundation
 import XCTest
 import NTSDCore
+import NTSDProfile
 import NTSDReferenceChecks
 
 final class OriginalInitialInterfaceTests: XCTestCase {
@@ -46,7 +47,7 @@ final class OriginalInitialInterfaceTests: XCTestCase {
     func testWholeSurfaceFailureRetainsProducedDimensions() throws {
         var state = try globals(), loader = OriginalInitialInterfaceLoading(), requests: [String] = []
         var constructors = 0, stores = 0
-        try loader.load(globals: &state, allocate: { index in
+        try loader.load(globals: &state, names: NTSDProfile.rules.interface.interfaceBitmaps, allocate: { index in
             .init(address: index == 0 ? 0x28000020 : 0, backing: index == 0 ? [UInt8](repeating: 0xa5, count: 0x1f50) : [])
         }, source: { _,_ in throw Stop.unexpectedLegacyProvider }, deviceResult: { _ in throw Stop.unexpectedLegacyProvider },
         constructBitmap: { index,allocation,device,path in
@@ -94,14 +95,14 @@ final class OriginalInitialInterfaceTests: XCTestCase {
 
     func testLateProvidedConstructorFailureKeepsCommittedInterface() throws {
         var state = try globals(), loader = OriginalInitialInterfaceLoading()
-        try loader.load(globals: &state, allocate: { i in
+        try loader.load(globals: &state, names: NTSDProfile.rules.interface.interfaceBitmaps, allocate: { i in
             .init(address: 0x28000020+UInt32(i)*0x2000, backing: [UInt8](repeating: 0xa5, count: 0x1f50))
         }, source: { _,_ in throw Stop.unexpectedLegacyProvider }, deviceResult: { _ in throw Stop.unexpectedLegacyProvider },
         constructBitmap: { _,allocation,_,path in try self.bitmap(path,allocation.backing) })
         try state.write(Int32(1), at: 0x44d05c-base)
         let before = state, previous = loader.bitmaps
         var constructors = 0, stores = 0
-        XCTAssertThrowsError(try loader.load(globals: &state, allocate: { i in
+        XCTAssertThrowsError(try loader.load(globals: &state, names: NTSDProfile.rules.interface.interfaceBitmaps, allocate: { i in
             .init(address: 0x29000020+UInt32(i)*0x2000, backing: [UInt8](repeating: 0x5a, count: 0x1f50))
         }, source: { _,_ in throw Stop.unexpectedLegacyProvider }, deviceResult: { _ in throw Stop.unexpectedLegacyProvider },
         constructBitmap: { index,allocation,_,path in
@@ -122,7 +123,7 @@ final class OriginalInitialInterfaceTests: XCTestCase {
         for wrongPath in [true,false] {
             var state = try globals(), loader = OriginalInitialInterfaceLoading()
             let before = state
-            XCTAssertThrowsError(try loader.load(globals: &state, allocate: { i in
+            XCTAssertThrowsError(try loader.load(globals: &state, names: NTSDProfile.rules.interface.interfaceBitmaps, allocate: { i in
                 .init(address: 0x28000020+UInt32(i)*0x2000, backing: [UInt8](repeating: 0xa5, count: 0x1f50))
             }, source: { _,_ in throw Stop.unexpectedLegacyProvider }, deviceResult: { _ in throw Stop.unexpectedLegacyProvider },
             constructBitmap: { index,allocation,_,path in

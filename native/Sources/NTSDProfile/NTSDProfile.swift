@@ -61,7 +61,14 @@ public enum NTSDProfile {
         interface: .init(frontBitmaps: ["LF2_CURSOR", "MENU_CLIP", "MENU_CLIP2", "MENU_CLIP3", "MENU_CLIP4", "MENU_CLIP5",
                                         "MENU_CLIP6", "MENU_CLIP7", "MENU_WAIT", "SLOGAN", "ENDING", "LF2_CURSOR", "CS2", "CS3",
                                         "CS4", "CS5", "CS6", "FRAME", "WORDS0", "WORDS1", "WORDS2", "WORDS3", "WORDS4", "WORDS5"],
-                         frontSheets: frontSheets),
+                         frontSheets: frontSheets,
+                         // The initial interface's bitmaps and the common WAVs loading reads first.
+                         interfaceBitmaps: ["PAUSE", "DEMO", "SCORE_BOARD1", "SCORE_BOARD2", "SCORE_BOARD3", "SCORE_BOARD4", "WIN_ALIVE",
+                                            "WIN_DEAD", "LOSE_DEAD", "BARS"],
+                         commonSounds: ["data\\001.wav", "data\\002.wav", "data\\006.wav", "data\\010.wav", "data\\011.wav",
+                                        "data\\004.wav", "data\\016.wav", "data\\017.wav", "data\\020.wav", "data\\021.wav",
+                                        "data\\025.wav", "data\\032.wav", "data\\033.wav", "data\\039.wav", "data\\065.wav",
+                                        "data\\066.wav", "data\\068.wav", "data\\085.wav"]),
         // The character AI's target choice and fight.
         characterAI: .init(stageAllyBound: 30, healBall: 200, healers: OriginalIDSet([2, 34]), stateDanger: 211, frameDanger: 212,
                            pickupItems: OriginalIDRange(100..<200), pickupExtra: 213, soughtDrink: 122, avoidedDrink: 123,

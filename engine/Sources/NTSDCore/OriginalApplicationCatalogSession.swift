@@ -181,7 +181,8 @@ public struct OriginalApplicationCatalogSession {
             }
             for (token,record) in startup.music.allocations { try range(token,record.byteCount) }
             for (i,owner) in entry.waveOwners.enumerated() {
-                guard owner.binding.index == i,owner.binding.path == OriginalInitialSoundLoading.paths[i] else { throw Boundary.input("Common WAV path/index") }
+                guard owner.binding.index == i,i < inputs.rules.interface.commonSounds.count,
+                      owner.binding.path == inputs.rules.interface.commonSounds[i] else { throw Boundary.input("Common WAV path/index") }
                 guard owner.matches(entry.common.sounds[i]) else { throw Boundary.input("Common WAV result") }
                 try owner.validate(device:device,destination:UInt32(0x451db0+4*i),
                     output:word(0x451db0+4*i),domain:audioDomain)
