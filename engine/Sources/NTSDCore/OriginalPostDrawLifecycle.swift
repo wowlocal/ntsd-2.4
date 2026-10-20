@@ -76,15 +76,17 @@ public enum OriginalPostDrawLifecycle {
                 if OriginalCPointPass.outsideAllocation(number) && catalog.objects.indices.contains(index) { return OriginalCPointPass.beyondAllocation }
                 guard catalog.objects.indices.contains(index), catalog.objects[index].frameStorage.indices.contains(Int(number)) else { throw error("Frame binding") }
                 return catalog.objects[index].frameStorage[Int(number)]
-            }, observe: observe, inPlace: inPlace)
+            }, rules: catalog.rules, observe: observe, inPlace: inPlace)
     }
     private static func error(_ text: String) -> OriginalStateError { .invalidStorage("Post-draw lifecycle: " + text) }
+    /// `header` must be pure: it reaches the opoint, whose A57 test reads it once
+    /// (ENGINE_SPLIT E5c-1g, F6).
     @discardableResult
     static func apply(world: inout OriginalStateRecord, actors: inout [OriginalStateRecord], globals: inout OriginalStateRecord,
                       scratch: inout OriginalPostDrawScratch, wholeLoop: Bool, slot: Int,
                       library: OriginalLibTransformBacking? = nil,
                       precision: OriginalArithmeticPrecision, sse2: Bool, objectCount: Int32,
-                      header: (Int) throws -> OriginalStateRecord, frame: (Int, Int32) throws -> OriginalStateRecord,
+                      header: (Int) throws -> OriginalStateRecord, frame: (Int, Int32) throws -> OriginalStateRecord, rules: OriginalGameRules,
                       observe: (OriginalPostDrawLifecycleEvent) throws -> Void = { _ in }, inPlace: Bool = false) throws -> OriginalLibTransformBacking? {
         guard (0..<400).contains(slot) else { throw error("Slot extent") }
         guard inPlace else {
@@ -92,7 +94,7 @@ public enum OriginalPostDrawLifecycle {
             var copiedWorld = world, copies = actors, copiedGlobals = globals, copiedScratch = scratch
             let result = try apply(world: &copiedWorld, actors: &copies, globals: &copiedGlobals, scratch: &copiedScratch, wholeLoop: wholeLoop,
                                    slot: slot, library: library, precision: precision, sse2: sse2, objectCount: objectCount,
-                                   header: header, frame: frame, observe: observe, inPlace: true)
+                                   header: header, frame: frame, rules: rules, observe: observe, inPlace: true)
             world = copiedWorld; actors = copies; globals = copiedGlobals; scratch = copiedScratch
             return result
         }
@@ -113,7 +115,7 @@ public enum OriginalPostDrawLifecycle {
                     // every path (CORE_REALTIME B2 P4).
                     var body = Body(world: inPlaceTake(&world, leaving: .vacant), actors: inPlaceTake(&actors, leaving: []),
                                     globals: inPlaceTake(&globals, leaving: .vacant), scratch: scratch, slot: slot, library: library,
-                                    precision: precision, sse2: sse2, objectCount: objectCount, header: headers, frame: frames, observe: observer,
+                                    precision: precision, sse2: sse2, objectCount: objectCount, rules: rules, header: headers, frame: frames, observe: observer,
                                     converted: converted)
                     defer { world = body.world; actors = body.actors; globals = body.globals; scratch = body.scratch }
                     for selected in wholeLoop ? 0..<400 : slot..<slot+1 {
@@ -130,6 +132,7 @@ public enum OriginalPostDrawLifecycle {
         var scratch: OriginalPostDrawScratch, slot: Int
         var library: OriginalLibTransformBacking?
         let precision: OriginalArithmeticPrecision, sse2: Bool, objectCount: Int32
+        let rules: OriginalGameRules
         let header: (Int) throws -> OriginalStateRecord, frame: (Int, Int32) throws -> OriginalStateRecord
         let observe: (OriginalPostDrawLifecycleEvent) throws -> Void
         let converted: (OriginalPostDrawSlotEvent) throws -> Void
@@ -246,7 +249,7 @@ public enum OriginalPostDrawLifecycle {
             let command = fields == [9, 0, 9, 0] ? 100 : fields == [9, 9, 9, 9] ? 102 : fields == [9, 5, 9, 5] ? 104 : 0
             if command == 0 { return }
             for offset in [0x418, 0x414, 0x410, 0x40c, 0x408] { try put(parent, offset, 0) }
-            let selected = try free(), object = try find(998)
+            let selected = try free(), object = try find(rules.commandEffect)
             // 420c7b/420c97 step SP+34 through the catalog table even without a free slot.
             if objectCount > 0 { scratch.requestSlot = .catalogCursor(object ?? objectCount) }
             guard let selected, let object else { return }
@@ -274,7 +277,7 @@ public enum OriginalPostDrawLifecycle {
         mutating func late(_ parent: Int) throws {
             if try (state(parent, 0x78) == 13 || i(parent, 0x78) == 200) && state(parent, 0x70) != 13 && i(parent, 0x70) != 200 {
                 try sound(parent, 15, builtin: true)
-                if let object = try find(999) {
+                if let object = try find(rules.deathParticles) {
                     for n in 0..<15 {
                         guard let selected = try free() else { break }
                         let child = try construct(selected, object); try copyParticleCoordinates(parent, child)
@@ -298,7 +301,7 @@ public enum OriginalPostDrawLifecycle {
                 else { count = 7 }
                 for _ in 0..<count {
                     guard let selected = try free() else { break }
-                    let found = try find(999)
+                    let found = try find(rules.fireParticles)
                     if objectCount > 0 { scratch.requestSlot = .catalogCursor(found ?? objectCount) } // 4211f6/421212
                     if let found { scratch.fireObject = found }
                     guard let object = scratch.fireObject else { throw error("Fire Object index provenance") }
@@ -336,7 +339,7 @@ public enum OriginalPostDrawLifecycle {
             }
             let continuation = try OriginalPostDrawOpoint.apply(world: &world, actors: &actors, slot: slot,
                 requestSlot: &scratch.requestSlot, precision: precision, sse2: sse2, objectCount: objectCount, header: header, frame: frame,
-                observe: converted, inPlace: true)
+                rules: rules, observe: converted, inPlace: true)
             if continuation == .nextSlot { return }
             let parent = try index(slot)
             if try continuation == .weaponCreation && !weapon(parent) { try command(parent) }

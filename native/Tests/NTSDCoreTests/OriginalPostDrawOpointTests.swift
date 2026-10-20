@@ -2,6 +2,7 @@ import Foundation
 import XCTest
 @testable import NTSDCore
 @testable import NTSDReferenceChecks
+import NTSDProfile
 
 final class OriginalPostDrawOpointTests: XCTestCase {
     private struct Patch: Decodable {
@@ -101,7 +102,7 @@ final class OriginalPostDrawOpointTests: XCTestCase {
                 var requestSlot: OriginalRequestSlotWord?
                 let continuation = try OriginalPostDrawOpoint.apply(world: &world, actors: &actors, slot: item.slot, requestSlot: &requestSlot,
                     precision: .bits53, sse2: item.sse2 == 1, objectCount: item.count ?? 4,
-                    header: { ownHeaders[$0] }, frame: { ownFrames[$0][Int($1)] }, observe: { event in
+                    header: { ownHeaders[$0] }, frame: { ownFrames[$0][Int($1)] }, rules: NTSDProfile.rules, observe: { event in
                         switch event {
                         case let .random(slot, stream, range, result):
                             events.append(.init(slot: slot, kind: "random", arguments: [stream, range, result].map(UInt32.init(bitPattern:))))
@@ -146,7 +147,7 @@ final class OriginalPostDrawOpointTests: XCTestCase {
         let beforeWorld = world, beforeActors = actors
         var seen: [OriginalPostDrawSlotEvent] = []
         XCTAssertThrowsError(try OriginalPostDrawOpoint.apply(world: &world, actors: &actors, slot: 0,
-            precision: .bits53, sse2: false, objectCount: 1, header: { _ in header }, frame: { _, _ in frame }, observe: { event in
+            precision: .bits53, sse2: false, objectCount: 1, header: { _ in header }, frame: { _, _ in frame }, rules: NTSDProfile.rules, observe: { event in
                 seen.append(event)
                 if seen.count == 2 { throw OriginalStateError.invalidStorage("Second constructor observer") }
             }))
@@ -159,7 +160,7 @@ final class OriginalPostDrawOpointTests: XCTestCase {
         let beforeWorld = world, beforeActors = actors
         var seen: [OriginalPostDrawSlotEvent] = []
         XCTAssertThrowsError(try OriginalPostDrawOpoint.apply(world: &world, actors: &actors, slot: 0,
-            precision: .bits53, sse2: false, objectCount: 1, header: { _ in header }, frame: { _, _ in frame }, observe: { seen.append($0) }))
+            precision: .bits53, sse2: false, objectCount: 1, header: { _ in header }, frame: { _, _ in frame }, rules: NTSDProfile.rules, observe: { seen.append($0) }))
         XCTAssertEqual(seen, [.reconstruct(slot: 0, created: 50)])
         XCTAssertEqual(world, beforeWorld); XCTAssertEqual(actors, beforeActors)
     }

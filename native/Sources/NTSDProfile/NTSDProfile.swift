@@ -36,5 +36,8 @@ public enum NTSDProfile {
                        restingPiece: 999, revivalPicture: OriginalIDRange(30..<37), revivalEffect: 998),
         // The world drawing: no shadow; team-5 computers left without the "Com" label.
         drawing: .init(shadowless: OriginalIDSet([223, 224]),
-                       unlabelledComputers: OriginalIDSet([30, 31, 32, 33, 34, 35, 36, 37, 39, 40, 41, 42, 43, 44, 45, 46, 47, 48, 49])))
+                       unlabelledComputers: OriginalIDSet([30, 31, 32, 33, 34, 35, 36, 37, 39, 40, 41, 42, 43, 44, 45, 46, 47, 48, 49])),
+        // The post-draw opoint's children and the lifecycle's spawned Objects.
+        effects: .init(fixedDepthChildren: OriginalIDSet([223, 224]), quarterDepthChild: 211, weakChildren: OriginalIDSet([5, 52]),
+                       commandEffect: 998, deathParticles: 999, fireParticles: 999))
 }

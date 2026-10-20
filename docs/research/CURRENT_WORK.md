@@ -64,7 +64,8 @@ E5c-2c выполнен: запрошенные предметы и стадия
 E5c-2g выполнен: надпись режима (D10); строки меню и режимов E5c-2 в профиле:
 [evidence](../evidence/es-e5c2g-mode-label-roles.json). E5c-1e выполнен: физика (дрейфы, гравитация брошенного, покоящийся кусок, оживление): [evidence](../evidence/es-e5c1e-physics-roles.json).
 E5c-1f выполнен: отрисовка (тень A45, подпись «Com» A46): [evidence](../evidence/es-e5c1f-drawing-roles.json).
-Следующая задача — E5c-1g: эффекты после отрисовки (A55–A57, N2–N4).
+E5c-1g выполнен: эффекты после отрисовки (дети opoint, эффект команды, частицы): [evidence](../evidence/es-e5c1g-effects-roles.json).
+Следующая задача — E5c-1h: префикс слота, планировщик, откат раунда (A29, A31, A32, A47, N1).
 
 ## Internal build storage и VM quota исправлены — 2026-10-17
 

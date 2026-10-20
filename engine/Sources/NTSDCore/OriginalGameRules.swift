@@ -242,13 +242,40 @@ public struct OriginalGameRules: Equatable, Sendable {
             self.shadowless = shadowless; self.unlabelledComputers = unlabelledComputers
         }
     }
+    /// Effects: how the post-draw opoint treats the Objects it creates
+    /// (OriginalPostDrawOpoint) and the Objects the post-draw lifecycle spawns
+    /// (OriginalPostDrawLifecycle).
+    public struct Effects: Equatable, Sendable {
+        /// Children (in states 3000, 1002, 3006) that do not take their z speed
+        /// from the parent's up/down input.
+        public let fixedDepthChildren: OriginalIDSet
+        /// The child whose z speed, so taken, is quartered.
+        public let quarterDepthChild: Int32
+        /// Children created with +0x2fc, +0x304 and +0x300 (HP, maximum and
+        /// recoverable HP) 10 and +0x308 (MP) 5.
+        public let weakChildren: OriginalIDSet
+        /// The Object a fighter's command (100, 102 or 104) spawns.
+        public let commandEffect: Int32
+        /// The particles an Actor sheds when its previous frame was in state 13 or
+        /// numbered 200 and its current one is neither (named after the engine's
+        /// `deathSlot`; state 13's meaning is not recorded here).
+        public let deathParticles: Int32
+        /// The particles an Actor sheds whose previous frame was in state 18 or 19:
+        /// seven on leaving it, else one when draw(203, 4) gives 0.
+        public let fireParticles: Int32
+        public init(fixedDepthChildren: OriginalIDSet, quarterDepthChild: Int32, weakChildren: OriginalIDSet, commandEffect: Int32,
+                    deathParticles: Int32, fireParticles: Int32) {
+            self.fixedDepthChildren = fixedDepthChildren; self.quarterDepthChild = quarterDepthChild; self.weakChildren = weakChildren
+            self.commandEffect = commandEffect; self.deathParticles = deathParticles; self.fireParticles = fireParticles
+        }
+    }
     private final class Roles: Sendable {
         let profile: String, reflection: Reflection, armour: Armour, interaction: Interaction, impact: Impact, items: Items, roster: Roster
-        let modes: Modes, physics: Physics, drawing: Drawing
+        let modes: Modes, physics: Physics, drawing: Drawing, effects: Effects
         init(profile: String, reflection: Reflection, armour: Armour, interaction: Interaction, impact: Impact, items: Items, roster: Roster,
-             modes: Modes, physics: Physics, drawing: Drawing) {
+             modes: Modes, physics: Physics, drawing: Drawing, effects: Effects) {
             self.profile = profile; self.reflection = reflection; self.armour = armour; self.interaction = interaction; self.impact = impact
-            self.items = items; self.roster = roster; self.modes = modes; self.physics = physics; self.drawing = drawing
+            self.items = items; self.roster = roster; self.modes = modes; self.physics = physics; self.drawing = drawing; self.effects = effects
         }
     }
     private let roles: Roles
@@ -263,6 +290,7 @@ public struct OriginalGameRules: Equatable, Sendable {
     public var modes: Modes { roles.modes }
     public var physics: Physics { roles.physics }
     public var drawing: Drawing { roles.drawing }
+    public var effects: Effects { roles.effects }
     public var reflectable: OriginalIDSet { roles.reflection.reflectable }
     public var reflector: Int32 { roles.reflection.reflector }
     public var rebinder: Int32 { roles.reflection.rebinder }
@@ -307,15 +335,21 @@ public struct OriginalGameRules: Equatable, Sendable {
     public var revivalEffect: Int32 { roles.physics.revivalEffect }
     public var shadowless: OriginalIDSet { roles.drawing.shadowless }
     public var unlabelledComputers: OriginalIDSet { roles.drawing.unlabelledComputers }
+    public var fixedDepthChildren: OriginalIDSet { roles.effects.fixedDepthChildren }
+    public var quarterDepthChild: Int32 { roles.effects.quarterDepthChild }
+    public var weakChildren: OriginalIDSet { roles.effects.weakChildren }
+    public var commandEffect: Int32 { roles.effects.commandEffect }
+    public var deathParticles: Int32 { roles.effects.deathParticles }
+    public var fireParticles: Int32 { roles.effects.fireParticles }
     public init(profile: String, reflection: Reflection, armour: Armour, interaction: Interaction, impact: Impact, items: Items,
-                roster: Roster, modes: Modes, physics: Physics, drawing: Drawing) {
+                roster: Roster, modes: Modes, physics: Physics, drawing: Drawing, effects: Effects) {
         roles = Roles(profile: profile, reflection: reflection, armour: armour, interaction: interaction, impact: impact, items: items,
-                      roster: roster, modes: modes, physics: physics, drawing: drawing)
+                      roster: roster, modes: modes, physics: physics, drawing: drawing, effects: effects)
     }
     public static func == (a: Self, b: Self) -> Bool {
         a.roles === b.roles || (a.profile == b.profile && a.reflection == b.reflection && a.armour == b.armour && a.interaction == b.interaction
                                 && a.impact == b.impact && a.items == b.items && a.roster == b.roster
                                 && a.modes == b.modes && a.physics == b.physics
-                                && a.drawing == b.drawing)
+                                && a.drawing == b.drawing && a.effects == b.effects)
     }
 }

@@ -2,6 +2,7 @@ import Foundation
 import XCTest
 @testable import NTSDCore
 @testable import NTSDReferenceChecks
+import NTSDProfile
 
 final class OriginalPostDrawLifecycleTests: XCTestCase {
     private struct Patch: Decodable {
@@ -108,7 +109,7 @@ final class OriginalPostDrawLifecycleTests: XCTestCase {
             do {
                 try OriginalPostDrawLifecycle.apply(world: &world, actors: &actors, globals: &globals, scratch: &scratch,
                     wholeLoop: item.whole ?? false, slot: item.slot, precision: .bits53, sse2: item.sse2 == 1, objectCount: item.count ?? 4,
-                    header: { ownHeaders[$0] }, frame: { ownFrames[$0][Int($1)] }, observe: { event in
+                    header: { ownHeaders[$0] }, frame: { ownFrames[$0][Int($1)] }, rules: NTSDProfile.rules, observe: { event in
                         switch event {
                         case let .random(slot, stream, range, result):
                             events.append(.init(slot: slot, kind: "random", arguments: [stream, range, result].map(UInt32.init(bitPattern:))))
@@ -162,7 +163,7 @@ final class OriginalPostDrawLifecycleTests: XCTestCase {
         let beforeScratch = scratch
         var constructions = 0
         XCTAssertThrowsError(try OriginalPostDrawLifecycle.apply(world: &world, actors: &actors, globals: &globals, scratch: &scratch,
-            wholeLoop: true, slot: 0, precision: .bits53, sse2: false, objectCount: 1, header: { _ in header }, frame: { _, number in frames[Int(number)] }, observe: { event in
+            wholeLoop: true, slot: 0, precision: .bits53, sse2: false, objectCount: 1, header: { _ in header }, frame: { _, number in frames[Int(number)] }, rules: NTSDProfile.rules, observe: { event in
                 events.append(event)
                 if case .reconstruct = event { constructions += 1 }
                 if constructions == 2 { throw OriginalStateError.invalidStorage("Second effect constructor") }
@@ -177,7 +178,7 @@ final class OriginalPostDrawLifecycleTests: XCTestCase {
         let placedEvents = events
         events = []; constructions = 0
         XCTAssertThrowsError(try OriginalPostDrawLifecycle.apply(world: &world, actors: &actors, globals: &globals, scratch: &scratch,
-            wholeLoop: true, slot: 0, precision: .bits53, sse2: false, objectCount: 1, header: { _ in header }, frame: { _, number in frames[Int(number)] }, observe: { event in
+            wholeLoop: true, slot: 0, precision: .bits53, sse2: false, objectCount: 1, header: { _ in header }, frame: { _, number in frames[Int(number)] }, rules: NTSDProfile.rules, observe: { event in
                 events.append(event)
                 if case .reconstruct = event { constructions += 1 }
                 if constructions == 2 { throw OriginalStateError.invalidStorage("Second effect constructor") }
@@ -195,12 +196,12 @@ final class OriginalPostDrawLifecycleTests: XCTestCase {
         let beforeWorld = world, beforeActors = actors, beforeGlobals = globals
         var scratch = OriginalPostDrawScratch(), events: [OriginalPostDrawLifecycleEvent] = []
         XCTAssertThrowsError(try OriginalPostDrawLifecycle.apply(world: &world, actors: &actors, globals: &globals, scratch: &scratch,
-            wholeLoop: false, slot: 0, precision: .bits53, sse2: false, objectCount: 1, header: { _ in header }, frame: { _, number in frames[Int(number)] }, observe: { events.append($0) }))
+            wholeLoop: false, slot: 0, precision: .bits53, sse2: false, objectCount: 1, header: { _ in header }, frame: { _, number in frames[Int(number)] }, rules: NTSDProfile.rules, observe: { events.append($0) }))
         XCTAssertTrue(events.isEmpty); XCTAssertEqual(scratch, OriginalPostDrawScratch())
         XCTAssertEqual(world, beforeWorld); XCTAssertEqual(actors, beforeActors); XCTAssertEqual(globals, beforeGlobals)
         for slot in 50..<400 { try world.write(UInt8(1), at: 4+slot) }
         try OriginalPostDrawLifecycle.apply(world: &world, actors: &actors, globals: &globals, scratch: &scratch,
-            wholeLoop: false, slot: 0, precision: .bits53, sse2: false, objectCount: 1, header: { _ in header }, frame: { _, number in frames[Int(number)] }, observe: { events.append($0) })
+            wholeLoop: false, slot: 0, precision: .bits53, sse2: false, objectCount: 1, header: { _ in header }, frame: { _, number in frames[Int(number)] }, rules: NTSDProfile.rules, observe: { events.append($0) })
         XCTAssertTrue(events.isEmpty); XCTAssertNil(scratch.fireObject)
         XCTAssertEqual(try actors[0].integer(at: 0x78, as: Int32.self), 0)
     }

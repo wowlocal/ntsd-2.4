@@ -23,24 +23,26 @@ public enum OriginalPostDrawOpoint {
                     throw error("Frame binding")
                 }
                 return catalog.objects[index].frameStorage[Int(number)]
-            }, observe: observe)
+            }, rules: catalog.rules, observe: observe)
     }
     private static func error(_ text: String) -> OriginalStateError { .invalidStorage("Post-draw opoint: " + text) }
 
     static func apply(world: inout OriginalStateRecord, actors: inout [OriginalStateRecord], slot: Int,
                       precision: OriginalArithmeticPrecision, sse2: Bool, objectCount: Int32,
-                      header: (Int) throws -> OriginalStateRecord, frame: (Int, Int32) throws -> OriginalStateRecord,
+                      header: (Int) throws -> OriginalStateRecord, frame: (Int, Int32) throws -> OriginalStateRecord, rules: OriginalGameRules,
                       observe: (OriginalPostDrawSlotEvent) throws -> Void = { _ in }) throws -> OriginalPostDrawOpointContinuation {
         var requestSlot: OriginalRequestSlotWord?
         return try apply(world: &world, actors: &actors, slot: slot, requestSlot: &requestSlot, precision: precision, sse2: sse2,
-                         objectCount: objectCount, header: header, frame: frame, observe: observe)
+                         objectCount: objectCount, header: header, frame: frame, rules: rules, observe: observe)
     }
 
     /// The same continuation with the body's frame word SP+34 (APPLICATION_REQUESTED_ITEMS_SLOT_PLAN.md).
+    /// `header` must be pure: A57's test (ENGINE_SPLIT E5c-1g, F6) reads it once
+    /// where the code before it read it twice.
     static func apply(world: inout OriginalStateRecord, actors: inout [OriginalStateRecord], slot: Int,
                       requestSlot: inout OriginalRequestSlotWord?,
                       precision: OriginalArithmeticPrecision, sse2: Bool, objectCount: Int32,
-                      header: (Int) throws -> OriginalStateRecord, frame: (Int, Int32) throws -> OriginalStateRecord,
+                      header: (Int) throws -> OriginalStateRecord, frame: (Int, Int32) throws -> OriginalStateRecord, rules: OriginalGameRules,
                       observe: (OriginalPostDrawSlotEvent) throws -> Void = { _ in }, inPlace: Bool = false) throws -> OriginalPostDrawOpointContinuation {
         guard (0..<400).contains(slot) else { throw error("Slot extent") }
         guard inPlace else {
@@ -48,7 +50,7 @@ public enum OriginalPostDrawOpoint {
             // when it completes.
             var w = world, a = actors, q = requestSlot
             let result = try apply(world: &w, actors: &a, slot: slot, requestSlot: &q, precision: precision, sse2: sse2,
-                                   objectCount: objectCount, header: header, frame: frame, observe: observe, inPlace: true)
+                                   objectCount: objectCount, header: header, frame: frame, rules: rules, observe: observe, inPlace: true)
             world = w; actors = a; requestSlot = q
             return result
         }
@@ -61,7 +63,7 @@ public enum OriginalPostDrawOpoint {
                                     requestSlot: requestSlot, slot: slot, precision: precision, sse2: sse2,
                                     objectCount: objectCount, header: headers, frame: frames, observe: observer)
                     defer { world = body.world; actors = body.actors; requestSlot = body.requestSlot }
-                    return try body.run()
+                    return try body.run(rules: rules)
                 }
             }
         }
@@ -98,7 +100,9 @@ public enum OriginalPostDrawOpoint {
             for n in 0..<Int(objectCount) where try header(n).integer(at: 0x6f4, as: Int32.self) == id { return n }
             return nil
         }
-        mutating func run() throws -> OriginalPostDrawOpointContinuation {
+        /// The game's rules come as a parameter, not a field: the Body is built per
+        /// slot per tick (ENGINE_SPLIT E5c-1g, the E5c-1e lesson).
+        mutating func run(rules: OriginalGameRules) throws -> OriginalPostDrawOpointContinuation {
             let parent = try index(slot), initialFrame = try i(parent, 0x70)
             if initialFrame/100 == 11 || initialFrame/100 == 12 {
                 for linked in 0..<400 where try active(linked) == 1 {
@@ -158,10 +162,10 @@ public enum OriginalPostDrawOpoint {
                 try number(child, 0x60, Double(i(child, 0x14)))
                 try put(child, 0x70, op(0x64)); try number(child, 0x48, Double(op(0x6c))); try number(child, 0x50, 0)
                 let childState = try current(child).integer(at: 8, as: Int32.self), childSource = try source(child)
-                if [3000, 1002, 3006].contains(childState) && childSource != 223 && childSource != 224 {
+                if [3000, 1002, 3006].contains(childState) && !rules.fixedDepthChildren.contains(childSource) {
                     if try b(parent, 0xcd) != 0 && b(parent, 0xce) == 0 { try number(child, 0x50, -2.5) }
                     else if try b(parent, 0xcd) == 0 && b(parent, 0xce) != 0 { try number(child, 0x50, 2.5) }
-                    if try source(child) == 211 { try number(child, 0x50, (decimal(child, 0x50)*x(0.25)).double) }
+                    if try source(child) == rules.quarterDepthChild { try number(child, 0x50, (decimal(child, 0x50)*x(0.25)).double) }
                 }
                 if try type(child) == 0 {
                     let owner = try i(parent, 0x2f4)
@@ -189,7 +193,7 @@ public enum OriginalPostDrawOpoint {
                     guard (0..<400).contains(reloadedOwner) else { throw error("Owner vrest extent") }
                     try byte(child, 0xf0+reloadedOwner, 10)
                 }
-                if try source(child) == 5 || source(child) == 52 {
+                if try rules.weakChildren.contains(source(child)) {
                     for offset in [0x2fc, 0x304, 0x300] { try put(child, offset, 10) }; try put(child, 0x308, 5)
                 }
                 for (decimal, integer) in [(0x58, 0x10), (0x60, 0x14), (0x68, 0x18)] {

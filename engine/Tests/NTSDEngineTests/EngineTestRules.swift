@@ -4,7 +4,8 @@
 /// as NTSD's, is not visible here). Synthetic: every ID role is −1 and every set
 /// or other range empty (no record these tests build carries −1 or a member at +0x6f4),
 /// except the item range 100..<200, which the requested-items tests' pools
-/// (Object ID 100) are built on. No engine test reaches the menus (Random would
+/// (Object ID 100) are built on, and the effects' 998/999 (the lifecycle
+/// pools: three of the request-slot tests depend on them). No engine test reaches the menus (Random would
 /// find no candidate there), stage mode, the camera or War.
 extension OriginalGameRules {
     static let engineTests = OriginalGameRules(profile: "engine tests (synthetic)",
@@ -20,5 +21,8 @@ extension OriginalGameRules {
                      stageWeightPlus1: -1, stageWeightPlus2: -1, warTroops: OriginalIDSet([]), stageBackgrounds: [:]),
         physics: .init(extraDrift: -1, reverseDrift: -1, lowGravityThrow: -1, midGravityThrow: -1, highGravityThrow: -1, restingPiece: -1,
                        revivalPicture: OriginalIDRange(0..<0), revivalEffect: -1),
-        drawing: .init(shadowless: OriginalIDSet([]), unlabelledComputers: OriginalIDSet([])))
+        drawing: .init(shadowless: OriginalIDSet([]), unlabelledComputers: OriginalIDSet([])),
+        // The request-slot tests' lifecycle pools are built on Objects 998 and 999.
+        effects: .init(fixedDepthChildren: OriginalIDSet([]), quarterDepthChild: -1, weakChildren: OriginalIDSet([]),
+                       commandEffect: 998, deathParticles: 999, fireParticles: 999))
 }

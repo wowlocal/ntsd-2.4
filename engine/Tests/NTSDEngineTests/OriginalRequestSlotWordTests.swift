@@ -21,7 +21,7 @@ final class OriginalRequestSlotWordTests: XCTestCase {
             let header = self.header, frames = self.frames
             try OriginalPostDrawLifecycle.apply(world: &world, actors: &actors, globals: &globals, scratch: &scratch,
                 wholeLoop: false, slot: slot, precision: .bits53, sse2: false, objectCount: 1,
-                header: { _ in header }, frame: { _, number in try Pool.frame(frames, number) })
+                header: { _ in header }, frame: { _, number in try Pool.frame(frames, number) }, rules: .engineTests)
         }
         static func frame(_ frames: [OriginalStateRecord], _ number: Int32) throws -> OriginalStateRecord {
             guard frames.indices.contains(Int(number)) else { throw OriginalStateError.invalidStorage("Test frame \(number)") }
