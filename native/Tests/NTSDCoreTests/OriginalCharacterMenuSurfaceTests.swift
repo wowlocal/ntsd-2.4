@@ -1,6 +1,7 @@
 import Foundation
 import XCTest
 import NTSDCore
+import NTSDProfile
 @testable import NTSDReferenceChecks
 
 final class OriginalCharacterMenuSurfaceTests: XCTestCase {
@@ -94,8 +95,8 @@ final class OriginalCharacterMenuSurfaceTests: XCTestCase {
             XCTAssertEqual(e.kind,.construct)
             let expected=try next("construct"), i=try XCTUnwrap(expected.index)
             XCTAssertEqual(e.arguments,[g.currentWrapper,0x40,0]); XCTAssertEqual(expected.address,g.currentWrapper)
-            XCTAssertEqual(e.strings,[Array(OriginalMenuResourceLoading.paths[i].utf8)])
-            XCTAssertEqual(expected.path,OriginalMenuResourceLoading.paths[i])
+            XCTAssertEqual(e.strings,[Array(NTSDProfile.rules.interface.menuBitmaps[i].utf8)])
+            XCTAssertEqual(expected.path,NTSDProfile.rules.interface.menuBitmaps[i])
         }
         func perform(_ q: API.Request,_ g: inout Context) throws -> API.Response {
             let e=try next(q.kind), expected=try XCTUnwrap(e.request), captured=try XCTUnwrap(e.response), key=try XCTUnwrap(e.key)
@@ -169,7 +170,7 @@ final class OriginalCharacterMenuSurfaceTests: XCTestCase {
         let before=globals,beforeContext=context
         let unavailable: String? = c.spec.label=="object-first-zero" ? "bitmap width" : c.spec.label=="first-description-unavailable" ? "surface width" : nil
         do {
-            let result=try loader.loadWithSurfaceLoading(globals:&globals,context:&context,allocate:a.allocate,perform:a.perform,checkpoint:a.stored,observe:a.observe)
+            let result=try loader.loadWithSurfaceLoading(globals:&globals, names: NTSDProfile.rules.interface.menuBitmaps,context:&context,allocate:a.allocate,perform:a.perform,checkpoint:a.stored,observe:a.observe)
             XCTAssertNil(failure); XCTAssertNil(unavailable)
             XCTAssertEqual(result.continuation.rawValue,c.end)
             XCTAssertEqual(result.selectionAtEntry,try before.integer(at:0x4512c8-OriginalMatchPreparation.globalBase,as:UInt32.self))

@@ -7,8 +7,6 @@ import CryptoKit
 /// continuation; expected pixels, EXE execution and platform writes are absent.
 public struct OriginalApplicationMenuInputs: Equatable {
     public enum Boundary: Error, Equatable { case missing(String), invalid(String) }
-    /// War setup bitmaps constructed by438b40 (tools/package_war_menu.py).
-    public static let warPaths = ["BATTLEMODE","BATTLETROOPS"]
     public let bitmaps: [String:OriginalApplicationStartupInputs.Bitmap]
     private struct Manifest: Decodable {
         struct Entry: Decodable { let name: String,path: String,count: Int,sha256: String }
@@ -25,7 +23,7 @@ public struct OriginalApplicationMenuInputs: Equatable {
     public static func bundledWithWar(in content: OriginalContentLocation) throws -> Self {
         let menu = try bundled(in:content)
         let war = try load(directory:bundledDirectory("OriginalWarMenu",in:content),identity:content.identity,
-                           manifest:content.identity.warMenuManifestSHA256,names:warPaths)
+                           manifest:content.identity.warMenuManifestSHA256,names:content.identity.rules.interface.warBitmaps)
         return .init(bitmaps:menu.bitmaps.merging(war.bitmaps) { a,_ in a })
     }
     /// These inputs plus other packaged bitmaps: War start (43a21f) loads the
@@ -38,9 +36,11 @@ public struct OriginalApplicationMenuInputs: Equatable {
         }
         return .init(bitmaps:next)
     }
-    /// `manifest` defaults to the identity's character-menu digest.
+    /// `manifest` defaults to the identity's character-menu digest, `names` to its
+    /// rules' menu bitmaps (ENGINE_SPLIT E5f-2b).
     public static func load(directory: URL,identity: OriginalContentIdentity,manifest manifestDigest: String? = nil,
-                            names: [String] = OriginalMenuResourceLoading.paths) throws -> Self {
+                            names suppliedNames: [String]? = nil) throws -> Self {
+        let names = suppliedNames ?? identity.rules.interface.menuBitmaps
         func read(_ path: String) throws -> Data {
             let url = directory.appendingPathComponent(path)
             guard OriginalFileFacts.exists(url) else { throw Boundary.missing(path) }

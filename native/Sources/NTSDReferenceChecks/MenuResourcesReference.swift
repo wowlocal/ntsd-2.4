@@ -1,5 +1,6 @@
 import Foundation
 import NTSDCore
+import NTSDProfile
 
 public enum MenuResourcesReference {
     public struct Result {
@@ -39,7 +40,7 @@ public enum MenuResourcesReference {
                                loading: Data, catalog: Data, sounds: Data) throws -> Result {
         let c = try JSONDecoder().decode(Corpus.self,from: MatchPreparationReference.unpack(resources,maximumCount: 128_000_000))
         guard c.exeSHA256 == "3f7ac67c5890ef979ee24a6dae5528056e7f631725c292cf9cb0a928ebeff71c", !c.cases.isEmpty,
-              c.sources.count == 11, Set(c.sources.map(\.path)) == Set(OriginalMenuResourceLoading.paths) else { throw error("Source identity") }
+              c.sources.count == 11, Set(c.sources.map(\.path)) == Set(NTSDProfile.rules.interface.menuBitmaps) else { throw error("Source identity") }
         for (key,data) in [("music-playback",music),("match-round",round),("replay-tick",replay),("input-control",control),("local-input",local),
                            ("initial-loading",loading),("initial-loading-catalog",catalog),("initial-loading-sounds",sounds)] {
             guard let p = c.parents[key], MatchPreparationReference.digest(data) == p.sha256 else { throw error("Parent SHA "+key) }
@@ -110,7 +111,7 @@ public enum MenuResourcesReference {
                 let inputs = Dictionary(uniqueKeysWithValues: item.inputs.map { ($0.index,$0) })
                 guard inputs.count == item.calls.count else { throw error("Constructor input count") }
                 var allocationIndex = 0, eventIndex = 0, checkpointIndex = 0
-                let result = try loader.load(globals: &state,allocate: { index in
+                let result = try loader.load(globals: &state,names: NTSDProfile.rules.interface.menuBitmaps,allocate: { index in
                     guard index == allocationIndex, index < item.allocations.count else { throw error("Allocation order") }
                     let a = item.allocations[index];allocationIndex += 1;allocations += 1
                     if a.address == 0 { nulls += 1;guard a.backing == nil, inputs[index] == nil else { throw error("Null allocation") };return .init(address: 0,backing: []) }

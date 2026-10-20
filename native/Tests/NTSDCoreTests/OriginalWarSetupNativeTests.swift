@@ -103,6 +103,26 @@ final class OriginalWarSetupNativeTests: XCTestCase {
         let moved=n.with(roster:.init(hiddenRoster:n.hiddenRoster,randomCandidates:OriginalIDRange(30..<40),bracketFavourites:n.bracketFavourites))
         XCTAssertEqual(try firstChoices(moved),[1,2,3,4,5,6,7,8,23])
     }
+    /// ENGINE_SPLIT E5f-2b: the War bitmaps the setup constructs come from the profile.
+    func testWarBitmapNamesFollowTheProfile() throws {
+        func constructed(_ rules: OriginalGameRules) throws -> [String] {
+            var state=try initial(catalog(rules:rules)),memory=OriginalWarMenuMemory(),library: OriginalLibSurfaceText? = .init()
+            var buffer=Buffer(),reached=false
+            _ = try? run(&state,&memory,&library,&buffer,reached:&reached)
+            return buffer.events.filter { $0.kind=="resource-construct" }.map { String(decoding:$0.strings[0],as:UTF8.self) }
+        }
+        let n=NTSDProfile.rules,i=n.interface
+        XCTAssertEqual(try constructed(n),["BATTLEMODE","BATTLETROOPS"])
+        let renamed=n.with(interface:.init(frontBitmaps:i.frontBitmaps,frontSheets:i.frontSheets,interfaceBitmaps:i.interfaceBitmaps,
+            commonSounds:i.commonSounds,menuBitmaps:i.menuBitmaps,warBitmaps:["MY_MODE","MY_TROOPS"]))
+        XCTAssertEqual(try constructed(renamed),["MY_MODE","MY_TROOPS"])
+        let short=n.with(interface:.init(frontBitmaps:i.frontBitmaps,frontSheets:i.frontSheets,interfaceBitmaps:i.interfaceBitmaps,
+            commonSounds:i.commonSounds,menuBitmaps:i.menuBitmaps,warBitmaps:["MY_MODE"]))
+        var state=try initial(catalog(rules:short)),memory=OriginalWarMenuMemory(),library: OriginalLibSurfaceText? = .init()
+        var buffer=Buffer(),reached=false
+        XCTAssertThrowsError(try run(&state,&memory,&library,&buffer,reached:&reached)) { XCTAssertTrue("\($0)".contains("War bitmap names: one per slot"),"\($0)") }
+        XCTAssertFalse(buffer.events.contains { $0.kind.hasPrefix("resource-") },"no resource before the check")
+    }
     func testWholeMenuRollsBackAfterLateDependencies() throws {
         let loaded=try catalog(),fresh=try initial(loaded)
         var state=fresh,memory=OriginalWarMenuMemory(),library: OriginalLibSurfaceText? = .init(),buffer=Buffer(),reached=false

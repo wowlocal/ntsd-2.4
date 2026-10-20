@@ -16,7 +16,8 @@ public enum OriginalCharacterMenuStartup {
     /// Music reads the previous-menu word before resource loading replaces it.
     /// Any throw, including a NULL-SPARK boundary or final observer, retains all
     /// four caller-owned values instead of publishing completed music alone.
-    public static func run<Environment>(globals: inout OriginalStateRecord,
+    /// `menuNames`: the game's menu bitmaps (ENGINE_SPLIT E5f-2b: `Interface.menuBitmaps`).
+    public static func run<Environment>(globals: inout OriginalStateRecord, menuNames: [String],
         music: inout OriginalMusicMemory, resources: inout OriginalMenuResourceLoading,
         environment: inout Environment,
         musicRequest: (OriginalMusicEvent, inout Environment) throws -> OriginalMusicResponse,
@@ -29,7 +30,7 @@ public enum OriginalCharacterMenuStartup {
         beforeCommit: (Result, OriginalStateRecord, OriginalMusicMemory, OriginalMenuResourceLoading, inout Environment) throws -> Void = { _,_,_,_,_ in }) throws -> Result {
         try withMusic(globals: &globals, music: &music, resources: &resources, environment: &environment,
             musicRequest: musicRequest, afterMusic: afterMusic, beforeCommit: beforeCommit) { state,images,candidate in
-                try images.load(globals: &state,
+                try images.load(globals: &state, names: menuNames,
                     allocate: { try allocate($0, &candidate) },
                     source: { try source($0, $1, &candidate) },
                     deviceResult: { try deviceResult($0, &candidate) },
@@ -42,7 +43,7 @@ public enum OriginalCharacterMenuStartup {
     /// Own graph-log bytes and subsequent API dimensions survive at the recovered
     /// shared stack depth; current-call request masks remain independent.
     /// A rejected dependency or final observer retains all four caller values.
-    public static func runWithSurfaceLoading<Environment>(globals: inout OriginalStateRecord,
+    public static func runWithSurfaceLoading<Environment>(globals: inout OriginalStateRecord, menuNames: [String],
         music: inout OriginalMusicMemory, resources: inout OriginalMenuResourceLoading,
         environment: inout Environment,
         musicRequest: (OriginalMusicEvent, inout Environment) throws -> OriginalMusicResponse,
@@ -58,7 +59,7 @@ public enum OriginalCharacterMenuStartup {
                 if event.kind == .format { try loader.graphLog(event.strings[1]) }
                 return try musicRequest(event, &candidate)
             }, afterMusic: afterMusic, beforeCommit: beforeCommit) { state,images,candidate in
-                try images.loadWithSurfaceLoading(globals: &state, context: &candidate,
+                try images.loadWithSurfaceLoading(globals: &state, names: menuNames, context: &candidate,
                     loaderScratch: loader, allocate: allocate, perform: perform, checkpoint: checkpoint, observe: observe)
             }
     }

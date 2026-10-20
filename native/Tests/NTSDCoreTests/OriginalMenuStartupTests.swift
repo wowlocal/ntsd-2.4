@@ -1,6 +1,7 @@
 import Foundation
 import XCTest
 import NTSDCore
+import NTSDProfile
 @testable import NTSDReferenceChecks
 
 final class OriginalMenuStartupTests: XCTestCase {
@@ -81,7 +82,7 @@ final class OriginalMenuStartupTests: XCTestCase {
             let before = environment
             var reached = false
             XCTAssertThrowsError(try {
-                result = try OriginalCharacterMenuStartup.run(globals: &globals,music: &music,resources: &resources,environment: &environment,
+                result = try OriginalCharacterMenuStartup.run(globals: &globals, menuNames: NTSDProfile.rules.interface.menuBitmaps,music: &music,resources: &resources,environment: &environment,
                     musicRequest: { event,context in
                         guard context.musicRequests < input.music.events.count else { throw Stop.unexpectedPlatform }
                         let response = input.music.events[context.musicRequests];context.musicRequests += 1

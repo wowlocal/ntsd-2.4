@@ -439,15 +439,22 @@ public struct OriginalGameRules: Equatable, Sendable {
     /// screen reading its sheet back (OriginalStageEnding); the initial
     /// interface's bitmaps (OriginalInitialInterfaceLoading, one per slot) and
     /// the common WAVs loading reads before the catalog (OriginalInitialSoundLoading,
-    /// one per destination from 0x451db0), each list in load order.
+    /// one per destination from 0x451db0), the character menu's bitmaps
+    /// (OriginalMenuResourceLoading, one per slot) and War's two (OriginalWarSetup,
+    /// one per slot; the War-menu package), each list in load order.
     public struct Interface: Equatable, Sendable {
         public let frontBitmaps: [String]
         public let frontSheets: [OriginalBitmapSheet]
         public let interfaceBitmaps: [String]
         public let commonSounds: [String]
-        public init(frontBitmaps: [String], frontSheets: [OriginalBitmapSheet], interfaceBitmaps: [String], commonSounds: [String]) {
+        /// The character menu's bitmaps (OriginalMenuResourceLoading, one per slot)
+        /// and War's two (the War-menu package), in load order.
+        public let menuBitmaps: [String], warBitmaps: [String]
+        public init(frontBitmaps: [String], frontSheets: [OriginalBitmapSheet], interfaceBitmaps: [String], commonSounds: [String],
+                    menuBitmaps: [String], warBitmaps: [String]) {
             self.frontBitmaps = frontBitmaps; self.frontSheets = frontSheets
             self.interfaceBitmaps = interfaceBitmaps; self.commonSounds = commonSounds
+            self.menuBitmaps = menuBitmaps; self.warBitmaps = warBitmaps
         }
     }
     /// The character AI (OriginalCharacterAI): the IDs its target choice and fight test.

@@ -1,6 +1,7 @@
 import Foundation
 import XCTest
 import NTSDCore
+import NTSDProfile
 @testable import NTSDReferenceChecks
 
 final class OriginalLibWarSetupTests: XCTestCase {
@@ -149,7 +150,7 @@ final class OriginalLibWarSetupTests: XCTestCase {
             corpus=try JSONDecoder().decode(Corpus.self,from:JSONSerialization.data(withJSONObject:document))
             XCTAssertEqual(corpus.cases.count,1);XCTAssertEqual(corpus.cases[0].spec.label,entry.label)
             var projected=document
-            projected["assets"]=(part["assets"] as! [String:Any]).filter { OriginalMenuResourceLoading.paths.contains($0.key) }
+            projected["assets"]=(part["assets"] as! [String:Any]).filter { NTSDProfile.rules.interface.menuBitmaps.contains($0.key) }
             projected["cases"]=[(part["case"] as! [String:Any])["startup"]!]
             let temporary=FileManager.default.temporaryDirectory.appendingPathComponent("ntsd-war-startup-"+UUID().uuidString+".json")
             try JSONSerialization.data(withJSONObject:projected).write(to:temporary)
@@ -420,7 +421,7 @@ final class OriginalLibWarSetupTests: XCTestCase {
                 XCTAssertEqual(Array(expected.prefix(4)),(0..<4).map { UInt8(truncatingIfNeeded:surface >> ($0*8)) })
                 expected.replaceSubrange(0..<4,with:[1,0,0,0]);XCTAssertEqual(actual.storage.bytes,expected)
                 XCTAssertEqual(actual.storage.defined,try r.startup.blob(record.mask).map { $0 != 0 })
-                let i=Int((record.address-0x50000020)/0x2000);XCTAssertEqual(actual.input.path,OriginalMenuResourceLoading.paths[item.spec.control ? 10-i : i]);XCTAssertTrue(actual.input.present)
+                let i=Int((record.address-0x50000020)/0x2000);XCTAssertEqual(actual.input.path,NTSDProfile.rules.interface.menuBitmaps[item.spec.control ? 10-i : i]);XCTAssertTrue(actual.input.present)
             }
         }
         func draw(_ request: OriginalCharacterScreenDraw,_ state: OriginalStateRecord,

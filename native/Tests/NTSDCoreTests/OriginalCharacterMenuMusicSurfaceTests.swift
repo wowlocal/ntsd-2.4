@@ -1,6 +1,7 @@
 import Foundation
 import XCTest
 import NTSDCore
+import NTSDProfile
 @testable import NTSDReferenceChecks
 
 final class OriginalCharacterMenuMusicSurfaceTests: XCTestCase {
@@ -52,7 +53,7 @@ final class OriginalCharacterMenuMusicSurfaceTests: XCTestCase {
         default: unavailable=nil
         }
         do {
-            let result=try OriginalCharacterMenuStartup.runWithSurfaceLoading(globals:&globals,music:&music,resources:&resources,environment:&env,
+            let result=try OriginalCharacterMenuStartup.runWithSurfaceLoading(globals:&globals, menuNames: NTSDProfile.rules.interface.menuBitmaps,music:&music,resources:&resources,environment:&env,
                 musicRequest: { event,env in
                     let expected=try XCTUnwrap(x.events[a.index].music); _=try a.next("music")
                     XCTAssertEqual(event,.init(expected.kind,expected.arguments,expected.strings),"\(c.spec.label) music event\(a.index-1)")

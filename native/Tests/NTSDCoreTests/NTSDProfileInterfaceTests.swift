@@ -3,9 +3,9 @@ import XCTest
 @testable import NTSDCore
 import NTSDProfile
 
-/// ENGINE_SPLIT E5f-1/2a: the front menu's bitmaps and rectangle sheets, the
-/// ENDING screen's sheet, the initial interface's bitmaps and the common WAVs
-/// come from the game's `Interface`.
+/// ENGINE_SPLIT E5f-1/2a/2b: the front menu's bitmaps and rectangle sheets, the
+/// ENDING screen's sheet, the initial interface's bitmaps, the common WAVs and
+/// the menu's and War's bitmaps come from the game's `Interface`.
 final class NTSDProfileInterfaceTests: XCTestCase {
     func zero(_ size: Int) throws -> OriginalStateRecord {
         try .init(bytes: [UInt8](repeating: 0, count: size), defined: [Bool](repeating: true, count: size))
@@ -13,7 +13,7 @@ final class NTSDProfileInterfaceTests: XCTestCase {
     let n = NTSDProfile.rules.interface
     func interface(names: [String]? = nil, sheets: [OriginalBitmapSheet]? = nil) -> OriginalGameRules.Interface {
         .init(frontBitmaps: names ?? n.frontBitmaps, frontSheets: sheets ?? n.frontSheets, interfaceBitmaps: n.interfaceBitmaps,
-              commonSounds: n.commonSounds)
+              commonSounds: n.commonSounds, menuBitmaps: n.menuBitmaps, warBitmaps: n.warBitmaps)
     }
     func testProfileSheetsAgreeWithTheEndingCapture() throws {
         // The ENDING oracle's declared frames (original-stage-ending.json): a copy of the same
@@ -126,8 +126,32 @@ final class NTSDProfileInterfaceTests: XCTestCase {
         _ = try firstSoundRead(n.commonSounds, effects: &effects); XCTAssertGreaterThan(effects, 0, "a valid list gets to its effects")
         let rules = NTSDProfile.rules
         XCTAssertNotEqual(rules, rules.with(profile: rules.profile, interface: .init(frontBitmaps: n.frontBitmaps, frontSheets: n.frontSheets,
-            interfaceBitmaps: names, commonSounds: n.commonSounds)))
+            interfaceBitmaps: names, commonSounds: n.commonSounds, menuBitmaps: n.menuBitmaps, warBitmaps: n.warBitmaps)))
         XCTAssertNotEqual(rules, rules.with(profile: rules.profile, interface: .init(frontBitmaps: n.frontBitmaps, frontSheets: n.frontSheets,
-            interfaceBitmaps: n.interfaceBitmaps, commonSounds: sounds)))
+            interfaceBitmaps: n.interfaceBitmaps, commonSounds: sounds, menuBitmaps: n.menuBitmaps, warBitmaps: n.warBitmaps)))
+    }
+    /// The character menu's resource load (flag 0x44d07c set) under these names: the
+    /// first name it asks a source for, or its error.
+    func firstMenuRequest(_ names: [String]) throws -> String {
+        var globals = try zero(OriginalMatchPreparation.globalSize), loader = OriginalMenuResourceLoading(), requested: String?
+        try globals.write(UInt32(1), at: 0x44d07c-OriginalMatchPreparation.globalBase)
+        do {
+            _ = try loader.load(globals: &globals, names: names,
+                allocate: { _ in OriginalInterfaceAllocation(address: 0x1000, backing: [UInt8](repeating: 0, count: 0x1f50)) },
+                source: { _, path in requested = path; throw Stop() }, deviceResult: { _ in throw Stop() })
+        } catch is Stop { return requested ?? "" } catch { return "\(error)" }
+        return requested ?? ""
+    }
+    func testMenuAndWarNames() throws {
+        XCTAssertEqual(n.menuBitmaps.count, OriginalMenuResourceLoading.slots.count); XCTAssertEqual(n.warBitmaps, ["BATTLEMODE", "BATTLETROOPS"])
+        XCTAssertEqual(try firstMenuRequest(n.menuBitmaps), "CHARMENU")
+        var names = n.menuBitmaps; names[0] = "MY_MENU"
+        XCTAssertEqual(try firstMenuRequest(names), "MY_MENU")
+        XCTAssertEqual(try firstMenuRequest(Array(names.dropLast())), "\(OriginalStateError.invalidStorage("Menu resource names: one per slot"))")
+        let rules = NTSDProfile.rules
+        XCTAssertNotEqual(rules, rules.with(profile: rules.profile, interface: .init(frontBitmaps: n.frontBitmaps, frontSheets: n.frontSheets,
+            interfaceBitmaps: n.interfaceBitmaps, commonSounds: n.commonSounds, menuBitmaps: names, warBitmaps: n.warBitmaps)))
+        XCTAssertNotEqual(rules, rules.with(profile: rules.profile, interface: .init(frontBitmaps: n.frontBitmaps, frontSheets: n.frontSheets,
+            interfaceBitmaps: n.interfaceBitmaps, commonSounds: n.commonSounds, menuBitmaps: n.menuBitmaps, warBitmaps: ["BATTLEMODE"])))
     }
 }

@@ -1,6 +1,7 @@
 import Foundation
 import XCTest
 import NTSDCore
+import NTSDProfile
 @testable import NTSDReferenceChecks
 
 final class OriginalLibMenuContinuationTests: XCTestCase {
@@ -112,7 +113,7 @@ final class OriginalLibMenuContinuationTests: XCTestCase {
             if failure == "network" && e.kind == "textOut" && e.strings == [Array("Waiting for opponent...".utf8)] || failure == "volume" && e.kind == "method" && buffer.filter({ $0.kind == "method" && $0.arguments[1] == 0x3c }).count == 5 || failure == "present" && e.kind == "method" && e.arguments[1] == 0x14 { throw Stop.injected }
         }
         do {
-            let end=try OriginalModeMenuContinuation.advance(world:&world,actors:actors,globals:&globals,memory:&memory,music:&music,resources:&resources,local:&local,libraryText:&library,environment:&committed,
+            let end=try OriginalModeMenuContinuation.advance(world:&world,actors:actors,globals:&globals, menuNames: NTSDProfile.rules.interface.menuBitmaps,memory:&memory,music:&music,resources:&resources,local:&local,libraryText:&library,environment:&committed,
                 worldAddress:c.worldAddress,target:c.target,
                 screenInput:.init(dcResult:item.spec.dcResult ?? 0,dc:item.spec.dc ?? 0x76543210,methodResult:item.spec.methodResult ?? -1,drawResults:[-1],shellResult:33),
                 outputInput:item.output,milliseconds:item.spec.milliseconds ?? 17,

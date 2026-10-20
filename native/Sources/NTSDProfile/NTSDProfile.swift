@@ -68,7 +68,10 @@ public enum NTSDProfile {
                          commonSounds: ["data\\001.wav", "data\\002.wav", "data\\006.wav", "data\\010.wav", "data\\011.wav",
                                         "data\\004.wav", "data\\016.wav", "data\\017.wav", "data\\020.wav", "data\\021.wav",
                                         "data\\025.wav", "data\\032.wav", "data\\033.wav", "data\\039.wav", "data\\065.wav",
-                                        "data\\066.wav", "data\\068.wav", "data\\085.wav"]),
+                                        "data\\066.wav", "data\\068.wav", "data\\085.wav"],
+                         // The character menu's bitmaps and War's two.
+                         menuBitmaps: ["CHARMENU", "CM1", "CM2", "CM3", "CM4", "CM5", "CMA", "CMA2", "CMC", "RFACE", "SPARK"],
+                         warBitmaps: ["BATTLEMODE", "BATTLETROOPS"]),
         // The character AI's target choice and fight.
         characterAI: .init(stageAllyBound: 30, healBall: 200, healers: OriginalIDSet([2, 34]), stateDanger: 211, frameDanger: 212,
                            pickupItems: OriginalIDRange(100..<200), pickupExtra: 213, soughtDrink: 122, avoidedDrink: 123,

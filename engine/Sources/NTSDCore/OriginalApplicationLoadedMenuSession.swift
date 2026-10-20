@@ -161,6 +161,9 @@ public struct OriginalApplicationLoadedMenuSession {
     final class Attempt<E> {
         let entry: Input.PendingContinuation,bindings: OriginalApplicationMatchBindings
         let screenInput: OriginalFrontScreenBodyInput,outputInput: OriginalMenuPresentationInput
+        /// The game's menu bitmaps, from the attempt's catalog (a `let`: reading it
+        /// takes no dynamic access, unlike `model`; ENGINE_SPLIT E5f-2b).
+        let menuNames: [String]
         let allocation: (AllocationKind,Int,inout E) throws -> OriginalInterfaceAllocation
         let bitmapReply: (API.Request,inout E) throws -> API.Response
         let musicReply: (OriginalMusicEvent,inout E) throws -> OriginalMusicResponse
@@ -206,6 +209,7 @@ public struct OriginalApplicationLoadedMenuSession {
             localTimeReply = localTime;replayReply = replay
             self.entry = entry;environment = env;state = resuming?.snapshot.state ?? entry.state
             model = resuming?.snapshot.match ?? entry.match;audio = resuming?.snapshot.music ?? entry.music
+            menuNames = (resuming?.snapshot.match ?? entry.match).catalog.rules.interface.menuBitmaps
             resources = resuming?.snapshot.resources ?? entry.menuResources
             backgrounds = resuming?.snapshot.backgrounds ?? entry.menuBackgrounds
             bindings = try .init(pending:entry.entry);screenInput = screen;outputInput = output
@@ -596,7 +600,8 @@ public struct OriginalApplicationLoadedMenuSession {
             var dummy: Void = ()
             var globals = model.globals,world = model.world,owned = state.memory,text = state.libraryText,scratch = local
             var musicOwner = audio,images = resources
-            let startup = try OriginalCharacterMenuStartup.runWithSurfaceLoading(globals:&globals,music:&musicOwner,resources:&images,environment:&dummy,
+            let startup = try OriginalCharacterMenuStartup.runWithSurfaceLoading(globals:&globals,menuNames:menuNames,
+                music:&musicOwner,resources:&images,environment:&dummy,
                 musicRequest:{ e,_ in try self.music(e) },allocate:{ i,_ in try self.allocate(.menu(i)) },perform:{ q,_ in try self.bitmap(q) },
                 afterMusic:{ _,g,_,_ in try self.checkpoint("music",g,&self.environment) },
                 checkpoint:{ p,g,b,_ in

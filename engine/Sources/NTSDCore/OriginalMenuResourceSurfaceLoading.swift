@@ -5,17 +5,17 @@ extension OriginalMenuResourceLoading {
     /// thrown dependencies/observers leave loader, globals and context unchanged.
     /// NULL-SPARK preserves the standalone partial boundary, never dispatches.
     @discardableResult
-    public mutating func loadWithSurfaceLoading<Context>(globals: inout OriginalStateRecord,
+    public mutating func loadWithSurfaceLoading<Context>(globals: inout OriginalStateRecord, names: [String],
         context: inout Context,
         allocate: (Int, inout Context) throws -> OriginalInterfaceAllocation,
         perform: @escaping (OriginalBitmapSurfaceLoading.Request, inout Context) throws -> OriginalBitmapSurfaceLoading.Response,
         checkpoint: (OriginalMenuResourceCheckpoint, OriginalStateRecord, [UInt32:OriginalLoadedBitmap], inout Context) throws -> Void = { _,_,_,_ in },
         observe: (OriginalInterfaceEvent, inout Context) throws -> Void = { _,_ in }) throws -> OriginalMenuResourceResult {
-        try loadWithSurfaceLoading(globals: &globals, context: &context,
+        try loadWithSurfaceLoading(globals: &globals, names: names, context: &context,
             loaderScratch: OriginalBitmapSurfaceLoading.LoaderScratch(), allocate: allocate,
             perform: perform, checkpoint: checkpoint, observe: observe)
     }
-    mutating func loadWithSurfaceLoading<Context>(globals: inout OriginalStateRecord,
+    mutating func loadWithSurfaceLoading<Context>(globals: inout OriginalStateRecord, names: [String],
         context: inout Context, loaderScratch: OriginalBitmapSurfaceLoading.LoaderScratch,
         allocate: (Int, inout Context) throws -> OriginalInterfaceAllocation,
         perform: @escaping (OriginalBitmapSurfaceLoading.Request, inout Context) throws -> OriginalBitmapSurfaceLoading.Response,
@@ -23,7 +23,7 @@ extension OriginalMenuResourceLoading {
         observe: (OriginalInterfaceEvent, inout Context) throws -> Void) throws -> OriginalMenuResourceResult {
         var candidate = self, state = globals, environment = context
         var scratch = try OriginalBitmapSurfaceLoading.CopyScratch(), loader = loaderScratch
-        let result = try candidate.load(globals: &state, allocate: { try allocate($0, &environment) },
+        let result = try candidate.load(globals: &state, names: names, allocate: { try allocate($0, &environment) },
             source: { _,_ in throw OriginalStateError.invalidStorage("Unexpected menu image-result provider") },
             deviceResult: { _ in throw OriginalStateError.invalidStorage("Unexpected menu device-result provider") },
             constructBitmap: { _,allocation,device,path in

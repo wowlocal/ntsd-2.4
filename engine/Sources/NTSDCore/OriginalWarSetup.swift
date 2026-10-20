@@ -115,9 +115,12 @@ public enum OriginalWarSetup {
         try candidate.advanceMenuInput();try mark(0x438bbb)
         let initialize=try word(0x44d774)
         if initialize==1 {
+            // The game's two War bitmaps (ENGINE_SPLIT E5f-2b), one per slot (0x451bb0, 0x451bac).
+            let paths=candidate.catalog.rules.interface.warBitmaps
+            guard paths.count==2 else { throw error("War bitmap names: one per slot") }
             try OriginalWarTroops.initialize(&candidate.globals)
             let device=UInt32(bitPattern:try word(0x457578))
-            for (index,path) in ["BATTLEMODE","BATTLETROOPS"].enumerated() {
+            for (index,path) in paths.enumerated() {
                 try beforeResource(index,candidate.globals,owned,&context)
                 try resourceEvent(.init(.allocate,[0x1f50]),&context)
                 let allocation=try allocate(index,&context)

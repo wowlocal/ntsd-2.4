@@ -6,8 +6,9 @@ public enum OriginalModeMenuContinuationError: Error, Equatable {
 ///422ab8 return. The earlier tick body and outer424746 caller are separate.
 /// Keep every state owner and caller event buffer staged across all children.
 public enum OriginalModeMenuContinuation {
+    /// `menuNames`: the game's menu bitmaps (ENGINE_SPLIT E5f-2b: `Interface.menuBitmaps`).
     public static func advance<Environment>(world: inout OriginalStateRecord,actors: [OriginalStateRecord],
-        globals: inout OriginalStateRecord,memory: inout OriginalMenuPresentationMemory,
+        globals: inout OriginalStateRecord,menuNames: [String],memory: inout OriginalMenuPresentationMemory,
         music: inout OriginalMusicMemory,resources: inout OriginalMenuResourceLoading,
         local: inout OriginalStateRecord,libraryText: inout OriginalLibSurfaceText,
         environment: inout Environment,worldAddress: UInt32,target: UInt32,
@@ -27,7 +28,7 @@ public enum OriginalModeMenuContinuation {
         afterScreen: (OriginalModeScreenExit,OriginalStateRecord,OriginalMenuPresentationMemory,OriginalStateRecord,OriginalLibSurfaceText,inout Environment) throws -> Void = { _,_,_,_,_,_ in },
         checkpoint: (String,OriginalStateRecord,OriginalStateRecord,inout Environment) throws -> Void = { _,_,_,_ in }) throws -> OriginalModeScreenExit {
         var scene=world,state=globals,owned=memory,audio=music,images=resources,scratch=local,text=libraryText,candidate=environment
-        _ = try OriginalCharacterMenuStartup.runWithSurfaceLoading(globals:&state,music:&audio,resources:&images,environment:&candidate,
+        _ = try OriginalCharacterMenuStartup.runWithSurfaceLoading(globals:&state,menuNames:menuNames,music:&audio,resources:&images,environment:&candidate,
             musicRequest:musicRequest,allocate:allocate,perform:perform,afterMusic:afterMusic,checkpoint:resourceCheckpoint,observe:resourceEvent,beforeCommit:afterStartup)
         guard try OriginalModeScreen.selectsModeScreen(globals:&state) else {
             throw OriginalModeMenuContinuationError.requiresMenuBody(try state.integer(at:0x44d020-OriginalMatchPreparation.globalBase,as:Int32.self))

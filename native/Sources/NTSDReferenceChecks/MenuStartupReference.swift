@@ -1,5 +1,6 @@
 import Foundation
 import NTSDCore
+import NTSDProfile
 
 /// Natural continuation of the own early-menu/loading state to character-menu
 /// resources. All snapshots are comparisons; only declared platform replies,
@@ -231,7 +232,7 @@ public enum MenuStartupReference {
                 }
             }
             var menuEnvironment: [String] = []
-            let startup = try OriginalCharacterMenuStartup.run(globals: &state.globals,music: &musicMemory,resources: &loader,environment: &menuEnvironment,
+            let startup = try OriginalCharacterMenuStartup.run(globals: &state.globals,menuNames: NTSDProfile.rules.interface.menuBitmaps,music: &musicMemory,resources: &loader,environment: &menuEnvironment,
                 musicRequest: { event,_ in
                 guard musicIndex < music.events.count else { throw error("Excess music event") }
                 let e = music.events[musicIndex];musicIndex += 1;events += 1

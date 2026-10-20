@@ -1,5 +1,6 @@
 import Foundation
 import NTSDCore
+import NTSDProfile
 
 public enum MenuCycleReference {
     public struct Result {
@@ -211,7 +212,7 @@ public enum MenuCycleReference {
                   resources.endPC == 0x429e5a,resources.endSP == 0x1000df08 else { throw error("Retained resource entry") }
             var pointIndex = 0
             var menuEnvironment: [String] = []
-            let startup = try OriginalCharacterMenuStartup.run(globals: &state.globals,music: &musicMemory,resources: &loader,environment: &menuEnvironment,
+            let startup = try OriginalCharacterMenuStartup.run(globals: &state.globals,menuNames: NTSDProfile.rules.interface.menuBitmaps,music: &musicMemory,resources: &loader,environment: &menuEnvironment,
                 musicRequest: { _,_ in throw error("Unexpected music request") },
                 allocate: { _,_ in throw error("Unexpected menu allocation") },source: { _,_,_ in throw error("Unexpected bitmap load") },
                 deviceResult: { _,_ in throw error("Unexpected bitmap device request") },

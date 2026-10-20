@@ -10,7 +10,7 @@ measurement from [TVOS_WEB](TVOS_WEB.md), [MEMORY_LOADING](MEMORY_LOADING.md) an
 engine from the game itself. to publish engine as the separate github repo";
 then, after the plan: "ok … when the plan is setteled start the loop in a
 separate branch" and "push automatically every step (on that new branch)".
-**Status:** E0–E3, E4a, E4b (all six hosts), E4c-1 (the engine's self-contained tests), E5a (the game profile's survey and design) and E5b (the record type, the copied tables out), E4c-1a (a nondeterministic engine test corrected) E5c-0 (the profile's plumbing, reflection), E5c-1a (one storage, the reflectors), E5c-1b (armour), E5c-1c (special interactions) and E5c-1d (impact) done; E5c-2a, E5c-2b and E5c-2c (the items family: the random and requested spawns, camera, links, the mission stage) E5c-2d (the roster family), E5c-2e (the modes family), E5c-2f (the match prelude) and E5c-2g (the mode label) done: E5c-2's menu and mode rows are in the profile; E5c-1e (physics), E5c-1f (drawing) and E5c-1g (the post-draw effects) and E5c-1h (the slot prefix, scheduler and round restore) and E5c-1i (the object input) and E5c-1j (A28, the input chain) done: every E5c row is in the profile; E5d-1a (the AI's target roles) and E5d-1b (its fight roles) done: every object-ID literal of the generic AI is in the profile; E5d-2 (the special-move hook) and E5d-3 (the 20 routines in the game) done: the AI's NTSD code is the game's; E5e (the coarse hooks) surveyed: roles, no new hook; E5e-1 (the ID-300 roles), E5e-2 (the mission pseudo-IDs), E5e-3 (War life), E5e-4 (fusion) and E5e-5 (the weapon break) done: every object-ID rule of the E5a table is the game's; E5f surveyed; E5f-1 (the front menu's names and rectangles, carried by the startup) and E5f-2a (the interface and common sound names) done; E5f-2b next.
+**Status:** E0–E3, E4a, E4b (all six hosts), E4c-1 (the engine's self-contained tests), E5a (the game profile's survey and design) and E5b (the record type, the copied tables out), E4c-1a (a nondeterministic engine test corrected) E5c-0 (the profile's plumbing, reflection), E5c-1a (one storage, the reflectors), E5c-1b (armour), E5c-1c (special interactions) and E5c-1d (impact) done; E5c-2a, E5c-2b and E5c-2c (the items family: the random and requested spawns, camera, links, the mission stage) E5c-2d (the roster family), E5c-2e (the modes family), E5c-2f (the match prelude) and E5c-2g (the mode label) done: E5c-2's menu and mode rows are in the profile; E5c-1e (physics), E5c-1f (drawing) and E5c-1g (the post-draw effects) and E5c-1h (the slot prefix, scheduler and round restore) and E5c-1i (the object input) and E5c-1j (A28, the input chain) done: every E5c row is in the profile; E5d-1a (the AI's target roles) and E5d-1b (its fight roles) done: every object-ID literal of the generic AI is in the profile; E5d-2 (the special-move hook) and E5d-3 (the 20 routines in the game) done: the AI's NTSD code is the game's; E5e (the coarse hooks) surveyed: roles, no new hook; E5e-1 (the ID-300 roles), E5e-2 (the mission pseudo-IDs), E5e-3 (War life), E5e-4 (fusion) and E5e-5 (the weapon break) done: every object-ID rule of the E5a table is the game's; E5f surveyed; E5f-1 (the front menu's names and rectangles, carried by the startup), E5f-2a (the interface and common sound names) and E5f-2b (the menu and War names) done; E5f-3 next.
 **Branch:** `exp/engine-split`, from `main` 380b448d. Worktree
 `/Volumes/NTSD-Builds/tasks/engine-split/worktree` (T7-backed APFS, see
 [BUILD_STORAGE_T7](BUILD_STORAGE_T7.md)). It tracks `origin/exp/engine-split`
@@ -158,7 +158,7 @@ A read-only survey of `native/` (three agents, 2026-10-18):
 | E2 | Content policy out of Core: the digest, count and EXE-SHA pins become the NTSD content identity the game passes; Core checks what it is given with the same checks and errors (2.8.3.3's content origin as the model, read only) | **done** ([evidence](../evidence/es-e2-content-identity.json)) |
 | E3 | Identity and Practice: user-data folder, wasm module, Android prefix/entry, queue/thread names, titles and messages become game configuration; Practice/Lab and its two checks move to the game side | **done**: E3a ([evidence](../evidence/es-e3a-practice.json)), E3b ([evidence](../evidence/es-e3b-game-identity.json)); diagnostic labels wait for D2 |
 | E4 | Two packages: `engine/Package.swift` (Core, Runtime, codecs, decoders, shims, host libraries, self-contained tests) and `native/Package.swift` depending on it by path; the unsafeFlags plan (SwiftPM rejects them in version-pinned dependencies) | E4a **done** ([evidence](../evidence/es-e4a-engine-package.json)); E4b: headless **done** ([evidence](../evidence/es-e4b1-headless-host.json)), browser **done** ([evidence](../evidence/es-e4b2-web-host.json)), SDL **done** ([evidence](../evidence/es-e4b3-sdl-host.json)), AppKit **done** ([evidence](../evidence/es-e4b4-appkit-host.json)), UIKit **done** ([evidence](../evidence/es-e4b5-uikit-host.json)), Android **done** ([evidence](../evidence/es-e4b6-android-host.json)); E4c-1 **done** ([evidence](../evidence/es-e4c1-engine-tests.json)), E4c-1a **done** ([evidence](../evidence/es-e4c1a-sorted-keys.json)); E4c-2 (split the 11 mixed test files, the War trio) queued |
-| E5 | Game profile: the ID sites (100 rows, about 125 branch points; first estimated ~90) and the AI dispatch behind a profile the game supplies; the engine defines the `0x44d000` record's layout and the game supplies `initial.bin`; the NTSD profile bit-exact (all gates plus the full fixture-driven suites); the API's fit with 2.8.3.3 checked read only | E5a **done** (survey and design, [evidence](../evidence/es-e5a-design.json)); E5b **done** ([evidence](../evidence/es-e5b-record-type.json)); E5c-0 **done** ([evidence](../evidence/es-e5c0-profile-plumbing.json)); E5c-1a **done** ([evidence](../evidence/es-e5c1a-reflector-roles.json)); E5c-1b **done** ([evidence](../evidence/es-e5c1b-armour-roles.json)); E5c-1c **done** ([evidence](../evidence/es-e5c1c-interaction-roles.json)); E5c-1d **done** ([evidence](../evidence/es-e5c1d-impact-roles.json)); E5c-2a **done** ([evidence](../evidence/es-e5c2a-items-roles.json)); E5c-2b **done** ([evidence](../evidence/es-e5c2b-camera-links-roles.json)); E5c-2c **done** ([evidence](../evidence/es-e5c2c-requested-mission-roles.json)); E5c-2d **done** ([evidence](../evidence/es-e5c2d-roster-roles.json)); E5c-2e **done** ([evidence](../evidence/es-e5c2e-modes-roles.json)); E5c-2f **done** ([evidence](../evidence/es-e5c2f-prelude-roles.json)); E5c-2g **done** ([evidence](../evidence/es-e5c2g-mode-label-roles.json)); E5c-1e **done** ([evidence](../evidence/es-e5c1e-physics-roles.json)); E5c-1f **done** ([evidence](../evidence/es-e5c1f-drawing-roles.json)); E5c-1g **done** ([evidence](../evidence/es-e5c1g-effects-roles.json)); E5c-1h **done** ([evidence](../evidence/es-e5c1h-lifecycle-roles.json)); E5c-1i **done** ([evidence](../evidence/es-e5c1i-object-input-roles.json)); E5c-1j **done** ([evidence](../evidence/es-e5c1j-input-roles.json)); E5d: [survey](../evidence/es-e5d-plumbing.md), E5d-1a **done** ([evidence](../evidence/es-e5d1a-ai-target-roles.json)), E5d-1b **done** ([evidence](../evidence/es-e5d1b-ai-fight-roles.json)), E5d-2 **done** ([evidence](../evidence/es-e5d2-ai-special-hook.json)), E5d-3 **done** ([evidence](../evidence/es-e5d3-ai-routines-in-game.json)); E5e: [survey](../evidence/es-e5e-plumbing.md), E5e-1 **done** ([evidence](../evidence/es-e5e1-id300-roles.json)), E5e-2 **done** ([evidence](../evidence/es-e5e2-mission-pseudo-ids.json)), E5e-3 **done** ([evidence](../evidence/es-e5e3-war-life.json)), E5e-4 **done** ([evidence](../evidence/es-e5e4-fusion.json)), E5e-5 **done** ([evidence](../evidence/es-e5e5-weapon-break.json)); E5f: [survey](../evidence/es-e5f-plumbing.md), E5f-1 **done** ([evidence](../evidence/es-e5f1-front-interface.json)), E5f-2a **done** ([evidence](../evidence/es-e5f2a-interface-sound-names.json)), E5f-2b next |
+| E5 | Game profile: the ID sites (100 rows, about 125 branch points; first estimated ~90) and the AI dispatch behind a profile the game supplies; the engine defines the `0x44d000` record's layout and the game supplies `initial.bin`; the NTSD profile bit-exact (all gates plus the full fixture-driven suites); the API's fit with 2.8.3.3 checked read only | E5a **done** (survey and design, [evidence](../evidence/es-e5a-design.json)); E5b **done** ([evidence](../evidence/es-e5b-record-type.json)); E5c-0 **done** ([evidence](../evidence/es-e5c0-profile-plumbing.json)); E5c-1a **done** ([evidence](../evidence/es-e5c1a-reflector-roles.json)); E5c-1b **done** ([evidence](../evidence/es-e5c1b-armour-roles.json)); E5c-1c **done** ([evidence](../evidence/es-e5c1c-interaction-roles.json)); E5c-1d **done** ([evidence](../evidence/es-e5c1d-impact-roles.json)); E5c-2a **done** ([evidence](../evidence/es-e5c2a-items-roles.json)); E5c-2b **done** ([evidence](../evidence/es-e5c2b-camera-links-roles.json)); E5c-2c **done** ([evidence](../evidence/es-e5c2c-requested-mission-roles.json)); E5c-2d **done** ([evidence](../evidence/es-e5c2d-roster-roles.json)); E5c-2e **done** ([evidence](../evidence/es-e5c2e-modes-roles.json)); E5c-2f **done** ([evidence](../evidence/es-e5c2f-prelude-roles.json)); E5c-2g **done** ([evidence](../evidence/es-e5c2g-mode-label-roles.json)); E5c-1e **done** ([evidence](../evidence/es-e5c1e-physics-roles.json)); E5c-1f **done** ([evidence](../evidence/es-e5c1f-drawing-roles.json)); E5c-1g **done** ([evidence](../evidence/es-e5c1g-effects-roles.json)); E5c-1h **done** ([evidence](../evidence/es-e5c1h-lifecycle-roles.json)); E5c-1i **done** ([evidence](../evidence/es-e5c1i-object-input-roles.json)); E5c-1j **done** ([evidence](../evidence/es-e5c1j-input-roles.json)); E5d: [survey](../evidence/es-e5d-plumbing.md), E5d-1a **done** ([evidence](../evidence/es-e5d1a-ai-target-roles.json)), E5d-1b **done** ([evidence](../evidence/es-e5d1b-ai-fight-roles.json)), E5d-2 **done** ([evidence](../evidence/es-e5d2-ai-special-hook.json)), E5d-3 **done** ([evidence](../evidence/es-e5d3-ai-routines-in-game.json)); E5e: [survey](../evidence/es-e5e-plumbing.md), E5e-1 **done** ([evidence](../evidence/es-e5e1-id300-roles.json)), E5e-2 **done** ([evidence](../evidence/es-e5e2-mission-pseudo-ids.json)), E5e-3 **done** ([evidence](../evidence/es-e5e3-war-life.json)), E5e-4 **done** ([evidence](../evidence/es-e5e4-fusion.json)), E5e-5 **done** ([evidence](../evidence/es-e5e5-weapon-break.json)); E5f: [survey](../evidence/es-e5f-plumbing.md), E5f-1 **done** ([evidence](../evidence/es-e5f1-front-interface.json)), E5f-2a **done** ([evidence](../evidence/es-e5f2a-interface-sound-names.json)), E5f-2b **done** ([evidence](../evidence/es-e5f2b-menu-war-names.json)), E5f-3 next |
 | E6 | Classify each profile rule as LF2 2.0a or NTSD from the second reference; LF2 rules become the engine's default profile | needs D1 |
 | E7 | Engine stand-alone: the engine package builds alone (macOS, Linux container) and passes its tests with a from-scratch synthetic content pack; a scan finds no original bytes (files under `downloads/`, the resources, fixtures, `initial.bin`) | queued |
 | E8 | Publication: name, licence, a new repository with fresh history, a tag; this repository depends on it by revision; README credits | needs D2 and the user |
@@ -1563,6 +1563,54 @@ From a read-only survey ([report](../evidence/es-e5f-plumbing.md)).
   statics, `Interface.init` takes four lists, and `OriginalApplicationLoadingInputs`'
   `==` compares `rules`. `swift_beginAccess` before the gate: 3,278.
 
+### E5f-2b note (2026-10-20, reviewed with its change; done)
+
+- **Lists (into `Interface`).** `menuBitmaps` (the character menu's 11 names,
+  one per `OriginalMenuResourceLoading.slots` entry) and `warBitmaps` (the War
+  menu package's two), in load order; `OriginalMenuResourceLoading.paths` and
+  `OriginalApplicationMenuInputs.warPaths` are gone. The menu loader checks the
+  count after its extent check (a declared error before any effect of its
+  own, also on the path that loads nothing, which for an invalid profile now
+  throws where it used to return `.ready`; in `OriginalCharacterMenuStartup`
+  the music request and `afterMusic` run first, staged in its candidate and
+  dropped on the throw). War's setup (`OriginalWarSetup`, the code that builds
+  the two War bitmaps) reads `warBitmaps` from its candidate's catalog and
+  checks the count before its troop initialisation; the survey had missed this
+  site.
+- **Plumbing (parameters, as E5f-2a).** `OriginalMenuResourceLoading.load` and
+  both `loadWithSurfaceLoading`s take `names:`; `OriginalCharacterMenuStartup.run`
+  and `runWithSurfaceLoading` `menuNames:`; `OriginalModeMenuContinuation.advance`
+  `menuNames:` (it has no catalog). The loaded menu session and the character
+  menu continuation pass their catalog's rules. `OriginalApplicationMenuInputs.load`'s
+  `names:` (now `[String]?`) defaults to the identity's `menuBitmaps` (not an
+  empty list: the identity the load already takes); `bundledWithWar` passes its
+  `warBitmaps`. The loaded menu session holds the menu names in a `let` taken
+  from its attempt's catalog when the attempt is made: reading them through
+  the attempt's `model` added four `swift_beginAccess` (3,282, measured, found
+  per function in `Attempt.run()` and its specialisation); with the `let` the
+  count is back to 3,278.
+- **Public surface.** The two `Interface` fields and init parameters (six lists
+  now); the `names:`/`menuNames:` parameters above; the two statics removed.
+  Three reference checks and five test calls pass NTSD's list (inserted by the
+  helper script, now placing middle arguments correctly); 17 files that read
+  the old static read the profile's.
+- **Tests.** `NTSDProfileInterfaceTests.testMenuAndWarNames`: the counts and
+  War's two names; the menu load's first source request under NTSD's list and
+  a renamed one; the declared error for a short list; `==` for each list.
+  `OriginalWarSetupNativeTests.testWarBitmapNamesFollowTheProfile`: the War
+  setup constructs NTSD's two names, a renamed pair, and throws for one name
+  before any resource event. Two War surface adapters and the outer rollback
+  test read the profile's names.
+- **Review.** No change for NTSD (the 11 + 2 strings and order equal the
+  removed statics; the loader's events, slots and checkpoints unchanged; every
+  inserted argument correct; `OriginalModeMenuContinuation.advance` and
+  `OriginalCharacterMenuContinuation.advance` are called only from tests;
+  production goes through the loaded session). Required: War's setup literal
+  (moved to the profile, with a count check) and the note on the staged music
+  effects. Adopted: the War adapters and rollback test, the doc comment order,
+  `Interface`'s doc. The suggested counters for the menu loader's short list
+  stay with the error test (the War test checks no resource event).
+
 ## Ledger
 
 - 2026-10-18: plan agreed; branch `exp/engine-split` and its worktree created
@@ -2029,14 +2077,27 @@ From a read-only survey ([report](../evidence/es-e5f-plumbing.md)).
   tests, 3,278/3,406; 18 suites with 59 tests; WASI vs identical; Mac
   overlapping; phone 3v2 apart (slower), the 4v4 follow-up overlapping
   everywhere. [Evidence](../evidence/es-e5f2a-interface-sound-names.json).
+- 2026-10-20 E5f-2b: the character menu's 11 bitmap names and War's 2 into
+  `Interface`, passed as parameters (War's setup reads its catalog's). Reviewed
+  (no behavioural change for NTSD; War's literal, which the survey had missed,
+  moved too). `swift_beginAccess` measured first: 3,282 through the menu
+  attempt's `model`, 3,278 with a `let`. Gate `es-e5f2b`: 11 scenarios,
+  frames, AppKit, unchecked, emulator, 20 clean launches, 29 suite runs, the
+  engine's 110 tests, 3,278/3,406; 27 suites with 72 tests; WASI vs
+  identical; Mac overlapping; phone 3v2 main apart (slower), the 4v4 follow-up
+  overlapping everywhere. [Evidence](../evidence/es-e5f2b-menu-war-names.json).
 
 ## Next task
 
-E5f-2b (the E5f note; survey [report](../evidence/es-e5f-plumbing.md) §1, §4):
-the menu's 11 bitmap names (`OriginalMenuResourceLoading`) and War's 2
-(`OriginalApplicationMenuInputs`) into `Interface` (`menuBitmaps`,
-`warBitmaps`), passed as parameters as in E5f-2a (the menu session and its
-inputs from the identity's rules, the manifest check unchanged in kind).
-Tests: the lists equal NTSD's, a renamed entry reaches the loader, `==`. Gates
-with the menu resources, menu startup, character menu surface, War and menu
-inputs suites in gate3. Then E5f-3 (menu WAVs) and E5f-4 (optional).
+E5f-3 (the E5f note; survey [report](../evidence/es-e5f-plumbing.md) §1, §4):
+the five menu WAVs (`OriginalMenuSoundStartup.paths`, destinations
+`0x45560c+4i`) into `Interface.menuSounds`, passed as parameters:
+`OriginalMenuSoundStartup.load`/`loadObserved(names:)` (count checked before
+their own effects), `OriginalInputStartup.load`/`loadObserved` and
+`OriginalWinMainStartup.run` (`menuSounds:`, from the bootstrap's rules); the
+Runtime's `prepared` (its startup inputs' rules) and loading (its catalog
+inputs' rules); the catalog session's startup sounds and check (its rules).
+Tests: the list equals NTSD's, a renamed entry reaches the loader, the count
+error, `==`. Gates with the menu sound startup, startup audio corpus, input
+and WinMain startup, bootstrap, observed/prepared startup, Mac loading audio
+and catalog suites in gate3. Then E5f-4 (optional).

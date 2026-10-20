@@ -18,13 +18,14 @@ public struct OriginalMenuResourceResult: Codable, Equatable, Sendable {
 /// and initialization mask untouched. A supplied constructor owns image/copy/
 /// device handling; the enclosing operation must stage its external effects.
 public struct OriginalMenuResourceLoading {
-    public static let paths = ["CHARMENU","CM1","CM2","CM3","CM4","CM5","CMA","CMA2","CMC","RFACE","SPARK"]
     public static let slots = [0x4512c4,0x4512b0,0x4512b4,0x4512b8,0x4512bc,0x4512c0,0x4512ac,0x4512a8,0x44fd88,0x44fd84,0x44f8fc]
     public private(set) var bitmaps: [UInt32: OriginalLoadedBitmap] = [:]
     public init() {}
 
+    /// `names`: the game's menu bitmaps, one per slot (ENGINE_SPLIT E5f-2b:
+    /// `Interface.menuBitmaps`).
     @discardableResult
-    public mutating func load(globals: inout OriginalStateRecord,
+    public mutating func load(globals: inout OriginalStateRecord, names: [String],
                               allocate: (Int) throws -> OriginalInterfaceAllocation,
                               source: (Int, String) throws -> OriginalBitmapInput,
                               deviceResult: (Int) throws -> (surface: UInt32, colorKeyResult: Int32),
@@ -33,6 +34,7 @@ public struct OriginalMenuResourceLoading {
                               observe: (OriginalInterfaceEvent) throws -> Void = { _ in }) throws -> OriginalMenuResourceResult {
         let base = OriginalMatchPreparation.globalBase
         guard globals.byteCount == OriginalMatchPreparation.globalSize else { throw OriginalStateError.invalidStorage("Menu resource globals extent") }
+        guard names.count == Self.slots.count else { throw OriginalStateError.invalidStorage("Menu resource names: one per slot") }
         var state = globals, candidate = self
         let current = try state.integer(at: 0x44d020-base,as: UInt32.self)
         let selection = try state.integer(at: 0x4512c8-base,as: UInt32.self)
@@ -41,7 +43,7 @@ public struct OriginalMenuResourceLoading {
         try checkpoint(.init(.prefix),state,candidate.bitmaps)
         if load {
             let device = try state.integer(at: 0x457578-base,as: UInt32.self)
-            for (index,path) in Self.paths.enumerated() {
+            for (index,path) in names.enumerated() {
                 try observe(.init(.allocate,[0x1f50]))
                 let allocation = try allocate(index)
                 if allocation.address != 0 {

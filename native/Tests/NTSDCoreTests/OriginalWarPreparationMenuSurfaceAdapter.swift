@@ -1,6 +1,7 @@
 import Foundation
 import XCTest
 import NTSDCore
+import NTSDProfile
 @testable import NTSDReferenceChecks
 
 /// Comparison adapter for the two War resources. The reference is the pinned
@@ -12,7 +13,7 @@ final class OriginalWarPreparationMenuSurfaceAdapter {
     typealias Base = OriginalCharacterMenuSurfaceTests
     typealias API = OriginalBitmapSurfaceLoading
     let c: Test.WarGraphics,r: Test.Resources,control: Bool
-    let paths=["BATTLEMODE","BATTLETROOPS"]
+    let paths=NTSDProfile.rules.interface.warBitmaps
     var index=0,allocations=0,shadow: [UInt8]=[]
     init(_ c: Test.WarGraphics,_ r: Test.Resources,control: Bool) { self.c=c;self.r=r;self.control=control }
     func token(_ i: Int) -> UInt32 { 0x76000020+UInt32(control ? 1-i : i)*0x2000 }

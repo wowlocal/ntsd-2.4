@@ -1,6 +1,7 @@
 import Foundation
 import XCTest
 @testable import NTSDCore
+import NTSDProfile
 @testable import NTSDReferenceChecks
 
 final class OriginalApplicationLoadedMenuTests: XCTestCase {
@@ -57,7 +58,7 @@ final class OriginalApplicationLoadedMenuTests: XCTestCase {
             switch q.kind {
             case "module":return .init(result:0x400000)
             case "image":
-                XCTAssertEqual(q.strings,[Array((index == 11 ? "MENU_BACK9" : OriginalMenuResourceLoading.paths[index]).utf8)])
+                XCTAssertEqual(q.strings,[Array((index == 11 ? "MENU_BACK9" : NTSDProfile.rules.interface.menuBitmaps[index]).utf8)])
                 // Embedded DIB: the original loader first tries LR_LOADFROMFILE,
                 // then retries the same name as an application resource.
                 if q.words[4] == 0x2010 { return .init() }
@@ -170,7 +171,7 @@ final class OriginalApplicationLoadedMenuTests: XCTestCase {
             XCTAssertEqual(view.state.memory.allocations[token]?.live,true)
             XCTAssertEqual(try view.match.globals.integer(at:OriginalMenuResourceLoading.slots[i]-0x44d000,as:UInt32.self),token)
             let inputs = try XCTUnwrap(view.state.bitmapInputs),colors = try inputs.sourceColors(forSurface:UInt32(0x7f200000+i*16))
-            let pixels = try XCTUnwrap(OriginalApplicationMenuInputsTests.inputs.get().bitmaps[OriginalMenuResourceLoading.paths[i]]).pixels
+            let pixels = try XCTUnwrap(OriginalApplicationMenuInputsTests.inputs.get().bitmaps[NTSDProfile.rules.interface.menuBitmaps[i]]).pixels
             XCTAssertEqual(colors.width,pixels.width);XCTAssertEqual(colors.height,pixels.height)
             XCTAssertEqual(colors.rgb,pixels.rgb);XCTAssertEqual(colors.defined,pixels.defined)
         }

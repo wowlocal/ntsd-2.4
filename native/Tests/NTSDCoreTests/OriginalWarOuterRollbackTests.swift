@@ -1,6 +1,7 @@
 import Foundation
 import XCTest
 import NTSDCore
+import NTSDProfile
 
 /// Native-only outer transaction checks. The game contract is the declared
 /// menu startup -> War438b40 -> returned output, with the pinned EXE/lib/VC80
@@ -60,7 +61,7 @@ extension OriginalWarSetupNativeTests {
             if q.words[4]==0x2010 { return .init() }
             XCTAssertEqual(q.words[4],0x2000)
             let path=String(decoding:try XCTUnwrap(q.strings.first),as:UTF8.self)
-            XCTAssertTrue((OriginalMenuResourceLoading.paths+["BATTLEMODE","BATTLETROOPS"]).contains(path))
+            XCTAssertTrue((NTSDProfile.rules.interface.menuBitmaps+NTSDProfile.rules.interface.warBitmaps).contains(path))
             let image=UInt32(0x61000000+env.images.count*0x100)
             env.images[image]=path;return .init(result:Int32(bitPattern:image))
         case "getObject":

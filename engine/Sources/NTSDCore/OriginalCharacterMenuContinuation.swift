@@ -23,7 +23,8 @@ public enum OriginalCharacterMenuContinuation {
         characterCheckpoint: (OriginalCharacterScreenCheckpoint,OriginalMatchPreparation,inout Environment) throws -> Void = { _,_,_ in },
         checkpoint: (String,OriginalStateRecord,OriginalStateRecord,inout Environment) throws -> Void = { _,_,_,_ in }) throws -> OriginalCharacterScreenExit {
         var scene=state,owned=memory,audio=music,images=resources,text=libraryText,candidate=environment
-        let startup = try OriginalCharacterMenuStartup.runWithSurfaceLoading(globals:&scene.globals,music:&audio,resources:&images,environment:&candidate,
+        let startup = try OriginalCharacterMenuStartup.runWithSurfaceLoading(globals:&scene.globals,menuNames:scene.catalog.rules.interface.menuBitmaps,
+            music:&audio,resources:&images,environment:&candidate,
             musicRequest:musicRequest,allocate:allocate,perform:perform,afterMusic:afterMusic,checkpoint:resourceCheckpoint,observe:resourceEvent,beforeCommit:afterStartup)
         let end = try OriginalMatchSelection.advanceWithLibrary(state:&scene,libraryText:&text,selectionAtEntry:startup.resources.selectionAtEntry,
             target:target,input:input,fillBacking:{ [UInt8](repeating:0,count:100) },

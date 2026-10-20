@@ -1,6 +1,7 @@
 import Foundation
 import XCTest
 import NTSDCore
+import NTSDProfile
 @testable import NTSDReferenceChecks
 
 final class OriginalLibWarPreparationTests: XCTestCase {
@@ -166,7 +167,7 @@ final class OriginalLibWarPreparationTests: XCTestCase {
             corpus=try JSONDecoder().decode(Corpus.self,from:JSONSerialization.data(withJSONObject:document))
             XCTAssertEqual(corpus.cases.count,1);XCTAssertEqual(corpus.cases[0].spec.label,expectedLabel)
             var projected=document
-            projected["assets"]=(try XCTUnwrap(document["assets"] as? [String:Any])).filter { OriginalMenuResourceLoading.paths.contains($0.key) }
+            projected["assets"]=(try XCTUnwrap(document["assets"] as? [String:Any])).filter { NTSDProfile.rules.interface.menuBitmaps.contains($0.key) }
             let startup=(try XCTUnwrap(document["cases"] as? [[String:Any]])).first?["startup"]
             if let startup { projected["cases"]=[startup] }
             else {
@@ -542,7 +543,7 @@ final class OriginalLibWarPreparationTests: XCTestCase {
                 XCTAssertEqual(Array(expected.prefix(4)),(0..<4).map { UInt8(truncatingIfNeeded:surface >> ($0*8)) })
                 expected.replaceSubrange(0..<4,with:[1,0,0,0]);XCTAssertEqual(actual.storage.bytes,expected)
                 XCTAssertEqual(actual.storage.defined,try r.startup.blob(record.mask).map { $0 != 0 })
-                let i=Int((record.address-0x50000020)/0x2000);XCTAssertEqual(actual.input.path,OriginalMenuResourceLoading.paths[item.spec.control ? 10-i : i]);XCTAssertTrue(actual.input.present)
+                let i=Int((record.address-0x50000020)/0x2000);XCTAssertEqual(actual.input.path,NTSDProfile.rules.interface.menuBitmaps[item.spec.control ? 10-i : i]);XCTAssertTrue(actual.input.present)
             }
         }
         func compareFaultStartup(_ name: String,_ state: OriginalStateRecord) throws {
