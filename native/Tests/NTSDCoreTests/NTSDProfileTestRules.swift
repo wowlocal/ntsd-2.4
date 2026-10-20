@@ -5,9 +5,10 @@ import NTSDCore
 /// only this helper, the game's profile and the engine tests' value.
 extension OriginalGameRules {
     func with(profile: String = "moved",reflection: Reflection? = nil,armour: Armour? = nil,interaction: Interaction? = nil,
-              impact: Impact? = nil,items: Items? = nil,roster: Roster? = nil,modes: Modes? = nil) -> OriginalGameRules {
+              impact: Impact? = nil,items: Items? = nil,roster: Roster? = nil,modes: Modes? = nil,
+              physics: Physics? = nil) -> OriginalGameRules {
         OriginalGameRules(profile: profile,reflection: reflection ?? self.reflection,armour: armour ?? self.armour,
                           interaction: interaction ?? self.interaction,impact: impact ?? self.impact,items: items ?? self.items,
-                          roster: roster ?? self.roster,modes: modes ?? self.modes)
+                          roster: roster ?? self.roster,modes: modes ?? self.modes,physics: physics ?? self.physics)
     }
 }

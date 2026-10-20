@@ -202,13 +202,41 @@ public struct OriginalGameRules: Equatable, Sendable {
             self.stageBackgrounds = stageBackgrounds
         }
     }
+    /// Physics: the Objects the actor physics moves or drops their own way
+    /// (OriginalActorPhysics) and the two Object roles of a revival
+    /// (OriginalWorldPhysics). The gravities stay engine values (F5).
+    public struct Physics: Equatable, Sendable {
+        /// Moves a further 0.2·vx in x each tick, as every type-4 Object does.
+        public let extraDrift: Int32
+        /// Moves 0.2·vx back in x each tick (a damped drift: 0.8·vx in all).
+        public let reverseDrift: Int32
+        /// Thrown (state 1002) and in the air, these fall with gravity 0.17, 0.425
+        /// and 1.133 instead of 0.567, tested in that order (types other than 3, 4
+        /// and 6; the first match wins).
+        public let lowGravityThrow: Int32, midGravityThrow: Int32, highGravityThrow: Int32
+        /// The Object (of a type other than 0, 1, 2, 4 and 6) that, on the ground
+        /// (y above −0.0001, frame +0x88 not 2), stops at frame 101 with y, vy and vx 0,
+        /// on every such tick.
+        public let restingPiece: Int32
+        /// The Objects (the reviving Actor's +0x368, read after the revival's writes;
+        /// no type test) whose revival sets +0x318 to 140.
+        public let revivalPicture: OriginalIDRange
+        /// The Object a revival spawns into a free slot from 50.
+        public let revivalEffect: Int32
+        public init(extraDrift: Int32, reverseDrift: Int32, lowGravityThrow: Int32, midGravityThrow: Int32, highGravityThrow: Int32,
+                    restingPiece: Int32, revivalPicture: OriginalIDRange, revivalEffect: Int32) {
+            self.extraDrift = extraDrift; self.reverseDrift = reverseDrift
+            self.lowGravityThrow = lowGravityThrow; self.midGravityThrow = midGravityThrow; self.highGravityThrow = highGravityThrow
+            self.restingPiece = restingPiece; self.revivalPicture = revivalPicture; self.revivalEffect = revivalEffect
+        }
+    }
     private final class Roles: Sendable {
         let profile: String, reflection: Reflection, armour: Armour, interaction: Interaction, impact: Impact, items: Items, roster: Roster
-        let modes: Modes
+        let modes: Modes, physics: Physics
         init(profile: String, reflection: Reflection, armour: Armour, interaction: Interaction, impact: Impact, items: Items, roster: Roster,
-             modes: Modes) {
+             modes: Modes, physics: Physics) {
             self.profile = profile; self.reflection = reflection; self.armour = armour; self.interaction = interaction; self.impact = impact
-            self.items = items; self.roster = roster; self.modes = modes
+            self.items = items; self.roster = roster; self.modes = modes; self.physics = physics
         }
     }
     private let roles: Roles
@@ -221,6 +249,7 @@ public struct OriginalGameRules: Equatable, Sendable {
     public var items: Items { roles.items }
     public var roster: Roster { roles.roster }
     public var modes: Modes { roles.modes }
+    public var physics: Physics { roles.physics }
     public var reflectable: OriginalIDSet { roles.reflection.reflectable }
     public var reflector: Int32 { roles.reflection.reflector }
     public var rebinder: Int32 { roles.reflection.rebinder }
@@ -255,14 +284,22 @@ public struct OriginalGameRules: Equatable, Sendable {
     public var stageWeightPlus2: Int32 { roles.modes.stageWeightPlus2 }
     public var warTroops: OriginalIDSet { roles.modes.warTroops }
     public var stageBackgrounds: [Int32: Int32] { roles.modes.stageBackgrounds }
+    public var extraDrift: Int32 { roles.physics.extraDrift }
+    public var reverseDrift: Int32 { roles.physics.reverseDrift }
+    public var lowGravityThrow: Int32 { roles.physics.lowGravityThrow }
+    public var midGravityThrow: Int32 { roles.physics.midGravityThrow }
+    public var highGravityThrow: Int32 { roles.physics.highGravityThrow }
+    public var restingPiece: Int32 { roles.physics.restingPiece }
+    public var revivalPicture: OriginalIDRange { roles.physics.revivalPicture }
+    public var revivalEffect: Int32 { roles.physics.revivalEffect }
     public init(profile: String, reflection: Reflection, armour: Armour, interaction: Interaction, impact: Impact, items: Items,
-                roster: Roster, modes: Modes) {
+                roster: Roster, modes: Modes, physics: Physics) {
         roles = Roles(profile: profile, reflection: reflection, armour: armour, interaction: interaction, impact: impact, items: items,
-                      roster: roster, modes: modes)
+                      roster: roster, modes: modes, physics: physics)
     }
     public static func == (a: Self, b: Self) -> Bool {
         a.roles === b.roles || (a.profile == b.profile && a.reflection == b.reflection && a.armour == b.armour && a.interaction == b.interaction
                                 && a.impact == b.impact && a.items == b.items && a.roster == b.roster
-                                && a.modes == b.modes)
+                                && a.modes == b.modes && a.physics == b.physics)
     }
 }

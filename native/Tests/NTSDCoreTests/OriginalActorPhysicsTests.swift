@@ -2,6 +2,7 @@ import Foundation
 import XCTest
 @testable import NTSDCore
 @testable import NTSDReferenceChecks
+import NTSDProfile
 
 final class OriginalActorPhysicsTests: XCTestCase {
     private struct Patch: Decodable {
@@ -94,14 +95,14 @@ final class OriginalActorPhysicsTests: XCTestCase {
             }
             if let index = item.objectIndex {
                 let loaded = try XCTUnwrap(objects);XCTAssertTrue(item.header?.isEmpty != false && item.frames?.isEmpty != false)
-                try OriginalActorPhysics.apply(actor: &actor,object: loaded[index],globals: &globals,sse2Conversion: item.sse2 == 1,precision: OriginalArithmeticPrecision(controlWord: UInt16(c.fpcw)),observe: observe)
+                try OriginalActorPhysics.apply(actor: &actor,object: loaded[index],globals: &globals,rules: NTSDProfile.rules,sse2Conversion: item.sse2 == 1,precision: OriginalArithmeticPrecision(controlWord: UInt16(c.fpcw)),observe: observe)
             } else {
                 // Both forms: in place on copies first, then the default form
                 // checked against the recorded results (CORE_REALTIME B2 P4).
                 var placed = actor,placedGlobals = globals
-                try OriginalActorPhysics.apply(actor: &placed,header: header,globals: &placedGlobals,sse2Conversion: item.sse2 == 1,precision: OriginalArithmeticPrecision(controlWord: UInt16(c.fpcw)),frame: { ownFrames[Int($0)] },observe: observe,inPlace: true)
+                try OriginalActorPhysics.apply(actor: &placed,header: header,globals: &placedGlobals,rules: NTSDProfile.rules,sse2Conversion: item.sse2 == 1,precision: OriginalArithmeticPrecision(controlWord: UInt16(c.fpcw)),frame: { ownFrames[Int($0)] },observe: observe,inPlace: true)
                 let placedEvents = events;events = []
-                try OriginalActorPhysics.apply(actor: &actor,header: header,globals: &globals,sse2Conversion: item.sse2 == 1,precision: OriginalArithmeticPrecision(controlWord: UInt16(c.fpcw)),frame: { ownFrames[Int($0)] },observe: observe)
+                try OriginalActorPhysics.apply(actor: &actor,header: header,globals: &globals,rules: NTSDProfile.rules,sse2Conversion: item.sse2 == 1,precision: OriginalArithmeticPrecision(controlWord: UInt16(c.fpcw)),frame: { ownFrames[Int($0)] },observe: observe)
                 XCTAssertEqual(placed,actor,item.label+" in place");XCTAssertEqual(placedGlobals,globals,item.label+" in place")
                 XCTAssertEqual(placedEvents,events,item.label+" in place")
             }

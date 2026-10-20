@@ -62,7 +62,8 @@ E5c-2c выполнен: запрошенные предметы и стадия
 [evidence](../evidence/es-e5c2d-roster-roles.json). E5c-2e выполнен: режимы (стадии выживания и нумерованные, последний набор, веса 51/52, войска War):
 [evidence](../evidence/es-e5c2e-modes-roles.json). E5c-2f выполнен: прелюдия матча (арены стадий D8, суффикс реплея D9): [evidence](../evidence/es-e5c2f-prelude-roles.json).
 E5c-2g выполнен: надпись режима (D10); строки меню и режимов E5c-2 в профиле:
-[evidence](../evidence/es-e5c2g-mode-label-roles.json). Следующая задача — E5c-1e: физика (A33–A38).
+[evidence](../evidence/es-e5c2g-mode-label-roles.json). E5c-1e выполнен: физика (дрейфы, гравитация брошенного, покоящийся кусок, оживление): [evidence](../evidence/es-e5c1e-physics-roles.json).
+Следующая задача — E5c-1f: отрисовка (A45, A46).
 
 ## Internal build storage и VM quota исправлены — 2026-10-17
 

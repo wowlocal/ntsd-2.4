@@ -5,14 +5,14 @@ public enum OriginalActorPhysicsEvent: Equatable {
 /// Whole40e490..40ef6a. The surrounding World death/spawn pass is separate.
 /// Arithmetic uses an explicit x87 precision and retains extended exponents.
 public enum OriginalActorPhysics {
-    public static func apply(actor: inout OriginalStateRecord,object: OriginalLoadedObject,globals: inout OriginalStateRecord,
+    public static func apply(actor: inout OriginalStateRecord,object: OriginalLoadedObject,globals: inout OriginalStateRecord,rules: OriginalGameRules,
                              sse2Conversion: Bool = false,precision: OriginalArithmeticPrecision = .bits64,observe: (OriginalActorPhysicsEvent) throws -> Void = { _ in }) throws {
-        try apply(actor: &actor,header: object.header,globals: &globals,sse2Conversion: sse2Conversion,precision: precision,frame: { number in
+        try apply(actor: &actor,header: object.header,globals: &globals,rules: rules,sse2Conversion: sse2Conversion,precision: precision,frame: { number in
             guard object.frameStorage.indices.contains(Int(number)) else { throw OriginalStateError.invalidStorage("Physics frame binding") }
             return object.frameStorage[Int(number)]
         },observe: observe)
     }
-    static func apply(actor: inout OriginalStateRecord,header: OriginalStateRecord,globals: inout OriginalStateRecord,
+    static func apply(actor: inout OriginalStateRecord,header: OriginalStateRecord,globals: inout OriginalStateRecord,rules: OriginalGameRules,
                       sse2Conversion: Bool = false,precision: OriginalArithmeticPrecision = .bits64,frame: (Int32) throws -> OriginalStateRecord,
                       observe: (OriginalActorPhysicsEvent) throws -> Void = { _ in },inPlace: Bool = false) throws {
         try withoutActuallyEscaping(frame) { frames in
@@ -20,7 +20,7 @@ public enum OriginalActorPhysics {
                 guard inPlace else {
                     // All or nothing: the body runs on copies, assigned when it completes.
                     var body = Body(actor: actor,globals: globals,precision: precision,header: header,frame: frames,observe: observer)
-                    try body.run(sse2Conversion: sse2Conversion);actor = body.actor;globals = body.globals
+                    try body.run(sse2Conversion: sse2Conversion,rules: rules);actor = body.actor;globals = body.globals
                     return
                 }
                 // The caller's actor and globals, moved into the body and written
@@ -28,7 +28,7 @@ public enum OriginalActorPhysics {
                 var body = Body(actor: inPlaceTake(&actor,leaving: .vacant),globals: inPlaceTake(&globals,leaving: .vacant),
                                 precision: precision,header: header,frame: frames,observe: observer)
                 defer { actor = body.actor;globals = body.globals }
-                try body.run(sse2Conversion: sse2Conversion)
+                try body.run(sse2Conversion: sse2Conversion,rules: rules)
             }
         }
     }
@@ -63,7 +63,9 @@ public enum OriginalActorPhysics {
                 if next > epsilon { try number(offset,0) }
             }
         }
-        mutating func run(sse2Conversion: Bool) throws {
+        /// The game's rules come as a parameter, not a field: the Body is built per
+        /// Actor per tick, and a field would retain them each time (ENGINE_SPLIT E5c-1e).
+        mutating func run(sse2Conversion: Bool,rules: OriginalGameRules) throws {
             let freeze = try i(0xb4)
             if freeze != 0 { try put(0xb4,freeze > 0 ? freeze &- 1 : freeze &+ 1);return }
             if try i(0x98) < 0 || f(0x88) == 2 { return }
@@ -71,8 +73,8 @@ public enum OriginalActorPhysics {
             let type = try h(0x6f8),id = try h(0x6f4)
             let vx = try v(0x40),vz = try v(0x50)
             if !(try (vx > zero && i(0x3f4) == 1) || (vx < zero && i(0x3f0) == 1)) { try store(0x58,v(0x58)+vx) }
-            if type == 4 || id == 120 { try store(0x58,vx * constant(0.2) + v(0x58)) }
-            if id == 101 { try store(0x58,v(0x58)-constant(0.2)*vx) }
+            if type == 4 || id == rules.extraDrift { try store(0x58,vx * constant(0.2) + v(0x58)) }
+            if id == rules.reverseDrift { try store(0x58,v(0x58)-constant(0.2)*vx) }
             if !(try (vz > zero && i(0x3ec) == 1) || (vz < zero && i(0x3e8) == 1)) { try store(0x68,v(0x68)+vz) }
             for offset in [0x3ec,0x3e8,0x3f0,0x3f4] { try put(offset,0) }
             if type == 3,try f(0x2c) > 0 { try store(0x68,v(0x68)+constant(Double(f(0x2c) &- 50))) }
@@ -88,14 +90,15 @@ public enum OriginalActorPhysics {
                     if type == 6 { gravity = 1.1333333333333333 }
                     else if type == 4 { gravity = 0.85 }
                     else if try f(8) == 1002 {
-                        gravity = id == 124 ? 0.16999999999999998 : id == 120 ? 0.425 : id == 101 ? 1.1333333333333333 : 0.5666666666666667
+                        gravity = id == rules.lowGravityThrow ? 0.16999999999999998 : id == rules.midGravityThrow ? 0.425
+                            : id == rules.highGravityThrow ? 1.1333333333333333 : 0.5666666666666667
                     } else { gravity = 1.7 }
                     try store(0x48,v(0x48)+constant(gravity))
                 }
                 if type == 0 { try airborne() }
             } else if try f(0x88) != 2 {
                 if type == 0 { try fighterLanding(y: y) }
-                else { try objectLanding(type: type,id: id,y: y) }
+                else { try objectLanding(type: type,id: id,y: y,rules: rules) }
             }
             for (from,to) in [(0x58,0x10),(0x60,0x14),(0x68,0x18)] {
                 try put(to,OriginalCoordinateConversion.integer(actor.binary64(at: from),sse2: sse2Conversion))
@@ -156,10 +159,10 @@ public enum OriginalActorPhysics {
                 }
             }
         }
-        mutating func objectLanding(type: Int32,id: Int32,y: OriginalExtended) throws {
+        mutating func objectLanding(type: Int32,id: Int32,y: OriginalExtended,rules: OriginalGameRules) throws {
             let epsilon = try constant(0.0001)
             if ![1,2,4,6].contains(type) {
-                if id == 999 && y > -epsilon {
+                if id == rules.restingPiece && y > -epsilon {
                     try number(0x60,0);try put(0x70,101);try number(0x48,0);try number(0x40,0);try put(0x88,0)
                 };return
             }

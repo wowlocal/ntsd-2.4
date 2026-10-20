@@ -30,5 +30,8 @@ public enum NTSDProfile {
         modes: .init(survivalStages: OriginalIDRange(50..<60), numberedStages: OriginalIDRange(Int32.min..<50),
                      finalStageSet: OriginalIDRange(40..<50), stageWeightPlus1: 51, stageWeightPlus2: 52,
                      warTroops: OriginalIDSet([30, 31, 32, 33, 34, 35, 36, 37, 39, 122, 123]),
-                     stageBackgrounds: [0: 1, 10: 2, 20: 3, 30: 4, 40: 5, 50: 6]))
+                     stageBackgrounds: [0: 1, 10: 2, 20: 3, 30: 4, 40: 5, 50: 6]),
+        // The actor physics' special Objects and the revival's (OriginalActorPhysics, OriginalWorldPhysics).
+        physics: .init(extraDrift: 120, reverseDrift: 101, lowGravityThrow: 124, midGravityThrow: 120, highGravityThrow: 101,
+                       restingPiece: 999, revivalPicture: OriginalIDRange(30..<37), revivalEffect: 998))
 }

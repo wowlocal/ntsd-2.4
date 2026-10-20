@@ -2,6 +2,7 @@ import Foundation
 import XCTest
 @testable import NTSDCore
 @testable import NTSDReferenceChecks
+import NTSDProfile
 
 final class OriginalWorldPhysicsTests: XCTestCase {
     func testRespawnWithoutAllyRollsBackAfterOriginalRandomCall() throws {
@@ -17,7 +18,7 @@ final class OriginalWorldPhysicsTests: XCTestCase {
         try frame.write(Int32(14),at: 8)
         let beforeActors = actors,beforeGlobals = globals,beforeWorld = world
         var draws: [OriginalWorldPhysicsEvent] = []
-        XCTAssertThrowsError(try OriginalWorldPhysics.apply(world: &world,actors: &actors,globals: &globals,objectCount: 1,header: { _ in header },frame: { _,_ in frame },observe: { event in
+        XCTAssertThrowsError(try OriginalWorldPhysics.apply(world: &world,actors: &actors,globals: &globals,objectCount: 1,header: { _ in header },frame: { _,_ in frame },rules: NTSDProfile.rules,observe: { event in
             if case .random = event { draws.append(event) }
         }))
         XCTAssertEqual(draws,[.random(slot: 0,stream: 144,range: 51,result: 2)])
@@ -25,7 +26,7 @@ final class OriginalWorldPhysicsTests: XCTestCase {
         // In place (CORE_REALTIME B2 P4): the same error after the same draw,
         // the revival writes and the draw kept, nothing left vacant.
         draws = []
-        XCTAssertThrowsError(try OriginalWorldPhysics.apply(world: &world,actors: &actors,globals: &globals,objectCount: 1,header: { _ in header },frame: { _,_ in frame },observe: { event in
+        XCTAssertThrowsError(try OriginalWorldPhysics.apply(world: &world,actors: &actors,globals: &globals,objectCount: 1,header: { _ in header },frame: { _,_ in frame },rules: NTSDProfile.rules,observe: { event in
             if case .random = event { draws.append(event) }
         },inPlace: true)) { XCTAssertEqual("\($0)","\(OriginalStateError.invalidStorage("World physics: Original respawn idiv by zero after RNG"))") }
         XCTAssertEqual(draws,[.random(slot: 0,stream: 144,range: 51,result: 2)])
@@ -57,7 +58,7 @@ final class OriginalWorldPhysicsTests: XCTestCase {
             XCTAssertThrowsError(try OriginalWorldPhysics.apply(world: &world,actors: &actors,globals: &globals,objectCount: 1,header: { _ in header },frame: { object,_ in
                 if object == 1 { reads += 1;if reads == 2 { throw failure } }
                 return frame
-            },inPlace: inPlace)) { XCTAssertEqual("\($0)","\(failure)") }
+            },rules: NTSDProfile.rules,inPlace: inPlace)) { XCTAssertEqual("\($0)","\(failure)") }
             XCTAssertEqual(reads,2)
             if !inPlace { XCTAssertEqual(world,beforeWorld);XCTAssertEqual(actors,beforeActors);XCTAssertEqual(globals,beforeGlobals);continue }
             XCTAssertEqual(world.byteCount,beforeWorld.byteCount);XCTAssertEqual(globals.byteCount,0xb440)
@@ -81,7 +82,7 @@ final class OriginalWorldPhysicsTests: XCTestCase {
         var frame = try OriginalStateRecord(bytes: [UInt8](repeating: 0,count: 0x178),defined: [Bool](repeating: true,count: 0x178))
         try frame.write(Int32(14),at: 8)
         var respawns = 0
-        try OriginalWorldPhysics.apply(world: &world,actors: &actors,globals: &globals,objectCount: 1,header: { _ in header },frame: { _,_ in frame },
+        try OriginalWorldPhysics.apply(world: &world,actors: &actors,globals: &globals,objectCount: 1,header: { _ in header },frame: { _,_ in frame },rules: NTSDProfile.rules,
             respawned: { respawns += 1 })
         XCTAssertEqual(respawns,1)
         XCTAssertEqual(try actors[0].integer(at: 0x30c,as: Int32.self),1)
@@ -166,7 +167,7 @@ final class OriginalWorldPhysicsTests: XCTestCase {
             for inPlace in [false,true] {
             var world = startWorld,actors = startActors,globals = startGlobals,events: [Event] = []
             try OriginalWorldPhysics.apply(world: &world,actors: &actors,globals: &globals,precision: OriginalArithmeticPrecision(controlWord: UInt16(c.fpcw ?? 0x37f)),objectCount: item.count ?? 4,
-                header: { headers[$0] },frame: { ownFrames[$0][Int($1)] },observe: { event in
+                header: { headers[$0] },frame: { ownFrames[$0][Int($1)] },rules: NTSDProfile.rules,observe: { event in
                     switch event {
                     case let .random(slot,stream,range,result):events.append(.init(slot: slot,kind: "random",arguments: [stream,range,result].map(UInt32.init(bitPattern:))))
                     case let .reconstruct(slot,created):events.append(.init(slot: slot,kind: "reconstruct",arguments: [UInt32(created)]))

@@ -31,18 +31,19 @@ public enum OriginalWorldPhysics {
         },frame: { index,number in
             guard catalog.objects.indices.contains(index),catalog.objects[index].frameStorage.indices.contains(Int(number)) else { throw error("Frame binding") }
             return catalog.objects[index].frameStorage[Int(number)]
-        },observe: observe,afterActorPhysics: afterActorPhysics,respawned: respawned,inPlace: inPlace)
+        },rules: catalog.rules,observe: observe,afterActorPhysics: afterActorPhysics,respawned: respawned,inPlace: inPlace)
     }
     private static func error(_ text: String) -> OriginalStateError { .invalidStorage("World physics: "+text) }
     static func apply(world: inout OriginalStateRecord,actors: inout [OriginalStateRecord],globals: inout OriginalStateRecord,
                       precision: OriginalArithmeticPrecision = .bits64,objectCount: Int32,header: (Int) throws -> OriginalStateRecord,frame: (Int,Int32) throws -> OriginalStateRecord,
+                      rules: OriginalGameRules,
                       observe: (OriginalWorldPhysicsEvent) throws -> Void = { _ in },
                       afterActorPhysics: ((Int,OriginalStateRecord) throws -> Void)? = nil,
                       respawned: () throws -> Void = {},inPlace: Bool = false) throws {
         guard inPlace else {
             // All or nothing: in place on copies, assigned when it completes.
             var copiedWorld = world,copies = actors,copiedGlobals = globals
-            try apply(world: &copiedWorld,actors: &copies,globals: &copiedGlobals,precision: precision,objectCount: objectCount,header: header,frame: frame,
+            try apply(world: &copiedWorld,actors: &copies,globals: &copiedGlobals,precision: precision,objectCount: objectCount,header: header,frame: frame,rules: rules,
                       observe: observe,afterActorPhysics: afterActorPhysics,respawned: respawned,inPlace: true)
             world = copiedWorld;actors = copies;globals = copiedGlobals
             return
@@ -74,7 +75,7 @@ public enum OriginalWorldPhysics {
             // The helper runs on this pass's own Actor and globals (dropped with
             // the pass on a throw; CORE_REALTIME B2 P4).
             let actorHeader = try header(o)
-            try OriginalActorPhysics.apply(actor: &pool[a],header: actorHeader,globals: &owned,precision: precision,frame: { try frame(o,$0) },observe: { try observe(.sound(slot: slot,event: $0)) },inPlace: true)
+            try OriginalActorPhysics.apply(actor: &pool[a],header: actorHeader,globals: &owned,rules: rules,precision: precision,frame: { try frame(o,$0) },observe: { try observe(.sound(slot: slot,event: $0)) },inPlace: true)
             // Without an observer the actor is not copied for one (tier 3 L4).
             if let afterActorPhysics { try afterActorPhysics(slot,pool[a]) }
             // One frame lookup: the write between the two tests touches only
@@ -86,10 +87,10 @@ public enum OriginalWorldPhysics {
                     try pool[a].write(i(a,0x310),at: 0x30c);try pool[a].write(Int32(0),at: 0x308)
                     try pool[a].write(i(a,0x314),at: 0x304);try pool[a].write(i(a,0x304),at: 0x300);try pool[a].write(i(a,0x300),at: 0x2fc)
                     try pool[a].write(Int32(0),at: 0x314);try pool[a].write(Int32(0),at: 0x310);try pool[a].write(Int32(1),at: 0x364)
-                    if try (30...36).contains(header(object(a)).integer(at: 0x6f4,as: Int32.self)) { try pool[a].write(Int32(140),at: 0x318) }
+                    if try rules.revivalPicture.contains(header(object(a)).integer(at: 0x6f4,as: Int32.self)) { try pool[a].write(Int32(140),at: 0x318) }
                     try pool[a].write(Int32(219),at: 0x70);try pool[a].write(Int32(0),at: 0x88);try pool[a].write(Int32(10),at: 0xb4)
                     // Failed allocation/lookup preserves all preceding revival writes.
-                    if let free = try (50..<400).first(where: { try active($0) == 0 }),let replacement = try find(998) {
+                    if let free = try (50..<400).first(where: { try active($0) == 0 }),let replacement = try find(rules.revivalEffect) {
                         let b = try index(free)
                         try observe(.reconstruct(slot: slot,created: free));try pool[b].reconstructActor()
                         try pool[b].write(UInt32(replacement),at: 0x368)

@@ -17,5 +17,7 @@ extension OriginalGameRules {
                      keptOnScreen: OriginalIDSet([]), hpDrink: -1, mpDrink: -1),
         roster: .init(hiddenRoster: OriginalIDSet([]), randomCandidates: OriginalIDRange(0..<0), bracketFavourites: OriginalIDSet([])),
         modes: .init(survivalStages: OriginalIDRange(0..<0), numberedStages: OriginalIDRange(0..<0), finalStageSet: OriginalIDRange(0..<0),
-                     stageWeightPlus1: -1, stageWeightPlus2: -1, warTroops: OriginalIDSet([]), stageBackgrounds: [:]))
+                     stageWeightPlus1: -1, stageWeightPlus2: -1, warTroops: OriginalIDSet([]), stageBackgrounds: [:]),
+        physics: .init(extraDrift: -1, reverseDrift: -1, lowGravityThrow: -1, midGravityThrow: -1, highGravityThrow: -1, restingPiece: -1,
+                       revivalPicture: OriginalIDRange(0..<0), revivalEffect: -1))
 }
