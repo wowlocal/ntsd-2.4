@@ -24,7 +24,7 @@ extension OriginalGameRules {
         drawing: .init(shadowless: OriginalIDSet([]), unlabelledComputers: OriginalIDSet([])),
         // The request-slot tests' lifecycle pools are built on Objects 998 and 999.
         effects: .init(fixedDepthChildren: OriginalIDSet([]), quarterDepthChild: -1, weakChildren: OriginalIDSet([]),
-                       commandEffect: 998, deathParticles: 999, fireParticles: 999),
+                       commandEffect: 998, deathParticles: 999, fireParticles: 999, burstChild: -1, escortChild: -1),
         // The request-slot tests' slot prefix pool is built on Object 217.
         lifecycle: .init(halfHPRegen: OriginalIDSet([]), state9995Object: -1, pieces: 217, lastPiece: 218, noRiseInvulnerability: OriginalIDSet([]),
                          roundRevertFrom: -1, roundRevertTo: -1))

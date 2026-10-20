@@ -33,7 +33,7 @@ public enum OriginalObjectInput {
                                            globals: inPlaceTake(&state.globals,leaving: .vacant),
                                            objects: catalog.objects,objectCount: objectCount,precision: precision)
         defer { state.world = pass.world; state.actors = pass.actors; state.globals = pass.globals }
-        try pass.run(slot,observe: observe)
+        try pass.run(slot,rules: catalog.rules,observe: observe)
     }
 
     static func error(_ message: String) -> OriginalStateError { .invalidStorage(message) }
@@ -111,14 +111,16 @@ struct OriginalObjectInputPass {
         return a
     }
 
-    mutating func run(_ slot: Int,observe: (OriginalObjectInputEvent) throws -> Void) throws {
+    /// The game's rules come as a parameter, not a field: the pass is built per
+    /// slot (ENGINE_SPLIT E5c-1i, the E5c-1e lesson).
+    mutating func run(_ slot: Int,rules: OriginalGameRules,observe: (OriginalObjectInputEvent) throws -> Void) throws {
         let hit = try frame(index(slot),0x30)
         guard OriginalObjectInput.recoveredHitFa.contains(hit) else {
             throw OriginalLoaderError.outsideVerifiedDomain("Object input hit_Fa \(hit) is not recovered")
         }
         switch hit {
-        case 8: try burst(slot,observe: observe)
-        case 5: try escort(slot,observe: observe)
+        case 8: try burst(slot,rules: rules,observe: observe)
+        case 5: try escort(slot,rules: rules,observe: observe)
         case 10: try drift(slot)
         default:
             if hit == 7 { try trail(slot,observe: observe) }
@@ -127,8 +129,8 @@ struct OriginalObjectInputPass {
         }
     }
 
-    /// hit_Fa 8 (407232..40768e): split into3+ clay birds aimed at random enemies.
-    mutating func burst(_ slot: Int,observe: (OriginalObjectInputEvent) throws -> Void) throws {
+    /// hit_Fa 8 (407232..40768e): split into3+ `burstChild` Objects aimed at random enemies.
+    mutating func burst(_ slot: Int,rules: OriginalGameRules,observe: (OriginalObjectInputEvent) throws -> Void) throws {
         let s = try index(slot)
         var enemies: [Int32] = []
         for k in 0..<400 where try active(k) != 0 {
@@ -137,7 +139,7 @@ struct OriginalObjectInputPass {
         }
         let n = Int32(enemies.count), count = n <= 4 ? 3 : (n-3)/2+3
         for _ in 0..<count {
-            guard let free = try free(), let bird = try find(0xe1) else { continue }
+            guard let free = try free(), let bird = try find(rules.burstChild) else { continue }
             let s = try index(slot), a = try spawn(free,bird,from: s,observe: observe)
             try store(a,0x40,c(Double(draw(3,0x15,observe: observe) &- 11)))
             try store(a,0x48,c(3)-c(Double(draw(5,0x18,observe: observe)))*c(0.25))
@@ -149,13 +151,13 @@ struct OriginalObjectInputPass {
         try activate(slot,0)
     }
 
-    /// hit_Fa 5 (407ad5..407d3b): one Object219 per living allied character.
-    mutating func escort(_ slot: Int,observe: (OriginalObjectInputEvent) throws -> Void) throws {
+    /// hit_Fa 5 (407ad5..407d3b): one `escortChild` Object per living allied character.
+    mutating func escort(_ slot: Int,rules: OriginalGameRules,observe: (OriginalObjectInputEvent) throws -> Void) throws {
         for k in 0..<400 {
             guard try active(k) == 1 else { continue }
             let t = try index(k), s = try index(slot)
             guard try h(t,0x6f8) == 0, try i(t,0x364) == i(s,0x364), try i(t,0x2fc) > 0,
-                  let free = try free(), let n = try find(0xdb) else { continue }
+                  let free = try free(), let n = try find(rules.escortChild) else { continue }
             let a = try spawn(free,n,from: s,observe: observe)
             try store(a,0x40,c(Double((i(index(k),0x10) &- i(a,0x10))/50)))
             try actors[a].writeBinary64(0,at: 0x48); try actors[a].writeBinary64(0,at: 0x50)

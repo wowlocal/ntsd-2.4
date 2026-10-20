@@ -2,19 +2,20 @@ import XCTest
 @testable import NTSDCore
 import NTSDProfile
 
-/// ENGINE_SPLIT E5c-1g: the post-draw opoint's children (A55–A57) and the
-/// lifecycle's spawned Objects (N2–N4) follow the profile. Synthetic records
+/// ENGINE_SPLIT E5c-1g/1i: the post-draw opoint's children (A55–A57), the
+/// lifecycle's spawned Objects (N2–N4) and the object input's spawns (A58, A59)
+/// follow the profile. Synthetic records
 /// after OriginalPostDrawOpointTests' and OriginalPostDrawLifecycleTests' own.
 final class NTSDProfileEffectsTests: XCTestCase {
     func zero(_ size: Int) throws -> OriginalStateRecord {
         try .init(bytes: [UInt8](repeating: 0, count: size), defined: [Bool](repeating: true, count: size))
     }
     func effects(fixed: OriginalIDSet? = nil, quarter: Int32? = nil, weak: OriginalIDSet? = nil, command: Int32? = nil,
-                 death: Int32? = nil, fire: Int32? = nil) -> OriginalGameRules {
+                 death: Int32? = nil, fire: Int32? = nil, burst: Int32? = nil, escort: Int32? = nil) -> OriginalGameRules {
         let n = NTSDProfile.rules
         return n.with(effects: .init(fixedDepthChildren: fixed ?? n.fixedDepthChildren, quarterDepthChild: quarter ?? n.quarterDepthChild,
             weakChildren: weak ?? n.weakChildren, commandEffect: command ?? n.commandEffect, deathParticles: death ?? n.deathParticles,
-            fireParticles: fire ?? n.fireParticles))
+            fireParticles: fire ?? n.fireParticles, burstChild: burst ?? n.burstChild, escortChild: escort ?? n.escortChild))
     }
     func bootstrap() throws -> OriginalWorldBootstrap {
         try OriginalWorldBootstrap(worldBacking: [UInt8](repeating: 0xa5, count: 0x7d8),
@@ -86,5 +87,39 @@ final class NTSDProfileEffectsTests: XCTestCase {
         r = try lifecycle(id: 999, previous: 18, rules: effects(fire: 998))
         XCTAssertEqual(r.error, "\(OriginalStateError.invalidStorage("Post-draw lifecycle: Fire Object index provenance"))", "no fire Object found")
         XCTAssertNil(try lifecycle(id: 998, previous: 18, rules: effects(fire: 998)).error)
+    }
+    /// The object input pass for slot 10 (an Object of type 1 whose frame has this
+    /// hit_Fa) over these extra catalog Objects, an ally (a type-0 character of the
+    /// same team) in slot 11: the reconstructions.
+    func objectInput(hit: Int32, ids: [Int32], rules: OriginalGameRules) throws -> Int {
+        var world = try zero(0x7d8), globals = try zero(0xb440)
+        for (slot, actor): (Int, UInt32) in [(10, 0), (11, 1), (50, 2), (51, 3), (52, 4), (53, 5)] { try world.write(actor, at: 0x194+4*slot) }
+        for slot in [10, 11] { try world.write(UInt8(1), at: 4+slot) }
+        for n in 0..<3000 { try globals.write(UInt8(1), at: 0x44ff90-0x44d000+n) }
+        var actors = try (0..<6).map { _ in try zero(0x420) }
+        try actors[0].write(UInt32(0), at: 0x368); try actors[1].write(UInt32(1), at: 0x368)
+        for a in [0, 1] { try actors[a].write(Int32(1), at: 0x364); try actors[a].write(Int32(100), at: 0x2fc) }
+        func object(_ id: Int32, type: Int32, hit: Int32 = 0) throws -> OriginalLoadedObject {
+            var header = try zero(0x7a4); try header.write(id, at: 0x6f4); try header.write(type, at: 0x6f8)
+            var frame = try zero(0x178); try frame.write(hit, at: 0x30)
+            return OriginalLoadedObject(header: header, nameTail: try zero(0x3c), frames: [], frameStorage: [frame], weaponSoundPaths: [:])
+        }
+        let objects = try [object(5, type: 1, hit: hit), object(2, type: 0)] + ids.map { try object($0, type: 1) }
+        var pass = OriginalObjectInputPass(world: world, actors: actors, globals: globals, objects: objects, objectCount: Int32(objects.count),
+                                           precision: .bits64)
+        var created = 0
+        try pass.run(10, rules: rules, observe: { if case .reconstruct = $0 { created += 1 } })
+        XCTAssertEqual(try pass.world.integer(at: 4+10, as: UInt8.self), 0, "the slot deactivated")
+        if created > 0 { XCTAssertEqual(try pass.actors[2].integer(at: 0x368, as: UInt32.self), 2, "the child is the role's Object") }
+        return created
+    }
+    func testObjectInputSpawnsA58A59() throws {
+        let n = NTSDProfile.rules
+        XCTAssertEqual(try objectInput(hit: 8, ids: [225], rules: n), 3, "three birds without enemies")
+        XCTAssertEqual(try objectInput(hit: 8, ids: [225], rules: effects(burst: 77)), 0)
+        XCTAssertEqual(try objectInput(hit: 8, ids: [77], rules: effects(burst: 77)), 3)
+        XCTAssertEqual(try objectInput(hit: 5, ids: [219], rules: n), 1, "one for the living ally")
+        XCTAssertEqual(try objectInput(hit: 5, ids: [219], rules: effects(escort: 77)), 0)
+        XCTAssertEqual(try objectInput(hit: 5, ids: [77], rules: effects(escort: 77)), 1)
     }
 }

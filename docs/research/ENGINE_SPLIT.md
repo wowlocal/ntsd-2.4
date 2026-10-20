@@ -10,7 +10,7 @@ measurement from [TVOS_WEB](TVOS_WEB.md), [MEMORY_LOADING](MEMORY_LOADING.md) an
 engine from the game itself. to publish engine as the separate github repo";
 then, after the plan: "ok … when the plan is setteled start the loop in a
 separate branch" and "push automatically every step (on that new branch)".
-**Status:** E0–E3, E4a, E4b (all six hosts), E4c-1 (the engine's self-contained tests), E5a (the game profile's survey and design) and E5b (the record type, the copied tables out), E4c-1a (a nondeterministic engine test corrected) E5c-0 (the profile's plumbing, reflection), E5c-1a (one storage, the reflectors), E5c-1b (armour), E5c-1c (special interactions) and E5c-1d (impact) done; E5c-2a, E5c-2b and E5c-2c (the items family: the random and requested spawns, camera, links, the mission stage) E5c-2d (the roster family), E5c-2e (the modes family), E5c-2f (the match prelude) and E5c-2g (the mode label) done: E5c-2's menu and mode rows are in the profile; E5c-1e (physics), E5c-1f (drawing) and E5c-1g (the post-draw effects) and E5c-1h (the slot prefix, scheduler and round restore) done; E5c-1i, the object input, next.
+**Status:** E0–E3, E4a, E4b (all six hosts), E4c-1 (the engine's self-contained tests), E5a (the game profile's survey and design) and E5b (the record type, the copied tables out), E4c-1a (a nondeterministic engine test corrected) E5c-0 (the profile's plumbing, reflection), E5c-1a (one storage, the reflectors), E5c-1b (armour), E5c-1c (special interactions) and E5c-1d (impact) done; E5c-2a, E5c-2b and E5c-2c (the items family: the random and requested spawns, camera, links, the mission stage) E5c-2d (the roster family), E5c-2e (the modes family), E5c-2f (the match prelude) and E5c-2g (the mode label) done: E5c-2's menu and mode rows are in the profile; E5c-1e (physics), E5c-1f (drawing) and E5c-1g (the post-draw effects) and E5c-1h (the slot prefix, scheduler and round restore) and E5c-1i (the object input) done; E5c-1j, A28, next.
 **Branch:** `exp/engine-split`, from `main` 380b448d. Worktree
 `/Volumes/NTSD-Builds/tasks/engine-split/worktree` (T7-backed APFS, see
 [BUILD_STORAGE_T7](BUILD_STORAGE_T7.md)). It tracks `origin/exp/engine-split`
@@ -158,7 +158,7 @@ A read-only survey of `native/` (three agents, 2026-10-18):
 | E2 | Content policy out of Core: the digest, count and EXE-SHA pins become the NTSD content identity the game passes; Core checks what it is given with the same checks and errors (2.8.3.3's content origin as the model, read only) | **done** ([evidence](../evidence/es-e2-content-identity.json)) |
 | E3 | Identity and Practice: user-data folder, wasm module, Android prefix/entry, queue/thread names, titles and messages become game configuration; Practice/Lab and its two checks move to the game side | **done**: E3a ([evidence](../evidence/es-e3a-practice.json)), E3b ([evidence](../evidence/es-e3b-game-identity.json)); diagnostic labels wait for D2 |
 | E4 | Two packages: `engine/Package.swift` (Core, Runtime, codecs, decoders, shims, host libraries, self-contained tests) and `native/Package.swift` depending on it by path; the unsafeFlags plan (SwiftPM rejects them in version-pinned dependencies) | E4a **done** ([evidence](../evidence/es-e4a-engine-package.json)); E4b: headless **done** ([evidence](../evidence/es-e4b1-headless-host.json)), browser **done** ([evidence](../evidence/es-e4b2-web-host.json)), SDL **done** ([evidence](../evidence/es-e4b3-sdl-host.json)), AppKit **done** ([evidence](../evidence/es-e4b4-appkit-host.json)), UIKit **done** ([evidence](../evidence/es-e4b5-uikit-host.json)), Android **done** ([evidence](../evidence/es-e4b6-android-host.json)); E4c-1 **done** ([evidence](../evidence/es-e4c1-engine-tests.json)), E4c-1a **done** ([evidence](../evidence/es-e4c1a-sorted-keys.json)); E4c-2 (split the 11 mixed test files, the War trio) queued |
-| E5 | Game profile: the ID sites (100 rows, about 125 branch points; first estimated ~90) and the AI dispatch behind a profile the game supplies; the engine defines the `0x44d000` record's layout and the game supplies `initial.bin`; the NTSD profile bit-exact (all gates plus the full fixture-driven suites); the API's fit with 2.8.3.3 checked read only | E5a **done** (survey and design, [evidence](../evidence/es-e5a-design.json)); E5b **done** ([evidence](../evidence/es-e5b-record-type.json)); E5c-0 **done** ([evidence](../evidence/es-e5c0-profile-plumbing.json)); E5c-1a **done** ([evidence](../evidence/es-e5c1a-reflector-roles.json)); E5c-1b **done** ([evidence](../evidence/es-e5c1b-armour-roles.json)); E5c-1c **done** ([evidence](../evidence/es-e5c1c-interaction-roles.json)); E5c-1d **done** ([evidence](../evidence/es-e5c1d-impact-roles.json)); E5c-2a **done** ([evidence](../evidence/es-e5c2a-items-roles.json)); E5c-2b **done** ([evidence](../evidence/es-e5c2b-camera-links-roles.json)); E5c-2c **done** ([evidence](../evidence/es-e5c2c-requested-mission-roles.json)); E5c-2d **done** ([evidence](../evidence/es-e5c2d-roster-roles.json)); E5c-2e **done** ([evidence](../evidence/es-e5c2e-modes-roles.json)); E5c-2f **done** ([evidence](../evidence/es-e5c2f-prelude-roles.json)); E5c-2g **done** ([evidence](../evidence/es-e5c2g-mode-label-roles.json)); E5c-1e **done** ([evidence](../evidence/es-e5c1e-physics-roles.json)); E5c-1f **done** ([evidence](../evidence/es-e5c1f-drawing-roles.json)); E5c-1g **done** ([evidence](../evidence/es-e5c1g-effects-roles.json)); E5c-1h **done** ([evidence](../evidence/es-e5c1h-lifecycle-roles.json)); E5c-1i next |
+| E5 | Game profile: the ID sites (100 rows, about 125 branch points; first estimated ~90) and the AI dispatch behind a profile the game supplies; the engine defines the `0x44d000` record's layout and the game supplies `initial.bin`; the NTSD profile bit-exact (all gates plus the full fixture-driven suites); the API's fit with 2.8.3.3 checked read only | E5a **done** (survey and design, [evidence](../evidence/es-e5a-design.json)); E5b **done** ([evidence](../evidence/es-e5b-record-type.json)); E5c-0 **done** ([evidence](../evidence/es-e5c0-profile-plumbing.json)); E5c-1a **done** ([evidence](../evidence/es-e5c1a-reflector-roles.json)); E5c-1b **done** ([evidence](../evidence/es-e5c1b-armour-roles.json)); E5c-1c **done** ([evidence](../evidence/es-e5c1c-interaction-roles.json)); E5c-1d **done** ([evidence](../evidence/es-e5c1d-impact-roles.json)); E5c-2a **done** ([evidence](../evidence/es-e5c2a-items-roles.json)); E5c-2b **done** ([evidence](../evidence/es-e5c2b-camera-links-roles.json)); E5c-2c **done** ([evidence](../evidence/es-e5c2c-requested-mission-roles.json)); E5c-2d **done** ([evidence](../evidence/es-e5c2d-roster-roles.json)); E5c-2e **done** ([evidence](../evidence/es-e5c2e-modes-roles.json)); E5c-2f **done** ([evidence](../evidence/es-e5c2f-prelude-roles.json)); E5c-2g **done** ([evidence](../evidence/es-e5c2g-mode-label-roles.json)); E5c-1e **done** ([evidence](../evidence/es-e5c1e-physics-roles.json)); E5c-1f **done** ([evidence](../evidence/es-e5c1f-drawing-roles.json)); E5c-1g **done** ([evidence](../evidence/es-e5c1g-effects-roles.json)); E5c-1h **done** ([evidence](../evidence/es-e5c1h-lifecycle-roles.json)); E5c-1i **done** ([evidence](../evidence/es-e5c1i-object-input-roles.json)); E5c-1j next |
 | E6 | Classify each profile rule as LF2 2.0a or NTSD from the second reference; LF2 rules become the engine's default profile | needs D1 |
 | E7 | Engine stand-alone: the engine package builds alone (macOS, Linux container) and passes its tests with a from-scratch synthetic content pack; a scan finds no original bytes (files under `downloads/`, the resources, fixtures, `initial.bin`) | queued |
 | E8 | Publication: name, licence, a new repository with fresh history, a tag; this repository depends on it by revision; README credits | needs D2 and the user |
@@ -938,6 +938,37 @@ From the survey ([report](../evidence/es-e5c-rest-plumbing.md) §1, §2, §5, §
   `noLyingDelay`) and its doc gives the frame and team conditions. Adopted: the
   A31 miss keeps frame 0, the unused roster-test helpers removed.
 
+### E5c-1i note (2026-10-20, reviewed with its change; done)
+
+From the survey ([report](../evidence/es-e5c-rest-plumbing.md) §1, §2, §6).
+- **Roles (Effects).** `burstChild` 225 (A58: `find(0xe1)` in `burst`, an
+  Object's hit_Fa 8 split into three or more Objects aimed at random enemies)
+  and `escortChild` 219 (A59: `find(0xdb)` in `escort`, one per living allied
+  character); each `find` stays after its free-slot scan in the same `guard`.
+- **Plumbing.** `OriginalObjectInputPass` is built per slot, so the rules go as
+  a parameter of `run` to `burst` and `escort` (the survey proposed a pass field;
+  a parameter avoids its per-slot retain, the E5c-1e lesson); `applyInPlace`
+  passes its catalog's; no signature of the entry points changes (`run` is
+  internal). The public surface added: two `Effects` fields and accessors, and
+  `Effects.init`'s two parameters.
+  `Effects.init` gains `burstChild:` and `escortChild:` (its constructions
+  updated); `OriginalGameRules.engineTests` gives −1 (no engine test reaches the
+  object input).
+- **Tests.** The pass built directly for slot 10 (a type-1 Object whose frame
+  has hit_Fa 8 or 5) with an ally in slot 11: three bursts of 225 without
+  enemies, one escort of 219 for the ally; none under moved IDs, the same
+  counts for Objects with the moved IDs; the slot deactivated, the child the
+  role's Object. The `find`-miss branches (0x4074a0 for 225, 0x407b98 for 219)
+  never ran in the object-input corpora: they are decoded statically, so the
+  moved-ID cases test Native's model of them, not observed behaviour.
+- **Review.** No correctness defect (literals restored, rules removed:
+  byte-identical to HEAD; `find` still only after `free()` in the `guard`; the
+  other 0xe1/0xdb literals are byte offsets, stream labels and key codes, not
+  these IDs). Required: exact role docs (the burst count, its targets without
+  enemies, the ally conditions, the deactivation) and the static-only note on
+  the miss branches. Adopted: the comments name the roles, the slot and child
+  assertions, the departure from the survey recorded.
+
 ## Ledger
 
 - 2026-10-18: plan agreed; branch `exp/engine-split` and its worktree created
@@ -1292,16 +1323,28 @@ From the survey ([report](../evidence/es-e5c-rest-plumbing.md) §1, §2, §5, §
   runs, the engine's 110 tests, `swift_beginAccess` 3,278/3,406; 21 suites with
   79 tests; WASI vs identical; phone and Mac overlapping.
   [Evidence](../evidence/es-e5c1h-lifecycle-roles.json).
+- 2026-10-20 E5c-1i: the object input's two spawns into `Effects` (`burstChild`
+  225, A58; `escortChild` 219, A59). Reviewed (no correctness defect; exact
+  role docs; the miss branches noted as static only). Gate `es-e5c1i` (access
+  precheck 3,278): 11 scenarios, frames, AppKit, unchecked, emulator, 20 clean
+  launches, 29 suite runs, the engine's 110 tests, `swift_beginAccess`
+  3,278/3,406; 18 suites with 68 tests; WASI vs identical; phone and Mac
+  overlapping. [Evidence](../evidence/es-e5c1i-object-input-roles.json).
 
 ## Next task
 
-E5c-1i (survey: [report](../evidence/es-e5c-rest-plumbing.md) §1, §2, §6): the
-object input's two spawns into the `Effects` family: `burstChild` 225 (A58:
-`find(0xe1)` in `burst`, a hit_Fa 8 split into aimed Objects) and `escortChild`
-219 (A59: `find(0xdb)` in `escort`, one per living ally), each still after its
-free-slot scan. Plumbing: `OriginalObjectInputPass` is built per slot, so the
-rules go as a parameter of `run` to `burst` and `escort`; the public entry
-points pass their catalog's; no signature changes. Measure `swift_beginAccess`
-first. Tests: the pass built directly with frame hit_Fa 8 and 5, under NTSD's
-profile and moved IDs. Gates as E5c-1h (a hot pass), with the object input
-suites in gate3. Then E5c-1j (A28, F4) and the E5e coarse hooks.
+E5c-1j (survey: [report](../evidence/es-e5c-rest-plumbing.md) §1, §2, §6; F4
+settled as a role): A28 in `OriginalActorInput.recognizeCombos`: a `Lifecycle`
+role `guardedTransformer` 6 (`index == 8 && sourceID == 6 && target == 300 &&
+HP > 177 && 0x458428 == 0` keeps the combo from transferring; the frame 300
+and the HP threshold 177 stay engine values, as E5c-1b's thresholds). Plumbing
+down the input chain, as parameters (per-Actor bodies): the world control's
+internal `apply(world:)` (its state entry points pass the catalog's), the actor
+control's `apply(header:)` and its public `apply(object:)` (F10), the bundled
+library's actor control, the actor input's `apply(sourceID:)` and public
+`apply(object:)` (F10), and `recognizeCombos`. 16 explicit test calls pass the
+rules. Measure `swift_beginAccess` first. Tests: `recognizeCombos` directly for
+source 6 at frame 300 above and below HP 177 under NTSD's profile and a moved
+role. Gates as E5c-1i (a hot pass), with the actor input, actor control, lib
+actor control and world control suites in gate3. Then E5d (the AI) and E5e (the
+coarse hooks) per the E5 design.

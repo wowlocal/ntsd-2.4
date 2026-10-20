@@ -39,7 +39,7 @@ public enum NTSDProfile {
                        unlabelledComputers: OriginalIDSet([30, 31, 32, 33, 34, 35, 36, 37, 39, 40, 41, 42, 43, 44, 45, 46, 47, 48, 49])),
         // The post-draw opoint's children and the lifecycle's spawned Objects.
         effects: .init(fixedDepthChildren: OriginalIDSet([223, 224]), quarterDepthChild: 211, weakChildren: OriginalIDSet([5, 52]),
-                       commandEffect: 998, deathParticles: 999, fireParticles: 999),
+                       commandEffect: 998, deathParticles: 999, fireParticles: 999, burstChild: 225, escortChild: 219),
         // The slot prefix, the scheduler's invulnerability on rising, the round restore.
         lifecycle: .init(halfHPRegen: OriginalIDSet([51, 52]), state9995Object: 50, pieces: 217, lastPiece: 218,
                          noRiseInvulnerability: OriginalIDSet([30, 31, 32, 33, 34, 35, 36, 37, 39]), roundRevertFrom: 50, roundRevertTo: 6))

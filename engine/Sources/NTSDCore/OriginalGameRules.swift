@@ -243,8 +243,9 @@ public struct OriginalGameRules: Equatable, Sendable {
         }
     }
     /// Effects: how the post-draw opoint treats the Objects it creates
-    /// (OriginalPostDrawOpoint) and the Objects the post-draw lifecycle spawns
-    /// (OriginalPostDrawLifecycle).
+    /// (OriginalPostDrawOpoint), the Objects the post-draw lifecycle spawns
+    /// (OriginalPostDrawLifecycle) and the object input's two spawns
+    /// (OriginalObjectInput).
     public struct Effects: Equatable, Sendable {
         /// Children (in states 3000, 1002, 3006) that do not take their z speed
         /// from the parent's up/down input.
@@ -263,10 +264,20 @@ public struct OriginalGameRules: Equatable, Sendable {
         /// The particles an Actor sheds whose previous frame was in state 18 or 19:
         /// seven on leaving it, else one when draw(203, 4) gives 0.
         public let fireParticles: Int32
+        /// The Objects an Object's hit_Fa 8 splits into: three for up to four
+        /// enemies (active type-0 characters of another team with HP above 0), else
+        /// (n−3)/2+3; each aims at a random enemy, or at the splitting Object's own
+        /// slot without one; the splitting Object's slot is then deactivated.
+        public let burstChild: Int32
+        /// The Object an Object's hit_Fa 5 sends to each ally (a slot whose activity
+        /// is exactly 1 holding a type-0 character of the same team with HP above 0);
+        /// the sending Object's slot is then deactivated.
+        public let escortChild: Int32
         public init(fixedDepthChildren: OriginalIDSet, quarterDepthChild: Int32, weakChildren: OriginalIDSet, commandEffect: Int32,
-                    deathParticles: Int32, fireParticles: Int32) {
+                    deathParticles: Int32, fireParticles: Int32, burstChild: Int32, escortChild: Int32) {
             self.fixedDepthChildren = fixedDepthChildren; self.quarterDepthChild = quarterDepthChild; self.weakChildren = weakChildren
             self.commandEffect = commandEffect; self.deathParticles = deathParticles; self.fireParticles = fireParticles
+            self.burstChild = burstChild; self.escortChild = escortChild
         }
     }
     /// Lifecycle: the slot prefix's Objects (OriginalPostDrawSlotPrefix), the
@@ -370,6 +381,8 @@ public struct OriginalGameRules: Equatable, Sendable {
     public var commandEffect: Int32 { roles.effects.commandEffect }
     public var deathParticles: Int32 { roles.effects.deathParticles }
     public var fireParticles: Int32 { roles.effects.fireParticles }
+    public var burstChild: Int32 { roles.effects.burstChild }
+    public var escortChild: Int32 { roles.effects.escortChild }
     public var halfHPRegen: OriginalIDSet { roles.lifecycle.halfHPRegen }
     public var state9995Object: Int32 { roles.lifecycle.state9995Object }
     public var pieces: Int32 { roles.lifecycle.pieces }
