@@ -55,55 +55,62 @@ public struct OriginalCharacterAIPass {
     let sse2: Bool
     var events: [OriginalCharacterAIEvent] = []
 
-    enum Key: Int { case up = 0xcd, down, left, right, attack, jump, defend }
+    public enum Key: Int { case up = 0xcd, down, left, right, attack, jump, defend }
 
     func error(_ message: String) -> OriginalStateError { .invalidStorage(message) }
-    func g(_ address: Int) throws -> Int32 { try globals.integer(at: address-0x44d000,as: Int32.self) }
+    public func g(_ address: Int) throws -> Int32 { try globals.integer(at: address-0x44d000,as: Int32.self) }
     mutating func setG(_ address: Int,_ value: Int32) throws { try globals.write(value,at: address-0x44d000) }
-    func active(_ slot: Int) throws -> UInt8 {
+    public func active(_ slot: Int) throws -> UInt8 {
         guard (0..<400).contains(slot) else { throw error("Character-AI activity outside slots 0..399") }
         return try world.integer(at: 4+slot,as: UInt8.self)
     }
-    func index(_ slot: Int) throws -> Int {
+    public func index(_ slot: Int) throws -> Int {
         guard (0..<400).contains(slot) else { throw error("Character-AI Actor table outside slots 0..399") }
         let a = Int(try world.integer(at: 0x194+slot*4,as: UInt32.self))
         guard actors.indices.contains(a) else { throw error("Character-AI Actor binding") }
         return a
     }
-    func i(_ a: Int,_ o: Int) throws -> Int32 { try actors[a].integer(at: o,as: Int32.self) }
-    func facing(_ a: Int) throws -> UInt8 { try actors[a].integer(at: 0x80,as: UInt8.self) }
+    public func i(_ a: Int,_ o: Int) throws -> Int32 { try actors[a].integer(at: o,as: Int32.self) }
+    public func facing(_ a: Int) throws -> UInt8 { try actors[a].integer(at: 0x80,as: UInt8.self) }
     func object(_ a: Int) throws -> Int {
         let n = Int(try actors[a].integer(at: 0x368,as: UInt32.self))
         guard objects.indices.contains(n) else { throw error("Character-AI Object binding") }
         return n
     }
-    func id(_ a: Int) throws -> Int32 { try objects[object(a)].header.integer(at: 0x6f4,as: Int32.self) }
-    func type(_ a: Int) throws -> Int32 { try objects[object(a)].header.integer(at: 0x6f8,as: Int32.self) }
-    func state(_ a: Int) throws -> Int32 {
+    public func id(_ a: Int) throws -> Int32 { try objects[object(a)].header.integer(at: 0x6f4,as: Int32.self) }
+    public func type(_ a: Int) throws -> Int32 { try objects[object(a)].header.integer(at: 0x6f8,as: Int32.self) }
+    public func state(_ a: Int) throws -> Int32 {
         let n = try object(a),f = try i(a,0x70)
         guard objects[n].frameStorage.indices.contains(Int(f)) else { throw error("Character-AI Frame binding") }
         return try objects[n].frameStorage[Int(f)].integer(at: 8,as: Int32.self)
     }
     func v(_ a: Int,_ o: Int) throws -> OriginalExtended { try OriginalExtended(actors[a].binary64(at: o)) }
     /// 4450d0 on a loaded binary64 (legacy x87 path or the declared SSE2 path).
-    func ftol(_ a: Int,_ o: Int) throws -> Int32 { OriginalCoordinateConversion.integer(try actors[a].binary64(at: o),sse2: sse2) }
+    public func ftol(_ a: Int,_ o: Int) throws -> Int32 { OriginalCoordinateConversion.integer(try actors[a].binary64(at: o),sse2: sse2) }
     mutating func put(_ a: Int,_ o: Int,_ value: Int32) throws { try actors[a].write(value,at: o) }
-    mutating func byte(_ a: Int,_ o: Int,_ value: UInt8) throws { try actors[a].write(value,at: o) }
-    mutating func press(_ a: Int,_ key: Key) throws { try byte(a,key.rawValue,1) }
-    mutating func release(_ a: Int,_ key: Key) throws { try byte(a,key.rawValue-7,0) }
+    public mutating func byte(_ a: Int,_ o: Int,_ value: UInt8) throws { try actors[a].write(value,at: o) }
+    public mutating func press(_ a: Int,_ key: Key) throws { try byte(a,key.rawValue,1) }
+    public mutating func release(_ a: Int,_ key: Key) throws { try byte(a,key.rawValue-7,0) }
     /// prev = cur, then cur = 0 for all seven buttons.
     mutating func shift(_ a: Int) throws {
         for n in 0..<7 { try byte(a,0xc6+n,actors[a].integer(at: 0xcd+n,as: UInt8.self)) }
         for n in 0..<7 { try byte(a,0xcd+n,0) }
     }
-    func abs(_ value: Int32) -> Int32 { value < 0 ? 0 &- value : value } // 4034e0
-    mutating func draw(_ stream: Int32,_ range: Int32) throws -> Int32 {
+    public func abs(_ value: Int32) -> Int32 { value < 0 ? 0 &- value : value } // 4034e0
+    public mutating func draw(_ stream: Int32,_ range: Int32) throws -> Int32 {
         var rng = OriginalRandom(table: try OriginalRandom.table(globals, at: 0x44ff90-0x44d000),
             index: Int(try g(0x450bcc)),counter: Int(try g(0x450c34)),source: "owned character AI",sourceSHA256: "")
         try rng.validate(); let result = Int32(rng.next(Int(range)))
         try setG(0x450bcc,Int32(rng.index)); try setG(0x450c34,Int32(rng.counter))
         events.append(.random(stream: stream,range: range,result: result)); return result
     }
+    /// The Actor's current frame's Int32 field (the game's special moves read +0x2c).
+    public func frameField(_ a: Int,_ o: Int) throws -> Int32 {
+        let n = try object(a),f = try i(a,0x70)
+        guard objects[n].frameStorage.indices.contains(Int(f)) else { throw error("Character-AI Frame binding") }
+        return try objects[n].frameStorage[Int(f)].integer(at: o,as: Int32.self)
+    }
+
     func background(_ bg: Int32,_ o: Int) throws -> Int32 {
         guard backgrounds.indices.contains(Int(bg)) else { throw error("Character-AI background binding") }
         return try backgrounds[Int(bg)].integer(at: o,as: Int32.self)
@@ -139,10 +146,16 @@ public struct OriginalCharacterAIPass {
     }
 
     public struct Locals {
-        var nearest38: Int32 = 10000,lying48: Int32 = 10000,item50: Int32 = 10000,target: Int32 = -1,bg: Int32 = 0
-        var aligned34: Int32 = 0,allies10: Int32 = 0,hurt1c: Int32 = 0,healthy18: Int32 = 0,avoid2c: Int32 = 0
-        var down3c: Int32 = 0,up40: Int32 = 0,left14: Int32 = 0,right20: Int32 = 0,ball30: Int32 = 0,near48: Int32 = 0,seen44: Int32 = 0
-        var self58: Int32 = -1,sState: Int32 = 0,tState: Int32 = 0
+        // The four the game's special moves read are public (E5d-3); the order is unchanged.
+        public internal(set) var nearest38: Int32 = 10000
+        var lying48: Int32 = 10000,item50: Int32 = 10000,target: Int32 = -1,bg: Int32 = 0
+        public internal(set) var aligned34: Int32 = 0
+        var allies10: Int32 = 0,hurt1c: Int32 = 0,healthy18: Int32 = 0,avoid2c: Int32 = 0
+        var down3c: Int32 = 0,up40: Int32 = 0,left14: Int32 = 0,right20: Int32 = 0
+        public internal(set) var ball30: Int32 = 0
+        var near48: Int32 = 0,seen44: Int32 = 0
+        var self58: Int32 = -1,sState: Int32 = 0
+        public internal(set) var tState: Int32 = 0
     }
 
     mutating func walk(_ s: Int) throws {

@@ -1,6 +1,6 @@
 import XCTest
 @testable import NTSDCore
-import NTSDProfile
+@testable import NTSDProfile
 
 /// ENGINE_SPLIT E5d-1a/1b/2: the character AI's target choice (A80–A86), fight
 /// (A87–A91, A93–A98) and special-move hook follow the profile. Synthetic records; the pass's steps are run directly.
@@ -307,10 +307,17 @@ final class NTSDProfileCharacterAITests: XCTestCase {
         let goesOn = try fight(pass(own: 3, other: 3, x: 50), rules: goes)
         XCTAssertGreaterThan(goesOn.count, 2)
         XCTAssertEqual(goesOn, try fight(pass(own: 3, other: 3, x: 50), rules: n), "false goes on as NTSD's own (no routine for 3)")
-        // NTSD's routines are the engine's until E5d-3; rules differ by the hook's type.
-        XCTAssertTrue(n.characterAISpecial is OriginalCharacterAIBuiltInSpecial)
+        // NTSD's routines are the game's (E5d-3); rules differ by the hook's type.
+        XCTAssertTrue(n.characterAISpecial is NTSDCharacterAISpecial)
         XCTAssertNotEqual(n, n.with(profile: n.profile, characterAISpecial: EndsFight()))
         XCTAssertNotEqual(ends, goes); XCTAssertEqual(ends, n.with(characterAISpecial: EndsFight()))
         XCTAssertEqual(n, n.with(profile: n.profile))
+    }
+    /// E5d-3: the routines moved into the game resolve the pass's own `abs` (`0 &- v`,
+    /// wrapping), not `Swift.abs`, which traps on `Int32.min`.
+    func testMovedRoutinesUseThePassAbs() throws {
+        let p = try pass(own: 7, x: Int32.min, z: Int32.min)
+        XCTAssertEqual(try p.dx(0, 1), Int32.min); XCTAssertEqual(try p.dz(0, 1), Int32.min)
+        XCTAssertEqual(p.abs(Int32.min), Int32.min); XCTAssertEqual(p.abs(-5), 5)
     }
 }

@@ -1,7 +1,10 @@
-/// NTSD's special moves (ENGINE_SPLIT E5d-2): 403a40's blocks by the AI's own
-/// Object id behind the game's hook. They stay in the engine until E5d-3 moves
-/// them into the game, which then supplies its own conformer.
-public struct OriginalCharacterAIBuiltInSpecial: OriginalCharacterAISpecial {
+import NTSDCore
+
+/// NTSD's special moves (ENGINE_SPLIT E5d-3): 403a40's blocks by the AI's own
+/// Object id, the game's conformer of the engine's hook. The routines run on
+/// the engine's pass through its public primitives (its own `abs`, which wraps
+/// where `Swift.abs` traps).
+public struct NTSDCharacterAISpecial: OriginalCharacterAISpecial {
     public init() {}
     public func special(own: Int32,_ ai: inout OriginalCharacterAIPass,s: Int,t: Int,slot: Int,_ l: OriginalCharacterAIPass.Locals) throws -> Bool {
         switch own {
@@ -225,12 +228,6 @@ extension OriginalCharacterAIPass {
         if (f == 0 && sx < tx) || (f == 1 && sx > tx) { return try command(s,0xd6) }
         return false
     }
-    func frameField(_ a: Int,_ o: Int) throws -> Int32 {
-        let n = try object(a),f = try i(a,0x70)
-        guard objects[n].frameStorage.indices.contains(Int(f)) else { throw error("Character-AI Frame binding") }
-        return try objects[n].frameStorage[Int(f)].integer(at: o,as: Int32.self)
-    }
-
     /// 404c05..404dae (Sasuke).
     mutating func sasuke11(_ s: Int,_ t: Int,_ l: Locals) throws -> Bool {
         if try i(s,0x308) > 150, try dx(s,t) < 280, try dz(s,t) < 30, try draw(0x5d,10) == 0, let done = try lunge(s,t) { return done }
