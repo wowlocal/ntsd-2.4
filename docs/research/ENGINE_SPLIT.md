@@ -10,7 +10,7 @@ measurement from [TVOS_WEB](TVOS_WEB.md), [MEMORY_LOADING](MEMORY_LOADING.md) an
 engine from the game itself. to publish engine as the separate github repo";
 then, after the plan: "ok … when the plan is setteled start the loop in a
 separate branch" and "push automatically every step (on that new branch)".
-**Status:** E0–E3, E4a, E4b (all six hosts), E4c-1 (the engine's self-contained tests), E5a (the game profile's survey and design) and E5b (the record type, the copied tables out), E4c-1a (a nondeterministic engine test corrected) E5c-0 (the profile's plumbing, reflection), E5c-1a (one storage, the reflectors), E5c-1b (armour), E5c-1c (special interactions) and E5c-1d (impact) done; E5c-2a, E5c-2b and E5c-2c (the items family: the random and requested spawns, camera, links, the mission stage) E5c-2d (the roster family), E5c-2e (the modes family), E5c-2f (the match prelude) and E5c-2g (the mode label) done: E5c-2's menu and mode rows are in the profile; E5c-1e (physics) done; E5c-1f, drawing, next.
+**Status:** E0–E3, E4a, E4b (all six hosts), E4c-1 (the engine's self-contained tests), E5a (the game profile's survey and design) and E5b (the record type, the copied tables out), E4c-1a (a nondeterministic engine test corrected) E5c-0 (the profile's plumbing, reflection), E5c-1a (one storage, the reflectors), E5c-1b (armour), E5c-1c (special interactions) and E5c-1d (impact) done; E5c-2a, E5c-2b and E5c-2c (the items family: the random and requested spawns, camera, links, the mission stage) E5c-2d (the roster family), E5c-2e (the modes family), E5c-2f (the match prelude) and E5c-2g (the mode label) done: E5c-2's menu and mode rows are in the profile; E5c-1e (physics) and E5c-1f (drawing) done; E5c-1g, the post-draw effects, next.
 **Branch:** `exp/engine-split`, from `main` 380b448d. Worktree
 `/Volumes/NTSD-Builds/tasks/engine-split/worktree` (T7-backed APFS, see
 [BUILD_STORAGE_T7](BUILD_STORAGE_T7.md)). It tracks `origin/exp/engine-split`
@@ -158,7 +158,7 @@ A read-only survey of `native/` (three agents, 2026-10-18):
 | E2 | Content policy out of Core: the digest, count and EXE-SHA pins become the NTSD content identity the game passes; Core checks what it is given with the same checks and errors (2.8.3.3's content origin as the model, read only) | **done** ([evidence](../evidence/es-e2-content-identity.json)) |
 | E3 | Identity and Practice: user-data folder, wasm module, Android prefix/entry, queue/thread names, titles and messages become game configuration; Practice/Lab and its two checks move to the game side | **done**: E3a ([evidence](../evidence/es-e3a-practice.json)), E3b ([evidence](../evidence/es-e3b-game-identity.json)); diagnostic labels wait for D2 |
 | E4 | Two packages: `engine/Package.swift` (Core, Runtime, codecs, decoders, shims, host libraries, self-contained tests) and `native/Package.swift` depending on it by path; the unsafeFlags plan (SwiftPM rejects them in version-pinned dependencies) | E4a **done** ([evidence](../evidence/es-e4a-engine-package.json)); E4b: headless **done** ([evidence](../evidence/es-e4b1-headless-host.json)), browser **done** ([evidence](../evidence/es-e4b2-web-host.json)), SDL **done** ([evidence](../evidence/es-e4b3-sdl-host.json)), AppKit **done** ([evidence](../evidence/es-e4b4-appkit-host.json)), UIKit **done** ([evidence](../evidence/es-e4b5-uikit-host.json)), Android **done** ([evidence](../evidence/es-e4b6-android-host.json)); E4c-1 **done** ([evidence](../evidence/es-e4c1-engine-tests.json)), E4c-1a **done** ([evidence](../evidence/es-e4c1a-sorted-keys.json)); E4c-2 (split the 11 mixed test files, the War trio) queued |
-| E5 | Game profile: the ID sites (100 rows, about 125 branch points; first estimated ~90) and the AI dispatch behind a profile the game supplies; the engine defines the `0x44d000` record's layout and the game supplies `initial.bin`; the NTSD profile bit-exact (all gates plus the full fixture-driven suites); the API's fit with 2.8.3.3 checked read only | E5a **done** (survey and design, [evidence](../evidence/es-e5a-design.json)); E5b **done** ([evidence](../evidence/es-e5b-record-type.json)); E5c-0 **done** ([evidence](../evidence/es-e5c0-profile-plumbing.json)); E5c-1a **done** ([evidence](../evidence/es-e5c1a-reflector-roles.json)); E5c-1b **done** ([evidence](../evidence/es-e5c1b-armour-roles.json)); E5c-1c **done** ([evidence](../evidence/es-e5c1c-interaction-roles.json)); E5c-1d **done** ([evidence](../evidence/es-e5c1d-impact-roles.json)); E5c-2a **done** ([evidence](../evidence/es-e5c2a-items-roles.json)); E5c-2b **done** ([evidence](../evidence/es-e5c2b-camera-links-roles.json)); E5c-2c **done** ([evidence](../evidence/es-e5c2c-requested-mission-roles.json)); E5c-2d **done** ([evidence](../evidence/es-e5c2d-roster-roles.json)); E5c-2e **done** ([evidence](../evidence/es-e5c2e-modes-roles.json)); E5c-2f **done** ([evidence](../evidence/es-e5c2f-prelude-roles.json)); E5c-2g **done** ([evidence](../evidence/es-e5c2g-mode-label-roles.json)); E5c-1e **done** ([evidence](../evidence/es-e5c1e-physics-roles.json)); E5c-1f next |
+| E5 | Game profile: the ID sites (100 rows, about 125 branch points; first estimated ~90) and the AI dispatch behind a profile the game supplies; the engine defines the `0x44d000` record's layout and the game supplies `initial.bin`; the NTSD profile bit-exact (all gates plus the full fixture-driven suites); the API's fit with 2.8.3.3 checked read only | E5a **done** (survey and design, [evidence](../evidence/es-e5a-design.json)); E5b **done** ([evidence](../evidence/es-e5b-record-type.json)); E5c-0 **done** ([evidence](../evidence/es-e5c0-profile-plumbing.json)); E5c-1a **done** ([evidence](../evidence/es-e5c1a-reflector-roles.json)); E5c-1b **done** ([evidence](../evidence/es-e5c1b-armour-roles.json)); E5c-1c **done** ([evidence](../evidence/es-e5c1c-interaction-roles.json)); E5c-1d **done** ([evidence](../evidence/es-e5c1d-impact-roles.json)); E5c-2a **done** ([evidence](../evidence/es-e5c2a-items-roles.json)); E5c-2b **done** ([evidence](../evidence/es-e5c2b-camera-links-roles.json)); E5c-2c **done** ([evidence](../evidence/es-e5c2c-requested-mission-roles.json)); E5c-2d **done** ([evidence](../evidence/es-e5c2d-roster-roles.json)); E5c-2e **done** ([evidence](../evidence/es-e5c2e-modes-roles.json)); E5c-2f **done** ([evidence](../evidence/es-e5c2f-prelude-roles.json)); E5c-2g **done** ([evidence](../evidence/es-e5c2g-mode-label-roles.json)); E5c-1e **done** ([evidence](../evidence/es-e5c1e-physics-roles.json)); E5c-1f **done** ([evidence](../evidence/es-e5c1f-drawing-roles.json)); E5c-1g next |
 | E6 | Classify each profile rule as LF2 2.0a or NTSD from the second reference; LF2 rules become the engine's default profile | needs D1 |
 | E7 | Engine stand-alone: the engine package builds alone (macOS, Linux container) and passes its tests with a from-scratch synthetic content pack; a scan finds no original bytes (files under `downloads/`, the resources, fixtures, `initial.bin`) | queued |
 | E8 | Publication: name, licence, a new repository with fresh history, a tag; this repository depends on it by revision; README credits | needs D2 and the user |
@@ -823,6 +823,38 @@ From the survey ([report](../evidence/es-e5c-rest-plumbing.md) §1, §2, §5, §
   docs (types, the grounded stop each tick, the revival's Object), the extra
   cases, the public surface listed.
 
+### E5c-1f note (2026-10-20, reviewed with its change; done)
+
+From the survey ([report](../evidence/es-e5c-rest-plumbing.md) §1, §2, §5, §6).
+- **Drawing family (ninth).** `shadowless` {223, 224} (A45) and
+  `unlabelledComputers` {30–37, 39–49} (A46). F6 settled: A45's
+  `h(0x6f4) != 223 && h(0x6f4) != 224` becomes `!shadowless.contains(h(0x6f4))`
+  in the same place of the lazy `&&` chain; HEAD's code read the header twice
+  for any ID other than 223 and once for 223 (the EXE was not examined here), the set test reads it once: the
+  read is pure (the same header record, no state change between), so the outcome
+  and any throw are the same. F7 settled: A46's `id < 30 || id >= 50 || id == 38`
+  becomes `!unlabelledComputers.contains(id)`; its complement is exactly {30–37,
+  39–49} for every `Int32`. The opoint's {223, 224} (A55) stays its own role in
+  E5c-1g (F8).
+- **Plumbing.** The internal `draw(world:)` takes a required `rules:`;
+  `applyInPlace` passes its local catalog's rules; the state entry points and
+  their callers (the gameplay body, paused gameplay, the gameplay drawing
+  reference) do not change; one explicit test call passes NTSD's rules; `draw`'s
+  doc says its `header` closure must be pure (F6 relies on it; all three
+  closures are). The public surface added: `Drawing`, `drawing:` on
+  `OriginalGameRules.init`, three accessors.
+- **Tests.** `draw(world:)` with one active Actor whose blink counter leaves only
+  the row under test (−28: the shadow alone; −22: the label alone), stopping at
+  the first bitmap fetch after its "draw" event: the shadow for 5, none for
+  223/224; the label for 29, 38, 50, −1 and none for 30, 37, 39, 49; moved sets
+  swap them, 224 included, and 29 and 38 lose the label under a set holding them.
+- **Review.** No correctness defect (literals restored: byte-identical to HEAD;
+  A46 exact for every `Int32`; every header closure pure, so F6's single read
+  is accepted). Required: the note says HEAD's code read the header twice, not
+  the EXE. Adopted: the purity doc on `draw`, the partial-literal cases, the
+  public surface; the sets stay inline (about two retain pairs per drawn actor
+  at worst; the same pattern runs in the hit pass).
+
 ## Ledger
 
 - 2026-10-18: plan agreed; branch `exp/engine-split` and its worktree created
@@ -1152,21 +1184,32 @@ From the survey ([report](../evidence/es-e5c-rest-plumbing.md) §1, §2, §5, §
   runs, the engine's 110 tests, `swift_beginAccess` 3,278/3,406; 18 suites with
   68 tests; WASI vs identical; phone and Mac overlapping.
   [Evidence](../evidence/es-e5c1e-physics-roles.json).
+- 2026-10-20 E5c-1f: a ninth family, `Drawing`: `shadowless` {223, 224} (A45,
+  F6's single header read accepted: every header closure is pure) and
+  `unlabelledComputers` {30–37, 39–49} (A46, F7's finite set). Reviewed (no
+  correctness defect). Gate `es-e5c1f` (access precheck 3,278): 11 scenarios,
+  frames, AppKit, unchecked, emulator, 20 clean launches, 29 suite runs, the
+  engine's 110 tests, `swift_beginAccess` 3,278/3,406; 17 suites with 60 tests;
+  WASI vs identical; phone and Mac overlapping.
+  [Evidence](../evidence/es-e5c1f-drawing-roles.json).
 
 ## Next task
 
-E5c-1f (survey: [report](../evidence/es-e5c-rest-plumbing.md) §1, §2, §5, §6;
-F6, F7): a ninth family `Drawing` in `OriginalWorldDrawing.draw(world:)`, reached
-from `applyInPlace`'s catalog. `shadowless` {223, 224} (A45: `h(0x6f4) != 223
-&& h(0x6f4) != 224` inside the lazy `&&` chain after the two frame-state tests;
-F6: the set test reads the header once where the original read it twice, a pure
-read, so the same outcome: record the decision with its review) and
-`unlabelledComputers` {30–37, 39–49} (A46: `id < 30 || id >= 50 || id == 38`
-labels a team-5 type-0 Actor in slots from 20 "Com"; F7: one finite set tested
-with `!contains`, exact for every `Int32`, instead of a range with an
-exception). Separate from the opoint's {223, 224} (A55, E5c-1g; F8). Measure
-`swift_beginAccess` with a clean release build first. Tests: `draw(world:)` with
-a synthetic shadow case (the shadow draw event present or absent) and the "Com"
-label's text events, under NTSD's profile and moved ones. Gates as E5c-1e (a hot
-pass), with the world drawing, gameplay drawing and application active graphics
-suites in gate3.
+E5c-1g (survey: [report](../evidence/es-e5c-rest-plumbing.md) §1, §2, §5, §6;
+F1, F6, F8): a tenth family `Effects` for the post-draw opoint and lifecycle.
+Opoint (`OriginalPostDrawOpoint`, per slot): `fixedDepthChildren` {223, 224}
+(A55: a 3000/1002/3006 child takes vz from the parent's up/down except these;
+its own role, not `shadowless`, F8), `quarterDepthChild` 211 (A56, its re-read
+of the child's source kept), `weakChildren` {5, 52} (A57: HP and maximum 10, MP
+5; F6: one read where HEAD's code read twice). Lifecycle
+(`OriginalPostDrawLifecycle`, once per tick): the F1 rows `commandEffect` 998
+(N2: the fighter's command 100/102/104, `free()` and `find` together, the
+catalog cursor still stepped), `deathSparks` and `fireSparks` 999 (N3, N4, read
+each where they are). Plumbing: the opoint's entry points take `rules:` and
+pass it as a parameter (its body is built per slot: the E5c-1e lesson); the
+lifecycle's `Body` holds `let rules` (built once per pass) and passes it to the
+opoint; `OriginalGameRules.engineTests` carries 998 and 999 there, which the
+engine's request-slot tests' pools are built on (F1). Measure
+`swift_beginAccess` first. Tests per row under NTSD's profile and moved ones.
+Gates as E5c-1f (a hot pass), with the post-draw lifecycle, opoint, gameplay
+lifecycle and the engine's request-slot suites in gate3.

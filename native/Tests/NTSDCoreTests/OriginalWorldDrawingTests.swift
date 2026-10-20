@@ -2,6 +2,7 @@ import Foundation
 import XCTest
 @testable import NTSDCore
 @testable import NTSDReferenceChecks
+import NTSDProfile
 
 final class OriginalWorldDrawingTests: XCTestCase {
     private struct Patch: Decodable {
@@ -106,7 +107,7 @@ final class OriginalWorldDrawingTests: XCTestCase {
                     catalogBitmap: { try binding(Int($0)-1) },resourceBitmap: { token in
                         guard token >= c.bitmapBase,(token-c.bitmapBase)%0x2000 == 0 else { throw OriginalStateError.invalidStorage("Test resource token") }
                         return try binding(Int((token-c.bitmapBase)/0x2000))
-                    },performBlit: { _ in events.count%2 == 1 ? Int32(bitPattern: 0x80004005) : 0 },observe: { events.append($0) })
+                    },performBlit: { _ in events.count%2 == 1 ? Int32(bitPattern: 0x80004005) : 0 },rules: NTSDProfile.rules,observe: { events.append($0) })
             } catch { XCTFail(item.label+": \(error)");throw error }
             let records = [world]+actors
             XCTAssertEqual(MatchPreparationReference.digest(Data(records.flatMap(\.bytes))),item.poolSHA256,item.label+" pool")

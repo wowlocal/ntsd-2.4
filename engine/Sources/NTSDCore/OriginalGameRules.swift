@@ -230,13 +230,25 @@ public struct OriginalGameRules: Equatable, Sendable {
             self.restingPiece = restingPiece; self.revivalPicture = revivalPicture; self.revivalEffect = revivalEffect
         }
     }
+    /// Drawing: the Objects the world drawing gives no shadow, and the computer
+    /// characters it leaves without the "Com" label (OriginalWorldDrawing).
+    public struct Drawing: Equatable, Sendable {
+        /// Objects drawn without a shadow.
+        public let shadowless: OriginalIDSet
+        /// Team-5 characters (type 0) in slots from 20 drawn without a label; every
+        /// other such character is labelled "Com".
+        public let unlabelledComputers: OriginalIDSet
+        public init(shadowless: OriginalIDSet, unlabelledComputers: OriginalIDSet) {
+            self.shadowless = shadowless; self.unlabelledComputers = unlabelledComputers
+        }
+    }
     private final class Roles: Sendable {
         let profile: String, reflection: Reflection, armour: Armour, interaction: Interaction, impact: Impact, items: Items, roster: Roster
-        let modes: Modes, physics: Physics
+        let modes: Modes, physics: Physics, drawing: Drawing
         init(profile: String, reflection: Reflection, armour: Armour, interaction: Interaction, impact: Impact, items: Items, roster: Roster,
-             modes: Modes, physics: Physics) {
+             modes: Modes, physics: Physics, drawing: Drawing) {
             self.profile = profile; self.reflection = reflection; self.armour = armour; self.interaction = interaction; self.impact = impact
-            self.items = items; self.roster = roster; self.modes = modes; self.physics = physics
+            self.items = items; self.roster = roster; self.modes = modes; self.physics = physics; self.drawing = drawing
         }
     }
     private let roles: Roles
@@ -250,6 +262,7 @@ public struct OriginalGameRules: Equatable, Sendable {
     public var roster: Roster { roles.roster }
     public var modes: Modes { roles.modes }
     public var physics: Physics { roles.physics }
+    public var drawing: Drawing { roles.drawing }
     public var reflectable: OriginalIDSet { roles.reflection.reflectable }
     public var reflector: Int32 { roles.reflection.reflector }
     public var rebinder: Int32 { roles.reflection.rebinder }
@@ -292,14 +305,17 @@ public struct OriginalGameRules: Equatable, Sendable {
     public var restingPiece: Int32 { roles.physics.restingPiece }
     public var revivalPicture: OriginalIDRange { roles.physics.revivalPicture }
     public var revivalEffect: Int32 { roles.physics.revivalEffect }
+    public var shadowless: OriginalIDSet { roles.drawing.shadowless }
+    public var unlabelledComputers: OriginalIDSet { roles.drawing.unlabelledComputers }
     public init(profile: String, reflection: Reflection, armour: Armour, interaction: Interaction, impact: Impact, items: Items,
-                roster: Roster, modes: Modes, physics: Physics) {
+                roster: Roster, modes: Modes, physics: Physics, drawing: Drawing) {
         roles = Roles(profile: profile, reflection: reflection, armour: armour, interaction: interaction, impact: impact, items: items,
-                      roster: roster, modes: modes, physics: physics)
+                      roster: roster, modes: modes, physics: physics, drawing: drawing)
     }
     public static func == (a: Self, b: Self) -> Bool {
         a.roles === b.roles || (a.profile == b.profile && a.reflection == b.reflection && a.armour == b.armour && a.interaction == b.interaction
                                 && a.impact == b.impact && a.items == b.items && a.roster == b.roster
-                                && a.modes == b.modes && a.physics == b.physics)
+                                && a.modes == b.modes && a.physics == b.physics
+                                && a.drawing == b.drawing)
     }
 }

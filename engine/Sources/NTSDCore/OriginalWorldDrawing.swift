@@ -35,15 +35,17 @@ public enum OriginalWorldDrawing {
             },catalogBitmap: { token in
                 guard token != 0,Int(token)-1 < bitmaps.count,!released.contains(Int(token)-1) else { throw error("Bitmap binding") }
                 return try (bitmaps[Int(token)-1].storage,surface(Int(token)-1))
-            },resourceBitmap: resourceBitmap,performBlit: performBlit,detail: detail,observe: observe)
+            },resourceBitmap: resourceBitmap,performBlit: performBlit,rules: catalog.rules,detail: detail,observe: observe)
     }
     private static func error(_ detail: String) -> OriginalStateError { .invalidStorage("World drawing: "+detail) }
+    /// `header` must be pure: the shadow test (ENGINE_SPLIT E5c-1f, F6) reads it once
+    /// where the code before it read it twice.
     static func draw(world: OriginalStateRecord,actors: inout [OriginalStateRecord],globals: OriginalStateRecord,
         backgrounds: [OriginalStateRecord],target: UInt32,phase: Int32,
         header: (Int) throws -> OriginalStateRecord,frame: (Int,Int32) throws -> OriginalStateRecord,
         catalogBitmap: (UInt32) throws -> (OriginalStateRecord,UInt32),
         resourceBitmap: (UInt32) throws -> (OriginalStateRecord,UInt32),
-        performBlit: (OriginalBitmapBlit) throws -> Int32,
+        performBlit: (OriginalBitmapBlit) throws -> Int32,rules: OriginalGameRules,
         detail: Bool = true,
         observe: (OriginalFrontScreenEvent) throws -> Void) throws {
         func g(_ address: Int) throws -> Int32 { try globals.integer(at: address-0x44d000,as: Int32.self) }
@@ -95,7 +97,7 @@ public enum OriginalWorldDrawing {
             func f() throws -> OriginalStateRecord { try frame(object,i(0x70)) }
             func h(_ offset: Int) throws -> Int32 { try header(object).integer(at: offset,as: Int32.self) }
             let blink = try i(8),absolute = blink < 0 ? 0 &- blink : blink
-            if try i(0x98) >= 0 && f().integer(at: 8,as: Int32.self) != 3005 && f().integer(at: 8,as: Int32.self) != 9997 && h(0x6f4) != 223 && h(0x6f4) != 224 && blink > -70 && absolute%4 < 2 {
+            if try i(0x98) >= 0 && f().integer(at: 8,as: Int32.self) != 3005 && f().integer(at: 8,as: Int32.self) != 9997 && !rules.shadowless.contains(h(0x6f4)) && blink > -70 && absolute%4 < 2 {
                 guard backgrounds.indices.contains(arena) else { throw error("Background binding") }
                 let bg = backgrounds[arena]
                 let x = try i(0x1c) &- bg.integer(at: 0x14,as: Int32.self)/2 &+ i(0x10) &- g(0x450bc4)
@@ -130,7 +132,7 @@ public enum OriginalWorldDrawing {
                 }
             } else if try entry.slot >= 20 && blink > -25 && h(0x6f8) == 0 && i(0x364) == 5 {
                 let id = try h(0x6f4)
-                if id < 30 || id >= 50 || id == 38 { label = [67,111,109];fontAddress = 0x44fd80 }
+                if !rules.unlabelledComputers.contains(id) { label = [67,111,109];fontAddress = 0x44fd80 }
             }
             if let label, !label.isEmpty {
                 let width = Int32(truncatingIfNeeded: label.count) &* 9

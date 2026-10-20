@@ -33,5 +33,8 @@ public enum NTSDProfile {
                      stageBackgrounds: [0: 1, 10: 2, 20: 3, 30: 4, 40: 5, 50: 6]),
         // The actor physics' special Objects and the revival's (OriginalActorPhysics, OriginalWorldPhysics).
         physics: .init(extraDrift: 120, reverseDrift: 101, lowGravityThrow: 124, midGravityThrow: 120, highGravityThrow: 101,
-                       restingPiece: 999, revivalPicture: OriginalIDRange(30..<37), revivalEffect: 998))
+                       restingPiece: 999, revivalPicture: OriginalIDRange(30..<37), revivalEffect: 998),
+        // The world drawing: no shadow; team-5 computers left without the "Com" label.
+        drawing: .init(shadowless: OriginalIDSet([223, 224]),
+                       unlabelledComputers: OriginalIDSet([30, 31, 32, 33, 34, 35, 36, 37, 39, 40, 41, 42, 43, 44, 45, 46, 47, 48, 49])))
 }
