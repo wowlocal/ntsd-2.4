@@ -75,7 +75,7 @@ extension Data {
         // The legacy aggregate sound value is ignored when observesAudio is set.
         var result = Platform.Prepared(panelIO:io,environmentTZ:nil,sound:.init(createResult:0,createdDevice:0))
         result.observesAudio = true
-        result.waveFiles = try OriginalMenuSoundStartup.paths.enumerated().map { index,path in
+        result.waveFiles = try inputs.rules.interface.menuSounds.enumerated().map { index,path in
             guard let bytes = try inputs.file(path) else { throw OriginalMacRuntimeWave.Boundary.malformed(path) }
             return .init(.init(index,path,UInt32(0x45560c+4*index)),try OriginalMacRuntimeWave.input(path,bytes))
         }

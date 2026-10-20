@@ -78,13 +78,16 @@ public struct OriginalWinMainStartup {
     /// All owned generations and globals commit together, after the fifth WAV.
     /// Unknown fullscreen hCursor is rejected before RegisterClass. Other opaque
     /// platform structure bytes retain false masks; only owned fields compare.
-    public mutating func run(instance: UInt32,show: Int32,globals: inout OriginalStateRecord,
+    /// `menuSounds`: the game's menu WAVs (ENGINE_SPLIT E5f-3: `Interface.menuSounds`),
+    /// checked with the globals' extent, before any request or store.
+    public mutating func run(instance: UInt32,show: Int32,globals: inout OriginalStateRecord,menuSounds: [String],
         platform p: any OriginalWinMainStartupPlatform,
         store: OriginalWindowInput.Store = { _,_ in },
         after: (OriginalWinMainStartup,OriginalStateRecord) throws -> Void = { _,_ in }) throws {
         guard globals.byteCount == OriginalMatchPreparation.globalSize else {
             throw OriginalStateError.invalidStorage("WinMain startup globals extent")
         }
+        try OriginalMenuSoundStartup.checkNames(menuSounds)
         var candidate = self,state = globals
         func write(_ address: Int,_ bytes: [UInt8]) throws {
             for (i,b) in bytes.enumerated() { try state.write(b,at:address-OriginalMatchPreparation.globalBase+i) }
@@ -120,14 +123,14 @@ public struct OriginalWinMainStartup {
         try p.observe(.stage("output-return",state))
         try p.observe(.stage("input-entry",state))
         if p.observesAudio {
-            candidate.input = try OriginalInputStartup.loadObserved(globals:&state,request:p.joystick,
+            candidate.input = try OriginalInputStartup.loadObserved(globals:&state,menuSounds:menuSounds,request:p.joystick,
                 soundRequest:p.soundRequest,waveInput:p.waveInput,waveRequest:p.waveRequest,fileSource:{ path in
                     guard let bytes = try p.file(path) else { throw OriginalStateError.invalidStorage("Missing declared menu WAV source") }
                     return bytes
                 },store:store,capabilities:{ try p.observe(.capabilities($0,$1)) },
                 afterWave:{ try p.observe(.wave($0,$1,$2)) },observeSound:{ try p.observe(.sound($0,$1)) })
         } else {
-        candidate.input = try OriginalInputStartup.load(globals:&state,request:p.joystick,soundPlatform:p.sound,
+        candidate.input = try OriginalInputStartup.load(globals:&state,menuSounds:menuSounds,request:p.joystick,soundPlatform:p.sound,
             wavePlatform:p.wave,fileSource:{ path in
                 guard let bytes = try p.file(path) else { throw OriginalStateError.invalidStorage("Missing declared menu WAV source") }
                 return bytes

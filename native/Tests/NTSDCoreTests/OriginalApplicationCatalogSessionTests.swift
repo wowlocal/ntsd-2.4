@@ -41,7 +41,7 @@ final class OriginalApplicationCatalogSessionTests: XCTestCase {
             XCTAssertEqual(prepared.common.sounds.count,18)
             let startup = try XCTUnwrap(own.bootstrap?.startup?.input?.sounds)
             let music = try XCTUnwrap(own.bootstrap?.startup?.output.music)
-            try body(prepared,.init(owner:startup,platforms:r.startupWaveInputs,music:music))
+            try body(prepared,.init(owner:startup,platforms:r.startupWaveInputs, names: NTSDProfile.rules.interface.menuSounds,music:music))
         },ownerAtLoading:ownerAtLoading)
         XCTAssertTrue(reached)
     }

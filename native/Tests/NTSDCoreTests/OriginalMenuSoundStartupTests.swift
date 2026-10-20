@@ -1,6 +1,7 @@
 import Foundation
 import XCTest
 import NTSDCore
+import NTSDProfile
 @testable import NTSDReferenceChecks
 
 final class OriginalMenuSoundStartupTests: XCTestCase {
@@ -36,7 +37,7 @@ final class OriginalMenuSoundStartupTests: XCTestCase {
     func testWholeMenuSoundStartupAgainstOriginal() throws {
         let c = try corpus()
         XCTAssertEqual(c.exeSHA256, "3f7ac67c5890ef979ee24a6dae5528056e7f631725c292cf9cb0a928ebeff71c")
-        XCTAssertEqual(c.sources.map(\.path), OriginalMenuSoundStartup.paths)
+        XCTAssertEqual(c.sources.map(\.path), NTSDProfile.rules.interface.menuSounds)
         var cache: [String: [UInt8]] = [:]
         func blob(_ key: String) throws -> [UInt8] {
             if let bytes = cache[key] { return bytes }
@@ -74,7 +75,7 @@ final class OriginalMenuSoundStartupTests: XCTestCase {
             var result: OriginalMenuSoundStartup.Result?
             var caught = false
             do {
-                result = try OriginalMenuSoundStartup.load(globals: &globals, platform: item.spec.device, wavePlatform: { index,path,destination,device in
+                result = try OriginalMenuSoundStartup.load(globals: &globals, names: NTSDProfile.rules.interface.menuSounds, platform: item.spec.device, wavePlatform: { index,path,destination,device in
                     let l = item.loads[index]
                     XCTAssertEqual(l.path, Array(path.utf8));XCTAssertEqual(l.input.destination, destination);XCTAssertEqual(l.input.device, device)
                     XCTAssertEqual(l.file, sources[path]?.sha256)
@@ -149,7 +150,7 @@ final class OriginalMenuSoundStartupTests: XCTestCase {
             platform:.init(createResult:0,createdDevice:nil)))
         XCTAssertEqual(globals.bytes,before.bytes);XCTAssertEqual(globals.defined,before.defined)
         var completed = 0, events = 0
-        XCTAssertThrowsError(try OriginalMenuSoundStartup.load(globals:&globals,platform:item.spec.device,
+        XCTAssertThrowsError(try OriginalMenuSoundStartup.load(globals:&globals, names: NTSDProfile.rules.interface.menuSounds,platform:item.spec.device,
             wavePlatform:{ i,_,_,_ in item.loads[i].input },fileSource:{ path in
                 try blob(XCTUnwrap(c.sources.first { $0.path == path }).sha256)
             },afterWave:{ i,_,_ in completed += 1;if i == 4 { throw Trial.late } },observe:{ _,_ in events += 1 })) { error in

@@ -1,6 +1,7 @@
 import Foundation
 import XCTest
 import NTSDCore
+import NTSDProfile
 @testable import NTSDReferenceChecks
 
 final class OriginalApplicationStartupInputsTests: XCTestCase {
@@ -39,7 +40,7 @@ final class OriginalApplicationStartupInputsTests: XCTestCase {
         XCTAssertEqual(digest(try XCTUnwrap(p.file("data\\control.txt"))),"cc7f84872d9b95fe64c1c95cc7895b3e2c0a52a3ae0f7f7970f0b3c56b7037c0")
         XCTAssertEqual(digest(try p.controlBytes()),"6728804465456b893de32cb8bf9390b88843dbef58de25670e49834caaa177d9")
         XCTAssertEqual(p.bitmaps.count,36);XCTAssertEqual(p.bitmaps.values.reduce(0) { $0+$1.dib.count },28_986_014)
-        for name in OriginalMenuSoundStartup.paths { XCTAssertGreaterThan(try XCTUnwrap(p.file(name)).count,44) }
+        for name in NTSDProfile.rules.interface.menuSounds { XCTAssertGreaterThan(try XCTUnwrap(p.file(name)).count,44) }
         XCTAssertEqual(p.bitmaps.values.filter { $0.bitsPerPixel == 8 }.count,13)
         XCTAssertEqual(p.bitmaps.values.filter { $0.bitsPerPixel == 24 }.count,23)
         XCTAssertNil(try p.file("data\\ad0.txt"))

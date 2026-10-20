@@ -21,9 +21,11 @@ public struct OriginalFrontMenuResources {
     public static let slots = [0x451170,0x4511a0,0x451168,0x451178,0x45116c,0x45117c,0x4511a4,0x451188,0x45118c,0x45119c,0x451190,
                                0x451198,0x451174,0x451164,0x451184,0x451194,0x451180,0x4511a8,0x44faf4,0x44f888,0x44fcbc,0x44fb68,0x44faf8,0x44fd80]
     public private(set) var bitmaps: [UInt32:OriginalLoadedBitmap] = [:]
-    /// The game's names and rectangle sheets (ENGINE_SPLIT E5f-1).
-    public let interface: OriginalGameRules.Interface
-    public init(interface: OriginalGameRules.Interface) { self.interface = interface }
+    /// The game's names and rectangle sheets (ENGINE_SPLIT E5f-1), only these two
+    /// of its interface lists: the menu session's state copies this owner, and a
+    /// whole `Interface` there grew with every list (E5f-3).
+    public let frontBitmaps: [String], frontSheets: [OriginalBitmapSheet]
+    public init(interface: OriginalGameRules.Interface) { frontBitmaps = interface.frontBitmaps; frontSheets = interface.frontSheets }
 
     @discardableResult
     public mutating func load(world: OriginalStateRecord, globals: inout OriginalStateRecord,
@@ -34,7 +36,7 @@ public struct OriginalFrontMenuResources {
                               observe: (OriginalFrontMenuEvent) throws -> Void = { _ in }) throws -> OriginalFrontMenuResourceResult {
         let base = OriginalMatchPreparation.globalBase
         guard globals.byteCount == OriginalMatchPreparation.globalSize else { throw OriginalStateError.invalidStorage("Front menu globals extent") }
-        let paths = interface.frontBitmaps, sheets = interface.frontSheets
+        let paths = frontBitmaps, sheets = frontSheets
         // Checked before any effect: one name per slot; each sheet in one of the
         // first eleven slots, at most once, with at most 500 frames (the x array's room).
         guard paths.count == Self.slots.count, Set(sheets.map(\.slot)).count == sheets.count,

@@ -81,7 +81,9 @@ public enum OriginalInputStartup {
         globals = state;return returned
     }
 
-    public static func load(globals: inout OriginalStateRecord,
+    /// `menuSounds`: the game's menu WAVs (ENGINE_SPLIT E5f-3: `Interface.menuSounds`),
+    /// checked before the key table and joystick requests.
+    public static func load(globals: inout OriginalStateRecord, menuSounds: [String],
         request: (Request, OriginalStateRecord) throws -> Response,
         soundPlatform: OriginalMenuSoundStartup.Platform,
         wavePlatform: (Int, String, UInt32, UInt32) throws -> OriginalWavePlatform,
@@ -90,13 +92,14 @@ public enum OriginalInputStartup {
         capabilities: (Int, OriginalStateRecord) throws -> Void = { _,_ in },
         afterWave: (Int, OriginalWaveLoadResult, OriginalStateRecord) throws -> Void = { _,_,_ in },
         observeSound: (OriginalMenuSoundStartup.Event, OriginalStateRecord) throws -> Void = { _,_ in }) throws -> Result {
-        try loadBody(globals:&globals,request:request,sound:{ state in
-            try OriginalMenuSoundStartup.load(globals:&state,platform:soundPlatform,wavePlatform:wavePlatform,
+        try OriginalMenuSoundStartup.checkNames(menuSounds)
+        return try loadBody(globals:&globals,request:request,sound:{ state in
+            try OriginalMenuSoundStartup.load(globals:&state,names:menuSounds,platform:soundPlatform,wavePlatform:wavePlatform,
                 fileSource:fileSource,afterWave:afterWave,store:{ try store($0,little($1)) },observe:observeSound)
         },store:store,capabilities:capabilities)
     }
 
-    public static func loadObserved(globals: inout OriginalStateRecord,
+    public static func loadObserved(globals: inout OriginalStateRecord, menuSounds: [String],
         request: (Request,OriginalStateRecord) throws -> Response,
         soundRequest: (OriginalMenuSoundStartup.Event) throws -> OriginalSoundResponse,
         waveInput: (Int,String,UInt32,UInt32) throws -> OriginalWaveInput,
@@ -105,8 +108,9 @@ public enum OriginalInputStartup {
         capabilities: (Int,OriginalStateRecord) throws -> Void = { _,_ in },
         afterWave: (Int,OriginalWaveLoadResult,OriginalStateRecord) throws -> Void = { _,_,_ in },
         observeSound: (OriginalMenuSoundStartup.Event,OriginalStateRecord) throws -> Void = { _,_ in }) throws -> Result {
-        try loadBody(globals:&globals,request:request,sound:{ state in
-            try OriginalMenuSoundStartup.loadObserved(globals:&state,soundRequest:soundRequest,waveInput:waveInput,
+        try OriginalMenuSoundStartup.checkNames(menuSounds)
+        return try loadBody(globals:&globals,request:request,sound:{ state in
+            try OriginalMenuSoundStartup.loadObserved(globals:&state,names:menuSounds,soundRequest:soundRequest,waveInput:waveInput,
                 waveRequest:waveRequest,fileSource:fileSource,afterWave:afterWave,
                 store:{ try store($0,little($1)) },observe:observeSound)
         },store:store,capabilities:capabilities)

@@ -82,7 +82,7 @@ final class OriginalApplicationLoadedCycleTests: XCTestCase {
             waves:prefix.prefix.loads.map(\.input),drawResult:draw,presentationResult:presentation)
         XCTAssertEqual(common.state.full.bytes,try prefix.blob(prefix.c.before.globals))
         var catalog = try C.Input.Pool.Catalog(pending:common,startup:.init(owner:XCTUnwrap(startup.input?.sounds),
-            platforms:prefix.startupWaveInputs,music:startup.output.music))
+            platforms:prefix.startupWaveInputs, names: NTSDProfile.rules.interface.menuSounds,music:startup.output.music))
         let checksum = try common.state.full.integer(at:0x44f620-0x44d000,as:UInt32.self)
         let cache = Array(common.state.full.bytes[(0x455638-0x44d000)..<(0x458438-0x44d000)])
         let controls = F.Provider(r,checksum,cache)

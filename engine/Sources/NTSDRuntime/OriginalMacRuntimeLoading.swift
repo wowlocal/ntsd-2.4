@@ -203,8 +203,10 @@ public struct OriginalRuntimeLoadingPackages {
         let host = started.host,heap = started.runtime.heap
         guard let pending = host.pendingLoading,let startup = host.committedStartup,let sounds = startup.input?.sounds else { throw Boundary.missing("pending loading") }
         let device = try pending.state.full.integer(at:0x44eecc-0x44d000,as:UInt32.self)
+        let names = self.catalogInputs.rules.interface.menuSounds
+        guard sounds.loads.count == names.count else { throw Boundary.unexpected("menu sound names") }
         let owners = try sounds.loads.enumerated().map { i,result in
-            try started.audio.ownership(.init(i,OriginalMenuSoundStartup.paths[i],UInt32(0x45560c+i*4),device),result:result)
+            try started.audio.ownership(.init(i,names[i],UInt32(0x45560c+i*4),device),result:result)
         }
         let startupSounds = try Catalog.StartupSounds(owner:sounds,waveOwners:owners,music:startup.output.music)
         let driver = try OriginalApplicationObservedLoadingAudio<P>(host:host,domain:.opaque(started.audio.loadingDomain))

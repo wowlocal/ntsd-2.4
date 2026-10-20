@@ -440,8 +440,10 @@ public struct OriginalGameRules: Equatable, Sendable {
     /// interface's bitmaps (OriginalInitialInterfaceLoading, one per slot) and
     /// the common WAVs loading reads before the catalog (OriginalInitialSoundLoading,
     /// one per destination from 0x451db0), the character menu's bitmaps
-    /// (OriginalMenuResourceLoading, one per slot) and War's two (OriginalWarSetup,
-    /// one per slot; the War-menu package), each list in load order.
+    /// (OriginalMenuResourceLoading, one per slot), War's two (OriginalWarSetup,
+    /// one per slot; the War-menu package) and the menu WAVs WinMain's input
+    /// startup loads (OriginalMenuSoundStartup, one per destination from
+    /// 0x45560c), each list in load order.
     public struct Interface: Equatable, Sendable {
         public let frontBitmaps: [String]
         public let frontSheets: [OriginalBitmapSheet]
@@ -450,11 +452,12 @@ public struct OriginalGameRules: Equatable, Sendable {
         /// The character menu's bitmaps (OriginalMenuResourceLoading, one per slot)
         /// and War's two (the War-menu package), in load order.
         public let menuBitmaps: [String], warBitmaps: [String]
+        public let menuSounds: [String]
         public init(frontBitmaps: [String], frontSheets: [OriginalBitmapSheet], interfaceBitmaps: [String], commonSounds: [String],
-                    menuBitmaps: [String], warBitmaps: [String]) {
+                    menuBitmaps: [String], warBitmaps: [String], menuSounds: [String]) {
             self.frontBitmaps = frontBitmaps; self.frontSheets = frontSheets
             self.interfaceBitmaps = interfaceBitmaps; self.commonSounds = commonSounds
-            self.menuBitmaps = menuBitmaps; self.warBitmaps = warBitmaps
+            self.menuBitmaps = menuBitmaps; self.warBitmaps = warBitmaps; self.menuSounds = menuSounds
         }
     }
     /// The character AI (OriginalCharacterAI): the IDs its target choice and fight test.

@@ -83,7 +83,8 @@ E5e-5 выполнен: поломка оружия (A52–A54), семейст�
 E5f-1 выполнен: имена и прямоугольники меню фронта в профиле (семейство Interface, правила через путь запуска): [evidence](../evidence/es-e5f1-front-interface.json).
 E5f-2a выполнен: имена интерфейса и общих звуков в Interface: [evidence](../evidence/es-e5f2a-interface-sound-names.json).
 E5f-2b выполнен: имена меню и War в Interface: [evidence](../evidence/es-e5f2b-menu-war-names.json).
-Следующая задача — E5f-3: звуки меню в Interface.
+E5f-3 выполнен: звуки меню в Interface: [evidence](../evidence/es-e5f3-menu-sound-names.json).
+Следующая задача — E5f-4: прямоугольники панели и BATTLEMODE в Interface.
 
 ## Internal build storage и VM quota исправлены — 2026-10-17
 

@@ -1,6 +1,7 @@
 import Foundation
 import XCTest
 import NTSDCore
+import NTSDProfile
 @testable import NTSDReferenceChecks
 
 final class OriginalInputStartupTests: XCTestCase {
@@ -74,7 +75,7 @@ final class OriginalInputStartupTests: XCTestCase {
             }
             var result: OriginalInputStartup.Result?
             do {
-                result = try OriginalInputStartup.load(globals:&globals,request:{ r,state in
+                result = try OriginalInputStartup.load(globals:&globals, menuSounds: NTSDProfile.rules.interface.menuSounds,request:{ r,state in
                     let expected = item.joyRequests[requestIndex];requestIndex += 1
                     XCTAssertEqual(r,expected.request,item.spec.label)
                     try event(.init(r.kind,r.arguments,r.information.map { [$0] } ?? []),state)
@@ -146,7 +147,7 @@ final class OriginalInputStartupTests: XCTestCase {
         let before = try OriginalStateRecord(bytes:blob(item.beforeGlobals),defined:[Bool](repeating:true,count:OriginalMatchPreparation.globalSize))
         for lateCaps in [true,false] {
             var globals = before,index = 0,completed = 0
-            XCTAssertThrowsError(try OriginalInputStartup.load(globals:&globals,request:{ _,_ in defer { index += 1 };return item.joyRequests[index].response },soundPlatform:item.spec.device,
+            XCTAssertThrowsError(try OriginalInputStartup.load(globals:&globals, menuSounds: NTSDProfile.rules.interface.menuSounds,request:{ _,_ in defer { index += 1 };return item.joyRequests[index].response },soundPlatform:item.spec.device,
                 wavePlatform:{ i,_,_,_ in item.loads[i].input },fileSource:{ path in try blob(XCTUnwrap(c.sources.first { $0.path == path }).sha256) },
                 capabilities:{ _,_ in if lateCaps { throw Trial.late } },afterWave:{ i,_,_ in completed += 1;if i == 4 { throw Trial.late } })) { XCTAssertTrue($0 is Trial) }
             XCTAssertEqual(globals,before);XCTAssertEqual(completed,lateCaps ? 0 : 5)

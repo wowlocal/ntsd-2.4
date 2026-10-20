@@ -114,10 +114,10 @@ final class OriginalWarSetupNativeTests: XCTestCase {
         let n=NTSDProfile.rules,i=n.interface
         XCTAssertEqual(try constructed(n),["BATTLEMODE","BATTLETROOPS"])
         let renamed=n.with(interface:.init(frontBitmaps:i.frontBitmaps,frontSheets:i.frontSheets,interfaceBitmaps:i.interfaceBitmaps,
-            commonSounds:i.commonSounds,menuBitmaps:i.menuBitmaps,warBitmaps:["MY_MODE","MY_TROOPS"]))
+            commonSounds:i.commonSounds,menuBitmaps:i.menuBitmaps,warBitmaps:["MY_MODE","MY_TROOPS"], menuSounds: i.menuSounds))
         XCTAssertEqual(try constructed(renamed),["MY_MODE","MY_TROOPS"])
         let short=n.with(interface:.init(frontBitmaps:i.frontBitmaps,frontSheets:i.frontSheets,interfaceBitmaps:i.interfaceBitmaps,
-            commonSounds:i.commonSounds,menuBitmaps:i.menuBitmaps,warBitmaps:["MY_MODE"]))
+            commonSounds:i.commonSounds,menuBitmaps:i.menuBitmaps,warBitmaps:["MY_MODE"], menuSounds: i.menuSounds))
         var state=try initial(catalog(rules:short)),memory=OriginalWarMenuMemory(),library: OriginalLibSurfaceText? = .init()
         var buffer=Buffer(),reached=false
         XCTAssertThrowsError(try run(&state,&memory,&library,&buffer,reached:&reached)) { XCTAssertTrue("\($0)".contains("War bitmap names: one per slot"),"\($0)") }

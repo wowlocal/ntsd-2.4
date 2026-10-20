@@ -86,7 +86,7 @@ import NTSDProfile
             let sounds = try XCTUnwrap(startup.input?.sounds)
             let device = try pending.state.full.integer(at:0x44eecc-0x44d000,as:UInt32.self)
             let owners = try sounds.loads.enumerated().map { i,result in
-                try run.audio.ownership(.init(i,OriginalMenuSoundStartup.paths[i],UInt32(0x45560c+i*4),device),result:result)
+                try run.audio.ownership(.init(i,NTSDProfile.rules.interface.menuSounds[i],UInt32(0x45560c+i*4),device),result:result)
             }
             let files = Dictionary(uniqueKeysWithValues:try A().files().map { ($0.path,$0) })
             return try .init(startup:run,sounds:.init(owner:sounds,waveOwners:owners,music:startup.output.music),

@@ -1,6 +1,7 @@
 import Foundation
 import XCTest
 import NTSDCore
+import NTSDProfile
 @testable import NTSDReferenceChecks
 
 final class OriginalStartupAudioMenuCorpus: XCTestCase {
@@ -36,7 +37,7 @@ final class OriginalStartupAudioMenuCorpus: XCTestCase {
     func compareWholeMenuSoundStartupAgainstOriginal() throws {
         let c = try corpus()
         XCTAssertEqual(c.exeSHA256, "3f7ac67c5890ef979ee24a6dae5528056e7f631725c292cf9cb0a928ebeff71c")
-        XCTAssertEqual(c.sources.map(\.path), OriginalMenuSoundStartup.paths)
+        XCTAssertEqual(c.sources.map(\.path), NTSDProfile.rules.interface.menuSounds)
         var cache: [String: [UInt8]] = [:]
         func blob(_ key: String) throws -> [UInt8] {
             if let bytes = cache[key] { return bytes }
@@ -75,7 +76,7 @@ final class OriginalStartupAudioMenuCorpus: XCTestCase {
             var caught = false
             var replies: [Int:OriginalWaveLegacyReplies] = [:]
             do {
-                result = try OriginalMenuSoundStartup.loadObserved(globals: &globals, soundRequest:{ try OriginalSoundLegacyReplies.reply(item.spec.device,$0) }, waveInput: { index,path,destination,device in
+                result = try OriginalMenuSoundStartup.loadObserved(globals: &globals, names: NTSDProfile.rules.interface.menuSounds, soundRequest:{ try OriginalSoundLegacyReplies.reply(item.spec.device,$0) }, waveInput: { index,path,destination,device in
                     let l = item.loads[index]
                     XCTAssertEqual(l.path, Array(path.utf8));XCTAssertEqual(l.input.destination, destination);XCTAssertEqual(l.input.device, device)
                     XCTAssertEqual(l.file, sources[path]?.sha256)

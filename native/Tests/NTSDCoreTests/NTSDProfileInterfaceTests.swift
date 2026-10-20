@@ -3,9 +3,9 @@ import XCTest
 @testable import NTSDCore
 import NTSDProfile
 
-/// ENGINE_SPLIT E5f-1/2a/2b: the front menu's bitmaps and rectangle sheets, the
-/// ENDING screen's sheet, the initial interface's bitmaps, the common WAVs and
-/// the menu's and War's bitmaps come from the game's `Interface`.
+/// ENGINE_SPLIT E5f-1/2a/2b/3: the front menu's bitmaps and rectangle sheets, the
+/// ENDING screen's sheet, the initial interface's bitmaps, the common WAVs, the
+/// menu's and War's bitmaps and the menu WAVs come from the game's `Interface`.
 final class NTSDProfileInterfaceTests: XCTestCase {
     func zero(_ size: Int) throws -> OriginalStateRecord {
         try .init(bytes: [UInt8](repeating: 0, count: size), defined: [Bool](repeating: true, count: size))
@@ -13,7 +13,7 @@ final class NTSDProfileInterfaceTests: XCTestCase {
     let n = NTSDProfile.rules.interface
     func interface(names: [String]? = nil, sheets: [OriginalBitmapSheet]? = nil) -> OriginalGameRules.Interface {
         .init(frontBitmaps: names ?? n.frontBitmaps, frontSheets: sheets ?? n.frontSheets, interfaceBitmaps: n.interfaceBitmaps,
-              commonSounds: n.commonSounds, menuBitmaps: n.menuBitmaps, warBitmaps: n.warBitmaps)
+              commonSounds: n.commonSounds, menuBitmaps: n.menuBitmaps, warBitmaps: n.warBitmaps, menuSounds: n.menuSounds)
     }
     func testProfileSheetsAgreeWithTheEndingCapture() throws {
         // The ENDING oracle's declared frames (original-stage-ending.json): a copy of the same
@@ -126,9 +126,9 @@ final class NTSDProfileInterfaceTests: XCTestCase {
         _ = try firstSoundRead(n.commonSounds, effects: &effects); XCTAssertGreaterThan(effects, 0, "a valid list gets to its effects")
         let rules = NTSDProfile.rules
         XCTAssertNotEqual(rules, rules.with(profile: rules.profile, interface: .init(frontBitmaps: n.frontBitmaps, frontSheets: n.frontSheets,
-            interfaceBitmaps: names, commonSounds: n.commonSounds, menuBitmaps: n.menuBitmaps, warBitmaps: n.warBitmaps)))
+            interfaceBitmaps: names, commonSounds: n.commonSounds, menuBitmaps: n.menuBitmaps, warBitmaps: n.warBitmaps, menuSounds: n.menuSounds)))
         XCTAssertNotEqual(rules, rules.with(profile: rules.profile, interface: .init(frontBitmaps: n.frontBitmaps, frontSheets: n.frontSheets,
-            interfaceBitmaps: n.interfaceBitmaps, commonSounds: sounds, menuBitmaps: n.menuBitmaps, warBitmaps: n.warBitmaps)))
+            interfaceBitmaps: n.interfaceBitmaps, commonSounds: sounds, menuBitmaps: n.menuBitmaps, warBitmaps: n.warBitmaps, menuSounds: n.menuSounds)))
     }
     /// The character menu's resource load (flag 0x44d07c set) under these names: the
     /// first name it asks a source for, or its error.
@@ -150,8 +150,40 @@ final class NTSDProfileInterfaceTests: XCTestCase {
         XCTAssertEqual(try firstMenuRequest(Array(names.dropLast())), "\(OriginalStateError.invalidStorage("Menu resource names: one per slot"))")
         let rules = NTSDProfile.rules
         XCTAssertNotEqual(rules, rules.with(profile: rules.profile, interface: .init(frontBitmaps: n.frontBitmaps, frontSheets: n.frontSheets,
-            interfaceBitmaps: n.interfaceBitmaps, commonSounds: n.commonSounds, menuBitmaps: names, warBitmaps: n.warBitmaps)))
+            interfaceBitmaps: n.interfaceBitmaps, commonSounds: n.commonSounds, menuBitmaps: names, warBitmaps: n.warBitmaps, menuSounds: n.menuSounds)))
         XCTAssertNotEqual(rules, rules.with(profile: rules.profile, interface: .init(frontBitmaps: n.frontBitmaps, frontSheets: n.frontSheets,
-            interfaceBitmaps: n.interfaceBitmaps, commonSounds: n.commonSounds, menuBitmaps: n.menuBitmaps, warBitmaps: ["BATTLEMODE"])))
+            interfaceBitmaps: n.interfaceBitmaps, commonSounds: n.commonSounds, menuBitmaps: n.menuBitmaps, warBitmaps: ["BATTLEMODE"], menuSounds: n.menuSounds)))
+    }
+    /// The menu WAV load under these names with a failed DirectSoundCreate: the
+    /// first name it binds, or its error, and the sound requests made before.
+    func firstMenuSound(_ names: [String]) throws -> (String, Int) {
+        var globals = try zero(OriginalMatchPreparation.globalSize), requests = 0, bound: String?
+        do {
+            _ = try OriginalMenuSoundStartup.loadObserved(globals: &globals, names: names,
+                soundRequest: { e in requests += 1; return .init(result: e.kind == "deviceCreate" ? -1 : 0) },
+                waveInput: { _, path, _, _ in bound = path; throw Stop() },
+                waveRequest: { _, _ in throw Stop() }, fileSource: { _ in throw Stop() })
+        } catch is Stop { return (bound ?? "", requests) } catch { return ("\(error)", requests) }
+        return (bound ?? "", requests)
+    }
+    func testMenuSoundNames() throws {
+        XCTAssertEqual(n.menuSounds.count, OriginalMenuSoundStartup.destinationCount)
+        XCTAssertEqual(try firstMenuSound(n.menuSounds).0, "data\\m_join.wav")
+        var names = n.menuSounds; names[0] = "data\\my_join.wav"
+        XCTAssertEqual(try firstMenuSound(names).0, "data\\my_join.wav")
+        let short = try firstMenuSound(Array(names.dropLast()))
+        XCTAssertEqual(short.0, "\(OriginalStateError.invalidStorage("Menu sound names: one per destination"))")
+        XCTAssertEqual(short.1, 0, "no sound request before the check")
+        // The input startup checks before its key table and joystick requests.
+        var globals = try zero(OriginalMatchPreparation.globalSize), requests = 0, stores = 0
+        XCTAssertThrowsError(try OriginalInputStartup.load(globals: &globals, menuSounds: Array(names.dropLast()),
+            request: { _, _ in requests += 1; throw Stop() }, soundPlatform: .init(createResult: -1, createdDevice: nil),
+            wavePlatform: { _, _, _, _ in throw Stop() }, fileSource: { _ in throw Stop() }, store: { _, _ in stores += 1 })) {
+            XCTAssertEqual("\($0)", "\(OriginalStateError.invalidStorage("Menu sound names: one per destination"))")
+        }
+        XCTAssertEqual(requests + stores, 0)
+        let rules = NTSDProfile.rules
+        XCTAssertNotEqual(rules, rules.with(profile: rules.profile, interface: .init(frontBitmaps: n.frontBitmaps, frontSheets: n.frontSheets,
+            interfaceBitmaps: n.interfaceBitmaps, commonSounds: n.commonSounds, menuBitmaps: n.menuBitmaps, warBitmaps: n.warBitmaps, menuSounds: names)))
     }
 }

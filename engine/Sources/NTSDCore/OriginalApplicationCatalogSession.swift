@@ -17,11 +17,12 @@ public struct OriginalApplicationCatalogSession {
         /// The real WinMain output already owns its wide music allocation.
         /// Retain it through catalog/pool/input until the next music consumer.
         public let music: OriginalMusicMemory
-        public init(owner: OriginalMenuSoundStartup.Result, platforms: [OriginalWavePlatform], music: OriginalMusicMemory) throws {
-            guard owner.loads.count == platforms.count else { throw Boundary.input("Startup WAV owners") }
+        /// `names`: the game's menu WAVs (ENGINE_SPLIT E5f-3: `Interface.menuSounds`).
+        public init(owner: OriginalMenuSoundStartup.Result, platforms: [OriginalWavePlatform], names: [String], music: OriginalMusicMemory) throws {
+            guard owner.loads.count == platforms.count, names.count == platforms.count else { throw Boundary.input("Startup WAV owners") }
             self.owner = owner; self.platforms = platforms; self.music = music
             waveOwners = zip(owner.loads,platforms).enumerated().map { i,pair in
-                let path = i < OriginalMenuSoundStartup.paths.count ? OriginalMenuSoundStartup.paths[i] : ""
+                let path = names[i]
                 return .init(binding:.init(i,path,pair.1.destination,pair.1.device),result:pair.0,legacy:pair.1)
             }
         }
@@ -170,11 +171,11 @@ public struct OriginalApplicationCatalogSession {
             })
             let device = try word(0x44eecc)
             guard startup.owner.deviceReady,device != 0,
-                  startup.owner.loads.count == OriginalMenuSoundStartup.paths.count else {
+                  startup.owner.loads.count == inputs.rules.interface.menuSounds.count else {
                 throw Boundary.dependency("Startup sound ownership for catalog entry")
             }
             for (i,owner) in startup.waveOwners.enumerated() {
-                guard owner.binding.index == i,owner.binding.path == OriginalMenuSoundStartup.paths[i] else { throw Boundary.input("Startup WAV path/index") }
+                guard owner.binding.index == i,owner.binding.path == inputs.rules.interface.menuSounds[i] else { throw Boundary.input("Startup WAV path/index") }
                 try owner.validate(device:device,destination:UInt32(0x45560c+4*i),
                     output:word(0x45560c+4*i),domain:audioDomain)
                 try retainWave(owner)

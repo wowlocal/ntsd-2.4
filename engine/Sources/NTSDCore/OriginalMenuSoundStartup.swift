@@ -23,7 +23,13 @@ public enum OriginalMenuSoundStartup {
         /// temporary allocations. Tokens are supplied by the platform adapter.
         public let loads: [OriginalWaveLoadResult]
     }
-    public static let paths = ["data\\m_join.wav", "data\\m_ok.wav", "data\\m_cancel.wav", "data\\m_pass.wav", "data\\m_end.wav"]
+    /// The menu WAV destinations (0x45560c+4i), one per name.
+    public static let destinationCount = 5
+    /// The one count check for the game's menu WAVs: the loader and the input
+    /// and WinMain startups call it before any effect of their own.
+    static func checkNames(_ names: [String]) throws {
+        guard names.count == destinationCount else { throw OriginalStateError.invalidStorage("Menu sound names: one per destination") }
+    }
 
     /// Whole401970: only zero DirectSoundCreate succeeds. SetCooperativeLevel's
     /// result is ignored. A failed create clears the live global without Release.
@@ -58,14 +64,16 @@ public enum OriginalMenuSoundStartup {
         globals = candidate; return true
     }
 
-    public static func load(globals: inout OriginalStateRecord, platform: Platform,
+    /// `names`: the game's menu WAVs, one per destination (ENGINE_SPLIT E5f-3:
+    /// `Interface.menuSounds`).
+    public static func load(globals: inout OriginalStateRecord, names: [String], platform: Platform,
         wavePlatform: (Int, String, UInt32, UInt32) throws -> OriginalWavePlatform,
         fileSource: (String) throws -> [UInt8],
         afterWave: (Int, OriginalWaveLoadResult, OriginalStateRecord) throws -> Void = { _, _, _ in },
         store: (Int, UInt32) throws -> Void = { _, _ in },
         observe: (Event, OriginalStateRecord) throws -> Void = { _, _ in }) throws -> Result {
         var replies: [Int:OriginalWaveLegacyReplies] = [:]
-        return try loadObserved(globals:&globals,soundRequest:{ try OriginalSoundLegacyReplies.reply(platform,$0) },
+        return try loadObserved(globals:&globals,names:names,soundRequest:{ try OriginalSoundLegacyReplies.reply(platform,$0) },
             waveInput:{ i,path,destination,device in
                 let p = try wavePlatform(i,path,destination,device),r = try OriginalWaveLegacyReplies(p)
                 replies[i] = r;return r.input
@@ -75,7 +83,7 @@ public enum OriginalMenuSoundStartup {
             },fileSource:fileSource,afterWave:afterWave,store:store,observe:observe)
     }
 
-    public static func loadObserved(globals: inout OriginalStateRecord,
+    public static func loadObserved(globals: inout OriginalStateRecord, names: [String],
         soundRequest: (Event) throws -> OriginalSoundResponse,
         waveInput: (Int,String,UInt32,UInt32) throws -> OriginalWaveInput,
         waveRequest: (OriginalWaveBinding,OriginalWaveRequest) throws -> OriginalWaveResponse,
@@ -83,6 +91,7 @@ public enum OriginalMenuSoundStartup {
         afterWave: (Int,OriginalWaveLoadResult,OriginalStateRecord) throws -> Void = { _,_,_ in },
         store: (Int,UInt32) throws -> Void = { _,_ in },
         observe: (Event,OriginalStateRecord) throws -> Void = { _,_ in }) throws -> Result {
+        try checkNames(names)
         var candidate = globals
         let base = OriginalMatchPreparation.globalBase
         let window = try candidate.integer(at: 0x4546f4-base, as: UInt32.self)
@@ -94,7 +103,7 @@ public enum OriginalMenuSoundStartup {
             try observe(message,candidate);_ = try soundRequest(message)
         }
         var loads: [OriginalWaveLoadResult] = []
-        for (index, path) in paths.enumerated() {
+        for (index, path) in names.enumerated() {
             let destination = UInt32(0x45560c + 4*index)
             let device = try candidate.integer(at: 0x44eecc-base, as: UInt32.self)
             let p = try waveInput(index,path,destination,device)
