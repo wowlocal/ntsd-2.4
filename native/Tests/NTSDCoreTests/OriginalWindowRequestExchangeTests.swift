@@ -102,7 +102,7 @@ final class OriginalWindowRequestExchangeTests: XCTestCase {
                 let p = try base.stagedCopy()
                 try p.calendar(engine.output.calendar,c.before)
                 do {
-                    try engine.run(instance:c.spec.instance ?? 0x400000,show:c.spec.show ?? 10,globals:&globals, menuSounds: NTSDProfile.rules.interface.menuSounds,platform:p,store:p.store)
+                    try engine.run(instance:c.spec.instance ?? 0x400000,show:c.spec.show ?? 10,globals:&globals, interface: NTSDProfile.rules.interface,platform:p,store:p.store)
                     XCTAssertEqual(c.end,"startupBoundary"); XCTAssertEqual(c.endPC,0x43d100); XCTAssertEqual(c.endSP,0x1000effc)
                     try p.complete(engine,globals); _ = try exchange.finish(XCTUnwrap(p.windowExchange)); whole += 1
                 } catch let ticket as E.RequestNeeded {
@@ -164,7 +164,7 @@ final class OriginalWindowRequestExchangeTests: XCTestCase {
                 let p = try P.Adapter(c,r,sources:sources,blob:blob,initial:before.bytes,fail:phase)
                 p.windowExchange = try exchange.snapshot.cursor()
                 do {
-                    try engine.run(instance:0x400000,show:10,globals:&globals, menuSounds: NTSDProfile.rules.interface.menuSounds,platform:p,store:p.store,
+                    try engine.run(instance:0x400000,show:10,globals:&globals, interface: NTSDProfile.rules.interface,platform:p,store:p.store,
                         after:{ _,_ in if phase == "after" { throw P.Trial.late } })
                     XCTFail("Missing late failure"); break
                 } catch let ticket as E.RequestNeeded {
@@ -179,7 +179,7 @@ final class OriginalWindowRequestExchangeTests: XCTestCase {
             var globals = before, engine = OriginalWinMainStartup()
             let p = try P.Adapter(c,r,sources:sources,blob:blob,initial:before.bytes)
             p.windowExchange = try saved.cursor()
-            try engine.run(instance:0x400000,show:10,globals:&globals, menuSounds: NTSDProfile.rules.interface.menuSounds,platform:p,store:p.store)
+            try engine.run(instance:0x400000,show:10,globals:&globals, interface: NTSDProfile.rules.interface,platform:p,store:p.store)
             try p.complete(engine,globals)
             let completed = try exchange.finish(XCTUnwrap(p.windowExchange))
             XCTAssertEqual(completed.receipts.count,windowCount)

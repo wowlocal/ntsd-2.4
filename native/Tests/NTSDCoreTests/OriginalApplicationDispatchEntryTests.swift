@@ -79,7 +79,7 @@ final class OriginalApplicationDispatchEntryTests: XCTestCase {
         var globals = try OriginalStateRecord(bytes:r.blob(parent.initialGlobals),defined:[Bool](repeating:true,count:OriginalMatchPreparation.globalSize)),startup = OriginalWinMainStartup()
         let sources = Dictionary(uniqueKeysWithValues:try XCTUnwrap(parent.input).loads.map { (String(decoding:$0.path,as:UTF8.self),$0.file) })
         let initial = try Parent.Adapter(parent,XCTUnwrap(r.parents[c.parent]),sources:sources,blob:r.blob,initial:globals.bytes)
-        try startup.run(instance:0x400000,show:10,globals:&globals, menuSounds: NTSDProfile.rules.interface.menuSounds,platform:initial,store:initial.store);try initial.complete(startup,globals)
+        try startup.run(instance:0x400000,show:10,globals:&globals, interface: NTSDProfile.rules.interface,platform:initial,store:initial.store);try initial.complete(startup,globals)
         let outer = try OriginalStateRecord(bytes:r.blob(lc.initialOuter),defined:[Bool](repeating:true,count:0x854))
         let local = try OriginalStateRecord(bytes:Array(outer.bytes[..<0x140]),defined:Array(outer.defined[..<0x140])),pointers = try OriginalStateRecord(bytes:Array(outer.bytes[0x468..<0x470]),defined:Array(outer.defined[0x468..<0x470]))
         var state = Loop.Context(globals:globals,outer:outer,local:local,memory:.init(replayPointers:pointers)),loop = try OriginalApplicationMessageLoop(baseline:startup.random.state,counter:0)

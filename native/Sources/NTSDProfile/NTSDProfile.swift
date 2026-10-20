@@ -73,7 +73,13 @@ public enum NTSDProfile {
                          menuBitmaps: ["CHARMENU", "CM1", "CM2", "CM3", "CM4", "CM5", "CMA", "CMA2", "CMC", "RFACE", "SPARK"],
                          warBitmaps: ["BATTLEMODE", "BATTLETROOPS"],
                          // The menu WAVs WinMain's input startup loads.
-                         menuSounds: ["data\\m_join.wav", "data\\m_ok.wav", "data\\m_cancel.wav", "data\\m_pass.wav", "data\\m_end.wav"]),
+                         menuSounds: ["data\\m_join.wav", "data\\m_ok.wav", "data\\m_cancel.wav", "data\\m_pass.wav", "data\\m_end.wav"],
+                         // The information panel's atlas (x, y, width, height) and BATTLEMODE's two frames.
+                         panelFrames: [[0, 0, 397, 34], [397, 0, 397, 34],
+                                       [0, 34, 198, 194], [198, 34, 198, 194], [396, 34, 198, 194], [594, 34, 198, 194],
+                                       [0, 228, 198, 194], [198, 228, 198, 194], [396, 228, 198, 194], [594, 228, 198, 194],
+                                       [0, 422, 794, 128]],
+                         warModeFrames: [[0, 0, 705, 400], [0, 471, 705, 16]]),
         // The character AI's target choice and fight.
         characterAI: .init(stageAllyBound: 30, healBall: 200, healers: OriginalIDSet([2, 34]), stateDanger: 211, frameDanger: 212,
                            pickupItems: OriginalIDRange(100..<200), pickupExtra: 213, soughtDrink: 122, avoidedDrink: 123,

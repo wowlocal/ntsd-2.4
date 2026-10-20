@@ -1,6 +1,7 @@
 import Foundation
 import XCTest
 import NTSDCore
+import NTSDProfile
 @testable import NTSDReferenceChecks
 
 final class OriginalStartupPanelTests: XCTestCase {
@@ -41,7 +42,7 @@ final class OriginalStartupPanelTests: XCTestCase {
         written: @escaping (Int,[UInt8]) throws -> Void = { _,_ in },after: @escaping (UInt32,UInt32,OriginalStateRecord,OriginalStartupPanel) throws -> Void = { _,_,_,_ in }) throws -> UInt32 {
         let s = item.spec,b = item.children.first { $0.kind == "bitmap" };var writes = 0
         let backing = (0..<s.capacity).map { ramp ? UInt8(truncatingIfNeeded:$0) : UInt8(0xa5) }
-        return try panel.run(globals:&globals,infoBytes:s.info,contentSource:{ path in
+        return try panel.run(globals:&globals, panelFrames: NTSDProfile.rules.interface.panelFrames,infoBytes:s.info,contentSource:{ path in
             let infoChild = try XCTUnwrap(item.children.first { $0.kind == "content" })
             let bytes = try blob(infoChild.beforeGlobals),offset = 0x44d784-OriginalMatchPreparation.globalBase
             let expectedIndex = Int32(bitPattern:UInt32(bytes[offset]) | UInt32(bytes[offset+1])<<8 | UInt32(bytes[offset+2])<<16 | UInt32(bytes[offset+3])<<24)

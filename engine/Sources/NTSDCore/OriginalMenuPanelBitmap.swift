@@ -19,14 +19,25 @@ public struct OriginalMenuPanelBitmap {
     public init() {}
     private static func error(_ text: String) -> OriginalStateError { .invalidStorage("Menu panel bitmap: "+text) }
 
+    /// At most 500 frames: the room of each of the four rectangle arrays. (A
+    /// frame of other than four values traps at its first missing field, as
+    /// `Interface.init`'s precondition does; a declared check here moved the
+    /// optimiser's inlining of WinMain's startup: E5f-4's evidence.)
+    static func checkFrames(_ frames: [[Int32]]) throws {
+        guard frames.count <= 500 else { throw error("At most 500 atlas frames") }
+    }
+
+    /// `frames`: the game's panel atlas rectangles (ENGINE_SPLIT E5f-4:
+    /// `Interface.panelFrames`), checked with the globals' extent.
     @discardableResult
-    public mutating func load(globals: inout OriginalStateRecord,
+    public mutating func load(globals: inout OriginalStateRecord, frames: [[Int32]],
         allocate: () throws -> OriginalInterfaceAllocation,
         source: (String) throws -> OriginalBitmapInput,
         deviceResult: () throws -> (surface: UInt32,colorKeyResult: Int32),
         observe: (OriginalMenuPanelBitmapEvent) throws -> Void = { _ in }) throws -> Bool {
         let base = OriginalMatchPreparation.globalBase
         guard globals.byteCount == OriginalMatchPreparation.globalSize else { throw Self.error("Global extent") }
+        try Self.checkFrames(frames)
         var state = globals, candidate = self
         func global(_ address: Int,_ value: UInt32) throws {
             try state.write(value,at: address-base)
@@ -68,21 +79,18 @@ public struct OriginalMenuPanelBitmap {
         try global(0x458420,address)
         let surface: UInt32 = output.colorKeyResult < 0 ? 0 : output.surface
         if surface != 0 {
-            // Original43ccf2..43cf10: fixed atlas metadata, independent of DIB
-            // dimensions. Count is written after all44 rectangle fields.
-            let rectangles: [[Int32]] = [[0,0,397,34],[397,0,397,34],
-                [0,34,198,194],[198,34,198,194],[396,34,198,194],[594,34,198,194],
-                [0,228,198,194],[198,228,198,194],[396,228,198,194],[594,228,198,194],
-                [0,422,794,128]]
-            for (frame,rectangle) in rectangles.enumerated() {
+            // Original43ccf2..43cf10: fixed atlas metadata (the game's frames),
+            // independent of DIB dimensions. Count is written after all the
+            // rectangle fields.
+            for (frame,rectangle) in frames.enumerated() {
                 for (field,start) in [0x10,0x7e0,0xfb0,0x1780].enumerated() {
                     let offset = start+4*frame, value = rectangle[field]
                     try bitmap.storage.write(value,at: offset)
                     try observe(.init("write",[address,UInt32(offset),4,UInt32(bitPattern: value)]))
                 }
             }
-            try bitmap.storage.write(Int32(11),at: 0x0c)
-            try observe(.init("write",[address,0x0c,4,11]))
+            try bitmap.storage.write(Int32(frames.count),at: 0x0c)
+            try observe(.init("write",[address,0x0c,4,UInt32(frames.count)]))
         }
         candidate.records.append(.init(address: address,bitmap: bitmap,surface: surface,live: true))
         return finish(surface != 0)

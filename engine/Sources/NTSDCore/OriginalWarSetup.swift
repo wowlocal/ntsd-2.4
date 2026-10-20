@@ -116,8 +116,10 @@ public enum OriginalWarSetup {
         let initialize=try word(0x44d774)
         if initialize==1 {
             // The game's two War bitmaps (ENGINE_SPLIT E5f-2b), one per slot (0x451bb0, 0x451bac).
-            let paths=candidate.catalog.rules.interface.warBitmaps
+            let paths=candidate.catalog.rules.interface.warBitmaps,modeFrames=candidate.catalog.rules.interface.warModeFrames
             guard paths.count==2 else { throw error("War bitmap names: one per slot") }
+            // At most 500 BATTLEMODE frames, each rectangle array's room (ENGINE_SPLIT E5f-4).
+            guard modeFrames.count<=500 else { throw error("BATTLEMODE frames: at most 500") }
             try OriginalWarTroops.initialize(&candidate.globals)
             let device=UInt32(bitPattern:try word(0x457578))
             for (index,path) in paths.enumerated() {
@@ -143,7 +145,15 @@ public enum OriginalWarSetup {
             try mark(0x438d2a)
             let token=UInt32(bitPattern:try word(0x451bb0))
             guard token != 0,var mode=owned.bitmaps[token] else { throw error("NULL BATTLEMODE geometry write is unsupported") }
-            for (offset,value): (Int,Int32) in [(0x10,0),(0x7e0,0),(0x1780,400),(0xfb0,705),(0x14,0),(0x7e4,471),(0xfb4,705),(0x1784,16),(0xc,2)] { try mode.storage.write(value,at:offset) }
+            // The game's frames into the owned copy, then the count. No event or
+            // other effect separates these writes (between checkpoints 0x438d2a
+            // and 0x438da5) and the copy is committed after them, so the
+            // original's order within a frame (x, y, height, width for the
+            // first) is not observable.
+            for (frame,rectangle) in modeFrames.enumerated() {
+                for (field,start) in [0x10,0x7e0,0xfb0,0x1780].enumerated() { try mode.storage.write(rectangle[field],at:start+4*frame) }
+            }
+            try mode.storage.write(Int32(modeFrames.count),at:0xc)
             owned.bitmaps[token]=mode
         }
         if initialize==1 || initialize == -1 {

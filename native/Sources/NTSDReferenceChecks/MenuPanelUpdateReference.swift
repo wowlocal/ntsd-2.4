@@ -1,5 +1,6 @@
 import Foundation
 import NTSDCore
+import NTSDProfile
 
 public enum MenuPanelUpdateReference {
     public struct Result {
@@ -147,7 +148,7 @@ public enum MenuPanelUpdateReference {
                 let child = try next("bitmap");result.bitmaps += 1
                 guard child.entry == 0x43cc60,let a = child.allocation,let surface = child.surface,let key = child.colorKeyResult,let sourceName = child.source,let source = sources[sourceName],let calls = child.calls,let records = child.records else { throw error("Bitmap input") }
                 var n = 0,allocations = 0,loads = 0
-                let value = try panel.load(globals: &state,allocate: {
+                let value = try panel.load(globals: &state,frames: NTSDProfile.rules.interface.panelFrames,allocate: {
                     allocations += 1;guard early[a.address] == nil else { throw error("Reused early resource") }
                     if a.address == 0 { guard a.backing == nil,child.resource == nil else { throw error("Null bitmap") };return .init(address: 0,backing: []) }
                     guard let backing = a.backing else { throw error("Bitmap backing") };return try .init(address: a.address,backing: blob(backing))

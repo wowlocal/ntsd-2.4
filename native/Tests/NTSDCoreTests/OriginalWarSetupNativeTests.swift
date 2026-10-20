@@ -114,13 +114,35 @@ final class OriginalWarSetupNativeTests: XCTestCase {
         let n=NTSDProfile.rules,i=n.interface
         XCTAssertEqual(try constructed(n),["BATTLEMODE","BATTLETROOPS"])
         let renamed=n.with(interface:.init(frontBitmaps:i.frontBitmaps,frontSheets:i.frontSheets,interfaceBitmaps:i.interfaceBitmaps,
-            commonSounds:i.commonSounds,menuBitmaps:i.menuBitmaps,warBitmaps:["MY_MODE","MY_TROOPS"], menuSounds: i.menuSounds))
+            commonSounds:i.commonSounds,menuBitmaps:i.menuBitmaps,warBitmaps:["MY_MODE","MY_TROOPS"], menuSounds: i.menuSounds, panelFrames: i.panelFrames, warModeFrames: i.warModeFrames))
         XCTAssertEqual(try constructed(renamed),["MY_MODE","MY_TROOPS"])
         let short=n.with(interface:.init(frontBitmaps:i.frontBitmaps,frontSheets:i.frontSheets,interfaceBitmaps:i.interfaceBitmaps,
-            commonSounds:i.commonSounds,menuBitmaps:i.menuBitmaps,warBitmaps:["MY_MODE"], menuSounds: i.menuSounds))
+            commonSounds:i.commonSounds,menuBitmaps:i.menuBitmaps,warBitmaps:["MY_MODE"], menuSounds: i.menuSounds, panelFrames: i.panelFrames, warModeFrames: i.warModeFrames))
         var state=try initial(catalog(rules:short)),memory=OriginalWarMenuMemory(),library: OriginalLibSurfaceText? = .init()
         var buffer=Buffer(),reached=false
         XCTAssertThrowsError(try run(&state,&memory,&library,&buffer,reached:&reached)) { XCTAssertTrue("\($0)".contains("War bitmap names: one per slot"),"\($0)") }
+        XCTAssertFalse(buffer.events.contains { $0.kind.hasPrefix("resource-") },"no resource before the check")
+    }
+    /// ENGINE_SPLIT E5f-4: BATTLEMODE's frames the setup writes come from the profile.
+    func testBattleModeFramesFollowTheProfile() throws {
+        func geometry(_ rules: OriginalGameRules,frames: Int) throws -> [Int32] {
+            var state=try initial(catalog(rules:rules)),memory=OriginalWarMenuMemory(),library: OriginalLibSurfaceText? = .init()
+            var buffer=Buffer(),reached=false
+            XCTAssertEqual(try run(&state,&memory,&library,&buffer,reached:&reached),.returned)
+            let mode=try XCTUnwrap(memory.bitmaps[UInt32(bitPattern:word(state,0x451bb0))])
+            let offsets=[0xc]+(0..<frames).flatMap { f in [0x10,0x7e0,0xfb0,0x1780].map { $0+4*f } }
+            return try offsets.map { try mode.storage.integer(at:$0,as:Int32.self) }
+        }
+        let n=NTSDProfile.rules,i=n.interface
+        XCTAssertEqual(try geometry(n,frames:2),[2,0,0,705,400,0,471,705,16])
+        func with(_ frames: [[Int32]]) -> OriginalGameRules {
+            n.with(interface:.init(frontBitmaps:i.frontBitmaps,frontSheets:i.frontSheets,interfaceBitmaps:i.interfaceBitmaps,commonSounds:i.commonSounds,
+                menuBitmaps:i.menuBitmaps,warBitmaps:i.warBitmaps,menuSounds:i.menuSounds,panelFrames:i.panelFrames,warModeFrames:frames))
+        }
+        XCTAssertEqual(try geometry(with([[1,2,3,4],[5,6,7,8],[9,10,11,12]]),frames:3),[3,1,2,3,4,5,6,7,8,9,10,11,12])
+        var state=try initial(catalog(rules:with([[Int32]](repeating:[0,0,1,1],count:501)))),memory=OriginalWarMenuMemory(),library: OriginalLibSurfaceText? = .init()
+        var buffer=Buffer(),reached=false
+        XCTAssertThrowsError(try run(&state,&memory,&library,&buffer,reached:&reached)) { XCTAssertTrue("\($0)".contains("BATTLEMODE frames: at most 500"),"\($0)") }
         XCTAssertFalse(buffer.events.contains { $0.kind.hasPrefix("resource-") },"no resource before the check")
     }
     func testWholeMenuRollsBackAfterLateDependencies() throws {

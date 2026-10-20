@@ -3,9 +3,10 @@ import XCTest
 @testable import NTSDCore
 import NTSDProfile
 
-/// ENGINE_SPLIT E5f-1/2a/2b/3: the front menu's bitmaps and rectangle sheets, the
-/// ENDING screen's sheet, the initial interface's bitmaps, the common WAVs, the
-/// menu's and War's bitmaps and the menu WAVs come from the game's `Interface`.
+/// ENGINE_SPLIT E5f-1/2a/2b/3/4: the front menu's bitmaps and rectangle sheets,
+/// the ENDING screen's sheet, the initial interface's bitmaps, the common WAVs,
+/// the menu's and War's bitmaps, the menu WAVs and the panel atlas come from the
+/// game's `Interface`.
 final class NTSDProfileInterfaceTests: XCTestCase {
     func zero(_ size: Int) throws -> OriginalStateRecord {
         try .init(bytes: [UInt8](repeating: 0, count: size), defined: [Bool](repeating: true, count: size))
@@ -13,7 +14,7 @@ final class NTSDProfileInterfaceTests: XCTestCase {
     let n = NTSDProfile.rules.interface
     func interface(names: [String]? = nil, sheets: [OriginalBitmapSheet]? = nil) -> OriginalGameRules.Interface {
         .init(frontBitmaps: names ?? n.frontBitmaps, frontSheets: sheets ?? n.frontSheets, interfaceBitmaps: n.interfaceBitmaps,
-              commonSounds: n.commonSounds, menuBitmaps: n.menuBitmaps, warBitmaps: n.warBitmaps, menuSounds: n.menuSounds)
+              commonSounds: n.commonSounds, menuBitmaps: n.menuBitmaps, warBitmaps: n.warBitmaps, menuSounds: n.menuSounds, panelFrames: n.panelFrames, warModeFrames: n.warModeFrames)
     }
     func testProfileSheetsAgreeWithTheEndingCapture() throws {
         // The ENDING oracle's declared frames (original-stage-ending.json): a copy of the same
@@ -126,9 +127,9 @@ final class NTSDProfileInterfaceTests: XCTestCase {
         _ = try firstSoundRead(n.commonSounds, effects: &effects); XCTAssertGreaterThan(effects, 0, "a valid list gets to its effects")
         let rules = NTSDProfile.rules
         XCTAssertNotEqual(rules, rules.with(profile: rules.profile, interface: .init(frontBitmaps: n.frontBitmaps, frontSheets: n.frontSheets,
-            interfaceBitmaps: names, commonSounds: n.commonSounds, menuBitmaps: n.menuBitmaps, warBitmaps: n.warBitmaps, menuSounds: n.menuSounds)))
+            interfaceBitmaps: names, commonSounds: n.commonSounds, menuBitmaps: n.menuBitmaps, warBitmaps: n.warBitmaps, menuSounds: n.menuSounds, panelFrames: n.panelFrames, warModeFrames: n.warModeFrames)))
         XCTAssertNotEqual(rules, rules.with(profile: rules.profile, interface: .init(frontBitmaps: n.frontBitmaps, frontSheets: n.frontSheets,
-            interfaceBitmaps: n.interfaceBitmaps, commonSounds: sounds, menuBitmaps: n.menuBitmaps, warBitmaps: n.warBitmaps, menuSounds: n.menuSounds)))
+            interfaceBitmaps: n.interfaceBitmaps, commonSounds: sounds, menuBitmaps: n.menuBitmaps, warBitmaps: n.warBitmaps, menuSounds: n.menuSounds, panelFrames: n.panelFrames, warModeFrames: n.warModeFrames)))
     }
     /// The character menu's resource load (flag 0x44d07c set) under these names: the
     /// first name it asks a source for, or its error.
@@ -150,9 +151,9 @@ final class NTSDProfileInterfaceTests: XCTestCase {
         XCTAssertEqual(try firstMenuRequest(Array(names.dropLast())), "\(OriginalStateError.invalidStorage("Menu resource names: one per slot"))")
         let rules = NTSDProfile.rules
         XCTAssertNotEqual(rules, rules.with(profile: rules.profile, interface: .init(frontBitmaps: n.frontBitmaps, frontSheets: n.frontSheets,
-            interfaceBitmaps: n.interfaceBitmaps, commonSounds: n.commonSounds, menuBitmaps: names, warBitmaps: n.warBitmaps, menuSounds: n.menuSounds)))
+            interfaceBitmaps: n.interfaceBitmaps, commonSounds: n.commonSounds, menuBitmaps: names, warBitmaps: n.warBitmaps, menuSounds: n.menuSounds, panelFrames: n.panelFrames, warModeFrames: n.warModeFrames)))
         XCTAssertNotEqual(rules, rules.with(profile: rules.profile, interface: .init(frontBitmaps: n.frontBitmaps, frontSheets: n.frontSheets,
-            interfaceBitmaps: n.interfaceBitmaps, commonSounds: n.commonSounds, menuBitmaps: n.menuBitmaps, warBitmaps: ["BATTLEMODE"], menuSounds: n.menuSounds)))
+            interfaceBitmaps: n.interfaceBitmaps, commonSounds: n.commonSounds, menuBitmaps: n.menuBitmaps, warBitmaps: ["BATTLEMODE"], menuSounds: n.menuSounds, panelFrames: n.panelFrames, warModeFrames: n.warModeFrames)))
     }
     /// The menu WAV load under these names with a failed DirectSoundCreate: the
     /// first name it binds, or its error, and the sound requests made before.
@@ -184,6 +185,43 @@ final class NTSDProfileInterfaceTests: XCTestCase {
         XCTAssertEqual(requests + stores, 0)
         let rules = NTSDProfile.rules
         XCTAssertNotEqual(rules, rules.with(profile: rules.profile, interface: .init(frontBitmaps: n.frontBitmaps, frontSheets: n.frontSheets,
-            interfaceBitmaps: n.interfaceBitmaps, commonSounds: n.commonSounds, menuBitmaps: n.menuBitmaps, warBitmaps: n.warBitmaps, menuSounds: names)))
+            interfaceBitmaps: n.interfaceBitmaps, commonSounds: n.commonSounds, menuBitmaps: n.menuBitmaps, warBitmaps: n.warBitmaps, menuSounds: names, panelFrames: n.panelFrames, warModeFrames: n.warModeFrames)))
+    }
+    /// The information panel's load (path "P", a live surface) under these frames:
+    /// the rectangle and count writes into the panel bitmap, or the error, and
+    /// the events before it.
+    func panelWrites(_ frames: [[Int32]]) throws -> ([[UInt32]], String?, Int) {
+        var globals = try zero(OriginalMatchPreparation.globalSize), loader = OriginalMenuPanelBitmap(), events: [OriginalMenuPanelBitmapEvent] = []
+        try globals.write(UInt8(ascii: "P"), at: 0x453d40-OriginalMatchPreparation.globalBase)
+        do {
+            _ = try loader.load(globals: &globals, frames: frames,
+                allocate: { OriginalInterfaceAllocation(address: 0x1000, backing: [UInt8](repeating: 0, count: 0x1f50)) },
+                source: { .init(path: $0, present: true, width: 794, height: 550) }, deviceResult: { (surface: 0x2000, colorKeyResult: 0) },
+                observe: { events.append($0) })
+        } catch { return ([], "\(error)", events.count) }
+        return (events.filter { $0.kind == "write" && $0.arguments[0] == 0x1000 }.map(\.arguments), nil, events.count)
+    }
+    func testPanelAndWarModeFrames() throws {
+        XCTAssertEqual(n.panelFrames.count, 11); XCTAssertEqual(n.warModeFrames, [[0, 0, 705, 400], [0, 471, 705, 16]])
+        func expected(_ frames: [[Int32]]) -> [[UInt32]] {
+            frames.enumerated().flatMap { frame, r in [0x10, 0x7e0, 0xfb0, 0x1780].enumerated().map { field, start in
+                [0x1000, UInt32(start+4*frame), 4, UInt32(bitPattern: r[field])] } } + [[0x1000, 0x0c, 4, UInt32(frames.count)]]
+        }
+        let ntsd = try panelWrites(n.panelFrames)
+        XCTAssertNil(ntsd.1); XCTAssertEqual(ntsd.0.count, 45); XCTAssertEqual(ntsd.0, expected(n.panelFrames))
+        var moved = n.panelFrames; moved[3] = [1, 2, 3, 4]; moved.append([5, 6, 7, 8])
+        let m = try panelWrites(moved)
+        XCTAssertNil(m.1); XCTAssertEqual(m.0.count, 49); XCTAssertEqual(m.0, expected(moved))
+        let tooMany = try panelWrites([[Int32]](repeating: [0, 0, 1, 1], count: 501))
+        XCTAssertEqual(tooMany.1, "\(OriginalStateError.invalidStorage("Menu panel bitmap: At most 500 atlas frames"))")
+        XCTAssertEqual(tooMany.2, 0, "no event before the check")
+        let rules = NTSDProfile.rules
+        func with(panel: [[Int32]], war: [[Int32]]) -> OriginalGameRules {
+            rules.with(profile: rules.profile, interface: .init(frontBitmaps: n.frontBitmaps, frontSheets: n.frontSheets, interfaceBitmaps: n.interfaceBitmaps,
+                commonSounds: n.commonSounds, menuBitmaps: n.menuBitmaps, warBitmaps: n.warBitmaps, menuSounds: n.menuSounds, panelFrames: panel, warModeFrames: war))
+        }
+        XCTAssertEqual(rules, with(panel: n.panelFrames, war: n.warModeFrames))
+        XCTAssertNotEqual(rules, with(panel: moved, war: n.warModeFrames))
+        XCTAssertNotEqual(rules, with(panel: n.panelFrames, war: [[0, 0, 705, 400]]))
     }
 }

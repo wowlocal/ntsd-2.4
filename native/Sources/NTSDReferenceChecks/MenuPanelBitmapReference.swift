@@ -1,5 +1,6 @@
 import Foundation
 import NTSDCore
+import NTSDProfile
 
 public enum MenuPanelBitmapReference {
     public struct Result {
@@ -64,7 +65,7 @@ public enum MenuPanelBitmapReference {
             guard i >= 2 || item.path == c.absentOriginalFiles[i].replacingOccurrences(of: "/",with: "\\") && item.resource?.present == false else { throw error("Original missing files") }
             for (j,b) in (Array(item.path.utf8)+[0]).enumerated() { try state.write(b,at: 0x453d40-OriginalMatchPreparation.globalBase+j) }
             var eventIndex = 0, allocationCount = 0, inputCount = 0, deviceCount = 0
-            let value = try loader.load(globals: &state,allocate: {
+            let value = try loader.load(globals: &state,frames: NTSDProfile.rules.interface.panelFrames,allocate: {
                 allocationCount += 1;result.allocations += 1
                 let a = item.allocation
                 if a.address == 0 {

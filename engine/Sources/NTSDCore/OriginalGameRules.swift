@@ -443,7 +443,10 @@ public struct OriginalGameRules: Equatable, Sendable {
     /// (OriginalMenuResourceLoading, one per slot), War's two (OriginalWarSetup,
     /// one per slot; the War-menu package) and the menu WAVs WinMain's input
     /// startup loads (OriginalMenuSoundStartup, one per destination from
-    /// 0x45560c), each list in load order.
+    /// 0x45560c), each list in load order; the information panel's atlas
+    /// rectangles WinMain's panel stage writes (OriginalMenuPanelBitmap) and
+    /// BATTLEMODE's War's setup writes (OriginalWarSetup), each frame x, y, width
+    /// and height, in frame order.
     public struct Interface: Equatable, Sendable {
         public let frontBitmaps: [String]
         public let frontSheets: [OriginalBitmapSheet]
@@ -453,11 +456,14 @@ public struct OriginalGameRules: Equatable, Sendable {
         /// and War's two (the War-menu package), in load order.
         public let menuBitmaps: [String], warBitmaps: [String]
         public let menuSounds: [String]
+        public let panelFrames: [[Int32]], warModeFrames: [[Int32]]
         public init(frontBitmaps: [String], frontSheets: [OriginalBitmapSheet], interfaceBitmaps: [String], commonSounds: [String],
-                    menuBitmaps: [String], warBitmaps: [String], menuSounds: [String]) {
+                    menuBitmaps: [String], warBitmaps: [String], menuSounds: [String], panelFrames: [[Int32]], warModeFrames: [[Int32]]) {
+            precondition((panelFrames + warModeFrames).allSatisfy { $0.count == 4 }, "A frame is x, y, width and height")
             self.frontBitmaps = frontBitmaps; self.frontSheets = frontSheets
             self.interfaceBitmaps = interfaceBitmaps; self.commonSounds = commonSounds
             self.menuBitmaps = menuBitmaps; self.warBitmaps = warBitmaps; self.menuSounds = menuSounds
+            self.panelFrames = panelFrames; self.warModeFrames = warModeFrames
         }
     }
     /// The character AI (OriginalCharacterAI): the IDs its target choice and fight test.

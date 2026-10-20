@@ -36,8 +36,8 @@ extension OriginalGameRules {
         weaponBreak: .init(fragments: [100: 5], fragmentObject: 999, highToss: OriginalIDSet([]), lowToss: OriginalIDSet([100]),
                            frames0: -1, frames10: 100, frames150: -1, frames20: -1, frames40: -1, frames54: -1, frame170: -1,
                            frame60: -1, frames70: -1, frames160: -1, frame174: OriginalIDSet([])),
-        // No engine test loads the front menu, the ENDING screen, the initial interface, the common WAVs, the menus or the menu WAVs.
-        interface: .init(frontBitmaps: [], frontSheets: [], interfaceBitmaps: [], commonSounds: [], menuBitmaps: [], warBitmaps: [], menuSounds: []),
+        // No engine test loads the front menu, the ENDING screen, the initial interface, the common WAVs, the menus, the menu WAVs, the panel or BATTLEMODE.
+        interface: .init(frontBitmaps: [], frontSheets: [], interfaceBitmaps: [], commonSounds: [], menuBitmaps: [], warBitmaps: [], menuSounds: [], panelFrames: [], warModeFrames: []),
         characterAI: .init(stageAllyBound: -1, healBall: -1, healers: OriginalIDSet([]), stateDanger: -1, frameDanger: -1,
                            pickupItems: OriginalIDRange(0..<0), pickupExtra: -1, soughtDrink: -1, avoidedDrink: -1, idleDefenders: [],
                            drinks: OriginalIDSet([]), rangedBand: OriginalIDSet([]), rangedJoiner: -1, meleeWeapons: OriginalIDSet([]),

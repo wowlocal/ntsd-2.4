@@ -18,8 +18,10 @@ public struct OriginalStartupPanel {
 
     /// All globals, bitmap generations, locals and output publish together.
     /// File/device callbacks supply data or stage effects until the caller commits.
+    /// `panelFrames`: the game's panel atlas rectangles (ENGINE_SPLIT E5f-4:
+    /// `Interface.panelFrames`), checked before any effect.
     @discardableResult
-    public mutating func run(globals: inout OriginalStateRecord,infoBytes: [UInt8]?,
+    public mutating func run(globals: inout OriginalStateRecord,panelFrames: [[Int32]],infoBytes: [UInt8]?,
         contentSource: (String) throws -> [UInt8]?,chunk: Int = 4096,infoReadFailAt: Int = -1,
         infoClose: Int32 = 0,contentClose: Int32 = 0,
         outputBacking: [UInt8],writeAvailable: Bool = true,
@@ -30,6 +32,7 @@ public struct OriginalStartupPanel {
         observe: (Observation) throws -> Void = { _ in },
         written: (Int,[UInt8]) throws -> Void = { _,_ in },
         afterChild: (UInt32,UInt32,OriginalStateRecord,OriginalStartupPanel) throws -> Void = { _,_,_,_ in }) throws -> UInt32 {
+        try OriginalMenuPanelBitmap.checkFrames(panelFrames)
         var state = globals,candidate = self
         func unknown(_ count: Int) throws -> OriginalStateRecord {
             try .init(bytes:[UInt8](repeating:0,count:count),defined:[Bool](repeating:false,count:count))
@@ -59,7 +62,7 @@ public struct OriginalStartupPanel {
             value = contentValue;candidate.contentLocal = content;try returned(0x43c780,value)
             if value != 0 {
                 try call(0x43cc60)
-                value = try candidate.panel.load(globals:&state,allocate:allocate,source:bitmapSource,deviceResult:deviceResult,observe:{ event in
+                value = try candidate.panel.load(globals:&state,frames:panelFrames,allocate:allocate,source:bitmapSource,deviceResult:deviceResult,observe:{ event in
                     if event.kind == "write",event.arguments[0] == 0 { let value = event.arguments[3];try written(Int(event.arguments[1]),(0..<Int(event.arguments[2])).map { UInt8(truncatingIfNeeded:value >> (8*$0)) }) }
                     try observe(.bitmap(event))
                 }) ? 1 : 0

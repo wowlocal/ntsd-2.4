@@ -283,7 +283,7 @@ final class OriginalWinMainStartupTests: XCTestCase {
             let p = try Adapter(c,r,sources:sources,blob:blob,initial:globals.bytes)
             try p.calendar(engine.output.calendar,c.before)
             do {
-                try engine.run(instance:c.spec.instance ?? 0x400000,show:c.spec.show ?? 10,globals:&globals, menuSounds: NTSDProfile.rules.interface.menuSounds,platform:p,store:p.store)
+                try engine.run(instance:c.spec.instance ?? 0x400000,show:c.spec.show ?? 10,globals:&globals, interface: NTSDProfile.rules.interface,platform:p,store:p.store)
                 XCTAssertEqual(c.end,"startupBoundary");XCTAssertEqual(c.endPC,0x43d100);XCTAssertEqual(c.endSP,0x1000effc)
                 try p.complete(engine,globals);whole += 1
             } catch let e as OriginalWinMainStartup.Boundary {
@@ -319,7 +319,7 @@ final class OriginalWinMainStartupTests: XCTestCase {
         for phase in ["window-return","panel-return","secondDate","output-return","fifthWave","after"] {
             var globals = try OriginalStateRecord(bytes:blob(c.initialGlobals),defined:[Bool](repeating:true,count:OriginalMatchPreparation.globalSize)),engine = OriginalWinMainStartup()
             let before = globals,prior = engine,p = try Adapter(c,r,sources:sources,blob:blob,initial:globals.bytes,fail:phase);var reached = false
-            do { try engine.run(instance:0x400000,show:10,globals:&globals, menuSounds: NTSDProfile.rules.interface.menuSounds,platform:p,store:p.store,after:{ _,_ in if phase == "after" { throw Trial.late } });XCTFail("Missing late error") }
+            do { try engine.run(instance:0x400000,show:10,globals:&globals, interface: NTSDProfile.rules.interface,platform:p,store:p.store,after:{ _,_ in if phase == "after" { throw Trial.late } });XCTFail("Missing late error") }
             catch Trial.late { reached = true }
             XCTAssertTrue(reached);XCTAssertEqual(globals,before);rollback(engine,prior)
         }

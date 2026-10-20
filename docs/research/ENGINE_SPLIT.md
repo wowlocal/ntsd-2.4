@@ -10,7 +10,7 @@ measurement from [TVOS_WEB](TVOS_WEB.md), [MEMORY_LOADING](MEMORY_LOADING.md) an
 engine from the game itself. to publish engine as the separate github repo";
 then, after the plan: "ok … when the plan is setteled start the loop in a
 separate branch" and "push automatically every step (on that new branch)".
-**Status:** E0–E3, E4a, E4b (all six hosts), E4c-1 (the engine's self-contained tests), E5a (the game profile's survey and design) and E5b (the record type, the copied tables out), E4c-1a (a nondeterministic engine test corrected) E5c-0 (the profile's plumbing, reflection), E5c-1a (one storage, the reflectors), E5c-1b (armour), E5c-1c (special interactions) and E5c-1d (impact) done; E5c-2a, E5c-2b and E5c-2c (the items family: the random and requested spawns, camera, links, the mission stage) E5c-2d (the roster family), E5c-2e (the modes family), E5c-2f (the match prelude) and E5c-2g (the mode label) done: E5c-2's menu and mode rows are in the profile; E5c-1e (physics), E5c-1f (drawing) and E5c-1g (the post-draw effects) and E5c-1h (the slot prefix, scheduler and round restore) and E5c-1i (the object input) and E5c-1j (A28, the input chain) done: every E5c row is in the profile; E5d-1a (the AI's target roles) and E5d-1b (its fight roles) done: every object-ID literal of the generic AI is in the profile; E5d-2 (the special-move hook) and E5d-3 (the 20 routines in the game) done: the AI's NTSD code is the game's; E5e (the coarse hooks) surveyed: roles, no new hook; E5e-1 (the ID-300 roles), E5e-2 (the mission pseudo-IDs), E5e-3 (War life), E5e-4 (fusion) and E5e-5 (the weapon break) done: every object-ID rule of the E5a table is the game's; E5f surveyed; E5f-1 (the front menu's names and rectangles, carried by the startup), E5f-2a (the interface and common sound names), E5f-2b (the menu and War names) and E5f-3 (the menu WAVs) done; E5f-4 next.
+**Status:** E0–E3, E4a, E4b (all six hosts), E4c-1 (the engine's self-contained tests), E5a (the game profile's survey and design) and E5b (the record type, the copied tables out), E4c-1a (a nondeterministic engine test corrected) E5c-0 (the profile's plumbing, reflection), E5c-1a (one storage, the reflectors), E5c-1b (armour), E5c-1c (special interactions) and E5c-1d (impact) done; E5c-2a, E5c-2b and E5c-2c (the items family: the random and requested spawns, camera, links, the mission stage) E5c-2d (the roster family), E5c-2e (the modes family), E5c-2f (the match prelude) and E5c-2g (the mode label) done: E5c-2's menu and mode rows are in the profile; E5c-1e (physics), E5c-1f (drawing) and E5c-1g (the post-draw effects) and E5c-1h (the slot prefix, scheduler and round restore) and E5c-1i (the object input) and E5c-1j (A28, the input chain) done: every E5c row is in the profile; E5d-1a (the AI's target roles) and E5d-1b (its fight roles) done: every object-ID literal of the generic AI is in the profile; E5d-2 (the special-move hook) and E5d-3 (the 20 routines in the game) done: the AI's NTSD code is the game's; E5e (the coarse hooks) surveyed: roles, no new hook; E5e-1 (the ID-300 roles), E5e-2 (the mission pseudo-IDs), E5e-3 (War life), E5e-4 (fusion) and E5e-5 (the weapon break) done: every object-ID rule of the E5a table is the game's; E5f surveyed; E5f-1 (the front menu's names and rectangles, carried by the startup), E5f-2a (the interface and common sound names), E5f-2b (the menu and War names), E5f-3 (the menu WAVs) and E5f-4 (the panel and BATTLEMODE rectangles) done; E4c-2 next.
 **Branch:** `exp/engine-split`, from `main` 380b448d. Worktree
 `/Volumes/NTSD-Builds/tasks/engine-split/worktree` (T7-backed APFS, see
 [BUILD_STORAGE_T7](BUILD_STORAGE_T7.md)). It tracks `origin/exp/engine-split`
@@ -158,7 +158,7 @@ A read-only survey of `native/` (three agents, 2026-10-18):
 | E2 | Content policy out of Core: the digest, count and EXE-SHA pins become the NTSD content identity the game passes; Core checks what it is given with the same checks and errors (2.8.3.3's content origin as the model, read only) | **done** ([evidence](../evidence/es-e2-content-identity.json)) |
 | E3 | Identity and Practice: user-data folder, wasm module, Android prefix/entry, queue/thread names, titles and messages become game configuration; Practice/Lab and its two checks move to the game side | **done**: E3a ([evidence](../evidence/es-e3a-practice.json)), E3b ([evidence](../evidence/es-e3b-game-identity.json)); diagnostic labels wait for D2 |
 | E4 | Two packages: `engine/Package.swift` (Core, Runtime, codecs, decoders, shims, host libraries, self-contained tests) and `native/Package.swift` depending on it by path; the unsafeFlags plan (SwiftPM rejects them in version-pinned dependencies) | E4a **done** ([evidence](../evidence/es-e4a-engine-package.json)); E4b: headless **done** ([evidence](../evidence/es-e4b1-headless-host.json)), browser **done** ([evidence](../evidence/es-e4b2-web-host.json)), SDL **done** ([evidence](../evidence/es-e4b3-sdl-host.json)), AppKit **done** ([evidence](../evidence/es-e4b4-appkit-host.json)), UIKit **done** ([evidence](../evidence/es-e4b5-uikit-host.json)), Android **done** ([evidence](../evidence/es-e4b6-android-host.json)); E4c-1 **done** ([evidence](../evidence/es-e4c1-engine-tests.json)), E4c-1a **done** ([evidence](../evidence/es-e4c1a-sorted-keys.json)); E4c-2 (split the 11 mixed test files, the War trio) queued |
-| E5 | Game profile: the ID sites (100 rows, about 125 branch points; first estimated ~90) and the AI dispatch behind a profile the game supplies; the engine defines the `0x44d000` record's layout and the game supplies `initial.bin`; the NTSD profile bit-exact (all gates plus the full fixture-driven suites); the API's fit with 2.8.3.3 checked read only | E5a **done** (survey and design, [evidence](../evidence/es-e5a-design.json)); E5b **done** ([evidence](../evidence/es-e5b-record-type.json)); E5c-0 **done** ([evidence](../evidence/es-e5c0-profile-plumbing.json)); E5c-1a **done** ([evidence](../evidence/es-e5c1a-reflector-roles.json)); E5c-1b **done** ([evidence](../evidence/es-e5c1b-armour-roles.json)); E5c-1c **done** ([evidence](../evidence/es-e5c1c-interaction-roles.json)); E5c-1d **done** ([evidence](../evidence/es-e5c1d-impact-roles.json)); E5c-2a **done** ([evidence](../evidence/es-e5c2a-items-roles.json)); E5c-2b **done** ([evidence](../evidence/es-e5c2b-camera-links-roles.json)); E5c-2c **done** ([evidence](../evidence/es-e5c2c-requested-mission-roles.json)); E5c-2d **done** ([evidence](../evidence/es-e5c2d-roster-roles.json)); E5c-2e **done** ([evidence](../evidence/es-e5c2e-modes-roles.json)); E5c-2f **done** ([evidence](../evidence/es-e5c2f-prelude-roles.json)); E5c-2g **done** ([evidence](../evidence/es-e5c2g-mode-label-roles.json)); E5c-1e **done** ([evidence](../evidence/es-e5c1e-physics-roles.json)); E5c-1f **done** ([evidence](../evidence/es-e5c1f-drawing-roles.json)); E5c-1g **done** ([evidence](../evidence/es-e5c1g-effects-roles.json)); E5c-1h **done** ([evidence](../evidence/es-e5c1h-lifecycle-roles.json)); E5c-1i **done** ([evidence](../evidence/es-e5c1i-object-input-roles.json)); E5c-1j **done** ([evidence](../evidence/es-e5c1j-input-roles.json)); E5d: [survey](../evidence/es-e5d-plumbing.md), E5d-1a **done** ([evidence](../evidence/es-e5d1a-ai-target-roles.json)), E5d-1b **done** ([evidence](../evidence/es-e5d1b-ai-fight-roles.json)), E5d-2 **done** ([evidence](../evidence/es-e5d2-ai-special-hook.json)), E5d-3 **done** ([evidence](../evidence/es-e5d3-ai-routines-in-game.json)); E5e: [survey](../evidence/es-e5e-plumbing.md), E5e-1 **done** ([evidence](../evidence/es-e5e1-id300-roles.json)), E5e-2 **done** ([evidence](../evidence/es-e5e2-mission-pseudo-ids.json)), E5e-3 **done** ([evidence](../evidence/es-e5e3-war-life.json)), E5e-4 **done** ([evidence](../evidence/es-e5e4-fusion.json)), E5e-5 **done** ([evidence](../evidence/es-e5e5-weapon-break.json)); E5f: [survey](../evidence/es-e5f-plumbing.md), E5f-1 **done** ([evidence](../evidence/es-e5f1-front-interface.json)), E5f-2a **done** ([evidence](../evidence/es-e5f2a-interface-sound-names.json)), E5f-2b **done** ([evidence](../evidence/es-e5f2b-menu-war-names.json)), E5f-3 **done** ([evidence](../evidence/es-e5f3-menu-sound-names.json)), E5f-4 next |
+| E5 | Game profile: the ID sites (100 rows, about 125 branch points; first estimated ~90) and the AI dispatch behind a profile the game supplies; the engine defines the `0x44d000` record's layout and the game supplies `initial.bin`; the NTSD profile bit-exact (all gates plus the full fixture-driven suites); the API's fit with 2.8.3.3 checked read only | E5a **done** (survey and design, [evidence](../evidence/es-e5a-design.json)); E5b **done** ([evidence](../evidence/es-e5b-record-type.json)); E5c-0 **done** ([evidence](../evidence/es-e5c0-profile-plumbing.json)); E5c-1a **done** ([evidence](../evidence/es-e5c1a-reflector-roles.json)); E5c-1b **done** ([evidence](../evidence/es-e5c1b-armour-roles.json)); E5c-1c **done** ([evidence](../evidence/es-e5c1c-interaction-roles.json)); E5c-1d **done** ([evidence](../evidence/es-e5c1d-impact-roles.json)); E5c-2a **done** ([evidence](../evidence/es-e5c2a-items-roles.json)); E5c-2b **done** ([evidence](../evidence/es-e5c2b-camera-links-roles.json)); E5c-2c **done** ([evidence](../evidence/es-e5c2c-requested-mission-roles.json)); E5c-2d **done** ([evidence](../evidence/es-e5c2d-roster-roles.json)); E5c-2e **done** ([evidence](../evidence/es-e5c2e-modes-roles.json)); E5c-2f **done** ([evidence](../evidence/es-e5c2f-prelude-roles.json)); E5c-2g **done** ([evidence](../evidence/es-e5c2g-mode-label-roles.json)); E5c-1e **done** ([evidence](../evidence/es-e5c1e-physics-roles.json)); E5c-1f **done** ([evidence](../evidence/es-e5c1f-drawing-roles.json)); E5c-1g **done** ([evidence](../evidence/es-e5c1g-effects-roles.json)); E5c-1h **done** ([evidence](../evidence/es-e5c1h-lifecycle-roles.json)); E5c-1i **done** ([evidence](../evidence/es-e5c1i-object-input-roles.json)); E5c-1j **done** ([evidence](../evidence/es-e5c1j-input-roles.json)); E5d: [survey](../evidence/es-e5d-plumbing.md), E5d-1a **done** ([evidence](../evidence/es-e5d1a-ai-target-roles.json)), E5d-1b **done** ([evidence](../evidence/es-e5d1b-ai-fight-roles.json)), E5d-2 **done** ([evidence](../evidence/es-e5d2-ai-special-hook.json)), E5d-3 **done** ([evidence](../evidence/es-e5d3-ai-routines-in-game.json)); E5e: [survey](../evidence/es-e5e-plumbing.md), E5e-1 **done** ([evidence](../evidence/es-e5e1-id300-roles.json)), E5e-2 **done** ([evidence](../evidence/es-e5e2-mission-pseudo-ids.json)), E5e-3 **done** ([evidence](../evidence/es-e5e3-war-life.json)), E5e-4 **done** ([evidence](../evidence/es-e5e4-fusion.json)), E5e-5 **done** ([evidence](../evidence/es-e5e5-weapon-break.json)); E5f: [survey](../evidence/es-e5f-plumbing.md), E5f-1 **done** ([evidence](../evidence/es-e5f1-front-interface.json)), E5f-2a **done** ([evidence](../evidence/es-e5f2a-interface-sound-names.json)), E5f-2b **done** ([evidence](../evidence/es-e5f2b-menu-war-names.json)), E5f-3 **done** ([evidence](../evidence/es-e5f3-menu-sound-names.json)), E5f-4 **done** ([evidence](../evidence/es-e5f4-panel-war-frames.json)) |
 | E6 | Classify each profile rule as LF2 2.0a or NTSD from the second reference; LF2 rules become the engine's default profile | needs D1 |
 | E7 | Engine stand-alone: the engine package builds alone (macOS, Linux container) and passes its tests with a from-scratch synthetic content pack; a scan finds no original bytes (files under `downloads/`, the resources, fixtures, `initial.bin`) | queued |
 | E8 | Publication: name, licence, a new repository with fresh history, a tag; this repository depends on it by revision; README credits | needs D2 and the user |
@@ -1661,6 +1661,71 @@ From a read-only survey ([report](../evidence/es-e5f-plumbing.md)).
   write; the input startup's test covers the shared check's error). The front
   resources' two lists (the access count) were reviewed in a second pass.
 
+### E5f-4 note (2026-10-21, reviewed with its change; done)
+
+- **Lists (into `Interface`).** `panelFrames` (the information panel's 11
+  atlas rectangles, `OriginalMenuPanelBitmap`, 43ccf2..43cf10) and
+  `warModeFrames` (BATTLEMODE's 2, `OriginalWarSetup`), each frame x, y,
+  width and height (`Interface.init` requires four values a frame, as
+  `OriginalBitmapSheet` does). Values only: the panel keeps its write order
+  (frame by frame, x/y/width/height, then the count, each write observed) with
+  the count now the list's length (11 for NTSD). BATTLEMODE's writes go to an
+  owned copy of the bitmap with no event or other effect between them
+  (between checkpoints 0x438d2a and 0x438da5; no write can throw: the storage
+  is 0x1f50 bytes, the count and fields checked) and the copy is committed
+  after them, so the original's order within a frame (x, y, height, width for
+  the first) is not observable; the engine writes frame by frame,
+  x/y/width/height, then the count (2 for NTSD). This departs from the
+  survey's plan ("the engine's write order kept"): keeping it would need an
+  NTSD-specific field order in the engine. The bytes are the same.
+- **Counts.** At most 500 frames (each rectangle array's room, 0x7d0 bytes):
+  `OriginalMenuPanelBitmap.checkFrames`, called by the loader after its extent
+  check, by `OriginalStartupPanel.run` first and by WinMain's startup with the
+  menu WAVs' check; War's setup beside its names' check, before the troop
+  initialisation. A declared error before any effect in each.
+- **Plumbing.** `OriginalMenuPanelBitmap.load(frames:)`,
+  `OriginalStartupPanel.run(panelFrames:)`; `OriginalWinMainStartup.run` now
+  takes the whole `interface:` (its menu WAVs and panel frames) instead of
+  E5f-3's `menuSounds:`; the bootstrap passes its rules' interface. War's setup
+  reads its catalog's `warModeFrames`.
+- **Access count.** 3,278 measured before the review. With the review's
+  four-fields check in `checkFrames` the gate's precheck measured 3,330 (52
+  more) and the gate did not start: WinMain's run was no longer inlined into
+  the bootstrap (3 accesses in it and its specialisation each) and the panel's
+  and menu info helpers' specialisations were duplicated (the info writer's
+  `save` three times instead of once); all startup code. Isolated by clean
+  builds: the pre-review trees again 3,278 (deterministic), the same trees
+  with only the check 3,330. Tried and measured without effect: a loop instead
+  of `allSatisfy`, and `@inline(never)` on `checkFrames` (that one together
+  with WinMain taking two lists instead of the `Interface`, so not isolated).
+  The check is dropped: a frame of other than four values traps at its first
+  missing field, as `Interface.init`'s precondition and `OriginalBitmapSheet`
+  do.
+- **Public surface.** The two `Interface` fields and init parameters (nine
+  lists now); `frames:`/`panelFrames:`/`interface:` above; `menuSounds:` on
+  WinMain's run replaced. Nine WinMain test calls and the bootstrap pass an
+  interface (the tests NTSD's), one startup panel test call and two reference
+  checks NTSD's panel frames.
+- **Tests.** `NTSDProfileInterfaceTests.testPanelAndWarModeFrames`: the lists;
+  the panel's whole rectangle and count write sequence (45 and 49 writes)
+  under NTSD's frames and a moved and longer list; the declared error for 501
+  frames with no event before it;
+  `==`. `OriginalWarSetupNativeTests.testBattleModeFramesFollowTheProfile`:
+  NTSD's geometry (2; 0, 0, 705, 400; 0, 471, 705, 16) as the replaced
+  literal wrote it, three moved frames (all three frames' offsets), the error
+  before any resource event.
+- **Review.** No change for NTSD (the 11 + 2 frames equal the removed
+  literals with x +0x10, y +0x7e0, width +0xfb0, height +0x1780; the panel's
+  write events unchanged; the BATTLEMODE departure accepted as recorded; every
+  check before its entry point's first effect; every caller updated).
+  Required: the WinMain call count. Adopted: the departure's record and its
+  checkpoint boundaries (an unsourced address dropped), the doc comment above
+  `@discardableResult`, whole write sequences and the third frame in the
+  tests. Adopted and then dropped: four fields checked in `checkFrames` (the
+  access count, above). Not adopted: a 501-frame `OriginalStartupPanel.run`
+  test (its check is the shared one, first in `run`). The review's warning to
+  re-check the access count held, though not for the `Interface` parameter.
+
 ## Ledger
 
 - 2026-10-18: plan agreed; branch `exp/engine-split` and its worktree created
@@ -2147,20 +2212,28 @@ From a read-only survey ([report](../evidence/es-e5f-plumbing.md)).
   with 84 tests; WASI vs identical; phone overlapping; Mac complete time
   apart 3 against 3 (the new build slower), overlapping 4 against 4.
   [Evidence](../evidence/es-e5f3-menu-sound-names.json).
+- 2026-10-21 E5f-4: the information panel's 11 atlas rectangles and
+  BATTLEMODE's 2 into `Interface` (frame lists), the panel's through WinMain's
+  startup (which now takes the `Interface`), BATTLEMODE's from War's catalog;
+  BATTLEMODE's unobservable field order within a frame not kept (recorded).
+  Reviewed (no behavioural change for NTSD). `swift_beginAccess` 3,278 before
+  the review; the review's four-field check gave 3,330 at the gate's precheck
+  (the gate did not start; isolated by clean builds) and was dropped. Gate
+  `es-e5f4` (second attempt): 11 scenarios, frames, AppKit, unchecked,
+  emulator, 20 clean launches, 29 suite runs, the engine's 110 tests,
+  3,278/3,406; 20 suites with 69 tests; WASI vs identical; Mac
+  overlapping; phone 3v2 render and process apart (slower), the 4v4 follow-up overlapping everywhere.
+  [Evidence](../evidence/es-e5f4-panel-war-frames.json).
 
 ## Next task
 
-E5f-4 (optional in the E5f note; survey [report](../evidence/es-e5f-plumbing.md)
-§1, §4): the panel atlas's 11 rectangles (`OriginalMenuPanelBitmap`, written at
-WinMain's panel stage) and BATTLEMODE's 2 (`OriginalWarSetup`) into
-`Interface` as frame lists, values only: the panel keeps its write order
-(frames, then x/y/width/height, the count after the frames) and its events;
-BATTLEMODE's writes go to an owned copy with no event between them (the
-original's field order within a frame is not observable; the review checks
-it). The panel's list reaches WinMain's startup from the bootstrap's rules
-(`OriginalWinMainStartup.run` may take the `Interface` instead of
-`menuSounds:`), BATTLEMODE's from War's catalog. Counts checked (at most 500
-frames, the arrays' room) before the loaders' effects. Tests: the lists equal
-NTSD's, a moved rectangle reaches the bitmap, the count error, `==`. Gates with
-the panel bitmap, panel update, startup panel, WinMain, War setup and front
-suites in gate3. Then E4c-2 and E7.
+E4c-2 (the E4 row; survey 2026-10-21, recorded with the step): split the ten
+mixed test files whose synthetic tests read no content (26 tests) into the
+engine's test target, the content-reading ones (17, plus
+`OriginalApplicationLoadingSessionTests`' three, which has none to split) stay
+in native under the same class names; `NTSDMusicDecoder` joins the engine's
+test target for the ALAC test; the engine's Corelibs lines follow. Counts:
+`swift test list` of both packages before and after, the union of
+class/test pairs unchanged. The War trio stays in native (since E5b it reads
+`initial.bin` and NTSD's profile; moving it would mean new tests on a
+synthetic War record), recorded. Then E7.

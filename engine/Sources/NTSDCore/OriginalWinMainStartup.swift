@@ -78,16 +78,18 @@ public struct OriginalWinMainStartup {
     /// All owned generations and globals commit together, after the fifth WAV.
     /// Unknown fullscreen hCursor is rejected before RegisterClass. Other opaque
     /// platform structure bytes retain false masks; only owned fields compare.
-    /// `menuSounds`: the game's menu WAVs (ENGINE_SPLIT E5f-3: `Interface.menuSounds`),
-    /// checked with the globals' extent, before any request or store.
-    public mutating func run(instance: UInt32,show: Int32,globals: inout OriginalStateRecord,menuSounds: [String],
+    /// `interface`: the game's interface data; its menu WAVs (ENGINE_SPLIT E5f-3) and
+    /// panel atlas (E5f-4) are checked with the globals' extent, before any request
+    /// or store.
+    public mutating func run(instance: UInt32,show: Int32,globals: inout OriginalStateRecord,interface: OriginalGameRules.Interface,
         platform p: any OriginalWinMainStartupPlatform,
         store: OriginalWindowInput.Store = { _,_ in },
         after: (OriginalWinMainStartup,OriginalStateRecord) throws -> Void = { _,_ in }) throws {
         guard globals.byteCount == OriginalMatchPreparation.globalSize else {
             throw OriginalStateError.invalidStorage("WinMain startup globals extent")
         }
-        try OriginalMenuSoundStartup.checkNames(menuSounds)
+        let menuSounds = interface.menuSounds, panelFrames = interface.panelFrames
+        try OriginalMenuSoundStartup.checkNames(menuSounds); try OriginalMenuPanelBitmap.checkFrames(panelFrames)
         var candidate = self,state = globals
         func write(_ address: Int,_ bytes: [UInt8]) throws {
             for (i,b) in bytes.enumerated() { try state.write(b,at:address-OriginalMatchPreparation.globalBase+i) }
@@ -110,7 +112,7 @@ public struct OriginalWinMainStartup {
         try p.observe(.stage("window-return",state))
         try p.observe(.stage("panel-entry",state))
         let io = p.panelIO
-        _ = try candidate.panel.run(globals:&state,infoBytes:p.file("data\\adinfo.txt"),contentSource:p.file,
+        _ = try candidate.panel.run(globals:&state,panelFrames:panelFrames,infoBytes:p.file("data\\adinfo.txt"),contentSource:p.file,
             chunk:io.chunk,infoReadFailAt:io.readFailAt,infoClose:io.infoClose,contentClose:io.contentClose,
             outputBacking:io.outputBacking,writeAvailable:io.writeAvailable,write:p.writePanel,close:p.closePanel,
             allocate:p.allocatePanel,bitmapSource:p.panelBitmap,deviceResult:p.panelDevice,

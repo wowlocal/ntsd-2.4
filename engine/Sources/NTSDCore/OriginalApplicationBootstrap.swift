@@ -150,7 +150,7 @@ public struct OriginalApplicationBootstrap {
             try prepare(staged)
             var owner = OriginalWinMainStartup()
             var globals = try Session.State.slice(initial,0,OriginalMatchPreparation.globalSize)
-            try owner.run(instance:instance,show:show,globals:&globals,menuSounds:rules.interface.menuSounds,platform:bridge,
+            try owner.run(instance:instance,show:show,globals:&globals,interface:rules.interface,platform:bridge,
                           store:{ try store(staged,$0,$1) })
             var bytes = initial.bytes,mask = initial.defined
             bytes.replaceSubrange(0..<globals.byteCount,with:globals.bytes)
