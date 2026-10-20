@@ -1,6 +1,7 @@
 import Foundation
 import XCTest
 @testable import NTSDCore
+import NTSDProfile
 @testable import NTSDReferenceChecks
 
 /// Test transport only. The existing character/selection comparators run inside
@@ -29,7 +30,7 @@ final class OriginalApplicationLoadedTestDriver {
     var core: A { host?.snapshot ?? original }
 
     init(application: A,initial: Ready? = nil) { host = nil;original = application;self.initial = initial }
-    init(host: H.Host) { self.host = host;original = A() }
+    init(host: H.Host) { self.host = host;original = A(rules: NTSDProfile.rules) }
     static func selected(_ reverse: Bool) throws -> OriginalApplicationLoadedTestDriver {
         let (app,ready) = try OriginalApplicationLoadedCharacterTests.selected(reverse)
         return .init(application:app,initial:ready)

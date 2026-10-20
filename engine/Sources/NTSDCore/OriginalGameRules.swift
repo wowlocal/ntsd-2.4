@@ -38,6 +38,19 @@ public struct OriginalIDFrames: Equatable, Sendable {
     public init(_ id: Int32, frames: ClosedRange<Int32>) { self.id = id; first = frames.lowerBound; last = frames.upperBound }
 }
 
+/// One bitmap's rectangle sheet (ENGINE_SPLIT E5f): the global slot that holds
+/// the bitmap and its frames' x, y, width and height, in the order they are
+/// written (x at +0x10, y at +0x7e0, width at +0xfb0, height at +0x1780, four
+/// bytes a frame; then the count at +0x0c).
+public struct OriginalBitmapSheet: Equatable, Sendable {
+    public let slot: Int
+    public let frames: [[Int32]]
+    public init(slot: Int, frames: [[Int32]]) {
+        precondition(frames.allSatisfy { $0.count == 4 }, "A frame is x, y, width and height")
+        self.slot = slot; self.frames = frames
+    }
+}
+
 /// A game's rules (ENGINE_SPLIT E5): the values the engine's passes test where
 /// the original tests object IDs, grouped by family. The game supplies them with
 /// its content identity; the AI's special moves travel with them as a code hook
@@ -419,6 +432,18 @@ public struct OriginalGameRules: Equatable, Sendable {
             self.frames70 = frames70; self.frames160 = frames160; self.frame174 = frame174
         }
     }
+    /// The game's interface data (ENGINE_SPLIT E5f): the front menu's bitmaps in
+    /// load order (one name per `OriginalFrontMenuResources.slots` entry; the
+    /// same name may appear twice) and the rectangle sheets it writes into the
+    /// first eleven of them at startup (OriginalFrontMenuResources), the ENDING
+    /// screen reading its sheet back (OriginalStageEnding).
+    public struct Interface: Equatable, Sendable {
+        public let frontBitmaps: [String]
+        public let frontSheets: [OriginalBitmapSheet]
+        public init(frontBitmaps: [String], frontSheets: [OriginalBitmapSheet]) {
+            self.frontBitmaps = frontBitmaps; self.frontSheets = frontSheets
+        }
+    }
     /// The character AI (OriginalCharacterAI): the IDs its target choice and fight test.
     /// The names follow the AI's own tests, not what the Objects are in the DAT.
     public struct CharacterAI: Equatable, Sendable {
@@ -502,15 +527,16 @@ public struct OriginalGameRules: Equatable, Sendable {
     private final class Roles: Sendable {
         let profile: String, reflection: Reflection, armour: Armour, interaction: Interaction, impact: Impact, items: Items, roster: Roster
         let modes: Modes, physics: Physics, drawing: Drawing, effects: Effects, lifecycle: Lifecycle, fusion: Fusion
-        let weaponBreak: WeaponBreak, characterAI: CharacterAI
+        let weaponBreak: WeaponBreak, interface: Interface, characterAI: CharacterAI
         let characterAISpecial: any OriginalCharacterAISpecial
         init(profile: String, reflection: Reflection, armour: Armour, interaction: Interaction, impact: Impact, items: Items, roster: Roster,
              modes: Modes, physics: Physics, drawing: Drawing, effects: Effects, lifecycle: Lifecycle, fusion: Fusion,
-             weaponBreak: WeaponBreak, characterAI: CharacterAI,
+             weaponBreak: WeaponBreak, interface: Interface, characterAI: CharacterAI,
              characterAISpecial: any OriginalCharacterAISpecial) {
             self.profile = profile; self.reflection = reflection; self.armour = armour; self.interaction = interaction; self.impact = impact
             self.items = items; self.roster = roster; self.modes = modes; self.physics = physics; self.drawing = drawing; self.effects = effects
-            self.lifecycle = lifecycle; self.fusion = fusion; self.weaponBreak = weaponBreak; self.characterAI = characterAI
+            self.lifecycle = lifecycle; self.fusion = fusion; self.weaponBreak = weaponBreak; self.interface = interface
+            self.characterAI = characterAI
             self.characterAISpecial = characterAISpecial
         }
     }
@@ -530,6 +556,7 @@ public struct OriginalGameRules: Equatable, Sendable {
     public var lifecycle: Lifecycle { roles.lifecycle }
     public var fusion: Fusion { roles.fusion }
     public var weaponBreak: WeaponBreak { roles.weaponBreak }
+    public var interface: Interface { roles.interface }
     public var characterAI: CharacterAI { roles.characterAI }
     /// The game's special moves: a code hook, compared by its type.
     public var characterAISpecial: any OriginalCharacterAISpecial { roles.characterAISpecial }
@@ -627,17 +654,19 @@ public struct OriginalGameRules: Equatable, Sendable {
     public var shortDasher: Int32 { roles.characterAI.shortDasher }
     public init(profile: String, reflection: Reflection, armour: Armour, interaction: Interaction, impact: Impact, items: Items,
                 roster: Roster, modes: Modes, physics: Physics, drawing: Drawing, effects: Effects, lifecycle: Lifecycle,
-                fusion: Fusion, weaponBreak: WeaponBreak, characterAI: CharacterAI, characterAISpecial: any OriginalCharacterAISpecial) {
+                fusion: Fusion, weaponBreak: WeaponBreak, interface: Interface, characterAI: CharacterAI,
+                characterAISpecial: any OriginalCharacterAISpecial) {
         roles = Roles(profile: profile, reflection: reflection, armour: armour, interaction: interaction, impact: impact, items: items,
                       roster: roster, modes: modes, physics: physics, drawing: drawing, effects: effects, lifecycle: lifecycle,
-                      fusion: fusion, weaponBreak: weaponBreak, characterAI: characterAI, characterAISpecial: characterAISpecial)
+                      fusion: fusion, weaponBreak: weaponBreak, interface: interface, characterAI: characterAI,
+                      characterAISpecial: characterAISpecial)
     }
     public static func == (a: Self, b: Self) -> Bool {
         a.roles === b.roles || (a.profile == b.profile && a.reflection == b.reflection && a.armour == b.armour && a.interaction == b.interaction
                                 && a.impact == b.impact && a.items == b.items && a.roster == b.roster
                                 && a.modes == b.modes && a.physics == b.physics
                                 && a.drawing == b.drawing && a.effects == b.effects && a.lifecycle == b.lifecycle && a.fusion == b.fusion
-                                && a.weaponBreak == b.weaponBreak
+                                && a.weaponBreak == b.weaponBreak && a.interface == b.interface
                                 && a.characterAI == b.characterAI
                                 && ObjectIdentifier(type(of: a.characterAISpecial)) == ObjectIdentifier(type(of: b.characterAISpecial)))
     }

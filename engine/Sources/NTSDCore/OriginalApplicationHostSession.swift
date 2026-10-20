@@ -116,7 +116,7 @@ public final class OriginalApplicationHostSession<Platform: OriginalApplicationS
     }
     private let lock = NSRecursiveLock()
     private var inFlight = false
-    private var application = Application()
+    private var application: Application
     /// The committed platform. Never changed in place: attempts stage a copy,
     /// and a delivery context may hold this object (A3 L5a), so a callback
     /// must not keep a supplied platform beyond its call.
@@ -126,7 +126,9 @@ public final class OriginalApplicationHostSession<Platform: OriginalApplicationS
     private var batches: [Batch] = []
     private var sequence: UInt64 = 0
 
-    public init(platform: Platform) throws { self.platform = try Self.copy(platform) }
+    public init(platform: Platform, rules: OriginalGameRules) throws {
+        self.platform = try Self.copy(platform); application = Application(rules: rules)
+    }
     private static func copy(_ platform: Platform) throws -> Platform {
         let staged = try platform.stagedCopy()
         guard staged !== platform else { throw Boundary.sharedPlatform }

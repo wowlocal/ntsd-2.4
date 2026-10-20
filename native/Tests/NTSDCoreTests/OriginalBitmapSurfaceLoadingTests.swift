@@ -1,6 +1,7 @@
 import Foundation
 import XCTest
 import NTSDCore
+import NTSDProfile
 @testable import NTSDReferenceChecks
 
 final class OriginalBitmapSurfaceLoadingTests: XCTestCase {
@@ -166,7 +167,7 @@ final class OriginalBitmapSurfaceLoadingTests: XCTestCase {
         var bootstrap: OriginalApplicationBootstrap? = nil
         var bitmapInputs: OriginalApplicationBitmapInputs? = nil
         var applicationGraphics: OriginalApplicationGraphics? = nil
-        var base: Loop.Context,front = OriginalFrontMenuResources(),graphics = Graphics()
+        var base: Loop.Context,front = OriginalFrontMenuResources(interface: NTSDProfile.rules.interface),graphics = Graphics()
         var settings: OriginalSettingsLoading.StartupResult? = nil, gameEntry: OriginalApplicationDispatchEntry.GameEntry? = nil
         var earlyScreen = OriginalFrontScreenPrelude()
         var screenBody: OriginalFrontScreenBody.StartupResult? = nil

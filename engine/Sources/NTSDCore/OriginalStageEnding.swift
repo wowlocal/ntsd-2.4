@@ -17,10 +17,10 @@ public enum OriginalStageEnding {
     }
 
     /// The ENDING wrapper's frame arrays as 424b45..424c98 write them at startup
-    /// from static PE constants (OriginalFrontMenuRectangles). No other writer of
-    /// these fields is known.
-    public static func endingSheet() throws -> OriginalStateRecord {
-        guard let sheet = OriginalFrontMenuRectangles.sheets.first(where: { $0.slot == 0x451190 }) else {
+    /// from static PE constants (the game's `Interface.frontSheets`). No other
+    /// writer of these fields is known.
+    public static func endingSheet(_ interface: OriginalGameRules.Interface) throws -> OriginalStateRecord {
+        guard let sheet = interface.frontSheets.first(where: { $0.slot == 0x451190 }) else {
             throw OriginalStateError.invalidStorage("Stage ending: ENDING sheet")
         }
         var record = try OriginalStateRecord(bytes: [UInt8](repeating: 0, count: 0x1f50), defined: [Bool](repeating: false, count: 0x1f50))

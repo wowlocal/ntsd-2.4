@@ -1,6 +1,7 @@
 import Foundation
 import XCTest
 import NTSDCore
+import NTSDProfile
 
 final class OriginalApplicationInputTests: XCTestCase {
     typealias S = OriginalApplicationInputSession
@@ -28,7 +29,7 @@ final class OriginalApplicationInputTests: XCTestCase {
     /// Controlled owner adapter tests need only full/memory. Empty front values
     /// do not claim a second application bootstrap or reconstructed draw owners.
     static func state(_ full: OriginalStateRecord,_ memory: OriginalMenuPresentationMemory) throws -> State {
-        try .init(full:full,memory:memory,front:.init(),frontSurfaces:[:],earlyScreen:.init(),
+        try .init(full:full,memory:memory,front:.init(interface: NTSDProfile.rules.interface),frontSurfaces:[:],earlyScreen:.init(),
                   libraryText:.init(),random:.init(state:1),screenBody:nil)
     }
     static func coherent(_ b: B,_ model: OriginalMatchPreparation,_ state: State) throws {

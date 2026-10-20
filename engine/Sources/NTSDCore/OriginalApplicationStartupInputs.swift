@@ -119,6 +119,8 @@ public struct OriginalApplicationStartupInputs: Equatable {
     public let bitmaps: [String:Bitmap]
     private let files: [String:[UInt8]]
     private let fileNames: Set<String>
+    /// The game's rules, from the content identity (ENGINE_SPLIT E5f-1).
+    public let rules: OriginalGameRules
 
     public static func bundled(in content: OriginalContentLocation) throws -> Self { try load(directory:bundledDirectory(in:content),identity:content.identity) }
     public static func bundledDirectory(in content: OriginalContentLocation) throws -> URL {
@@ -199,7 +201,7 @@ public struct OriginalApplicationStartupInputs: Equatable {
         }
         // The declared-absent files are known names that read as missing.
         let absent = identity.startup.absentFiles.map { $0.replacingOccurrences(of:"/",with:"\\") }
-        return .init(initial:initial,bitmaps:bitmaps,files:files,fileNames:Set(files.keys).union(absent))
+        return .init(initial:initial,bitmaps:bitmaps,files:files,fileNames:Set(files.keys).union(absent),rules:identity.rules)
     }
     public func file(_ name: String) throws -> [UInt8]? {
         guard fileNames.contains(name) else { throw Boundary.unsupportedName(name) }
@@ -210,7 +212,7 @@ public struct OriginalApplicationStartupInputs: Equatable {
     public func replacingFile(_ name: String,with bytes: [UInt8]?) throws -> Self {
         guard fileNames.contains(name) else { throw Boundary.unsupportedName(name) }
         var files = files;files[name] = bytes
-        return .init(initial:initial,bitmaps:bitmaps,files:files,fileNames:fileNames)
+        return .init(initial:initial,bitmaps:bitmaps,files:files,fileNames:fileNames,rules:rules)
     }
     /// Exactly the baseline control.txt CRLF-to-LF projection. General Windows
     /// text mode, Ctrl-Z, locale and live filesystem stream behavior remain open.

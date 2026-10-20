@@ -165,7 +165,7 @@ public enum OriginalCharacterScreen {
             let endingToken = UInt32(bitPattern:try word(0x451190)),backBuffer = UInt32(bitPattern:try word(0x455608))
             let drawGlobals = candidate.globals
             var ending = candidate
-            try OriginalStageEnding.advance(state:&ending,target:target,ending:OriginalStageEnding.endingSheet()) { e in
+            try OriginalStageEnding.advance(state:&ending,target:target,ending:OriginalStageEnding.endingSheet(rules.interface)) { e in
                 switch e {
                 case let .draw(x,y,frame,surface):
                     try draw(.init(bitmap:.menu(endingToken),x:x,y:y,target:surface,frame:frame,colorKey:0),drawGlobals)

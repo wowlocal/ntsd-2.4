@@ -94,7 +94,8 @@ extension Data {
         environment: OriginalMacRuntimeStartupService.Environment = .init(),maximumAttempts: Int = 2000,
         host: OriginalRuntimeStartupHost) throws -> Started {
         let inputs = try Self.inputs(package,overlay:overlay)
-        let driver = try Driver(platform:Platform(inputs:inputs,prepared:prepared(inputs)),instance:0x400000,show:10,initial:inputs.initial)
+        let driver = try Driver(platform:Platform(inputs:inputs,prepared:prepared(inputs)),instance:0x400000,show:10,initial:inputs.initial,
+                                rules:inputs.rules)
         let windows = OriginalRuntimeWindowBackend(instance:0x400000,host:host.windows)
         let windowService = OriginalMacWindowStartupService(driver:driver,backend:windows)
         // 3 GiB, clamped where Int has 32 bits (wasm32: 3<<30 wrapped negative

@@ -1,6 +1,7 @@
 import Foundation
 import XCTest
 import NTSDCore
+import NTSDProfile
 @testable import NTSDReferenceChecks
 
 final class OriginalApplicationDispatchEntryTests: XCTestCase {
@@ -102,7 +103,7 @@ final class OriginalApplicationDispatchEntryTests: XCTestCase {
                     let offset = Int(entry.worldAddress)-0x44d000
                     let world = try OriginalStateRecord(bytes:Array(full.bytes[offset..<offset+0x7d8]),defined:Array(full.defined[offset..<offset+0x7d8]))
                     XCTAssertEqual(world.bytes,[UInt8](repeating:0,count:0x7d8));XCTAssertEqual(world.bytes,try r.blob(c.worldEntry.bytes))
-                    var frontGlobals = try OriginalStateRecord(bytes:Array(full.bytes[..<0xb440]),defined:Array(full.defined[..<0xb440])),front = OriginalFrontMenuResources(),allocationObserved = false
+                    var frontGlobals = try OriginalStateRecord(bytes:Array(full.bytes[..<0xb440]),defined:Array(full.defined[..<0xb440])),front = OriginalFrontMenuResources(interface: NTSDProfile.rules.interface),allocationObserved = false
                     _ = try front.load(world:world,globals:&frontGlobals,allocate:{ index in
                         XCTAssertEqual(index,0);XCTAssertTrue(allocationObserved);try a.required();throw Stop.resourceRequired
                     },source:{ _,_ in XCTFail("Resource allocation has not returned");throw Stop.late },deviceResult:{ _ in XCTFail("Resource allocation has not returned");throw Stop.late },observe:{ event in

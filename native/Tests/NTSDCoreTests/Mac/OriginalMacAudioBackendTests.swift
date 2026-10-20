@@ -2,6 +2,7 @@ import AppKit
 import AVFAudio
 import XCTest
 @testable import NTSDCore
+import NTSDProfile
 @testable import NTSDMacPlatform
 @testable import NTSDRuntime
 @testable import NTSDReferenceChecks
@@ -157,7 +158,7 @@ import XCTest
         }
         // This ignored legacy value must not create the device or choose buffers.
         prepared.sound = .init(createResult:123,createdDevice:0xdeadbeef)
-        let driver = try Driver(platform:N(inputs:package,prepared:prepared),instance:0x400000,show:10,initial:initial)
+        let driver = try Driver(platform:N(inputs:package,prepared:prepared),instance:0x400000,show:10,initial:initial,rules: NTSDProfile.rules)
         let windows = OriginalMacWindowBackend(instance:0x400000),windowService = OriginalMacWindowStartupService(driver:driver,backend:windows)
         let display = OriginalMacDisplayBackend(windows:windows),displayService = OriginalMacDisplayStartupService(driver:driver,backend:display)
         let audio = B(windows:windows),service = S(backend:audio)

@@ -63,7 +63,9 @@ public struct OriginalApplicationBootstrap {
     }
     public private(set) var startup: OriginalWinMainStartup?
     public private(set) var session: Session?
-    public init() {}
+    /// The game's rules: the front menu's names and sheets (ENGINE_SPLIT E5f-1).
+    public let rules: OriginalGameRules
+    public init(rules: OriginalGameRules) { self.rules = rules }
 
     /// Every message/timer iteration commits independently. Failed first-menu
     /// work leaves startup and all previously delivered callbacks intact.
@@ -155,7 +157,7 @@ public struct OriginalApplicationBootstrap {
             mask.replaceSubrange(0..<globals.byteCount,with:globals.defined)
             let full = try OriginalStateRecord(bytes:bytes,defined:mask)
             let memory = OriginalMenuPresentationMemory(replayPointers:try Session.State.slice(full,0xb8a8,8))
-            var state = try Session.State(full:full,memory:memory,front:.init(),frontSurfaces:[:],
+            var state = try Session.State(full:full,memory:memory,front:.init(interface:rules.interface),frontSurfaces:[:],
                 earlyScreen:.init(),libraryText:.init(),random:owner.random,screenBody:nil)
             state.graphics = bridge.graphics
             let loop = try Session.Loop(baseline:owner.random.state,counter:full.integer(at:0xb580,as:UInt32.self))

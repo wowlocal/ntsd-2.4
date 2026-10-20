@@ -1,5 +1,6 @@
 import Foundation
 import NTSDCore
+import NTSDProfile
 
 /// Repeated outer calls select their own phases. Captured phases are assertions
 /// and platform inputs, never a program driving native control flow.
@@ -124,7 +125,7 @@ public enum FrontMenuLoopReference {
             ownWorld = world;ownGlobals = state;ownCRT = crt;ownMemory = memory
         }
         guard var world = ownWorld,var state = ownGlobals,var crt = ownCRT,var memory = ownMemory,var prefix = ownPrefix else { throw error("Missing native parent") }
-        var resources = OriginalFrontMenuResources()
+        var resources = OriginalFrontMenuResources(interface: NTSDProfile.rules.interface)
         var libraryText = result.parent.libraryText ?? OriginalLibSurfaceText()
         guard (result.parent.libraryText != nil) == libraryEnabled else { throw error("Library first-return route") }
         func records(_ expected: [Record],_ label: String) throws {

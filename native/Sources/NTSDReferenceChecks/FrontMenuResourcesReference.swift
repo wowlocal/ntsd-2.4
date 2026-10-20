@@ -1,5 +1,6 @@
 import Foundation
 import NTSDCore
+import NTSDProfile
 
 public enum FrontMenuResourcesReference {
     public struct Result {
@@ -33,7 +34,7 @@ public enum FrontMenuResourcesReference {
         onNatural: ((OriginalStateRecord,OriginalStateRecord,OriginalFrontMenuResources) throws -> Void)? = nil) throws -> Result {
         let c = try JSONDecoder().decode(Corpus.self,from: MatchPreparationReference.unpack(data,maximumCount: 256_000_000))
         guard c.exeSHA256 == "3f7ac67c5890ef979ee24a6dae5528056e7f631725c292cf9cb0a928ebeff71c", !c.cases.isEmpty,
-              Set(c.sources.map(\.path)) == Set(OriginalFrontMenuResources.paths), c.sources.count == 23 else { throw error("Source identity") }
+              Set(c.sources.map(\.path)) == Set(NTSDProfile.rules.interface.frontBitmaps), c.sources.count == 23 else { throw error("Source identity") }
         var result = Result(), blobs: [String:[UInt8]] = [:], normalized: [String:OriginalStateRecord] = [:], surfaces: [String:UInt32] = [:]
         func blob(_ key: String) throws -> [UInt8] {
             if let bytes = blobs[key] { return bytes }
@@ -71,7 +72,7 @@ public enum FrontMenuResourcesReference {
                   try record.integer(at: 8,as: Int32.self) == source.height else { throw error("DIB dimensions") }
             sourceByPath[source.path] = source;result.sources += 1
         }
-        var world = try OriginalStateRecord.worldPrefix(over: blob(c.worldBacking)), state = try globals(c.initialGlobals), loader = OriginalFrontMenuResources()
+        var world = try OriginalStateRecord.worldPrefix(over: blob(c.worldBacking)), state = try globals(c.initialGlobals), loader = OriginalFrontMenuResources(interface: NTSDProfile.rules.interface)
         try check(world,storage(c.initialWorld),"World constructor")
         let returns: [UInt32] = [0x4247a5,0x42482c,0x42486b,0x4248aa,0x4248e9,0x424928,0x424967,0x4249a6,0x4249e5,0x424a24,0x424a63,
                                   0x426bc2,0x426c05,0x426c44,0x426c86,0x426cc1,0x426d00,0x426d3f,0x426d7e,0x426db9,0x426df8,0x426e37,0x426e76,0x426eb5]

@@ -23,8 +23,8 @@ public final class OriginalApplicationWindowStartup<Platform: OriginalApplicatio
     private let initial: OriginalStateRecord, instance: UInt32, show: Int32
     private var inFlight = false
 
-    public init(platform: Platform, instance: UInt32, show: Int32, initial: OriginalStateRecord) throws {
-        host = try Host(platform: platform)
+    public init(platform: Platform, instance: UInt32, show: Int32, initial: OriginalStateRecord, rules: OriginalGameRules) throws {
+        host = try Host(platform: platform, rules: rules)
         self.instance = instance; self.show = show; self.initial = initial
     }
     private func locked<T>(_ body: () throws -> T) rethrows -> T {

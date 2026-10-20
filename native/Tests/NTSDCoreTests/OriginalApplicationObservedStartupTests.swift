@@ -1,6 +1,7 @@
 import Foundation
 import XCTest
 @testable import NTSDCore
+import NTSDProfile
 @testable import NTSDReferenceChecks
 
 extension OriginalApplicationPreparedStartupPlatformTests.Audit: OriginalApplicationObservedStartupPlatform {
@@ -119,7 +120,7 @@ final class OriginalApplicationObservedStartupTests: XCTestCase {
             bytes.replaceSubrange(0..<0xb440,with:before.bytes); mask.replaceSubrange(0..<0xb440,with:before.defined)
             let initial = try OriginalStateRecord(bytes:bytes,defined:mask)
             let p = try P.Adapter(c,r,sources:sources,blob:blob,initial:before.bytes)
-            let driver = try Driver(platform:audited(p,package),instance:c.spec.instance ?? 0x400000,show:c.spec.show ?? 10,initial:initial)
+            let driver = try Driver(platform:audited(p,package),instance:c.spec.instance ?? 0x400000,show:c.spec.show ?? 10,initial:initial,rules: NTSDProfile.rules)
             try p.calendar(OriginalWinMainStartup().output.calendar,c.before)
             let service = try Service(p,package)
             var attempted: P.Adapter?
@@ -132,7 +133,7 @@ final class OriginalApplicationObservedStartupTests: XCTestCase {
                 let batch = try XCTUnwrap(host.takeCommitted()); XCTAssertEqual(batch.sequence,1)
                 XCTAssertNil(try host.takeCommitted())
                 guard case .startup(let value) = batch.contents else { throw Stop.missingOutcome }
-                var reference = OriginalApplicationBootstrap(), referencePlatform = try p.stagedCopy()
+                var reference = OriginalApplicationBootstrap(rules: NTSDProfile.rules), referencePlatform = try p.stagedCopy()
                 let expected = try reference.start(instance:c.spec.instance ?? 0x400000,show:c.spec.show ?? 10,
                     initial:initial,platform:&referencePlatform,store:{ $0.store($1,$2) },beforeCommit:{ owner,session,candidate in
                         try candidate.complete(owner,self.globals(session))
@@ -194,7 +195,7 @@ final class OriginalApplicationObservedStartupTests: XCTestCase {
         for phase in ["window-return","panel-return","secondDate","output-return","fifthWave","after","publication-copy"] {
             let (p,initial) = try D().inputs(), service = try Service(p,package)
             let original = try audited(p,package)
-            let driver = try Driver(platform:original,instance:0x400000,show:10,initial:initial)
+            let driver = try Driver(platform:original,instance:0x400000,show:10,initial:initial,rules: NTSDProfile.rules)
             var reached = 0
             XCTAssertThrowsError(try drive(driver,p,service,prepare:{ $0.audit.fail = phase },before:{ owner,session,candidate in
                 try candidate.audit.complete(owner,self.globals(session))
@@ -223,14 +224,14 @@ final class OriginalApplicationObservedStartupTests: XCTestCase {
             XCTAssertEqual(try host.takeCommitted()?.sequence,1); XCTAssertNil(try host.takeCommitted())
         }
         let (p,initial) = try D().inputs()
-        let driver = try Driver(platform:audited(p,package),instance:0x400000,show:10,initial:initial)
+        let driver = try Driver(platform:audited(p,package),instance:0x400000,show:10,initial:initial,rules: NTSDProfile.rules)
         XCTAssertThrowsError(try driver.resume(prepare:{ _ in throw P.Trial.late })) { XCTAssertTrue($0 is P.Trial) }
         try unchanged(driver,p); XCTAssertTrue(driver.exchangeSnapshot.receipts.isEmpty)
         weak var weakOwner: Resource?
         func retainedContext() throws -> Host.DeliveryContext {
             let (p,initial) = try D().inputs(),service = try Service(p,package)
             let owner = Resource(); weakOwner = owner
-            let driver = try Driver(platform:audited(p,package),instance:0x400000,show:10,initial:initial)
+            let driver = try Driver(platform:audited(p,package),instance:0x400000,show:10,initial:initial,rules: NTSDProfile.rules)
             let host = try drive(driver,p,service,resources:{ [owner] })
             return try XCTUnwrap(host.takeCommitted()).context
         }
@@ -366,7 +367,7 @@ final class OriginalApplicationObservedStartupTests: XCTestCase {
         XCTAssertThrowsError(try Clock.answer(.panelClose)) { XCTAssertEqual($0 as? Clock.Boundary,.unsupportedRequest) }
         let package = try OriginalApplicationStartupInputsTests.shared.get(),(p,initial) = try D().inputs()
         let native = N(inputs:package,prepared:Self.constants(try Old().preparation(p)))
-        let driver = try OriginalApplicationObservedStartup(platform:native,instance:0x400000,show:10,initial:initial)
+        let driver = try OriginalApplicationObservedStartup(platform:native,instance:0x400000,show:10,initial:initial,rules: NTSDProfile.rules)
         let service = try Service(p,package)
         var milliseconds: UInt32?,filetime: UInt64?,windowCount = 0,clockReads = 0
         var attemptedClock: (UInt32,UInt64)?,reachedFailure = false

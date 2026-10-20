@@ -1,6 +1,7 @@
 import Foundation
 import XCTest
 @testable import NTSDCore
+import NTSDProfile
 @testable import NTSDReferenceChecks
 
 final class OriginalApplicationLoadedCycleTests: XCTestCase {
@@ -293,7 +294,7 @@ final class OriginalApplicationLoadedCycleTests: XCTestCase {
         }
         try Self.finish(&app,returned)
         XCTAssertThrowsError(try Self.finish(&app,returned))
-        XCTAssertThrowsError(try A().makeLoadedCycle(pending:pending))
+        XCTAssertThrowsError(try A(rules: NTSDProfile.rules).makeLoadedCycle(pending:pending))
         var foreign = try Session(state:XCTUnwrap(prior.session).state,loop:XCTUnwrap(prior.session).loop)
         XCTAssertThrowsError(try foreign.makeLoadedCycle(pending:pending))
         var tail: Void = ()

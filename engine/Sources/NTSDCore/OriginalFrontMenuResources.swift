@@ -18,12 +18,12 @@ public struct OriginalFrontMenuResourceResult: Codable, Equatable, Sendable {
 /// shared constructor and recovered resource metadata. Settings423480 and the
 /// later flag clear have not executed when this returns .settings.
 public struct OriginalFrontMenuResources {
-    public static let paths = ["LF2_CURSOR","MENU_CLIP","MENU_CLIP2","MENU_CLIP3","MENU_CLIP4","MENU_CLIP5","MENU_CLIP6","MENU_CLIP7","MENU_WAIT","SLOGAN","ENDING",
-                               "LF2_CURSOR","CS2","CS3","CS4","CS5","CS6","FRAME","WORDS0","WORDS1","WORDS2","WORDS3","WORDS4","WORDS5"]
     public static let slots = [0x451170,0x4511a0,0x451168,0x451178,0x45116c,0x45117c,0x4511a4,0x451188,0x45118c,0x45119c,0x451190,
                                0x451198,0x451174,0x451164,0x451184,0x451194,0x451180,0x4511a8,0x44faf4,0x44f888,0x44fcbc,0x44fb68,0x44faf8,0x44fd80]
     public private(set) var bitmaps: [UInt32:OriginalLoadedBitmap] = [:]
-    public init() {}
+    /// The game's names and rectangle sheets (ENGINE_SPLIT E5f-1).
+    public let interface: OriginalGameRules.Interface
+    public init(interface: OriginalGameRules.Interface) { self.interface = interface }
 
     @discardableResult
     public mutating func load(world: OriginalStateRecord, globals: inout OriginalStateRecord,
@@ -34,6 +34,13 @@ public struct OriginalFrontMenuResources {
                               observe: (OriginalFrontMenuEvent) throws -> Void = { _ in }) throws -> OriginalFrontMenuResourceResult {
         let base = OriginalMatchPreparation.globalBase
         guard globals.byteCount == OriginalMatchPreparation.globalSize else { throw OriginalStateError.invalidStorage("Front menu globals extent") }
+        let paths = interface.frontBitmaps, sheets = interface.frontSheets
+        // Checked before any effect: one name per slot; each sheet in one of the
+        // first eleven slots, at most once, with at most 500 frames (the x array's room).
+        guard paths.count == Self.slots.count, Set(sheets.map(\.slot)).count == sheets.count,
+              sheets.allSatisfy({ Self.slots[0..<11].contains($0.slot) && $0.frames.count <= 500 }) else {
+            throw OriginalStateError.invalidStorage("Front menu interface: one name per slot, sheets in the first eleven")
+        }
         let selector = try world.integer(at: 0,as: Int32.self)
         guard selector != 1 && selector != 2 else { throw OriginalStateError.invalidStorage("Front menu World dispatch requires its other branch") }
         var state = globals, candidate = self
@@ -54,7 +61,7 @@ public struct OriginalFrontMenuResources {
         let device = try state.integer(at: 0x457578-base,as: UInt32.self)
         func construct(_ index: Int) throws {
             try observe(.init(.allocate,[0x1f50]))
-            let allocation = try allocate(index), path = Self.paths[index]
+            let allocation = try allocate(index), path = paths[index]
             addresses.append(allocation.address)
             if allocation.address == 0 { loaded.append(nil) }
             else {
@@ -87,7 +94,7 @@ public struct OriginalFrontMenuResources {
             try observe(.init(.write,[addresses[index],UInt32(offset),4,UInt32(bitPattern: value)]))
         }
         for index in 0..<11 { try construct(index) }
-        for sheet in OriginalFrontMenuRectangles.sheets {
+        for sheet in sheets {
             let index = Self.slots.firstIndex(of: sheet.slot)!
             guard loaded[index] != nil else { return finish(.nullBitmap,slot: sheet.slot) }
             for (frame,rectangle) in sheet.frames.enumerated() {

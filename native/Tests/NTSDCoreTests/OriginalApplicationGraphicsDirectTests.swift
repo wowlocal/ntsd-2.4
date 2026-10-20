@@ -1,6 +1,7 @@
 import Foundation
 import XCTest
 @testable import NTSDCore
+import NTSDProfile
 
 /// Blt and fill commands built directly (CORE_REALTIME tier 3 G3a) equal
 /// `consume`'s: the same command or the same error, the owner unchanged.
@@ -111,7 +112,7 @@ final class OriginalApplicationGraphicsDirectTests: XCTestCase {
         bytes[0xb580] = 58
         let mask = [Bool](repeating: true, count: 0xc3a8), full = try OriginalStateRecord(bytes: bytes, defined: mask)
         let pointers = try OriginalStateRecord(bytes: Array(bytes[0xb8a8..<0xb8b0]), defined: Array(mask[0xb8a8..<0xb8b0]))
-        var state = try Session.State(full: full, memory: .init(replayPointers: pointers), front: .init(), frontSurfaces: [:],
+        var state = try Session.State(full: full, memory: .init(replayPointers: pointers), front: .init(interface: NTSDProfile.rules.interface), frontSurfaces: [:],
                                       earlyScreen: .init(), libraryText: .init(), random: .init(), screenBody: nil)
         XCTAssertNil(state.graphics)
         let blit = OriginalBitmapBlit(sourceSurface: 0, targetSurface: 3, source: [0, 0, 2, 2], destination: [0, 0, 2, 2],

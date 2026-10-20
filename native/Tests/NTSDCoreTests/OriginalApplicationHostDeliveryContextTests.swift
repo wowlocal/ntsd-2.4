@@ -1,6 +1,7 @@
 import Foundation
 import XCTest
 @testable import NTSDCore
+import NTSDProfile
 
 final class OriginalApplicationHostDeliveryContextTests: XCTestCase {
     typealias B = OriginalApplicationBootstrapTests
@@ -147,9 +148,9 @@ final class OriginalApplicationHostDeliveryContextTests: XCTestCase {
 
     func testDelayedStartupAndIterationsKeepTheirOwnStateAndOrder() throws {
         let (p,initial) = try inputs()
-        var reference = A(),referencePlatform = try p.stagedCopy()
+        var reference = A(rules: NTSDProfile.rules),referencePlatform = try p.stagedCopy()
         let expected = try reference.start(instance:0x400000,show:10,initial:initial,platform:&referencePlatform,store:{ $0.store($1,$2) })
-        let host = try Host(platform:p)
+        let host = try Host(platform:p,rules: NTSDProfile.rules)
         XCTAssertEqual(try start(host,initial),1)
         let down = try key(host,0x100),up = try key(host,0x101)
         XCTAssertEqual(down.0,2);XCTAssertEqual(up.0,3);XCTAssertEqual(host.pendingBatchCount,3)
@@ -175,7 +176,7 @@ final class OriginalApplicationHostDeliveryContextTests: XCTestCase {
 
     func testStartupCopyFailuresLeaveNoPublicationAndRetryOnce() throws {
         for failure in [CopyFailure.throwing,.shared] {
-            let (p,initial) = try inputs(),host = try Host(platform:p)
+            let (p,initial) = try inputs(),host = try Host(platform:p,rules: NTSDProfile.rules)
             var callbacks = 0,reached = false
             XCTAssertThrowsError(try start(host,initial,before:{ owner,_,candidate in
                 reached = true;XCTAssertEqual(owner.input?.sounds.loads.count,5);self.arm(candidate,failure)
@@ -195,7 +196,7 @@ final class OriginalApplicationHostDeliveryContextTests: XCTestCase {
     }
 
     func testIterationCopyFailuresPreserveEarlierBatchesAndSamePacketRetry() throws {
-        let (p,initial) = try inputs(),host = try Host(platform:p)
+        let (p,initial) = try inputs(),host = try Host(platform:p,rules: NTSDProfile.rules)
         try start(host,initial);let first = try key(host,0x100)
         let before = host.snapshot,platform = try host.platformSnapshot()
         for failure in [CopyFailure.throwing,.shared] {
@@ -286,7 +287,7 @@ final class OriginalApplicationHostDeliveryContextTests: XCTestCase {
 
     func testContextsOutliveHostAndInspectionCopiesDoNotChangeOwners() throws {
         let (p,initial) = try inputs()
-        var host: Host? = try Host(platform:p);weak var weakHost = host
+        var host: Host? = try Host(platform:p,rules: NTSDProfile.rules);weak var weakHost = host
         try start(XCTUnwrap(host),initial)
         let batch = try XCTUnwrap(host?.takeCommitted()),before = batch.context.application
         host = nil;XCTAssertNil(weakHost)

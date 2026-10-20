@@ -1,6 +1,7 @@
 import Foundation
 import XCTest
 @testable import NTSDCore
+import NTSDProfile
 @testable import NTSDReferenceChecks
 
 final class OriginalApplicationPreparedStartupPlatformTests: XCTestCase {
@@ -183,7 +184,7 @@ final class OriginalApplicationPreparedStartupPlatformTests: XCTestCase {
             bytes.replaceSubrange(0..<0xb440,with:before.bytes); mask.replaceSubrange(0..<0xb440,with:before.defined)
             let initial = try OriginalStateRecord(bytes:bytes,defined:mask)
             let p = try P.Adapter(c,r,sources:sources,blob:blob,initial:before.bytes)
-            let driver = try Driver(platform:audited(p,package),instance:c.spec.instance ?? 0x400000,show:c.spec.show ?? 10,initial:initial)
+            let driver = try Driver(platform:audited(p,package),instance:c.spec.instance ?? 0x400000,show:c.spec.show ?? 10,initial:initial,rules: NTSDProfile.rules)
             try p.calendar(OriginalWinMainStartup().output.calendar,c.before)
             var attempted: P.Adapter?
             do {
@@ -195,7 +196,7 @@ final class OriginalApplicationPreparedStartupPlatformTests: XCTestCase {
                 let batch = try XCTUnwrap(host.takeCommitted()); XCTAssertEqual(batch.sequence,1)
                 XCTAssertNil(try host.takeCommitted())
                 guard case .startup(let value) = batch.contents else { throw Stop.missingOutcome }
-                var reference = OriginalApplicationBootstrap(), referencePlatform = try p.stagedCopy()
+                var reference = OriginalApplicationBootstrap(rules: NTSDProfile.rules), referencePlatform = try p.stagedCopy()
                 let expected = try reference.start(instance:c.spec.instance ?? 0x400000,show:c.spec.show ?? 10,
                     initial:initial,platform:&referencePlatform,store:{ $0.store($1,$2) },beforeCommit:{ owner,session,candidate in
                         try candidate.complete(owner,self.globals(session))
@@ -255,7 +256,7 @@ final class OriginalApplicationPreparedStartupPlatformTests: XCTestCase {
         for phase in ["window-return","panel-return","secondDate","output-return","fifthWave","after","publication-copy"] {
             let (p,initial) = try D().inputs()
             let original = try audited(p,package)
-            let driver = try Driver(platform:original,instance:0x400000,show:10,initial:initial)
+            let driver = try Driver(platform:original,instance:0x400000,show:10,initial:initial,rules: NTSDProfile.rules)
             var reached = 0
             XCTAssertThrowsError(try drive(driver,p,prepare:{ $0.audit.fail = phase },before:{ owner,session,candidate in
                 try candidate.audit.complete(owner,self.globals(session)); try candidate.native.validatePreparedConsumption()
@@ -284,7 +285,7 @@ final class OriginalApplicationPreparedStartupPlatformTests: XCTestCase {
         do {
             let (p,initial) = try D().inputs()
             let original = try audited(p,package)
-            let driver = try Driver(platform:original,instance:0x400000,show:10,initial:initial)
+            let driver = try Driver(platform:original,instance:0x400000,show:10,initial:initial,rules: NTSDProfile.rules)
             XCTAssertThrowsError(try driver.resume(prepare:{ candidate in
                 _ = try candidate.native.milliseconds(); throw P.Trial.late
             })) { XCTAssertTrue($0 is P.Trial) }
@@ -298,7 +299,7 @@ final class OriginalApplicationPreparedStartupPlatformTests: XCTestCase {
         weak var weakOwner: Resource?
         func make() throws -> Driver {
             let owner = Resource(); weakOwner = owner
-            return try Driver(platform:audited(p,package,retaining:[owner]),instance:0x400000,show:10,initial:initial)
+            return try Driver(platform:audited(p,package,retaining:[owner]),instance:0x400000,show:10,initial:initial,rules: NTSDProfile.rules)
         }
         var driver: Driver? = try make()
         var host: Host? = try drive(XCTUnwrap(driver),p,before:{ owner,session,candidate in
@@ -317,7 +318,7 @@ final class OriginalApplicationPreparedStartupPlatformTests: XCTestCase {
         weak var weakOwner: Resource?
         func run() throws {
             let owner = Resource(); weakOwner = owner
-            let driver = try Driver(platform:audited(p,package,retaining:[owner]),instance:0x400000,show:10,initial:initial)
+            let driver = try Driver(platform:audited(p,package,retaining:[owner]),instance:0x400000,show:10,initial:initial,rules: NTSDProfile.rules)
             let host = try drive(driver,p)
             var batch = try host.takeCommitted()
             XCTAssertNotNil(weakOwner); batch = nil

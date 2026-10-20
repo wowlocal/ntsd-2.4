@@ -1,6 +1,7 @@
 import Foundation
 import XCTest
 import NTSDCore
+import NTSDProfile
 
 final class OriginalApplicationHostSessionTests: XCTestCase {
     typealias Parent = OriginalWinMainStartupTests
@@ -14,7 +15,7 @@ final class OriginalApplicationHostSessionTests: XCTestCase {
     /// all whole-parent comparators remain in their original test composers.
     final class Application {
         let useHost: Bool, controls: Bool
-        private var original = A()
+        private var original = A(rules: NTSDProfile.rules)
         private(set) var host: Host?
         init(useHost: Bool, controls: Bool = false) { self.useHost = useHost; self.controls = controls }
         var core: A { host?.snapshot ?? original }
@@ -29,7 +30,7 @@ final class OriginalApplicationHostSessionTests: XCTestCase {
                 return try original.start(instance:instance,show:show,initial:initial,platform:&platform,
                     store:store,beforeCommit:beforeCommit,failedAttempt:failedAttempt)
             }
-            if host == nil { host = try Host(platform:platform) }
+            if host == nil { host = try Host(platform:platform,rules: NTSDProfile.rules) }
             let driver = try XCTUnwrap(host)
             if controls {
                 XCTAssertThrowsError(try driver.start(instance:instance,show:show,initial:initial,store:store,
@@ -166,7 +167,7 @@ final class OriginalApplicationHostSessionTests: XCTestCase {
         let package = try OriginalApplicationStartupInputsTests.shared.get(),initial = package.initial
         for phase in ["window-return","panel-return","secondDate","output-return","fifthWave","after"] {
             let p = try Parent.Adapter(c,raw,sources:sources,blob:br.blob,initial:Array(initial.bytes[..<0xb440]),fail:phase,startupInputs:package)
-            let driver = try Host(platform:p)
+            let driver = try Host(platform:p,rules: NTSDProfile.rules)
             XCTAssertThrowsError(try driver.start(instance:0x400000,show:10,initial:initial,store:{ $0.store($1,$2) },
                 beforeCommit:{ _,_,_ in if phase == "after" { throw Parent.Trial.late } })) {
                 XCTAssertTrue($0 is Parent.Trial)
@@ -177,7 +178,7 @@ final class OriginalApplicationHostSessionTests: XCTestCase {
             XCTAssertEqual(snapshot.index,0); XCTAssertEqual(snapshot.waves,0); XCTAssertEqual(snapshot.shadow,Array(initial.bytes[..<0xb440]))
             XCTAssertEqual(p.index,0); XCTAssertEqual(p.waves,0)
             p.hostShareCopies = true
-            XCTAssertThrowsError(try Host(platform:p)) { XCTAssertEqual($0 as? Host.Boundary,.sharedPlatform) }
+            XCTAssertThrowsError(try Host(platform:p,rules: NTSDProfile.rules)) { XCTAssertEqual($0 as? Host.Boundary,.sharedPlatform) }
         }
     }
 }

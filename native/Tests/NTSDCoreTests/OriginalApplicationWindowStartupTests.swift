@@ -1,6 +1,7 @@
 import Foundation
 import XCTest
 @testable import NTSDCore
+import NTSDProfile
 @testable import NTSDReferenceChecks
 
 extension OriginalWinMainStartupTests.Adapter: OriginalApplicationWindowStartupPlatform {}
@@ -17,7 +18,7 @@ final class OriginalApplicationWindowStartupTests: XCTestCase {
 
     func fresh() throws -> (Driver,P.Adapter,OriginalStateRecord) {
         let (p,initial) = try D().inputs()
-        return (try Driver(platform:p,instance:0x400000,show:10,initial:initial),p,initial)
+        return (try Driver(platform:p,instance:0x400000,show:10,initial:initial,rules: NTSDProfile.rules),p,initial)
     }
     func globals(_ session: Host.Session) throws -> OriginalStateRecord {
         try .init(bytes:Array(session.state.full.bytes[..<0xb440]),defined:Array(session.state.full.defined[..<0xb440]))
@@ -76,7 +77,7 @@ final class OriginalApplicationWindowStartupTests: XCTestCase {
             bytes.replaceSubrange(0..<0xb440,with:before.bytes); mask.replaceSubrange(0..<0xb440,with:before.defined)
             let initial = try OriginalStateRecord(bytes:bytes,defined:mask)
             let p = try P.Adapter(c,r,sources:sources,blob:blob,initial:before.bytes)
-            let driver = try Driver(platform:p,instance:c.spec.instance ?? 0x400000,show:c.spec.show ?? 10,initial:initial)
+            let driver = try Driver(platform:p,instance:c.spec.instance ?? 0x400000,show:c.spec.show ?? 10,initial:initial,rules: NTSDProfile.rules)
             try p.calendar(OriginalWinMainStartup().output.calendar,c.before)
             var attempted: P.Adapter?
             do {
@@ -88,7 +89,7 @@ final class OriginalApplicationWindowStartupTests: XCTestCase {
                 let batch = try XCTUnwrap(host.takeCommitted()); XCTAssertEqual(batch.sequence,1)
                 XCTAssertNil(try host.takeCommitted())
                 guard case .startup(let value) = batch.contents else { throw Stop.missingOutcome }
-                var reference = OriginalApplicationBootstrap(), referencePlatform = try p.stagedCopy()
+                var reference = OriginalApplicationBootstrap(rules: NTSDProfile.rules), referencePlatform = try p.stagedCopy()
                 let expected = try reference.start(instance:c.spec.instance ?? 0x400000,show:c.spec.show ?? 10,
                     initial:initial,platform:&referencePlatform,store:{ $0.store($1,$2) },beforeCommit:{ owner,session,candidate in
                         try candidate.complete(owner,self.globals(session))
@@ -253,7 +254,7 @@ final class OriginalApplicationWindowStartupTests: XCTestCase {
         let (p,initial) = try D().inputs()
         weak var weakResource: Resource?
         func completed() throws -> Host.Batch {
-            var driver: Driver? = try Driver(platform:p,instance:0x400000,show:10,initial:initial)
+            var driver: Driver? = try Driver(platform:p,instance:0x400000,show:10,initial:initial,rules: NTSDProfile.rules)
             var resource: Resource? = Resource(); weakResource = resource
             let host = try drive(XCTUnwrap(driver),p,retaining:[try XCTUnwrap(resource)])
             let batch = try XCTUnwrap(host.takeCommitted()); XCTAssertEqual(batch.sequence,1)
@@ -272,7 +273,7 @@ final class OriginalApplicationWindowStartupTests: XCTestCase {
         XCTAssertEqual(try batch?.context.platformSnapshot().windowExchange?.position,p.c.events.filter { $0.kind == "window" }.count)
         batch = nil; XCTAssertNil(weakResource)
 
-        var cancelled: Driver? = try Driver(platform:p,instance:0x400000,show:10,initial:initial)
+        var cancelled: Driver? = try Driver(platform:p,instance:0x400000,show:10,initial:initial,rules: NTSDProfile.rules)
         guard case .request(let permit) = try XCTUnwrap(cancelled).resume(store:{ $0.store($1,$2) }) else { throw Stop.missingOutcome }
         var late: Resource? = Resource(); weak var weakLate = late
         try cancelled?.cancel(); try cancelled?.answer(permit,response:reply(p,permit),retaining:[try XCTUnwrap(late)])

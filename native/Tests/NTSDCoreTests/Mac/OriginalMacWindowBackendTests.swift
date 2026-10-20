@@ -2,6 +2,7 @@ import Foundation
 import AppKit
 import XCTest
 @testable import NTSDCore
+import NTSDProfile
 @testable import NTSDMacPlatform
 @testable import NTSDRuntime
 
@@ -57,7 +58,7 @@ import XCTest
         _ = NSApplication.shared
         let package = try OriginalApplicationStartupInputsTests.shared.get(),(p,initial) = try D().inputs()
         let native = N(inputs:package,prepared:Observed.constants(try Old().preparation(p)))
-        let driver = try Driver(platform:native,instance:0x400000,show:10,initial:initial)
+        let driver = try Driver(platform:native,instance:0x400000,show:10,initial:initial,rules: NTSDProfile.rules)
         let backend = Backend(instance:0x400000)
         return (driver,Service(driver:driver,backend:backend),try Controls(p,package))
     }

@@ -57,6 +57,11 @@ public enum NTSDProfile {
                            lowToss: OriginalIDSet([100, 201, 101, 120, 121, 122, 123, 124, 217, 218]),
                            frames0: 150, frames10: 100, frames150: 213, frames20: 101, frames40: 151, frames54: 120, frame170: 124,
                            frame60: 121, frames70: 122, frames160: 123, frame174: OriginalIDSet([217, 218])),
+        // The front menu's bitmaps in load order and its rectangle sheets (NTSDFrontMenuRectangles.swift).
+        interface: .init(frontBitmaps: ["LF2_CURSOR", "MENU_CLIP", "MENU_CLIP2", "MENU_CLIP3", "MENU_CLIP4", "MENU_CLIP5",
+                                        "MENU_CLIP6", "MENU_CLIP7", "MENU_WAIT", "SLOGAN", "ENDING", "LF2_CURSOR", "CS2", "CS3",
+                                        "CS4", "CS5", "CS6", "FRAME", "WORDS0", "WORDS1", "WORDS2", "WORDS3", "WORDS4", "WORDS5"],
+                         frontSheets: frontSheets),
         // The character AI's target choice and fight.
         characterAI: .init(stageAllyBound: 30, healBall: 200, healers: OriginalIDSet([2, 34]), stateDanger: 211, frameDanger: 212,
                            pickupItems: OriginalIDRange(100..<200), pickupExtra: 213, soughtDrink: 122, avoidedDrink: 123,

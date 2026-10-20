@@ -1,6 +1,7 @@
 import Foundation
 import XCTest
 import NTSDCore
+import NTSDProfile
 @testable import NTSDReferenceChecks
 
 final class OriginalApplicationBootstrapTests: XCTestCase {
@@ -484,7 +485,7 @@ final class OriginalApplicationBootstrapTests: XCTestCase {
         let package = try OriginalApplicationStartupInputsTests.shared.get(),initial = package.initial,bytes = initial.bytes
         XCTAssertEqual(Array(bytes[..<0xb440]),try br.blob(c.initialGlobals))
         for phase in ["window-return","panel-return","secondDate","output-return","fifthWave","after"] {
-            var app = A(),p = try Parent.Adapter(c,raw,sources:sources,blob:br.blob,initial:Array(bytes[..<0xb440]),fail:phase,startupInputs:package)
+            var app = A(rules: NTSDProfile.rules),p = try Parent.Adapter(c,raw,sources:sources,blob:br.blob,initial:Array(bytes[..<0xb440]),fail:phase,startupInputs:package)
             let original = p;var attempted: Parent.Adapter?,published: A.Started?
             do {
                 published = try app.start(instance:0x400000,show:10,initial:initial,platform:&p,store:{ $0.store($1,$2) },
