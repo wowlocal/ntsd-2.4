@@ -189,7 +189,7 @@ public enum OriginalPostDrawCommands {
             if try global(0x450bb8) == 2 {
                 let type = try h(a, 0x6f8)
                 if [1, 2, 4, 6].contains(type) { try put(a, 0x31c, -1) }
-                else if try global(0x451160) == 1 && i(a, 0x364) == 5 && type == 0 && h(a, 0x6f4) != 300 {
+                else if try global(0x451160) == 1 && i(a, 0x364) == 5 && type == 0 && h(a, 0x6f4) != rules.killRequestSpared {
                     try put(a, 0x2fc, 0); try put(a, 0x308, 0)
                 }
             }

@@ -420,8 +420,8 @@ struct OriginalMissionStagePass {
         var hp = try c(s,base+0xb4)
         var id = try c(s,base+0xac)
         let difficulty = try g(0x450c30)
-        if difficulty == -1,id != 0x12c { hp = ftol(try ext(Double(hp))*ext(1.5)) }
-        else if difficulty == 2,id != 0x12c { hp = ftol(try ext(Double(hp))*ext(0.75)) }
+        if difficulty == -1,id != rules.fixedDifficultyHP { hp = ftol(try ext(Double(hp))*ext(1.5)) }
+        else if difficulty == 2,id != rules.fixedDifficultyHP { hp = ftol(try ext(Double(hp))*ext(0.75)) }
         if id == 0x3e8 {
             var at = try g(0x44d34c)
             if at == 10 || at == -1 {

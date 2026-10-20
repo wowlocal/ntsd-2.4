@@ -1,0 +1,552 @@
+{
+ "study": "ENGINE_SPLIT",
+ "step": "E5e-1",
+ "label": "es-e5e1",
+ "prev": "es-e5d3",
+ "base": "a939f6c1fda3e9b8184878dbef0022fa2df8132e",
+ "recordedUTC": "2026-10-20T10:28:31Z",
+ "change": "The ID-300 exemption as three Int32 roles (NTSD 300): Impact.hitConverted (A7, OriginalHitDamage.damageHit), Modes.killRequestSpared (A51, the post-draw commands' recover), Modes.fixedDifficultyHP (A60, the mission spawn's two difficulty factors). No plumbing: each pass already holds rules.",
+ "publicSurface": [
+  "Impact.hitConverted, Modes.killRequestSpared, Modes.fixedDifficultyHP with their init parameters and flat accessors (Impact.init and Modes.init change)"
+ ],
+ "survey": "docs/evidence/es-e5e-plumbing.md",
+ "testedTrees": {
+  "recorded": "native d96b8f15bf7d488212fe44096573dbf9941b04bf tools 6ca9dd25ea16acfba51131fcf3dd1b35e726aeb6 engine 2a71ca31fa14fd034d0d2505e026d2f6f2df7899",
+  "equal": true
+ },
+ "review": {
+  "by": "a separate read-only agent, 2026-10-20",
+  "verdict": "no code defect",
+  "mappingTable": "literals restored: byte-identical to HEAD; A7's header read first and the body read only on a match; A51's header read last in its chain; A60's difficulty-then-id order; no new throwing read; the other 300/0x12c literals are frame numbers, timers, menus, the +0x12c offset, sizes or coordinates",
+  "required": [
+   "the hitConverted doc: only an unguarded kind-0 hit; +0xb8 = 45 still written; the spark and the attacker's remaining contacts in this resolve skipped"
+  ],
+  "adopted": [
+   "an injury of 20 so the moved case loses HP",
+   "MP asserted with HP in A51"
+  ]
+ },
+ "tests": "NTSDProfileExemptionTests (3): damageHit on a 1005 body word, the commands' request 2 in stage mode, the mission spawn at difficulties -1, 0 and 2; each under NTSD's profile and a moved one",
+ "accessCount": {
+  "measuredBeforeGate": "3278 (clean release headless)",
+  "precheck": [
+   "precheck build exit=0",
+   "precheck beginAccess=3278"
+  ],
+  "gate": "3278 headless and 3406 app: the baseline"
+ },
+ "gateScript": {
+  "run": "/Volumes/NTSD-Builds/tasks/engine-split/gates/gate-run-es-e5e1.sh",
+  "sha256": "b5bcd934ed97372039be9df8ebbab7784cc91d9ec130904164871d0874d7c317"
+ },
+ "builds": [
+  "headless built (checked: 3278 beginAccess)",
+  "app built (checked: 3406 beginAccess)",
+  "unchecked headless built (0 beginAccess)",
+  "bundle exit=0",
+  "engine bundle exit=0"
+ ],
+ "launches": "launches: crashes 0 of 20",
+ "scenariosHeadless": [
+  {
+   "scenario": "vs",
+   "exit": 0,
+   "result": "equal",
+   "differs": []
+  },
+  {
+   "scenario": "mission",
+   "exit": 0,
+   "result": "equal",
+   "differs": []
+  },
+  {
+   "scenario": "demo",
+   "exit": 0,
+   "result": "equal",
+   "differs": []
+  },
+  {
+   "scenario": "war",
+   "exit": 0,
+   "result": "equal",
+   "differs": []
+  },
+  {
+   "scenario": "playback",
+   "exit": 0,
+   "result": "equal",
+   "differs": []
+  },
+  {
+   "scenario": "tournament",
+   "exit": 0,
+   "result": "equal",
+   "differs": []
+  },
+  {
+   "scenario": "altenter",
+   "exit": 0,
+   "result": "equal",
+   "differs": []
+  },
+  {
+   "scenario": "tournament-win",
+   "exit": 0,
+   "result": "equal",
+   "differs": []
+  },
+  {
+   "scenario": "team-tournament",
+   "exit": 0,
+   "result": "equal",
+   "differs": []
+  },
+  {
+   "scenario": "joystick",
+   "exit": 0,
+   "result": "equal",
+   "differs": []
+  },
+  {
+   "scenario": "title-joystick",
+   "exit": 0,
+   "result": "equal",
+   "differs": []
+  }
+ ],
+ "frames": [
+  {
+   "frames": 1832,
+   "mismatched": 0,
+   "result": "identical"
+  },
+  {
+   "frames": 1832,
+   "mismatched": 0,
+   "result": "identical"
+  },
+  {
+   "frames": 3960,
+   "mismatched": 0,
+   "result": "identical"
+  },
+  {
+   "frames": 1832,
+   "mismatched": 0,
+   "result": "identical"
+  }
+ ],
+ "appkit": [
+  {
+   "scenario": "vs",
+   "exit": 0,
+   "seconds": 67.8,
+   "result": "equal",
+   "differs": []
+  },
+  {
+   "scenario": "playback",
+   "exit": 0,
+   "seconds": 70.2,
+   "result": "equal",
+   "differs": []
+  },
+  {
+   "frames": 3960,
+   "mismatched": 0,
+   "result": "identical"
+  }
+ ],
+ "uncheckedHeadless": [
+  {
+   "scenario": "vs",
+   "exit": 0,
+   "seconds": 73.5,
+   "result": "equal",
+   "differs": []
+  },
+  {
+   "scenario": "demo",
+   "exit": 0,
+   "seconds": 49.8,
+   "result": "equal",
+   "differs": []
+  },
+  {
+   "frames": 1832,
+   "mismatched": 0,
+   "result": "identical"
+  }
+ ],
+ "emulatorVs": {
+  "exit": "emu exit=0"
+ },
+ "suites": [
+  "OriginalExclusivityChecksTests exit=0 1s \t Executed 1 test, with 0 failures (0 unexpected) in 0.000 (0.002) seconds",
+  "OriginalALACTrackTests exit=0 5s \t Executed 2 tests, with 0 failures (0 unexpected) in 5.553 (5.555) seconds",
+  "OriginalApplicationCatalogInputsTests exit=0 13s \t Executed 4 tests, with 0 failures (0 unexpected) in 12.984 (12.986) seconds",
+  "OriginalApplicationInterfaceInputsTests exit=0 1s \t Executed 3 tests, with 0 failures (0 unexpected) in 0.078 (0.080) seconds",
+  "OriginalApplicationLoadedLaunchTests exit=0 52s \t Executed 2 tests, with 0 failures (0 unexpected) in 52.515 (52.519) seconds",
+  "OriginalApplicationLoadingPrefixTests exit=0 23s \t Executed 2 tests, with 0 failures (0 unexpected) in 22.757 (22.762) seconds",
+  "OriginalApplicationLoadingSessionTests exit=0 0s \t Executed 3 tests, with 0 failures (0 unexpected) in 0.048 (0.051) seconds",
+  "OriginalApplicationMenuInputsTests exit=0 0s \t Executed 3 tests, with 0 failures (0 unexpected) in 0.107 (0.109) seconds",
+  "OriginalApplicationObservedBitmapTests exit=0 13s \t Executed 5 tests, with 0 failures (0 unexpected) in 12.379 (12.382) seconds",
+  "OriginalApplicationObservedGraphicsTests exit=0 37s \t Executed 5 tests, with 0 failures (0 unexpected) in 36.584 (36.589) seconds",
+  "OriginalApplicationObservedIterationTests exit=0 9s \t Executed 3 tests, with 0 failures (0 unexpected) in 8.976 (8.979) seconds",
+  "OriginalApplicationStartupInputsTests exit=0 0s \t Executed 4 tests, with 0 failures (0 unexpected) in 0.325 (0.327) seconds",
+  "OriginalCatalogChecksumTests exit=0 2s \t Executed 3 tests, with 0 failures (0 unexpected) in 2.270 (2.274) seconds",
+  "OriginalConcurrentInputsTests exit=0 3s \t Executed 7 tests, with 0 failures (0 unexpected) in 2.379 (2.382) seconds",
+  "OriginalDataTests exit=0 1s \t Executed 2 tests, with 0 failures (0 unexpected) in 0.724 (0.726) seconds",
+  "OriginalDIBValidationTests exit=0 1s \t Executed 2 tests, with 0 failures (0 unexpected) in 0.955 (0.957) seconds",
+  "OriginalFrameLoaderTests exit=0 0s \t Executed 2 tests, with 0 failures (0 unexpected) in 0.021 (0.022) seconds",
+  "OriginalLoadingReadAheadTests exit=0 1s \t Executed 5 tests, with 0 failures (0 unexpected) in 1.450 (1.452) seconds",
+  "OriginalLZ4Tests exit=0 8s \t Executed 6 tests, with 0 failures (0 unexpected) in 7.235 (7.236) seconds",
+  "OriginalMacBitmapBackendTests exit=0 2s \t Executed 5 tests, with 0 failures (0 unexpected) in 2.535 (2.538) seconds",
+  "OriginalMacMusicOutputTests exit=0 0s \t Executed 7 tests, with 0 failures (0 unexpected) in 0.024 (0.025) seconds",
+  "OriginalMacRuntimeLoadingTests exit=0 2s \t Executed 7 tests, with 0 failures (0 unexpected) in 1.587 (1.589) seconds",
+  "OriginalMacWindowGeometryTests exit=0 18s \t Executed 6 tests, with 0 failures (0 unexpected) in 17.583 (17.586) seconds",
+  "OriginalMeleeTests exit=0 1s \t Executed 5 tests, with 0 failures (0 unexpected) in 1.475 (1.479) seconds",
+  "OriginalMovementTests exit=0 0s \t Executed 2 tests, with 0 failures (0 unexpected) in 0.062 (0.065) seconds",
+  "OriginalReplayFileInputTests exit=0 1s \t Executed 1 test, with 0 failures (0 unexpected) in 0.222 (0.224) seconds",
+  "OriginalWord32BoundaryTests exit=0 0s \t Executed 6 tests, with 0 failures (0 unexpected) in 0.019 (0.020) seconds",
+  "PortableSHA256BlockFunctionTests exit=0 0s \t Executed 2 tests, with 0 failures (0 unexpected) in 0.179 (0.180) seconds",
+  "PortableSHA256Tests exit=0 5s \t Executed 3 tests, with 0 failures (0 unexpected) in 5.045 (5.048) seconds"
+ ],
+ "engineTests": "NTSDEngineTests exit=0 6s \t Executed 110 tests, with 0 failures (0 unexpected) in 4.656 (4.825) seconds",
+ "phoneAB": {
+  "summaries": [
+   {
+    "build": "es-e5e1",
+    "runs": 3,
+    "startupSeconds": {
+     "median": -419727.44,
+     "min": -419727.48,
+     "max": -419727.43
+    },
+    "loadSeconds": {
+     "median": 6.63,
+     "min": 6.58,
+     "max": 6.9
+    },
+    "startToLoadedSeconds": {
+     "median": -419715.66,
+     "min": -419715.69,
+     "max": -419715.01
+    },
+    "peakResidentMB": {
+     "median": 593,
+     "min": 586,
+     "max": 594
+    },
+    "peakFootprintMB": {
+     "median": 597,
+     "min": 595,
+     "max": 606
+    },
+    "loadedResidentMB": {
+     "median": 555,
+     "min": 520,
+     "max": 569
+    },
+    "bodiesResidentMB": {
+     "median": 546,
+     "min": 536,
+     "max": 561
+    },
+    "mainMsPerTick": {
+     "median": 10.87,
+     "min": 10.86,
+     "max": 10.88
+    },
+    "renderMsPerTick": {
+     "median": 7.62,
+     "min": 7.16,
+     "max": 7.65
+    },
+    "processMsPerTick": {
+     "median": 27.73,
+     "min": 27.25,
+     "max": 27.74
+    },
+    "completeMsPerTick": {
+     "median": 7.34,
+     "min": 7.3,
+     "max": 7.34
+    },
+    "loadedSwapMB": {
+     "median": 22,
+     "min": 22,
+     "max": 22
+    },
+    "bodiesSwapMB": {
+     "median": 22,
+     "min": 22,
+     "max": 23
+    },
+    "ticksEndResidentMB": {
+     "median": 571,
+     "min": 566,
+     "max": 597
+    },
+    "ticksEndSwapMB": {
+     "median": 14,
+     "min": 14,
+     "max": 14
+    },
+    "ticksEndFootprintMB": {
+     "median": 585,
+     "min": 580,
+     "max": 611
+    },
+    "ticksEndPssMB": {
+     "median": 539,
+     "min": 536,
+     "max": 566
+    },
+    "cpuToEndSeconds": {
+     "median": 95.81,
+     "min": 95.04,
+     "max": 96.35
+    }
+   },
+   {
+    "build": "es-e5d3",
+    "runs": 2,
+    "startupSeconds": {
+     "median": -419727.445,
+     "min": -419727.49,
+     "max": -419727.4
+    },
+    "loadSeconds": {
+     "median": 6.15,
+     "min": 5.42,
+     "max": 6.88
+    },
+    "startToLoadedSeconds": {
+     "median": -419715.56,
+     "min": -419715.73,
+     "max": -419715.39
+    },
+    "peakResidentMB": {
+     "median": 599.5,
+     "min": 596,
+     "max": 603
+    },
+    "peakFootprintMB": {
+     "median": 603.0,
+     "min": 601,
+     "max": 605
+    },
+    "loadedResidentMB": {
+     "median": 572.5,
+     "min": 566,
+     "max": 579
+    },
+    "bodiesResidentMB": {
+     "median": 535.0,
+     "min": 534,
+     "max": 536
+    },
+    "mainMsPerTick": {
+     "median": 10.895,
+     "min": 10.88,
+     "max": 10.91
+    },
+    "renderMsPerTick": {
+     "median": 7.16,
+     "min": 7.14,
+     "max": 7.18
+    },
+    "processMsPerTick": {
+     "median": 27.240000000000002,
+     "min": 27.19,
+     "max": 27.29
+    },
+    "completeMsPerTick": {
+     "median": 7.36,
+     "min": 7.36,
+     "max": 7.36
+    },
+    "loadedSwapMB": {
+     "median": 22.0,
+     "min": 22,
+     "max": 22
+    },
+    "bodiesSwapMB": {
+     "median": 22.0,
+     "min": 22,
+     "max": 22
+    },
+    "ticksEndResidentMB": {
+     "median": 570.5,
+     "min": 569,
+     "max": 572
+    },
+    "ticksEndSwapMB": {
+     "median": 14.0,
+     "min": 14,
+     "max": 14
+    },
+    "ticksEndFootprintMB": {
+     "median": 584.5,
+     "min": 583,
+     "max": 586
+    },
+    "ticksEndPssMB": {
+     "median": 537.5,
+     "min": 535,
+     "max": 540
+    },
+    "cpuToEndSeconds": {
+     "median": 94.86,
+     "min": 94.56,
+     "max": 95.16
+    }
+   }
+  ],
+  "finding": "3 against 2: overlapping everywhere (main 10.86-10.88 against 10.88-10.91 ms, touching)"
+ },
+ "macAB": {
+  "summaries": [
+   {
+    "build": "frozen-unchecked-es-e5e1",
+    "runs": 3,
+    "startupSeconds": {
+     "median": 0.055,
+     "min": 0.05,
+     "max": 0.058
+    },
+    "loadSeconds": {
+     "median": 0.32,
+     "min": 0.317,
+     "max": 0.321
+    },
+    "startToLoadedSeconds": {
+     "median": 0.699,
+     "min": 0.679,
+     "max": 0.717
+    },
+    "startedToLoadedSeconds": {
+     "median": 0.645,
+     "min": 0.63,
+     "max": 0.657
+    },
+    "peakResidentMB": {
+     "median": 681,
+     "min": 674,
+     "max": 713
+    },
+    "loadedResidentMB": {
+     "median": 675,
+     "min": 657,
+     "max": 680
+    },
+    "bodiesResidentMB": {
+     "median": 612,
+     "min": 570,
+     "max": 713
+    },
+    "processMsPerTick": {
+     "median": 3.422,
+     "min": 3.411,
+     "max": 3.467
+    },
+    "completeMsPerTick": {
+     "median": 1.2729,
+     "min": 1.2633,
+     "max": 1.2895
+    }
+   },
+   {
+    "build": "frozen-unchecked-es-e5d3",
+    "runs": 3,
+    "startupSeconds": {
+     "median": 0.055,
+     "min": 0.054,
+     "max": 0.063
+    },
+    "loadSeconds": {
+     "median": 0.32,
+     "min": 0.314,
+     "max": 0.326
+    },
+    "startToLoadedSeconds": {
+     "median": 0.681,
+     "min": 0.679,
+     "max": 0.706
+    },
+    "startedToLoadedSeconds": {
+     "median": 0.628,
+     "min": 0.625,
+     "max": 0.644
+    },
+    "peakResidentMB": {
+     "median": 679,
+     "min": 676,
+     "max": 692
+    },
+    "loadedResidentMB": {
+     "median": 678,
+     "min": 660,
+     "max": 678
+    },
+    "bodiesResidentMB": {
+     "median": 591,
+     "min": 571,
+     "max": 606
+    },
+    "processMsPerTick": {
+     "median": 3.344,
+     "min": 3.3,
+     "max": 3.467
+    },
+    "completeMsPerTick": {
+     "median": 1.2945,
+     "min": 1.2547,
+     "max": 1.3479
+    }
+   }
+  ],
+  "finding": "overlapping"
+ },
+ "gate3": {
+  "script": "/Volumes/NTSD-Builds/tasks/engine-split/gates/gate3-es-e5e1.sh",
+  "log": [
+   "trees a939f6c1fda3e9b8184878dbef0022fa2df8132e staged no-unstaged",
+   "== (a) suites",
+   "NTSDProfileExemptionTests exit=0 0s Executed 3 tests, with 0 failures (0 unexpected) in 0.012 (0.013) seconds",
+   "NTSDProfileCharacterAITests exit=0 0s Executed 12 tests, with 0 failures (0 unexpected) in 0.009 (0.011) seconds",
+   "NTSDProfileLifecycleTests exit=0 0s Executed 6 tests, with 0 failures (0 unexpected) in 0.021 (0.022) seconds",
+   "NTSDProfileEffectsTests exit=0 0s Executed 4 tests, with 0 failures (0 unexpected) in 0.006 (0.007) seconds",
+   "NTSDProfileDrawingTests exit=0 0s Executed 2 tests, with 0 failures (0 unexpected) in 0.001 (0.002) seconds",
+   "NTSDProfilePhysicsTests exit=0 0s Executed 4 tests, with 0 failures (0 unexpected) in 0.003 (0.004) seconds",
+   "NTSDProfileModesTests exit=0 0s Executed 8 tests, with 0 failures (0 unexpected) in 0.005 (0.006) seconds",
+   "NTSDProfileRosterTests exit=0 1s Executed 3 tests, with 0 failures (0 unexpected) in 0.029 (0.030) seconds",
+   "NTSDProfileItemsRequestedMissionTests exit=0 0s Executed 4 tests, with 0 failures (0 unexpected) in 0.001 (0.002) seconds",
+   "NTSDProfileItemsCameraLinksTests exit=0 0s Executed 3 tests, with 0 failures (0 unexpected) in 0.001 (0.003) seconds",
+   "NTSDProfileItemsTests exit=0 0s Executed 3 tests, with 0 failures (0 unexpected) in 0.002 (0.003) seconds",
+   "NTSDProfileImpactTests exit=0 0s Executed 4 tests, with 0 failures (0 unexpected) in 0.001 (0.003) seconds",
+   "NTSDProfileInteractionTests exit=0 0s Executed 4 tests, with 0 failures (0 unexpected) in 0.002 (0.004) seconds",
+   "NTSDProfileArmourTests exit=0 0s Executed 6 tests, with 0 failures (0 unexpected) in 0.001 (0.003) seconds",
+   "NTSDProfileReflectionTests exit=0 2s Executed 5 tests, with 0 failures (0 unexpected) in 1.840 (1.842) seconds",
+   "OriginalActorHitsTests exit=0 14s Executed 2 tests, with 0 failures (0 unexpected) in 13.571 (13.574) seconds",
+   "OriginalLibActorHitsTests exit=0 17s Executed 3 tests, with 0 failures (0 unexpected) in 17.053 (17.056) seconds",
+   "OriginalGameplayHitsTests exit=0 304s Executed 2 tests, with 0 failures (0 unexpected) in 304.104 (304.107) seconds",
+   "OriginalPostDrawCommandsTests exit=0 3s Executed 4 tests, with 0 failures (0 unexpected) in 2.900 (2.903) seconds",
+   "OriginalLibStageCommandsTests exit=0 3s Executed 6 tests, with 0 failures (0 unexpected) in 3.252 (3.255) seconds",
+   "OriginalMissionStageTests exit=0 20s Executed 2 tests, with 0 failures (0 unexpected) in 20.165 (20.168) seconds",
+   "OriginalApplicationCatalogSessionTests exit=0 126s Executed 3 tests, with 0 failures (0 unexpected) in 125.027 (125.039) seconds",
+   "OriginalCatalogChecksumTests exit=0 0s Executed 3 tests, with 0 failures (0 unexpected) in 0.686 (0.688) seconds",
+   "OriginalApplicationCatalogFullTests exit=0 62s Executed 3 tests, with 0 failures (0 unexpected) in 61.418 (61.424) seconds",
+   "== (b) WASI vs",
+   "wasi build exit=0",
+   "exit=0",
+   "{\"scenario\": \"vs\", \"exit\": 0, \"seconds\": 64.5, \"result\": \"equal\", \"differs\": [], \"node\": \"v26.7.0\"}",
+   "{\"frames\": 1832, \"mismatched\": 0, \"result\": \"identical\"}",
+   "gate3_done"
+  ],
+  "verdict": "the profile tests and the actor hits, lib actor hits, gameplay hits, post-draw commands, lib stage commands, mission stage and catalog suites pass from mlgate's clean release test build (24 suites, 99 tests); the WASI (32-bit) vs equal with 1,832 frames identical"
+ },
+ "openGates": []
+}

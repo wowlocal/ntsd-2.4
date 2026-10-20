@@ -15,7 +15,7 @@ public enum NTSDProfile {
         interaction: .init(holdKind101: OriginalIDSet([120, 124]), pullImmune: OriginalIDSet([201, 202]), teamBypass: 212,
                            countsAsCharacter: OriginalIDSet([201, 202])),
         // What an attacker's hit does to it or to the defender's x impulse: OriginalHitDamage.
-        impact: .init(vanishingAttacker: 201, spentAttacker: 214, heavyHeldWeapon: 100),
+        impact: .init(vanishingAttacker: 201, spentAttacker: 214, heavyHeldWeapon: 100, hitConverted: 300),
         // The random and requested item spawns (OriginalWorldHits, OriginalPostDrawCommands), the
         // mission stage's spawn, the camera, the held drinks (OriginalWorldLinks).
         items: .init(itemRange: OriginalIDRange(100..<200), scarceDropItems: OriginalIDSet([122, 123]), scarceRequestedItem: 122, spawnHP200: 122,
@@ -30,7 +30,7 @@ public enum NTSDProfile {
         modes: .init(survivalStages: OriginalIDRange(50..<60), numberedStages: OriginalIDRange(Int32.min..<50),
                      finalStageSet: OriginalIDRange(40..<50), stageWeightPlus1: 51, stageWeightPlus2: 52,
                      warTroops: OriginalIDSet([30, 31, 32, 33, 34, 35, 36, 37, 39, 122, 123]),
-                     stageBackgrounds: [0: 1, 10: 2, 20: 3, 30: 4, 40: 5, 50: 6]),
+                     stageBackgrounds: [0: 1, 10: 2, 20: 3, 30: 4, 40: 5, 50: 6], killRequestSpared: 300, fixedDifficultyHP: 300),
         // The actor physics' special Objects and the revival's (OriginalActorPhysics, OriginalWorldPhysics).
         physics: .init(extraDrift: 120, reverseDrift: 101, lowGravityThrow: 124, midGravityThrow: 120, highGravityThrow: 101,
                        restingPiece: 999, revivalPicture: OriginalIDRange(30..<37), revivalEffect: 998),

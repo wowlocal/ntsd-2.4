@@ -115,8 +115,17 @@ public struct OriginalGameRules: Equatable, Sendable {
         /// defender's x impulse (+0x28) by 2.5 with sound 13; a non-zero result under
         /// 10 in magnitude becomes ±10.
         public let heavyHeldWeapon: Int32
-        public init(vanishingAttacker: Int32, spentAttacker: Int32, heavyHeldWeapon: Int32) {
+        /// A defender an unguarded kind-0 hit (`damageHit`) leaves undamaged (A7):
+        /// when its frame has a body (+0x12c above 0) whose first word is above
+        /// 1000, it joins team 1 (+0x364) at frame (+0x70) word − 1000 with +0xb4
+        /// −3, the attacker's +0xb4 3; +0xb8 = 45 is still written; this
+        /// contact's spark and the attacker's remaining contacts in this
+        /// `resolve` are skipped. Guarded and special (kind ≠ 0) hits are not
+        /// affected.
+        public let hitConverted: Int32
+        public init(vanishingAttacker: Int32, spentAttacker: Int32, heavyHeldWeapon: Int32, hitConverted: Int32) {
             self.vanishingAttacker = vanishingAttacker; self.spentAttacker = spentAttacker; self.heavyHeldWeapon = heavyHeldWeapon
+            self.hitConverted = hitConverted
         }
     }
     /// Items: which Objects a random item spawn picks from and how it treats
@@ -203,11 +212,19 @@ public struct OriginalGameRules: Equatable, Sendable {
         /// The arena (background ordinal) a stage-mode match starts on, by stage
         /// (OriginalMatchPrelude); other stages keep the arena they have.
         public let stageBackgrounds: [Int32: Int32]
+        /// The post-draw commands' request 2 (0x450bb8) in stage mode (0x451160
+        /// = 1) zeroes the HP and MP of team-5 characters (type 0) except this
+        /// Object's (A51).
+        public let killRequestSpared: Int32
+        /// A mission stage spawn word the difficulty's HP factor (×1.5 at −1,
+        /// ×0.75 at 2) skips (A60; tested before the pseudo-IDs are replaced).
+        public let fixedDifficultyHP: Int32
         public init(survivalStages: OriginalIDRange, numberedStages: OriginalIDRange, finalStageSet: OriginalIDRange,
-                    stageWeightPlus1: Int32, stageWeightPlus2: Int32, warTroops: OriginalIDSet, stageBackgrounds: [Int32: Int32]) {
+                    stageWeightPlus1: Int32, stageWeightPlus2: Int32, warTroops: OriginalIDSet, stageBackgrounds: [Int32: Int32],
+                    killRequestSpared: Int32, fixedDifficultyHP: Int32) {
             self.survivalStages = survivalStages; self.numberedStages = numberedStages; self.finalStageSet = finalStageSet
             self.stageWeightPlus1 = stageWeightPlus1; self.stageWeightPlus2 = stageWeightPlus2; self.warTroops = warTroops
-            self.stageBackgrounds = stageBackgrounds
+            self.stageBackgrounds = stageBackgrounds; self.killRequestSpared = killRequestSpared; self.fixedDifficultyHP = fixedDifficultyHP
         }
     }
     /// Physics: the Objects the actor physics moves or drops their own way
@@ -448,6 +465,7 @@ public struct OriginalGameRules: Equatable, Sendable {
     public var vanishingAttacker: Int32 { roles.impact.vanishingAttacker }
     public var spentAttacker: Int32 { roles.impact.spentAttacker }
     public var heavyHeldWeapon: Int32 { roles.impact.heavyHeldWeapon }
+    public var hitConverted: Int32 { roles.impact.hitConverted }
     public var itemRange: OriginalIDRange { roles.items.itemRange }
     public var scarceDropItems: OriginalIDSet { roles.items.scarceDropItems }
     public var scarceRequestedItem: Int32 { roles.items.scarceRequestedItem }
@@ -465,6 +483,8 @@ public struct OriginalGameRules: Equatable, Sendable {
     public var stageWeightPlus2: Int32 { roles.modes.stageWeightPlus2 }
     public var warTroops: OriginalIDSet { roles.modes.warTroops }
     public var stageBackgrounds: [Int32: Int32] { roles.modes.stageBackgrounds }
+    public var killRequestSpared: Int32 { roles.modes.killRequestSpared }
+    public var fixedDifficultyHP: Int32 { roles.modes.fixedDifficultyHP }
     public var extraDrift: Int32 { roles.physics.extraDrift }
     public var reverseDrift: Int32 { roles.physics.reverseDrift }
     public var lowGravityThrow: Int32 { roles.physics.lowGravityThrow }

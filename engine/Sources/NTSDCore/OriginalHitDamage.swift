@@ -1,10 +1,10 @@
 extension OriginalHitPass {
-    //42e87d..42fdf2; true is the original ID300 whole-function return.
+    //42e87d..42fdf2; true is the original ID300 whole-function return (the ID: rules.hitConverted).
     mutating func damageHit(_ attacker: Int,_ defender: Int,_ body: OriginalStateRecord,spark: inout Int32,
                             observe: (OriginalHitEvent) throws -> Void) throws -> Bool {
         let a = try index(attacker),d = try index(defender)
         try put(d,0xb8,45)
-        if try h(d,0x6f4) == 300 {
+        if try h(d,0x6f4) == rules.hitConverted {
             if try f(d,0x12c) > 0 {
                 let first = try memory.word(UInt32(bitPattern: f(d,0x134)))
                 if first > 1000 { try put(d,0x364,1);try put(d,0x70,first &- 1000);try put(a,0xb4,3);try put(d,0xb4,-3) }
