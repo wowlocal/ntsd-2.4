@@ -69,7 +69,8 @@ E5c-1h выполнен: префикс слота, планировщик, от
 E5c-1i выполнен: ввод объектов (A58, A59): [evidence](../evidence/es-e5c1i-object-input-roles.json).
 E5c-1j выполнен: подавление комбо 6 → 300 (A28), правила по цепочке ввода: [evidence](../evidence/es-e5c1j-input-roles.json).
 Все строки E5c в профиле. План E5d (ИИ): [обзор](../evidence/es-e5d-plumbing.md).
-Следующая задача — E5d-1a: роли выбора цели ИИ (A80–A86).
+E5d-1a выполнен: роли выбора цели ИИ (A80–A86): [evidence](../evidence/es-e5d1a-ai-target-roles.json).
+Следующая задача — E5d-1b: роли боя ИИ (A87–A91, A93–A98).
 
 ## Internal build storage и VM quota исправлены — 2026-10-17
 

@@ -30,7 +30,7 @@ public enum OriginalCharacterAI {
                                            globals: inPlaceTake(&state.globals,leaving: .vacant),objects: catalog.objects,
                                            objectCount: objectCount,backgrounds: backgrounds,sse2: sse2)
         defer { state.world = pass.world; state.actors = pass.actors; state.globals = pass.globals }
-        try pass.run(slot,mode: mode)
+        try pass.run(slot,mode: mode,rules: catalog.rules)
         for event in pass.events { try observe(event) }
     }
 }
@@ -107,7 +107,7 @@ struct OriginalCharacterAIPass {
         return tt != st && (mode != 1 || st == 5 || tt == 5)
     }
 
-    mutating func run(_ slot: Int,mode: Int32) throws {
+    mutating func run(_ slot: Int,mode: Int32,rules: OriginalGameRules) throws {
         let s = try index(slot)
         // A: scripted run to the right (4094c9..409613).
         if mode == 1, try g(0x450bac) == 1 {
@@ -117,14 +117,14 @@ struct OriginalCharacterAIPass {
         }
         // B: walk to a point (409616..409925).
         if try i(s,0x3fc) > -1000 { try walk(s); return }
-        var l = Locals(); try setup(s,slot: slot,mode: mode,&l)
+        var l = Locals(); try setup(s,slot: slot,mode: mode,&l,rules: rules)
         try search(s,slot: slot,mode: mode,&l)
         try shift(s)
         l.self58 = l.target
-        guard l.target >= 0 else { try idle(s,&l); return }
-        try items(s,&l)
+        guard l.target >= 0 else { try idle(s,&l,rules: rules); return }
+        try items(s,&l,rules: rules)
         if l.near48 == 1 { l.target = l.self58 }
-        guard l.target >= 0 else { try idle(s,&l); return }
+        guard l.target >= 0 else { try idle(s,&l,rules: rules); return }
         try fight(s,slot: slot,mode: mode,&l)
     }
 
@@ -156,14 +156,14 @@ struct OriginalCharacterAIPass {
     }
 
     /// 409928..409ff0: difficulty globals, ally/health flags and avoidance.
-    mutating func setup(_ s: Int,slot: Int,mode: Int32,_ l: inout Locals) throws {
+    mutating func setup(_ s: Int,slot: Int,mode: Int32,_ l: inout Locals,rules: OriginalGameRules) throws {
         l.bg = try g(0x44d024)
         var width = try g(0x450bb4)
         if width <= 0 { width = try background(l.bg,0) }
         try setG(0x44f604,width)
         var level: Int32 = 0
         if try g(0x450c2c) != 1 {
-            let easy = try mode == 1 && i(s,0x364) != 5 && (slot < 20 || id(s) < 30)
+            let easy = try mode == 1 && i(s,0x364) != 5 && (slot < 20 || id(s) < rules.stageAllyBound)
             if !easy { level = max(try g(0x450c30),0) }
         }
         try setG(0x44f60c,level)
@@ -247,15 +247,15 @@ struct OriginalCharacterAIPass {
     }
 
     /// 40a43b..40a90a: items, healing balls and dangers in slots 20..399.
-    mutating func items(_ s: Int,_ l: inout Locals) throws {
+    mutating func items(_ s: Int,_ l: inout Locals,rules: OriginalGameRules) throws {
         for k in 20..<400 {
             guard try active(k) != 0 else { continue }
             let t = try index(k),id = try id(t)
-            if id == 200 {
+            if id == rules.healBall {
                 let group = try i(t,0x70)/10
                 var go = false
                 if try group == 6 && i(t,0x364) != i(s,0x364) { go = true }
-                else if group == 5, try [2,34].contains(self.id(s)) {
+                else if group == 5, try rules.healers.contains(self.id(s)) {
                     let hp = try i(s,0x2fc),max = try i(s,0x304)
                     let first = hp >= max &- 70 || hp >= max &- 200
                     let second = hp >= (max &* 3)/5 || hp < max &- 200
@@ -277,7 +277,7 @@ struct OriginalCharacterAIPass {
                 }
             }
             let frame = try i(t,0x70)
-            if try (id == 211 && state(t) == 18) || (id == 212 && frame >= 150 && frame <= 170) {
+            if try (id == rules.stateDanger && state(t) == 18) || (id == rules.frameDanger && frame >= 150 && frame <= 170) {
                 let tx = try i(t,0x10),sx = try i(s,0x10)
                 if abs(tx &- sx) < 80 {
                     if try i(t,0x18) > i(s,0x18) &+ 20 { l.down3c = 1 }
@@ -290,13 +290,13 @@ struct OriginalCharacterAIPass {
             if l.seen44 != 0 { if l.seen44 > 1 { continue } }
             else if l.aligned34 == 0 && l.near48 == 0 {
                 let d = try abs(i(t,0x18) &- i(s,0x18)) &+ abs(i(t,0x10) &- i(s,0x10))
-                if try i(s,0x98) == 0, d < l.nearest38 &* 2, d < l.item50, id/100 == 1 || id == 213, try i(t,0x98) == 0,
-                   try [1004,2004].contains(state(t)), !(l.healthy18 != 0 && id == 122), !(l.avoid2c != 0 && id == 123),
-                   try !(i(s,0x404) == 1 && id != 122) {
+                if try i(s,0x98) == 0, d < l.nearest38 &* 2, d < l.item50, rules.pickupItems.contains(id) || id == rules.pickupExtra, try i(t,0x98) == 0,
+                   try [1004,2004].contains(state(t)), !(l.healthy18 != 0 && id == rules.soughtDrink), !(l.avoid2c != 0 && id == rules.avoidedDrink),
+                   try !(i(s,0x404) == 1 && id != rules.soughtDrink) {
                     l.target = Int32(k); l.item50 = d
                 }
             }
-            if id == 200, try i(t,0x70)/10 == 5 {
+            if id == rules.healBall, try i(t,0x70)/10 == 5 {
                 if try abs(i(t,0x10) &- i(s,0x10)) < 300, try abs(i(t,0x18) &- i(s,0x18)) < 90, try i(t,0x364) == i(s,0x364) {
                     let hp = try i(s,0x2fc),max = try i(s,0x300)
                     let want: Bool
@@ -306,12 +306,12 @@ struct OriginalCharacterAIPass {
                     l.seen44 = 1
                 }
             }
-            if l.hurt1c == 1, id == 122, try state(t) == 1004, try i(s,0x98) == 0 { l.target = Int32(k); l.seen44 = 1 }
+            if l.hurt1c == 1, id == rules.soughtDrink, try state(t) == 1004, try i(s,0x98) == 0 { l.target = Int32(k); l.seen44 = 1 }
         }
     }
 
     /// 40b7b5..40b846: no target.
-    mutating func idle(_ s: Int,_ l: inout Locals) throws {
+    mutating func idle(_ s: Int,_ l: inout Locals,rules: OriginalGameRules) throws {
         // With no target the EXE reads World+0x7d4 (the catalog pointer) as an
         // Actor when +0x404 is set: its "z" is an Object pointer. Every mapped
         // Win32 address is ≥ 0x10000, so the far branch is taken for any sane z.
@@ -324,7 +324,7 @@ struct OriginalCharacterAIPass {
         }
         if !farAway, try g(0x44f608) == 1 { try press(s,.left) }
         let id = try id(s),frame = try i(s,0x70)
-        if (id == 7 && frame >= 255 && frame <= 261) || (id == 9 && frame >= 280 && frame <= 290) || (id == 32 && frame >= 240 && frame <= 245) {
+        if rules.idleDefenders.contains(where: { id == $0.id && frame >= $0.first && frame <= $0.last }) {
             try press(s,.defend)
         }
     }

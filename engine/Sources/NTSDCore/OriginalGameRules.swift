@@ -31,6 +31,13 @@ public struct OriginalIDRange: Equatable, Sendable {
     func contains(_ id: Int32) -> Bool { id >= lowerBound && id < upperBound }
 }
 
+/// An object ID with an inclusive window of its frame numbers, for a rule that
+/// tests both (ENGINE_SPLIT E5d-1a): the frames are that object's own.
+public struct OriginalIDFrames: Equatable, Sendable {
+    public let id: Int32, first: Int32, last: Int32
+    public init(_ id: Int32, frames: ClosedRange<Int32>) { self.id = id; first = frames.lowerBound; last = frames.upperBound }
+}
+
 /// A game's rules (ENGINE_SPLIT E5): the values the engine's passes test where
 /// the original tests object IDs, grouped by family. The game supplies them with
 /// its content identity; code hooks travel separately. Every role lives in one
@@ -314,14 +321,55 @@ public struct OriginalGameRules: Equatable, Sendable {
             self.guardedTransformer = guardedTransformer
         }
     }
+    /// The character AI (OriginalCharacterAI): the IDs its target choice tests.
+    /// The names follow the AI's own tests, not what the Objects are in the DAT.
+    public struct CharacterAI: Equatable, Sendable {
+        /// When 0x450c2c is 1 every character plays at AI level 0 and the bound is
+        /// not read. Otherwise, in mode 1, a character of a team other than 5 plays
+        /// at level 0 when in slots below 20 or with an ID below this bound (read
+        /// only for slots 20 and up); every other character at max(0x450c30, 0).
+        public let stageAllyBound: Int32
+        /// The AI's ball: one of another team in frames 60–69, or, for `healers`
+        /// passing an HP test, of its own team in frames 50–59, makes the character
+        /// keep the search's target over items (`near48`) and, within 25 in z and
+        /// 150 in x, sets `ball30` and the steering flags; one of its own team in
+        /// frames 50–59 within 300×90 ends the item search for later slots
+        /// (`seen44`, whatever the HP) and becomes the target of a character
+        /// passing another HP test.
+        public let healBall: Int32
+        /// Characters that head for their own team's `healBall`.
+        public let healers: OriginalIDSet
+        /// Dangers the AI steps away from: `stateDanger` in state 18,
+        /// `frameDanger` in frames 150–170.
+        public let stateDanger: Int32, frameDanger: Int32
+        /// Objects the AI may pick up (in states 1004 and 2004, not held): the
+        /// range and one more ID.
+        public let pickupItems: OriginalIDRange
+        public let pickupExtra: Int32
+        /// `soughtDrink`: skipped by a healthy character, the only pick-up of one
+        /// with +0x404 = 1, and, in state 1004, the target of a hurt character
+        /// holding nothing; `avoidedDrink`: skipped by a character that avoids it
+        /// (+0x2f4 above −1, +0x308 above 250, team 1 in mode 1, or slots 20 and up
+        /// in mode 4). Items has the links pass's own drink roles.
+        public let soughtDrink: Int32, avoidedDrink: Int32
+        /// With no target, a character in one of these frame windows of its own
+        /// presses defend.
+        public let idleDefenders: [OriginalIDFrames]
+        public init(stageAllyBound: Int32, healBall: Int32, healers: OriginalIDSet, stateDanger: Int32, frameDanger: Int32,
+                    pickupItems: OriginalIDRange, pickupExtra: Int32, soughtDrink: Int32, avoidedDrink: Int32, idleDefenders: [OriginalIDFrames]) {
+            self.stageAllyBound = stageAllyBound; self.healBall = healBall; self.healers = healers
+            self.stateDanger = stateDanger; self.frameDanger = frameDanger; self.pickupItems = pickupItems; self.pickupExtra = pickupExtra
+            self.soughtDrink = soughtDrink; self.avoidedDrink = avoidedDrink; self.idleDefenders = idleDefenders
+        }
+    }
     private final class Roles: Sendable {
         let profile: String, reflection: Reflection, armour: Armour, interaction: Interaction, impact: Impact, items: Items, roster: Roster
-        let modes: Modes, physics: Physics, drawing: Drawing, effects: Effects, lifecycle: Lifecycle
+        let modes: Modes, physics: Physics, drawing: Drawing, effects: Effects, lifecycle: Lifecycle, characterAI: CharacterAI
         init(profile: String, reflection: Reflection, armour: Armour, interaction: Interaction, impact: Impact, items: Items, roster: Roster,
-             modes: Modes, physics: Physics, drawing: Drawing, effects: Effects, lifecycle: Lifecycle) {
+             modes: Modes, physics: Physics, drawing: Drawing, effects: Effects, lifecycle: Lifecycle, characterAI: CharacterAI) {
             self.profile = profile; self.reflection = reflection; self.armour = armour; self.interaction = interaction; self.impact = impact
             self.items = items; self.roster = roster; self.modes = modes; self.physics = physics; self.drawing = drawing; self.effects = effects
-            self.lifecycle = lifecycle
+            self.lifecycle = lifecycle; self.characterAI = characterAI
         }
     }
     private let roles: Roles
@@ -338,6 +386,7 @@ public struct OriginalGameRules: Equatable, Sendable {
     public var drawing: Drawing { roles.drawing }
     public var effects: Effects { roles.effects }
     public var lifecycle: Lifecycle { roles.lifecycle }
+    public var characterAI: CharacterAI { roles.characterAI }
     public var reflectable: OriginalIDSet { roles.reflection.reflectable }
     public var reflector: Int32 { roles.reflection.reflector }
     public var rebinder: Int32 { roles.reflection.rebinder }
@@ -398,15 +447,28 @@ public struct OriginalGameRules: Equatable, Sendable {
     public var roundRevertFrom: Int32 { roles.lifecycle.roundRevertFrom }
     public var roundRevertTo: Int32 { roles.lifecycle.roundRevertTo }
     public var guardedTransformer: Int32 { roles.lifecycle.guardedTransformer }
+    public var stageAllyBound: Int32 { roles.characterAI.stageAllyBound }
+    public var healBall: Int32 { roles.characterAI.healBall }
+    public var healers: OriginalIDSet { roles.characterAI.healers }
+    public var stateDanger: Int32 { roles.characterAI.stateDanger }
+    public var frameDanger: Int32 { roles.characterAI.frameDanger }
+    public var pickupItems: OriginalIDRange { roles.characterAI.pickupItems }
+    public var pickupExtra: Int32 { roles.characterAI.pickupExtra }
+    public var soughtDrink: Int32 { roles.characterAI.soughtDrink }
+    public var avoidedDrink: Int32 { roles.characterAI.avoidedDrink }
+    public var idleDefenders: [OriginalIDFrames] { roles.characterAI.idleDefenders }
     public init(profile: String, reflection: Reflection, armour: Armour, interaction: Interaction, impact: Impact, items: Items,
-                roster: Roster, modes: Modes, physics: Physics, drawing: Drawing, effects: Effects, lifecycle: Lifecycle) {
+                roster: Roster, modes: Modes, physics: Physics, drawing: Drawing, effects: Effects, lifecycle: Lifecycle,
+                characterAI: CharacterAI) {
         roles = Roles(profile: profile, reflection: reflection, armour: armour, interaction: interaction, impact: impact, items: items,
-                      roster: roster, modes: modes, physics: physics, drawing: drawing, effects: effects, lifecycle: lifecycle)
+                      roster: roster, modes: modes, physics: physics, drawing: drawing, effects: effects, lifecycle: lifecycle,
+                      characterAI: characterAI)
     }
     public static func == (a: Self, b: Self) -> Bool {
         a.roles === b.roles || (a.profile == b.profile && a.reflection == b.reflection && a.armour == b.armour && a.interaction == b.interaction
                                 && a.impact == b.impact && a.items == b.items && a.roster == b.roster
                                 && a.modes == b.modes && a.physics == b.physics
-                                && a.drawing == b.drawing && a.effects == b.effects && a.lifecycle == b.lifecycle)
+                                && a.drawing == b.drawing && a.effects == b.effects && a.lifecycle == b.lifecycle
+                                && a.characterAI == b.characterAI)
     }
 }

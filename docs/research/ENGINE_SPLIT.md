@@ -10,7 +10,7 @@ measurement from [TVOS_WEB](TVOS_WEB.md), [MEMORY_LOADING](MEMORY_LOADING.md) an
 engine from the game itself. to publish engine as the separate github repo";
 then, after the plan: "ok … when the plan is setteled start the loop in a
 separate branch" and "push automatically every step (on that new branch)".
-**Status:** E0–E3, E4a, E4b (all six hosts), E4c-1 (the engine's self-contained tests), E5a (the game profile's survey and design) and E5b (the record type, the copied tables out), E4c-1a (a nondeterministic engine test corrected) E5c-0 (the profile's plumbing, reflection), E5c-1a (one storage, the reflectors), E5c-1b (armour), E5c-1c (special interactions) and E5c-1d (impact) done; E5c-2a, E5c-2b and E5c-2c (the items family: the random and requested spawns, camera, links, the mission stage) E5c-2d (the roster family), E5c-2e (the modes family), E5c-2f (the match prelude) and E5c-2g (the mode label) done: E5c-2's menu and mode rows are in the profile; E5c-1e (physics), E5c-1f (drawing) and E5c-1g (the post-draw effects) and E5c-1h (the slot prefix, scheduler and round restore) and E5c-1i (the object input) and E5c-1j (A28, the input chain) done: every E5c row is in the profile; E5d-1a, the AI's target roles, next.
+**Status:** E0–E3, E4a, E4b (all six hosts), E4c-1 (the engine's self-contained tests), E5a (the game profile's survey and design) and E5b (the record type, the copied tables out), E4c-1a (a nondeterministic engine test corrected) E5c-0 (the profile's plumbing, reflection), E5c-1a (one storage, the reflectors), E5c-1b (armour), E5c-1c (special interactions) and E5c-1d (impact) done; E5c-2a, E5c-2b and E5c-2c (the items family: the random and requested spawns, camera, links, the mission stage) E5c-2d (the roster family), E5c-2e (the modes family), E5c-2f (the match prelude) and E5c-2g (the mode label) done: E5c-2's menu and mode rows are in the profile; E5c-1e (physics), E5c-1f (drawing) and E5c-1g (the post-draw effects) and E5c-1h (the slot prefix, scheduler and round restore) and E5c-1i (the object input) and E5c-1j (A28, the input chain) done: every E5c row is in the profile; E5d-1a (the AI's target roles) done; E5d-1b, the fight roles, next.
 **Branch:** `exp/engine-split`, from `main` 380b448d. Worktree
 `/Volumes/NTSD-Builds/tasks/engine-split/worktree` (T7-backed APFS, see
 [BUILD_STORAGE_T7](BUILD_STORAGE_T7.md)). It tracks `origin/exp/engine-split`
@@ -158,7 +158,7 @@ A read-only survey of `native/` (three agents, 2026-10-18):
 | E2 | Content policy out of Core: the digest, count and EXE-SHA pins become the NTSD content identity the game passes; Core checks what it is given with the same checks and errors (2.8.3.3's content origin as the model, read only) | **done** ([evidence](../evidence/es-e2-content-identity.json)) |
 | E3 | Identity and Practice: user-data folder, wasm module, Android prefix/entry, queue/thread names, titles and messages become game configuration; Practice/Lab and its two checks move to the game side | **done**: E3a ([evidence](../evidence/es-e3a-practice.json)), E3b ([evidence](../evidence/es-e3b-game-identity.json)); diagnostic labels wait for D2 |
 | E4 | Two packages: `engine/Package.swift` (Core, Runtime, codecs, decoders, shims, host libraries, self-contained tests) and `native/Package.swift` depending on it by path; the unsafeFlags plan (SwiftPM rejects them in version-pinned dependencies) | E4a **done** ([evidence](../evidence/es-e4a-engine-package.json)); E4b: headless **done** ([evidence](../evidence/es-e4b1-headless-host.json)), browser **done** ([evidence](../evidence/es-e4b2-web-host.json)), SDL **done** ([evidence](../evidence/es-e4b3-sdl-host.json)), AppKit **done** ([evidence](../evidence/es-e4b4-appkit-host.json)), UIKit **done** ([evidence](../evidence/es-e4b5-uikit-host.json)), Android **done** ([evidence](../evidence/es-e4b6-android-host.json)); E4c-1 **done** ([evidence](../evidence/es-e4c1-engine-tests.json)), E4c-1a **done** ([evidence](../evidence/es-e4c1a-sorted-keys.json)); E4c-2 (split the 11 mixed test files, the War trio) queued |
-| E5 | Game profile: the ID sites (100 rows, about 125 branch points; first estimated ~90) and the AI dispatch behind a profile the game supplies; the engine defines the `0x44d000` record's layout and the game supplies `initial.bin`; the NTSD profile bit-exact (all gates plus the full fixture-driven suites); the API's fit with 2.8.3.3 checked read only | E5a **done** (survey and design, [evidence](../evidence/es-e5a-design.json)); E5b **done** ([evidence](../evidence/es-e5b-record-type.json)); E5c-0 **done** ([evidence](../evidence/es-e5c0-profile-plumbing.json)); E5c-1a **done** ([evidence](../evidence/es-e5c1a-reflector-roles.json)); E5c-1b **done** ([evidence](../evidence/es-e5c1b-armour-roles.json)); E5c-1c **done** ([evidence](../evidence/es-e5c1c-interaction-roles.json)); E5c-1d **done** ([evidence](../evidence/es-e5c1d-impact-roles.json)); E5c-2a **done** ([evidence](../evidence/es-e5c2a-items-roles.json)); E5c-2b **done** ([evidence](../evidence/es-e5c2b-camera-links-roles.json)); E5c-2c **done** ([evidence](../evidence/es-e5c2c-requested-mission-roles.json)); E5c-2d **done** ([evidence](../evidence/es-e5c2d-roster-roles.json)); E5c-2e **done** ([evidence](../evidence/es-e5c2e-modes-roles.json)); E5c-2f **done** ([evidence](../evidence/es-e5c2f-prelude-roles.json)); E5c-2g **done** ([evidence](../evidence/es-e5c2g-mode-label-roles.json)); E5c-1e **done** ([evidence](../evidence/es-e5c1e-physics-roles.json)); E5c-1f **done** ([evidence](../evidence/es-e5c1f-drawing-roles.json)); E5c-1g **done** ([evidence](../evidence/es-e5c1g-effects-roles.json)); E5c-1h **done** ([evidence](../evidence/es-e5c1h-lifecycle-roles.json)); E5c-1i **done** ([evidence](../evidence/es-e5c1i-object-input-roles.json)); E5c-1j **done** ([evidence](../evidence/es-e5c1j-input-roles.json)); E5d: [survey](../evidence/es-e5d-plumbing.md), E5d-1a next |
+| E5 | Game profile: the ID sites (100 rows, about 125 branch points; first estimated ~90) and the AI dispatch behind a profile the game supplies; the engine defines the `0x44d000` record's layout and the game supplies `initial.bin`; the NTSD profile bit-exact (all gates plus the full fixture-driven suites); the API's fit with 2.8.3.3 checked read only | E5a **done** (survey and design, [evidence](../evidence/es-e5a-design.json)); E5b **done** ([evidence](../evidence/es-e5b-record-type.json)); E5c-0 **done** ([evidence](../evidence/es-e5c0-profile-plumbing.json)); E5c-1a **done** ([evidence](../evidence/es-e5c1a-reflector-roles.json)); E5c-1b **done** ([evidence](../evidence/es-e5c1b-armour-roles.json)); E5c-1c **done** ([evidence](../evidence/es-e5c1c-interaction-roles.json)); E5c-1d **done** ([evidence](../evidence/es-e5c1d-impact-roles.json)); E5c-2a **done** ([evidence](../evidence/es-e5c2a-items-roles.json)); E5c-2b **done** ([evidence](../evidence/es-e5c2b-camera-links-roles.json)); E5c-2c **done** ([evidence](../evidence/es-e5c2c-requested-mission-roles.json)); E5c-2d **done** ([evidence](../evidence/es-e5c2d-roster-roles.json)); E5c-2e **done** ([evidence](../evidence/es-e5c2e-modes-roles.json)); E5c-2f **done** ([evidence](../evidence/es-e5c2f-prelude-roles.json)); E5c-2g **done** ([evidence](../evidence/es-e5c2g-mode-label-roles.json)); E5c-1e **done** ([evidence](../evidence/es-e5c1e-physics-roles.json)); E5c-1f **done** ([evidence](../evidence/es-e5c1f-drawing-roles.json)); E5c-1g **done** ([evidence](../evidence/es-e5c1g-effects-roles.json)); E5c-1h **done** ([evidence](../evidence/es-e5c1h-lifecycle-roles.json)); E5c-1i **done** ([evidence](../evidence/es-e5c1i-object-input-roles.json)); E5c-1j **done** ([evidence](../evidence/es-e5c1j-input-roles.json)); E5d: [survey](../evidence/es-e5d-plumbing.md), E5d-1a **done** ([evidence](../evidence/es-e5d1a-ai-target-roles.json)), E5d-1b next |
 | E6 | Classify each profile rule as LF2 2.0a or NTSD from the second reference; LF2 rules become the engine's default profile | needs D1 |
 | E7 | Engine stand-alone: the engine package builds alone (macOS, Linux container) and passes its tests with a from-scratch synthetic content pack; a scan finds no original bytes (files under `downloads/`, the resources, fixtures, `initial.bin`) | queued |
 | E8 | Publication: name, licence, a new repository with fresh history, a tag; this repository depends on it by revision; README credits | needs D2 and the user |
@@ -1046,6 +1046,51 @@ routines of `OriginalCharacterAISpecial.swift`.
 - **For the user:** nothing blocks E5d. An engine default with LF2's own
   routines belongs to D1/E6; the `public`-or-SPI surface can be revisited at E8.
 
+### E5d-1a note (2026-10-20, reviewed with its change; done)
+
+- **Family (thirteenth).** `CharacterAI`, the target choice of
+  `OriginalCharacterAI` (`setup`, `items`, `idle`): `stageAllyBound` 30 (A80:
+  `slot < 20 || id(s) < bound`, the short-circuit kept, an `Int32` bound as
+  E5c-0 foresaw for open-ended tests), `healBall` 200 (A81's two frame groups
+  and A84; A88 joins in E5d-1b), `healers` {2, 34} (A81; A95 shares it in
+  E5d-1b), `stateDanger` 211 (state 18) and `frameDanger` 212 (frames 150–170
+  stay engine values) (A82), `pickupItems` 100..<200 (A83's `id/100 == 1`:
+  `Int32` division truncates, so it holds exactly for 100…199) and
+  `pickupExtra` 213, `soughtDrink` 122 (A83 twice, A85) and `avoidedDrink` 123
+  (A83), and `idleDefenders` (A86), a table of `OriginalIDFrames` (an ID and
+  an inclusive frame window: 7 255–261, 9 280–290, 32 240–245). The drink
+  roles are named after the AI's tests: `Items` already has the links pass's
+  `hpDrink`/`mpDrink` with the same values (separate rules, F9), as it has
+  `itemRange` equal to `pickupItems`.
+- **Frames.** A86 is a table with its frames because it is a per-character
+  list whose length belongs to the game; the frame tests on one fixed Object
+  stay engine values (A81/A84's groups 50–69 of `healBall`, A82's 150–170 of
+  `frameDanger`, as A28's 300). A profile that moves `healBall` or
+  `frameDanger` must keep those frames in its Object.
+- **Sites.** Only the comparisons change: each keeps its reads (A81's own-ID
+  read inside group 5, A83's single header read per slot, A86's one ID and
+  frame read before the table) and order; A86's three windows become
+  `contains(where:)` over the table, pure comparisons of values read before.
+- **Plumbing.** `applyInPlace` passes `catalog.rules` (its local copy) to
+  `run`, which passes it to `setup`, `items` and both `idle` calls; all
+  internal. Public surface added: `OriginalIDFrames`, the `CharacterAI`
+  family, `characterAI:` on `OriginalGameRules.init`, its family and ten flat
+  accessors. Three constructions (the profile, `engineTests` with −1/empty,
+  the `with` helper).
+- **Tests.** `NTSDProfileCharacterAITests` (5): the pass's `setup`, `items` and
+  `idle` run directly on synthetic records, each role under NTSD's profile and
+  a moved one (A80's level; A81's `near48`, A84's `seen44`; A82's steering;
+  A83's target, with +0x404 = 1 too, and A85's `seen44`; A86's window edges, a
+  moved window and the empty table).
+- **Review.** No defect in the code (literals restored, rules removed: byte-
+  identical to HEAD; `id/100 == 1` exact for 100…199; the set, the table and
+  A80's short-circuit equal; no throwing read added or reordered; every
+  construction and `==` covered; no other caller). Required: A83's +0x404 use
+  tested; the `healBall` doc (another team, the search's target, `seen44`).
+  Adopted: the `stageAllyBound` doc (`max(…, 0)`, 0x450c2c = 1), the frames
+  rationale and coupling, `pickupItems` beside `itemRange`, the A86 tests.
+  `swift_beginAccess` measured before the gate: 3,278.
+
 ## Ledger
 
 - 2026-10-18: plan agreed; branch `exp/engine-split` and its worktree created
@@ -1416,21 +1461,28 @@ routines of `OriginalCharacterAISpecial.swift`.
   engine's 110 tests, 3,278/3,406; 21 suites with 84 tests; WASI vs identical;
   phone and Mac overlapping. Every E5c row is in the profile.
   [Evidence](../evidence/es-e5c1j-input-roles.json).
+- 2026-10-20 E5d-1a: the AI's target roles into a `CharacterAI` family (A80–A86;
+  `OriginalIDFrames` for A86's windows). Reviewed (no code defect; the
+  +0x404 test and the `healBall` doc fixed). `swift_beginAccess` measured first
+  (3,278). Gate `es-e5d1a`: 11 scenarios, frames, AppKit, unchecked, emulator,
+  20 clean launches, 29 suite runs, the engine's 110 tests, 3,278/3,406;
+  20 suites with 81 tests (the AI's two corpora among them); WASI vs
+  identical; Mac overlapping; phone 3v2 load time apart, the 4v4 follow-up
+  overlapping everywhere. [Evidence](../evidence/es-e5d1a-ai-target-roles.json).
 
 ## Next task
 
-E5d-1a (the E5d note above; survey [report](../evidence/es-e5d-plumbing.md)):
-a `CharacterAI` family with the target roles of `setup`, `items` and `idle`:
-`stageAllyBound` 30 (A80: `slot < 20 || id < bound`, short-circuit kept),
-`healBall` 200 (A81, A84; A88 in E5d-1b), `healers` {2, 34} (A81; A95 in
-E5d-1b), `stateDanger` 211 (state 18) and `frameDanger` 212 (frames 150–170
-engine) (A82), `pickupItems` 100..<200 (A83's `id/100 == 1`, equal for every
-`Int32`) and `pickupExtra` 213, `hpDrink` 122 (A83 twice, A85) and `mpDrink`
-123 (A83) — named after the AI's tests, not the DAT — and `idleDefenders`, a
-table of (ID, first, last frame) (A86: 7 255–261, 9 280–290, 32 240–245).
-Rules as a parameter from `applyInPlace` (`catalog.rules` from its local copy)
-through `run` to `setup`, `items` and `idle`; no public signature changes. Each
-site keeps its reads (A81's own-ID read inside group 5, A86's single ID and
-frame reads) and order. Tests: the pass directly for each role under NTSD's
-profile and a moved one. Gates as a hot pass with `OriginalCharacterAITests`,
-`OriginalLocalInputTests` and `OriginalMacRuntimeLoadingTests` in gate3.
+E5d-1b (the E5d note above): the fight roles into `CharacterAI`: `drinks`
+{122, 123} (A87's held drink in `fight`, A91's target in `item`, A95's held
+`wid` in `weapon`: one identical list), `healBall` again for A88 (`fight`'s
+`id(t) == 200`), `rangedBand` {4, 5, 31} (A89 in `approach` and `tactics`)
+and `rangedJoiner` 36 (A90), `meleeWeapons` {100, 101, 120, 121, 124} and
+`rollingWeapon` 124 (A93's extra roll, stream 0x2b), `thrownWeapons` {150,
+151} (A94), `healers` again for A95's command (`weapon`, line 600),
+`dashCounters` {2, 4, 6, 9, 10, 11, 8, 7, 33, 34} (A96: the per-call `Set`
+becomes the profile's set, its two `id(s)` reads kept), `shortDasher` 1 (A97,
+twice) and `dashJumper` 34 (A98: `dash`'s `jumpID`, stream 0x3a still drawn
+only on a match). Rules as a parameter from `run` through `fight` to
+`approach`, `tactics`, `item`, `weapon` and `attackHelper` (`dash` keeps its
+`jumpID`; `special` waits for E5d-2). Tests: the steps directly, each role
+under NTSD's profile and a moved one. Gates as E5d-1a.
