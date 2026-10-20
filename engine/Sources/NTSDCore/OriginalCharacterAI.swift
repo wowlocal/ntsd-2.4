@@ -125,7 +125,7 @@ struct OriginalCharacterAIPass {
         try items(s,&l,rules: rules)
         if l.near48 == 1 { l.target = l.self58 }
         guard l.target >= 0 else { try idle(s,&l,rules: rules); return }
-        try fight(s,slot: slot,mode: mode,&l)
+        try fight(s,slot: slot,mode: mode,&l,rules: rules)
     }
 
     struct Locals {
@@ -330,7 +330,7 @@ struct OriginalCharacterAIPass {
     }
 
     /// 40a925..40b7b0 with a target.
-    mutating func fight(_ s: Int,slot: Int,mode: Int32,_ l: inout Locals) throws {
+    mutating func fight(_ s: Int,slot: Int,mode: Int32,_ l: inout Locals,rules: OriginalGameRules) throws {
         let t = try index(Int(l.target))
         l.tState = try state(t); l.sState = try state(s)
         if try draw(0x14,g(0x44f618) &+ 8) == 0, try [0x3e8,0x3ec,0x3f0,0x3f4].contains(where: { try i(s,$0) == 1 }) {
@@ -348,7 +348,7 @@ struct OriginalCharacterAIPass {
             return
         }
         if try i(s,0x404) == 1 {
-            if try i(s,0x98) > 0, try [122,123].contains(id(index(Int(i(s,0x9c))))) { try release(s,.attack); try press(s,.attack); return }
+            if try i(s,0x98) > 0, try rules.drinks.contains(id(index(Int(i(s,0x9c))))) { try release(s,.attack); try press(s,.attack); return }
             var skip = false
             if try i(s,0x3fc) != -1000, try abs(i(s,0x400) &- i(s,0x18)) > 90 || abs(i(s,0x3fc) &- i(s,0x10)) > 90 { skip = true }
             if !skip {
@@ -361,28 +361,28 @@ struct OriginalCharacterAIPass {
                 }
             }
         }
-        if l.tState == 1004 || l.tState == 2004 { try item(s,t,&l); return }
+        if l.tState == 1004 || l.tState == 2004 { try item(s,t,&l,rules: rules); return }
         if try !far(s,t) {
             if try l.tState == 14 || abs(i(t,8)) > 2 { try flee(s,t,&l); return }
         }
-        if try id(t) == 200 {
+        if try id(t) == rules.healBall {
             if try i(t,0x10) > i(s,0x10) &+ 7 { try press(s,.right) } else if try i(t,0x10) < i(s,0x10) &+ -7 { try press(s,.left) }
             if try i(t,0x18) > i(s,0x18) &+ 2 { try press(s,.down) } else if try i(t,0x18) < i(s,0x18) &+ -2 { try press(s,.up) }
             return
         }
         if try special(s,t,slot: slot,l) { return }
-        if try !far(s,t) { try approach(s,t,slot: slot,mode: mode,&l) }
-        if try i(s,0x98) > 0, try !weapon(s,t,slot: slot,l) { return }
-        try tactics(s,t,slot: slot,mode: mode,&l)
-        try attackHelper(s,t,l)
+        if try !far(s,t) { try approach(s,t,slot: slot,mode: mode,&l,rules: rules) }
+        if try i(s,0x98) > 0, try !weapon(s,t,slot: slot,l,rules: rules) { return }
+        try tactics(s,t,slot: slot,mode: mode,&l,rules: rules)
+        try attackHelper(s,t,l,rules: rules)
     }
 
     /// 40adaa..40b0c7: approach, retreat bands and z alignment.
-    mutating func approach(_ s: Int,_ t: Int,slot: Int,mode: Int32,_ l: inout Locals) throws {
+    mutating func approach(_ s: Int,_ t: Int,slot: Int,mode: Int32,_ l: inout Locals,rules: OriginalGameRules) throws {
         if try (l.right20 == 1 || g(0x44f608) == 1) && l.sState == 2 && facing(s) == 0 { try press(s,.left) }
         if try l.left14 == 1 && l.sState == 2 && facing(s) == 1 { try press(s,.right) }
         let own = try id(s)
-        var band = [4,5,31].contains(own)
+        var band = rules.rangedBand.contains(own)
         if !band {
             let hp = try i(s,0x2fc)
             if try i(t,0x2fc) > hp &* 2 || (hp <= 100 && i(s,0x304) > 100) {
@@ -422,7 +422,7 @@ struct OriginalCharacterAIPass {
     }
 
     /// 40b0fc..40b78f: defend, jump and attack chances.
-    mutating func tactics(_ s: Int,_ t: Int,slot: Int,mode: Int32,_ l: inout Locals) throws {
+    mutating func tactics(_ s: Int,_ t: Int,slot: Int,mode: Int32,_ l: inout Locals,rules: OriginalGameRules) throws {
         let level = try g(0x44f60c)
         if try draw(0x1e,level &* 7 &+ 10) == 0, l.tState == 3 || l.tState/100 == 3, try abs(i(t,0x18) &- i(s,0x18)) < 9 {
             let f = try facing(t)
@@ -430,7 +430,7 @@ struct OriginalCharacterAIPass {
         }
         if try !far(s,t), try draw(0x1f,(level &* 5 &+ 10) &* 2) < 3, try draw(0x20,20) < 3, l.tState != 14 { try press(s,.jump) }
         let own = try id(s)
-        let band = [4,5,31].contains(own)
+        let band = rules.rangedBand.contains(own)
         if !band || l.tState == 16 {
             if try abs(i(t,0x10) &- ftol(s,0x40) &* 2 &- i(s,0x10)) < 80, try abs(i(t,0x18) &- i(s,0x18)) < 5,
                try draw(0x21,g(0x44f61c) &+ 3) == 0, l.tState != 14 { try press(s,.attack) }
@@ -441,7 +441,7 @@ struct OriginalCharacterAIPass {
                    try draw(0x22,g(0x44f61c) &+ 3) == 0 { try strike(s,t) }
                 return
             }
-            if l.tState != 16 && (band || own == 36) {
+            if l.tState != 16 && (band || own == rules.rangedJoiner) {
                 let flag = try i(t,0x10) &- i(s,0x10) < 100 && abs(i(t,0x18) &- i(s,0x18)) < 80 && draw(0x23,g(0x44f61c) &+ 2) == 0
                 if flag && l.sState != 7 {
                     if try !far(s,t) { try escape(s,t) }
@@ -489,8 +489,8 @@ struct OriginalCharacterAIPass {
     }
 
     /// 40b987..40bba3: walk to an item and pick it up.
-    mutating func item(_ s: Int,_ t: Int,_ l: inout Locals) throws {
-        let skip = try far(s,t) && ![122,123].contains(id(t))
+    mutating func item(_ s: Int,_ t: Int,_ l: inout Locals,rules: OriginalGameRules) throws {
+        let skip = try far(s,t) && !rules.drinks.contains(id(t))
         if !skip {
             let sx = try i(s,0x10),tx = try i(t,0x10)
             if sx > tx &+ 6 {
@@ -537,7 +537,7 @@ struct OriginalCharacterAIPass {
     }
 
     /// 408cb0: weapon use; false ends the AI for this call.
-    mutating func weapon(_ s: Int,_ t: Int,slot: Int,_ l: Locals) throws -> Bool {
+    mutating func weapon(_ s: Int,_ t: Int,slot: Int,_ l: Locals,rules: OriginalGameRules) throws -> Bool {
         if try draw(0x28,g(0x44f61c) &+ 1) > 0 { return false }
         let wid = try id(index(Int(i(s,0x9c))))
         var flag = false
@@ -550,10 +550,10 @@ struct OriginalCharacterAIPass {
             if (sx < ax && ax < tx) || (tx < ax && ax < sx) { flag = true } // 4061a0
         }
         if l.sState == 2, try draw(0x29,g(0x44f61c) &+ 5) == 0 { try press(s,flag ? .jump : .attack) }
-        if [100,101,120,121,124].contains(wid) {
+        if rules.meleeWeapons.contains(wid) {
             if try abs(i(t,0x10) &- ftol(s,0x40) &* 2 &- i(s,0x10)) < 115, try abs(i(t,0x18) &- i(s,0x18)) < 6,
                try draw(0x2a,g(0x44f61c) &+ 3) == 0, l.tState != 14 { try press(s,.attack) }
-            if wid == 124, try draw(0x2b,g(0x44f614) &+ 30) == 0 { try press(s,.attack) }
+            if wid == rules.rollingWeapon, try draw(0x2b,g(0x44f614) &+ 30) == 0 { try press(s,.attack) }
             if try draw(0x2c,g(0x44f61c) &+ 5) == 0, try !far(s,t) {
                 if try abs(i(t,0x10) &- i(s,0x10)) < 600, try abs(i(t,0x18) &- i(s,0x18)) < 20 {
                     if try i(t,0x10) > i(s,0x10), try g(0x44f608) == 0 { try press(s,.right); try release(s,.right) }
@@ -561,11 +561,11 @@ struct OriginalCharacterAIPass {
                 }
             }
         }
-        if (wid == 150 || wid == 151) && !flag {
+        if rules.thrownWeapons.contains(wid) && !flag {
             if try abs(i(t,0x10) &- ftol(s,0x40) &* 2 &- i(s,0x10)) < 300, try abs(i(t,0x18) &- i(s,0x18)) < 6,
                try draw(0x2d,g(0x44f618) &+ 7) == 0, l.tState != 14 { try press(s,.attack) }
         }
-        guard wid == 122 || wid == 123 else { return true }
+        guard rules.drinks.contains(wid) else { return true }
         for key in [Key.defend,.jump,.attack,.down,.up,.left,.right] { try byte(s,key.rawValue,0) }
         if try l.sState == 17 && l.aligned34 == 1 && l.ball30 == 0 && i(s,8) != 0 { try press(s,.defend); return false }
         if try far(s,t) { return false }
@@ -597,34 +597,33 @@ struct OriginalCharacterAIPass {
             return false
         }
         guard try draw(0x34,5) == 0 else { return false }
-        if try l.ball30 == 0 && [2,34].contains(id(s)) && i(s,0x308) > 150 && draw(0x35,g(0x44f61c) &+ 3) > 0 {
+        if try l.ball30 == 0 && rules.healers.contains(id(s)) && i(s,0x308) > 150 && draw(0x35,g(0x44f61c) &+ 3) > 0 {
             try byte(s,tx > i(s,0x10) ? 0xd8 : 0xd9,3); return true
         }
         try press(s,.attack); return false
     }
 
     /// 4034f0: close-range attacks and dash counters.
-    mutating func attackHelper(_ s: Int,_ t: Int,_ l: Locals) throws {
+    mutating func attackHelper(_ s: Int,_ t: Int,_ l: Locals,rules: OriginalGameRules) throws {
         if try abs(i(t,0x10) &- ftol(s,0x40) &* 2 &- i(s,0x10)) < 80, try abs(i(t,0x18) &- i(s,0x18)) < 5,
            try draw(0x37,g(0x44f61c) &+ 3) == 0, l.tState != 14 { try press(s,.attack) }
         if try l.right20 != 0 && i(t,0x10) > i(s,0x10) { return }
         if try l.left14 != 0 && i(t,0x10) < i(s,0x10) { return }
         if try draw(0x38,g(0x44f61c) &+ 1) != 0 { return }
-        let set: Set<Int32> = [2,4,6,9,10,11,8,7,33,34]
-        if try set.contains(id(s)) {
+        if try rules.dashCounters.contains(id(s)) {
             let d = try abs(i(t,0x10) &+ ftol(t,0x40) &* 2 &- i(s,0x10))
             if d > 100, try abs(i(t,0x10) &+ ftol(t,0x40) &* 2 &- i(s,0x10)) < 900, try abs(i(t,0x18) &- i(s,0x18)) < 5,
                try draw(0x39,g(0x44f61c) &+ 10) == 0, l.tState != 14 { try press(s,.defend) }
         }
-        if try set.contains(id(s)) {
-            try dash(s,t,l,range: 90,z: 13,jumpID: 34)
+        if try rules.dashCounters.contains(id(s)) {
+            try dash(s,t,l,range: 90,z: 13,jumpID: rules.dashJumper)
         }
-        if try id(s) == 1 {
+        if try id(s) == rules.shortDasher {
             let d = try abs(i(t,0x10) &+ ftol(t,0x40) &* 2 &- i(s,0x10))
             if d > 100, try abs(i(t,0x10) &+ ftol(t,0x40) &* 2 &- i(s,0x10)) < 300, try abs(i(t,0x18) &- i(s,0x18)) < 5,
                try draw(0x3b,g(0x44f618) &+ 10) == 0, l.tState != 14 { try press(s,.defend) }
         }
-        if try id(s) == 1 { try dash(s,t,l,range: 90,z: 7,jumpID: nil) }
+        if try id(s) == rules.shortDasher { try dash(s,t,l,range: 90,z: 7,jumpID: nil) }
     }
 
     mutating func dash(_ s: Int,_ t: Int,_ l: Locals,range: Int32,z: Int32,jumpID: Int32?) throws {

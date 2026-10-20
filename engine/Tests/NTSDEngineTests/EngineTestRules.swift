@@ -29,5 +29,7 @@ extension OriginalGameRules {
         lifecycle: .init(halfHPRegen: OriginalIDSet([]), state9995Object: -1, pieces: 217, lastPiece: 218, noRiseInvulnerability: OriginalIDSet([]),
                          roundRevertFrom: -1, roundRevertTo: -1, guardedTransformer: -1),
         characterAI: .init(stageAllyBound: -1, healBall: -1, healers: OriginalIDSet([]), stateDanger: -1, frameDanger: -1,
-                           pickupItems: OriginalIDRange(0..<0), pickupExtra: -1, soughtDrink: -1, avoidedDrink: -1, idleDefenders: []))
+                           pickupItems: OriginalIDRange(0..<0), pickupExtra: -1, soughtDrink: -1, avoidedDrink: -1, idleDefenders: [],
+                           drinks: OriginalIDSet([]), rangedBand: OriginalIDSet([]), rangedJoiner: -1, meleeWeapons: OriginalIDSet([]),
+                           rollingWeapon: -1, thrownWeapons: OriginalIDSet([]), dashCounters: OriginalIDSet([]), dashJumper: -1, shortDasher: -1))
 }

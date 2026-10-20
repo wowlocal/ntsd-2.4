@@ -2,32 +2,51 @@ import XCTest
 @testable import NTSDCore
 import NTSDProfile
 
-/// ENGINE_SPLIT E5d-1a: the character AI's target choice (A80–A86) follows the
-/// profile. Synthetic records; the pass's steps are run directly.
+/// ENGINE_SPLIT E5d-1a/1b: the character AI's target choice (A80–A86) and fight
+/// (A87–A91, A93–A98) follow the profile. Synthetic records; the pass's steps are run directly.
 final class NTSDProfileCharacterAITests: XCTestCase {
     func zero(_ size: Int) throws -> OriginalStateRecord {
         try .init(bytes: [UInt8](repeating: 0, count: size), defined: [Bool](repeating: true, count: size))
     }
     func characterAI(bound: Int32? = nil, ball: Int32? = nil, healers: OriginalIDSet? = nil, stateDanger: Int32? = nil,
                      frameDanger: Int32? = nil, pickup: OriginalIDRange? = nil, extra: Int32? = nil, sought: Int32? = nil,
-                     avoided: Int32? = nil, defenders: [OriginalIDFrames]? = nil) -> OriginalGameRules {
+                     avoided: Int32? = nil, defenders: [OriginalIDFrames]? = nil, drinks: OriginalIDSet? = nil,
+                     band: OriginalIDSet? = nil, joiner: Int32? = nil, melee: OriginalIDSet? = nil, rolling: Int32? = nil,
+                     thrown: OriginalIDSet? = nil, counters: OriginalIDSet? = nil, jumper: Int32? = nil,
+                     short: Int32? = nil) -> OriginalGameRules {
         let n = NTSDProfile.rules
-        return n.with(characterAI: .init(stageAllyBound: bound ?? n.stageAllyBound, healBall: ball ?? n.healBall, healers: healers ?? n.healers,
-            stateDanger: stateDanger ?? n.stateDanger, frameDanger: frameDanger ?? n.frameDanger, pickupItems: pickup ?? n.pickupItems,
-            pickupExtra: extra ?? n.pickupExtra, soughtDrink: sought ?? n.soughtDrink, avoidedDrink: avoided ?? n.avoidedDrink,
-            idleDefenders: defenders ?? n.idleDefenders))
+        // One value per statement: a single expression of these defaults outgrows the type checker.
+        let bound: Int32 = bound ?? n.stageAllyBound, ball: Int32 = ball ?? n.healBall, healers: OriginalIDSet = healers ?? n.healers
+        let stateDanger: Int32 = stateDanger ?? n.stateDanger, frameDanger: Int32 = frameDanger ?? n.frameDanger
+        let pickup: OriginalIDRange = pickup ?? n.pickupItems, extra: Int32 = extra ?? n.pickupExtra
+        let sought: Int32 = sought ?? n.soughtDrink, avoided: Int32 = avoided ?? n.avoidedDrink
+        let defenders: [OriginalIDFrames] = defenders ?? n.idleDefenders, drinks: OriginalIDSet = drinks ?? n.drinks
+        let band: OriginalIDSet = band ?? n.rangedBand, joiner: Int32 = joiner ?? n.rangedJoiner
+        let melee: OriginalIDSet = melee ?? n.meleeWeapons, rolling: Int32 = rolling ?? n.rollingWeapon
+        let thrown: OriginalIDSet = thrown ?? n.thrownWeapons, counters: OriginalIDSet = counters ?? n.dashCounters
+        let jumper: Int32 = jumper ?? n.dashJumper, short: Int32 = short ?? n.shortDasher
+        let ai = OriginalGameRules.CharacterAI(stageAllyBound: bound, healBall: ball, healers: healers, stateDanger: stateDanger,
+            frameDanger: frameDanger, pickupItems: pickup, pickupExtra: extra, soughtDrink: sought, avoidedDrink: avoided,
+            idleDefenders: defenders, drinks: drinks, rangedBand: band, rangedJoiner: joiner, meleeWeapons: melee, rollingWeapon: rolling,
+            thrownWeapons: thrown, dashCounters: counters, dashJumper: jumper, shortDasher: short)
+        return n.with(characterAI: ai)
     }
     /// The character (a type-0 Object with this ID, team 1, HP 500 of 500, at this
-    /// frame) in slot 10 and another Object (this ID, type 1, team, frame, z and
-    /// the state of that frame) in slot 20; 0x450bb4 (the width) 1000 and the
-    /// difficulty 0x450c30 2.
-    func pass(own: Int32, ownFrame: Int32 = 0, other: Int32 = 1, team: Int32 = 1, frame: Int32 = 0, z: Int32 = 0,
-              state: Int32 = 0) throws -> OriginalCharacterAIPass {
+    /// frame) in slot 10 and another Object (this ID, type 1, team, frame, x, z and
+    /// the state of that frame) in slot 20; with `held`, a third Object in slot 21
+    /// that the character holds (+0x98 1, +0x9c 21). 0x450bb4 (the width) 1000,
+    /// the difficulty 0x450c30 2, a random table of ones and one background.
+    func pass(own: Int32, ownFrame: Int32 = 0, other: Int32 = 1, team: Int32 = 1, frame: Int32 = 0, x: Int32 = 0, z: Int32 = 0,
+              state: Int32 = 0, held: Int32? = nil) throws -> OriginalCharacterAIPass {
         var world = try zero(0x7d8), globals = try zero(0xb440)
-        for (slot, actor) in [(10, 0), (20, 1)] { try world.write(UInt32(actor), at: 0x194+4*slot); try world.write(UInt8(1), at: 4+slot) }
+        for (slot, actor) in [(10, 0), (20, 1), (21, 2)] { try world.write(UInt32(actor), at: 0x194+4*slot) }
+        for slot in held == nil ? [10, 20] : [10, 20, 21] { try world.write(UInt8(1), at: 4+slot) }
         try globals.write(Int32(1000), at: 0x450bb4-0x44d000); try globals.write(Int32(2), at: 0x450c30-0x44d000)
-        var actors = try (0..<2).map { _ in try zero(0x420) }
-        for a in 0..<2 { try actors[a].write(UInt32(a), at: 0x368) }
+        for n in 0..<3000 { try globals.write(UInt8(1), at: 0x44ff90-0x44d000+n) }
+        var actors = try (0..<3).map { _ in try zero(0x420) }
+        for a in 0..<3 { try actors[a].write(UInt32(a), at: 0x368) }
+        if held != nil { try actors[0].write(Int32(1), at: 0x98); try actors[0].write(Int32(21), at: 0x9c) }
+        try actors[1].write(x, at: 0x10)
         for o in [0x2fc, 0x300, 0x304] { try actors[0].write(Int32(500), at: o) }
         try actors[0].write(Int32(1), at: 0x364); try actors[0].write(ownFrame, at: 0x70)
         try actors[1].write(team, at: 0x364); try actors[1].write(frame, at: 0x70); try actors[1].write(z, at: 0x18)
@@ -37,9 +56,10 @@ final class NTSDProfileCharacterAITests: XCTestCase {
             return OriginalLoadedObject(header: header, nameTail: try zero(0x3c), frames: [],
                                         frameStorage: [OriginalStateRecord](repeating: f, count: frames), weaponSoundPaths: [:])
         }
-        let objects = [try object(own, type: 0, frames: 1, state: 0), try object(other, type: 1, frames: Int(frame)+1, state: state)]
-        return OriginalCharacterAIPass(world: world, actors: actors, globals: globals, objects: objects, objectCount: 2, backgrounds: [],
-                                       sse2: false)
+        let objects = [try object(own, type: 0, frames: 1, state: 0), try object(other, type: 1, frames: Int(frame)+1, state: state),
+                       try object(held ?? 0, type: 1, frames: 1, state: 0)]
+        return OriginalCharacterAIPass(world: world, actors: actors, globals: globals, objects: objects, objectCount: 3,
+                                       backgrounds: [try zero(0x100)], sse2: false)
     }
     /// A80: the AI level `setup` stores (0x44f60c) for the character in this slot, in mode 1.
     func level(own: Int32, slot: Int, rules: OriginalGameRules) throws -> Int32 {
@@ -140,5 +160,120 @@ final class NTSDProfileCharacterAITests: XCTestCase {
         for (id, frame): (Int32, Int32) in [(7, 258), (9, 285), (32, 242)] {
             XCTAssertFalse(try defends(own: id, frame: frame, rules: characterAI(defenders: [])))
         }
+    }
+    /// The random streams one step drew (a branch is told by its streams).
+    func streams(_ p: OriginalCharacterAIPass) -> [Int32] { p.events.map { if case let .random(stream, _, _) = $0 { return stream }; return -1 } }
+    /// `fight` for the character with the Object in slot 20 as its target.
+    func fight(_ p: OriginalCharacterAIPass, rules: OriginalGameRules) throws -> [Int32] {
+        var p = p, l = OriginalCharacterAIPass.Locals(); l.target = 20
+        try p.fight(0, slot: 10, mode: 0, &l, rules: rules)
+        return streams(p)
+    }
+    func testDrinksAndHealBallInFightA87A88() throws {
+        let n = NTSDProfile.rules
+        func drinker(_ held: Int32) throws -> OriginalCharacterAIPass {
+            var p = try pass(own: 3, other: 3, held: held); try p.actors[0].write(Int32(1), at: 0x404); return p
+        }
+        // A87: with +0x404 1 a held drink is drunk at once: only the entry roll 0x14.
+        XCTAssertEqual(try fight(drinker(122), rules: n), [0x14]); XCTAssertEqual(try fight(drinker(123), rules: n), [0x14])
+        XCTAssertTrue(try fight(drinker(150), rules: n).contains(0x3c), "not a drink: on to the special roll")
+        XCTAssertTrue(try fight(drinker(122), rules: characterAI(drinks: OriginalIDSet([150]))).contains(0x3c))
+        XCTAssertEqual(try fight(drinker(150), rules: characterAI(drinks: OriginalIDSet([150]))), [0x14])
+        // A88: a target ball is walked onto, before the special roll.
+        XCTAssertEqual(try fight(pass(own: 3, other: 200, x: 50), rules: n), [0x14])
+        XCTAssertTrue(try fight(pass(own: 3, other: 200, x: 50), rules: characterAI(ball: 77)).contains(0x3c))
+        XCTAssertEqual(try fight(pass(own: 3, other: 77, x: 50), rules: characterAI(ball: 77)), [0x14])
+    }
+    func testRangedBandAndJoinerA89A90() throws {
+        let n = NTSDProfile.rules
+        // approach: the band closes in from beyond 170 (stream 0x1a), the others from beyond 60 (0x1c).
+        func approach(_ own: Int32, _ rules: OriginalGameRules) throws -> [Int32] {
+            var p = try pass(own: own, x: 200), l = OriginalCharacterAIPass.Locals()
+            try p.approach(0, 1, slot: 10, mode: 0, &l, rules: rules); return streams(p)
+        }
+        for own: Int32 in [4, 5, 31] { XCTAssertEqual(try approach(own, n), [0x1a], "\(own)") }
+        XCTAssertEqual(try approach(7, n), [0x1c])
+        XCTAssertEqual(try approach(4, characterAI(band: OriginalIDSet([7]))), [0x1c])
+        XCTAssertEqual(try approach(7, characterAI(band: OriginalIDSet([7]))), [0x1a])
+        // tactics: the close attack (0x21) is for those outside the band; the band and the joiner step away (0x23).
+        func tactics(_ own: Int32, _ rules: OriginalGameRules) throws -> (close: Bool, away: Bool) {
+            var p = try pass(own: own, x: 50), l = OriginalCharacterAIPass.Locals()
+            try p.tactics(0, 1, slot: 10, mode: 0, &l, rules: rules); let s = streams(p)
+            return (s.contains(0x21), s.contains(0x23))
+        }
+        XCTAssertTrue(try tactics(4, n) == (false, true)); XCTAssertTrue(try tactics(36, n) == (true, true))
+        XCTAssertTrue(try tactics(7, n) == (true, false))
+        XCTAssertTrue(try tactics(7, characterAI(band: OriginalIDSet([7]))) == (false, true))
+        XCTAssertTrue(try tactics(36, characterAI(joiner: 7)) == (true, false))
+        XCTAssertTrue(try tactics(7, characterAI(joiner: 7)) == (true, true))
+    }
+    func testDrinkTargetsA91() throws {
+        let n = NTSDProfile.rules
+        // item: a far target (+0x404 1, 300 away) is walked to only when a drink.
+        func walks(_ other: Int32, _ rules: OriginalGameRules) throws -> Bool {
+            var p = try pass(own: 7, other: other, x: 300), l = OriginalCharacterAIPass.Locals()
+            try p.actors[0].write(Int32(1), at: 0x404)
+            try p.item(0, 1, &l, rules: rules); return try p.actors[0].integer(at: 0xd0, as: UInt8.self) == 1
+        }
+        XCTAssertTrue(try walks(122, n)); XCTAssertTrue(try walks(123, n)); XCTAssertFalse(try walks(150, n))
+        XCTAssertFalse(try walks(122, characterAI(drinks: OriginalIDSet([150])))); XCTAssertTrue(try walks(150, characterAI(drinks: OriginalIDSet([150]))))
+    }
+    func testHeldWeaponsA93A94A95() throws {
+        let n = NTSDProfile.rules
+        func weapon(_ held: Int32, _ rules: OriginalGameRules, own: Int32 = 7, x: Int32 = 50, counter: Int32 = 0) throws -> (going: Bool, streams: [Int32]) {
+            var p = try pass(own: own, x: x, held: held), l = OriginalCharacterAIPass.Locals()
+            try p.setG(0x44f604, 1000); try p.setG(0x450c34, counter); try p.actors[0].write(Int32(200), at: 0x308)
+            let going = try p.weapon(0, 1, slot: 10, l, rules: rules); return (going, streams(p))
+        }
+        // A93: melee swings (0x2a), the rolling one's extra roll (0x2b); A94: a throw (0x2d); A95: a drink stops (false).
+        for held: Int32 in [100, 101, 120, 121, 124] { XCTAssertTrue(try weapon(held, n).streams.contains(0x2a), "\(held)") }
+        XCTAssertFalse(try weapon(100, n).streams.contains(0x2b))
+        XCTAssertTrue(try weapon(124, n).streams.contains(0x2b)); XCTAssertFalse(try weapon(150, n).streams.contains(0x2a))
+        XCTAssertFalse(try weapon(100, characterAI(melee: OriginalIDSet([150]))).streams.contains(0x2a))
+        XCTAssertTrue(try weapon(150, characterAI(melee: OriginalIDSet([150]))).streams.contains(0x2a))
+        XCTAssertFalse(try weapon(124, characterAI(rolling: 100)).streams.contains(0x2b))
+        XCTAssertTrue(try weapon(100, characterAI(rolling: 100)).streams.contains(0x2b))
+        XCTAssertTrue(try weapon(150, n).streams.contains(0x2d)); XCTAssertTrue(try weapon(151, n).streams.contains(0x2d))
+        XCTAssertFalse(try weapon(100, n).streams.contains(0x2d))
+        XCTAssertFalse(try weapon(150, characterAI(thrown: OriginalIDSet([100]))).streams.contains(0x2d))
+        XCTAssertTrue(try weapon(100, characterAI(thrown: OriginalIDSet([100]))).streams.contains(0x2d))
+        XCTAssertFalse(try weapon(122, n).going); XCTAssertFalse(try weapon(123, n).going); XCTAssertTrue(try weapon(150, n).going)
+        XCTAssertTrue(try weapon(122, characterAI(drinks: OriginalIDSet([150]))).going)
+        XCTAssertFalse(try weapon(150, characterAI(drinks: OriginalIDSet([150]))).going)
+        // A95: a healer holding a drink, away from the target, on a passed 1-in-5 roll (0x34), rolls 0x35.
+        let counter = try XCTUnwrap((0..<20).first { c in
+            ((try? weapon(122, n, own: 2, x: 500, counter: Int32(c)).streams) ?? []).contains(0x35)
+        }.map(Int32.init))
+        XCTAssertTrue(try weapon(122, n, own: 34, x: 500, counter: counter).streams.contains(0x35))
+        XCTAssertFalse(try weapon(122, n, own: 7, x: 500, counter: counter).streams.contains(0x35))
+        XCTAssertTrue(try weapon(122, characterAI(healers: OriginalIDSet([7])), own: 7, x: 500, counter: counter).streams.contains(0x35))
+        XCTAssertFalse(try weapon(122, characterAI(healers: OriginalIDSet([7])), own: 2, x: 500, counter: counter).streams.contains(0x35))
+    }
+    func testDashCountersA96A97A98() throws {
+        let n = NTSDProfile.rules
+        // attackHelper at frame 110, facing a target this far: the counter's defence roll (0x39), the short
+        // dasher's (0x3b), the dash jumper's coin (0x3a).
+        func helper(_ own: Int32, _ rules: OriginalGameRules, x: Int32 = 500) throws -> [Int32] { try run(own, rules, x: x).streams }
+        func run(_ own: Int32, _ rules: OriginalGameRules, x: Int32) throws -> (streams: [Int32], attack: Bool) {
+            var p = try pass(own: own, ownFrame: 110, x: x), l = OriginalCharacterAIPass.Locals()
+            try p.attackHelper(0, 1, l, rules: rules)
+            return (streams(p), try p.actors[0].integer(at: 0xd1, as: UInt8.self) == 1)
+        }
+        for own: Int32 in [2, 4, 6, 9, 10, 11, 8, 7, 33, 34] { XCTAssertTrue(try helper(own, n).contains(0x39), "\(own)") }
+        XCTAssertFalse(try helper(5, n).contains(0x39))
+        XCTAssertFalse(try helper(2, characterAI(counters: OriginalIDSet([5]))).contains(0x39))
+        XCTAssertTrue(try helper(5, characterAI(counters: OriginalIDSet([5]))).contains(0x39))
+        XCTAssertTrue(try helper(34, n).contains(0x3a)); XCTAssertFalse(try helper(2, n).contains(0x3a))
+        XCTAssertFalse(try helper(34, characterAI(jumper: 2)).contains(0x3a)); XCTAssertTrue(try helper(2, characterAI(jumper: 2)).contains(0x3a))
+        XCTAssertFalse(try helper(5, characterAI(jumper: 5)).contains(0x3a), "the jumper dashes only among the counters")
+        // The counters' dash (A96's second use) carries the jumper.
+        XCTAssertTrue(try helper(5, characterAI(counters: OriginalIDSet([5]), jumper: 5)).contains(0x3a))
+        XCTAssertFalse(try helper(34, characterAI(counters: OriginalIDSet([5]))).contains(0x3a))
+        XCTAssertTrue(try helper(1, n, x: 200).contains(0x3b)); XCTAssertFalse(try helper(5, n, x: 200).contains(0x3b))
+        XCTAssertFalse(try helper(1, characterAI(short: 5), x: 200).contains(0x3b))
+        XCTAssertTrue(try helper(5, characterAI(short: 5), x: 200).contains(0x3b))
+        // The short dasher's dash (A97's second use) attacks at 200 (beyond the close attack's 80); it draws no stream.
+        XCTAssertTrue(try run(1, n, x: 200).attack); XCTAssertFalse(try run(5, n, x: 200).attack)
+        XCTAssertTrue(try run(5, characterAI(short: 5), x: 200).attack); XCTAssertFalse(try run(1, characterAI(short: 5), x: 200).attack)
     }
 }

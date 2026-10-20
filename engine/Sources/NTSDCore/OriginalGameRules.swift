@@ -321,7 +321,7 @@ public struct OriginalGameRules: Equatable, Sendable {
             self.guardedTransformer = guardedTransformer
         }
     }
-    /// The character AI (OriginalCharacterAI): the IDs its target choice tests.
+    /// The character AI (OriginalCharacterAI): the IDs its target choice and fight test.
     /// The names follow the AI's own tests, not what the Objects are in the DAT.
     public struct CharacterAI: Equatable, Sendable {
         /// When 0x450c2c is 1 every character plays at AI level 0 and the bound is
@@ -335,9 +335,11 @@ public struct OriginalGameRules: Equatable, Sendable {
         /// 150 in x, sets `ball30` and the steering flags; one of its own team in
         /// frames 50–59 within 300×90 ends the item search for later slots
         /// (`seen44`, whatever the HP) and becomes the target of a character
-        /// passing another HP test.
+        /// passing another HP test; a target one is walked onto (within 7 in x and
+        /// 2 in z) before the special roll.
         public let healBall: Int32
-        /// Characters that head for their own team's `healBall`.
+        /// Characters that head for their own team's `healBall`, and that, holding
+        /// one of `drinks`, may set its command instead of drinking.
         public let healers: OriginalIDSet
         /// Dangers the AI steps away from: `stateDanger` in state 18,
         /// `frameDanger` in frames 150–170.
@@ -355,11 +357,48 @@ public struct OriginalGameRules: Equatable, Sendable {
         /// With no target, a character in one of these frame windows of its own
         /// presses defend.
         public let idleDefenders: [OriginalIDFrames]
+        /// The fight. `drinks`: a held one, when +0x404 is 1, is drunk (attack) at
+        /// once; a target one is walked to even when far; otherwise a held one
+        /// makes the character clear its buttons and steer (out of a corner, which
+        /// may lead toward the target, or away within 350×70; each steering
+        /// branch ends the step); once clear, on a 1-in-5 roll (stream 0x34) it
+        /// drinks, unless it is one of `healers` with `ball30` 0, +0x308 above 150
+        /// and a non-zero roll 0x35: that one sets the command 0xd8 or 0xd9 to 3
+        /// and goes on to the tactics.
+        public let drinks: OriginalIDSet
+        /// `rangedBand`: characters whose approach starts beyond 170 (others'
+        /// beyond 60), who skip the close attack unless the target is in state 16
+        /// and who, empty-handed, strike from up to 350 at a target in state 16,
+        /// else step away from a target less than 100 ahead in x (signed) within
+        /// 80 in z and strike from up to 300. `rangedJoiner` shares only the
+        /// empty-handed stepping away and 300 strike.
+        public let rangedBand: OriginalIDSet, rangedJoiner: Int32
+        /// Held weapons swung within 115 in x and 6 in z and carried toward a
+        /// target within 600×20; `rollingWeapon` (counted only among them) also
+        /// swings on an extra roll (stream 0x2b).
+        public let meleeWeapons: OriginalIDSet, rollingWeapon: Int32
+        /// Held weapons thrown from within 300 (stream 0x2d) unless `weapon`'s scan
+        /// of slots 0–19 sets its flag (a live actor of a nonzero team within 15
+        /// in z between the two in x, counted only when the target's team is the
+        /// character's own).
+        public let thrownWeapons: OriginalIDSet
+        /// `dashCounters`: characters that defend when the target (its x plus
+        /// twice its x speed) is more than 100 and less than 900 away within 5 in
+        /// z, and dash (in frame 110 or from 235) at one beyond 90 within 13 in z;
+        /// in that dash `dashJumper` jumps instead of attacking on a coin flip
+        /// (stream 0x3a). `shortDasher` defends at more than 100 and less than 300
+        /// and dashes within 7 in z.
+        public let dashCounters: OriginalIDSet, dashJumper: Int32, shortDasher: Int32
         public init(stageAllyBound: Int32, healBall: Int32, healers: OriginalIDSet, stateDanger: Int32, frameDanger: Int32,
-                    pickupItems: OriginalIDRange, pickupExtra: Int32, soughtDrink: Int32, avoidedDrink: Int32, idleDefenders: [OriginalIDFrames]) {
+                    pickupItems: OriginalIDRange, pickupExtra: Int32, soughtDrink: Int32, avoidedDrink: Int32, idleDefenders: [OriginalIDFrames],
+                    drinks: OriginalIDSet, rangedBand: OriginalIDSet, rangedJoiner: Int32, meleeWeapons: OriginalIDSet, rollingWeapon: Int32,
+                    thrownWeapons: OriginalIDSet, dashCounters: OriginalIDSet, dashJumper: Int32, shortDasher: Int32) {
             self.stageAllyBound = stageAllyBound; self.healBall = healBall; self.healers = healers
             self.stateDanger = stateDanger; self.frameDanger = frameDanger; self.pickupItems = pickupItems; self.pickupExtra = pickupExtra
             self.soughtDrink = soughtDrink; self.avoidedDrink = avoidedDrink; self.idleDefenders = idleDefenders
+            self.drinks = drinks; self.rangedBand = rangedBand; self.rangedJoiner = rangedJoiner; self.meleeWeapons = meleeWeapons
+            self.rollingWeapon = rollingWeapon; self.thrownWeapons = thrownWeapons; self.dashCounters = dashCounters
+            self.dashJumper = dashJumper; self.shortDasher = shortDasher
         }
     }
     private final class Roles: Sendable {
@@ -457,6 +496,15 @@ public struct OriginalGameRules: Equatable, Sendable {
     public var soughtDrink: Int32 { roles.characterAI.soughtDrink }
     public var avoidedDrink: Int32 { roles.characterAI.avoidedDrink }
     public var idleDefenders: [OriginalIDFrames] { roles.characterAI.idleDefenders }
+    public var drinks: OriginalIDSet { roles.characterAI.drinks }
+    public var rangedBand: OriginalIDSet { roles.characterAI.rangedBand }
+    public var rangedJoiner: Int32 { roles.characterAI.rangedJoiner }
+    public var meleeWeapons: OriginalIDSet { roles.characterAI.meleeWeapons }
+    public var rollingWeapon: Int32 { roles.characterAI.rollingWeapon }
+    public var thrownWeapons: OriginalIDSet { roles.characterAI.thrownWeapons }
+    public var dashCounters: OriginalIDSet { roles.characterAI.dashCounters }
+    public var dashJumper: Int32 { roles.characterAI.dashJumper }
+    public var shortDasher: Int32 { roles.characterAI.shortDasher }
     public init(profile: String, reflection: Reflection, armour: Armour, interaction: Interaction, impact: Impact, items: Items,
                 roster: Roster, modes: Modes, physics: Physics, drawing: Drawing, effects: Effects, lifecycle: Lifecycle,
                 characterAI: CharacterAI) {

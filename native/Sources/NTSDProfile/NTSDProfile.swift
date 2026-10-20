@@ -44,9 +44,12 @@ public enum NTSDProfile {
         lifecycle: .init(halfHPRegen: OriginalIDSet([51, 52]), state9995Object: 50, pieces: 217, lastPiece: 218,
                          noRiseInvulnerability: OriginalIDSet([30, 31, 32, 33, 34, 35, 36, 37, 39]), roundRevertFrom: 50, roundRevertTo: 6,
                          guardedTransformer: 6),
-        // The character AI's target choice.
+        // The character AI's target choice and fight.
         characterAI: .init(stageAllyBound: 30, healBall: 200, healers: OriginalIDSet([2, 34]), stateDanger: 211, frameDanger: 212,
                            pickupItems: OriginalIDRange(100..<200), pickupExtra: 213, soughtDrink: 122, avoidedDrink: 123,
                            idleDefenders: [OriginalIDFrames(7, frames: 255...261), OriginalIDFrames(9, frames: 280...290),
-                                           OriginalIDFrames(32, frames: 240...245)]))
+                                           OriginalIDFrames(32, frames: 240...245)],
+                           drinks: OriginalIDSet([122, 123]), rangedBand: OriginalIDSet([4, 5, 31]), rangedJoiner: 36,
+                           meleeWeapons: OriginalIDSet([100, 101, 120, 121, 124]), rollingWeapon: 124, thrownWeapons: OriginalIDSet([150, 151]),
+                           dashCounters: OriginalIDSet([2, 4, 6, 9, 10, 11, 8, 7, 33, 34]), dashJumper: 34, shortDasher: 1))
 }
