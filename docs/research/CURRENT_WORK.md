@@ -76,7 +76,8 @@ E5d-3 выполнен: 20 процедур ИИ в игре (NTSDProfile): [evi
 E5e-0 выполнен: обзор грубых хуков ([обзор](../evidence/es-e5e-plumbing.md)): новых хуков не нужно, всё — роли и три таблицы.
 E5e-1 выполнен: три роли исключения ID 300 (A7, A51, A60): [evidence](../evidence/es-e5e1-id300-roles.json).
 E5e-2 выполнен: псевдо-ID миссий (A61–A63): [evidence](../evidence/es-e5e2-mission-pseudo-ids.json).
-Следующая задача — E5e-3: жизнь отрядов War (A67) таблицей.
+E5e-3 выполнен: жизнь отрядов War (A67) таблицей: [evidence](../evidence/es-e5e3-war-life.json).
+Следующая задача — E5e-4: слияние (A24–A26).
 
 ## Internal build storage и VM quota исправлены — 2026-10-17
 

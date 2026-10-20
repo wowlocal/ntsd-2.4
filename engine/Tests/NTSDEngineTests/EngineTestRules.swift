@@ -20,7 +20,7 @@ extension OriginalGameRules {
         modes: .init(survivalStages: OriginalIDRange(0..<0), numberedStages: OriginalIDRange(0..<0), finalStageSet: OriginalIDRange(0..<0),
                      stageWeightPlus1: -1, stageWeightPlus2: -1, warTroops: OriginalIDSet([]), stageBackgrounds: [:],
                      killRequestSpared: -1, fixedDifficultyHP: -1, heroSpawnWord: -1, troopSpawnWord: -1, troopOrBossSpawnWord: -1,
-                     spawnTroops: OriginalIDRange(0..<0), bossTroop: -1),
+                     spawnTroops: OriginalIDRange(0..<0), bossTroop: -1, warUnitLife: [:], warSideZeroMarks: [:]),
         physics: .init(extraDrift: -1, reverseDrift: -1, lowGravityThrow: -1, midGravityThrow: -1, highGravityThrow: -1, restingPiece: -1,
                        revivalPicture: OriginalIDRange(0..<0), revivalEffect: -1),
         drawing: .init(shadowless: OriginalIDSet([]), unlabelledComputers: OriginalIDSet([])),

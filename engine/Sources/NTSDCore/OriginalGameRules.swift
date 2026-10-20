@@ -191,7 +191,7 @@ public struct OriginalGameRules: Equatable, Sendable {
     }
     /// Modes: what the stage numbers mean in stage mode (OriginalMissionStage, the
     /// camera, match selection, the match prelude) and which characters War counts as troops
-    /// (OriginalWarBattle). The decade arithmetic (ten stages a set, sixty stages)
+    /// and their life and marks (OriginalWarBattle). The decade arithmetic (ten stages a set, sixty stages)
     /// stays engine code.
     public struct Modes: Equatable, Sendable {
         /// Survival stages: the blink flag at a stage's start, the dead players'
@@ -234,15 +234,21 @@ public struct OriginalGameRules: Equatable, Sendable {
         public let heroSpawnWord: Int32, troopSpawnWord: Int32, troopOrBossSpawnWord: Int32
         public let spawnTroops: OriginalIDRange
         public let bossTroop: Int32
+        /// War's reserve spawn (A67): a unit's life (+0x300, +0x2fc, +0x304) by
+        /// its War-table word, 500 for a unit not listed; and for a character
+        /// (type 0) of the first side (`s == 0`, team 1) +0x318: 0x8c, then the
+        /// unit's mark if listed.
+        public let warUnitLife: [Int32: Int32], warSideZeroMarks: [Int32: Int32]
         public init(survivalStages: OriginalIDRange, numberedStages: OriginalIDRange, finalStageSet: OriginalIDRange,
                     stageWeightPlus1: Int32, stageWeightPlus2: Int32, warTroops: OriginalIDSet, stageBackgrounds: [Int32: Int32],
                     killRequestSpared: Int32, fixedDifficultyHP: Int32, heroSpawnWord: Int32, troopSpawnWord: Int32,
-                    troopOrBossSpawnWord: Int32, spawnTroops: OriginalIDRange, bossTroop: Int32) {
+                    troopOrBossSpawnWord: Int32, spawnTroops: OriginalIDRange, bossTroop: Int32,
+                    warUnitLife: [Int32: Int32], warSideZeroMarks: [Int32: Int32]) {
             self.survivalStages = survivalStages; self.numberedStages = numberedStages; self.finalStageSet = finalStageSet
             self.stageWeightPlus1 = stageWeightPlus1; self.stageWeightPlus2 = stageWeightPlus2; self.warTroops = warTroops
             self.stageBackgrounds = stageBackgrounds; self.killRequestSpared = killRequestSpared; self.fixedDifficultyHP = fixedDifficultyHP
             self.heroSpawnWord = heroSpawnWord; self.troopSpawnWord = troopSpawnWord; self.troopOrBossSpawnWord = troopOrBossSpawnWord
-            self.spawnTroops = spawnTroops; self.bossTroop = bossTroop
+            self.spawnTroops = spawnTroops; self.bossTroop = bossTroop; self.warUnitLife = warUnitLife; self.warSideZeroMarks = warSideZeroMarks
         }
     }
     /// Physics: the Objects the actor physics moves or drops their own way
@@ -508,6 +514,8 @@ public struct OriginalGameRules: Equatable, Sendable {
     public var troopOrBossSpawnWord: Int32 { roles.modes.troopOrBossSpawnWord }
     public var spawnTroops: OriginalIDRange { roles.modes.spawnTroops }
     public var bossTroop: Int32 { roles.modes.bossTroop }
+    public var warUnitLife: [Int32: Int32] { roles.modes.warUnitLife }
+    public var warSideZeroMarks: [Int32: Int32] { roles.modes.warSideZeroMarks }
     public var extraDrift: Int32 { roles.physics.extraDrift }
     public var reverseDrift: Int32 { roles.physics.reverseDrift }
     public var lowGravityThrow: Int32 { roles.physics.lowGravityThrow }

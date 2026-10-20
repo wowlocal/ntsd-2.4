@@ -200,22 +200,16 @@ struct OriginalWarBattlePass {
         if s == 0 { try put(a,0x10,type != 0 ? 50 : -100) }
         else { try put(a,0x10,type == 0 ? width &+ 100 : width &- 50) }
         try putDouble(a,0x58,Double(i(a,0x10)));try putDouble(a,0x68,Double(i(a,0x18)))
-        // 43abe2..43ac75: hit points by unit ID; side-1 characters' 318.
-        var life: Int32 = 500,at43 = false
+        // 43abe2..43ac75: hit points by unit ID; the first side's (s == 0, team 1)
+        // characters' 318. The chain tested disjoint unit values and its at43 held
+        // only for unit 0x25, so the life is a function of the unit (ENGINE_SPLIT
+        // E5e-3: the profile's tables; the 500 default and the 0x8c store engine).
+        var life: Int32 = 500
         if s == 0 && type == 0 {
             try put(a,0x318,0x8c)
-            if unit == 0x25 { try put(a,0x318,0x72);at43 = true }
+            if let mark = rules.warSideZeroMarks[unit] { try put(a,0x318,mark) }
         }
-        if !at43 && unit == 0x24 { life = 250 }
-        else {
-            if at43 || unit == 0x25 || unit == 0x23 || unit == 0x20 { life = 200 }
-            if unit == 0x27 || unit == 0x21 { life = 150 }
-            if unit == 0x22 { life = 100 }
-            else {
-                if unit == 0x1f || unit == 0x1e { life = 50 }
-                if unit == 0x7a { life = 200 }
-            }
-        }
+        if let listed = rules.warUnitLife[unit] { life = listed }
         try put(a,0x308,500);try put(a,0x300,life);try put(a,0x2fc,life);try put(a,0x304,life)
         try put(a,0x354,Int32(seat))
         let team = s/count &+ 1

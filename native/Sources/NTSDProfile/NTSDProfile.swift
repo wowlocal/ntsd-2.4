@@ -32,7 +32,9 @@ public enum NTSDProfile {
                      warTroops: OriginalIDSet([30, 31, 32, 33, 34, 35, 36, 37, 39, 122, 123]),
                      stageBackgrounds: [0: 1, 10: 2, 20: 3, 30: 4, 40: 5, 50: 6], killRequestSpared: 300, fixedDifficultyHP: 300,
                      heroSpawnWord: 1000, troopSpawnWord: 3000, troopOrBossSpawnWord: 3001, spawnTroops: OriginalIDRange(30..<32),
-                     bossTroop: 32),
+                     bossTroop: 32,
+                     warUnitLife: [36: 250, 37: 200, 35: 200, 32: 200, 39: 150, 33: 150, 34: 100, 31: 50, 30: 50, 122: 200],
+                     warSideZeroMarks: [37: 0x72]),
         // The actor physics' special Objects and the revival's (OriginalActorPhysics, OriginalWorldPhysics).
         physics: .init(extraDrift: 120, reverseDrift: 101, lowGravityThrow: 124, midGravityThrow: 120, highGravityThrow: 101,
                        restingPiece: 999, revivalPicture: OriginalIDRange(30..<37), revivalEffect: 998),

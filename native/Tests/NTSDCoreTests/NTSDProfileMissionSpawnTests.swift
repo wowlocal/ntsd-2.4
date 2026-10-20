@@ -14,7 +14,7 @@ final class NTSDProfileMissionSpawnTests: XCTestCase {
             stageWeightPlus1: n.stageWeightPlus1,stageWeightPlus2: n.stageWeightPlus2,warTroops: n.warTroops,stageBackgrounds: n.stageBackgrounds,
             killRequestSpared: n.killRequestSpared,fixedDifficultyHP: n.fixedDifficultyHP,heroSpawnWord: hero ?? n.heroSpawnWord,
             troopSpawnWord: troop ?? n.troopSpawnWord,troopOrBossSpawnWord: troopOrBoss ?? n.troopOrBossSpawnWord,
-            spawnTroops: troops ?? n.spawnTroops,bossTroop: boss ?? n.bossTroop))
+            spawnTroops: troops ?? n.spawnTroops,bossTroop: boss ?? n.bossTroop,warUnitLife: n.warUnitLife,warSideZeroMarks: n.warSideZeroMarks))
     }
     static let catalog: [Int32] = [7, 30, 31, 32, 40, 41, 42, 77]
     /// The mission stage's spawn (437400) of this word with HP 300 (difficulty 0), the
