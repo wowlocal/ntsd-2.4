@@ -1,0 +1,72 @@
+{
+ "study": "ENGINE_SPLIT",
+ "step": "E7a",
+ "base": "e9258fc1",
+ "recordedUTC": "2026-10-21T00:41:29Z",
+ "change": "No engine change. tools/crossplatform/engine_standalone.sh exports engine/ at a revision with git archive into an empty folder and builds and tests it alone: macOS debug and a clean release (-enable-testing, checked exclusivity, as mlgate's engine bundle) of the default products and NTSDEngineTests, then a native build and test inside swift:6.4.0-noble as uid 1000.",
+ "export": {
+  "revision": "e9258fc1",
+  "engineTree": "b36189eb69dbf8bf2f9e23fe950cbb109f605cbc",
+  "files": 412,
+  "lfsFiles": 0,
+  "folder": "/Volumes/NTSD-Builds/tasks/engine-split/scratch/e7a/engine"
+ },
+ "script": {
+  "path": "tools/crossplatform/engine_standalone.sh",
+  "sha256": "45efd69b22e5e9be7c81df80afc83677aa2a792d21299f1c6633947dfd2d24cc",
+  "output": [
+   "export b36189eb69dbf8bf2f9e23fe950cbb109f605cbc files 412",
+   "mac debug build exit=0",
+   "mac debug list exit=0 tests 136",
+   "mac debug test exit=0 Executed 136 tests, with 0 failures (0 unexpected) in 29.356 (29.369) seconds",
+   "mac release build exit=0",
+   "mac release list exit=0 tests 136",
+   "mac release test exit=0 Executed 136 tests, with 0 failures (0 unexpected) in 4.804 (4.815) seconds",
+   "linux build exit=0",
+   "linux list exit=0 tests 115",
+   "linux test exit=0",
+   "Executed 115 tests, with 0 failures (0 unexpected) in 9.634 (9.634) seconds",
+   "standalone_done",
+   "script exit=0"
+  ]
+ },
+ "macOS": {
+  "debug": {
+   "tests": 136,
+   "result": "mac debug test exit=0 Executed 136 tests, with 0 failures (0 unexpected) in 29.356 (29.369) seconds"
+  },
+  "release": {
+   "tests": 136,
+   "result": "mac release test exit=0 Executed 136 tests, with 0 failures (0 unexpected) in 4.804 (4.815) seconds"
+  },
+  "listsEqualTheRepository": true
+ },
+ "linux": {
+  "container": "swift:6.4.0-noble, uid 1000, HOME=/tmp",
+  "tests": 115,
+  "result": "Executed 115 tests, with 0 failures (0 unexpected) in 9.634 (9.634) seconds",
+  "missing": "exactly the 21 tests of the five Mac/ classes the target excludes on portable builds (OriginalDeferredReleaseTests, OriginalFramebufferTests, OriginalMacDisplayStorageTests, OriginalMacMusicOutputTests, OriginalMacSoundEffectsTests)",
+  "posixFacts": "OriginalPosixFileFactsTests passes as uid 1000"
+ },
+ "attempt1": {
+  "folder": "/Volumes/NTSD-Builds/tasks/engine-split/scratch/e7a-attempt1",
+  "finding": "the same build and test results; the script's tree-id echo printed 'ngine' (zsh read $REV:engine as the :e modifier); fixed to ${REV}:engine and run again from scratch"
+ },
+ "notRun": {
+  "rows": [
+   "SDL3 + FreeType",
+   "wasm (wasip1)",
+   "UIKit (iOS/tvOS)",
+   "Android"
+  ],
+  "why": "compile-only rows outside E7's gate (the survey): their SDKs and prefixes are this Mac's; E4b's gates built each host from this package"
+ },
+ "findings": [
+  {
+   "what": "engine/Sources/NTSDReplayCodec/README.md:27 links ../../../docs/research/REPLAY_COMPRESSION.md, outside engine/",
+   "action": "recorded for E8 (a published engine needs its own docs); no build or test reads it"
+  }
+ ],
+ "reviewNeeded": "no Core, Runtime or Package.swift change (a tool script and records)",
+ "openGates": []
+}
