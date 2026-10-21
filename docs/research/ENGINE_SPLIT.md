@@ -10,7 +10,7 @@ measurement from [TVOS_WEB](TVOS_WEB.md), [MEMORY_LOADING](MEMORY_LOADING.md) an
 engine from the game itself. to publish engine as the separate github repo";
 then, after the plan: "ok … when the plan is setteled start the loop in a
 separate branch" and "push automatically every step (on that new branch)".
-**Status:** E0–E3, E4a, E4b (all six hosts), E4c-1 (the engine's self-contained tests), E5a (the game profile's survey and design) and E5b (the record type, the copied tables out), E4c-1a (a nondeterministic engine test corrected) E5c-0 (the profile's plumbing, reflection), E5c-1a (one storage, the reflectors), E5c-1b (armour), E5c-1c (special interactions) and E5c-1d (impact) done; E5c-2a, E5c-2b and E5c-2c (the items family: the random and requested spawns, camera, links, the mission stage) E5c-2d (the roster family), E5c-2e (the modes family), E5c-2f (the match prelude) and E5c-2g (the mode label) done: E5c-2's menu and mode rows are in the profile; E5c-1e (physics), E5c-1f (drawing) and E5c-1g (the post-draw effects) and E5c-1h (the slot prefix, scheduler and round restore) and E5c-1i (the object input) and E5c-1j (A28, the input chain) done: every E5c row is in the profile; E5d-1a (the AI's target roles) and E5d-1b (its fight roles) done: every object-ID literal of the generic AI is in the profile; E5d-2 (the special-move hook) and E5d-3 (the 20 routines in the game) done: the AI's NTSD code is the game's; E5e (the coarse hooks) surveyed: roles, no new hook; E5e-1 (the ID-300 roles), E5e-2 (the mission pseudo-IDs), E5e-3 (War life), E5e-4 (fusion) and E5e-5 (the weapon break) done: every object-ID rule of the E5a table is the game's; E5f surveyed; E5f-1 (the front menu's names and rectangles, carried by the startup), E5f-2a (the interface and common sound names), E5f-2b (the menu and War names), E5f-3 (the menu WAVs) and E5f-4 (the panel and BATTLEMODE rectangles) done; E4c-2 (the mixed test files split) done; E7 surveyed; E7a (the engine alone on macOS and Linux) and E7b (the original-bytes scan: no unexpected hit; the policy for the expected classes is the user's) and E7c (a synthetic content pack loading on macOS and Linux) and E7d (a session load, a headless start and a VS match on it, equal on both) E7e-1 (the VC80 power-of-ten table computed) and E7f (a computer match to its end, the replay and text on the synthetic pack) done. No further step without the user: E6 needs D1, the rest of E7e the scan policy, E8 D2 and the go-ahead.
+**Status:** E0–E3, E4a, E4b (all six hosts), E4c-1 (the engine's self-contained tests), E5a (the game profile's survey and design) and E5b (the record type, the copied tables out), E4c-1a (a nondeterministic engine test corrected) E5c-0 (the profile's plumbing, reflection), E5c-1a (one storage, the reflectors), E5c-1b (armour), E5c-1c (special interactions) and E5c-1d (impact) done; E5c-2a, E5c-2b and E5c-2c (the items family: the random and requested spawns, camera, links, the mission stage) E5c-2d (the roster family), E5c-2e (the modes family), E5c-2f (the match prelude) and E5c-2g (the mode label) done: E5c-2's menu and mode rows are in the profile; E5c-1e (physics), E5c-1f (drawing) and E5c-1g (the post-draw effects) and E5c-1h (the slot prefix, scheduler and round restore) and E5c-1i (the object input) and E5c-1j (A28, the input chain) done: every E5c row is in the profile; E5d-1a (the AI's target roles) and E5d-1b (its fight roles) done: every object-ID literal of the generic AI is in the profile; E5d-2 (the special-move hook) and E5d-3 (the 20 routines in the game) done: the AI's NTSD code is the game's; E5e (the coarse hooks) surveyed: roles, no new hook; E5e-1 (the ID-300 roles), E5e-2 (the mission pseudo-IDs), E5e-3 (War life), E5e-4 (fusion) and E5e-5 (the weapon break) done: every object-ID rule of the E5a table is the game's; E5f surveyed; E5f-1 (the front menu's names and rectangles, carried by the startup), E5f-2a (the interface and common sound names), E5f-2b (the menu and War names), E5f-3 (the menu WAVs) and E5f-4 (the panel and BATTLEMODE rectangles) done; E4c-2 (the mixed test files split) done; E7 surveyed; E7a (the engine alone on macOS and Linux) and E7b (the original-bytes scan: no unexpected hit; the policy for the expected classes is the user's) and E7c (a synthetic content pack loading on macOS and Linux) and E7d (a session load, a headless start and a VS match on it, equal on both) E7e-1 (the VC80 power-of-ten table computed) and E7f (a computer match to its end, the replay and text on the synthetic pack) done; the user settled the scan policy and granted D1, D2 and E8 (2026-10-21); E7e-2 (the policy enforced by the scanner) done; E6a next.
 **Branch:** `exp/engine-split`, from `main` 380b448d. Worktree
 `/Volumes/NTSD-Builds/tasks/engine-split/worktree` (T7-backed APFS, see
 [BUILD_STORAGE_T7](BUILD_STORAGE_T7.md)). It tracks `origin/exp/engine-split`
@@ -37,18 +37,28 @@ Settled (the user's "ok" on the recommended plan, 2026-10-18):
 - Module names stay `NTSD*` until the name is chosen (D2); the rename is one
   mechanical step in E8.
 
-Open (the user's; each blocks only the step named):
+Settled 2026-10-21 (the user: "принимаю твои рекомендации по правилам для
+E7e, продолжай", then "разрешаю тебе все" and, after being told of LF2
+Remastered's Steam release, "бро все разрешаю. действуй полностью автономно"):
 
-- **D1 — a second reference.** The sources mark ID branches as "explicit EXE
-  branches" without saying which come from LF2 2.0a and which are NTSD edits.
-  Telling them apart needs the LF2 2.0a EXE as a second pinned reference, which
-  extends AGENTS.md's "only the original NTSD distribution" rule. Blocks E6
-  only; until then every ID-specific rule stays in the NTSD profile, and the
-  engine without a profile is not claimed to match any released game.
-- **D2 — name and licence.** Proposed: no "LF2" in the repository name (an
-  engine "for LF2 2.0a-format games"); MIT or Apache-2.0. The engine is code
-  recovered from a copyrighted EXE; whether to publish it is the user's call.
-  Blocks E8 only.
+- **Scan policy (E7e).** The published engine keeps vendored zlib, the DAT
+  key (a format constant), Microsoft's DirectShow GUIDs, the data files' names
+  and field vocabulary (the format) and the project's own labels; the VC80
+  power-of-ten table is computed (E7e-1); EXE strings are sorted by D1's
+  reference in E6. `tools/scan_original_bytes.py --policy` enforces it, with
+  the loop's rules for the classes the recommendations did not name (E7e-2).
+- **D1 — granted.** The official LF2 2.0a distribution is a second pinned
+  reference, used to tell LF2 2.0a rules from NTSD's; NTSD behaviour is still
+  recovered from the NTSD distribution. It stays outside the repository
+  (E6a pins it).
+- **D2 — delegated to the loop.** No "LF2" or "NTSD" in the name; the
+  licence and the name are chosen and recorded at E8.
+- **E8 — authorized**, publication included: a new public repository with
+  fresh history, a tag and CI. Recorded 2026-10-21: lf2.net links "Little
+  Fighter 2 Remastered", sold on Steam since 2025-07-18 by Little Fighter Co
+  Pty Ltd and Marti Wong; the user confirmed after being told.
+- The loop does not merge into main (not a step of this plan).
+
 - **Outside this card:** the existing GitHub repository is public, has no
   licence and holds the original EXE, `lib.dll`, DAT files and music (noted to
   the user 2026-10-18).
@@ -159,9 +169,9 @@ A read-only survey of `native/` (three agents, 2026-10-18):
 | E3 | Identity and Practice: user-data folder, wasm module, Android prefix/entry, queue/thread names, titles and messages become game configuration; Practice/Lab and its two checks move to the game side | **done**: E3a ([evidence](../evidence/es-e3a-practice.json)), E3b ([evidence](../evidence/es-e3b-game-identity.json)); diagnostic labels wait for D2 |
 | E4 | Two packages: `engine/Package.swift` (Core, Runtime, codecs, decoders, shims, host libraries, self-contained tests) and `native/Package.swift` depending on it by path; the unsafeFlags plan (SwiftPM rejects them in version-pinned dependencies) | E4a **done** ([evidence](../evidence/es-e4a-engine-package.json)); E4b: headless **done** ([evidence](../evidence/es-e4b1-headless-host.json)), browser **done** ([evidence](../evidence/es-e4b2-web-host.json)), SDL **done** ([evidence](../evidence/es-e4b3-sdl-host.json)), AppKit **done** ([evidence](../evidence/es-e4b4-appkit-host.json)), UIKit **done** ([evidence](../evidence/es-e4b5-uikit-host.json)), Android **done** ([evidence](../evidence/es-e4b6-android-host.json)); E4c-1 **done** ([evidence](../evidence/es-e4c1-engine-tests.json)), E4c-1a **done** ([evidence](../evidence/es-e4c1a-sorted-keys.json)); E4c-2 **done** ([evidence](../evidence/es-e4c2-mixed-tests.json)); the War trio stays with the game (recorded) |
 | E5 | Game profile: the ID sites (100 rows, about 125 branch points; first estimated ~90) and the AI dispatch behind a profile the game supplies; the engine defines the `0x44d000` record's layout and the game supplies `initial.bin`; the NTSD profile bit-exact (all gates plus the full fixture-driven suites); the API's fit with 2.8.3.3 checked read only | E5a **done** (survey and design, [evidence](../evidence/es-e5a-design.json)); E5b **done** ([evidence](../evidence/es-e5b-record-type.json)); E5c-0 **done** ([evidence](../evidence/es-e5c0-profile-plumbing.json)); E5c-1a **done** ([evidence](../evidence/es-e5c1a-reflector-roles.json)); E5c-1b **done** ([evidence](../evidence/es-e5c1b-armour-roles.json)); E5c-1c **done** ([evidence](../evidence/es-e5c1c-interaction-roles.json)); E5c-1d **done** ([evidence](../evidence/es-e5c1d-impact-roles.json)); E5c-2a **done** ([evidence](../evidence/es-e5c2a-items-roles.json)); E5c-2b **done** ([evidence](../evidence/es-e5c2b-camera-links-roles.json)); E5c-2c **done** ([evidence](../evidence/es-e5c2c-requested-mission-roles.json)); E5c-2d **done** ([evidence](../evidence/es-e5c2d-roster-roles.json)); E5c-2e **done** ([evidence](../evidence/es-e5c2e-modes-roles.json)); E5c-2f **done** ([evidence](../evidence/es-e5c2f-prelude-roles.json)); E5c-2g **done** ([evidence](../evidence/es-e5c2g-mode-label-roles.json)); E5c-1e **done** ([evidence](../evidence/es-e5c1e-physics-roles.json)); E5c-1f **done** ([evidence](../evidence/es-e5c1f-drawing-roles.json)); E5c-1g **done** ([evidence](../evidence/es-e5c1g-effects-roles.json)); E5c-1h **done** ([evidence](../evidence/es-e5c1h-lifecycle-roles.json)); E5c-1i **done** ([evidence](../evidence/es-e5c1i-object-input-roles.json)); E5c-1j **done** ([evidence](../evidence/es-e5c1j-input-roles.json)); E5d: [survey](../evidence/es-e5d-plumbing.md), E5d-1a **done** ([evidence](../evidence/es-e5d1a-ai-target-roles.json)), E5d-1b **done** ([evidence](../evidence/es-e5d1b-ai-fight-roles.json)), E5d-2 **done** ([evidence](../evidence/es-e5d2-ai-special-hook.json)), E5d-3 **done** ([evidence](../evidence/es-e5d3-ai-routines-in-game.json)); E5e: [survey](../evidence/es-e5e-plumbing.md), E5e-1 **done** ([evidence](../evidence/es-e5e1-id300-roles.json)), E5e-2 **done** ([evidence](../evidence/es-e5e2-mission-pseudo-ids.json)), E5e-3 **done** ([evidence](../evidence/es-e5e3-war-life.json)), E5e-4 **done** ([evidence](../evidence/es-e5e4-fusion.json)), E5e-5 **done** ([evidence](../evidence/es-e5e5-weapon-break.json)); E5f: [survey](../evidence/es-e5f-plumbing.md), E5f-1 **done** ([evidence](../evidence/es-e5f1-front-interface.json)), E5f-2a **done** ([evidence](../evidence/es-e5f2a-interface-sound-names.json)), E5f-2b **done** ([evidence](../evidence/es-e5f2b-menu-war-names.json)), E5f-3 **done** ([evidence](../evidence/es-e5f3-menu-sound-names.json)), E5f-4 **done** ([evidence](../evidence/es-e5f4-panel-war-frames.json)) |
-| E6 | Classify each profile rule as LF2 2.0a or NTSD from the second reference; LF2 rules become the engine's default profile | needs D1 |
-| E7 | Engine stand-alone: the engine package builds alone (macOS, Linux container) and passes its tests with a from-scratch synthetic content pack; a scan finds no original bytes (files under `downloads/`, the resources, fixtures, `initial.bin`) | [survey](../evidence/es-e7-survey.md); E7a **done** ([evidence](../evidence/es-e7a-standalone.json)), E7b **done** ([evidence](../evidence/es-e7b-scan.json); policy open, the user's), E7c **done** ([evidence](../evidence/es-e7c-synthetic-pack.json)), E7d **done** ([evidence](../evidence/es-e7d-synthetic-runs.json)), E7e-1 **done** ([evidence](../evidence/es-e7e1-power-table.json)); E7f **done** ([evidence](../evidence/es-e7f-synthetic-match-end.json)); the rest of E7e waits for the user's scan policy |
-| E8 | Publication: name, licence, a new repository with fresh history, a tag; this repository depends on it by revision; README credits | needs D2 and the user |
+| E6 | Classify each profile rule as LF2 2.0a or NTSD from the second reference; LF2 rules become the engine's default profile | D1 granted 2026-10-21; E6a next |
+| E7 | Engine stand-alone: the engine package builds alone (macOS, Linux container) and passes its tests with a from-scratch synthetic content pack; a scan finds no original bytes (files under `downloads/`, the resources, fixtures, `initial.bin`) | [survey](../evidence/es-e7-survey.md); E7a **done** ([evidence](../evidence/es-e7a-standalone.json)), E7b **done** ([evidence](../evidence/es-e7b-scan.json); policy open, the user's), E7c **done** ([evidence](../evidence/es-e7c-synthetic-pack.json)), E7d **done** ([evidence](../evidence/es-e7d-synthetic-runs.json)), E7e-1 **done** ([evidence](../evidence/es-e7e1-power-table.json)); E7f **done** ([evidence](../evidence/es-e7f-synthetic-match-end.json)); E7e-2 **done** (the policy enforced, [evidence](../evidence/es-e7e2-scan-policy.json)); EXE strings follow E6 |
+| E8 | Publication: name, licence, a new repository with fresh history, a tag; this repository depends on it by revision; README credits | authorized 2026-10-21 (D2 delegated) |
 
 ## E1 design (2026-10-18, before review)
 
@@ -2371,21 +2381,23 @@ From a read-only survey ([report](../evidence/es-e7-survey.md)).
   Reviewed (accepted after comment fixes; limits and the open time-zone
   finding recorded; the four rungs in one commit, as they share one run).
   No engine source change. [Evidence](../evidence/es-e7f-synthetic-match-end.json).
+- 2026-10-21 E7e-2: the user accepted E7b's recommendations and granted D1,
+  D2 and E8 (Decisions). `scan_original_bytes.py --policy` enforces the
+  policy: each class keep/removed/open, by the user or the loop; a removed or
+  unexpected hit fails unless examined (three, with digests); the DAT key and
+  GUID hits pinned by digest; the run refused without its originals or the
+  VC80 DLL. Both runs pass (engine literals, every match region: 3,205 hits;
+  the synthetic pack: 589,089); EXE strings stay open for E6. Reviewed: four
+  required fixes made (refusals, a vocabulary bound, the frame-line rule's
+  digits and sources, user/loop rules). No engine source change.
+  [Evidence](../evidence/es-e7e2-scan-policy.json).
 
 ## Next task
 
-None without the user (2026-10-21). Every remaining step of the plan needs
-an input that is the user's:
-- **E6** needs D1: the LF2 2.0a distribution as a second pinned reference
-  (it extends AGENTS.md's "only the original NTSD distribution" rule).
-- **The rest of E7e** needs the scan policy: which expected classes the
-  published engine keeps (the DAT key, DirectShow GUIDs, EXE strings, the data
-  files' vocabulary, vendored zlib); E7b's evidence holds the loop's
-  recommendations.
-- **E8** needs D2 (the name and licence) and the go-ahead for a new
-  repository and publication (the unsafeFlags question belongs there).
-Optional work the user may ask for (not queued): a read-only state accessor
-and an error callback in `OriginalRuntimeSession` so the synthetic match can
-run through the session itself; fixes for E7d's engine findings (the virtual
-clock's time zone, tracing without networking, the divide by zero with no
-item) after a check against the original.
+E6a: pin the LF2 2.0a reference and classify. The official installer
+(lf2.net's `LF2_v2.0a.exe`, from the Internet Archive) unpacked without
+running it (`tools/extract_clickteam_setup.py`), its files' hashes recorded,
+kept on `/Volumes/NTSD-Builds` outside the repository; the two EXEs compared
+by section (`tools/compare_pe_sections.py`); AGENTS.md's reference section
+records D1; a read-only survey classifies every profile entry as LF2 2.0a
+code, lib.dll (NTSD) or data, and proposes E6's sub-steps.

@@ -24,10 +24,19 @@ match's SHA-256. Each hit gets a class: the survey's expected classes
 (docs/evidence/es-e7-survey.md section 3) or "unexpected".
 
 Usage: scan_original_bytes.py REPO OUT.json [--originals PATH ...] [--min-length N]
-                              [--engine-files DIR]
+                              [--engine-files DIR] [--policy]
 
 --engine-files indexes the raw bytes of every file under DIR instead of the
 literals of engine/ (ENGINE_SPLIT E7c: a generated synthetic content pack).
+
+--policy (ENGINE_SPLIT E7e-2) adds the policy for each class (POLICY: the
+user's for the classes E7b's recommendations named, settled 2026-10-21, the
+loop's for the rest) to the report and exits 1 when a hit is in a removed
+class, unexpected and not one of the EXAMINED coincidences, or in a PINNED
+class without its pinned digest; classes still open are listed, not failed.
+It refuses (exit 2) a run whose originals are missing or empty, lack the
+VC80 DLL, or change --min-length/--min-distinct, and it keeps every match
+region of a literal (as file mode does), not only the longest.
 """
 import argparse, hashlib, json, mmap, os, re, struct, sys, tempfile, time, zlib
 
@@ -188,6 +197,52 @@ def project_json(original, variant):
     return (low.endswith(".json") and ("/Fixtures/" in original or "/Resources/" in original)) or \
            (variant.startswith("inflated") and "/Fixtures/" in original)
 
+# The policy for the classes: (rule, by, why). "user": the classes E7b's
+# recommendations named, accepted by the user 2026-10-21; "loop": the loop's
+# rule for classes those did not name. "keep" stays in the published engine,
+# "removed" fails a hit, "open" is reported until its step settles it.
+POLICY = {
+    "zlib or other vendored upstream code": ("keep", "user", "licensed upstream code (zlib licence), not the game's"),
+    "CALAC (vendored upstream)": ("keep", "loop", "licensed upstream code (Apache-2.0), not the game's"),
+    "DAT key": ("keep", "user", "the format constant every LF2-format DAT is encrypted with"),
+    "DirectShow GUIDs": ("keep", "user", "Microsoft's public interface and class IDs"),
+    "VC80 power-of-ten table": ("removed", "user", "computed since E7e-1"),
+    "CRT constants": ("keep", "loop", "public C runtime algorithm constants"),
+    "EXE strings": ("open", "user", "E6 sorts them by the LF2 2.0a reference (D1): LF2's stay engine text, NTSD's move to the game profile"),
+    "names and vocabulary of the data files": ("keep", "user", "the content format"),
+    PROJECT_JSON: ("keep", "user", "the project's own text"),
+    "BMP/DIB header fields": ("keep", "loop", "format structure of authored files"),
+    "WAV header fields": ("keep", "loop", "format structure of authored files"),
+    "short audio sample runs (authored waveforms)": ("keep", "loop", "short authored runs"),
+    "DAT and data-file format text (field vocabulary, frame names)": ("keep", "loop", "the content format"),
+    "DAT frame-line fragments (authored values in the format's vocabulary)": ("keep", "loop", "the content format: at most 64 printable bytes with at most 8 digits, against a DAT or a JSON fixture; a copied frame is longer"),
+}
+
+# Unexpected hits examined and judged coincidences: (engine path suffix, the
+# match's SHA-256 prefix) -> the reason (E7c, E7d, E7e-1 evidence).
+EXAMINED = {
+    ("OriginalDiagnosticNumberTableTests.swift", "e3fd6a0a483c5b12"): "the power list 1...8 as le16, a trivial ascending run",
+    ("SyntheticContentPackTests.swift", "9597f36279ed4330"): "the frame-number list as le16, equal to data inside 063.wav",
+    ("OriginalStartup/manifest.json", "c1191491d6b51bce"): "the digest of initial.mask, all ones and so byte-identical to the original's",
+    ("OriginalStartup/manifest.json", "5a0f3193d3e699f6"): "the digest of initial.mask, all ones and so byte-identical to the original's",
+}
+
+# Classes whose kept hits must be these exact matches (SHA-256 prefixes); any
+# other hit of the class fails in --policy (E7e-2's review: whole-file rules
+# would also keep other bytes of those files).
+PINNED = {
+    "DAT key": {"955e3ff19ab0e340"},
+    "DirectShow GUIDs": {"12f0a8d9306b50c6", "2be04b8a4ecefad4"},
+    "CRT constants": set(),
+}
+
+# Literal strings matching a data file are vocabulary only up to the longest
+# seen (E7e-2: 32 bytes, at most 3 digits); longer ones are unexpected.
+VOCABULARY_MAX, VOCABULARY_DIGITS = 32, 3
+
+def digits(piece):
+    return sum(c in b"0123456789" for c in piece)
+
 def classify_file(path, variant, piece, start, length, original, original_variant):
     """Classes for --engine-files (a generated content pack): the formats' own structure.
     `piece` is the generated file's matched bytes (DAT text decrypted)."""
@@ -202,6 +257,13 @@ def classify_file(path, variant, piece, start, length, original, original_varian
     # A few format lines at most, with almost no values in them.
     if low.endswith((".dat", ".txt")) and length <= 104 and sum(c in b"0123456789" for c in piece) <= 3:
         return "DAT and data-file format text (field vocabulary, frame names)"
+    # Frame lines with small authored values (E7d/E7f, longest 53 bytes): an
+    # original frame copied whole is longer than this.
+    olow = original.lower()
+    if low.endswith(".dat") and length <= 64 and digits(piece) <= 8 \
+            and (olow.endswith(".dat") or (olow.endswith(".json") and "/Fixtures/" in original)) \
+            and all(32 <= c < 127 or c in b"\r\n\t" for c in piece):
+        return "DAT frame-line fragments (authored values in the format's vocabulary)"
     return "unexpected"
 
 def classify(path, kind, seq, original, section):
@@ -212,15 +274,22 @@ def classify(path, kind, seq, original, section):
         return PROJECT_JSON
     if kind == "string":
         if low.endswith((".exe", ".dll")): return "EXE strings"
-        return "names and vocabulary of the data files"
+        if len(seq) <= VOCABULARY_MAX and digits(seq) <= VOCABULARY_DIGITS: return "names and vocabulary of the data files"
     return "unexpected"
 
 def main():
     a = argparse.ArgumentParser(); a.add_argument("repo"); a.add_argument("out")
     a.add_argument("--originals", nargs="*", default=DEFAULT_ORIGINALS)
     a.add_argument("--min-length", type=int, default=16); a.add_argument("--min-distinct", type=int, default=6)
-    a.add_argument("--engine-files", default="")
+    a.add_argument("--engine-files", default=""); a.add_argument("--policy", action="store_true")
     o = a.parse_args(); repo = os.path.abspath(o.repo); started = time.time()
+    if o.policy:
+        roots = [os.path.join(repo, r) for r in o.originals]
+        problems = [f"missing original {r}" for r in roots if not os.path.exists(r)]
+        problems += [f"empty original {r}" for r in roots if os.path.isdir(r) and not any(fs for _, _, fs in os.walk(r))]
+        if not any(os.path.basename(r).lower() == "msvcr80.dll" for r in roots): problems.append("the VC80 DLL (msvcr80.dll) is not among the originals")
+        if (o.min_length, o.min_distinct) != (16, 6): problems.append("--policy needs --min-length 16 and --min-distinct 6")
+        if problems: print("\n".join(problems), file=sys.stderr); sys.exit(2)
     if o.engine_files:
         top = os.path.abspath(o.engine_files); seqs = []
         for b, _, fs in sorted(os.walk(top)):
@@ -255,7 +324,7 @@ def main():
                         if len(set(matched)) < o.min_distinct: continue
                         # Literal mode: the longest match per literal and original. File
                         # mode: every match region (keyed by its maximal start in the file).
-                        k = (n, rel, variant, p - lo) if seqs[n][2] == "file" else (n, rel, variant)
+                        k = (n, rel, variant, p - lo) if seqs[n][2] == "file" or o.policy else (n, rel, variant)
                         if k not in best or best[k]["length"] < length:
                             sec = next((nm for s0, s1, nm in sections if s0 <= start < s1), None)
                             best[k] = {"length": length, "offset": start, "section": sec,
@@ -279,11 +348,30 @@ def main():
     for h in hits:
         c = classes.setdefault(h["class"], {"hits": 0, "engineSites": set()}); c["hits"] += 1; c["engineSites"].add(h["engine"])
     summary = {k: {"hits": v["hits"], "engineSites": len(v["engineSites"])} for k, v in sorted(classes.items())}
+    policy = None
+    if o.policy:
+        failing, examined, used = [], [], set()
+        for h in hits:
+            rule = POLICY.get(h["class"], ("unexpected",))[0]
+            key = next(((p, d) for (p, d) in EXAMINED if h["engine"].split(":")[0].endswith(p) and h["sha256"] == d), None)
+            if rule == "unexpected" and key:
+                used.add(key); examined.append({"engine": h["engine"], "sha256": h["sha256"], "reason": EXAMINED[key]})
+            elif rule in ("unexpected", "removed") or (h["class"] in PINNED and h["sha256"] not in PINNED[h["class"]]):
+                failing.append(h)
+        policy = {"settled": {"user": "2026-10-21: E7b's recommendations accepted", "loop": "the loop's rules for the classes they did not name"},
+                  "table": {k: dict(zip(("rule", "by", "why"), v)) for k, v in POLICY.items()},
+                  "pinned": {k: sorted(v) for k, v in PINNED.items()}, "vocabulary": [VOCABULARY_MAX, VOCABULARY_DIGITS],
+                  "examined": examined, "examinedUnused": [f"{p} {d}" for (p, d) in EXAMINED if (p, d) not in used],
+                  "failing": len(failing), "failingHits": failing,
+                  "open": sorted(k for k in summary if POLICY.get(k, ("",))[0] == "open"),
+                  "verdict": "fail" if failing else "pass"}
     json.dump({"tool": "tools/scan_original_bytes.py", "window": K, "stride": STRIDE, "minLength": o.min_length,
                "minDistinct": o.min_distinct, "originals": o.originals, "originalFiles": files, "originalBytes": scanned,
                "engineSequences": len(seqs), "indexedWindows": len(table), "seconds": round(time.time() - started),
-               "summary": summary, "hits": hits}, open(o.out, "w"), indent=1)
-    print(json.dumps({"files": files, "bytes": scanned, "hits": len(hits), "summary": summary}))
+               "summary": summary, **({"policy": policy} if policy else {}), "hits": hits}, open(o.out, "w"), indent=1)
+    print(json.dumps({"files": files, "bytes": scanned, "hits": len(hits), "summary": summary,
+                      **({"verdict": policy["verdict"], "failing": policy["failing"], "open": policy["open"]} if policy else {})}))
+    if policy and policy["verdict"] == "fail": sys.exit(1)
 
 if __name__ == "__main__":
     main()

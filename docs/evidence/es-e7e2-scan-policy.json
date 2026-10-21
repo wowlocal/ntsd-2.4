@@ -1,0 +1,288 @@
+{
+ "study": "ENGINE_SPLIT",
+ "step": "E7e-2",
+ "label": "es-e7e2",
+ "base": "689ebcb3",
+ "recordedUTC": "2026-10-21T20:22:48Z",
+ "userDecision": {
+  "date": "2026-10-21",
+  "words": [
+   "принимаю твои рекомендации по правилам для E7e, продолжай",
+   "разрешаю тебе все",
+   "бро все разрешаю. действуй полностью автономно"
+  ],
+  "meaning": "the loop's E7b recommendations become the scan policy; D1 and D2/E8 are granted (recorded in the card's Decisions)"
+ },
+ "change": "tools/scan_original_bytes.py gains --policy: each class gets its rule (keep, removed, open) and who set it (the user for the seven classes E7b's recommendations named, the loop for the rest); the report gains a policy section and the tool exits 1 when a hit is in a removed class or unexpected and not an examined coincidence. File mode gains the class 'DAT frame-line fragments' (printable DAT text of at most 64 bytes), which E7d/E7f had examined by hand as unexpected. No engine source change.",
+ "policy": {
+  "zlib or other vendored upstream code": {
+   "rule": "keep",
+   "by": "user",
+   "why": "licensed upstream code (zlib licence), not the game's"
+  },
+  "CALAC (vendored upstream)": {
+   "rule": "keep",
+   "by": "loop",
+   "why": "licensed upstream code (Apache-2.0), not the game's"
+  },
+  "DAT key": {
+   "rule": "keep",
+   "by": "user",
+   "why": "the format constant every LF2-format DAT is encrypted with"
+  },
+  "DirectShow GUIDs": {
+   "rule": "keep",
+   "by": "user",
+   "why": "Microsoft's public interface and class IDs"
+  },
+  "VC80 power-of-ten table": {
+   "rule": "removed",
+   "by": "user",
+   "why": "computed since E7e-1"
+  },
+  "CRT constants": {
+   "rule": "keep",
+   "by": "loop",
+   "why": "public C runtime algorithm constants"
+  },
+  "EXE strings": {
+   "rule": "open",
+   "by": "user",
+   "why": "E6 sorts them by the LF2 2.0a reference (D1): LF2's stay engine text, NTSD's move to the game profile"
+  },
+  "names and vocabulary of the data files": {
+   "rule": "keep",
+   "by": "user",
+   "why": "the content format"
+  },
+  "labels shared with the project's own fixtures and manifests (JSON text, not original bytes)": {
+   "rule": "keep",
+   "by": "user",
+   "why": "the project's own text"
+  },
+  "BMP/DIB header fields": {
+   "rule": "keep",
+   "by": "loop",
+   "why": "format structure of authored files"
+  },
+  "WAV header fields": {
+   "rule": "keep",
+   "by": "loop",
+   "why": "format structure of authored files"
+  },
+  "short audio sample runs (authored waveforms)": {
+   "rule": "keep",
+   "by": "loop",
+   "why": "short authored runs"
+  },
+  "DAT and data-file format text (field vocabulary, frame names)": {
+   "rule": "keep",
+   "by": "loop",
+   "why": "the content format"
+  },
+  "DAT frame-line fragments (authored values in the format's vocabulary)": {
+   "rule": "keep",
+   "by": "loop",
+   "why": "the content format: at most 64 printable bytes with at most 8 digits, against a DAT or a JSON fixture; a copied frame is longer"
+  }
+ },
+ "pinned": {
+  "DAT key": [
+   "955e3ff19ab0e340"
+  ],
+  "DirectShow GUIDs": [
+   "12f0a8d9306b50c6",
+   "2be04b8a4ecefad4"
+  ],
+  "CRT constants": []
+ },
+ "vocabularyBound": {
+  "maxBytes": 32,
+  "maxDigits": 3
+ },
+ "refusals": {
+  "withoutTheDLL": "exit 2: the VC80 DLL (msvcr80.dll) is not among the originals",
+  "missingRoot": "exit 2: missing original …/downloads/nonexistent"
+ },
+ "examined": [
+  {
+   "engine": "OriginalDiagnosticNumberTableTests.swift",
+   "sha256": "e3fd6a0a483c5b12",
+   "reason": "the power list 1...8 as le16, a trivial ascending run"
+  },
+  {
+   "engine": "SyntheticContentPackTests.swift",
+   "sha256": "9597f36279ed4330",
+   "reason": "the frame-number list as le16, equal to data inside 063.wav"
+  },
+  {
+   "engine": "OriginalStartup/manifest.json",
+   "sha256": "c1191491d6b51bce",
+   "reason": "the digest of initial.mask, all ones and so byte-identical to the original's"
+  },
+  {
+   "engine": "OriginalStartup/manifest.json",
+   "sha256": "5a0f3193d3e699f6",
+   "reason": "the digest of initial.mask, all ones and so byte-identical to the original's"
+  }
+ ],
+ "runs": [
+  {
+   "mode": "engine literals",
+   "report": "/Volumes/NTSD-Builds/tasks/engine-split/scratch/e7e2/scan-policy-2.json",
+   "sha256": "42b8f129183e28e83c2f335fdc48178bd115cca98241c9df3b4f0e2e2c9e5f60",
+   "originals": [
+    "downloads/NTSD_2.4_2.0a_clean",
+    "native/Sources/NTSDContent/Resources",
+    "native/Tests/NTSDCoreTests/Fixtures",
+    "/Users/michael/Developer/ntsd-2.4/build/original/crt/msvcr80.dll"
+   ],
+   "files": 3871,
+   "bytes": 6702325567,
+   "summary": {
+    "DAT key": {
+     "hits": 2,
+     "engineSites": 2
+    },
+    "DirectShow GUIDs": {
+     "hits": 2,
+     "engineSites": 2
+    },
+    "EXE strings": {
+     "hits": 162,
+     "engineSites": 117
+    },
+    "labels shared with the project's own fixtures and manifests (JSON text, not original bytes)": {
+     "hits": 115,
+     "engineSites": 66
+    },
+    "names and vocabulary of the data files": {
+     "hits": 2873,
+     "engineSites": 25
+    },
+    "unexpected": {
+     "hits": 3,
+     "engineSites": 2
+    },
+    "zlib or other vendored upstream code": {
+     "hits": 48,
+     "engineSites": 33
+    }
+   },
+   "verdict": "pass",
+   "failing": 0,
+   "open": [
+    "EXE strings"
+   ],
+   "examined": [
+    {
+     "engine": "engine/Tests/NTSDEngineTests/OriginalDiagnosticNumberTableTests.swift:13",
+     "sha256": "e3fd6a0a483c5b12",
+     "reason": "the power list 1...8 as le16, a trivial ascending run"
+    },
+    {
+     "engine": "engine/Tests/NTSDEngineTests/Synthetic/SyntheticContentPackTests.swift:158",
+     "sha256": "9597f36279ed4330",
+     "reason": "the frame-number list as le16, equal to data inside 063.wav"
+    },
+    {
+     "engine": "engine/Tests/NTSDEngineTests/Synthetic/SyntheticContentPackTests.swift:158",
+     "sha256": "9597f36279ed4330",
+     "reason": "the frame-number list as le16, equal to data inside 063.wav"
+    }
+   ]
+  },
+  {
+   "mode": "synthetic pack (--engine-files)",
+   "pack": "/Volumes/NTSD-Builds/tasks/engine-split/scratch/e7e2/pack (166 files written by SyntheticContentPackTests/testWritesThePackWhereAsked; its pinned digest test passed in the same run)",
+   "report": "/Volumes/NTSD-Builds/tasks/engine-split/scratch/e7e2/scan-pack-policy-2.json",
+   "sha256": "17f678faafe3b936c8d757d8557db8609d6c458eba397385cd5ca2dba9fc633d",
+   "summary": {
+    "DAT and data-file format text (field vocabulary, frame names)": {
+     "hits": 524037,
+     "engineSites": 12
+    },
+    "DAT frame-line fragments (authored values in the format's vocabulary)": {
+     "hits": 45804,
+     "engineSites": 9
+    },
+    "WAV header fields": {
+     "hits": 18464,
+     "engineSites": 32
+    },
+    "labels shared with the project's own fixtures and manifests (JSON text, not original bytes)": {
+     "hits": 199,
+     "engineSites": 3
+    },
+    "short audio sample runs (authored waveforms)": {
+     "hits": 582,
+     "engineSites": 8
+    },
+    "unexpected": {
+     "hits": 3,
+     "engineSites": 1
+    }
+   },
+   "verdict": "pass",
+   "failing": 0,
+   "examined": [
+    {
+     "engine": "pack/OriginalStartup/manifest.json:0",
+     "sha256": "c1191491d6b51bce",
+     "reason": "the digest of initial.mask, all ones and so byte-identical to the original's"
+    },
+    {
+     "engine": "pack/OriginalStartup/manifest.json:0",
+     "sha256": "5a0f3193d3e699f6",
+     "reason": "the digest of initial.mask, all ones and so byte-identical to the original's"
+    },
+    {
+     "engine": "pack/OriginalStartup/manifest.json:0",
+     "sha256": "5a0f3193d3e699f6",
+     "reason": "the digest of initial.mask, all ones and so byte-identical to the original's"
+    }
+   ]
+  }
+ ],
+ "manifestCheck": "the pack manifest's examined hits cover the text '\"sha256\": \"29bbc06e…\"', the SHA-256 of the pack's own all-ones OriginalStartup/initial.mask (checked against the file)",
+ "review": {
+  "by": "a separate read-only agent, 2026-10-21",
+  "verified": [
+   "every class the classifiers emit has a POLICY entry; unknown classes fail",
+   "removed hits fail even when examined",
+   "without --policy the output is unchanged except the new class (589,089 pack hits compared: identical apart from 45,804 moved from unexpected)",
+   "the three examined digests: initial.mask is 50,088 bytes of 0x01 (SHA-256 29bbc06e…), both manifest regions are that digest with JSON around it; the 1…8 le16 list hashes to e3fd6a0a…",
+   "a path-suffix collision cannot excuse different bytes: the digest pins them"
+  ],
+  "required": [
+   {
+    "finding": "missing or empty originals, or a run without the VC80 DLL, passed",
+    "done": "--policy refuses (exit 2) missing/empty originals, a run without msvcr80.dll and changed --min-length/--min-distinct; both refusals run"
+   },
+   {
+    "finding": "literal strings matching a data file were vocabulary at any length",
+    "done": "vocabulary only up to the longest seen (32 bytes, at most 3 digits); longer ones are unexpected"
+   },
+   {
+    "finding": "the frame-line rule bounded only the length",
+    "done": "also at most 8 digits (the observed maximum) and only against a DAT (raw or decrypted) or a JSON fixture"
+   },
+   {
+    "finding": "'settled 2026-10-21' covered classes the user never named",
+    "done": "each rule now says 'user' (the 7 classes of E7b's recommendations) or 'loop' (CALAC, CRT constants, the file-mode classes)"
+   }
+  ],
+  "optionalAdopted": [
+   "DAT key and DirectShow GUID hits pinned by digest (PINNED); CRT constants pinned to none, so any hit fails",
+   "in --policy the literal mode keeps every match region (as file mode), not only the longest per literal and original: 2,302 -> 3,205 hits, all classified",
+   "the report lists failing hits, unused examined entries, the whole policy table, the pins and the vocabulary bound",
+   "the initial.mask reason says the mask is byte-identical (all ones)"
+  ],
+  "optionalNotAdopted": [
+   "the zlib/CALAC rules still exempt whole vendored paths (CALAC's project-authored NTSDALAC.cpp included): no hit there today; noted"
+  ]
+ },
+ "openGates": [
+  "EXE strings stay 'open' until E6 sorts them by the LF2 2.0a reference"
+ ]
+}
