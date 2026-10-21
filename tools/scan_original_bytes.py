@@ -24,6 +24,10 @@ match's SHA-256. Each hit gets a class: the survey's expected classes
 (docs/evidence/es-e7-survey.md section 3) or "unexpected".
 
 Usage: scan_original_bytes.py REPO OUT.json [--originals PATH ...] [--min-length N]
+                              [--engine-files DIR]
+
+--engine-files indexes the raw bytes of every file under DIR instead of the
+literals of engine/ (ENGINE_SPLIT E7c: a generated synthetic content pack).
 """
 import argparse, hashlib, json, mmap, os, re, struct, sys, tempfile, time, zlib
 
@@ -143,7 +147,7 @@ def originals(repo, roots, key, scratch):
             for f in sorted(files):
                 path = os.path.join(base, f)
                 rel = os.path.relpath(path, repo) if path.startswith(repo + os.sep) else path
-                if f.lower().endswith(".zip"): continue
+                if f.lower().endswith(".zip") or f.startswith("._"): continue
                 if f.endswith(".zlib"):
                     # A zlib stream, or raw DEFLATE (Foundation's .zlib); else scanned as is.
                     out = os.path.join(scratch, "inflated")
@@ -176,12 +180,36 @@ EXPECTED = [
     (lambda p, s: p.endswith(("OriginalCalendarTime.swift", "OriginalCRTRandom.swift")), "CRT constants"),
 ]
 
+PROJECT_JSON = "labels shared with the project's own fixtures and manifests (JSON text, not original bytes)"
+
+def project_json(original, variant):
+    """The project's own JSON text: a fixture or manifest .json, or an inflated fixture."""
+    low = original.lower()
+    return (low.endswith(".json") and ("/Fixtures/" in original or "/Resources/" in original)) or \
+           (variant.startswith("inflated") and "/Fixtures/" in original)
+
+def classify_file(path, variant, piece, start, length, original, original_variant):
+    """Classes for --engine-files (a generated content pack): the formats' own structure.
+    `piece` is the generated file's matched bytes (DAT text decrypted)."""
+    low, end = path.lower(), start + length
+    if low.endswith(".json") and project_json(original, original_variant) and length <= 48 \
+            and not re.search(rb"[0-9a-fA-F]{16}", piece):
+        return PROJECT_JSON
+    if low.endswith(".dib") and end <= 40: return "BMP/DIB header fields"
+    if low.endswith(".bmp") and end <= 54: return "BMP/DIB header fields"
+    if low.endswith(".wav") and end <= 46: return "WAV header fields"
+    if low.endswith(".wav") and length <= 32: return "short audio sample runs (authored waveforms)"
+    # A few format lines at most, with almost no values in them.
+    if low.endswith((".dat", ".txt")) and length <= 104 and sum(c in b"0123456789" for c in piece) <= 3:
+        return "DAT and data-file format text (field vocabulary, frame names)"
+    return "unexpected"
+
 def classify(path, kind, seq, original, section):
     for test, name in EXPECTED:
         if test(path, seq): return name
     low = original.lower()
     if low.endswith(".json") and ("/Fixtures/" in original or "/Resources/" in original):
-        return "labels shared with the project's own fixtures and manifests (JSON text, not original bytes)"
+        return PROJECT_JSON
     if kind == "string":
         if low.endswith((".exe", ".dll")): return "EXE strings"
         return "names and vocabulary of the data files"
@@ -191,8 +219,20 @@ def main():
     a = argparse.ArgumentParser(); a.add_argument("repo"); a.add_argument("out")
     a.add_argument("--originals", nargs="*", default=DEFAULT_ORIGINALS)
     a.add_argument("--min-length", type=int, default=16); a.add_argument("--min-distinct", type=int, default=6)
+    a.add_argument("--engine-files", default="")
     o = a.parse_args(); repo = os.path.abspath(o.repo); started = time.time()
-    seqs = engine_sequences(os.path.join(repo, "engine")); table = index(seqs)
+    if o.engine_files:
+        top = os.path.abspath(o.engine_files); seqs = []
+        for b, _, fs in sorted(os.walk(top)):
+            for f in sorted(fs):
+                if f.startswith("._"): continue  # AppleDouble files, not the pack's
+                rel = os.path.relpath(os.path.join(b, f), os.path.dirname(top)); data = open(os.path.join(b, f), "rb").read()
+                seqs.append((rel, 0, "file", "raw", data))
+                # A generated DAT also as its text, so a copy at any key phase is found.
+                if f.lower().endswith(".dat"): seqs.append((rel, 0, "file", "decrypted", decrypt(data, dat_key(repo))))
+    else:
+        seqs = engine_sequences(os.path.join(repo, "engine"))
+    table = index(seqs)
     print(f"engine: {len(seqs)} literal sequences, {len(table)} indexed windows", flush=True)
     key = dat_key(repo); best = {}; scanned = files = 0
     with tempfile.TemporaryDirectory(dir=os.path.dirname(os.path.abspath(o.out))) as scratch:
@@ -213,7 +253,9 @@ def main():
                         if length < o.min_length: continue
                         matched = bytes(data[start:start + length])
                         if len(set(matched)) < o.min_distinct: continue
-                        k = (n, rel, variant)
+                        # Literal mode: the longest match per literal and original. File
+                        # mode: every match region (keyed by its maximal start in the file).
+                        k = (n, rel, variant, p - lo) if seqs[n][2] == "file" else (n, rel, variant)
                         if k not in best or best[k]["length"] < length:
                             sec = next((nm for s0, s1, nm in sections if s0 <= start < s1), None)
                             best[k] = {"length": length, "offset": start, "section": sec,
@@ -221,11 +263,18 @@ def main():
                                        "engineSlice": [p - lo, p - lo + length]}
             if files % 500 == 0: print(f"  {files} files, {scanned >> 20} MiB, {len(best)} hits, {time.time() - started:.0f} s", flush=True)
     hits = []
-    for (n, rel, variant), h in sorted(best.items(), key=lambda kv: (seqs[kv[0][0]][0], seqs[kv[0][0]][1], kv[0][1])):
-        path, line, kind, enc, seq = seqs[n]
+    key = dat_key(repo)
+    for (n, rel, variant, *_), h in sorted(best.items(), key=lambda kv: (seqs[kv[0][0]][0], seqs[kv[0][0]][1], kv[0][1], kv[1]["engineSlice"][0])):
+        path, line, kind, enc, seq = seqs[n]; a0, a1 = h["engineSlice"]
+        if kind == "file":
+            piece = seq[a0:a1]
+            if path.lower().endswith(".dat") and enc == "raw":  # ciphertext against ciphertext: judge the text
+                piece = bytes((b - key[i % len(key)]) & 0xff if i >= 123 else b for i, b in zip(range(a0, a1), piece))
+            c = classify_file(path, enc, piece, a0, h["length"], rel, variant)
+        else:
+            c = classify(path, kind, seq[a0:a1], rel, h["section"])
         hits.append({"engine": f"{path}:{line}", "kind": kind, "encoding": enc, "literalLength": len(seq),
-                     "original": rel, "variant": variant, **h,
-                     "class": classify(path, kind, seq[h["engineSlice"][0]:h["engineSlice"][1]], rel, h["section"])})
+                     "original": rel, "variant": variant, **h, "class": c})
     classes = {}
     for h in hits:
         c = classes.setdefault(h["class"], {"hits": 0, "engineSites": set()}); c["hits"] += 1; c["engineSites"].add(h["engine"])
