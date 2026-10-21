@@ -10,7 +10,7 @@ measurement from [TVOS_WEB](TVOS_WEB.md), [MEMORY_LOADING](MEMORY_LOADING.md) an
 engine from the game itself. to publish engine as the separate github repo";
 then, after the plan: "ok … when the plan is setteled start the loop in a
 separate branch" and "push automatically every step (on that new branch)".
-**Status:** E0–E3, E4a, E4b (all six hosts), E4c-1 (the engine's self-contained tests), E5a (the game profile's survey and design) and E5b (the record type, the copied tables out), E4c-1a (a nondeterministic engine test corrected) E5c-0 (the profile's plumbing, reflection), E5c-1a (one storage, the reflectors), E5c-1b (armour), E5c-1c (special interactions) and E5c-1d (impact) done; E5c-2a, E5c-2b and E5c-2c (the items family: the random and requested spawns, camera, links, the mission stage) E5c-2d (the roster family), E5c-2e (the modes family), E5c-2f (the match prelude) and E5c-2g (the mode label) done: E5c-2's menu and mode rows are in the profile; E5c-1e (physics), E5c-1f (drawing) and E5c-1g (the post-draw effects) and E5c-1h (the slot prefix, scheduler and round restore) and E5c-1i (the object input) and E5c-1j (A28, the input chain) done: every E5c row is in the profile; E5d-1a (the AI's target roles) and E5d-1b (its fight roles) done: every object-ID literal of the generic AI is in the profile; E5d-2 (the special-move hook) and E5d-3 (the 20 routines in the game) done: the AI's NTSD code is the game's; E5e (the coarse hooks) surveyed: roles, no new hook; E5e-1 (the ID-300 roles), E5e-2 (the mission pseudo-IDs), E5e-3 (War life), E5e-4 (fusion) and E5e-5 (the weapon break) done: every object-ID rule of the E5a table is the game's; E5f surveyed; E5f-1 (the front menu's names and rectangles, carried by the startup), E5f-2a (the interface and common sound names), E5f-2b (the menu and War names), E5f-3 (the menu WAVs) and E5f-4 (the panel and BATTLEMODE rectangles) done; E4c-2 next.
+**Status:** E0–E3, E4a, E4b (all six hosts), E4c-1 (the engine's self-contained tests), E5a (the game profile's survey and design) and E5b (the record type, the copied tables out), E4c-1a (a nondeterministic engine test corrected) E5c-0 (the profile's plumbing, reflection), E5c-1a (one storage, the reflectors), E5c-1b (armour), E5c-1c (special interactions) and E5c-1d (impact) done; E5c-2a, E5c-2b and E5c-2c (the items family: the random and requested spawns, camera, links, the mission stage) E5c-2d (the roster family), E5c-2e (the modes family), E5c-2f (the match prelude) and E5c-2g (the mode label) done: E5c-2's menu and mode rows are in the profile; E5c-1e (physics), E5c-1f (drawing) and E5c-1g (the post-draw effects) and E5c-1h (the slot prefix, scheduler and round restore) and E5c-1i (the object input) and E5c-1j (A28, the input chain) done: every E5c row is in the profile; E5d-1a (the AI's target roles) and E5d-1b (its fight roles) done: every object-ID literal of the generic AI is in the profile; E5d-2 (the special-move hook) and E5d-3 (the 20 routines in the game) done: the AI's NTSD code is the game's; E5e (the coarse hooks) surveyed: roles, no new hook; E5e-1 (the ID-300 roles), E5e-2 (the mission pseudo-IDs), E5e-3 (War life), E5e-4 (fusion) and E5e-5 (the weapon break) done: every object-ID rule of the E5a table is the game's; E5f surveyed; E5f-1 (the front menu's names and rectangles, carried by the startup), E5f-2a (the interface and common sound names), E5f-2b (the menu and War names), E5f-3 (the menu WAVs) and E5f-4 (the panel and BATTLEMODE rectangles) done; E4c-2 (the mixed test files split) done; E7 surveyed, E7a next.
 **Branch:** `exp/engine-split`, from `main` 380b448d. Worktree
 `/Volumes/NTSD-Builds/tasks/engine-split/worktree` (T7-backed APFS, see
 [BUILD_STORAGE_T7](BUILD_STORAGE_T7.md)). It tracks `origin/exp/engine-split`
@@ -157,7 +157,7 @@ A read-only survey of `native/` (three agents, 2026-10-18):
 | E1b | Music: `OriginalMusic` leaves `NTSDMacPlatform` for `NTSDContent` (in the bundle on Mac builds only); the source paths in tools and hosts follow; the iOS simulator row with a device set on `/Volumes/NTSD-Builds` | **done** ([evidence](../evidence/es-e1b-music.json)); its packaged-app and iOS rows, and E1a's iOS row, closed after the Mac's audio came back ([evidence](../evidence/es-e1b-open-rows.json)) |
 | E2 | Content policy out of Core: the digest, count and EXE-SHA pins become the NTSD content identity the game passes; Core checks what it is given with the same checks and errors (2.8.3.3's content origin as the model, read only) | **done** ([evidence](../evidence/es-e2-content-identity.json)) |
 | E3 | Identity and Practice: user-data folder, wasm module, Android prefix/entry, queue/thread names, titles and messages become game configuration; Practice/Lab and its two checks move to the game side | **done**: E3a ([evidence](../evidence/es-e3a-practice.json)), E3b ([evidence](../evidence/es-e3b-game-identity.json)); diagnostic labels wait for D2 |
-| E4 | Two packages: `engine/Package.swift` (Core, Runtime, codecs, decoders, shims, host libraries, self-contained tests) and `native/Package.swift` depending on it by path; the unsafeFlags plan (SwiftPM rejects them in version-pinned dependencies) | E4a **done** ([evidence](../evidence/es-e4a-engine-package.json)); E4b: headless **done** ([evidence](../evidence/es-e4b1-headless-host.json)), browser **done** ([evidence](../evidence/es-e4b2-web-host.json)), SDL **done** ([evidence](../evidence/es-e4b3-sdl-host.json)), AppKit **done** ([evidence](../evidence/es-e4b4-appkit-host.json)), UIKit **done** ([evidence](../evidence/es-e4b5-uikit-host.json)), Android **done** ([evidence](../evidence/es-e4b6-android-host.json)); E4c-1 **done** ([evidence](../evidence/es-e4c1-engine-tests.json)), E4c-1a **done** ([evidence](../evidence/es-e4c1a-sorted-keys.json)); E4c-2 (split the 11 mixed test files, the War trio) queued |
+| E4 | Two packages: `engine/Package.swift` (Core, Runtime, codecs, decoders, shims, host libraries, self-contained tests) and `native/Package.swift` depending on it by path; the unsafeFlags plan (SwiftPM rejects them in version-pinned dependencies) | E4a **done** ([evidence](../evidence/es-e4a-engine-package.json)); E4b: headless **done** ([evidence](../evidence/es-e4b1-headless-host.json)), browser **done** ([evidence](../evidence/es-e4b2-web-host.json)), SDL **done** ([evidence](../evidence/es-e4b3-sdl-host.json)), AppKit **done** ([evidence](../evidence/es-e4b4-appkit-host.json)), UIKit **done** ([evidence](../evidence/es-e4b5-uikit-host.json)), Android **done** ([evidence](../evidence/es-e4b6-android-host.json)); E4c-1 **done** ([evidence](../evidence/es-e4c1-engine-tests.json)), E4c-1a **done** ([evidence](../evidence/es-e4c1a-sorted-keys.json)); E4c-2 **done** ([evidence](../evidence/es-e4c2-mixed-tests.json)); the War trio stays with the game (recorded) |
 | E5 | Game profile: the ID sites (100 rows, about 125 branch points; first estimated ~90) and the AI dispatch behind a profile the game supplies; the engine defines the `0x44d000` record's layout and the game supplies `initial.bin`; the NTSD profile bit-exact (all gates plus the full fixture-driven suites); the API's fit with 2.8.3.3 checked read only | E5a **done** (survey and design, [evidence](../evidence/es-e5a-design.json)); E5b **done** ([evidence](../evidence/es-e5b-record-type.json)); E5c-0 **done** ([evidence](../evidence/es-e5c0-profile-plumbing.json)); E5c-1a **done** ([evidence](../evidence/es-e5c1a-reflector-roles.json)); E5c-1b **done** ([evidence](../evidence/es-e5c1b-armour-roles.json)); E5c-1c **done** ([evidence](../evidence/es-e5c1c-interaction-roles.json)); E5c-1d **done** ([evidence](../evidence/es-e5c1d-impact-roles.json)); E5c-2a **done** ([evidence](../evidence/es-e5c2a-items-roles.json)); E5c-2b **done** ([evidence](../evidence/es-e5c2b-camera-links-roles.json)); E5c-2c **done** ([evidence](../evidence/es-e5c2c-requested-mission-roles.json)); E5c-2d **done** ([evidence](../evidence/es-e5c2d-roster-roles.json)); E5c-2e **done** ([evidence](../evidence/es-e5c2e-modes-roles.json)); E5c-2f **done** ([evidence](../evidence/es-e5c2f-prelude-roles.json)); E5c-2g **done** ([evidence](../evidence/es-e5c2g-mode-label-roles.json)); E5c-1e **done** ([evidence](../evidence/es-e5c1e-physics-roles.json)); E5c-1f **done** ([evidence](../evidence/es-e5c1f-drawing-roles.json)); E5c-1g **done** ([evidence](../evidence/es-e5c1g-effects-roles.json)); E5c-1h **done** ([evidence](../evidence/es-e5c1h-lifecycle-roles.json)); E5c-1i **done** ([evidence](../evidence/es-e5c1i-object-input-roles.json)); E5c-1j **done** ([evidence](../evidence/es-e5c1j-input-roles.json)); E5d: [survey](../evidence/es-e5d-plumbing.md), E5d-1a **done** ([evidence](../evidence/es-e5d1a-ai-target-roles.json)), E5d-1b **done** ([evidence](../evidence/es-e5d1b-ai-fight-roles.json)), E5d-2 **done** ([evidence](../evidence/es-e5d2-ai-special-hook.json)), E5d-3 **done** ([evidence](../evidence/es-e5d3-ai-routines-in-game.json)); E5e: [survey](../evidence/es-e5e-plumbing.md), E5e-1 **done** ([evidence](../evidence/es-e5e1-id300-roles.json)), E5e-2 **done** ([evidence](../evidence/es-e5e2-mission-pseudo-ids.json)), E5e-3 **done** ([evidence](../evidence/es-e5e3-war-life.json)), E5e-4 **done** ([evidence](../evidence/es-e5e4-fusion.json)), E5e-5 **done** ([evidence](../evidence/es-e5e5-weapon-break.json)); E5f: [survey](../evidence/es-e5f-plumbing.md), E5f-1 **done** ([evidence](../evidence/es-e5f1-front-interface.json)), E5f-2a **done** ([evidence](../evidence/es-e5f2a-interface-sound-names.json)), E5f-2b **done** ([evidence](../evidence/es-e5f2b-menu-war-names.json)), E5f-3 **done** ([evidence](../evidence/es-e5f3-menu-sound-names.json)), E5f-4 **done** ([evidence](../evidence/es-e5f4-panel-war-frames.json)) |
 | E6 | Classify each profile rule as LF2 2.0a or NTSD from the second reference; LF2 rules become the engine's default profile | needs D1 |
 | E7 | Engine stand-alone: the engine package builds alone (macOS, Linux container) and passes its tests with a from-scratch synthetic content pack; a scan finds no original bytes (files under `downloads/`, the resources, fixtures, `initial.bin`) | queued |
@@ -1726,6 +1726,72 @@ From a read-only survey ([report](../evidence/es-e5f-plumbing.md)).
   test (its check is the shared one, first in `run`). The review's warning to
   re-check the access count held, though not for the `Interface` parameter.
 
+### E4c-2 note (2026-10-21, reviewed with its change; done)
+
+- **Survey.** A read-only agent read the 11 mixed files E4c-1 left (46
+  tests): 26 synthetic tests in ten of them read no content; 17 there and
+  `OriginalApplicationLoadingSessionTests`' three read the game's content
+  (bundled packages, `Bundle.main`, `#filePath` into `NTSDContent`,
+  `NTSDProfile`, `initial.bin`).
+- **Split.** The ten files each get an engine half under the same file and
+  class name (`Mac/OriginalMacMusicOutputTests` in the engine's `Mac/`): the
+  26 tests and the helpers they use, copied verbatim; the native halves keep
+  the 17 and their helpers (`Recorder`, `iid`, `play` stay for native's
+  `OriginalMacRuntimeLoadingTests`; `release`, the read-ahead `tearDown` and
+  four unused generators leave native). Each half's doc gains one E4c-2 line;
+  the engine halves drop imports they no longer need (no game module), keep
+  the CryptoKit guard where a moved test needs it. The two packages build
+  separate bundles, so one class name in both is safe (the gates call
+  `NTSDCoreTests.<Class>` and `NTSDEngineTests.<Class>`), as with
+  `OriginalExclusivityChecksTests` since E4c-1.
+- **Package.** `NTSDEngineTests` depends on `NTSDMusicDecoder` (the ALAC
+  test); CALAC already builds on every engine platform. Eight Corelibs
+  initialisers join the engine's shim (ALAC none, as in native's).
+- **Counts.** `swift test list`: before 110 + 824, after 136 + 798; the union
+  of class/test pairs 933 both times, none lost or new; only the exclusivity
+  check in both.
+- **Linux.** Both packages' tests build with the glibc SDK; the engine's 46
+  suites run in `swift:6.4.0-noble` (114 passed); the one failure is
+  `OriginalPosixFileFactsTests` as root, as since E4c-1, passing as uid 1000.
+  Native's SHA256 halves have no Linux tests now (their remaining tests are
+  CryptoKit-only); their synthetic tests run in the engine.
+- **The War trio stays** (`OriginalWarSetupNativeTests`,
+  `OriginalWarOuterRollbackTests`, `OriginalStageFinaleTests`): since E5b they
+  read `initial.bin` through `NTSDInitialRecordData` and since E5 NTSD's
+  profile (bitmap names, frames, the ENDING sheet, roster ranges); moving them
+  would mean new tests on a synthetic War record with values the engine
+  computes, not a move. E4c-1's call that they were synthetic predates E5b.
+- **Review.** No required code change (every moved test and helper verbatim;
+  every classification checked against its reads; imports, guards and the
+  package change correct; the dropped `tearDown` reset a global no native
+  test sets). Required and done: the Linux build and run, the records. Not
+  adopted: trimming the engine halves' class docs (kept verbatim; the E4c-2
+  line says which half it is).
+
+### E7 note (2026-10-21, from the survey)
+
+From a read-only survey ([report](../evidence/es-e7-survey.md)).
+- **Stand-alone build.** Nothing in `engine/`'s build reaches outside it (one
+  doc link dangles in a copy); its Linux runners and the cross-build SDK are
+  the repository's and the Mac's. E7a builds and tests a `git archive` of
+  `engine/` alone: macOS (default products and `NTSDEngineTests`, debug and
+  release) and a native build inside `swift:6.4.0-noble` as uid 1000. The SDL,
+  wasm, UIKit and Android products are compile-only rows outside E7's gate.
+- **Synthetic pack.** Generated by Swift code in the engine's tests into a
+  temporary folder (no binary files committed), every byte authored; record
+  words zero unless a documented table names the engine check needing them.
+  Proved in steps: loading (E7c), a headless start and a match of N bodies
+  with frames equal on macOS and Linux (E7d). Where the pack must meet engine
+  constants (file and bitmap names, `MENU_BACK%d`, `bgm\*.wma`, record words
+  the engine checks) is listed in the report.
+- **Scan.** A tool the loop runs, printing locations and hashes, never bytes
+  (E7b). The expected hits are policy, not findings: the DAT key, DirectShow
+  GUIDs, the VC80 power-of-ten table, CRT constants, EXE strings, the engine's
+  names and tables, statically linked zlib 1.1.4, address constants. Which of
+  them the published engine may keep is the user's call with D1 (E5's
+  "until D1 sets E7's policy"); E7e acts on that policy (the power-of-ten
+  table can be computed instead of copied before it).
+
 ## Ledger
 
 - 2026-10-18: plan agreed; branch `exp/engine-split` and its worktree created
@@ -2224,16 +2290,33 @@ From a read-only survey ([report](../evidence/es-e5f-plumbing.md)).
   3,278/3,406; 20 suites with 69 tests; WASI vs identical; Mac
   overlapping; phone 3v2 render and process apart (slower), the 4v4 follow-up overlapping everywhere.
   [Evidence](../evidence/es-e5f4-panel-war-frames.json).
+- 2026-10-21 E4c-2: ten mixed native test files split; their 26 synthetic
+  tests move to the engine's tests under the same names, 17 content-reading
+  ones stay; `NTSDMusicDecoder` joins the engine's test target. Counts:
+  110 + 824 before, 136 + 798 after, the union of 933 class/test pairs
+  unchanged. Linux: both test targets build; the engine's 46 suites run
+  (114 passed; the root-only failure as since E4c-1, passing as uid 1000).
+  The War trio stays with the game (reads `initial.bin` and NTSD's profile
+  since E5b/E5). Reviewed (no required code change). Gate `es-e4c2`: 11
+  scenarios, frames, AppKit, unchecked, emulator, 20 clean launches, 29 suite
+  runs, the engine's 136 tests, 3,278/3,406; the War trio and loading session
+  suites; WASI vs identical; phone overlapping; Mac (identical machine code at
+  other addresses) load apart 3 against 3, the first 4v4 complete apart by 0.004 ms, a second 4v4 (order reversed) overlapping everywhere.
+  [Evidence](../evidence/es-e4c2-mixed-tests.json).
 
 ## Next task
 
-E4c-2 (the E4 row; survey 2026-10-21, recorded with the step): split the ten
-mixed test files whose synthetic tests read no content (26 tests) into the
-engine's test target, the content-reading ones (17, plus
-`OriginalApplicationLoadingSessionTests`' three, which has none to split) stay
-in native under the same class names; `NTSDMusicDecoder` joins the engine's
-test target for the ALAC test; the engine's Corelibs lines follow. Counts:
-`swift test list` of both packages before and after, the union of
-class/test pairs unchanged. The War trio stays in native (since E5b it reads
-`initial.bin` and NTSD's profile; moving it would mean new tests on a
-synthetic War record), recorded. Then E7.
+E7a (the E7 row and note; survey [report](../evidence/es-e7-survey.md) §1, §4):
+the engine package alone. `git archive` of `engine/` into a
+folder on `/Volumes/NTSD-Builds` with nothing else; a clean macOS build of its
+default products and `NTSDEngineTests` (debug and release) and a native
+`swift build`/`swift test` of the same folder inside `swift:6.4.0-noble` as
+uid 1000; both test counts equal the repository's (136; Linux without `Mac/`).
+Whatever reaches outside `engine/` is a finding to fix or record (the survey
+found only a doc link). The SDL, wasm, UIKit and Android rows are recorded
+as separate compile-only rows. No engine source changes expected, so no
+mlgate set unless one is needed. Then E7b (the original-bytes scanner and its
+report; the policy for the expected hits — DAT key, DirectShow GUIDs, the
+CRT power-of-ten table, EXE strings, zlib — is the user's, with D1), E7c/E7d
+(a synthetic content pack generated in the engine's tests, then a headless
+start and match on it).

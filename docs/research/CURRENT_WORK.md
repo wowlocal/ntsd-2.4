@@ -85,7 +85,8 @@ E5f-2a выполнен: имена интерфейса и общих звук�
 E5f-2b выполнен: имена меню и War в Interface: [evidence](../evidence/es-e5f2b-menu-war-names.json).
 E5f-3 выполнен: звуки меню в Interface: [evidence](../evidence/es-e5f3-menu-sound-names.json).
 E5f-4 выполнен: прямоугольники панели и BATTLEMODE в Interface: [evidence](../evidence/es-e5f4-panel-war-frames.json).
-Следующая задача — E4c-2: синтетические тесты из смешанных файлов в движок.
+E4c-2 выполнен: синтетические тесты из смешанных файлов в движке: [evidence](../evidence/es-e4c2-mixed-tests.json).
+Следующая задача — E7a: пакет движка собирается и тестируется отдельно (macOS и Linux-контейнер).
 
 ## Internal build storage и VM quota исправлены — 2026-10-17
 

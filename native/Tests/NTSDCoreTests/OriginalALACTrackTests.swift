@@ -4,6 +4,7 @@ import NTSDMusicDecoder
 
 /// The packaged tracks decode without AVFoundation to exactly the PCM their
 /// manifest records (FFmpeg's decode of bgm/*.wma, before ALAC encoding).
+/// ENGINE_SPLIT E4c-2: its synthetic tests moved to the engine's NTSDEngineTests (same class name).
 final class OriginalALACTrackTests: XCTestCase {
     static let directory = URL(fileURLWithPath:#filePath).deletingLastPathComponent().deletingLastPathComponent().deletingLastPathComponent()
         .appendingPathComponent("Sources/NTSDContent/Resources/OriginalMusic",isDirectory:true)
@@ -24,9 +25,5 @@ final class OriginalALACTrackTests: XCTestCase {
             XCTAssertEqual(bytes.count,(pcm["bytes"] as? NSNumber)?.intValue,resource)
             XCTAssertEqual(PortableSHA256.hash(data:bytes).map { String(format:"%02x",$0) }.joined(),pcm["sha256"] as? String,resource)
         }
-    }
-
-    func testRejectsNonCAFData() {
-        XCTAssertThrowsError(try OriginalALACTrack(data:Data("not a caf".utf8))) { XCTAssertEqual($0 as? OriginalALACTrack.Failure,.notCAF) }
     }
 }
