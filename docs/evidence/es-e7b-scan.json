@@ -1,0 +1,3276 @@
+{
+ "study": "ENGINE_SPLIT",
+ "step": "E7b",
+ "base": "0c1c2456",
+ "recordedUTC": "2026-10-21T00:51:19Z",
+ "change": "tools/scan_original_bytes.py: the original-bytes scanner (a tool the loop runs; it reads the originals, its report holds locations, lengths and hash prefixes, never bytes). No engine change.",
+ "tool": {
+  "path": "tools/scan_original_bytes.py",
+  "sha256": "399fce1526caba8b677bd5ab2322db422079ce8089ed1f4e6506100ee22fbdc6",
+  "method": "engine side: the literals of every file under engine/ (Swift and C strings as UTF-8; runs of four or more integers flattened across nested arrays and tuples as u8/le16/le32/le64 where they fit; hex strings and runs of consecutive hex strings of one array as bytes), every 8-byte window with at least four distinct values indexed; original side sampled every 8 bytes (any copy of 15 bytes or more found), each hit extended both ways and kept at 16 bytes or more with at least 6 distinct values",
+  "limits": [
+   "copies shorter than 15 bytes can be missed and hits under 16 bytes are not kept: the CRT rand constants, PST/PDT and the three binary64 constants the survey listed are below that (listed from the survey, not found here)",
+   "the engine's code text is not indexed: constants written as separate immediates (writes of one word each, comparisons) are not literal runs",
+   "the fixtures are scanned as their JSON text and inflated bytes; payloads encoded in them (hex or base64 strings) are not decoded",
+   "the survey's third method (literal runs as subsequences of the EXE's .text immediates) is not implemented"
+  ]
+ },
+ "run": {
+  "originals": [
+   "downloads/NTSD_2.4_2.0a_clean",
+   "native/Sources/NTSDContent/Resources",
+   "native/Tests/NTSDCoreTests/Fixtures",
+   "<main worktree>/build/original/crt/msvcr80.dll (the pinned VC80 runtime DLL, SHA-256 c3ac989c8489a23bb96400b1856f5325ffc67e844f04651ea5d61bc20a991c6d, read only)"
+  ],
+  "originalFiles": 3871,
+  "originalBytes": 6702325567,
+  "engineSequences": 6882,
+  "indexedWindows": 35409,
+  "seconds": 107,
+  "report": "/Volumes/NTSD-Builds/tasks/engine-split/scratch/e7b/scan-3.json",
+  "reportSHA256": "78a68b1c1be70d2094f6f1dd12868f8b54e107e28199b719bbbb518783ddbd20"
+ },
+ "attempts": [
+  {
+   "run": "scan-1",
+   "finding": "stopped at a fixture named .zlib that is raw DEFLATE (Foundation's .zlib, no zlib header); the tool now tries zlib and raw DEFLATE"
+  },
+  {
+   "run": "scan-2",
+   "finding": "complete (3,870 files, 6.4 GB, 104 s, 1,282 hits, none unexpected) but without the VC80 DLL, so the power-of-ten table (from that DLL, as twelve-byte hex strings) was not found; the fixture-JSON hits were filed as data vocabulary"
+  },
+  {
+   "run": "scan-3",
+   "finding": "the DLL scanned too, runs of hex strings joined, the fixture-JSON hits in their own class: the table found; this report"
+  }
+ ],
+ "summary": {
+  "DAT key": {
+   "hits": 2,
+   "engineSites": 2
+  },
+  "DirectShow GUIDs": {
+   "hits": 2,
+   "engineSites": 2
+  },
+  "EXE strings": {
+   "hits": 122,
+   "engineSites": 107
+  },
+  "VC80 power-of-ten table": {
+   "hits": 1,
+   "engineSites": 1
+  },
+  "labels shared with the project's own fixtures and manifests (JSON text, not original bytes)": {
+   "hits": 77,
+   "engineSites": 54
+  },
+  "names and vocabulary of the data files": {
+   "hits": 1048,
+   "engineSites": 10
+  },
+  "zlib or other vendored upstream code": {
+   "hits": 37,
+   "engineSites": 33
+  }
+ },
+ "unexpected": {
+  "hits": 0,
+  "engineSites": 0
+ },
+ "classes": {
+  "DAT key": {
+   "hits": 2,
+   "engineSites": 2,
+   "sites": [
+    {
+     "engine": "engine/Sources/NTSDCore/OriginalDATDecoder.swift:34",
+     "kind": "string",
+     "encoding": "utf8",
+     "literalLength": 37,
+     "longestMatch": 37,
+     "originalFiles": 1,
+     "example": {
+      "original": "downloads/NTSD_2.4_2.0a_clean/NTSD 2.4_2.0a/NTSD 2.4.exe",
+      "variant": "raw",
+      "section": ".rdata",
+      "offset": 297260,
+      "sha256Prefix": "955e3ff19ab0e340"
+     }
+    },
+    {
+     "engine": "engine/Tests/NTSDEngineTests/OriginalCatalogChecksumTests.swift:14",
+     "kind": "string",
+     "encoding": "utf8",
+     "literalLength": 37,
+     "longestMatch": 37,
+     "originalFiles": 1,
+     "example": {
+      "original": "downloads/NTSD_2.4_2.0a_clean/NTSD 2.4_2.0a/NTSD 2.4.exe",
+      "variant": "raw",
+      "section": ".rdata",
+      "offset": 297260,
+      "sha256Prefix": "955e3ff19ab0e340"
+     }
+    }
+   ]
+  },
+  "DirectShow GUIDs": {
+   "hits": 2,
+   "engineSites": 2,
+   "sites": [
+    {
+     "engine": "engine/Sources/NTSDCore/OriginalMusicPlayback.swift:116",
+     "kind": "integers",
+     "encoding": "u8",
+     "literalLength": 16,
+     "longestMatch": 16,
+     "originalFiles": 1,
+     "example": {
+      "original": "downloads/NTSD_2.4_2.0a_clean/NTSD 2.4_2.0a/NTSD 2.4.exe",
+      "variant": "raw",
+      "section": ".rdata",
+      "offset": 303716,
+      "sha256Prefix": "12f0a8d9306b50c6"
+     }
+    },
+    {
+     "engine": "engine/Sources/NTSDCore/OriginalMusicPlayback.swift:190",
+     "kind": "string",
+     "encoding": "utf8",
+     "literalLength": 32,
+     "longestMatch": 32,
+     "originalFiles": 1,
+     "example": {
+      "original": "downloads/NTSD_2.4_2.0a_clean/NTSD 2.4_2.0a/NTSD 2.4.exe",
+      "variant": "raw",
+      "section": ".rdata",
+      "offset": 292476,
+      "sha256Prefix": "2be04b8a4ecefad4"
+     }
+    }
+   ]
+  },
+  "EXE strings": {
+   "hits": 122,
+   "engineSites": 107,
+   "sites": [
+    {
+     "engine": "engine/Sources/NTSDCore/OriginalApplicationArtSetup.swift:46",
+     "kind": "string",
+     "encoding": "utf8",
+     "literalLength": 40,
+     "longestMatch": 40,
+     "originalFiles": 1,
+     "example": {
+      "original": "downloads/NTSD_2.4_2.0a_clean/NTSD 2.4_2.0a/NTSD 2.4.exe",
+      "variant": "raw",
+      "section": ".rdata",
+      "offset": 303516,
+      "sha256Prefix": "40fe1793e2f6c903"
+     }
+    },
+    {
+     "engine": "engine/Sources/NTSDCore/OriginalApplicationStartupInputs.swift:220",
+     "kind": "string",
+     "encoding": "utf8",
+     "literalLength": 16,
+     "longestMatch": 16,
+     "originalFiles": 1,
+     "example": {
+      "original": "downloads/NTSD_2.4_2.0a_clean/NTSD 2.4_2.0a/NTSD 2.4.exe",
+      "variant": "raw",
+      "section": ".rdata",
+      "offset": 300672,
+      "sha256Prefix": "981d74bcd1bffd90"
+     }
+    },
+    {
+     "engine": "engine/Sources/NTSDCore/OriginalBitmapSurfaceLoading.swift:193",
+     "kind": "string",
+     "encoding": "utf8",
+     "literalLength": 28,
+     "longestMatch": 28,
+     "originalFiles": 1,
+     "example": {
+      "original": "downloads/NTSD_2.4_2.0a_clean/NTSD 2.4_2.0a/NTSD 2.4.exe",
+      "variant": "raw",
+      "section": ".rdata",
+      "offset": 303636,
+      "sha256Prefix": "e6484841d00a9961"
+     }
+    },
+    {
+     "engine": "engine/Sources/NTSDCore/OriginalBitmapSurfaceLoading.swift:194",
+     "kind": "string",
+     "encoding": "utf8",
+     "literalLength": 29,
+     "longestMatch": 29,
+     "originalFiles": 1,
+     "example": {
+      "original": "downloads/NTSD_2.4_2.0a_clean/NTSD 2.4_2.0a/NTSD 2.4.exe",
+      "variant": "raw",
+      "section": ".rdata",
+      "offset": 303636,
+      "sha256Prefix": "bfe8e290c966f738"
+     }
+    },
+    {
+     "engine": "engine/Sources/NTSDCore/OriginalBitmapSurfaceLoading.swift:197",
+     "kind": "string",
+     "encoding": "utf8",
+     "literalLength": 27,
+     "longestMatch": 27,
+     "originalFiles": 1,
+     "example": {
+      "original": "downloads/NTSD_2.4_2.0a_clean/NTSD 2.4_2.0a/NTSD 2.4.exe",
+      "variant": "raw",
+      "section": ".rdata",
+      "offset": 303576,
+      "sha256Prefix": "41e6a69746a8e044"
+     }
+    },
+    {
+     "engine": "engine/Sources/NTSDCore/OriginalBitmapSurfaceLoading.swift:198",
+     "kind": "string",
+     "encoding": "utf8",
+     "literalLength": 28,
+     "longestMatch": 28,
+     "originalFiles": 1,
+     "example": {
+      "original": "downloads/NTSD_2.4_2.0a_clean/NTSD 2.4_2.0a/NTSD 2.4.exe",
+      "variant": "raw",
+      "section": ".rdata",
+      "offset": 303576,
+      "sha256Prefix": "b7cfbe57822a692b"
+     }
+    },
+    {
+     "engine": "engine/Sources/NTSDCore/OriginalCatalogRegistry.swift:144",
+     "kind": "string",
+     "encoding": "utf8",
+     "literalLength": 16,
+     "longestMatch": 16,
+     "originalFiles": 1,
+     "example": {
+      "original": "downloads/NTSD_2.4_2.0a_clean/NTSD 2.4_2.0a/NTSD 2.4.exe",
+      "variant": "raw",
+      "section": ".rdata",
+      "offset": 297092,
+      "sha256Prefix": "a21af36c56ea0989"
+     }
+    },
+    {
+     "engine": "engine/Sources/NTSDCore/OriginalFrontControlSettings.swift:23",
+     "kind": "string",
+     "encoding": "utf8",
+     "literalLength": 47,
+     "longestMatch": 47,
+     "originalFiles": 1,
+     "example": {
+      "original": "downloads/NTSD_2.4_2.0a_clean/NTSD 2.4_2.0a/NTSD 2.4.exe",
+      "variant": "raw",
+      "section": ".rdata",
+      "offset": 300888,
+      "sha256Prefix": "eab2cd74f0be2d46"
+     }
+    },
+    {
+     "engine": "engine/Sources/NTSDCore/OriginalFrontRecordingInfo.swift:18",
+     "kind": "string",
+     "encoding": "utf8",
+     "literalLength": 35,
+     "longestMatch": 35,
+     "originalFiles": 1,
+     "example": {
+      "original": "downloads/NTSD_2.4_2.0a_clean/NTSD 2.4_2.0a/NTSD 2.4.exe",
+      "variant": "raw",
+      "section": ".rdata",
+      "offset": 300812,
+      "sha256Prefix": "d1bafee99dc289ae"
+     }
+    },
+    {
+     "engine": "engine/Sources/NTSDCore/OriginalFrontRecordingInfo.swift:19",
+     "kind": "string",
+     "encoding": "utf8",
+     "literalLength": 38,
+     "longestMatch": 38,
+     "originalFiles": 1,
+     "example": {
+      "original": "downloads/NTSD_2.4_2.0a_clean/NTSD 2.4_2.0a/NTSD 2.4.exe",
+      "variant": "raw",
+      "section": ".rdata",
+      "offset": 300772,
+      "sha256Prefix": "34f19c79d3841083"
+     }
+    },
+    {
+     "engine": "engine/Sources/NTSDCore/OriginalFrontScreenBody.swift:39",
+     "kind": "string",
+     "encoding": "utf8",
+     "literalLength": 28,
+     "longestMatch": 28,
+     "originalFiles": 1,
+     "example": {
+      "original": "downloads/NTSD_2.4_2.0a_clean/NTSD 2.4_2.0a/NTSD 2.4.exe",
+      "variant": "raw",
+      "section": ".rdata",
+      "offset": 301272,
+      "sha256Prefix": "b03fb59fd67fd211"
+     }
+    },
+    {
+     "engine": "engine/Sources/NTSDCore/OriginalFrontScreenBody.swift:40",
+     "kind": "string",
+     "encoding": "utf8",
+     "literalLength": 31,
+     "longestMatch": 31,
+     "originalFiles": 1,
+     "example": {
+      "original": "downloads/NTSD_2.4_2.0a_clean/NTSD 2.4_2.0a/NTSD 2.4.exe",
+      "variant": "raw",
+      "section": ".rdata",
+      "offset": 301240,
+      "sha256Prefix": "9624080def45e64d"
+     }
+    },
+    {
+     "engine": "engine/Sources/NTSDCore/OriginalFrontScreenBody.swift:41",
+     "kind": "string",
+     "encoding": "utf8",
+     "literalLength": 29,
+     "longestMatch": 29,
+     "originalFiles": 1,
+     "example": {
+      "original": "downloads/NTSD_2.4_2.0a_clean/NTSD 2.4_2.0a/NTSD 2.4.exe",
+      "variant": "raw",
+      "section": ".rdata",
+      "offset": 299524,
+      "sha256Prefix": "b3dcf3407567e4b2"
+     }
+    },
+    {
+     "engine": "engine/Sources/NTSDCore/OriginalFrontScreenBody.swift:44",
+     "kind": "string",
+     "encoding": "utf8",
+     "literalLength": 24,
+     "longestMatch": 24,
+     "originalFiles": 1,
+     "example": {
+      "original": "downloads/NTSD_2.4_2.0a_clean/NTSD 2.4_2.0a/NTSD 2.4.exe",
+      "variant": "raw",
+      "section": ".rdata",
+      "offset": 301212,
+      "sha256Prefix": "6ce88fba9e4feacd"
+     }
+    },
+    {
+     "engine": "engine/Sources/NTSDCore/OriginalFrontScreenBody.swift:45",
+     "kind": "string",
+     "encoding": "utf8",
+     "literalLength": 20,
+     "longestMatch": 20,
+     "originalFiles": 1,
+     "example": {
+      "original": "downloads/NTSD_2.4_2.0a_clean/NTSD 2.4_2.0a/NTSD 2.4.exe",
+      "variant": "raw",
+      "section": ".rdata",
+      "offset": 301188,
+      "sha256Prefix": "cd19996821605bac"
+     }
+    },
+    {
+     "engine": "engine/Sources/NTSDCore/OriginalFrontScreenBody.swift:46",
+     "kind": "string",
+     "encoding": "utf8",
+     "literalLength": 22,
+     "longestMatch": 22,
+     "originalFiles": 1,
+     "example": {
+      "original": "downloads/NTSD_2.4_2.0a_clean/NTSD 2.4_2.0a/NTSD 2.4.exe",
+      "variant": "raw",
+      "section": ".rdata",
+      "offset": 301164,
+      "sha256Prefix": "3df9bb7a9b55eeba"
+     }
+    },
+    {
+     "engine": "engine/Sources/NTSDCore/OriginalGameIdentity.swift:3",
+     "kind": "string",
+     "encoding": "utf8",
+     "literalLength": 16,
+     "longestMatch": 16,
+     "originalFiles": 1,
+     "example": {
+      "original": "downloads/NTSD_2.4_2.0a_clean/NTSD 2.4_2.0a/NTSD 2.4.exe",
+      "variant": "raw",
+      "section": ".rdata",
+      "offset": 292384,
+      "sha256Prefix": "619b44b164bbd18a"
+     }
+    },
+    {
+     "engine": "engine/Sources/NTSDCore/OriginalInitialInterfaceLoading.swift:29",
+     "kind": "string",
+     "encoding": "utf8",
+     "literalLength": 28,
+     "longestMatch": 28,
+     "originalFiles": 1,
+     "example": {
+      "original": "downloads/NTSD_2.4_2.0a_clean/NTSD 2.4_2.0a/NTSD 2.4.exe",
+      "variant": "raw",
+      "section": ".rdata",
+      "offset": 303636,
+      "sha256Prefix": "e6484841d00a9961"
+     }
+    },
+    {
+     "engine": "engine/Sources/NTSDCore/OriginalInitialInterfaceLoading.swift:30",
+     "kind": "string",
+     "encoding": "utf8",
+     "literalLength": 29,
+     "longestMatch": 29,
+     "originalFiles": 1,
+     "example": {
+      "original": "downloads/NTSD_2.4_2.0a_clean/NTSD 2.4_2.0a/NTSD 2.4.exe",
+      "variant": "raw",
+      "section": ".rdata",
+      "offset": 303636,
+      "sha256Prefix": "bfe8e290c966f738"
+     }
+    },
+    {
+     "engine": "engine/Sources/NTSDCore/OriginalInitialInterfaceLoading.swift:35",
+     "kind": "string",
+     "encoding": "utf8",
+     "literalLength": 27,
+     "longestMatch": 27,
+     "originalFiles": 1,
+     "example": {
+      "original": "downloads/NTSD_2.4_2.0a_clean/NTSD 2.4_2.0a/NTSD 2.4.exe",
+      "variant": "raw",
+      "section": ".rdata",
+      "offset": 303576,
+      "sha256Prefix": "41e6a69746a8e044"
+     }
+    },
+    {
+     "engine": "engine/Sources/NTSDCore/OriginalInitialInterfaceLoading.swift:36",
+     "kind": "string",
+     "encoding": "utf8",
+     "literalLength": 28,
+     "longestMatch": 28,
+     "originalFiles": 1,
+     "example": {
+      "original": "downloads/NTSD_2.4_2.0a_clean/NTSD 2.4_2.0a/NTSD 2.4.exe",
+      "variant": "raw",
+      "section": ".rdata",
+      "offset": 303576,
+      "sha256Prefix": "b7cfbe57822a692b"
+     }
+    },
+    {
+     "engine": "engine/Sources/NTSDCore/OriginalLibLoadingProgress.swift:126",
+     "kind": "string",
+     "encoding": "utf8",
+     "literalLength": 16,
+     "longestMatch": 16,
+     "originalFiles": 1,
+     "example": {
+      "original": "downloads/NTSD_2.4_2.0a_clean/NTSD 2.4_2.0a/NTSD 2.4.exe",
+      "variant": "raw",
+      "section": ".rdata",
+      "offset": 310942,
+      "sha256Prefix": "ad54136bd7977d99"
+     }
+    },
+    {
+     "engine": "engine/Sources/NTSDCore/OriginalLibLoadingProgress.swift:127",
+     "kind": "string",
+     "encoding": "utf8",
+     "literalLength": 16,
+     "longestMatch": 16,
+     "originalFiles": 1,
+     "example": {
+      "original": "downloads/NTSD_2.4_2.0a_clean/NTSD 2.4_2.0a/NTSD 2.4.exe",
+      "variant": "raw",
+      "section": ".rdata",
+      "offset": 310922,
+      "sha256Prefix": "10fa5c7f9a7efe3a"
+     }
+    },
+    {
+     "engine": "engine/Sources/NTSDCore/OriginalLibLoadingProgress.swift:90",
+     "kind": "string",
+     "encoding": "utf8",
+     "literalLength": 38,
+     "longestMatch": 38,
+     "originalFiles": 1,
+     "example": {
+      "original": "downloads/NTSD_2.4_2.0a_clean/NTSD 2.4_2.0a/NTSD 2.4.exe",
+      "variant": "raw",
+      "section": ".rdata",
+      "offset": 300732,
+      "sha256Prefix": "bab35cbb54ea1ca5"
+     }
+    },
+    {
+     "engine": "engine/Sources/NTSDCore/OriginalLoadingFiles.swift:184",
+     "kind": "string",
+     "encoding": "utf8",
+     "literalLength": 23,
+     "longestMatch": 23,
+     "originalFiles": 1,
+     "example": {
+      "original": "downloads/NTSD_2.4_2.0a_clean/NTSD 2.4_2.0a/NTSD 2.4.exe",
+      "variant": "raw",
+      "section": ".rdata",
+      "offset": 293464,
+      "sha256Prefix": "76a1c5dc9f7c0a0e"
+     }
+    },
+    {
+     "engine": "engine/Sources/NTSDCore/OriginalLoadingFiles.swift:61",
+     "kind": "string",
+     "encoding": "utf8",
+     "literalLength": 18,
+     "longestMatch": 18,
+     "originalFiles": 1,
+     "example": {
+      "original": "downloads/NTSD_2.4_2.0a_clean/NTSD 2.4_2.0a/NTSD 2.4.exe",
+      "variant": "raw",
+      "section": ".rdata",
+      "offset": 293660,
+      "sha256Prefix": "71872f54d1543396"
+     }
+    },
+    {
+     "engine": "engine/Sources/NTSDCore/OriginalMainMenu.swift:206",
+     "kind": "string",
+     "encoding": "utf8",
+     "literalLength": 17,
+     "longestMatch": 17,
+     "originalFiles": 1,
+     "example": {
+      "original": "downloads/NTSD_2.4_2.0a_clean/NTSD 2.4_2.0a/NTSD 2.4.exe",
+      "variant": "raw",
+      "section": ".rdata",
+      "offset": 301128,
+      "sha256Prefix": "1c272cd314c1fec2"
+     }
+    },
+    {
+     "engine": "engine/Sources/NTSDCore/OriginalMainMenu.swift:214",
+     "kind": "string",
+     "encoding": "utf8",
+     "literalLength": 24,
+     "longestMatch": 24,
+     "originalFiles": 1,
+     "example": {
+      "original": "downloads/NTSD_2.4_2.0a_clean/NTSD 2.4_2.0a/NTSD 2.4.exe",
+      "variant": "raw",
+      "section": ".rdata",
+      "offset": 301212,
+      "sha256Prefix": "6ce88fba9e4feacd"
+     }
+    },
+    {
+     "engine": "engine/Sources/NTSDCore/OriginalMainMenu.swift:268",
+     "kind": "string",
+     "encoding": "utf8",
+     "literalLength": 16,
+     "longestMatch": 16,
+     "originalFiles": 1,
+     "example": {
+      "original": "downloads/NTSD_2.4_2.0a_clean/NTSD 2.4_2.0a/NTSD 2.4.exe",
+      "variant": "raw",
+      "section": ".rdata",
+      "offset": 292864,
+      "sha256Prefix": "d7c7cb8577c1ffe5"
+     }
+    },
+    {
+     "engine": "engine/Sources/NTSDCore/OriginalMatchPrelude.swift:59",
+     "kind": "string",
+     "encoding": "utf8",
+     "literalLength": 24,
+     "longestMatch": 24,
+     "originalFiles": 1,
+     "example": {
+      "original": "downloads/NTSD_2.4_2.0a_clean/NTSD 2.4_2.0a/NTSD 2.4.exe",
+      "variant": "raw",
+      "section": ".rdata",
+      "offset": 301560,
+      "sha256Prefix": "491e4ab77eaab500"
+     }
+    },
+    {
+     "engine": "engine/Sources/NTSDCore/OriginalMenuContent.swift:90",
+     "kind": "string",
+     "encoding": "utf8",
+     "literalLength": 19,
+     "longestMatch": 19,
+     "originalFiles": 1,
+     "example": {
+      "original": "downloads/NTSD_2.4_2.0a_clean/NTSD 2.4_2.0a/NTSD 2.4.exe",
+      "variant": "raw",
+      "section": ".rdata",
+      "offset": 302928,
+      "sha256Prefix": "45e4a8b4fc636cef"
+     }
+    },
+    {
+     "engine": "engine/Sources/NTSDCore/OriginalMenuInfoReading.swift:105",
+     "kind": "string",
+     "encoding": "utf8",
+     "literalLength": 19,
+     "longestMatch": 19,
+     "originalFiles": 1,
+     "example": {
+      "original": "downloads/NTSD_2.4_2.0a_clean/NTSD 2.4_2.0a/NTSD 2.4.exe",
+      "variant": "raw",
+      "section": ".rdata",
+      "offset": 302928,
+      "sha256Prefix": "45e4a8b4fc636cef"
+     }
+    },
+    {
+     "engine": "engine/Sources/NTSDCore/OriginalMenuInfoReading.swift:73",
+     "kind": "string",
+     "encoding": "utf8",
+     "literalLength": 29,
+     "longestMatch": 29,
+     "originalFiles": 1,
+     "example": {
+      "original": "downloads/NTSD_2.4_2.0a_clean/NTSD 2.4_2.0a/NTSD 2.4.exe",
+      "variant": "raw",
+      "section": ".rdata",
+      "offset": 303124,
+      "sha256Prefix": "f31f5bb70d003d3a"
+     }
+    },
+    {
+     "engine": "engine/Sources/NTSDCore/OriginalMenuInfoWriting.swift:121",
+     "kind": "string",
+     "encoding": "utf8",
+     "literalLength": 19,
+     "longestMatch": 19,
+     "originalFiles": 1,
+     "example": {
+      "original": "downloads/NTSD_2.4_2.0a_clean/NTSD 2.4_2.0a/NTSD 2.4.exe",
+      "variant": "raw",
+      "section": ".rdata",
+      "offset": 302928,
+      "sha256Prefix": "45e4a8b4fc636cef"
+     }
+    },
+    {
+     "engine": "engine/Sources/NTSDCore/OriginalMenuPresentation.swift:288",
+     "kind": "string",
+     "encoding": "utf8",
+     "literalLength": 23,
+     "longestMatch": 23,
+     "originalFiles": 1,
+     "example": {
+      "original": "downloads/NTSD_2.4_2.0a_clean/NTSD 2.4_2.0a/NTSD 2.4.exe",
+      "variant": "raw",
+      "section": ".rdata",
+      "offset": 292824,
+      "sha256Prefix": "591e60e577ffdc28"
+     }
+    },
+    {
+     "engine": "engine/Sources/NTSDCore/OriginalMenuPresentation.swift:291",
+     "kind": "string",
+     "encoding": "utf8",
+     "literalLength": 26,
+     "longestMatch": 26,
+     "originalFiles": 1,
+     "example": {
+      "original": "downloads/NTSD_2.4_2.0a_clean/NTSD 2.4_2.0a/NTSD 2.4.exe",
+      "variant": "raw",
+      "section": ".rdata",
+      "offset": 292796,
+      "sha256Prefix": "0b732cc57a6a3c8a"
+     }
+    },
+    {
+     "engine": "engine/Sources/NTSDCore/OriginalMenuPresentation.swift:296",
+     "kind": "string",
+     "encoding": "utf8",
+     "literalLength": 19,
+     "longestMatch": 19,
+     "originalFiles": 1,
+     "example": {
+      "original": "downloads/NTSD_2.4_2.0a_clean/NTSD 2.4_2.0a/NTSD 2.4.exe",
+      "variant": "raw",
+      "section": ".rdata",
+      "offset": 292776,
+      "sha256Prefix": "176469229fcce6f5"
+     }
+    },
+    {
+     "engine": "engine/Sources/NTSDCore/OriginalMenuReturn.swift:65",
+     "kind": "string",
+     "encoding": "utf8",
+     "literalLength": 23,
+     "longestMatch": 23,
+     "originalFiles": 1,
+     "example": {
+      "original": "downloads/NTSD_2.4_2.0a_clean/NTSD 2.4_2.0a/NTSD 2.4.exe",
+      "variant": "raw",
+      "section": ".rdata",
+      "offset": 299352,
+      "sha256Prefix": "718e26d0005b291a"
+     }
+    },
+    {
+     "engine": "engine/Sources/NTSDCore/OriginalMenuSoundStartup.swift:102",
+     "kind": "string",
+     "encoding": "utf8",
+     "literalLength": 33,
+     "longestMatch": 33,
+     "originalFiles": 1,
+     "example": {
+      "original": "downloads/NTSD_2.4_2.0a_clean/NTSD 2.4_2.0a/NTSD 2.4.exe",
+      "variant": "raw",
+      "section": ".rdata",
+      "offset": 303420,
+      "sha256Prefix": "6a372abccf893a23"
+     }
+    },
+    {
+     "engine": "engine/Sources/NTSDCore/OriginalMissionStage.swift:378",
+     "kind": "string",
+     "encoding": "utf8",
+     "literalLength": 16,
+     "longestMatch": 16,
+     "originalFiles": 1,
+     "example": {
+      "original": "downloads/NTSD_2.4_2.0a_clean/NTSD 2.4_2.0a/NTSD 2.4.exe",
+      "variant": "raw",
+      "section": ".rdata",
+      "offset": 302448,
+      "sha256Prefix": "78761df59c33730c"
+     }
+    },
+    {
+     "engine": "engine/Sources/NTSDCore/OriginalMusicConfiguration.swift:69",
+     "kind": "string",
+     "encoding": "utf8",
+     "literalLength": 28,
+     "longestMatch": 28,
+     "originalFiles": 1,
+     "example": {
+      "original": "downloads/NTSD_2.4_2.0a_clean/NTSD 2.4_2.0a/NTSD 2.4.exe",
+      "variant": "raw",
+      "section": ".rdata",
+      "offset": 292520,
+      "sha256Prefix": "d95c08b39c4fddfc"
+     }
+    },
+    {
+     "engine": "engine/Sources/NTSDCore/OriginalMusicPlayback.swift:216",
+     "kind": "string",
+     "encoding": "utf8",
+     "literalLength": 46,
+     "longestMatch": 46,
+     "originalFiles": 1,
+     "example": {
+      "original": "downloads/NTSD_2.4_2.0a_clean/NTSD 2.4_2.0a/NTSD 2.4.exe",
+      "variant": "raw",
+      "section": ".rdata",
+      "offset": 292428,
+      "sha256Prefix": "5fb378e62c9b4f9c"
+     }
+    },
+    {
+     "engine": "engine/Sources/NTSDCore/OriginalNetworkClient.swift:65",
+     "kind": "string",
+     "encoding": "utf8",
+     "literalLength": 20,
+     "longestMatch": 20,
+     "originalFiles": 1,
+     "example": {
+      "original": "downloads/NTSD_2.4_2.0a_clean/NTSD 2.4_2.0a/NTSD 2.4.exe",
+      "variant": "raw",
+      "section": ".rdata",
+      "offset": 301040,
+      "sha256Prefix": "6cd99aebc3ec31ff"
+     }
+    },
+    {
+     "engine": "engine/Sources/NTSDCore/OriginalNetworkClient.swift:76",
+     "kind": "string",
+     "encoding": "utf8",
+     "literalLength": 23,
+     "longestMatch": 23,
+     "originalFiles": 1,
+     "example": {
+      "original": "downloads/NTSD_2.4_2.0a_clean/NTSD 2.4_2.0a/NTSD 2.4.exe",
+      "variant": "raw",
+      "section": ".rdata",
+      "offset": 301016,
+      "sha256Prefix": "41cd7f25c62593ae"
+     }
+    },
+    {
+     "engine": "engine/Sources/NTSDCore/OriginalNetworkExit.swift:29",
+     "kind": "string",
+     "encoding": "utf8",
+     "literalLength": 20,
+     "longestMatch": 20,
+     "originalFiles": 1,
+     "example": {
+      "original": "downloads/NTSD_2.4_2.0a_clean/NTSD 2.4_2.0a/NTSD 2.4.exe",
+      "variant": "raw",
+      "section": ".rdata",
+      "offset": 292964,
+      "sha256Prefix": "fdca459f4657a544"
+     }
+    },
+    {
+     "engine": "engine/Sources/NTSDCore/OriginalNetworkMenu.swift:109",
+     "kind": "string",
+     "encoding": "utf8",
+     "literalLength": 20,
+     "longestMatch": 20,
+     "originalFiles": 1,
+     "example": {
+      "original": "downloads/NTSD_2.4_2.0a_clean/NTSD 2.4_2.0a/NTSD 2.4.exe",
+      "variant": "raw",
+      "section": ".rdata",
+      "offset": 301080,
+      "sha256Prefix": "ad3207bc5eff28d7"
+     }
+    },
+    {
+     "engine": "engine/Sources/NTSDCore/OriginalNetworkMenu.swift:88",
+     "kind": "string",
+     "encoding": "utf8",
+     "literalLength": 20,
+     "longestMatch": 20,
+     "originalFiles": 1,
+     "example": {
+      "original": "downloads/NTSD_2.4_2.0a_clean/NTSD 2.4_2.0a/NTSD 2.4.exe",
+      "variant": "raw",
+      "section": ".rdata",
+      "offset": 301104,
+      "sha256Prefix": "1a77a5e13c8ccdf0"
+     }
+    },
+    {
+     "engine": "engine/Sources/NTSDCore/OriginalObjectLoader.swift:225",
+     "kind": "string",
+     "encoding": "utf8",
+     "literalLength": 20,
+     "longestMatch": 20,
+     "originalFiles": 1,
+     "example": {
+      "original": "downloads/NTSD_2.4_2.0a_clean/NTSD 2.4_2.0a/NTSD 2.4.exe",
+      "variant": "raw",
+      "section": ".rdata",
+      "offset": 296580,
+      "sha256Prefix": "994d9a659cdc320d"
+     }
+    },
+    {
+     "engine": "engine/Sources/NTSDCore/OriginalObjectLoader.swift:253",
+     "kind": "string",
+     "encoding": "utf8",
+     "literalLength": 22,
+     "longestMatch": 22,
+     "originalFiles": 1,
+     "example": {
+      "original": "downloads/NTSD_2.4_2.0a_clean/NTSD 2.4_2.0a/NTSD 2.4.exe",
+      "variant": "raw",
+      "section": ".rdata",
+      "offset": 296556,
+      "sha256Prefix": "a4fd4b665cacf85f"
+     }
+    },
+    {
+     "engine": "engine/Sources/NTSDCore/OriginalObjectLoader.swift:256",
+     "kind": "string",
+     "encoding": "utf8",
+     "literalLength": 26,
+     "longestMatch": 26,
+     "originalFiles": 1,
+     "example": {
+      "original": "downloads/NTSD_2.4_2.0a_clean/NTSD 2.4_2.0a/NTSD 2.4.exe",
+      "variant": "raw",
+      "section": ".rdata",
+      "offset": 296528,
+      "sha256Prefix": "0b697d93d71a30fe"
+     }
+    },
+    {
+     "engine": "engine/Sources/NTSDCore/OriginalObjectLoader.swift:375",
+     "kind": "string",
+     "encoding": "utf8",
+     "literalLength": 18,
+     "longestMatch": 18,
+     "originalFiles": 1,
+     "example": {
+      "original": "downloads/NTSD_2.4_2.0a_clean/NTSD 2.4_2.0a/NTSD 2.4.exe",
+      "variant": "raw",
+      "section": ".rdata",
+      "offset": 295464,
+      "sha256Prefix": "26e04c576d1612b7"
+     }
+    },
+    {
+     "engine": "engine/Sources/NTSDCore/OriginalObjectLoader.swift:377",
+     "kind": "string",
+     "encoding": "utf8",
+     "literalLength": 20,
+     "longestMatch": 20,
+     "originalFiles": 1,
+     "example": {
+      "original": "downloads/NTSD_2.4_2.0a_clean/NTSD 2.4_2.0a/NTSD 2.4.exe",
+      "variant": "raw",
+      "section": ".rdata",
+      "offset": 295368,
+      "sha256Prefix": "ecb8c85bd8a3d274"
+     }
+    },
+    {
+     "engine": "engine/Sources/NTSDCore/OriginalObjectLoader.swift:378",
+     "kind": "string",
+     "encoding": "utf8",
+     "literalLength": 20,
+     "longestMatch": 20,
+     "originalFiles": 1,
+     "example": {
+      "original": "downloads/NTSD_2.4_2.0a_clean/NTSD 2.4_2.0a/NTSD 2.4.exe",
+      "variant": "raw",
+      "section": ".rdata",
+      "offset": 295312,
+      "sha256Prefix": "4a3d3811f81998d9"
+     }
+    },
+    {
+     "engine": "engine/Sources/NTSDCore/OriginalPostDrawCommands.swift:176",
+     "kind": "string",
+     "encoding": "utf8",
+     "literalLength": 95,
+     "longestMatch": 16,
+     "originalFiles": 1,
+     "example": {
+      "original": "<main worktree>/build/original/crt/msvcr80.dll",
+      "variant": "raw",
+      "section": ".rdata",
+      "offset": 419105,
+      "sha256Prefix": "5c00f22de4f8ba9f"
+     }
+    },
+    {
+     "engine": "engine/Sources/NTSDCore/OriginalPostDrawImpulses.swift:5",
+     "kind": "string",
+     "encoding": "utf8",
+     "literalLength": 24,
+     "longestMatch": 24,
+     "originalFiles": 1,
+     "example": {
+      "original": "downloads/NTSD_2.4_2.0a_clean/NTSD 2.4_2.0a/NTSD 2.4.exe",
+      "variant": "raw",
+      "section": ".rdata",
+      "offset": 299656,
+      "sha256Prefix": "b5faa6d3faf73eee"
+     }
+    },
+    {
+     "engine": "engine/Sources/NTSDCore/OriginalPostHUDNotices.swift:107",
+     "kind": "string",
+     "encoding": "utf8",
+     "literalLength": 28,
+     "longestMatch": 28,
+     "originalFiles": 1,
+     "example": {
+      "original": "downloads/NTSD_2.4_2.0a_clean/NTSD 2.4_2.0a/NTSD 2.4.exe",
+      "variant": "raw",
+      "section": ".rdata",
+      "offset": 299556,
+      "sha256Prefix": "42370540e71178cb"
+     }
+    },
+    {
+     "engine": "engine/Sources/NTSDCore/OriginalPostHUDNotices.swift:145",
+     "kind": "string",
+     "encoding": "utf8",
+     "literalLength": 19,
+     "longestMatch": 19,
+     "originalFiles": 1,
+     "example": {
+      "original": "downloads/NTSD_2.4_2.0a_clean/NTSD 2.4_2.0a/NTSD 2.4.exe",
+      "variant": "raw",
+      "section": ".rdata",
+      "offset": 299432,
+      "sha256Prefix": "7a0409f9819d0f49"
+     }
+    },
+    {
+     "engine": "engine/Sources/NTSDCore/OriginalPostHUDNotices.swift:8",
+     "kind": "string",
+     "encoding": "utf8",
+     "literalLength": 91,
+     "longestMatch": 91,
+     "originalFiles": 1,
+     "example": {
+      "original": "downloads/NTSD_2.4_2.0a_clean/NTSD 2.4_2.0a/NTSD 2.4.exe",
+      "variant": "raw",
+      "section": ".rdata",
+      "offset": 299432,
+      "sha256Prefix": "59580100c1b35fef"
+     }
+    },
+    {
+     "engine": "engine/Sources/NTSDCore/OriginalReplayPlayback.swift:137",
+     "kind": "string",
+     "encoding": "utf8",
+     "literalLength": 49,
+     "longestMatch": 49,
+     "originalFiles": 1,
+     "example": {
+      "original": "downloads/NTSD_2.4_2.0a_clean/NTSD 2.4_2.0a/NTSD 2.4.exe",
+      "variant": "raw",
+      "section": ".rdata",
+      "offset": 302208,
+      "sha256Prefix": "3960b8c45b2e29e8"
+     }
+    },
+    {
+     "engine": "engine/Sources/NTSDCore/OriginalReplayPlayback.swift:138",
+     "kind": "string",
+     "encoding": "utf8",
+     "literalLength": 76,
+     "longestMatch": 76,
+     "originalFiles": 1,
+     "example": {
+      "original": "downloads/NTSD_2.4_2.0a_clean/NTSD 2.4_2.0a/NTSD 2.4.exe",
+      "variant": "raw",
+      "section": ".rdata",
+      "offset": 302128,
+      "sha256Prefix": "4868b56e0615ba4e"
+     }
+    },
+    {
+     "engine": "engine/Sources/NTSDCore/OriginalReplayPlayback.swift:164",
+     "kind": "string",
+     "encoding": "utf8",
+     "literalLength": 202,
+     "longestMatch": 202,
+     "originalFiles": 1,
+     "example": {
+      "original": "downloads/NTSD_2.4_2.0a_clean/NTSD 2.4_2.0a/NTSD 2.4.exe",
+      "variant": "raw",
+      "section": ".rdata",
+      "offset": 301920,
+      "sha256Prefix": "215792b0d77a9444"
+     }
+    },
+    {
+     "engine": "engine/Sources/NTSDCore/OriginalReplayPlayback.swift:172",
+     "kind": "string",
+     "encoding": "utf8",
+     "literalLength": 47,
+     "longestMatch": 47,
+     "originalFiles": 1,
+     "example": {
+      "original": "downloads/NTSD_2.4_2.0a_clean/NTSD 2.4_2.0a/NTSD 2.4.exe",
+      "variant": "raw",
+      "section": ".rdata",
+      "offset": 301824,
+      "sha256Prefix": "396f4800f3c811f5"
+     }
+    },
+    {
+     "engine": "engine/Sources/NTSDCore/OriginalResultLayout.swift:156",
+     "kind": "string",
+     "encoding": "utf8",
+     "literalLength": 18,
+     "longestMatch": 18,
+     "originalFiles": 1,
+     "example": {
+      "original": "downloads/NTSD_2.4_2.0a_clean/NTSD 2.4_2.0a/NTSD 2.4.exe",
+      "variant": "raw",
+      "section": ".rdata",
+      "offset": 299376,
+      "sha256Prefix": "dbd23a7075df08b6"
+     }
+    },
+    {
+     "engine": "engine/Sources/NTSDCore/OriginalSettingsLoading.swift:68",
+     "kind": "string",
+     "encoding": "utf8",
+     "literalLength": 16,
+     "longestMatch": 16,
+     "originalFiles": 1,
+     "example": {
+      "original": "downloads/NTSD_2.4_2.0a_clean/NTSD 2.4_2.0a/NTSD 2.4.exe",
+      "variant": "raw",
+      "section": ".rdata",
+      "offset": 300672,
+      "sha256Prefix": "981d74bcd1bffd90"
+     }
+    },
+    {
+     "engine": "engine/Sources/NTSDCore/OriginalSettingsWriting.swift:74",
+     "kind": "string",
+     "encoding": "utf8",
+     "literalLength": 16,
+     "longestMatch": 16,
+     "originalFiles": 1,
+     "example": {
+      "original": "downloads/NTSD_2.4_2.0a_clean/NTSD 2.4_2.0a/NTSD 2.4.exe",
+      "variant": "raw",
+      "section": ".rdata",
+      "offset": 300672,
+      "sha256Prefix": "981d74bcd1bffd90"
+     }
+    },
+    {
+     "engine": "engine/Sources/NTSDCore/OriginalStageLoader.swift:88",
+     "kind": "string",
+     "encoding": "utf8",
+     "literalLength": 22,
+     "longestMatch": 22,
+     "originalFiles": 1,
+     "example": {
+      "original": "downloads/NTSD_2.4_2.0a_clean/NTSD 2.4_2.0a/NTSD 2.4.exe",
+      "variant": "raw",
+      "section": ".rdata",
+      "offset": 293728,
+      "sha256Prefix": "9da9115fc0fc0e1d"
+     }
+    },
+    {
+     "engine": "engine/Sources/NTSDCore/OriginalTeamTournamentPreparation.swift:37",
+     "kind": "string",
+     "encoding": "utf8",
+     "literalLength": 24,
+     "longestMatch": 24,
+     "originalFiles": 1,
+     "example": {
+      "original": "downloads/NTSD_2.4_2.0a_clean/NTSD 2.4_2.0a/NTSD 2.4.exe",
+      "variant": "raw",
+      "section": ".rdata",
+      "offset": 301560,
+      "sha256Prefix": "491e4ab77eaab500"
+     }
+    },
+    {
+     "engine": "engine/Sources/NTSDCore/OriginalTournamentPreparation.swift:55",
+     "kind": "string",
+     "encoding": "utf8",
+     "literalLength": 24,
+     "longestMatch": 24,
+     "originalFiles": 1,
+     "example": {
+      "original": "downloads/NTSD_2.4_2.0a_clean/NTSD 2.4_2.0a/NTSD 2.4.exe",
+      "variant": "raw",
+      "section": ".rdata",
+      "offset": 301560,
+      "sha256Prefix": "491e4ab77eaab500"
+     }
+    },
+    {
+     "engine": "engine/Sources/NTSDCore/OriginalWarPreparation.swift:38",
+     "kind": "string",
+     "encoding": "utf8",
+     "literalLength": 31,
+     "longestMatch": 31,
+     "originalFiles": 1,
+     "example": {
+      "original": "downloads/NTSD_2.4_2.0a_clean/NTSD 2.4_2.0a/NTSD 2.4.exe",
+      "variant": "raw",
+      "section": ".rdata",
+      "offset": 302480,
+      "sha256Prefix": "7116de50b46678b0"
+     }
+    },
+    {
+     "engine": "engine/Sources/NTSDCore/OriginalWaveLoader.swift:136",
+     "kind": "string",
+     "encoding": "utf8",
+     "literalLength": 26,
+     "longestMatch": 26,
+     "originalFiles": 1,
+     "example": {
+      "original": "downloads/NTSD_2.4_2.0a_clean/NTSD 2.4_2.0a/NTSD 2.4.exe",
+      "variant": "raw",
+      "section": ".rdata",
+      "offset": 292272,
+      "sha256Prefix": "50068687a3ec29b4"
+     }
+    },
+    {
+     "engine": "engine/Sources/NTSDCore/OriginalWaveLoader.swift:141",
+     "kind": "string",
+     "encoding": "utf8",
+     "literalLength": 32,
+     "longestMatch": 32,
+     "originalFiles": 1,
+     "example": {
+      "original": "downloads/NTSD_2.4_2.0a_clean/NTSD 2.4_2.0a/NTSD 2.4.exe",
+      "variant": "raw",
+      "section": ".rdata",
+      "offset": 292232,
+      "sha256Prefix": "270a3b6091dc97d7"
+     }
+    },
+    {
+     "engine": "engine/Sources/NTSDCore/OriginalWaveLoader.swift:150",
+     "kind": "string",
+     "encoding": "utf8",
+     "literalLength": 32,
+     "longestMatch": 32,
+     "originalFiles": 1,
+     "example": {
+      "original": "downloads/NTSD_2.4_2.0a_clean/NTSD 2.4_2.0a/NTSD 2.4.exe",
+      "variant": "raw",
+      "section": ".rdata",
+      "offset": 292232,
+      "sha256Prefix": "270a3b6091dc97d7"
+     }
+    },
+    {
+     "engine": "engine/Sources/NTSDCore/OriginalWaveLoader.swift:157",
+     "kind": "string",
+     "encoding": "utf8",
+     "literalLength": 42,
+     "longestMatch": 42,
+     "originalFiles": 1,
+     "example": {
+      "original": "downloads/NTSD_2.4_2.0a_clean/NTSD 2.4_2.0a/NTSD 2.4.exe",
+      "variant": "raw",
+      "section": ".rdata",
+      "offset": 292188,
+      "sha256Prefix": "47d8ba3c128a5b76"
+     }
+    },
+    {
+     "engine": "engine/Sources/NTSDCore/OriginalWaveLoader.swift:162",
+     "kind": "string",
+     "encoding": "utf8",
+     "literalLength": 25,
+     "longestMatch": 25,
+     "originalFiles": 1,
+     "example": {
+      "original": "downloads/NTSD_2.4_2.0a_clean/NTSD 2.4_2.0a/NTSD 2.4.exe",
+      "variant": "raw",
+      "section": ".rdata",
+      "offset": 292160,
+      "sha256Prefix": "afc1b70951615ac9"
+     }
+    },
+    {
+     "engine": "engine/Sources/NTSDCore/OriginalWaveLoader.swift:166",
+     "kind": "string",
+     "encoding": "utf8",
+     "literalLength": 23,
+     "longestMatch": 23,
+     "originalFiles": 1,
+     "example": {
+      "original": "downloads/NTSD_2.4_2.0a_clean/NTSD 2.4_2.0a/NTSD 2.4.exe",
+      "variant": "raw",
+      "section": ".rdata",
+      "offset": 292136,
+      "sha256Prefix": "c3826b3a994bb720"
+     }
+    },
+    {
+     "engine": "engine/Sources/NTSDCore/OriginalWaveLoader.swift:169",
+     "kind": "string",
+     "encoding": "utf8",
+     "literalLength": 16,
+     "longestMatch": 16,
+     "originalFiles": 1,
+     "example": {
+      "original": "downloads/NTSD_2.4_2.0a_clean/NTSD 2.4_2.0a/NTSD 2.4.exe",
+      "variant": "raw",
+      "section": ".rdata",
+      "offset": 292116,
+      "sha256Prefix": "c4f7553021a66628"
+     }
+    },
+    {
+     "engine": "engine/Sources/NTSDCore/OriginalWaveLoader.swift:173",
+     "kind": "string",
+     "encoding": "utf8",
+     "literalLength": 21,
+     "longestMatch": 21,
+     "originalFiles": 1,
+     "example": {
+      "original": "downloads/NTSD_2.4_2.0a_clean/NTSD 2.4_2.0a/NTSD 2.4.exe",
+      "variant": "raw",
+      "section": ".rdata",
+      "offset": 292092,
+      "sha256Prefix": "8ec40f86f1cba4cc"
+     }
+    },
+    {
+     "engine": "engine/Sources/NTSDCore/OriginalWaveLoader.swift:181",
+     "kind": "string",
+     "encoding": "utf8",
+     "literalLength": 21,
+     "longestMatch": 21,
+     "originalFiles": 1,
+     "example": {
+      "original": "downloads/NTSD_2.4_2.0a_clean/NTSD 2.4_2.0a/NTSD 2.4.exe",
+      "variant": "raw",
+      "section": ".rdata",
+      "offset": 292092,
+      "sha256Prefix": "8ec40f86f1cba4cc"
+     }
+    },
+    {
+     "engine": "engine/Sources/NTSDCore/OriginalWaveLoader.swift:198",
+     "kind": "string",
+     "encoding": "utf8",
+     "literalLength": 24,
+     "longestMatch": 24,
+     "originalFiles": 1,
+     "example": {
+      "original": "downloads/NTSD_2.4_2.0a_clean/NTSD 2.4_2.0a/NTSD 2.4.exe",
+      "variant": "raw",
+      "section": ".rdata",
+      "offset": 292064,
+      "sha256Prefix": "f1d70a4bc3444e7b"
+     }
+    },
+    {
+     "engine": "engine/Sources/NTSDCore/OriginalWaveLoader.swift:217",
+     "kind": "string",
+     "encoding": "utf8",
+     "literalLength": 30,
+     "longestMatch": 30,
+     "originalFiles": 1,
+     "example": {
+      "original": "downloads/NTSD_2.4_2.0a_clean/NTSD 2.4_2.0a/NTSD 2.4.exe",
+      "variant": "raw",
+      "section": ".rdata",
+      "offset": 292032,
+      "sha256Prefix": "9de711636db3961c"
+     }
+    },
+    {
+     "engine": "engine/Sources/NTSDCore/OriginalWindowInitialization.swift:110",
+     "kind": "string",
+     "encoding": "utf8",
+     "literalLength": 16,
+     "longestMatch": 16,
+     "originalFiles": 1,
+     "example": {
+      "original": "downloads/NTSD_2.4_2.0a_clean/NTSD 2.4_2.0a/NTSD 2.4.exe",
+      "variant": "raw",
+      "section": ".rdata",
+      "offset": 292384,
+      "sha256Prefix": "619b44b164bbd18a"
+     }
+    },
+    {
+     "engine": "engine/Sources/NTSDCore/OriginalWindowInitialization.swift:121",
+     "kind": "string",
+     "encoding": "utf8",
+     "literalLength": 40,
+     "longestMatch": 40,
+     "originalFiles": 1,
+     "example": {
+      "original": "downloads/NTSD_2.4_2.0a_clean/NTSD 2.4_2.0a/NTSD 2.4.exe",
+      "variant": "raw",
+      "section": ".rdata",
+      "offset": 291648,
+      "sha256Prefix": "d9ea21f101508120"
+     }
+    },
+    {
+     "engine": "engine/Sources/NTSDCore/OriginalWindowInitialization.swift:123",
+     "kind": "string",
+     "encoding": "utf8",
+     "literalLength": 37,
+     "longestMatch": 37,
+     "originalFiles": 1,
+     "example": {
+      "original": "downloads/NTSD_2.4_2.0a_clean/NTSD 2.4_2.0a/NTSD 2.4.exe",
+      "variant": "raw",
+      "section": ".rdata",
+      "offset": 291608,
+      "sha256Prefix": "b8adc82d9d49f1cd"
+     }
+    },
+    {
+     "engine": "engine/Sources/NTSDCore/OriginalWindowInitialization.swift:126",
+     "kind": "string",
+     "encoding": "utf8",
+     "literalLength": 36,
+     "longestMatch": 36,
+     "originalFiles": 1,
+     "example": {
+      "original": "downloads/NTSD_2.4_2.0a_clean/NTSD 2.4_2.0a/NTSD 2.4.exe",
+      "variant": "raw",
+      "section": ".rdata",
+      "offset": 291568,
+      "sha256Prefix": "50e9049ac5d2578b"
+     }
+    },
+    {
+     "engine": "engine/Sources/NTSDCore/OriginalWindowInitialization.swift:134",
+     "kind": "string",
+     "encoding": "utf8",
+     "literalLength": 46,
+     "longestMatch": 46,
+     "originalFiles": 1,
+     "example": {
+      "original": "downloads/NTSD_2.4_2.0a_clean/NTSD 2.4_2.0a/NTSD 2.4.exe",
+      "variant": "raw",
+      "section": ".rdata",
+      "offset": 291788,
+      "sha256Prefix": "ab244152d4eaf58c"
+     }
+    },
+    {
+     "engine": "engine/Sources/NTSDCore/OriginalWindowInitialization.swift:140",
+     "kind": "string",
+     "encoding": "utf8",
+     "literalLength": 49,
+     "longestMatch": 49,
+     "originalFiles": 1,
+     "example": {
+      "original": "downloads/NTSD_2.4_2.0a_clean/NTSD 2.4_2.0a/NTSD 2.4.exe",
+      "variant": "raw",
+      "section": ".rdata",
+      "offset": 291736,
+      "sha256Prefix": "2d1bc056392b5645"
+     }
+    },
+    {
+     "engine": "engine/Sources/NTSDCore/OriginalWindowInitialization.swift:142",
+     "kind": "string",
+     "encoding": "utf8",
+     "literalLength": 41,
+     "longestMatch": 41,
+     "originalFiles": 1,
+     "example": {
+      "original": "downloads/NTSD_2.4_2.0a_clean/NTSD 2.4_2.0a/NTSD 2.4.exe",
+      "variant": "raw",
+      "section": ".rdata",
+      "offset": 291692,
+      "sha256Prefix": "bb0e03464e3e2a65"
+     }
+    },
+    {
+     "engine": "engine/Sources/NTSDCore/OriginalWindowInitialization.swift:164",
+     "kind": "string",
+     "encoding": "utf8",
+     "literalLength": 40,
+     "longestMatch": 40,
+     "originalFiles": 1,
+     "example": {
+      "original": "downloads/NTSD_2.4_2.0a_clean/NTSD 2.4_2.0a/NTSD 2.4.exe",
+      "variant": "raw",
+      "section": ".rdata",
+      "offset": 303516,
+      "sha256Prefix": "40fe1793e2f6c903"
+     }
+    },
+    {
+     "engine": "engine/Sources/NTSDCore/OriginalWindowInitialization.swift:165",
+     "kind": "string",
+     "encoding": "utf8",
+     "literalLength": 25,
+     "longestMatch": 25,
+     "originalFiles": 1,
+     "example": {
+      "original": "downloads/NTSD_2.4_2.0a_clean/NTSD 2.4_2.0a/NTSD 2.4.exe",
+      "variant": "raw",
+      "section": ".rdata",
+      "offset": 303488,
+      "sha256Prefix": "d9bf8ee458f59ea4"
+     }
+    },
+    {
+     "engine": "engine/Sources/NTSDCore/OriginalWindowInitialization.swift:175",
+     "kind": "string",
+     "encoding": "utf8",
+     "literalLength": 47,
+     "longestMatch": 47,
+     "originalFiles": 1,
+     "example": {
+      "original": "downloads/NTSD_2.4_2.0a_clean/NTSD 2.4_2.0a/NTSD 2.4.exe",
+      "variant": "raw",
+      "section": ".rdata",
+      "offset": 291984,
+      "sha256Prefix": "4fa9ccffc876f279"
+     }
+    },
+    {
+     "engine": "engine/Sources/NTSDCore/OriginalWindowInitialization.swift:177",
+     "kind": "string",
+     "encoding": "utf8",
+     "literalLength": 37,
+     "longestMatch": 37,
+     "originalFiles": 1,
+     "example": {
+      "original": "downloads/NTSD_2.4_2.0a_clean/NTSD 2.4_2.0a/NTSD 2.4.exe",
+      "variant": "raw",
+      "section": ".rdata",
+      "offset": 291944,
+      "sha256Prefix": "ce55b40ae8bea8f2"
+     }
+    },
+    {
+     "engine": "engine/Sources/NTSDCore/OriginalWindowInitialization.swift:199",
+     "kind": "string",
+     "encoding": "utf8",
+     "literalLength": 18,
+     "longestMatch": 18,
+     "originalFiles": 1,
+     "example": {
+      "original": "downloads/NTSD_2.4_2.0a_clean/NTSD 2.4_2.0a/NTSD 2.4.exe",
+      "variant": "raw",
+      "section": ".rdata",
+      "offset": 302876,
+      "sha256Prefix": "0ace0761a56c79c1"
+     }
+    },
+    {
+     "engine": "engine/Sources/NTSDCore/OriginalWindowInput.swift:151",
+     "kind": "string",
+     "encoding": "utf8",
+     "literalLength": 21,
+     "longestMatch": 21,
+     "originalFiles": 1,
+     "example": {
+      "original": "downloads/NTSD_2.4_2.0a_clean/NTSD 2.4_2.0a/NTSD 2.4.exe",
+      "variant": "raw",
+      "section": ".rdata",
+      "offset": 302832,
+      "sha256Prefix": "98a073fe57d52ff9"
+     }
+    },
+    {
+     "engine": "engine/Sources/NTSDCore/OriginalWindowLifecycle.swift:100",
+     "kind": "string",
+     "encoding": "utf8",
+     "literalLength": 26,
+     "longestMatch": 26,
+     "originalFiles": 1,
+     "example": {
+      "original": "downloads/NTSD_2.4_2.0a_clean/NTSD 2.4_2.0a/NTSD 2.4.exe",
+      "variant": "raw",
+      "section": ".rdata",
+      "offset": 302736,
+      "sha256Prefix": "b23b1402d6d3da4f"
+     }
+    },
+    {
+     "engine": "engine/Sources/NTSDCore/OriginalWindowLifecycle.swift:98",
+     "kind": "string",
+     "encoding": "utf8",
+     "literalLength": 21,
+     "longestMatch": 21,
+     "originalFiles": 1,
+     "example": {
+      "original": "downloads/NTSD_2.4_2.0a_clean/NTSD 2.4_2.0a/NTSD 2.4.exe",
+      "variant": "raw",
+      "section": ".rdata",
+      "offset": 302764,
+      "sha256Prefix": "a3472cb2c0115d37"
+     }
+    },
+    {
+     "engine": "engine/Sources/NTSDCore/OriginalWorldHits.swift:84",
+     "kind": "string",
+     "encoding": "utf8",
+     "literalLength": 121,
+     "longestMatch": 16,
+     "originalFiles": 1,
+     "example": {
+      "original": "<main worktree>/build/original/crt/msvcr80.dll",
+      "variant": "raw",
+      "section": ".rdata",
+      "offset": 419105,
+      "sha256Prefix": "5c00f22de4f8ba9f"
+     }
+    },
+    {
+     "engine": "engine/Sources/NTSDRuntime/OriginalMacRuntimeMenu.swift:262",
+     "kind": "string",
+     "encoding": "utf8",
+     "literalLength": 16,
+     "longestMatch": 16,
+     "originalFiles": 1,
+     "example": {
+      "original": "downloads/NTSD_2.4_2.0a_clean/NTSD 2.4_2.0a/NTSD 2.4.exe",
+      "variant": "raw",
+      "section": ".rdata",
+      "offset": 300672,
+      "sha256Prefix": "981d74bcd1bffd90"
+     }
+    },
+    {
+     "engine": "engine/Sources/NTSDRuntime/OriginalMacRuntimeMenu.swift:99",
+     "kind": "string",
+     "encoding": "utf8",
+     "literalLength": 16,
+     "longestMatch": 16,
+     "originalFiles": 1,
+     "example": {
+      "original": "downloads/NTSD_2.4_2.0a_clean/NTSD 2.4_2.0a/NTSD 2.4.exe",
+      "variant": "raw",
+      "section": ".rdata",
+      "offset": 300672,
+      "sha256Prefix": "981d74bcd1bffd90"
+     }
+    },
+    {
+     "engine": "engine/Sources/NTSDRuntime/OriginalMacRuntimeMessages.swift:190",
+     "kind": "string",
+     "encoding": "utf8",
+     "literalLength": 16,
+     "longestMatch": 16,
+     "originalFiles": 1,
+     "example": {
+      "original": "downloads/NTSD_2.4_2.0a_clean/NTSD 2.4_2.0a/NTSD 2.4.exe",
+      "variant": "raw",
+      "section": ".rdata",
+      "offset": 310942,
+      "sha256Prefix": "ad54136bd7977d99"
+     }
+    },
+    {
+     "engine": "engine/Sources/NTSDRuntime/OriginalMacRuntimeNetwork.swift:88",
+     "kind": "string",
+     "encoding": "utf8",
+     "literalLength": 16,
+     "longestMatch": 16,
+     "originalFiles": 1,
+     "example": {
+      "original": "downloads/NTSD_2.4_2.0a_clean/NTSD 2.4_2.0a/NTSD 2.4.exe",
+      "variant": "raw",
+      "section": ".rdata",
+      "offset": 299956,
+      "sha256Prefix": "6ee4c28a48469990"
+     }
+    },
+    {
+     "engine": "engine/Sources/NTSDRuntime/OriginalMacRuntimeNetwork.swift:89",
+     "kind": "string",
+     "encoding": "utf8",
+     "literalLength": 21,
+     "longestMatch": 21,
+     "originalFiles": 1,
+     "example": {
+      "original": "downloads/NTSD_2.4_2.0a_clean/NTSD 2.4_2.0a/NTSD 2.4.exe",
+      "variant": "raw",
+      "section": ".rdata",
+      "offset": 299932,
+      "sha256Prefix": "66b5aa2cb4327c4c"
+     }
+    },
+    {
+     "engine": "engine/Sources/NTSDRuntime/OriginalMacRuntimeNetwork.swift:90",
+     "kind": "string",
+     "encoding": "utf8",
+     "literalLength": 20,
+     "longestMatch": 20,
+     "originalFiles": 1,
+     "example": {
+      "original": "downloads/NTSD_2.4_2.0a_clean/NTSD 2.4_2.0a/NTSD 2.4.exe",
+      "variant": "raw",
+      "section": ".rdata",
+      "offset": 299812,
+      "sha256Prefix": "a63f6cbb6b496988"
+     }
+    },
+    {
+     "engine": "engine/Sources/NTSDRuntime/OriginalMacRuntimeNetwork.swift:91",
+     "kind": "string",
+     "encoding": "utf8",
+     "literalLength": 22,
+     "longestMatch": 22,
+     "originalFiles": 1,
+     "example": {
+      "original": "downloads/NTSD_2.4_2.0a_clean/NTSD 2.4_2.0a/NTSD 2.4.exe",
+      "variant": "raw",
+      "section": ".rdata",
+      "offset": 299908,
+      "sha256Prefix": "9812077c24bc8156"
+     }
+    },
+    {
+     "engine": "engine/Sources/NTSDRuntime/OriginalMacRuntimeNetwork.swift:92",
+     "kind": "string",
+     "encoding": "utf8",
+     "literalLength": 67,
+     "longestMatch": 67,
+     "originalFiles": 1,
+     "example": {
+      "original": "downloads/NTSD_2.4_2.0a_clean/NTSD 2.4_2.0a/NTSD 2.4.exe",
+      "variant": "raw",
+      "section": ".rdata",
+      "offset": 299840,
+      "sha256Prefix": "04e8ea04917f0c6d"
+     }
+    },
+    {
+     "engine": "engine/Sources/NTSDRuntime/OriginalMacRuntimeStartupService.swift:125",
+     "kind": "string",
+     "encoding": "utf8",
+     "literalLength": 18,
+     "longestMatch": 18,
+     "originalFiles": 2,
+     "example": {
+      "original": "<main worktree>/build/original/crt/msvcr80.dll",
+      "variant": "raw",
+      "section": ".rdata",
+      "offset": 550668,
+      "sha256Prefix": "35bc3f9d29f7c077"
+     }
+    },
+    {
+     "engine": "engine/Sources/NTSDRuntime/OriginalRuntimeWindowBackend.swift:260",
+     "kind": "string",
+     "encoding": "utf8",
+     "literalLength": 16,
+     "longestMatch": 16,
+     "originalFiles": 1,
+     "example": {
+      "original": "downloads/NTSD_2.4_2.0a_clean/NTSD 2.4_2.0a/NTSD 2.4.exe",
+      "variant": "raw",
+      "section": ".rdata",
+      "offset": 292384,
+      "sha256Prefix": "619b44b164bbd18a"
+     }
+    },
+    {
+     "engine": "engine/Tests/NTSDEngineTests/OriginalPagedStageTests.swift:58",
+     "kind": "string",
+     "encoding": "utf8",
+     "literalLength": 195,
+     "longestMatch": 22,
+     "originalFiles": 1,
+     "example": {
+      "original": "downloads/NTSD_2.4_2.0a_clean/NTSD 2.4_2.0a/NTSD 2.4.exe",
+      "variant": "raw",
+      "section": ".rdata",
+      "offset": 293728,
+      "sha256Prefix": "9da9115fc0fc0e1d"
+     }
+    }
+   ]
+  },
+  "VC80 power-of-ten table": {
+   "hits": 1,
+   "engineSites": 1,
+   "sites": [
+    {
+     "engine": "engine/Sources/NTSDCore/OriginalDiagnosticNumber.swift:167",
+     "kind": "hex-run",
+     "encoding": "bytes",
+     "literalLength": 504,
+     "longestMatch": 252,
+     "originalFiles": 1,
+     "example": {
+      "original": "<main worktree>/build/original/crt/msvcr80.dll",
+      "variant": "raw",
+      "section": ".data",
+      "offset": 598000,
+      "sha256Prefix": "293a9913105f1465"
+     }
+    }
+   ]
+  },
+  "labels shared with the project's own fixtures and manifests (JSON text, not original bytes)": {
+   "hits": 77,
+   "engineSites": 54,
+   "sites": [
+    {
+     "engine": "engine/Sources/NTSDCore/OriginalApplicationBitmapInputs.swift:100",
+     "kind": "string",
+     "encoding": "utf8",
+     "literalLength": 34,
+     "longestMatch": 22,
+     "originalFiles": 1,
+     "example": {
+      "original": "native/Tests/NTSDCoreTests/Fixtures/startup-surface-colors.json",
+      "variant": "raw",
+      "section": null,
+      "offset": 4913279,
+      "sha256Prefix": "5736a500e0ec3633"
+     }
+    },
+    {
+     "engine": "engine/Sources/NTSDCore/OriginalApplicationCatalogSession.swift:227",
+     "kind": "string",
+     "encoding": "utf8",
+     "literalLength": 25,
+     "longestMatch": 17,
+     "originalFiles": 1,
+     "example": {
+      "original": "native/Tests/NTSDCoreTests/Fixtures/startup-surface-colors.json",
+      "variant": "raw",
+      "section": null,
+      "offset": 17597,
+      "sha256Prefix": "003a33f044fd4daf"
+     }
+    },
+    {
+     "engine": "engine/Sources/NTSDCore/OriginalApplicationCatalogSession.swift:308",
+     "kind": "string",
+     "encoding": "utf8",
+     "literalLength": 17,
+     "longestMatch": 17,
+     "originalFiles": 1,
+     "example": {
+      "original": "native/Tests/NTSDCoreTests/Fixtures/startup-graphics-owners.json",
+      "variant": "raw",
+      "section": null,
+      "offset": 268,
+      "sha256Prefix": "9c22ae619267ae11"
+     }
+    },
+    {
+     "engine": "engine/Sources/NTSDCore/OriginalApplicationGameplaySession.swift:70",
+     "kind": "string",
+     "encoding": "utf8",
+     "literalLength": 35,
+     "longestMatch": 16,
+     "originalFiles": 1,
+     "example": {
+      "original": "native/Tests/NTSDCoreTests/Fixtures/original-demo-music.json",
+      "variant": "raw",
+      "section": null,
+      "offset": 123,
+      "sha256Prefix": "dba6baba0210b0b1"
+     }
+    },
+    {
+     "engine": "engine/Sources/NTSDCore/OriginalApplicationGraphics.swift:154",
+     "kind": "string",
+     "encoding": "utf8",
+     "literalLength": 20,
+     "longestMatch": 16,
+     "originalFiles": 1,
+     "example": {
+      "original": "native/Tests/NTSDCoreTests/Fixtures/startup-graphics-owners.json",
+      "variant": "raw",
+      "section": null,
+      "offset": 4386966,
+      "sha256Prefix": "66d91377a915615b"
+     }
+    },
+    {
+     "engine": "engine/Sources/NTSDCore/OriginalApplicationGraphics.swift:155",
+     "kind": "string",
+     "encoding": "utf8",
+     "literalLength": 24,
+     "longestMatch": 20,
+     "originalFiles": 2,
+     "example": {
+      "original": "native/Tests/NTSDCoreTests/Fixtures/startup-graphics-owners.json",
+      "variant": "raw",
+      "section": null,
+      "offset": 4391450,
+      "sha256Prefix": "bd74627ceaa4b49b"
+     }
+    },
+    {
+     "engine": "engine/Sources/NTSDCore/OriginalApplicationGraphics.swift:174",
+     "kind": "string",
+     "encoding": "utf8",
+     "literalLength": 31,
+     "longestMatch": 31,
+     "originalFiles": 1,
+     "example": {
+      "original": "native/Tests/NTSDCoreTests/Fixtures/startup-graphics-owners.json",
+      "variant": "raw",
+      "section": null,
+      "offset": 6428501,
+      "sha256Prefix": "c3bc611f42426e15"
+     }
+    },
+    {
+     "engine": "engine/Sources/NTSDCore/OriginalApplicationGraphics.swift:175",
+     "kind": "string",
+     "encoding": "utf8",
+     "literalLength": 27,
+     "longestMatch": 27,
+     "originalFiles": 1,
+     "example": {
+      "original": "native/Tests/NTSDCoreTests/Fixtures/startup-graphics-owners.json",
+      "variant": "raw",
+      "section": null,
+      "offset": 6428565,
+      "sha256Prefix": "bf213c1dbfd3f16c"
+     }
+    },
+    {
+     "engine": "engine/Sources/NTSDCore/OriginalApplicationGraphics.swift:176",
+     "kind": "string",
+     "encoding": "utf8",
+     "literalLength": 39,
+     "longestMatch": 39,
+     "originalFiles": 1,
+     "example": {
+      "original": "native/Tests/NTSDCoreTests/Fixtures/startup-graphics-owners.json",
+      "variant": "raw",
+      "section": null,
+      "offset": 6428652,
+      "sha256Prefix": "52f5a85364911da1"
+     }
+    },
+    {
+     "engine": "engine/Sources/NTSDCore/OriginalApplicationGraphics.swift:177",
+     "kind": "string",
+     "encoding": "utf8",
+     "literalLength": 54,
+     "longestMatch": 54,
+     "originalFiles": 1,
+     "example": {
+      "original": "native/Tests/NTSDCoreTests/Fixtures/startup-graphics-owners.json",
+      "variant": "raw",
+      "section": null,
+      "offset": 6428711,
+      "sha256Prefix": "01962813dc4f06bf"
+     }
+    },
+    {
+     "engine": "engine/Sources/NTSDCore/OriginalApplicationGraphics.swift:222",
+     "kind": "string",
+     "encoding": "utf8",
+     "literalLength": 16,
+     "longestMatch": 16,
+     "originalFiles": 1,
+     "example": {
+      "original": "native/Tests/NTSDCoreTests/Fixtures/startup-graphics-owners.json",
+      "variant": "raw",
+      "section": null,
+      "offset": 8514900,
+      "sha256Prefix": "266d0820079b4749"
+     }
+    },
+    {
+     "engine": "engine/Sources/NTSDCore/OriginalApplicationGraphics.swift:238",
+     "kind": "string",
+     "encoding": "utf8",
+     "literalLength": 16,
+     "longestMatch": 16,
+     "originalFiles": 1,
+     "example": {
+      "original": "native/Tests/NTSDCoreTests/Fixtures/startup-graphics-owners.json",
+      "variant": "raw",
+      "section": null,
+      "offset": 8515133,
+      "sha256Prefix": "174ab427666b973e"
+     }
+    },
+    {
+     "engine": "engine/Sources/NTSDCore/OriginalApplicationGraphics.swift:240",
+     "kind": "string",
+     "encoding": "utf8",
+     "literalLength": 16,
+     "longestMatch": 16,
+     "originalFiles": 1,
+     "example": {
+      "original": "native/Tests/NTSDCoreTests/Fixtures/startup-graphics-owners.json",
+      "variant": "raw",
+      "section": null,
+      "offset": 8515133,
+      "sha256Prefix": "174ab427666b973e"
+     }
+    },
+    {
+     "engine": "engine/Sources/NTSDCore/OriginalApplicationGraphics.swift:366",
+     "kind": "string",
+     "encoding": "utf8",
+     "literalLength": 17,
+     "longestMatch": 17,
+     "originalFiles": 1,
+     "example": {
+      "original": "native/Tests/NTSDCoreTests/Fixtures/startup-graphics-owners.json",
+      "variant": "raw",
+      "section": null,
+      "offset": 268,
+      "sha256Prefix": "9c22ae619267ae11"
+     }
+    },
+    {
+     "engine": "engine/Sources/NTSDCore/OriginalApplicationGraphics.swift:403",
+     "kind": "string",
+     "encoding": "utf8",
+     "literalLength": 19,
+     "longestMatch": 19,
+     "originalFiles": 1,
+     "example": {
+      "original": "native/Tests/NTSDCoreTests/Fixtures/startup-graphics-owners.json",
+      "variant": "raw",
+      "section": null,
+      "offset": 4950926,
+      "sha256Prefix": "a2c09e665585f769"
+     }
+    },
+    {
+     "engine": "engine/Sources/NTSDCore/OriginalApplicationLoadedMenuSession.swift:280",
+     "kind": "string",
+     "encoding": "utf8",
+     "literalLength": 23,
+     "longestMatch": 17,
+     "originalFiles": 1,
+     "example": {
+      "original": "native/Tests/NTSDCoreTests/Fixtures/startup-surface-colors.json",
+      "variant": "raw",
+      "section": null,
+      "offset": 17597,
+      "sha256Prefix": "003a33f044fd4daf"
+     }
+    },
+    {
+     "engine": "engine/Sources/NTSDCore/OriginalApplicationLoadedMenuSession.swift:316",
+     "kind": "string",
+     "encoding": "utf8",
+     "literalLength": 17,
+     "longestMatch": 17,
+     "originalFiles": 1,
+     "example": {
+      "original": "native/Tests/NTSDCoreTests/Fixtures/startup-graphics-owners.json",
+      "variant": "raw",
+      "section": null,
+      "offset": 268,
+      "sha256Prefix": "9c22ae619267ae11"
+     }
+    },
+    {
+     "engine": "engine/Sources/NTSDCore/OriginalApplicationMenuSession.swift:398",
+     "kind": "string",
+     "encoding": "utf8",
+     "literalLength": 17,
+     "longestMatch": 17,
+     "originalFiles": 1,
+     "example": {
+      "original": "native/Tests/NTSDCoreTests/Fixtures/startup-graphics-owners.json",
+      "variant": "raw",
+      "section": null,
+      "offset": 268,
+      "sha256Prefix": "9c22ae619267ae11"
+     }
+    },
+    {
+     "engine": "engine/Sources/NTSDCore/OriginalApplicationPoolSession.swift:226",
+     "kind": "string",
+     "encoding": "utf8",
+     "literalLength": 25,
+     "longestMatch": 17,
+     "originalFiles": 1,
+     "example": {
+      "original": "native/Tests/NTSDCoreTests/Fixtures/startup-surface-colors.json",
+      "variant": "raw",
+      "section": null,
+      "offset": 17597,
+      "sha256Prefix": "003a33f044fd4daf"
+     }
+    },
+    {
+     "engine": "engine/Sources/NTSDCore/OriginalApplicationStartupPlatform.swift:147",
+     "kind": "string",
+     "encoding": "utf8",
+     "literalLength": 16,
+     "longestMatch": 16,
+     "originalFiles": 1,
+     "example": {
+      "original": "native/Tests/NTSDCoreTests/Fixtures/startup-graphics-owners.json",
+      "variant": "raw",
+      "section": null,
+      "offset": 8515133,
+      "sha256Prefix": "174ab427666b973e"
+     }
+    },
+    {
+     "engine": "engine/Sources/NTSDCore/OriginalFrameLoader.swift:312",
+     "kind": "string",
+     "encoding": "utf8",
+     "literalLength": 61,
+     "longestMatch": 16,
+     "originalFiles": 1,
+     "example": {
+      "original": "native/Tests/NTSDCoreTests/Fixtures/original-window-close.json",
+      "variant": "raw",
+      "section": null,
+      "offset": 1479110,
+      "sha256Prefix": "50c014e0e212782e"
+     }
+    },
+    {
+     "engine": "engine/Sources/NTSDCore/OriginalLibSurfaceText.swift:58",
+     "kind": "string",
+     "encoding": "utf8",
+     "literalLength": 39,
+     "longestMatch": 18,
+     "originalFiles": 1,
+     "example": {
+      "original": "native/Tests/NTSDCoreTests/Fixtures/startup-surface-colors.json",
+      "variant": "raw",
+      "section": null,
+      "offset": 17814,
+      "sha256Prefix": "64d22bff5af997e0"
+     }
+    },
+    {
+     "engine": "engine/Sources/NTSDCore/OriginalMatchContinuation.swift:90",
+     "kind": "string",
+     "encoding": "utf8",
+     "literalLength": 30,
+     "longestMatch": 16,
+     "originalFiles": 1,
+     "example": {
+      "original": "native/Tests/NTSDCoreTests/Fixtures/original-demo-music.json",
+      "variant": "raw",
+      "section": null,
+      "offset": 123,
+      "sha256Prefix": "dba6baba0210b0b1"
+     }
+    },
+    {
+     "engine": "engine/Sources/NTSDCore/OriginalMenuGraphicsRequestExchange.swift:19",
+     "kind": "string",
+     "encoding": "utf8",
+     "literalLength": 17,
+     "longestMatch": 17,
+     "originalFiles": 1,
+     "example": {
+      "original": "native/Tests/NTSDCoreTests/Fixtures/startup-graphics-owners.json",
+      "variant": "raw",
+      "section": null,
+      "offset": 268,
+      "sha256Prefix": "9c22ae619267ae11"
+     }
+    },
+    {
+     "engine": "engine/Sources/NTSDCore/OriginalMenuSoundStartup.swift:61",
+     "kind": "string",
+     "encoding": "utf8",
+     "literalLength": 43,
+     "longestMatch": 18,
+     "originalFiles": 1,
+     "example": {
+      "original": "native/Tests/NTSDCoreTests/Fixtures/startup-surface-colors.json",
+      "variant": "raw",
+      "section": null,
+      "offset": 17814,
+      "sha256Prefix": "64d22bff5af997e0"
+     }
+    },
+    {
+     "engine": "engine/Sources/NTSDCore/OriginalMenuSoundStartup.swift:63",
+     "kind": "string",
+     "encoding": "utf8",
+     "literalLength": 16,
+     "longestMatch": 16,
+     "originalFiles": 1,
+     "example": {
+      "original": "native/Tests/NTSDCoreTests/Fixtures/startup-graphics-owners.json",
+      "variant": "raw",
+      "section": null,
+      "offset": 8515133,
+      "sha256Prefix": "174ab427666b973e"
+     }
+    },
+    {
+     "engine": "engine/Sources/NTSDCore/OriginalNetworkClient.swift:47",
+     "kind": "string",
+     "encoding": "utf8",
+     "literalLength": 39,
+     "longestMatch": 17,
+     "originalFiles": 1,
+     "example": {
+      "original": "native/Tests/NTSDCoreTests/Fixtures/startup-surface-colors.json",
+      "variant": "raw",
+      "section": null,
+      "offset": 4912878,
+      "sha256Prefix": "2460f3b765786475"
+     }
+    },
+    {
+     "engine": "engine/Sources/NTSDCore/OriginalNetworkNotification.swift:64",
+     "kind": "string",
+     "encoding": "utf8",
+     "literalLength": 39,
+     "longestMatch": 17,
+     "originalFiles": 1,
+     "example": {
+      "original": "native/Tests/NTSDCoreTests/Fixtures/startup-surface-colors.json",
+      "variant": "raw",
+      "section": null,
+      "offset": 4912878,
+      "sha256Prefix": "2460f3b765786475"
+     }
+    },
+    {
+     "engine": "engine/Sources/NTSDCore/OriginalObjectLoader.swift:375",
+     "kind": "string",
+     "encoding": "utf8",
+     "literalLength": 18,
+     "longestMatch": 18,
+     "originalFiles": 3,
+     "example": {
+      "original": "native/Tests/NTSDCoreTests/Fixtures/original-combat.json",
+      "variant": "raw",
+      "section": null,
+      "offset": 331711,
+      "sha256Prefix": "47c368d4d6197677"
+     }
+    },
+    {
+     "engine": "engine/Sources/NTSDCore/OriginalObjectLoader.swift:377",
+     "kind": "string",
+     "encoding": "utf8",
+     "literalLength": 20,
+     "longestMatch": 20,
+     "originalFiles": 3,
+     "example": {
+      "original": "native/Tests/NTSDCoreTests/Fixtures/original-combat.json",
+      "variant": "raw",
+      "section": null,
+      "offset": 331905,
+      "sha256Prefix": "ecb8c85bd8a3d274"
+     }
+    },
+    {
+     "engine": "engine/Sources/NTSDCore/OriginalObjectLoader.swift:378",
+     "kind": "string",
+     "encoding": "utf8",
+     "literalLength": 20,
+     "longestMatch": 20,
+     "originalFiles": 3,
+     "example": {
+      "original": "native/Tests/NTSDCoreTests/Fixtures/original-combat.json",
+      "variant": "raw",
+      "section": null,
+      "offset": 331972,
+      "sha256Prefix": "4a3d3811f81998d9"
+     }
+    },
+    {
+     "engine": "engine/Sources/NTSDCore/OriginalObjectLoader.swift:39",
+     "kind": "string",
+     "encoding": "utf8",
+     "literalLength": 24,
+     "longestMatch": 17,
+     "originalFiles": 1,
+     "example": {
+      "original": "native/Tests/NTSDCoreTests/Fixtures/startup-surface-colors.json",
+      "variant": "raw",
+      "section": null,
+      "offset": 17597,
+      "sha256Prefix": "003a33f044fd4daf"
+     }
+    },
+    {
+     "engine": "engine/Sources/NTSDCore/OriginalReplayCompression.swift:35",
+     "kind": "string",
+     "encoding": "utf8",
+     "literalLength": 49,
+     "longestMatch": 17,
+     "originalFiles": 1,
+     "example": {
+      "original": "native/Tests/NTSDCoreTests/Fixtures/original-lib-war-preparation-bound.json",
+      "variant": "raw",
+      "section": null,
+      "offset": 388,
+      "sha256Prefix": "d4b3bb754a3eda8d"
+     }
+    },
+    {
+     "engine": "engine/Sources/NTSDCore/OriginalReplayCompression.swift:51",
+     "kind": "string",
+     "encoding": "utf8",
+     "literalLength": 43,
+     "longestMatch": 17,
+     "originalFiles": 1,
+     "example": {
+      "original": "native/Tests/NTSDCoreTests/Fixtures/original-lib-war-preparation-bound.json",
+      "variant": "raw",
+      "section": null,
+      "offset": 388,
+      "sha256Prefix": "d4b3bb754a3eda8d"
+     }
+    },
+    {
+     "engine": "engine/Sources/NTSDCore/OriginalReplayCompression.swift:67",
+     "kind": "string",
+     "encoding": "utf8",
+     "literalLength": 49,
+     "longestMatch": 17,
+     "originalFiles": 1,
+     "example": {
+      "original": "native/Tests/NTSDCoreTests/Fixtures/original-lib-war-preparation-bound.json",
+      "variant": "raw",
+      "section": null,
+      "offset": 388,
+      "sha256Prefix": "d4b3bb754a3eda8d"
+     }
+    },
+    {
+     "engine": "engine/Sources/NTSDCore/OriginalStartupAudio.swift:222",
+     "kind": "string",
+     "encoding": "utf8",
+     "literalLength": 16,
+     "longestMatch": 16,
+     "originalFiles": 1,
+     "example": {
+      "original": "native/Tests/NTSDCoreTests/Fixtures/startup-graphics-owners.json",
+      "variant": "raw",
+      "section": null,
+      "offset": 8515133,
+      "sha256Prefix": "174ab427666b973e"
+     }
+    },
+    {
+     "engine": "engine/Sources/NTSDCore/OriginalWaveLoader.swift:183",
+     "kind": "string",
+     "encoding": "utf8",
+     "literalLength": 46,
+     "longestMatch": 17,
+     "originalFiles": 1,
+     "example": {
+      "original": "native/Tests/NTSDCoreTests/Fixtures/startup-surface-colors.json",
+      "variant": "raw",
+      "section": null,
+      "offset": 17597,
+      "sha256Prefix": "003a33f044fd4daf"
+     }
+    },
+    {
+     "engine": "engine/Sources/NTSDCore/OriginalWindowInitialization.swift:115",
+     "kind": "string",
+     "encoding": "utf8",
+     "literalLength": 16,
+     "longestMatch": 16,
+     "originalFiles": 1,
+     "example": {
+      "original": "native/Tests/NTSDCoreTests/Fixtures/startup-graphics-owners.json",
+      "variant": "raw",
+      "section": null,
+      "offset": 8514900,
+      "sha256Prefix": "266d0820079b4749"
+     }
+    },
+    {
+     "engine": "engine/Sources/NTSDCore/OriginalWindowInitialization.swift:118",
+     "kind": "string",
+     "encoding": "utf8",
+     "literalLength": 16,
+     "longestMatch": 16,
+     "originalFiles": 1,
+     "example": {
+      "original": "native/Tests/NTSDCoreTests/Fixtures/startup-graphics-owners.json",
+      "variant": "raw",
+      "section": null,
+      "offset": 8515133,
+      "sha256Prefix": "174ab427666b973e"
+     }
+    },
+    {
+     "engine": "engine/Sources/NTSDCore/OriginalWindowInitialization.swift:74",
+     "kind": "string",
+     "encoding": "utf8",
+     "literalLength": 47,
+     "longestMatch": 18,
+     "originalFiles": 1,
+     "example": {
+      "original": "native/Tests/NTSDCoreTests/Fixtures/startup-surface-colors.json",
+      "variant": "raw",
+      "section": null,
+      "offset": 17814,
+      "sha256Prefix": "64d22bff5af997e0"
+     }
+    },
+    {
+     "engine": "engine/Sources/NTSDCore/OriginalWindowInput.swift:32",
+     "kind": "string",
+     "encoding": "utf8",
+     "literalLength": 31,
+     "longestMatch": 19,
+     "originalFiles": 1,
+     "example": {
+      "original": "native/Tests/NTSDCoreTests/Fixtures/original-state-constructors.json",
+      "variant": "raw",
+      "section": null,
+      "offset": 90,
+      "sha256Prefix": "9f79bac808c33687"
+     }
+    },
+    {
+     "engine": "engine/Sources/NTSDCore/OriginalWindowLifecycle.swift:109",
+     "kind": "string",
+     "encoding": "utf8",
+     "literalLength": 44,
+     "longestMatch": 19,
+     "originalFiles": 1,
+     "example": {
+      "original": "native/Tests/NTSDCoreTests/Fixtures/startup-graphics-owners.json",
+      "variant": "raw",
+      "section": null,
+      "offset": 13161,
+      "sha256Prefix": "dba33e5d1d5c2b94"
+     }
+    },
+    {
+     "engine": "engine/Sources/NTSDRuntime/OriginalMacAudioBackend.swift:118",
+     "kind": "string",
+     "encoding": "utf8",
+     "literalLength": 16,
+     "longestMatch": 16,
+     "originalFiles": 1,
+     "example": {
+      "original": "native/Tests/NTSDCoreTests/Fixtures/startup-graphics-owners.json",
+      "variant": "raw",
+      "section": null,
+      "offset": 8515133,
+      "sha256Prefix": "174ab427666b973e"
+     }
+    },
+    {
+     "engine": "engine/Sources/NTSDRuntime/OriginalMacAudioBackend.swift:165",
+     "kind": "string",
+     "encoding": "utf8",
+     "literalLength": 16,
+     "longestMatch": 16,
+     "originalFiles": 1,
+     "example": {
+      "original": "native/Tests/NTSDCoreTests/Fixtures/startup-graphics-owners.json",
+      "variant": "raw",
+      "section": null,
+      "offset": 8515133,
+      "sha256Prefix": "174ab427666b973e"
+     }
+    },
+    {
+     "engine": "engine/Sources/NTSDRuntime/OriginalMacDisplayBackend.swift:1216",
+     "kind": "string",
+     "encoding": "utf8",
+     "literalLength": 17,
+     "longestMatch": 17,
+     "originalFiles": 1,
+     "example": {
+      "original": "native/Tests/NTSDCoreTests/Fixtures/startup-graphics-owners.json",
+      "variant": "raw",
+      "section": null,
+      "offset": 268,
+      "sha256Prefix": "9c22ae619267ae11"
+     }
+    },
+    {
+     "engine": "engine/Sources/NTSDRuntime/OriginalMacDisplayBackend.swift:1220",
+     "kind": "string",
+     "encoding": "utf8",
+     "literalLength": 17,
+     "longestMatch": 17,
+     "originalFiles": 1,
+     "example": {
+      "original": "native/Tests/NTSDCoreTests/Fixtures/startup-graphics-owners.json",
+      "variant": "raw",
+      "section": null,
+      "offset": 268,
+      "sha256Prefix": "9c22ae619267ae11"
+     }
+    },
+    {
+     "engine": "engine/Sources/NTSDRuntime/OriginalMacDisplayBackend.swift:434",
+     "kind": "string",
+     "encoding": "utf8",
+     "literalLength": 16,
+     "longestMatch": 16,
+     "originalFiles": 1,
+     "example": {
+      "original": "native/Tests/NTSDCoreTests/Fixtures/startup-graphics-owners.json",
+      "variant": "raw",
+      "section": null,
+      "offset": 8514900,
+      "sha256Prefix": "266d0820079b4749"
+     }
+    },
+    {
+     "engine": "engine/Sources/NTSDRuntime/OriginalMacDisplayBackend.swift:491",
+     "kind": "string",
+     "encoding": "utf8",
+     "literalLength": 16,
+     "longestMatch": 16,
+     "originalFiles": 1,
+     "example": {
+      "original": "native/Tests/NTSDCoreTests/Fixtures/startup-graphics-owners.json",
+      "variant": "raw",
+      "section": null,
+      "offset": 8514900,
+      "sha256Prefix": "266d0820079b4749"
+     }
+    },
+    {
+     "engine": "engine/Sources/NTSDRuntime/OriginalMacDisplayBackend.swift:492",
+     "kind": "string",
+     "encoding": "utf8",
+     "literalLength": 16,
+     "longestMatch": 16,
+     "originalFiles": 1,
+     "example": {
+      "original": "native/Tests/NTSDCoreTests/Fixtures/startup-graphics-owners.json",
+      "variant": "raw",
+      "section": null,
+      "offset": 8515133,
+      "sha256Prefix": "174ab427666b973e"
+     }
+    },
+    {
+     "engine": "engine/Sources/NTSDRuntime/OriginalMacDisplayBackend.swift:647",
+     "kind": "string",
+     "encoding": "utf8",
+     "literalLength": 16,
+     "longestMatch": 16,
+     "originalFiles": 1,
+     "example": {
+      "original": "native/Tests/NTSDCoreTests/Fixtures/startup-graphics-owners.json",
+      "variant": "raw",
+      "section": null,
+      "offset": 8514900,
+      "sha256Prefix": "266d0820079b4749"
+     }
+    },
+    {
+     "engine": "engine/Sources/NTSDRuntime/OriginalMacDisplayBackend.swift:649",
+     "kind": "string",
+     "encoding": "utf8",
+     "literalLength": 16,
+     "longestMatch": 16,
+     "originalFiles": 1,
+     "example": {
+      "original": "native/Tests/NTSDCoreTests/Fixtures/startup-graphics-owners.json",
+      "variant": "raw",
+      "section": null,
+      "offset": 8515133,
+      "sha256Prefix": "174ab427666b973e"
+     }
+    },
+    {
+     "engine": "engine/Sources/NTSDRuntime/OriginalMacRuntimeLoading.swift:642",
+     "kind": "string",
+     "encoding": "utf8",
+     "literalLength": 17,
+     "longestMatch": 17,
+     "originalFiles": 1,
+     "example": {
+      "original": "native/Tests/NTSDCoreTests/Fixtures/startup-graphics-owners.json",
+      "variant": "raw",
+      "section": null,
+      "offset": 268,
+      "sha256Prefix": "9c22ae619267ae11"
+     }
+    },
+    {
+     "engine": "engine/Tests/NTSDEngineTests/OriginalLatin1Tests.swift:10",
+     "kind": "string",
+     "encoding": "utf8",
+     "literalLength": 18,
+     "longestMatch": 18,
+     "originalFiles": 4,
+     "example": {
+      "original": "native/Tests/NTSDCoreTests/Fixtures/original-combat.json",
+      "variant": "raw",
+      "section": null,
+      "offset": 333022,
+      "sha256Prefix": "77db4964877c2527"
+     }
+    },
+    {
+     "engine": "engine/Tests/NTSDEngineTests/PortableSHA256Tests.swift:16",
+     "kind": "string",
+     "encoding": "utf8",
+     "literalLength": 64,
+     "longestMatch": 64,
+     "originalFiles": 1,
+     "example": {
+      "original": "native/Tests/NTSDCoreTests/Fixtures/original-replay-loader.json",
+      "variant": "raw",
+      "section": null,
+      "offset": 43274,
+      "sha256Prefix": "cd372fb85148700f"
+     }
+    }
+   ]
+  },
+  "names and vocabulary of the data files": {
+   "hits": 1048,
+   "engineSites": 10,
+   "sites": [
+    {
+     "engine": "engine/Sources/NTSDCore/OriginalCatalogRegistry.swift:144",
+     "kind": "string",
+     "encoding": "utf8",
+     "literalLength": 16,
+     "longestMatch": 16,
+     "originalFiles": 4,
+     "example": {
+      "original": "downloads/NTSD_2.4_2.0a_clean/NTSD 2.4_2.0a/chars/deep_chop.dat",
+      "variant": "decrypted",
+      "section": null,
+      "offset": 3438,
+      "sha256Prefix": "a21af36c56ea0989"
+     }
+    },
+    {
+     "engine": "engine/Sources/NTSDCore/OriginalLoadingFiles.swift:184",
+     "kind": "string",
+     "encoding": "utf8",
+     "literalLength": 23,
+     "longestMatch": 23,
+     "originalFiles": 1,
+     "example": {
+      "original": "downloads/NTSD_2.4_2.0a_clean/NTSD 2.4_2.0a/data/temporary.txt",
+      "variant": "raw",
+      "section": null,
+      "offset": 0,
+      "sha256Prefix": "76a1c5dc9f7c0a0e"
+     }
+    },
+    {
+     "engine": "engine/Sources/NTSDCore/OriginalObjectLoader.swift:225",
+     "kind": "string",
+     "encoding": "utf8",
+     "literalLength": 20,
+     "longestMatch": 20,
+     "originalFiles": 106,
+     "example": {
+      "original": "downloads/NTSD_2.4_2.0a_clean/NTSD 2.4_2.0a/chars/big_boom.dat",
+      "variant": "decrypted",
+      "section": null,
+      "offset": 464,
+      "sha256Prefix": "994d9a659cdc320d"
+     }
+    },
+    {
+     "engine": "engine/Sources/NTSDCore/OriginalObjectLoader.swift:253",
+     "kind": "string",
+     "encoding": "utf8",
+     "literalLength": 22,
+     "longestMatch": 22,
+     "originalFiles": 31,
+     "example": {
+      "original": "downloads/NTSD_2.4_2.0a_clean/NTSD 2.4_2.0a/chars/byakugan.dat",
+      "variant": "decrypted",
+      "section": null,
+      "offset": 343,
+      "sha256Prefix": "a4fd4b665cacf85f"
+     }
+    },
+    {
+     "engine": "engine/Sources/NTSDCore/OriginalObjectLoader.swift:256",
+     "kind": "string",
+     "encoding": "utf8",
+     "literalLength": 26,
+     "longestMatch": 26,
+     "originalFiles": 31,
+     "example": {
+      "original": "downloads/NTSD_2.4_2.0a_clean/NTSD 2.4_2.0a/chars/byakugan.dat",
+      "variant": "decrypted",
+      "section": null,
+      "offset": 729,
+      "sha256Prefix": "0b697d93d71a30fe"
+     }
+    },
+    {
+     "engine": "engine/Sources/NTSDCore/OriginalObjectLoader.swift:375",
+     "kind": "string",
+     "encoding": "utf8",
+     "literalLength": 18,
+     "longestMatch": 18,
+     "originalFiles": 151,
+     "example": {
+      "original": "downloads/NTSD_2.4_2.0a_clean/NTSD 2.4_2.0a/chars/Hsasori.dat",
+      "variant": "decrypted",
+      "section": null,
+      "offset": 486,
+      "sha256Prefix": "47c368d4d6197677"
+     }
+    },
+    {
+     "engine": "engine/Sources/NTSDCore/OriginalObjectLoader.swift:377",
+     "kind": "string",
+     "encoding": "utf8",
+     "literalLength": 20,
+     "longestMatch": 20,
+     "originalFiles": 92,
+     "example": {
+      "original": "downloads/NTSD_2.4_2.0a_clean/NTSD 2.4_2.0a/chars/Hsasori.dat",
+      "variant": "decrypted",
+      "section": null,
+      "offset": 651,
+      "sha256Prefix": "ecb8c85bd8a3d274"
+     }
+    },
+    {
+     "engine": "engine/Sources/NTSDCore/OriginalObjectLoader.swift:378",
+     "kind": "string",
+     "encoding": "utf8",
+     "literalLength": 20,
+     "longestMatch": 20,
+     "originalFiles": 92,
+     "example": {
+      "original": "downloads/NTSD_2.4_2.0a_clean/NTSD 2.4_2.0a/chars/Hsasori.dat",
+      "variant": "decrypted",
+      "section": null,
+      "offset": 710,
+      "sha256Prefix": "4a3d3811f81998d9"
+     }
+    },
+    {
+     "engine": "engine/Tests/NTSDEngineTests/OriginalLatin1Tests.swift:10",
+     "kind": "string",
+     "encoding": "utf8",
+     "literalLength": 18,
+     "longestMatch": 18,
+     "originalFiles": 90,
+     "example": {
+      "original": "downloads/NTSD_2.4_2.0a_clean/NTSD 2.4_2.0a/chars/Hsasori.dat",
+      "variant": "decrypted",
+      "section": null,
+      "offset": 942,
+      "sha256Prefix": "77db4964877c2527"
+     }
+    },
+    {
+     "engine": "engine/Tests/NTSDEngineTests/OriginalPagedStageTests.swift:58",
+     "kind": "string",
+     "encoding": "utf8",
+     "literalLength": 195,
+     "longestMatch": 18,
+     "originalFiles": 2,
+     "example": {
+      "original": "downloads/NTSD_2.4_2.0a_clean/NTSD 2.4_2.0a/data/stage.dat",
+      "variant": "decrypted",
+      "section": null,
+      "offset": 8463,
+      "sha256Prefix": "bedd9a5c02727f9f"
+     }
+    }
+   ]
+  },
+  "zlib or other vendored upstream code": {
+   "hits": 37,
+   "engineSites": 33,
+   "sites": [
+    {
+     "engine": "engine/Sources/NTSDReplayCodec/vendor/deflate.c:55",
+     "kind": "string",
+     "encoding": "utf8",
+     "literalLength": 52,
+     "longestMatch": 52,
+     "originalFiles": 1,
+     "example": {
+      "original": "downloads/NTSD_2.4_2.0a_clean/NTSD 2.4_2.0a/NTSD 2.4.exe",
+      "variant": "raw",
+      "section": ".rdata",
+      "offset": 303808,
+      "sha256Prefix": "818058142301c029"
+     }
+    },
+    {
+     "engine": "engine/Sources/NTSDReplayCodec/vendor/infblock.c:180",
+     "kind": "string",
+     "encoding": "utf8",
+     "literalLength": 18,
+     "longestMatch": 18,
+     "originalFiles": 1,
+     "example": {
+      "original": "downloads/NTSD_2.4_2.0a_clean/NTSD 2.4_2.0a/NTSD 2.4.exe",
+      "variant": "raw",
+      "section": ".rdata",
+      "offset": 307004,
+      "sha256Prefix": "a559da46be1d9326"
+     }
+    },
+    {
+     "engine": "engine/Sources/NTSDReplayCodec/vendor/infblock.c:190",
+     "kind": "string",
+     "encoding": "utf8",
+     "literalLength": 28,
+     "longestMatch": 28,
+     "originalFiles": 1,
+     "example": {
+      "original": "downloads/NTSD_2.4_2.0a_clean/NTSD 2.4_2.0a/NTSD 2.4.exe",
+      "variant": "raw",
+      "section": ".rdata",
+      "offset": 306972,
+      "sha256Prefix": "94b53ca5a118353b"
+     }
+    },
+    {
+     "engine": "engine/Sources/NTSDReplayCodec/vendor/infblock.c:20",
+     "kind": "integers",
+     "encoding": "u8",
+     "literalLength": 19,
+     "longestMatch": 19,
+     "originalFiles": 1,
+     "example": {
+      "original": "downloads/NTSD_2.4_2.0a_clean/NTSD 2.4_2.0a/NTSD 2.4.exe",
+      "variant": "raw",
+      "section": ".rdata",
+      "offset": 304420,
+      "sha256Prefix": "111b15b20e0428a2"
+     }
+    },
+    {
+     "engine": "engine/Sources/NTSDReplayCodec/vendor/infblock.c:223",
+     "kind": "string",
+     "encoding": "utf8",
+     "literalLength": 35,
+     "longestMatch": 35,
+     "originalFiles": 1,
+     "example": {
+      "original": "downloads/NTSD_2.4_2.0a_clean/NTSD 2.4_2.0a/NTSD 2.4.exe",
+      "variant": "raw",
+      "section": ".rdata",
+      "offset": 306936,
+      "sha256Prefix": "1476341d5d62faab"
+     }
+    },
+    {
+     "engine": "engine/Sources/NTSDReplayCodec/vendor/infblock.c:295",
+     "kind": "string",
+     "encoding": "utf8",
+     "literalLength": 25,
+     "longestMatch": 25,
+     "originalFiles": 1,
+     "example": {
+      "original": "downloads/NTSD_2.4_2.0a_clean/NTSD 2.4_2.0a/NTSD 2.4.exe",
+      "variant": "raw",
+      "section": ".rdata",
+      "offset": 306908,
+      "sha256Prefix": "b0baeb1a4fdb8018"
+     }
+    },
+    {
+     "engine": "engine/Sources/NTSDReplayCodec/vendor/infcodes.c:156",
+     "kind": "string",
+     "encoding": "utf8",
+     "literalLength": 27,
+     "longestMatch": 27,
+     "originalFiles": 1,
+     "example": {
+      "original": "downloads/NTSD_2.4_2.0a_clean/NTSD 2.4_2.0a/NTSD 2.4.exe",
+      "variant": "raw",
+      "section": ".rdata",
+      "offset": 307048,
+      "sha256Prefix": "4537965e86e3c9c6"
+     }
+    },
+    {
+     "engine": "engine/Sources/NTSDReplayCodec/vendor/infcodes.c:188",
+     "kind": "string",
+     "encoding": "utf8",
+     "literalLength": 21,
+     "longestMatch": 21,
+     "originalFiles": 1,
+     "example": {
+      "original": "downloads/NTSD_2.4_2.0a_clean/NTSD 2.4_2.0a/NTSD 2.4.exe",
+      "variant": "raw",
+      "section": ".rdata",
+      "offset": 307024,
+      "sha256Prefix": "e09814aa2acf67e2"
+     }
+    },
+    {
+     "engine": "engine/Sources/NTSDReplayCodec/vendor/inffast.c:140",
+     "kind": "string",
+     "encoding": "utf8",
+     "literalLength": 21,
+     "longestMatch": 21,
+     "originalFiles": 1,
+     "example": {
+      "original": "downloads/NTSD_2.4_2.0a_clean/NTSD 2.4_2.0a/NTSD 2.4.exe",
+      "variant": "raw",
+      "section": ".rdata",
+      "offset": 307024,
+      "sha256Prefix": "e09814aa2acf67e2"
+     }
+    },
+    {
+     "engine": "engine/Sources/NTSDReplayCodec/vendor/inffast.c:171",
+     "kind": "string",
+     "encoding": "utf8",
+     "literalLength": 27,
+     "longestMatch": 27,
+     "originalFiles": 1,
+     "example": {
+      "original": "downloads/NTSD_2.4_2.0a_clean/NTSD 2.4_2.0a/NTSD 2.4.exe",
+      "variant": "raw",
+      "section": ".rdata",
+      "offset": 307048,
+      "sha256Prefix": "4537965e86e3c9c6"
+     }
+    },
+    {
+     "engine": "engine/Sources/NTSDReplayCodec/vendor/inflate.c:168",
+     "kind": "string",
+     "encoding": "utf8",
+     "literalLength": 26,
+     "longestMatch": 26,
+     "originalFiles": 1,
+     "example": {
+      "original": "downloads/NTSD_2.4_2.0a_clean/NTSD 2.4_2.0a/NTSD 2.4.exe",
+      "variant": "raw",
+      "section": ".rdata",
+      "offset": 304072,
+      "sha256Prefix": "fd81c4c462e4e1d0"
+     }
+    },
+    {
+     "engine": "engine/Sources/NTSDReplayCodec/vendor/inflate.c:175",
+     "kind": "string",
+     "encoding": "utf8",
+     "literalLength": 19,
+     "longestMatch": 19,
+     "originalFiles": 1,
+     "example": {
+      "original": "downloads/NTSD_2.4_2.0a_clean/NTSD 2.4_2.0a/NTSD 2.4.exe",
+      "variant": "raw",
+      "section": ".rdata",
+      "offset": 304052,
+      "sha256Prefix": "1db51fd4fa2a5fc8"
+     }
+    },
+    {
+     "engine": "engine/Sources/NTSDReplayCodec/vendor/inflate.c:186",
+     "kind": "string",
+     "encoding": "utf8",
+     "literalLength": 22,
+     "longestMatch": 22,
+     "originalFiles": 1,
+     "example": {
+      "original": "downloads/NTSD_2.4_2.0a_clean/NTSD 2.4_2.0a/NTSD 2.4.exe",
+      "variant": "raw",
+      "section": ".rdata",
+      "offset": 304028,
+      "sha256Prefix": "e23392ec0701344a"
+     }
+    },
+    {
+     "engine": "engine/Sources/NTSDReplayCodec/vendor/inflate.c:259",
+     "kind": "string",
+     "encoding": "utf8",
+     "literalLength": 20,
+     "longestMatch": 20,
+     "originalFiles": 1,
+     "example": {
+      "original": "downloads/NTSD_2.4_2.0a_clean/NTSD 2.4_2.0a/NTSD 2.4.exe",
+      "variant": "raw",
+      "section": ".rdata",
+      "offset": 304004,
+      "sha256Prefix": "6eb51a2776ece9a1"
+     }
+    },
+    {
+     "engine": "engine/Sources/NTSDReplayCodec/vendor/inftrees.c:14",
+     "kind": "string",
+     "encoding": "utf8",
+     "literalLength": 46,
+     "longestMatch": 46,
+     "originalFiles": 1,
+     "example": {
+      "original": "downloads/NTSD_2.4_2.0a_clean/NTSD 2.4_2.0a/NTSD 2.4.exe",
+      "variant": "raw",
+      "section": ".rdata",
+      "offset": 307080,
+      "sha256Prefix": "2692bb2e439ba9c0"
+     }
+    },
+    {
+     "engine": "engine/Sources/NTSDReplayCodec/vendor/inftrees.c:309",
+     "kind": "string",
+     "encoding": "utf8",
+     "literalLength": 39,
+     "longestMatch": 39,
+     "originalFiles": 1,
+     "example": {
+      "original": "downloads/NTSD_2.4_2.0a_clean/NTSD 2.4_2.0a/NTSD 2.4.exe",
+      "variant": "raw",
+      "section": ".rdata",
+      "offset": 307660,
+      "sha256Prefix": "fcc2ed4c9bc8afda"
+     }
+    },
+    {
+     "engine": "engine/Sources/NTSDReplayCodec/vendor/inftrees.c:312",
+     "kind": "string",
+     "encoding": "utf8",
+     "literalLength": 35,
+     "longestMatch": 35,
+     "originalFiles": 1,
+     "example": {
+      "original": "downloads/NTSD_2.4_2.0a_clean/NTSD 2.4_2.0a/NTSD 2.4.exe",
+      "variant": "raw",
+      "section": ".rdata",
+      "offset": 307624,
+      "sha256Prefix": "97ea74fc41e5640d"
+     }
+    },
+    {
+     "engine": "engine/Sources/NTSDReplayCodec/vendor/inftrees.c:344",
+     "kind": "string",
+     "encoding": "utf8",
+     "literalLength": 34,
+     "longestMatch": 34,
+     "originalFiles": 1,
+     "example": {
+      "original": "downloads/NTSD_2.4_2.0a_clean/NTSD 2.4_2.0a/NTSD 2.4.exe",
+      "variant": "raw",
+      "section": ".rdata",
+      "offset": 307732,
+      "sha256Prefix": "b53f927080928bdf"
+     }
+    },
+    {
+     "engine": "engine/Sources/NTSDReplayCodec/vendor/inftrees.c:347",
+     "kind": "string",
+     "encoding": "utf8",
+     "literalLength": 30,
+     "longestMatch": 30,
+     "originalFiles": 1,
+     "example": {
+      "original": "downloads/NTSD_2.4_2.0a_clean/NTSD 2.4_2.0a/NTSD 2.4.exe",
+      "variant": "raw",
+      "section": ".rdata",
+      "offset": 307700,
+      "sha256Prefix": "bc6c6f3e392eb1c8"
+     }
+    },
+    {
+     "engine": "engine/Sources/NTSDReplayCodec/vendor/inftrees.c:359",
+     "kind": "string",
+     "encoding": "utf8",
+     "literalLength": 28,
+     "longestMatch": 28,
+     "originalFiles": 1,
+     "example": {
+      "original": "downloads/NTSD_2.4_2.0a_clean/NTSD 2.4_2.0a/NTSD 2.4.exe",
+      "variant": "raw",
+      "section": ".rdata",
+      "offset": 307832,
+      "sha256Prefix": "6c3ae619859c41b6"
+     }
+    },
+    {
+     "engine": "engine/Sources/NTSDReplayCodec/vendor/inftrees.c:365",
+     "kind": "string",
+     "encoding": "utf8",
+     "literalLength": 24,
+     "longestMatch": 24,
+     "originalFiles": 1,
+     "example": {
+      "original": "downloads/NTSD_2.4_2.0a_clean/NTSD 2.4_2.0a/NTSD 2.4.exe",
+      "variant": "raw",
+      "section": ".rdata",
+      "offset": 307804,
+      "sha256Prefix": "163ffff0e8c71ac4"
+     }
+    },
+    {
+     "engine": "engine/Sources/NTSDReplayCodec/vendor/inftrees.c:370",
+     "kind": "string",
+     "encoding": "utf8",
+     "literalLength": 32,
+     "longestMatch": 32,
+     "originalFiles": 1,
+     "example": {
+      "original": "downloads/NTSD_2.4_2.0a_clean/NTSD 2.4_2.0a/NTSD 2.4.exe",
+      "variant": "raw",
+      "section": ".rdata",
+      "offset": 307768,
+      "sha256Prefix": "f6d3d0738f3c2e7b"
+     }
+    },
+    {
+     "engine": "engine/Sources/NTSDReplayCodec/vendor/inftrees.c:42",
+     "kind": "integers",
+     "encoding": "le16",
+     "literalLength": 62,
+     "longestMatch": 18,
+     "originalFiles": 1,
+     "example": {
+      "original": "<main worktree>/build/original/crt/msvcr80.dll",
+      "variant": "raw",
+      "section": ".rdata",
+      "offset": 565200,
+      "sha256Prefix": "3609df0b75acadc6"
+     }
+    },
+    {
+     "engine": "engine/Sources/NTSDReplayCodec/vendor/inftrees.c:49",
+     "kind": "integers",
+     "encoding": "le32",
+     "literalLength": 120,
+     "longestMatch": 120,
+     "originalFiles": 1,
+     "example": {
+      "original": "downloads/NTSD_2.4_2.0a_clean/NTSD 2.4_2.0a/NTSD 2.4.exe",
+      "variant": "raw",
+      "section": ".rdata",
+      "offset": 307384,
+      "sha256Prefix": "fc216f5c5ae2947d"
+     }
+    },
+    {
+     "engine": "engine/Sources/NTSDReplayCodec/vendor/infutil.c:16",
+     "kind": "integers",
+     "encoding": "le32",
+     "literalLength": 68,
+     "longestMatch": 68,
+     "originalFiles": 2,
+     "example": {
+      "original": "downloads/NTSD_2.4_2.0a_clean/NTSD 2.4_2.0a/NTSD 2.4.exe",
+      "variant": "raw",
+      "section": ".data",
+      "offset": 323168,
+      "sha256Prefix": "cf64d219c0ba56ce"
+     }
+    },
+    {
+     "engine": "engine/Sources/NTSDReplayCodec/vendor/trees.c:71",
+     "kind": "integers",
+     "encoding": "u8",
+     "literalLength": 19,
+     "longestMatch": 19,
+     "originalFiles": 1,
+     "example": {
+      "original": "downloads/NTSD_2.4_2.0a_clean/NTSD 2.4_2.0a/NTSD 2.4.exe",
+      "variant": "raw",
+      "section": ".rdata",
+      "offset": 304420,
+      "sha256Prefix": "111b15b20e0428a2"
+     }
+    },
+    {
+     "engine": "engine/Sources/NTSDReplayCodec/vendor/trees.h:103",
+     "kind": "integers",
+     "encoding": "u8",
+     "literalLength": 256,
+     "longestMatch": 256,
+     "originalFiles": 2,
+     "example": {
+      "original": "downloads/NTSD_2.4_2.0a_clean/NTSD 2.4_2.0a/NTSD 2.4.exe",
+      "variant": "raw",
+      "section": ".rdata",
+      "offset": 306224,
+      "sha256Prefix": "b9d4af390afc6a0f"
+     }
+    },
+    {
+     "engine": "engine/Sources/NTSDReplayCodec/vendor/trees.h:119",
+     "kind": "integers",
+     "encoding": "le16",
+     "literalLength": 58,
+     "longestMatch": 18,
+     "originalFiles": 1,
+     "example": {
+      "original": "<main worktree>/build/original/crt/msvcr80.dll",
+      "variant": "raw",
+      "section": ".rdata",
+      "offset": 565194,
+      "sha256Prefix": "e0cb19ca992a1039"
+     }
+    },
+    {
+     "engine": "engine/Sources/NTSDReplayCodec/vendor/trees.h:4",
+     "kind": "integers",
+     "encoding": "le16",
+     "literalLength": 1152,
+     "longestMatch": 1152,
+     "originalFiles": 1,
+     "example": {
+      "original": "downloads/NTSD_2.4_2.0a_clean/NTSD 2.4_2.0a/NTSD 2.4.exe",
+      "variant": "raw",
+      "section": ".rdata",
+      "offset": 304440,
+      "sha256Prefix": "36b8fda0bfb1d93a"
+     }
+    },
+    {
+     "engine": "engine/Sources/NTSDReplayCodec/vendor/trees.h:65",
+     "kind": "integers",
+     "encoding": "le16",
+     "literalLength": 120,
+     "longestMatch": 120,
+     "originalFiles": 1,
+     "example": {
+      "original": "downloads/NTSD_2.4_2.0a_clean/NTSD 2.4_2.0a/NTSD 2.4.exe",
+      "variant": "raw",
+      "section": ".rdata",
+      "offset": 305592,
+      "sha256Prefix": "9476220840d3ce82"
+     }
+    },
+    {
+     "engine": "engine/Sources/NTSDReplayCodec/vendor/trees.h:74",
+     "kind": "integers",
+     "encoding": "u8",
+     "literalLength": 512,
+     "longestMatch": 512,
+     "originalFiles": 3,
+     "example": {
+      "original": "downloads/NTSD_2.4_2.0a_clean/NTSD 2.4_2.0a/NTSD 2.4.exe",
+      "variant": "raw",
+      "section": ".rdata",
+      "offset": 305712,
+      "sha256Prefix": "3e4fb5fe52bf269d"
+     }
+    },
+    {
+     "engine": "engine/Sources/NTSDReplayCodec/vendor/zutil.c:23",
+     "kind": "string",
+     "encoding": "utf8",
+     "literalLength": 19,
+     "longestMatch": 19,
+     "originalFiles": 1,
+     "example": {
+      "original": "downloads/NTSD_2.4_2.0a_clean/NTSD 2.4_2.0a/NTSD 2.4.exe",
+      "variant": "raw",
+      "section": ".rdata",
+      "offset": 306760,
+      "sha256Prefix": "7a11679dc2c5fbf6"
+     }
+    },
+    {
+     "engine": "engine/Sources/NTSDReplayCodec/vendor/zutil.c:25",
+     "kind": "string",
+     "encoding": "utf8",
+     "literalLength": 20,
+     "longestMatch": 20,
+     "originalFiles": 1,
+     "example": {
+      "original": "downloads/NTSD_2.4_2.0a_clean/NTSD 2.4_2.0a/NTSD 2.4.exe",
+      "variant": "raw",
+      "section": ".rdata",
+      "offset": 306720,
+      "sha256Prefix": "69b5b8bc084fcf45"
+     }
+    }
+   ]
+  }
+ },
+ "policy": {
+  "status": "open: the user's call, with D1 (E5's 'until D1 sets E7's policy'); the loop's recommendations below are not decisions",
+  "recommendations": {
+   "zlib or other vendored upstream code": "the engine's vendored zlib 1.1.4 (zlib licence; the EXE and the VC80 DLL link the same code): licensed upstream code, not the game's; recommendation: keep",
+   "DAT key": "the key every LF2-format DAT is encrypted with (a format constant the engine needs to read the content); recommendation: keep as a format constant; the user's call",
+   "DirectShow GUIDs": "Microsoft's public DirectShow interface and class IDs; recommendation: keep (public API constants)",
+   "VC80 power-of-ten table": "copied from the pinned VC80 runtime DLL; derivable: E7e computes it and compares it with a digest, then the copy leaves the engine",
+   "EXE strings": "messages, file and format strings, credits and links found in the EXE's .rdata (and the VC80 DLL): the user's call with D1 (which are LF2 2.0a's, which NTSD's); candidates to move into the game profile",
+   "names and vocabulary of the data files": "the DAT field vocabulary and data file names (the content format): recommendation: keep as the format",
+   "labels shared with the project's own fixtures and manifests (JSON text, not original bytes)": "the project's own labels (error texts, field names) that its fixtures and manifests also contain: not original bytes; no action"
+  }
+ },
+ "reviewNeeded": "no Core, Runtime or Package.swift change (a tool and records)",
+ "openGates": [
+  "the policy for the expected classes (the user, with D1)"
+ ]
+}
