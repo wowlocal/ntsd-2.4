@@ -34,6 +34,9 @@ user's for the classes E7b's recommendations named, settled 2026-10-21, the
 loop's for the rest) to the report and exits 1 when a hit is in a removed
 class, unexpected and not one of the EXAMINED coincidences, or in a PINNED
 class without its pinned digest; classes still open are listed, not failed.
+With --lf2-exe (the pinned LF2 2.0a lf2.exe, kept outside the repository)
+each "EXE strings (LF2 2.0a .rdata)" hit is also checked at the same offset
+in that file; a hit whose bytes differ there is NTSD-only (ENGINE_SPLIT E6a-2).
 It refuses (exit 2) a run whose originals are missing or empty, lack the
 VC80 DLL, or change --min-length/--min-distinct, and it keeps every match
 region of a literal (as file mode does), not only the longest.
@@ -208,7 +211,9 @@ POLICY = {
     "DirectShow GUIDs": ("keep", "user", "Microsoft's public interface and class IDs"),
     "VC80 power-of-ten table": ("removed", "user", "computed since E7e-1"),
     "CRT constants": ("keep", "loop", "public C runtime algorithm constants"),
-    "EXE strings": ("open", "user", "E6 sorts them by the LF2 2.0a reference (D1): LF2's stay engine text, NTSD's move to the game profile"),
+    "EXE strings (LF2 2.0a .rdata)": ("keep", "user", "D1's rule, LF2's text stays engine text: NTSD 2.4.exe's .rdata equals LF2 2.0a lf2.exe's outside NTSD_RDATA_RUN (E6a)"),
+    "NTSD-only strings (lib.dll or the swapped import)": ("removed", "user", "D1's rule: NTSD's text belongs to the game"),
+    "VC80 runtime strings": ("keep", "loop", "Microsoft C runtime text in the pinned msvcr80.dll"),
     "names and vocabulary of the data files": ("keep", "user", "the content format"),
     PROJECT_JSON: ("keep", "user", "the project's own text"),
     "BMP/DIB header fields": ("keep", "loop", "format structure of authored files"),
@@ -240,6 +245,11 @@ PINNED = {
 # seen (E7e-2: 32 bytes, at most 3 digits); longer ones are unexpected.
 VOCABULARY_MAX, VOCABULARY_DIGITS = 32, 3
 
+# NTSD 2.4.exe's only .rdata bytes that differ from LF2 2.0a's lf2.exe (E6a,
+# es-e6a-lf2-reference.json: the swapped import's name, 0x44c600 + 17; the
+# file offset equals the RVA in .rdata), widened to the name's hint word.
+NTSD_RDATA_RUN = (0x4c5fe, 0x4c611)
+
 def digits(piece):
     return sum(c in b"0123456789" for c in piece)
 
@@ -266,14 +276,20 @@ def classify_file(path, variant, piece, start, length, original, original_varian
         return "DAT frame-line fragments (authored values in the format's vocabulary)"
     return "unexpected"
 
-def classify(path, kind, seq, original, section):
+def classify(path, kind, seq, original, section, offset):
     for test, name in EXPECTED:
         if test(path, seq): return name
     low = original.lower()
     if low.endswith(".json") and ("/Fixtures/" in original or "/Resources/" in original):
         return PROJECT_JSON
     if kind == "string":
-        if low.endswith((".exe", ".dll")): return "EXE strings"
+        name = os.path.basename(low)
+        if name == "lib.dll": return "NTSD-only strings (lib.dll or the swapped import)"
+        if name == "msvcr80.dll": return "VC80 runtime strings"
+        if name == "ntsd 2.4.exe" and section == ".rdata":
+            if offset < NTSD_RDATA_RUN[1] and offset + len(seq) > NTSD_RDATA_RUN[0]: return "NTSD-only strings (lib.dll or the swapped import)"
+            return "EXE strings (LF2 2.0a .rdata)"
+        if low.endswith((".exe", ".dll")): return "EXE strings outside a known section"
         if len(seq) <= VOCABULARY_MAX and digits(seq) <= VOCABULARY_DIGITS: return "names and vocabulary of the data files"
     return "unexpected"
 
@@ -282,6 +298,7 @@ def main():
     a.add_argument("--originals", nargs="*", default=DEFAULT_ORIGINALS)
     a.add_argument("--min-length", type=int, default=16); a.add_argument("--min-distinct", type=int, default=6)
     a.add_argument("--engine-files", default=""); a.add_argument("--policy", action="store_true")
+    a.add_argument("--lf2-exe", default="")
     o = a.parse_args(); repo = os.path.abspath(o.repo); started = time.time()
     if o.policy:
         roots = [os.path.join(repo, r) for r in o.originals]
@@ -341,9 +358,17 @@ def main():
                 piece = bytes((b - key[i % len(key)]) & 0xff if i >= 123 else b for i, b in zip(range(a0, a1), piece))
             c = classify_file(path, enc, piece, a0, h["length"], rel, variant)
         else:
-            c = classify(path, kind, seq[a0:a1], rel, h["section"])
+            c = classify(path, kind, seq[a0:a1], rel, h["section"], h["offset"])
         hits.append({"engine": f"{path}:{line}", "kind": kind, "encoding": enc, "literalLength": len(seq),
                      "original": rel, "variant": variant, **h, "class": c})
+    lf2 = None
+    if o.lf2_exe:
+        data = open(o.lf2_exe, "rb").read(); lf2 = {"path": o.lf2_exe, "sha256": hashlib.sha256(data).hexdigest(), "checked": 0, "differing": 0}
+        for h in hits:
+            if h["class"] != "EXE strings (LF2 2.0a .rdata)": continue
+            lf2["checked"] += 1
+            if hashlib.sha256(data[h["offset"]:h["offset"] + h["length"]]).hexdigest()[:16] != h["sha256"]:
+                lf2["differing"] += 1; h["class"] = "NTSD-only strings (lib.dll or the swapped import)"
     classes = {}
     for h in hits:
         c = classes.setdefault(h["class"], {"hits": 0, "engineSites": set()}); c["hits"] += 1; c["engineSites"].add(h["engine"])
@@ -368,8 +393,9 @@ def main():
     json.dump({"tool": "tools/scan_original_bytes.py", "window": K, "stride": STRIDE, "minLength": o.min_length,
                "minDistinct": o.min_distinct, "originals": o.originals, "originalFiles": files, "originalBytes": scanned,
                "engineSequences": len(seqs), "indexedWindows": len(table), "seconds": round(time.time() - started),
-               "summary": summary, **({"policy": policy} if policy else {}), "hits": hits}, open(o.out, "w"), indent=1)
+               "summary": summary, **({"lf2Exe": lf2} if lf2 else {}), **({"policy": policy} if policy else {}), "hits": hits}, open(o.out, "w"), indent=1)
     print(json.dumps({"files": files, "bytes": scanned, "hits": len(hits), "summary": summary,
+                      **({"lf2Exe": {k: lf2[k] for k in ("checked", "differing")}} if lf2 else {}),
                       **({"verdict": policy["verdict"], "failing": policy["failing"], "open": policy["open"]} if policy else {})}))
     if policy and policy["verdict"] == "fail": sys.exit(1)
 

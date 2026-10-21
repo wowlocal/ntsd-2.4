@@ -1,0 +1,96 @@
+{
+ "study": "ENGINE_SPLIT",
+ "step": "E6a-2",
+ "label": "es-e6a2",
+ "base": "4e0f29de",
+ "recordedUTC": "2026-10-21T20:37:56Z",
+ "change": "tools/scan_original_bytes.py settles the policy's last open class by D1's rule (LF2's text stays engine text, NTSD's goes to the game): a string hit in NTSD 2.4.exe's .rdata outside the only differing run (0x44c5fe..0x44c611, E6a) is 'EXE strings (LF2 2.0a .rdata)' (keep); one in lib.dll or that run is NTSD-only (removed: a hit fails); msvcr80.dll text is 'VC80 runtime strings' (keep, the loop's rule). --lf2-exe checks each LF2 hit's bytes at the same offset of the pinned lf2.exe. No engine source change.",
+ "runs": [
+  {
+   "mode": "engine literals",
+   "report": "/Volumes/NTSD-Builds/tasks/engine-split/scratch/e6a2/scan-policy-lf2.json",
+   "sha256": "debd8aa86d6bb7c241960402388fd7308e6fa081eb81209bed597b30552a0064",
+   "summary": {
+    "DAT key": {
+     "hits": 2,
+     "engineSites": 2
+    },
+    "DirectShow GUIDs": {
+     "hits": 2,
+     "engineSites": 2
+    },
+    "EXE strings (LF2 2.0a .rdata)": {
+     "hits": 159,
+     "engineSites": 115
+    },
+    "VC80 runtime strings": {
+     "hits": 3,
+     "engineSites": 3
+    },
+    "labels shared with the project's own fixtures and manifests (JSON text, not original bytes)": {
+     "hits": 115,
+     "engineSites": 66
+    },
+    "names and vocabulary of the data files": {
+     "hits": 2873,
+     "engineSites": 25
+    },
+    "unexpected": {
+     "hits": 3,
+     "engineSites": 2
+    },
+    "zlib or other vendored upstream code": {
+     "hits": 48,
+     "engineSites": 33
+    }
+   },
+   "lf2Exe": {
+    "path": "/Volumes/NTSD-Builds/tasks/engine-split/reference/lf2-2.0a/LF2 2.0a/lf2.exe",
+    "sha256": "12dfa00f6b767508612550e9ab27ab74b4201ff4cb9ff31d068925924eab8fc5",
+    "checked": 159,
+    "differing": 0
+   },
+   "verdict": "pass",
+   "failing": 0,
+   "open": []
+  },
+  {
+   "mode": "synthetic pack (E7e-2's 166 files)",
+   "report": "/Volumes/NTSD-Builds/tasks/engine-split/scratch/e6a2/scan-pack-policy.json",
+   "sha256": "2c1abe63447fe66035c592436bfd6ff6ff6d47997342bb974cd17490bae725d2",
+   "summary": {
+    "DAT and data-file format text (field vocabulary, frame names)": {
+     "hits": 524037,
+     "engineSites": 12
+    },
+    "DAT frame-line fragments (authored values in the format's vocabulary)": {
+     "hits": 45804,
+     "engineSites": 9
+    },
+    "WAV header fields": {
+     "hits": 18464,
+     "engineSites": 32
+    },
+    "labels shared with the project's own fixtures and manifests (JSON text, not original bytes)": {
+     "hits": 199,
+     "engineSites": 3
+    },
+    "short audio sample runs (authored waveforms)": {
+     "hits": 582,
+     "engineSites": 8
+    },
+    "unexpected": {
+     "hits": 3,
+     "engineSites": 1
+    }
+   },
+   "verdict": "pass",
+   "failing": 0,
+   "open": []
+  }
+ ],
+ "finding": "all 159 EXE-string hits (115 engine sites) have the same bytes at the same offset in LF2 2.0a's lf2.exe; the 3 msvcr80.dll hits are C runtime text; no class is open, so E7's scan criterion holds under the user's policy",
+ "notSeen": "lib.dll's 'Loading files' label (13 bytes, OriginalLibLoadingProgress.swift) is below the scanner's 16-byte minimum; it moves to the game with lib.dll's other data in E6d-2",
+ "review": "not separately reviewed: a tool change whose rule is checked directly against lf2.exe (159 of 159)",
+ "openGates": []
+}
