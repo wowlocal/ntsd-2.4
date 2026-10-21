@@ -1,0 +1,2707 @@
+{
+ "study": "ENGINE_SPLIT",
+ "step": "E6a survey (read-only)",
+ "date": "2026-10-21",
+ "worktree": "/Volumes/NTSD-Builds/tasks/engine-split/worktree",
+ "head": "0cdd9b5ff9a21b04d2b1a7860f82f57db4ac0d7e",
+ "inputs": "Swift sources, docs/research/*.md, docs/evidence/es-e5*.json/md, docs/evidence/lib-runtime-static.json; no content bytes, no EXE/DLL bytes",
+ "premise": "the loop's static comparison (es-e6a-lf2-reference.json): NTSD 2.4.exe = LF2 2.0a lf2.exe outside 0x445561 (2), 0x4464ab (7), 0x4464c4 (17) in .text and 0x44c600 (17) in .rdata; .data identical; .rsrc differs",
+ "classes": [
+  "LF2 2.0a code",
+  "lib.dll (NTSD)",
+  "data/identity",
+  "unclear"
+ ],
+ "counts": {
+  "LF2 2.0a code": 128,
+  "data/identity": 10
+ },
+ "countsNote": "116 OriginalGameRules roles (107 ID roles + 9 interface lists), the AI special hook, its 20 routines, and the profile label",
+ "entries": [
+  {
+   "name": "reflection.reflectable",
+   "file:line": "native/Sources/NTSDProfile/NTSDProfile.swift:10",
+   "engineSites": [
+    "engine/Sources/NTSDCore/OriginalWorldContacts.swift:179",
+    "engine/Sources/NTSDCore/OriginalHitDamage.swift:44",
+    "engine/Sources/NTSDCore/OriginalHitDamage.swift:148",
+    "engine/Sources/NTSDCore/OriginalHitDamage.swift:153",
+    "engine/Sources/NTSDCore/OriginalHitDamage.swift:157"
+   ],
+   "rows": [
+    "A12",
+    "A8",
+    "A14",
+    "A15",
+    "A16",
+    "A20"
+   ],
+   "addresses": [
+    "42f70f..42fcaa",
+    "42e87d..42fdf2 (state 3000)",
+    "417400 (contact pair, ITR loop head)"
+   ],
+   "class": "LF2 2.0a code",
+   "reason": "pristine .text, identical in lf2.exe; not in any hook's bypassed range (see hooks[]); reached with and without lib.dll; hit-damage reflection block ends before 42fcaa, i.e. before the effect hook 42fcb1 (LIB_WORLD_HITS: the hook runs after damage/knockdown/reflection); A20 precedes the kind-8 category hook 4176ac",
+   "e6": "engine default (LF2 2.0a), same value; NTSD inherits it"
+  },
+  {
+   "name": "reflection.reflector",
+   "file:line": "native/Sources/NTSDProfile/NTSDProfile.swift:10",
+   "engineSites": [
+    "engine/Sources/NTSDCore/OriginalWorldContacts.swift:179",
+    "engine/Sources/NTSDCore/OriginalHitDamage.swift:44",
+    "engine/Sources/NTSDCore/OriginalHitDamage.swift:137",
+    "engine/Sources/NTSDCore/OriginalHitDamage.swift:148"
+   ],
+   "rows": [
+    "A8",
+    "A13",
+    "A14",
+    "A20"
+   ],
+   "addresses": [
+    "42e87d..42fdf2",
+    "42f70f..42fcaa",
+    "417400"
+   ],
+   "class": "LF2 2.0a code",
+   "reason": "pristine .text, identical in lf2.exe; not in any hook's bypassed range (see hooks[]); reached with and without lib.dll; as reflectable",
+   "e6": "engine default (LF2 2.0a), same value; NTSD inherits it"
+  },
+  {
+   "name": "reflection.rebinder",
+   "file:line": "native/Sources/NTSDProfile/NTSDProfile.swift:10",
+   "engineSites": [
+    "engine/Sources/NTSDCore/OriginalHitDamage.swift:153"
+   ],
+   "rows": [
+    "A15"
+   ],
+   "addresses": [
+    "42f70f..42fcaa"
+   ],
+   "class": "LF2 2.0a code",
+   "reason": "pristine .text, identical in lf2.exe; not in any hook's bypassed range (see hooks[]); reached with and without lib.dll; before the effect hook 42fcb1",
+   "e6": "engine default (LF2 2.0a), same value; NTSD inherits it"
+  },
+  {
+   "name": "reflection.heldRebinder",
+   "file:line": "native/Sources/NTSDProfile/NTSDProfile.swift:10",
+   "engineSites": [
+    "engine/Sources/NTSDCore/OriginalHitDamage.swift:157"
+   ],
+   "rows": [
+    "A16"
+   ],
+   "addresses": [
+    "42f70f..42fcaa"
+   ],
+   "class": "LF2 2.0a code",
+   "reason": "pristine .text, identical in lf2.exe; not in any hook's bypassed range (see hooks[]); reached with and without lib.dll; before the effect hook 42fcb1",
+   "e6": "engine default (LF2 2.0a), same value; NTSD inherits it"
+  },
+  {
+   "name": "armour.guardPenetrators",
+   "file:line": "native/Sources/NTSDProfile/NTSDProfile.swift:12",
+   "engineSites": [
+    "engine/Sources/NTSDCore/OriginalActorHits.swift:193",
+    "engine/Sources/NTSDCore/OriginalActorHits.swift:196"
+   ],
+   "rows": [
+    "A1",
+    "A4"
+   ],
+   "addresses": [
+    "42e100 (hit resolution, guard test)"
+   ],
+   "class": "LF2 2.0a code",
+   "reason": "pristine .text, identical in lf2.exe; not in any hook's bypassed range (see hooks[]); reached with and without lib.dll; no hook in 42e100's guard test",
+   "e6": "engine default (LF2 2.0a), same value; NTSD inherits it"
+  },
+  {
+   "name": "armour.steadyArmour",
+   "file:line": "native/Sources/NTSDProfile/NTSDProfile.swift:12",
+   "engineSites": [
+    "engine/Sources/NTSDCore/OriginalActorHits.swift:194"
+   ],
+   "rows": [
+    "A2"
+   ],
+   "addresses": [
+    "42e100"
+   ],
+   "class": "LF2 2.0a code",
+   "reason": "pristine .text, identical in lf2.exe; not in any hook's bypassed range (see hooks[]); reached with and without lib.dll",
+   "e6": "engine default (LF2 2.0a), same value; NTSD inherits it"
+  },
+  {
+   "name": "armour.openingArmour",
+   "file:line": "native/Sources/NTSDProfile/NTSDProfile.swift:12",
+   "engineSites": [
+    "engine/Sources/NTSDCore/OriginalActorHits.swift:195"
+   ],
+   "rows": [
+    "A3"
+   ],
+   "addresses": [
+    "42e100"
+   ],
+   "class": "LF2 2.0a code",
+   "reason": "pristine .text, identical in lf2.exe; not in any hook's bypassed range (see hooks[]); reached with and without lib.dll",
+   "e6": "engine default (LF2 2.0a), same value; NTSD inherits it"
+  },
+  {
+   "name": "armour.attackerArmour",
+   "file:line": "native/Sources/NTSDProfile/NTSDProfile.swift:12",
+   "engineSites": [
+    "engine/Sources/NTSDCore/OriginalActorHits.swift:196"
+   ],
+   "rows": [
+    "A4"
+   ],
+   "addresses": [
+    "42e100"
+   ],
+   "class": "LF2 2.0a code",
+   "reason": "pristine .text, identical in lf2.exe; not in any hook's bypassed range (see hooks[]); reached with and without lib.dll",
+   "e6": "engine default (LF2 2.0a), same value; NTSD inherits it"
+  },
+  {
+   "name": "armour.alwaysBlocked",
+   "file:line": "native/Sources/NTSDProfile/NTSDProfile.swift:13",
+   "engineSites": [
+    "engine/Sources/NTSDCore/OriginalActorHits.swift:198"
+   ],
+   "rows": [
+    "A5"
+   ],
+   "addresses": [
+    "42e100"
+   ],
+   "class": "LF2 2.0a code",
+   "reason": "pristine .text, identical in lf2.exe; not in any hook's bypassed range (see hooks[]); reached with and without lib.dll",
+   "e6": "engine default (LF2 2.0a), same value; NTSD inherits it"
+  },
+  {
+   "name": "armour.armourGuardSound",
+   "file:line": "native/Sources/NTSDProfile/NTSDProfile.swift:13",
+   "engineSites": [
+    "engine/Sources/NTSDCore/OriginalHitGuard.swift:10"
+   ],
+   "rows": [
+    "A6"
+   ],
+   "addresses": [
+    "42fdf2..43056e"
+   ],
+   "class": "LF2 2.0a code",
+   "reason": "pristine .text, identical in lf2.exe; not in any hook's bypassed range (see hooks[]); reached with and without lib.dll; guard path, after the effect hook's continuations (42fd1d)",
+   "e6": "engine default (LF2 2.0a), same value; NTSD inherits it"
+  },
+  {
+   "name": "interaction.holdKind101",
+   "file:line": "native/Sources/NTSDProfile/NTSDProfile.swift:15",
+   "engineSites": [
+    "engine/Sources/NTSDCore/OriginalHitSpecial.swift:14",
+    "engine/Sources/NTSDCore/OriginalHitSpecial.swift:32"
+   ],
+   "rows": [
+    "A17",
+    "A18"
+   ],
+   "addresses": [
+    "43056e..43187a (ITR kinds 7 and 2)"
+   ],
+   "class": "LF2 2.0a code",
+   "reason": "pristine .text, identical in lf2.exe; not in any hook's bypassed range (see hooks[]); reached with and without lib.dll; the 430c8c hook bypasses only the kind-8 compare and body 430c8c..430ceb; kinds 7/2 are other bodies of the same dispatch",
+   "e6": "engine default (LF2 2.0a), same value; NTSD inherits it"
+  },
+  {
+   "name": "interaction.pullImmune",
+   "file:line": "native/Sources/NTSDProfile/NTSDProfile.swift:15",
+   "engineSites": [
+    "engine/Sources/NTSDCore/OriginalHitSpecial.swift:104"
+   ],
+   "rows": [
+    "A19"
+   ],
+   "addresses": [
+    "43056e..43187a (pullingHit, kinds 10/11)"
+   ],
+   "class": "LF2 2.0a code",
+   "reason": "pristine .text, identical in lf2.exe; not in any hook's bypassed range (see hooks[]); reached with and without lib.dll; outside 430c8c..430ceb",
+   "e6": "engine default (LF2 2.0a), same value; NTSD inherits it"
+  },
+  {
+   "name": "interaction.teamBypass",
+   "file:line": "native/Sources/NTSDProfile/NTSDProfile.swift:15",
+   "engineSites": [
+    "engine/Sources/NTSDCore/OriginalWorldContacts.swift:197",
+    "engine/Sources/NTSDCore/OriginalWorldContacts.swift:215"
+   ],
+   "rows": [
+    "A21",
+    "A22"
+   ],
+   "addresses": [
+    "417400"
+   ],
+   "class": "LF2 2.0a code",
+   "reason": "pristine .text, identical in lf2.exe; not in any hook's bypassed range (see hooks[]); reached with and without lib.dll; LIB_WORLD_CONTACTS: the defender state 10/13 and source-ID 212 gates lie before the team hook 4177b9; A22 (kind 5) follows the team gate and runs on every path in the 10,661 library-enabled comparisons; exact instruction addresses not recorded",
+   "e6": "engine default (LF2 2.0a), same value; NTSD inherits it"
+  },
+  {
+   "name": "interaction.countsAsCharacter",
+   "file:line": "native/Sources/NTSDProfile/NTSDProfile.swift:16",
+   "engineSites": [
+    "engine/Sources/NTSDCore/OriginalWorldContacts.swift:227"
+   ],
+   "rows": [
+    "A23"
+   ],
+   "addresses": [
+    "417400 (mode 1, body kind >= 1000)"
+   ],
+   "class": "LF2 2.0a code",
+   "reason": "pristine .text, identical in lf2.exe; not in any hook's bypassed range (see hooks[]); reached with and without lib.dll; after both contact hooks' continuations",
+   "e6": "engine default (LF2 2.0a), same value; NTSD inherits it"
+  },
+  {
+   "name": "impact.vanishingAttacker",
+   "file:line": "native/Sources/NTSDProfile/NTSDProfile.swift:18",
+   "engineSites": [
+    "engine/Sources/NTSDCore/OriginalHitDamage.swift:90"
+   ],
+   "rows": [
+    "A9"
+   ],
+   "addresses": [
+    "42e87d..42fdf2"
+   ],
+   "class": "LF2 2.0a code",
+   "reason": "pristine .text, identical in lf2.exe; not in any hook's bypassed range (see hooks[]); reached with and without lib.dll; before 42fcb1",
+   "e6": "engine default (LF2 2.0a), same value; NTSD inherits it"
+  },
+  {
+   "name": "impact.spentAttacker",
+   "file:line": "native/Sources/NTSDProfile/NTSDProfile.swift:18",
+   "engineSites": [
+    "engine/Sources/NTSDCore/OriginalHitDamage.swift:91"
+   ],
+   "rows": [
+    "A10"
+   ],
+   "addresses": [
+    "42e87d..42fdf2"
+   ],
+   "class": "LF2 2.0a code",
+   "reason": "pristine .text, identical in lf2.exe; not in any hook's bypassed range (see hooks[]); reached with and without lib.dll; before 42fcb1",
+   "e6": "engine default (LF2 2.0a), same value; NTSD inherits it"
+  },
+  {
+   "name": "impact.heavyHeldWeapon",
+   "file:line": "native/Sources/NTSDProfile/NTSDProfile.swift:18",
+   "engineSites": [
+    "engine/Sources/NTSDCore/OriginalHitDamage.swift:121"
+   ],
+   "rows": [
+    "A11"
+   ],
+   "addresses": [
+    "42ef45 area"
+   ],
+   "class": "LF2 2.0a code",
+   "reason": "pristine .text, identical in lf2.exe; not in any hook's bypassed range (see hooks[]); reached with and without lib.dll; before 42fcb1",
+   "e6": "engine default (LF2 2.0a), same value; NTSD inherits it"
+  },
+  {
+   "name": "impact.hitConverted",
+   "file:line": "native/Sources/NTSDProfile/NTSDProfile.swift:18",
+   "engineSites": [
+    "engine/Sources/NTSDCore/OriginalHitDamage.swift:2",
+    "engine/Sources/NTSDCore/OriginalHitDamage.swift:7"
+   ],
+   "rows": [
+    "A7"
+   ],
+   "addresses": [
+    "42e87d..42fdf2 (ID-300 whole-function return)"
+   ],
+   "class": "LF2 2.0a code",
+   "reason": "pristine .text, identical in lf2.exe; not in any hook's bypassed range (see hooks[]); reached with and without lib.dll; at the damage function's entry, far from 42fcb1",
+   "e6": "engine default (LF2 2.0a), same value; NTSD inherits it"
+  },
+  {
+   "name": "items.itemRange",
+   "file:line": "native/Sources/NTSDProfile/NTSDProfile.swift:21",
+   "engineSites": [
+    "engine/Sources/NTSDCore/OriginalPostDrawCommands.swift:132",
+    "engine/Sources/NTSDCore/OriginalWorldHits.swift:50"
+   ],
+   "rows": [
+    "A39",
+    "A48"
+   ],
+   "addresses": [
+    "41eefb..41f2ac (41ef92)",
+    "4214e4..42154e (command word 1 filter, in 4214d5..421a15)"
+   ],
+   "class": "LF2 2.0a code",
+   "reason": "pristine .text, identical in lf2.exe; not in any hook's bypassed range (see hooks[]); reached with and without lib.dll; A48 lies in the range the 4214d7 hook skips only for command word 3 (DLL scan, resume 42154e/421552); for word 1 the DLL resumes at 4214e4 and this original filter runs (LIB_STAGE_COMMANDS)",
+   "e6": "engine default (LF2 2.0a), same value; NTSD inherits it"
+  },
+  {
+   "name": "items.scarceDropItems",
+   "file:line": "native/Sources/NTSDProfile/NTSDProfile.swift:21",
+   "engineSites": [
+    "engine/Sources/NTSDCore/OriginalWorldHits.swift:51"
+   ],
+   "rows": [
+    "A40"
+   ],
+   "addresses": [
+    "41eefb..41f2ac"
+   ],
+   "class": "LF2 2.0a code",
+   "reason": "pristine .text, identical in lf2.exe; not in any hook's bypassed range (see hooks[]); reached with and without lib.dll",
+   "e6": "engine default (LF2 2.0a), same value; NTSD inherits it"
+  },
+  {
+   "name": "items.scarceRequestedItem",
+   "file:line": "native/Sources/NTSDProfile/NTSDProfile.swift:21",
+   "engineSites": [
+    "engine/Sources/NTSDCore/OriginalPostDrawCommands.swift:133"
+   ],
+   "rows": [
+    "A49"
+   ],
+   "addresses": [
+    "4214e4..42154e (word 1 filter)"
+   ],
+   "class": "LF2 2.0a code",
+   "reason": "pristine .text, identical in lf2.exe; not in any hook's bypassed range (see hooks[]); reached with and without lib.dll; as A48: original code run for word 1, skipped by the DLL only for word 3",
+   "e6": "engine default (LF2 2.0a), same value; NTSD inherits it"
+  },
+  {
+   "name": "items.spawnHP200",
+   "file:line": "native/Sources/NTSDProfile/NTSDProfile.swift:21",
+   "engineSites": [
+    "engine/Sources/NTSDCore/OriginalPostDrawCommands.swift:158",
+    "engine/Sources/NTSDCore/OriginalMissionStage.swift:477",
+    "engine/Sources/NTSDCore/OriginalWorldHits.swift:95"
+   ],
+   "rows": [
+    "A41",
+    "A50",
+    "A64"
+   ],
+   "addresses": [
+    "41eefb..41f2ac",
+    "42154e..421a15 (construction, 421651)",
+    "437400"
+   ],
+   "class": "LF2 2.0a code",
+   "reason": "pristine .text, identical in lf2.exe; not in any hook's bypassed range (see hooks[]); reached with and without lib.dll; A50 is the construction tail both word 1 (original) and word 3 (DLL continuation 42154e/421552) reach",
+   "e6": "engine default (LF2 2.0a), same value; NTSD inherits it"
+  },
+  {
+   "name": "items.keptOnScreen",
+   "file:line": "native/Sources/NTSDProfile/NTSDProfile.swift:22",
+   "engineSites": [
+    "engine/Sources/NTSDCore/OriginalWorldCamera.swift:79"
+   ],
+   "rows": [
+    "A42"
+   ],
+   "addresses": [
+    "41b5d0..41bc87"
+   ],
+   "class": "LF2 2.0a code",
+   "reason": "pristine .text, identical in lf2.exe; not in any hook's bypassed range (see hooks[]); reached with and without lib.dll",
+   "e6": "engine default (LF2 2.0a), same value; NTSD inherits it"
+  },
+  {
+   "name": "items.hpDrink",
+   "file:line": "native/Sources/NTSDProfile/NTSDProfile.swift:22",
+   "engineSites": [
+    "engine/Sources/NTSDCore/OriginalWorldLinks.swift:101"
+   ],
+   "rows": [
+    "A43"
+   ],
+   "addresses": [
+    "417f80..4187a3"
+   ],
+   "class": "LF2 2.0a code",
+   "reason": "pristine .text, identical in lf2.exe; not in any hook's bypassed range (see hooks[]); reached with and without lib.dll",
+   "e6": "engine default (LF2 2.0a), same value; NTSD inherits it"
+  },
+  {
+   "name": "items.mpDrink",
+   "file:line": "native/Sources/NTSDProfile/NTSDProfile.swift:22",
+   "engineSites": [
+    "engine/Sources/NTSDCore/OriginalWorldLinks.swift:114"
+   ],
+   "rows": [
+    "A44"
+   ],
+   "addresses": [
+    "417f80..4187a3"
+   ],
+   "class": "LF2 2.0a code",
+   "reason": "pristine .text, identical in lf2.exe; not in any hook's bypassed range (see hooks[]); reached with and without lib.dll",
+   "e6": "engine default (LF2 2.0a), same value; NTSD inherits it"
+  },
+  {
+   "name": "roster.hiddenRoster",
+   "file:line": "native/Sources/NTSDProfile/NTSDProfile.swift:25",
+   "engineSites": [
+    "engine/Sources/NTSDCore/OriginalCharacterScreen.swift:131",
+    "engine/Sources/NTSDCore/OriginalTeamTournamentSetup.swift:78",
+    "engine/Sources/NTSDCore/OriginalTournamentSetup.swift:78",
+    "engine/Sources/NTSDCore/OriginalComputerSelection.swift:92"
+   ],
+   "rows": [
+    "A70",
+    "A71",
+    "A72",
+    "A73"
+   ],
+   "addresses": [
+    "42b290..42e0d2",
+    "42ba84..42cb86",
+    "433550",
+    "4356d8"
+   ],
+   "class": "LF2 2.0a code",
+   "reason": "pristine .text, identical in lf2.exe; not in any hook's bypassed range (see hooks[]); reached with and without lib.dll; 0x458428 gate; no hook in the menu code",
+   "e6": "engine default (LF2 2.0a), same value; NTSD inherits it"
+  },
+  {
+   "name": "roster.randomCandidates",
+   "file:line": "native/Sources/NTSDProfile/NTSDProfile.swift:26",
+   "engineSites": [
+    "engine/Sources/NTSDCore/OriginalTeamTournamentSetup.swift:94",
+    "engine/Sources/NTSDCore/OriginalTournamentSetup.swift:94",
+    "engine/Sources/NTSDCore/OriginalMatchContinuation.swift:35",
+    "engine/Sources/NTSDCore/OriginalWarSetup.swift:291"
+   ],
+   "rows": [
+    "A74",
+    "A75",
+    "A76",
+    "A77"
+   ],
+   "addresses": [
+    "42b660/42ca80/42d840/42dfd0",
+    "433550",
+    "4356d8",
+    "43986a..4399c3"
+   ],
+   "class": "LF2 2.0a code",
+   "reason": "pristine .text, identical in lf2.exe; not in any hook's bypassed range (see hooks[]); reached with and without lib.dll",
+   "e6": "engine default (LF2 2.0a), same value; NTSD inherits it"
+  },
+  {
+   "name": "roster.bracketFavourites",
+   "file:line": "native/Sources/NTSDProfile/NTSDProfile.swift:27",
+   "engineSites": [
+    "engine/Sources/NTSDCore/OriginalTeamTournamentBracket.swift:105",
+    "engine/Sources/NTSDCore/OriginalTournamentBracket.swift:104",
+    "engine/Sources/NTSDCore/OriginalTournamentBracket.swift:105"
+   ],
+   "rows": [
+    "A78",
+    "A79"
+   ],
+   "addresses": [
+    "433bc9..433c22",
+    "435d59..435dbc"
+   ],
+   "class": "LF2 2.0a code",
+   "reason": "pristine .text, identical in lf2.exe; not in any hook's bypassed range (see hooks[]); reached with and without lib.dll",
+   "e6": "engine default (LF2 2.0a), same value; NTSD inherits it"
+  },
+  {
+   "name": "modes.survivalStages",
+   "file:line": "native/Sources/NTSDProfile/NTSDProfile.swift:30",
+   "engineSites": [
+    "engine/Sources/NTSDCore/OriginalWorldCamera.swift:79",
+    "engine/Sources/NTSDCore/OriginalModeLabel.swift:47",
+    "engine/Sources/NTSDCore/OriginalMissionStage.swift:162",
+    "engine/Sources/NTSDCore/OriginalMissionStage.swift:179"
+   ],
+   "rows": [
+    "D2",
+    "D3",
+    "D10",
+    "D14"
+   ],
+   "addresses": [
+    "437860",
+    "41b130",
+    "41b5d0"
+   ],
+   "class": "LF2 2.0a code",
+   "reason": "pristine .text, identical in lf2.exe; not in any hook's bypassed range (see hooks[]); reached with and without lib.dll",
+   "e6": "engine default (LF2 2.0a), same value; NTSD inherits it"
+  },
+  {
+   "name": "modes.numberedStages",
+   "file:line": "native/Sources/NTSDProfile/NTSDProfile.swift:30",
+   "engineSites": [
+    "engine/Sources/NTSDCore/OriginalMatchSelection.swift:184",
+    "engine/Sources/NTSDCore/OriginalMatchPrelude.swift:71",
+    "engine/Sources/NTSDCore/OriginalMissionStage.swift:271",
+    "engine/Sources/NTSDCore/OriginalMissionStage.swift:368"
+   ],
+   "rows": [
+    "D4",
+    "D6",
+    "D9",
+    "N5"
+   ],
+   "addresses": [
+    "437860",
+    "438614..4388ac",
+    "42cf8a..42d1ff",
+    "42cb86"
+   ],
+   "class": "LF2 2.0a code",
+   "reason": "pristine .text, identical in lf2.exe; not in any hook's bypassed range (see hooks[]); reached with and without lib.dll; D9 is in the match prelude 42cf8a..42d1ff, before the preparation hooks 42d30b/42d473/42d5ce",
+   "e6": "engine default (LF2 2.0a), same value; NTSD inherits it"
+  },
+  {
+   "name": "modes.finalStageSet",
+   "file:line": "native/Sources/NTSDProfile/NTSDProfile.swift:31",
+   "engineSites": [
+    "engine/Sources/NTSDCore/OriginalMissionStage.swift:404"
+   ],
+   "rows": [
+    "D7"
+   ],
+   "addresses": [
+    "4388af..43899d"
+   ],
+   "class": "LF2 2.0a code",
+   "reason": "pristine .text, identical in lf2.exe; not in any hook's bypassed range (see hooks[]); reached with and without lib.dll",
+   "e6": "engine default (LF2 2.0a), same value; NTSD inherits it"
+  },
+  {
+   "name": "modes.stageWeightPlus1",
+   "file:line": "native/Sources/NTSDProfile/NTSDProfile.swift:31",
+   "engineSites": [
+    "engine/Sources/NTSDCore/OriginalMissionStage.swift:157"
+   ],
+   "rows": [
+    "A30"
+   ],
+   "addresses": [
+    "437860"
+   ],
+   "class": "LF2 2.0a code",
+   "reason": "pristine .text, identical in lf2.exe; not in any hook's bypassed range (see hooks[]); reached with and without lib.dll",
+   "e6": "engine default (LF2 2.0a), same value; NTSD inherits it"
+  },
+  {
+   "name": "modes.stageWeightPlus2",
+   "file:line": "native/Sources/NTSDProfile/NTSDProfile.swift:31",
+   "engineSites": [
+    "engine/Sources/NTSDCore/OriginalMissionStage.swift:158"
+   ],
+   "rows": [
+    "A30"
+   ],
+   "addresses": [
+    "437860"
+   ],
+   "class": "LF2 2.0a code",
+   "reason": "pristine .text, identical in lf2.exe; not in any hook's bypassed range (see hooks[]); reached with and without lib.dll",
+   "e6": "engine default (LF2 2.0a), same value; NTSD inherits it"
+  },
+  {
+   "name": "modes.warTroops",
+   "file:line": "native/Sources/NTSDProfile/NTSDProfile.swift:32",
+   "engineSites": [
+    "engine/Sources/NTSDCore/OriginalWarBattle.swift:107"
+   ],
+   "rows": [
+    "A65"
+   ],
+   "addresses": [
+    "43a910"
+   ],
+   "class": "LF2 2.0a code",
+   "reason": "pristine .text, identical in lf2.exe; not in any hook's bypassed range (see hooks[]); reached with and without lib.dll",
+   "e6": "engine default (LF2 2.0a), same value; NTSD inherits it"
+  },
+  {
+   "name": "modes.stageBackgrounds",
+   "file:line": "native/Sources/NTSDProfile/NTSDProfile.swift:33",
+   "engineSites": [
+    "engine/Sources/NTSDCore/OriginalMatchPrelude.swift:50"
+   ],
+   "rows": [
+    "D8"
+   ],
+   "addresses": [
+    "42cf8a..42d1ff"
+   ],
+   "class": "LF2 2.0a code",
+   "reason": "pristine .text, identical in lf2.exe; not in any hook's bypassed range (see hooks[]); reached with and without lib.dll; code (per-stage stores), before the preparation hooks",
+   "e6": "engine default (LF2 2.0a), same value; NTSD inherits it"
+  },
+  {
+   "name": "modes.killRequestSpared",
+   "file:line": "native/Sources/NTSDProfile/NTSDProfile.swift:33",
+   "engineSites": [
+    "engine/Sources/NTSDCore/OriginalPostDrawCommands.swift:192"
+   ],
+   "rows": [
+    "A51"
+   ],
+   "addresses": [
+    "4214d5..421a15 (recover loop, command word 2)"
+   ],
+   "class": "LF2 2.0a code",
+   "reason": "pristine .text, identical in lf2.exe; not in any hook's bypassed range (see hooks[]); reached with and without lib.dll; reached through the 4214d7 hook's 'other words' continuation 42179b in NTSD and through the original compare in LF2",
+   "e6": "engine default (LF2 2.0a), same value; NTSD inherits it"
+  },
+  {
+   "name": "modes.fixedDifficultyHP",
+   "file:line": "native/Sources/NTSDProfile/NTSDProfile.swift:33",
+   "engineSites": [
+    "engine/Sources/NTSDCore/OriginalMissionStage.swift:423",
+    "engine/Sources/NTSDCore/OriginalMissionStage.swift:424"
+   ],
+   "rows": [
+    "A60"
+   ],
+   "addresses": [
+    "437400"
+   ],
+   "class": "LF2 2.0a code",
+   "reason": "pristine .text, identical in lf2.exe; not in any hook's bypassed range (see hooks[]); reached with and without lib.dll",
+   "e6": "engine default (LF2 2.0a), same value; NTSD inherits it"
+  },
+  {
+   "name": "modes.heroSpawnWord",
+   "file:line": "native/Sources/NTSDProfile/NTSDProfile.swift:34",
+   "engineSites": [
+    "engine/Sources/NTSDCore/OriginalMissionStage.swift:425"
+   ],
+   "rows": [
+    "A61"
+   ],
+   "addresses": [
+    "437400"
+   ],
+   "class": "LF2 2.0a code",
+   "reason": "pristine .text, identical in lf2.exe; not in any hook's bypassed range (see hooks[]); reached with and without lib.dll; the hero table 0x44d324 itself is .data (initial.bin)",
+   "e6": "engine default (LF2 2.0a), same value; NTSD inherits it"
+  },
+  {
+   "name": "modes.troopSpawnWord",
+   "file:line": "native/Sources/NTSDProfile/NTSDProfile.swift:34",
+   "engineSites": [
+    "engine/Sources/NTSDCore/OriginalMissionStage.swift:436"
+   ],
+   "rows": [
+    "A62"
+   ],
+   "addresses": [
+    "437400"
+   ],
+   "class": "LF2 2.0a code",
+   "reason": "pristine .text, identical in lf2.exe; not in any hook's bypassed range (see hooks[]); reached with and without lib.dll",
+   "e6": "engine default (LF2 2.0a), same value; NTSD inherits it"
+  },
+  {
+   "name": "modes.troopOrBossSpawnWord",
+   "file:line": "native/Sources/NTSDProfile/NTSDProfile.swift:34",
+   "engineSites": [
+    "engine/Sources/NTSDCore/OriginalMissionStage.swift:439"
+   ],
+   "rows": [
+    "A63"
+   ],
+   "addresses": [
+    "437400"
+   ],
+   "class": "LF2 2.0a code",
+   "reason": "pristine .text, identical in lf2.exe; not in any hook's bypassed range (see hooks[]); reached with and without lib.dll",
+   "e6": "engine default (LF2 2.0a), same value; NTSD inherits it"
+  },
+  {
+   "name": "modes.spawnTroops",
+   "file:line": "native/Sources/NTSDProfile/NTSDProfile.swift:34",
+   "engineSites": [
+    "engine/Sources/NTSDCore/OriginalMissionStage.swift:437",
+    "engine/Sources/NTSDCore/OriginalMissionStage.swift:441"
+   ],
+   "rows": [
+    "A62",
+    "A63"
+   ],
+   "addresses": [
+    "437400"
+   ],
+   "class": "LF2 2.0a code",
+   "reason": "pristine .text, identical in lf2.exe; not in any hook's bypassed range (see hooks[]); reached with and without lib.dll",
+   "e6": "engine default (LF2 2.0a), same value; NTSD inherits it"
+  },
+  {
+   "name": "modes.bossTroop",
+   "file:line": "native/Sources/NTSDProfile/NTSDProfile.swift:35",
+   "engineSites": [
+    "engine/Sources/NTSDCore/OriginalMissionStage.swift:440"
+   ],
+   "rows": [
+    "A63"
+   ],
+   "addresses": [
+    "437400"
+   ],
+   "class": "LF2 2.0a code",
+   "reason": "pristine .text, identical in lf2.exe; not in any hook's bypassed range (see hooks[]); reached with and without lib.dll",
+   "e6": "engine default (LF2 2.0a), same value; NTSD inherits it"
+  },
+  {
+   "name": "modes.warUnitLife",
+   "file:line": "native/Sources/NTSDProfile/NTSDProfile.swift:36",
+   "engineSites": [
+    "engine/Sources/NTSDCore/OriginalWarBattle.swift:212"
+   ],
+   "rows": [
+    "A67"
+   ],
+   "addresses": [
+    "43abe2..43ac75"
+   ],
+   "class": "LF2 2.0a code",
+   "reason": "pristine .text, identical in lf2.exe; not in any hook's bypassed range (see hooks[]); reached with and without lib.dll; a compare chain in code (E5e-3), not the .data unit table",
+   "e6": "engine default (LF2 2.0a), same value; NTSD inherits it"
+  },
+  {
+   "name": "modes.warSideZeroMarks",
+   "file:line": "native/Sources/NTSDProfile/NTSDProfile.swift:37",
+   "engineSites": [
+    "engine/Sources/NTSDCore/OriginalWarBattle.swift:210"
+   ],
+   "rows": [
+    "A67"
+   ],
+   "addresses": [
+    "43abe2..43ac75"
+   ],
+   "class": "LF2 2.0a code",
+   "reason": "pristine .text, identical in lf2.exe; not in any hook's bypassed range (see hooks[]); reached with and without lib.dll",
+   "e6": "engine default (LF2 2.0a), same value; NTSD inherits it"
+  },
+  {
+   "name": "physics.extraDrift",
+   "file:line": "native/Sources/NTSDProfile/NTSDProfile.swift:39",
+   "engineSites": [
+    "engine/Sources/NTSDCore/OriginalActorPhysics.swift:76"
+   ],
+   "rows": [
+    "A33"
+   ],
+   "addresses": [
+    "40e490..40ef6a"
+   ],
+   "class": "LF2 2.0a code",
+   "reason": "pristine .text, identical in lf2.exe; not in any hook's bypassed range (see hooks[]); reached with and without lib.dll",
+   "e6": "engine default (LF2 2.0a), same value; NTSD inherits it"
+  },
+  {
+   "name": "physics.reverseDrift",
+   "file:line": "native/Sources/NTSDProfile/NTSDProfile.swift:39",
+   "engineSites": [
+    "engine/Sources/NTSDCore/OriginalActorPhysics.swift:77"
+   ],
+   "rows": [
+    "A34"
+   ],
+   "addresses": [
+    "40e490..40ef6a"
+   ],
+   "class": "LF2 2.0a code",
+   "reason": "pristine .text, identical in lf2.exe; not in any hook's bypassed range (see hooks[]); reached with and without lib.dll",
+   "e6": "engine default (LF2 2.0a), same value; NTSD inherits it"
+  },
+  {
+   "name": "physics.lowGravityThrow",
+   "file:line": "native/Sources/NTSDProfile/NTSDProfile.swift:39",
+   "engineSites": [
+    "engine/Sources/NTSDCore/OriginalActorPhysics.swift:93"
+   ],
+   "rows": [
+    "A35"
+   ],
+   "addresses": [
+    "40e490..40ef6a (state 1002)"
+   ],
+   "class": "LF2 2.0a code",
+   "reason": "pristine .text, identical in lf2.exe; not in any hook's bypassed range (see hooks[]); reached with and without lib.dll",
+   "e6": "engine default (LF2 2.0a), same value; NTSD inherits it"
+  },
+  {
+   "name": "physics.midGravityThrow",
+   "file:line": "native/Sources/NTSDProfile/NTSDProfile.swift:39",
+   "engineSites": [
+    "engine/Sources/NTSDCore/OriginalActorPhysics.swift:93"
+   ],
+   "rows": [
+    "A35"
+   ],
+   "addresses": [
+    "40e490..40ef6a"
+   ],
+   "class": "LF2 2.0a code",
+   "reason": "pristine .text, identical in lf2.exe; not in any hook's bypassed range (see hooks[]); reached with and without lib.dll",
+   "e6": "engine default (LF2 2.0a), same value; NTSD inherits it"
+  },
+  {
+   "name": "physics.highGravityThrow",
+   "file:line": "native/Sources/NTSDProfile/NTSDProfile.swift:39",
+   "engineSites": [
+    "engine/Sources/NTSDCore/OriginalActorPhysics.swift:94"
+   ],
+   "rows": [
+    "A35"
+   ],
+   "addresses": [
+    "40e490..40ef6a"
+   ],
+   "class": "LF2 2.0a code",
+   "reason": "pristine .text, identical in lf2.exe; not in any hook's bypassed range (see hooks[]); reached with and without lib.dll",
+   "e6": "engine default (LF2 2.0a), same value; NTSD inherits it"
+  },
+  {
+   "name": "physics.restingPiece",
+   "file:line": "native/Sources/NTSDProfile/NTSDProfile.swift:40",
+   "engineSites": [
+    "engine/Sources/NTSDCore/OriginalActorPhysics.swift:165"
+   ],
+   "rows": [
+    "A36"
+   ],
+   "addresses": [
+    "40e490..40ef6a"
+   ],
+   "class": "LF2 2.0a code",
+   "reason": "pristine .text, identical in lf2.exe; not in any hook's bypassed range (see hooks[]); reached with and without lib.dll",
+   "e6": "engine default (LF2 2.0a), same value; NTSD inherits it"
+  },
+  {
+   "name": "physics.revivalPicture",
+   "file:line": "native/Sources/NTSDProfile/NTSDProfile.swift:40",
+   "engineSites": [
+    "engine/Sources/NTSDCore/OriginalWorldPhysics.swift:90"
+   ],
+   "rows": [
+    "A37"
+   ],
+   "addresses": [
+    "41e634..41eed1"
+   ],
+   "class": "LF2 2.0a code",
+   "reason": "pristine .text, identical in lf2.exe; not in any hook's bypassed range (see hooks[]); reached with and without lib.dll",
+   "e6": "engine default (LF2 2.0a), same value; NTSD inherits it"
+  },
+  {
+   "name": "physics.revivalEffect",
+   "file:line": "native/Sources/NTSDProfile/NTSDProfile.swift:40",
+   "engineSites": [
+    "engine/Sources/NTSDCore/OriginalWorldPhysics.swift:93"
+   ],
+   "rows": [
+    "A38"
+   ],
+   "addresses": [
+    "41e929"
+   ],
+   "class": "LF2 2.0a code",
+   "reason": "pristine .text, identical in lf2.exe; not in any hook's bypassed range (see hooks[]); reached with and without lib.dll",
+   "e6": "engine default (LF2 2.0a), same value; NTSD inherits it"
+  },
+  {
+   "name": "drawing.shadowless",
+   "file:line": "native/Sources/NTSDProfile/NTSDProfile.swift:42",
+   "engineSites": [
+    "engine/Sources/NTSDCore/OriginalWorldDrawing.swift:100"
+   ],
+   "rows": [
+    "A45"
+   ],
+   "addresses": [
+    "41a5a0..41ae50"
+   ],
+   "class": "LF2 2.0a code",
+   "reason": "pristine .text, identical in lf2.exe; not in any hook's bypassed range (see hooks[]); reached with and without lib.dll",
+   "e6": "engine default (LF2 2.0a), same value; NTSD inherits it"
+  },
+  {
+   "name": "drawing.unlabelledComputers",
+   "file:line": "native/Sources/NTSDProfile/NTSDProfile.swift:43",
+   "engineSites": [
+    "engine/Sources/NTSDCore/OriginalWorldDrawing.swift:135"
+   ],
+   "rows": [
+    "A46"
+   ],
+   "addresses": [
+    "41a5a0..41ae50"
+   ],
+   "class": "LF2 2.0a code",
+   "reason": "pristine .text, identical in lf2.exe; not in any hook's bypassed range (see hooks[]); reached with and without lib.dll",
+   "e6": "engine default (LF2 2.0a), same value; NTSD inherits it"
+  },
+  {
+   "name": "effects.fixedDepthChildren",
+   "file:line": "native/Sources/NTSDProfile/NTSDProfile.swift:45",
+   "engineSites": [
+    "engine/Sources/NTSDCore/OriginalPostDrawOpoint.swift:165"
+   ],
+   "rows": [
+    "A55"
+   ],
+   "addresses": [
+    "41fb0b..4203b4"
+   ],
+   "class": "LF2 2.0a code",
+   "reason": "pristine .text, identical in lf2.exe; not in any hook's bypassed range (see hooks[]); reached with and without lib.dll",
+   "e6": "engine default (LF2 2.0a), same value; NTSD inherits it"
+  },
+  {
+   "name": "effects.quarterDepthChild",
+   "file:line": "native/Sources/NTSDProfile/NTSDProfile.swift:45",
+   "engineSites": [
+    "engine/Sources/NTSDCore/OriginalPostDrawOpoint.swift:168"
+   ],
+   "rows": [
+    "A56"
+   ],
+   "addresses": [
+    "41fb0b..4203b4"
+   ],
+   "class": "LF2 2.0a code",
+   "reason": "pristine .text, identical in lf2.exe; not in any hook's bypassed range (see hooks[]); reached with and without lib.dll",
+   "e6": "engine default (LF2 2.0a), same value; NTSD inherits it"
+  },
+  {
+   "name": "effects.weakChildren",
+   "file:line": "native/Sources/NTSDProfile/NTSDProfile.swift:45",
+   "engineSites": [
+    "engine/Sources/NTSDCore/OriginalPostDrawOpoint.swift:196"
+   ],
+   "rows": [
+    "A57"
+   ],
+   "addresses": [
+    "41fb0b..4203b4"
+   ],
+   "class": "LF2 2.0a code",
+   "reason": "pristine .text, identical in lf2.exe; not in any hook's bypassed range (see hooks[]); reached with and without lib.dll",
+   "e6": "engine default (LF2 2.0a), same value; NTSD inherits it"
+  },
+  {
+   "name": "effects.commandEffect",
+   "file:line": "native/Sources/NTSDProfile/NTSDProfile.swift:46",
+   "engineSites": [
+    "engine/Sources/NTSDCore/OriginalPostDrawLifecycle.swift:254"
+   ],
+   "rows": [
+    "N2"
+   ],
+   "addresses": [
+    "420c7b/420c97"
+   ],
+   "class": "LF2 2.0a code",
+   "reason": "pristine .text, identical in lf2.exe; not in any hook's bypassed range (see hooks[]); reached with and without lib.dll",
+   "e6": "engine default (LF2 2.0a), same value; NTSD inherits it"
+  },
+  {
+   "name": "effects.deathParticles",
+   "file:line": "native/Sources/NTSDProfile/NTSDProfile.swift:46",
+   "engineSites": [
+    "engine/Sources/NTSDCore/OriginalPostDrawLifecycle.swift:282"
+   ],
+   "rows": [
+    "N3"
+   ],
+   "addresses": [
+    "420f89 area (41f550..4214d5)"
+   ],
+   "class": "LF2 2.0a code",
+   "reason": "pristine .text, identical in lf2.exe; not in any hook's bypassed range (see hooks[]); reached with and without lib.dll",
+   "e6": "engine default (LF2 2.0a), same value; NTSD inherits it"
+  },
+  {
+   "name": "effects.fireParticles",
+   "file:line": "native/Sources/NTSDProfile/NTSDProfile.swift:46",
+   "engineSites": [
+    "engine/Sources/NTSDCore/OriginalPostDrawLifecycle.swift:306"
+   ],
+   "rows": [
+    "N4"
+   ],
+   "addresses": [
+    "4211f6/421212"
+   ],
+   "class": "LF2 2.0a code",
+   "reason": "pristine .text, identical in lf2.exe; not in any hook's bypassed range (see hooks[]); reached with and without lib.dll",
+   "e6": "engine default (LF2 2.0a), same value; NTSD inherits it"
+  },
+  {
+   "name": "effects.burstChild",
+   "file:line": "native/Sources/NTSDProfile/NTSDProfile.swift:46",
+   "engineSites": [
+    "engine/Sources/NTSDCore/OriginalObjectInput.swift:142"
+   ],
+   "rows": [
+    "A58"
+   ],
+   "addresses": [
+    "407232..40768e (hit_Fa 8)"
+   ],
+   "class": "LF2 2.0a code",
+   "reason": "pristine .text, identical in lf2.exe; not in any hook's bypassed range (see hooks[]); reached with and without lib.dll",
+   "e6": "engine default (LF2 2.0a), same value; NTSD inherits it"
+  },
+  {
+   "name": "effects.escortChild",
+   "file:line": "native/Sources/NTSDProfile/NTSDProfile.swift:46",
+   "engineSites": [
+    "engine/Sources/NTSDCore/OriginalObjectInput.swift:160"
+   ],
+   "rows": [
+    "A59"
+   ],
+   "addresses": [
+    "407ad5..407d3b (hit_Fa 5)"
+   ],
+   "class": "LF2 2.0a code",
+   "reason": "pristine .text, identical in lf2.exe; not in any hook's bypassed range (see hooks[]); reached with and without lib.dll",
+   "e6": "engine default (LF2 2.0a), same value; NTSD inherits it"
+  },
+  {
+   "name": "lifecycle.halfHPRegen",
+   "file:line": "native/Sources/NTSDProfile/NTSDProfile.swift:48",
+   "engineSites": [
+    "engine/Sources/NTSDCore/OriginalPostDrawSlotPrefix.swift:210"
+   ],
+   "rows": [
+    "A29"
+   ],
+   "addresses": [
+    "41f550..41fb0b (resources, after 41f675)"
+   ],
+   "class": "LF2 2.0a code",
+   "reason": "pristine .text, identical in lf2.exe; not in any hook's bypassed range (see hooks[]); reached with and without lib.dll; after the transform hook's continuations 41f60a/41f675",
+   "e6": "engine default (LF2 2.0a), same value; NTSD inherits it"
+  },
+  {
+   "name": "lifecycle.state9995Object",
+   "file:line": "native/Sources/NTSDProfile/NTSDProfile.swift:48",
+   "engineSites": [
+    "engine/Sources/NTSDCore/OriginalPostDrawSlotPrefix.swift:220"
+   ],
+   "rows": [
+    "A31"
+   ],
+   "addresses": [
+    "41f550..41f5fc"
+   ],
+   "class": "LF2 2.0a code",
+   "reason": "pristine .text, identical in lf2.exe; not in any hook's bypassed range (see hooks[]); reached with and without lib.dll; precedes the transform hook 41f5fc (engine order: 9995 test, then the 8000/4000 ranges)",
+   "e6": "engine default (LF2 2.0a), same value; NTSD inherits it"
+  },
+  {
+   "name": "lifecycle.pieces",
+   "file:line": "native/Sources/NTSDProfile/NTSDProfile.swift:48",
+   "engineSites": [
+    "engine/Sources/NTSDCore/OriginalPostDrawSlotPrefix.swift:156"
+   ],
+   "rows": [
+    "N1"
+   ],
+   "addresses": [
+    "41f734"
+   ],
+   "class": "LF2 2.0a code",
+   "reason": "pristine .text, identical in lf2.exe; not in any hook's bypassed range (see hooks[]); reached with and without lib.dll; after the transform hook's continuation 41f675",
+   "e6": "engine default (LF2 2.0a), same value; NTSD inherits it"
+  },
+  {
+   "name": "lifecycle.lastPiece",
+   "file:line": "native/Sources/NTSDProfile/NTSDProfile.swift:48",
+   "engineSites": [
+    "engine/Sources/NTSDCore/OriginalPostDrawSlotPrefix.swift:156"
+   ],
+   "rows": [
+    "N1"
+   ],
+   "addresses": [
+    "41f734"
+   ],
+   "class": "LF2 2.0a code",
+   "reason": "pristine .text, identical in lf2.exe; not in any hook's bypassed range (see hooks[]); reached with and without lib.dll; after 41f675",
+   "e6": "engine default (LF2 2.0a), same value; NTSD inherits it"
+  },
+  {
+   "name": "lifecycle.noRiseInvulnerability",
+   "file:line": "native/Sources/NTSDProfile/NTSDProfile.swift:49",
+   "engineSites": [
+    "engine/Sources/NTSDCore/OriginalActorScheduler.swift:151"
+   ],
+   "rows": [
+    "A47"
+   ],
+   "addresses": [
+    "40d960..40de20"
+   ],
+   "class": "LF2 2.0a code",
+   "reason": "pristine .text, identical in lf2.exe; not in any hook's bypassed range (see hooks[]); reached with and without lib.dll",
+   "e6": "engine default (LF2 2.0a), same value; NTSD inherits it"
+  },
+  {
+   "name": "lifecycle.roundRevertFrom",
+   "file:line": "native/Sources/NTSDProfile/NTSDProfile.swift:49",
+   "engineSites": [
+    "engine/Sources/NTSDCore/OriginalMatchRound.swift:176"
+   ],
+   "rows": [
+    "A32"
+   ],
+   "addresses": [
+    "41ddf2..41e0e1"
+   ],
+   "class": "LF2 2.0a code",
+   "reason": "pristine .text, identical in lf2.exe; not in any hook's bypassed range (see hooks[]); reached with and without lib.dll",
+   "e6": "engine default (LF2 2.0a), same value; NTSD inherits it"
+  },
+  {
+   "name": "lifecycle.roundRevertTo",
+   "file:line": "native/Sources/NTSDProfile/NTSDProfile.swift:49",
+   "engineSites": [
+    "engine/Sources/NTSDCore/OriginalMatchRound.swift:177"
+   ],
+   "rows": [
+    "A32"
+   ],
+   "addresses": [
+    "41ddf2..41e0e1"
+   ],
+   "class": "LF2 2.0a code",
+   "reason": "pristine .text, identical in lf2.exe; not in any hook's bypassed range (see hooks[]); reached with and without lib.dll",
+   "e6": "engine default (LF2 2.0a), same value; NTSD inherits it"
+  },
+  {
+   "name": "lifecycle.guardedTransformer",
+   "file:line": "native/Sources/NTSDProfile/NTSDProfile.swift:50",
+   "engineSites": [
+    "engine/Sources/NTSDCore/OriginalActorInput.swift:139"
+   ],
+   "rows": [
+    "A28"
+   ],
+   "addresses": [
+    "412fdd..41300f"
+   ],
+   "class": "LF2 2.0a code",
+   "reason": "pristine .text, identical in lf2.exe; not in any hook's bypassed range (see hooks[]); reached with and without lib.dll; input recognition, not the 41408b actor-control hook",
+   "e6": "engine default (LF2 2.0a), same value; NTSD inherits it"
+  },
+  {
+   "name": "fusion.fusers",
+   "file:line": "native/Sources/NTSDProfile/NTSDProfile.swift:52",
+   "engineSites": [
+    "engine/Sources/NTSDCore/OriginalWorldFusion.swift:10"
+   ],
+   "rows": [
+    "A24"
+   ],
+   "addresses": [
+    "4064d0..406a1f"
+   ],
+   "class": "LF2 2.0a code",
+   "reason": "pristine .text, identical in lf2.exe; not in any hook's bypassed range (see hooks[]); reached with and without lib.dll",
+   "e6": "engine default (LF2 2.0a), same value; NTSD inherits it"
+  },
+  {
+   "name": "fusion.fusionPartnerSum",
+   "file:line": "native/Sources/NTSDProfile/NTSDProfile.swift:52",
+   "engineSites": [
+    "engine/Sources/NTSDCore/OriginalWorldFusion.swift:14"
+   ],
+   "rows": [
+    "A24"
+   ],
+   "addresses": [
+    "4064d0..406a1f"
+   ],
+   "class": "LF2 2.0a code",
+   "reason": "pristine .text, identical in lf2.exe; not in any hook's bypassed range (see hooks[]); reached with and without lib.dll",
+   "e6": "engine default (LF2 2.0a), same value; NTSD inherits it"
+  },
+  {
+   "name": "fusion.fusedForm",
+   "file:line": "native/Sources/NTSDProfile/NTSDProfile.swift:52",
+   "engineSites": [
+    "engine/Sources/NTSDCore/OriginalWorldFusion.swift:26",
+    "engine/Sources/NTSDCore/OriginalWorldFusion.swift:40"
+   ],
+   "rows": [
+    "A25",
+    "A26"
+   ],
+   "addresses": [
+    "4064d0..406a1f"
+   ],
+   "class": "LF2 2.0a code",
+   "reason": "pristine .text, identical in lf2.exe; not in any hook's bypassed range (see hooks[]); reached with and without lib.dll",
+   "e6": "engine default (LF2 2.0a), same value; NTSD inherits it"
+  },
+  {
+   "name": "weaponBreak.fragments",
+   "file:line": "native/Sources/NTSDProfile/NTSDProfile.swift:54",
+   "engineSites": [
+    "engine/Sources/NTSDCore/OriginalPostDrawLifecycle.swift:197"
+   ],
+   "rows": [
+    "A52"
+   ],
+   "addresses": [
+    "41f550..4214d5 (break block, 420537)"
+   ],
+   "class": "LF2 2.0a code",
+   "reason": "pristine .text, identical in lf2.exe; not in any hook's bypassed range (see hooks[]); reached with and without lib.dll; code in the lifecycle's weapon branch; no hook in 41f550..4214d5 besides 41f5fc..41f60a",
+   "e6": "engine default (LF2 2.0a), same value; NTSD inherits it"
+  },
+  {
+   "name": "weaponBreak.fragmentObject",
+   "file:line": "native/Sources/NTSDProfile/NTSDProfile.swift:56",
+   "engineSites": [
+    "engine/Sources/NTSDCore/OriginalPostDrawLifecycle.swift:202"
+   ],
+   "rows": [
+    "A53"
+   ],
+   "addresses": [
+    "41f550..4214d5 (break block, 420537)"
+   ],
+   "class": "LF2 2.0a code",
+   "reason": "pristine .text, identical in lf2.exe; not in any hook's bypassed range (see hooks[]); reached with and without lib.dll; code in the lifecycle's weapon branch; no hook in 41f550..4214d5 besides 41f5fc..41f60a",
+   "e6": "engine default (LF2 2.0a), same value; NTSD inherits it"
+  },
+  {
+   "name": "weaponBreak.highToss",
+   "file:line": "native/Sources/NTSDProfile/NTSDProfile.swift:56",
+   "engineSites": [
+    "engine/Sources/NTSDCore/OriginalPostDrawLifecycle.swift:212"
+   ],
+   "rows": [
+    "A54"
+   ],
+   "addresses": [
+    "41f550..4214d5 (break block, 420537)"
+   ],
+   "class": "LF2 2.0a code",
+   "reason": "pristine .text, identical in lf2.exe; not in any hook's bypassed range (see hooks[]); reached with and without lib.dll; code in the lifecycle's weapon branch; no hook in 41f550..4214d5 besides 41f5fc..41f60a",
+   "e6": "engine default (LF2 2.0a), same value; NTSD inherits it"
+  },
+  {
+   "name": "weaponBreak.lowToss",
+   "file:line": "native/Sources/NTSDProfile/NTSDProfile.swift:57",
+   "engineSites": [
+    "engine/Sources/NTSDCore/OriginalPostDrawLifecycle.swift:213"
+   ],
+   "rows": [
+    "A54"
+   ],
+   "addresses": [
+    "41f550..4214d5 (break block, 420537)"
+   ],
+   "class": "LF2 2.0a code",
+   "reason": "pristine .text, identical in lf2.exe; not in any hook's bypassed range (see hooks[]); reached with and without lib.dll; code in the lifecycle's weapon branch; no hook in 41f550..4214d5 besides 41f5fc..41f60a",
+   "e6": "engine default (LF2 2.0a), same value; NTSD inherits it"
+  },
+  {
+   "name": "weaponBreak.frames0",
+   "file:line": "native/Sources/NTSDProfile/NTSDProfile.swift:58",
+   "engineSites": [
+    "engine/Sources/NTSDCore/OriginalPostDrawLifecycle.swift:215"
+   ],
+   "rows": [
+    "A54"
+   ],
+   "addresses": [
+    "41f550..4214d5 (break block, 420537)"
+   ],
+   "class": "LF2 2.0a code",
+   "reason": "pristine .text, identical in lf2.exe; not in any hook's bypassed range (see hooks[]); reached with and without lib.dll; code in the lifecycle's weapon branch; no hook in 41f550..4214d5 besides 41f5fc..41f60a",
+   "e6": "engine default (LF2 2.0a), same value; NTSD inherits it"
+  },
+  {
+   "name": "weaponBreak.frames10",
+   "file:line": "native/Sources/NTSDProfile/NTSDProfile.swift:58",
+   "engineSites": [
+    "engine/Sources/NTSDCore/OriginalPostDrawLifecycle.swift:216"
+   ],
+   "rows": [
+    "A54"
+   ],
+   "addresses": [
+    "41f550..4214d5 (break block, 420537)"
+   ],
+   "class": "LF2 2.0a code",
+   "reason": "pristine .text, identical in lf2.exe; not in any hook's bypassed range (see hooks[]); reached with and without lib.dll; code in the lifecycle's weapon branch; no hook in 41f550..4214d5 besides 41f5fc..41f60a",
+   "e6": "engine default (LF2 2.0a), same value; NTSD inherits it"
+  },
+  {
+   "name": "weaponBreak.frames150",
+   "file:line": "native/Sources/NTSDProfile/NTSDProfile.swift:58",
+   "engineSites": [
+    "engine/Sources/NTSDCore/OriginalPostDrawLifecycle.swift:217"
+   ],
+   "rows": [
+    "A54"
+   ],
+   "addresses": [
+    "41f550..4214d5 (break block, 420537)"
+   ],
+   "class": "LF2 2.0a code",
+   "reason": "pristine .text, identical in lf2.exe; not in any hook's bypassed range (see hooks[]); reached with and without lib.dll; code in the lifecycle's weapon branch; no hook in 41f550..4214d5 besides 41f5fc..41f60a",
+   "e6": "engine default (LF2 2.0a), same value; NTSD inherits it"
+  },
+  {
+   "name": "weaponBreak.frames20",
+   "file:line": "native/Sources/NTSDProfile/NTSDProfile.swift:58",
+   "engineSites": [
+    "engine/Sources/NTSDCore/OriginalPostDrawLifecycle.swift:218"
+   ],
+   "rows": [
+    "A54"
+   ],
+   "addresses": [
+    "41f550..4214d5 (break block, 420537)"
+   ],
+   "class": "LF2 2.0a code",
+   "reason": "pristine .text, identical in lf2.exe; not in any hook's bypassed range (see hooks[]); reached with and without lib.dll; code in the lifecycle's weapon branch; no hook in 41f550..4214d5 besides 41f5fc..41f60a",
+   "e6": "engine default (LF2 2.0a), same value; NTSD inherits it"
+  },
+  {
+   "name": "weaponBreak.frames40",
+   "file:line": "native/Sources/NTSDProfile/NTSDProfile.swift:58",
+   "engineSites": [
+    "engine/Sources/NTSDCore/OriginalPostDrawLifecycle.swift:222"
+   ],
+   "rows": [
+    "A54"
+   ],
+   "addresses": [
+    "41f550..4214d5 (break block, 420537)"
+   ],
+   "class": "LF2 2.0a code",
+   "reason": "pristine .text, identical in lf2.exe; not in any hook's bypassed range (see hooks[]); reached with and without lib.dll; code in the lifecycle's weapon branch; no hook in 41f550..4214d5 besides 41f5fc..41f60a",
+   "e6": "engine default (LF2 2.0a), same value; NTSD inherits it"
+  },
+  {
+   "name": "weaponBreak.frames54",
+   "file:line": "native/Sources/NTSDProfile/NTSDProfile.swift:58",
+   "engineSites": [
+    "engine/Sources/NTSDCore/OriginalPostDrawLifecycle.swift:226"
+   ],
+   "rows": [
+    "A54"
+   ],
+   "addresses": [
+    "41f550..4214d5 (break block, 420537)"
+   ],
+   "class": "LF2 2.0a code",
+   "reason": "pristine .text, identical in lf2.exe; not in any hook's bypassed range (see hooks[]); reached with and without lib.dll; code in the lifecycle's weapon branch; no hook in 41f550..4214d5 besides 41f5fc..41f60a",
+   "e6": "engine default (LF2 2.0a), same value; NTSD inherits it"
+  },
+  {
+   "name": "weaponBreak.frame170",
+   "file:line": "native/Sources/NTSDProfile/NTSDProfile.swift:58",
+   "engineSites": [
+    "engine/Sources/NTSDCore/OriginalPostDrawLifecycle.swift:230"
+   ],
+   "rows": [
+    "A54"
+   ],
+   "addresses": [
+    "41f550..4214d5 (break block, 420537)"
+   ],
+   "class": "LF2 2.0a code",
+   "reason": "pristine .text, identical in lf2.exe; not in any hook's bypassed range (see hooks[]); reached with and without lib.dll; code in the lifecycle's weapon branch; no hook in 41f550..4214d5 besides 41f5fc..41f60a",
+   "e6": "engine default (LF2 2.0a), same value; NTSD inherits it"
+  },
+  {
+   "name": "weaponBreak.frame60",
+   "file:line": "native/Sources/NTSDProfile/NTSDProfile.swift:59",
+   "engineSites": [
+    "engine/Sources/NTSDCore/OriginalPostDrawLifecycle.swift:231"
+   ],
+   "rows": [
+    "A54"
+   ],
+   "addresses": [
+    "41f550..4214d5 (break block, 420537)"
+   ],
+   "class": "LF2 2.0a code",
+   "reason": "pristine .text, identical in lf2.exe; not in any hook's bypassed range (see hooks[]); reached with and without lib.dll; code in the lifecycle's weapon branch; no hook in 41f550..4214d5 besides 41f5fc..41f60a",
+   "e6": "engine default (LF2 2.0a), same value; NTSD inherits it"
+  },
+  {
+   "name": "weaponBreak.frames70",
+   "file:line": "native/Sources/NTSDProfile/NTSDProfile.swift:59",
+   "engineSites": [
+    "engine/Sources/NTSDCore/OriginalPostDrawLifecycle.swift:232"
+   ],
+   "rows": [
+    "A54"
+   ],
+   "addresses": [
+    "41f550..4214d5 (break block, 420537)"
+   ],
+   "class": "LF2 2.0a code",
+   "reason": "pristine .text, identical in lf2.exe; not in any hook's bypassed range (see hooks[]); reached with and without lib.dll; code in the lifecycle's weapon branch; no hook in 41f550..4214d5 besides 41f5fc..41f60a",
+   "e6": "engine default (LF2 2.0a), same value; NTSD inherits it"
+  },
+  {
+   "name": "weaponBreak.frames160",
+   "file:line": "native/Sources/NTSDProfile/NTSDProfile.swift:59",
+   "engineSites": [
+    "engine/Sources/NTSDCore/OriginalPostDrawLifecycle.swift:237"
+   ],
+   "rows": [
+    "A54"
+   ],
+   "addresses": [
+    "41f550..4214d5 (break block, 420537)"
+   ],
+   "class": "LF2 2.0a code",
+   "reason": "pristine .text, identical in lf2.exe; not in any hook's bypassed range (see hooks[]); reached with and without lib.dll; code in the lifecycle's weapon branch; no hook in 41f550..4214d5 besides 41f5fc..41f60a",
+   "e6": "engine default (LF2 2.0a), same value; NTSD inherits it"
+  },
+  {
+   "name": "weaponBreak.frame174",
+   "file:line": "native/Sources/NTSDProfile/NTSDProfile.swift:59",
+   "engineSites": [
+    "engine/Sources/NTSDCore/OriginalPostDrawLifecycle.swift:242"
+   ],
+   "rows": [
+    "A54"
+   ],
+   "addresses": [
+    "41f550..4214d5 (break block, 420537)"
+   ],
+   "class": "LF2 2.0a code",
+   "reason": "pristine .text, identical in lf2.exe; not in any hook's bypassed range (see hooks[]); reached with and without lib.dll; code in the lifecycle's weapon branch; no hook in 41f550..4214d5 besides 41f5fc..41f60a",
+   "e6": "engine default (LF2 2.0a), same value; NTSD inherits it"
+  },
+  {
+   "name": "characterAI.stageAllyBound",
+   "file:line": "native/Sources/NTSDProfile/NTSDProfile.swift:84",
+   "engineSites": [
+    "engine/Sources/NTSDCore/OriginalCharacterAI.swift:189"
+   ],
+   "rows": [
+    "A80"
+   ],
+   "addresses": [
+    "409928..409ff0"
+   ],
+   "class": "LF2 2.0a code",
+   "reason": "pristine .text, identical in lf2.exe; not in any hook's bypassed range (see hooks[]); reached with and without lib.dll; generic AI 4094b0 and helpers; no hook in 4034f0..40bba3",
+   "e6": "engine default (LF2 2.0a), same value; NTSD inherits it"
+  },
+  {
+   "name": "characterAI.healBall",
+   "file:line": "native/Sources/NTSDProfile/NTSDProfile.swift:84",
+   "engineSites": [
+    "engine/Sources/NTSDCore/OriginalCharacterAI.swift:277",
+    "engine/Sources/NTSDCore/OriginalCharacterAI.swift:322",
+    "engine/Sources/NTSDCore/OriginalCharacterAI.swift:391"
+   ],
+   "rows": [
+    "A81",
+    "A84",
+    "A88"
+   ],
+   "addresses": [
+    "40a43b..40a90a",
+    "40a925..40b7b0"
+   ],
+   "class": "LF2 2.0a code",
+   "reason": "pristine .text, identical in lf2.exe; not in any hook's bypassed range (see hooks[]); reached with and without lib.dll; generic AI 4094b0 and helpers; no hook in 4034f0..40bba3",
+   "e6": "engine default (LF2 2.0a), same value; NTSD inherits it"
+  },
+  {
+   "name": "characterAI.healers",
+   "file:line": "native/Sources/NTSDProfile/NTSDProfile.swift:84",
+   "engineSites": [
+    "engine/Sources/NTSDCore/OriginalCharacterAI.swift:281",
+    "engine/Sources/NTSDCore/OriginalCharacterAI.swift:602"
+   ],
+   "rows": [
+    "A81",
+    "A95"
+   ],
+   "addresses": [
+    "40a43b..40a90a",
+    "408cb0"
+   ],
+   "class": "LF2 2.0a code",
+   "reason": "pristine .text, identical in lf2.exe; not in any hook's bypassed range (see hooks[]); reached with and without lib.dll; generic AI 4094b0 and helpers; no hook in 4034f0..40bba3",
+   "e6": "engine default (LF2 2.0a), same value; NTSD inherits it"
+  },
+  {
+   "name": "characterAI.stateDanger",
+   "file:line": "native/Sources/NTSDProfile/NTSDProfile.swift:84",
+   "engineSites": [
+    "engine/Sources/NTSDCore/OriginalCharacterAI.swift:303"
+   ],
+   "rows": [
+    "A82"
+   ],
+   "addresses": [
+    "40a43b..40a90a"
+   ],
+   "class": "LF2 2.0a code",
+   "reason": "pristine .text, identical in lf2.exe; not in any hook's bypassed range (see hooks[]); reached with and without lib.dll; generic AI 4094b0 and helpers; no hook in 4034f0..40bba3",
+   "e6": "engine default (LF2 2.0a), same value; NTSD inherits it"
+  },
+  {
+   "name": "characterAI.frameDanger",
+   "file:line": "native/Sources/NTSDProfile/NTSDProfile.swift:84",
+   "engineSites": [
+    "engine/Sources/NTSDCore/OriginalCharacterAI.swift:303"
+   ],
+   "rows": [
+    "A82"
+   ],
+   "addresses": [
+    "40a43b..40a90a"
+   ],
+   "class": "LF2 2.0a code",
+   "reason": "pristine .text, identical in lf2.exe; not in any hook's bypassed range (see hooks[]); reached with and without lib.dll; generic AI 4094b0 and helpers; no hook in 4034f0..40bba3",
+   "e6": "engine default (LF2 2.0a), same value; NTSD inherits it"
+  },
+  {
+   "name": "characterAI.pickupItems",
+   "file:line": "native/Sources/NTSDProfile/NTSDProfile.swift:85",
+   "engineSites": [
+    "engine/Sources/NTSDCore/OriginalCharacterAI.swift:316"
+   ],
+   "rows": [
+    "A83"
+   ],
+   "addresses": [
+    "40a43b..40a90a"
+   ],
+   "class": "LF2 2.0a code",
+   "reason": "pristine .text, identical in lf2.exe; not in any hook's bypassed range (see hooks[]); reached with and without lib.dll; generic AI 4094b0 and helpers; no hook in 4034f0..40bba3",
+   "e6": "engine default (LF2 2.0a), same value; NTSD inherits it"
+  },
+  {
+   "name": "characterAI.pickupExtra",
+   "file:line": "native/Sources/NTSDProfile/NTSDProfile.swift:85",
+   "engineSites": [
+    "engine/Sources/NTSDCore/OriginalCharacterAI.swift:316"
+   ],
+   "rows": [
+    "A83"
+   ],
+   "addresses": [
+    "40a43b..40a90a"
+   ],
+   "class": "LF2 2.0a code",
+   "reason": "pristine .text, identical in lf2.exe; not in any hook's bypassed range (see hooks[]); reached with and without lib.dll; generic AI 4094b0 and helpers; no hook in 4034f0..40bba3",
+   "e6": "engine default (LF2 2.0a), same value; NTSD inherits it"
+  },
+  {
+   "name": "characterAI.soughtDrink",
+   "file:line": "native/Sources/NTSDProfile/NTSDProfile.swift:85",
+   "engineSites": [
+    "engine/Sources/NTSDCore/OriginalCharacterAI.swift:317",
+    "engine/Sources/NTSDCore/OriginalCharacterAI.swift:318",
+    "engine/Sources/NTSDCore/OriginalCharacterAI.swift:332"
+   ],
+   "rows": [
+    "A83",
+    "A85"
+   ],
+   "addresses": [
+    "40a43b..40a90a"
+   ],
+   "class": "LF2 2.0a code",
+   "reason": "pristine .text, identical in lf2.exe; not in any hook's bypassed range (see hooks[]); reached with and without lib.dll; generic AI 4094b0 and helpers; no hook in 4034f0..40bba3",
+   "e6": "engine default (LF2 2.0a), same value; NTSD inherits it"
+  },
+  {
+   "name": "characterAI.avoidedDrink",
+   "file:line": "native/Sources/NTSDProfile/NTSDProfile.swift:85",
+   "engineSites": [
+    "engine/Sources/NTSDCore/OriginalCharacterAI.swift:317"
+   ],
+   "rows": [
+    "A83"
+   ],
+   "addresses": [
+    "40a43b..40a90a"
+   ],
+   "class": "LF2 2.0a code",
+   "reason": "pristine .text, identical in lf2.exe; not in any hook's bypassed range (see hooks[]); reached with and without lib.dll; generic AI 4094b0 and helpers; no hook in 4034f0..40bba3",
+   "e6": "engine default (LF2 2.0a), same value; NTSD inherits it"
+  },
+  {
+   "name": "characterAI.idleDefenders",
+   "file:line": "native/Sources/NTSDProfile/NTSDProfile.swift:86",
+   "engineSites": [
+    "engine/Sources/NTSDCore/OriginalCharacterAI.swift:350"
+   ],
+   "rows": [
+    "A86"
+   ],
+   "addresses": [
+    "40b7b5..40b846"
+   ],
+   "class": "LF2 2.0a code",
+   "reason": "pristine .text, identical in lf2.exe; not in any hook's bypassed range (see hooks[]); reached with and without lib.dll; generic AI 4094b0 and helpers; no hook in 4034f0..40bba3",
+   "e6": "engine default (LF2 2.0a), same value; NTSD inherits it"
+  },
+  {
+   "name": "characterAI.drinks",
+   "file:line": "native/Sources/NTSDProfile/NTSDProfile.swift:88",
+   "engineSites": [
+    "engine/Sources/NTSDCore/OriginalCharacterAI.swift:374",
+    "engine/Sources/NTSDCore/OriginalCharacterAI.swift:516",
+    "engine/Sources/NTSDCore/OriginalCharacterAI.swift:570"
+   ],
+   "rows": [
+    "A87",
+    "A91",
+    "A95"
+   ],
+   "addresses": [
+    "40a925..40b7b0",
+    "40b987..40bba3",
+    "408cb0"
+   ],
+   "class": "LF2 2.0a code",
+   "reason": "pristine .text, identical in lf2.exe; not in any hook's bypassed range (see hooks[]); reached with and without lib.dll; generic AI 4094b0 and helpers; no hook in 4034f0..40bba3",
+   "e6": "engine default (LF2 2.0a), same value; NTSD inherits it"
+  },
+  {
+   "name": "characterAI.rangedBand",
+   "file:line": "native/Sources/NTSDProfile/NTSDProfile.swift:88",
+   "engineSites": [
+    "engine/Sources/NTSDCore/OriginalCharacterAI.swift:408",
+    "engine/Sources/NTSDCore/OriginalCharacterAI.swift:456"
+   ],
+   "rows": [
+    "A89"
+   ],
+   "addresses": [
+    "40adaa..40b0c7",
+    "40b0fc..40b78f"
+   ],
+   "class": "LF2 2.0a code",
+   "reason": "pristine .text, identical in lf2.exe; not in any hook's bypassed range (see hooks[]); reached with and without lib.dll; generic AI 4094b0 and helpers; no hook in 4034f0..40bba3",
+   "e6": "engine default (LF2 2.0a), same value; NTSD inherits it"
+  },
+  {
+   "name": "characterAI.rangedJoiner",
+   "file:line": "native/Sources/NTSDProfile/NTSDProfile.swift:88",
+   "engineSites": [
+    "engine/Sources/NTSDCore/OriginalCharacterAI.swift:467"
+   ],
+   "rows": [
+    "A90"
+   ],
+   "addresses": [
+    "40b0fc..40b78f"
+   ],
+   "class": "LF2 2.0a code",
+   "reason": "pristine .text, identical in lf2.exe; not in any hook's bypassed range (see hooks[]); reached with and without lib.dll; generic AI 4094b0 and helpers; no hook in 4034f0..40bba3",
+   "e6": "engine default (LF2 2.0a), same value; NTSD inherits it"
+  },
+  {
+   "name": "characterAI.meleeWeapons",
+   "file:line": "native/Sources/NTSDProfile/NTSDProfile.swift:89",
+   "engineSites": [
+    "engine/Sources/NTSDCore/OriginalCharacterAI.swift:555"
+   ],
+   "rows": [
+    "A93"
+   ],
+   "addresses": [
+    "408cb0"
+   ],
+   "class": "LF2 2.0a code",
+   "reason": "pristine .text, identical in lf2.exe; not in any hook's bypassed range (see hooks[]); reached with and without lib.dll; generic AI 4094b0 and helpers; no hook in 4034f0..40bba3",
+   "e6": "engine default (LF2 2.0a), same value; NTSD inherits it"
+  },
+  {
+   "name": "characterAI.rollingWeapon",
+   "file:line": "native/Sources/NTSDProfile/NTSDProfile.swift:89",
+   "engineSites": [
+    "engine/Sources/NTSDCore/OriginalCharacterAI.swift:558"
+   ],
+   "rows": [
+    "A93"
+   ],
+   "addresses": [
+    "408cb0"
+   ],
+   "class": "LF2 2.0a code",
+   "reason": "pristine .text, identical in lf2.exe; not in any hook's bypassed range (see hooks[]); reached with and without lib.dll; generic AI 4094b0 and helpers; no hook in 4034f0..40bba3",
+   "e6": "engine default (LF2 2.0a), same value; NTSD inherits it"
+  },
+  {
+   "name": "characterAI.thrownWeapons",
+   "file:line": "native/Sources/NTSDProfile/NTSDProfile.swift:89",
+   "engineSites": [
+    "engine/Sources/NTSDCore/OriginalCharacterAI.swift:566"
+   ],
+   "rows": [
+    "A94"
+   ],
+   "addresses": [
+    "408cb0"
+   ],
+   "class": "LF2 2.0a code",
+   "reason": "pristine .text, identical in lf2.exe; not in any hook's bypassed range (see hooks[]); reached with and without lib.dll; generic AI 4094b0 and helpers; no hook in 4034f0..40bba3",
+   "e6": "engine default (LF2 2.0a), same value; NTSD inherits it"
+  },
+  {
+   "name": "characterAI.dashCounters",
+   "file:line": "native/Sources/NTSDProfile/NTSDProfile.swift:90",
+   "engineSites": [
+    "engine/Sources/NTSDCore/OriginalCharacterAI.swift:615",
+    "engine/Sources/NTSDCore/OriginalCharacterAI.swift:620"
+   ],
+   "rows": [
+    "A96",
+    "A98"
+   ],
+   "addresses": [
+    "4034f0"
+   ],
+   "class": "LF2 2.0a code",
+   "reason": "pristine .text, identical in lf2.exe; not in any hook's bypassed range (see hooks[]); reached with and without lib.dll; generic AI 4094b0 and helpers; no hook in 4034f0..40bba3",
+   "e6": "engine default (LF2 2.0a), same value; NTSD inherits it"
+  },
+  {
+   "name": "characterAI.dashJumper",
+   "file:line": "native/Sources/NTSDProfile/NTSDProfile.swift:90",
+   "engineSites": [
+    "engine/Sources/NTSDCore/OriginalCharacterAI.swift:621"
+   ],
+   "rows": [
+    "A98"
+   ],
+   "addresses": [
+    "4034f0"
+   ],
+   "class": "LF2 2.0a code",
+   "reason": "pristine .text, identical in lf2.exe; not in any hook's bypassed range (see hooks[]); reached with and without lib.dll; generic AI 4094b0 and helpers; no hook in 4034f0..40bba3",
+   "e6": "engine default (LF2 2.0a), same value; NTSD inherits it"
+  },
+  {
+   "name": "characterAI.shortDasher",
+   "file:line": "native/Sources/NTSDProfile/NTSDProfile.swift:90",
+   "engineSites": [
+    "engine/Sources/NTSDCore/OriginalCharacterAI.swift:623",
+    "engine/Sources/NTSDCore/OriginalCharacterAI.swift:628"
+   ],
+   "rows": [
+    "A97"
+   ],
+   "addresses": [
+    "4034f0"
+   ],
+   "class": "LF2 2.0a code",
+   "reason": "pristine .text, identical in lf2.exe; not in any hook's bypassed range (see hooks[]); reached with and without lib.dll; generic AI 4094b0 and helpers; no hook in 4034f0..40bba3",
+   "e6": "engine default (LF2 2.0a), same value; NTSD inherits it"
+  },
+  {
+   "name": "interface.frontBitmaps",
+   "file:line": "native/Sources/NTSDProfile/NTSDProfile.swift:61",
+   "engineSites": [
+    "engine/Sources/NTSDCore/OriginalFrontMenuResources.swift:28"
+   ],
+   "rows": [
+    "E5f"
+   ],
+   "addresses": [
+    "424755..427089 (front startup; load order in .text)"
+   ],
+   "class": "data/identity",
+   "reason": "bitmap resource names; strings referenced from .text, presumably .rdata (string addresses not recorded in the repo); the bitmaps themselves are .rsrc (differs: game content). Same values in both EXEs (.text equal; .rdata equal except the 17-byte import name at 0x44c600, IsDebuggerPresent -> LoadLibraryA, per the loop's uncommitted es-e6a-lf2-reference.json) - but data, not a rule: it names/positions the game's content",
+   "e6": "names: may return as the engine's LF2 2.0a default under the scan policy (LF2 EXE strings stay engine text; data-file names keep), the game overriding"
+  },
+  {
+   "name": "interface.frontSheets",
+   "file:line": "native/Sources/NTSDProfile/NTSDProfile.swift:64",
+   "engineSites": [
+    "engine/Sources/NTSDCore/OriginalStageEnding.swift:20",
+    "engine/Sources/NTSDCore/OriginalStageEnding.swift:23",
+    "engine/Sources/NTSDCore/OriginalFrontMenuResources.swift:28"
+   ],
+   "rows": [
+    "E5f"
+   ],
+   "addresses": [
+    "424755..427089 (writes; ENDING sheet 424b45..424c98)"
+   ],
+   "class": "data/identity",
+   "reason": "151 rectangles as .text immediates (es-e5f-plumbing §2), identical in lf2.exe; EXE-copied table (E7 policy), generator tools/extract_front_menu_rectangles.py; file native/Sources/NTSDProfile/NTSDFrontMenuRectangles.swift. Same values in both EXEs (.text equal; .rdata equal except the 17-byte import name at 0x44c600, IsDebuggerPresent -> LoadLibraryA, per the loop's uncommitted es-e6a-lf2-reference.json) - but data, not a rule: it names/positions the game's content",
+   "e6": "rectangles: an EXE table no policy class covers; the loop decides (recommended: like the names)"
+  },
+  {
+   "name": "interface.interfaceBitmaps",
+   "file:line": "native/Sources/NTSDProfile/NTSDProfile.swift:66",
+   "engineSites": [
+    "engine/Sources/NTSDCore/OriginalInitialLoadingContinuation.swift:32",
+    "engine/Sources/NTSDCore/OriginalInitialLoadingContinuation.swift:60",
+    "engine/Sources/NTSDCore/OriginalInitialInterfaceLoading.swift:58",
+    "engine/Sources/NTSDCore/OriginalApplicationInterfaceInputs.swift:36",
+    "engine/Sources/NTSDCore/OriginalInitialPoolAndInterface.swift:29"
+   ],
+   "rows": [
+    "E5f"
+   ],
+   "addresses": [
+    "41c2f5..41c581 (calls 41c31b..41c55e)"
+   ],
+   "class": "data/identity",
+   "reason": "built-in DIB resource names (INITIAL_INTERFACE.md); strings presumably .rdata; resources .rsrc (game content). Same values in both EXEs (.text equal; .rdata equal except the 17-byte import name at 0x44c600, IsDebuggerPresent -> LoadLibraryA, per the loop's uncommitted es-e6a-lf2-reference.json) - but data, not a rule: it names/positions the game's content",
+   "e6": "names: may return as the engine's LF2 2.0a default under the scan policy (LF2 EXE strings stay engine text; data-file names keep), the game overriding"
+  },
+  {
+   "name": "interface.commonSounds",
+   "file:line": "native/Sources/NTSDProfile/NTSDProfile.swift:68",
+   "engineSites": [
+    "engine/Sources/NTSDCore/OriginalInitialLoadingCommon.swift:27",
+    "engine/Sources/NTSDCore/OriginalApplicationLoadingSession.swift:101",
+    "engine/Sources/NTSDCore/OriginalInitialLoading.swift:106",
+    "engine/Sources/NTSDCore/OriginalApplicationCatalogSession.swift:185",
+    "engine/Sources/NTSDCore/OriginalApplicationCatalogSession.swift:186",
+    "engine/Sources/NTSDCore/OriginalApplicationLoadingInputs.swift:16",
+    "engine/Sources/NTSDCore/OriginalApplicationLoadingInputs.swift:43",
+    "engine/Sources/NTSDCore/OriginalInitialMatchEntry.swift:38",
+    "engine/Sources/NTSDCore/OriginalInitialSoundLoading.swift:29"
+   ],
+   "rows": [
+    "E5f"
+   ],
+   "addresses": [
+    "41be98..41bfeb"
+   ],
+   "class": "data/identity",
+   "reason": "data-file names (data\\*.wav), strings presumably .rdata. Same values in both EXEs (.text equal; .rdata equal except the 17-byte import name at 0x44c600, IsDebuggerPresent -> LoadLibraryA, per the loop's uncommitted es-e6a-lf2-reference.json) - but data, not a rule: it names/positions the game's content",
+   "e6": "names: may return as the engine's LF2 2.0a default under the scan policy (LF2 EXE strings stay engine text; data-file names keep), the game overriding"
+  },
+  {
+   "name": "interface.menuBitmaps",
+   "file:line": "native/Sources/NTSDProfile/NTSDProfile.swift:73",
+   "engineSites": [
+    "engine/Sources/NTSDCore/OriginalModeMenuContinuation.swift:9",
+    "engine/Sources/NTSDCore/OriginalCharacterMenuStartup.swift:19",
+    "engine/Sources/NTSDCore/OriginalMenuResourceLoading.swift:26",
+    "engine/Sources/NTSDCore/OriginalApplicationLoadedMenuSession.swift:212",
+    "engine/Sources/NTSDCore/OriginalCharacterMenuContinuation.swift:26",
+    "engine/Sources/NTSDCore/OriginalApplicationMenuInputs.swift:43"
+   ],
+   "rows": [
+    "E5f"
+   ],
+   "addresses": [
+    "4297ae..429e5a"
+   ],
+   "class": "data/identity",
+   "reason": "resource names, presumably .rdata. Same values in both EXEs (.text equal; .rdata equal except the 17-byte import name at 0x44c600, IsDebuggerPresent -> LoadLibraryA, per the loop's uncommitted es-e6a-lf2-reference.json) - but data, not a rule: it names/positions the game's content",
+   "e6": "names: may return as the engine's LF2 2.0a default under the scan policy (LF2 EXE strings stay engine text; data-file names keep), the game overriding"
+  },
+  {
+   "name": "interface.warBitmaps",
+   "file:line": "native/Sources/NTSDProfile/NTSDProfile.swift:74",
+   "engineSites": [
+    "engine/Sources/NTSDCore/OriginalWarSetup.swift:119",
+    "engine/Sources/NTSDCore/OriginalApplicationMenuInputs.swift:26"
+   ],
+   "rows": [
+    "E5f"
+   ],
+   "addresses": [
+    "438bbb..438d2a"
+   ],
+   "class": "data/identity",
+   "reason": "resource names (BATTLEMODE, BATTLETROOPS), presumably .rdata. Same values in both EXEs (.text equal; .rdata equal except the 17-byte import name at 0x44c600, IsDebuggerPresent -> LoadLibraryA, per the loop's uncommitted es-e6a-lf2-reference.json) - but data, not a rule: it names/positions the game's content",
+   "e6": "names: may return as the engine's LF2 2.0a default under the scan policy (LF2 EXE strings stay engine text; data-file names keep), the game overriding"
+  },
+  {
+   "name": "interface.menuSounds",
+   "file:line": "native/Sources/NTSDProfile/NTSDProfile.swift:76",
+   "engineSites": [
+    "engine/Sources/NTSDCore/OriginalInputStartup.swift:84",
+    "engine/Sources/NTSDCore/OriginalApplicationCatalogSession.swift:20",
+    "engine/Sources/NTSDCore/OriginalApplicationCatalogSession.swift:174",
+    "engine/Sources/NTSDCore/OriginalApplicationCatalogSession.swift:178",
+    "engine/Sources/NTSDCore/OriginalWinMainStartup.swift:91",
+    "engine/Sources/NTSDCore/OriginalMenuSoundStartup.swift:68",
+    "engine/Sources/NTSDRuntime/OriginalMacRuntimeLoading.swift:206",
+    "engine/Sources/NTSDRuntime/OriginalMacRuntimeStartup.swift:78"
+   ],
+   "rows": [
+    "E5f"
+   ],
+   "addresses": [
+    "43d08e..43d100",
+    "401970"
+   ],
+   "class": "data/identity",
+   "reason": "data-file names (data\\m_*.wav), presumably .rdata. Same values in both EXEs (.text equal; .rdata equal except the 17-byte import name at 0x44c600, IsDebuggerPresent -> LoadLibraryA, per the loop's uncommitted es-e6a-lf2-reference.json) - but data, not a rule: it names/positions the game's content",
+   "e6": "names: may return as the engine's LF2 2.0a default under the scan policy (LF2 EXE strings stay engine text; data-file names keep), the game overriding"
+  },
+  {
+   "name": "interface.panelFrames",
+   "file:line": "native/Sources/NTSDProfile/NTSDProfile.swift:78",
+   "engineSites": [
+    "engine/Sources/NTSDCore/OriginalStartupPanel.swift:22",
+    "engine/Sources/NTSDCore/OriginalWinMainStartup.swift:91",
+    "engine/Sources/NTSDCore/OriginalMenuPanelBitmap.swift:31"
+   ],
+   "rows": [
+    "E5f"
+   ],
+   "addresses": [
+    "43ccf2..43cf10"
+   ],
+   "class": "data/identity",
+   "reason": "11 rectangles as .text immediates (OriginalMenuPanelBitmap: 'fixed atlas metadata'), identical in lf2.exe. Same values in both EXEs (.text equal; .rdata equal except the 17-byte import name at 0x44c600, IsDebuggerPresent -> LoadLibraryA, per the loop's uncommitted es-e6a-lf2-reference.json) - but data, not a rule: it names/positions the game's content",
+   "e6": "rectangles: an EXE table no policy class covers; the loop decides (recommended: like the names)"
+  },
+  {
+   "name": "interface.warModeFrames",
+   "file:line": "native/Sources/NTSDProfile/NTSDProfile.swift:82",
+   "engineSites": [
+    "engine/Sources/NTSDCore/OriginalWarSetup.swift:119"
+   ],
+   "rows": [
+    "E5f"
+   ],
+   "addresses": [
+    "438bbb..438d2a"
+   ],
+   "class": "data/identity",
+   "reason": "2 BATTLEMODE frames as .text immediates, identical in lf2.exe. Same values in both EXEs (.text equal; .rdata equal except the 17-byte import name at 0x44c600, IsDebuggerPresent -> LoadLibraryA, per the loop's uncommitted es-e6a-lf2-reference.json) - but data, not a rule: it names/positions the game's content",
+   "e6": "rectangles: an EXE table no policy class covers; the loop decides (recommended: like the names)"
+  },
+  {
+   "name": "characterAISpecial (hook)",
+   "file:line": "native/Sources/NTSDProfile/NTSDProfile.swift:92",
+   "engineSites": [
+    "engine/Sources/NTSDCore/OriginalCharacterAI.swift:44 (protocol)",
+    "engine/Sources/NTSDCore/OriginalCharacterAI.swift:535-538 (entry roll 0x3c, then the hook)"
+   ],
+   "rows": [
+    "A92"
+   ],
+   "addresses": [
+    "403a40 (if-chain after the entry roll; end 4061a0)"
+   ],
+   "class": "LF2 2.0a code",
+   "reason": "pristine .text, identical in lf2.exe; not in any hook's bypassed range (see hooks[]); reached with and without lib.dll; the ID if-chain 2,1,4,5,6,7,8,11,10,9,32,33,34,50,35,36,38,39,52,51 is LF2 2.0a's own per-character AI dispatch",
+   "e6": "engine default conformer (the 20 routines back in the engine); the protocol may stay as the extension point"
+  },
+  {
+   "name": "characterAISpecial.sakura1 (own ID 1)",
+   "file:line": "native/Sources/NTSDProfile/NTSDCharacterAISpecial.swift:94",
+   "engineSites": [],
+   "rows": [
+    "A92"
+   ],
+   "addresses": [
+    "403e83..4041e4"
+   ],
+   "class": "LF2 2.0a code",
+   "reason": "pristine .text, identical in lf2.exe; not in any hook's bypassed range (see hooks[]); reached with and without lib.dll; moved to the game in E5d-3; the routine's name is the port's NTSD label for LF2 2.0a's ID slot (no name in the EXE)",
+   "e6": "back to the engine (git mv), neutral names (by ID)"
+  },
+  {
+   "name": "characterAISpecial.naruto2 (own ID 2)",
+   "file:line": "native/Sources/NTSDProfile/NTSDCharacterAISpecial.swift:58",
+   "engineSites": [],
+   "rows": [
+    "A92",
+    "A99"
+   ],
+   "addresses": [
+    "403a7e..403e83 (+healAlly 403ca1..403e7f, tail 403f67..403fd4)"
+   ],
+   "class": "LF2 2.0a code",
+   "reason": "pristine .text, identical in lf2.exe; not in any hook's bypassed range (see hooks[]); reached with and without lib.dll; moved to the game in E5d-3; the routine's name is the port's NTSD label for LF2 2.0a's ID slot (no name in the EXE)",
+   "e6": "back to the engine (git mv), neutral names (by ID)"
+  },
+  {
+   "name": "characterAISpecial.sai4 (own ID 4)",
+   "file:line": "native/Sources/NTSDProfile/NTSDCharacterAISpecial.swift:119",
+   "engineSites": [],
+   "rows": [
+    "A92"
+   ],
+   "addresses": [
+    "4041e4..404361"
+   ],
+   "class": "LF2 2.0a code",
+   "reason": "pristine .text, identical in lf2.exe; not in any hook's bypassed range (see hooks[]); reached with and without lib.dll; moved to the game in E5d-3; the routine's name is the port's NTSD label for LF2 2.0a's ID slot (no name in the EXE)",
+   "e6": "back to the engine (git mv), neutral names (by ID)"
+  },
+  {
+   "name": "characterAISpecial.shino5 (own ID 5)",
+   "file:line": "native/Sources/NTSDProfile/NTSDCharacterAISpecial.swift:132",
+   "engineSites": [],
+   "rows": [
+    "A92"
+   ],
+   "addresses": [
+    "404361..4044ed"
+   ],
+   "class": "LF2 2.0a code",
+   "reason": "pristine .text, identical in lf2.exe; not in any hook's bypassed range (see hooks[]); reached with and without lib.dll; moved to the game in E5d-3; the routine's name is the port's NTSD label for LF2 2.0a's ID slot (no name in the EXE)",
+   "e6": "back to the engine (git mv), neutral names (by ID)"
+  },
+  {
+   "name": "characterAISpecial.hsasori6 (own ID 6)",
+   "file:line": "native/Sources/NTSDProfile/NTSDCharacterAISpecial.swift:147",
+   "engineSites": [],
+   "rows": [
+    "A92"
+   ],
+   "addresses": [
+    "4044ed..4045fc"
+   ],
+   "class": "LF2 2.0a code",
+   "reason": "pristine .text, identical in lf2.exe; not in any hook's bypassed range (see hooks[]); reached with and without lib.dll; moved to the game in E5d-3; the routine's name is the port's NTSD label for LF2 2.0a's ID slot (no name in the EXE)",
+   "e6": "back to the engine (git mv), neutral names (by ID)"
+  },
+  {
+   "name": "characterAISpecial.lee7 (own ID 7)",
+   "file:line": "native/Sources/NTSDProfile/NTSDCharacterAISpecial.swift:155",
+   "engineSites": [],
+   "rows": [
+    "A92"
+   ],
+   "addresses": [
+    "4045fc..40498d (+404aa5..404ae3)"
+   ],
+   "class": "LF2 2.0a code",
+   "reason": "pristine .text, identical in lf2.exe; not in any hook's bypassed range (see hooks[]); reached with and without lib.dll; moved to the game in E5d-3; the routine's name is the port's NTSD label for LF2 2.0a's ID slot (no name in the EXE)",
+   "e6": "back to the engine (git mv), neutral names (by ID)"
+  },
+  {
+   "name": "characterAISpecial.chiyo8 (own ID 8)",
+   "file:line": "native/Sources/NTSDProfile/NTSDCharacterAISpecial.swift:194",
+   "engineSites": [],
+   "rows": [
+    "A92"
+   ],
+   "addresses": [
+    "40498d..404c05"
+   ],
+   "class": "LF2 2.0a code",
+   "reason": "pristine .text, identical in lf2.exe; not in any hook's bypassed range (see hooks[]); reached with and without lib.dll; moved to the game in E5d-3; the routine's name is the port's NTSD label for LF2 2.0a's ID slot (no name in the EXE)",
+   "e6": "back to the engine (git mv), neutral names (by ID)"
+  },
+  {
+   "name": "characterAISpecial.itachi9 (own ID 9)",
+   "file:line": "native/Sources/NTSDProfile/NTSDCharacterAISpecial.swift:272",
+   "engineSites": [],
+   "rows": [
+    "A92"
+   ],
+   "addresses": [
+    "40513a..405311"
+   ],
+   "class": "LF2 2.0a code",
+   "reason": "pristine .text, identical in lf2.exe; not in any hook's bypassed range (see hooks[]); reached with and without lib.dll; moved to the game in E5d-3; the routine's name is the port's NTSD label for LF2 2.0a's ID slot (no name in the EXE)",
+   "e6": "back to the engine (git mv), neutral names (by ID)"
+  },
+  {
+   "name": "characterAISpecial.deidara10 (own ID 10)",
+   "file:line": "native/Sources/NTSDProfile/NTSDCharacterAISpecial.swift:240",
+   "engineSites": [],
+   "rows": [
+    "A92"
+   ],
+   "addresses": [
+    "404dae..40513a"
+   ],
+   "class": "LF2 2.0a code",
+   "reason": "pristine .text, identical in lf2.exe; not in any hook's bypassed range (see hooks[]); reached with and without lib.dll; moved to the game in E5d-3; the routine's name is the port's NTSD label for LF2 2.0a's ID slot (no name in the EXE)",
+   "e6": "back to the engine (git mv), neutral names (by ID)"
+  },
+  {
+   "name": "characterAISpecial.sasuke11 (own ID 11)",
+   "file:line": "native/Sources/NTSDProfile/NTSDCharacterAISpecial.swift:232",
+   "engineSites": [],
+   "rows": [
+    "A92"
+   ],
+   "addresses": [
+    "404c05..404dae"
+   ],
+   "class": "LF2 2.0a code",
+   "reason": "pristine .text, identical in lf2.exe; not in any hook's bypassed range (see hooks[]); reached with and without lib.dll; moved to the game in E5d-3; the routine's name is the port's NTSD label for LF2 2.0a's ID slot (no name in the EXE)",
+   "e6": "back to the engine (git mv), neutral names (by ID)"
+  },
+  {
+   "name": "characterAISpecial.hunter32 (own ID 32)",
+   "file:line": "native/Sources/NTSDProfile/NTSDCharacterAISpecial.swift:294",
+   "engineSites": [],
+   "rows": [
+    "A92"
+   ],
+   "addresses": [
+    "405311..405498"
+   ],
+   "class": "LF2 2.0a code",
+   "reason": "pristine .text, identical in lf2.exe; not in any hook's bypassed range (see hooks[]); reached with and without lib.dll; moved to the game in E5d-3; the routine's name is the port's NTSD label for LF2 2.0a's ID slot (no name in the EXE)",
+   "e6": "back to the engine (git mv), neutral names (by ID)"
+  },
+  {
+   "name": "characterAISpecial.clone33 (own ID 33)",
+   "file:line": "native/Sources/NTSDProfile/NTSDCharacterAISpecial.swift:409",
+   "engineSites": [],
+   "rows": [
+    "A92"
+   ],
+   "addresses": [
+    "405498..405550"
+   ],
+   "class": "LF2 2.0a code",
+   "reason": "pristine .text, identical in lf2.exe; not in any hook's bypassed range (see hooks[]); reached with and without lib.dll; moved to the game in E5d-3; the routine's name is the port's NTSD label for LF2 2.0a's ID slot (no name in the EXE)",
+   "e6": "back to the engine (git mv), neutral names (by ID)"
+  },
+  {
+   "name": "characterAISpecial.kidomaru34 (own ID 34)",
+   "file:line": "native/Sources/NTSDProfile/NTSDCharacterAISpecial.swift:307",
+   "engineSites": [],
+   "rows": [
+    "A92"
+   ],
+   "addresses": [
+    "405550..405761 (+healAlly 4055fa..40575b, tail 40587c..405910)"
+   ],
+   "class": "LF2 2.0a code",
+   "reason": "pristine .text, identical in lf2.exe; not in any hook's bypassed range (see hooks[]); reached with and without lib.dll; moved to the game in E5d-3; the routine's name is the port's NTSD label for LF2 2.0a's ID slot (no name in the EXE)",
+   "e6": "back to the engine (git mv), neutral names (by ID)"
+  },
+  {
+   "name": "characterAISpecial.sakon35 (own ID 35)",
+   "file:line": "native/Sources/NTSDProfile/NTSDCharacterAISpecial.swift:327",
+   "engineSites": [],
+   "rows": [
+    "A92"
+   ],
+   "addresses": [
+    "405913..40598d"
+   ],
+   "class": "LF2 2.0a code",
+   "reason": "pristine .text, identical in lf2.exe; not in any hook's bypassed range (see hooks[]); reached with and without lib.dll; moved to the game in E5d-3; the routine's name is the port's NTSD label for LF2 2.0a's ID slot (no name in the EXE)",
+   "e6": "back to the engine (git mv), neutral names (by ID)"
+  },
+  {
+   "name": "characterAISpecial.tayuya36 (own ID 36)",
+   "file:line": "native/Sources/NTSDProfile/NTSDCharacterAISpecial.swift:337",
+   "engineSites": [],
+   "rows": [
+    "A92"
+   ],
+   "addresses": [
+    "40598d..405abc"
+   ],
+   "class": "LF2 2.0a code",
+   "reason": "pristine .text, identical in lf2.exe; not in any hook's bypassed range (see hooks[]); reached with and without lib.dll; moved to the game in E5d-3; the routine's name is the port's NTSD label for LF2 2.0a's ID slot (no name in the EXE)",
+   "e6": "back to the engine (git mv), neutral names (by ID)"
+  },
+  {
+   "name": "characterAISpecial.sasukeCS38 (own ID 38)",
+   "file:line": "native/Sources/NTSDProfile/NTSDCharacterAISpecial.swift:353",
+   "engineSites": [],
+   "rows": [
+    "A92"
+   ],
+   "addresses": [
+    "405abc..405c1d"
+   ],
+   "class": "LF2 2.0a code",
+   "reason": "pristine .text, identical in lf2.exe; not in any hook's bypassed range (see hooks[]); reached with and without lib.dll; moved to the game in E5d-3; the routine's name is the port's NTSD label for LF2 2.0a's ID slot (no name in the EXE)",
+   "e6": "back to the engine (git mv), neutral names (by ID)"
+  },
+  {
+   "name": "characterAISpecial.sand39 (own ID 39)",
+   "file:line": "native/Sources/NTSDProfile/NTSDCharacterAISpecial.swift:364",
+   "engineSites": [],
+   "rows": [
+    "A92"
+   ],
+   "addresses": [
+    "405c1d..405d0d"
+   ],
+   "class": "LF2 2.0a code",
+   "reason": "pristine .text, identical in lf2.exe; not in any hook's bypassed range (see hooks[]); reached with and without lib.dll; moved to the game in E5d-3; the routine's name is the port's NTSD label for LF2 2.0a's ID slot (no name in the EXE)",
+   "e6": "back to the engine (git mv), neutral names (by ID)"
+  },
+  {
+   "name": "characterAISpecial.pein50 (own ID 50)",
+   "file:line": "native/Sources/NTSDProfile/NTSDCharacterAISpecial.swift:313",
+   "engineSites": [],
+   "rows": [
+    "A92"
+   ],
+   "addresses": [
+    "405761..405913"
+   ],
+   "class": "LF2 2.0a code",
+   "reason": "pristine .text, identical in lf2.exe; not in any hook's bypassed range (see hooks[]); reached with and without lib.dll; moved to the game in E5d-3; the routine's name is the port's NTSD label for LF2 2.0a's ID slot (no name in the EXE)",
+   "e6": "back to the engine (git mv), neutral names (by ID)"
+  },
+  {
+   "name": "characterAISpecial.sasori51 (own ID 51)",
+   "file:line": "native/Sources/NTSDProfile/NTSDCharacterAISpecial.swift:396",
+   "engineSites": [],
+   "rows": [
+    "A92"
+   ],
+   "addresses": [
+    "405fc2..40618b"
+   ],
+   "class": "LF2 2.0a code",
+   "reason": "pristine .text, identical in lf2.exe; not in any hook's bypassed range (see hooks[]); reached with and without lib.dll; moved to the game in E5d-3; the routine's name is the port's NTSD label for LF2 2.0a's ID slot (no name in the EXE)",
+   "e6": "back to the engine (git mv), neutral names (by ID)"
+  },
+  {
+   "name": "characterAISpecial.kyubi52 (own ID 52)",
+   "file:line": "native/Sources/NTSDProfile/NTSDCharacterAISpecial.swift:376",
+   "engineSites": [],
+   "rows": [
+    "A92"
+   ],
+   "addresses": [
+    "405d0d..405fc2"
+   ],
+   "class": "LF2 2.0a code",
+   "reason": "pristine .text, identical in lf2.exe; not in any hook's bypassed range (see hooks[]); reached with and without lib.dll; moved to the game in E5d-3; the routine's name is the port's NTSD label for LF2 2.0a's ID slot (no name in the EXE)",
+   "e6": "back to the engine (git mv), neutral names (by ID)"
+  },
+  {
+   "name": "profile",
+   "file:line": "native/Sources/NTSDProfile/NTSDProfile.swift:7",
+   "engineSites": [
+    "engine/Sources/NTSDCore/OriginalGameRules.swift:566-567"
+   ],
+   "rows": [],
+   "addresses": [],
+   "class": "data/identity",
+   "reason": "the port's label \"NTSD 2.4 2.0a\" (not an EXE value); game identity",
+   "e6": "game identity; the engine default gets its own label"
+  }
+ ],
+ "hooks": [
+  {
+   "site": "430c8c",
+   "dll": "100013d0",
+   "originalBytes": "83fa08755a (cmp edx,8; jne 430ceb)",
+   "continuations": [
+    "430ceb",
+    "43187a"
+   ],
+   "bypassed": "430c8c..430ceb: the kind-8 compare and the original kind-8 body 430c91..430cea (the DLL re-implements kind 8 with the literal Z addend bits 004176cb00447a08 instead of +1, changing 164 pristine kind-8 outcomes, and adds kinds 80-89/800-825); 43187a = end of the dispatch",
+   "study": "LIB_WORLD_HITS",
+   "profileRolesInside": [],
+   "profileRolesInFunction": [
+    "interaction.holdKind101",
+    "interaction.pullImmune"
+   ]
+  },
+  {
+   "site": "4176ac",
+   "dll": "10001807",
+   "originalBytes": "83fa08751e (cmp edx,8; jne 4176cf)",
+   "continuations": [
+    "4176cb",
+    "417f59"
+   ],
+   "bypassed": "4176ac..4176cb: the kind-8 defender-category test (the DLL tests categories for kinds 8, 36, 80-89, 800-825; reject -> 417f59 next ITR). Note: the original jne target computed from the bytes is 4176cf, not the acceptance continuation 4176cb; E6a should confirm by disassembly",
+   "study": "LIB_WORLD_CONTACTS",
+   "profileRolesInside": [],
+   "profileRolesInFunction": [
+    "reflection.reflectable",
+    "reflection.reflector",
+    "interaction.teamBypass",
+    "interaction.countsAsCharacter"
+   ]
+  },
+  {
+   "site": "4177b9",
+   "dll": "100011b9",
+   "originalBytes": "8b4424448b (mov eax,[esp+44]; mov ...)",
+   "continuations": [
+    "4177ca",
+    "41780b",
+    "417866"
+   ],
+   "bypassed": "4177b9..4177ca always (re-executed by the DLL); for attacker state 20 also 4177ca..41780b (old team equality and state-18 test) or a jump to 417866",
+   "study": "LIB_WORLD_CONTACTS",
+   "profileRolesInside": [],
+   "profileRolesInFunction": [
+    "interaction.teamBypass (A21 earlier than the hook)",
+    "interaction.teamBypass (A22)",
+    "interaction.countsAsCharacter"
+   ]
+  },
+  {
+   "site": "42fcb1",
+   "dll": "10001322",
+   "originalBytes": "83f8037405 (cmp eax,3; je 42fcbb)",
+   "continuations": [
+    "42fcbb",
+    "42fd1d"
+   ],
+   "bypassed": "42fcb1..42fcbb: the ITR-effect 3/30 test (the DLL keeps 3/30, adds effect >= 6000 -> frame via the 0xb2-stride read)",
+   "study": "LIB_WORLD_HITS",
+   "profileRolesInside": [],
+   "profileRolesInFunction": [
+    "impact.*",
+    "reflection.*"
+   ]
+  },
+  {
+   "site": "41f5fc",
+   "dll": "1000109d",
+   "originalBytes": "3d401f0000 (cmp eax,8000)",
+   "continuations": [
+    "41f60a",
+    "41f675"
+   ],
+   "bypassed": "41f5fc..41f60a: the 8000..<9000 state test (the DLL adds 4000..<4999 first and writes Actor+7b4)",
+   "study": "LIB_TRANSFORMS",
+   "profileRolesInside": [],
+   "profileRolesInFunction": [
+    "lifecycle.state9995Object (before)",
+    "lifecycle.pieces/lastPiece (41f734, after)",
+    "lifecycle.halfHPRegen (after)"
+   ]
+  },
+  {
+   "site": "41408b",
+   "dll": "10001125",
+   "originalBytes": "83bc0aac07 (cmp dword [edx+ecx+7ac],...)",
+   "continuations": [
+    "414099",
+    "414243"
+   ],
+   "bypassed": "41408b..414099: a frame-field compare and its jump (the DLL adds states 85/86 facing/frame rules); DLL data also holds an unused slot 414159",
+   "study": "LIB_ACTOR_CONTROL",
+   "profileRolesInside": [],
+   "profileRolesInFunction": []
+  },
+  {
+   "site": "401290",
+   "dll": "10001298",
+   "originalBytes": "568b742408 (push esi; mov esi,[esp+8])",
+   "continuations": [
+    "(returns to the caller)"
+   ],
+   "bypassed": "the whole text routine from 401290 (end not recorded in the docs; before 4013d0): SetBkColor opaque text -> SetBkMode(1) transparent text with a retained DC",
+   "study": "LIB_RUNTIME, LIB_MODE_SCREEN",
+   "profileRolesInside": [],
+   "profileRolesInFunction": []
+  },
+  {
+   "site": "424352",
+   "dll": "10001236",
+   "originalBytes": "6a3c686002 (push 3c; push 0x...260)",
+   "continuations": [
+    "4243b1"
+   ],
+   "bypassed": "424352..4243b1: the old loading label (filename/colour) code incl. 424359..4243b0; replaced by the DLL's 'Loading files' label with phase colours",
+   "study": "LIB_LOADING",
+   "profileRolesInside": [],
+   "profileRolesInFunction": []
+  },
+  {
+   "site": "424357",
+   "dll": null,
+   "originalBytes": "0000 -> 9090",
+   "continuations": [],
+   "bypassed": "inside 424352..4243b1; never executed (the jump bypasses it)",
+   "study": "LIB_LOADING",
+   "profileRolesInside": [],
+   "profileRolesInFunction": []
+  },
+  {
+   "site": "4214d7",
+   "dll": "10001a9a",
+   "originalBytes": "833db80b45 (cmp dword [450bb8],imm8; then jcc to 4214e4)",
+   "continuations": [
+    "4214e4",
+    "42154e",
+    "421552",
+    "42179b"
+   ],
+   "bypassed": "4214d7..4214e4 always (the command-word compare); for word 3 also 4214e4..42154e (the original word-1 candidate filter, replaced by the DLL's requested-ID scan)",
+   "study": "LIB_STAGE_COMMANDS",
+   "profileRolesInside": [],
+   "profileRolesInFunction": [
+    "items.itemRange (A48, word-1 filter: conditional range)",
+    "items.scarceRequestedItem (A49, same)",
+    "items.spawnHP200 (A50, construction, after)",
+    "modes.killRequestSpared (A51, 42179b path)"
+   ]
+  },
+  {
+   "site": "42d5ce",
+   "dll": "10001b1b",
+   "originalBytes": "892d1c0c45 (mov [450c1c],ebp)",
+   "continuations": [
+    "42d5d4"
+   ],
+   "bypassed": "42d5ce..42d5d4 (re-executed; the DLL adds byte 450bb8 = 3)",
+   "study": "LIB_STAGE_COMMANDS",
+   "profileRolesInside": [],
+   "profileRolesInFunction": []
+  },
+  {
+   "site": "42d30b",
+   "dll": "10001b2e",
+   "originalBytes": "8b8438b05d (mov eax,[eax+edi+5db0])",
+   "continuations": [
+    "42d312"
+   ],
+   "bypassed": "42d30b..42d312 (re-executed; the DLL copies BG+0xc into 459ff8)",
+   "study": "LIB_STAGE_COMMANDS",
+   "profileRolesInside": [],
+   "profileRolesInFunction": []
+  },
+  {
+   "site": "42d473",
+   "dll": "10001b48",
+   "originalBytes": "8b843ab05d (mov eax,[edx+edi+5db0])",
+   "continuations": [
+    "42d47a"
+   ],
+   "bypassed": "42d473..42d47a (re-executed; the DLL copies BG+0xc into 459ff8 and clobbers ECX, changing X)",
+   "study": "LIB_STAGE_COMMANDS",
+   "profileRolesInside": [],
+   "profileRolesInFunction": []
+  }
+ ],
+ "libSites": [
+  {
+   "site": "engine/Sources/NTSDCore/OriginalActorControl.swift:241-252",
+   "hook": "41408b",
+   "behaviour": "states 85/86 facing/frame",
+   "pristine": "else branch",
+   "selection": "bundledLibrary (OriginalWorldControl <- OriginalGameplayBody:102)"
+  },
+  {
+   "site": "engine/Sources/NTSDCore/OriginalWorldContacts.swift:106-113,190-192",
+   "hook": "4176ac",
+   "behaviour": "ITR-kind/defender-category filter",
+   "pristine": "kind-8 gate :192",
+   "selection": "bundledLibrary (OriginalGameplayBody:112)"
+  },
+  {
+   "site": "engine/Sources/NTSDCore/OriginalWorldContacts.swift:202",
+   "hook": "4177b9",
+   "behaviour": "state-20 team-gate inversion",
+   "pristine": "yes",
+   "selection": "bundledLibrary"
+  },
+  {
+   "site": "engine/Sources/NTSDCore/OriginalLibActorHits.swift:101-131 (from OriginalHitSpecial.swift:6)",
+   "hook": "430c8c",
+   "behaviour": "movement kinds 8/80-89/800-825, 777 target buffer, DLL Z-addend bits",
+   "pristine": "OriginalHitSpecial case 8 (+1)",
+   "selection": "OriginalHitPass.library != nil"
+  },
+  {
+   "site": "engine/Sources/NTSDCore/OriginalLibActorHits.swift:77-82 (from OriginalHitDamage.swift:93)",
+   "hook": "42fcb1",
+   "behaviour": "effect >= 6000 -> frame",
+   "pristine": "yes",
+   "selection": "library != nil"
+  },
+  {
+   "site": "engine/Sources/NTSDCore/OriginalLibActorHits.swift:3-13,44-72 (OriginalLibHitState, OriginalLibWorldHits)",
+   "hook": "430c8c/42fcb1",
+   "behaviour": "20000-byte target buffer; whole hits pass",
+   "pristine": "OriginalWorldHits",
+   "selection": "OriginalGameplayBody:117-122"
+  },
+  {
+   "site": "engine/Sources/NTSDCore/OriginalPostDrawSlotPrefix.swift:227-236; OriginalLibTransformBacking.swift",
+   "hook": "41f5fc",
+   "behaviour": "states 4000-4999 transform, Actor+7b4 write",
+   "pristine": "nil backing",
+   "selection": "OriginalLibTransformBacking? (OriginalGameplayBody:229; NTSDRuntime/OriginalMacRuntimeLoading.swift:459,465-480)"
+  },
+  {
+   "site": "engine/Sources/NTSDCore/OriginalPostDrawCommands.swift:37,118-131,227; OriginalLibStageCommands.swift",
+   "hook": "4214d7",
+   "behaviour": "command word 3 spawns the requested ID",
+   "pristine": "word 1 path",
+   "selection": "explicit library or implicit state.libraryCommands (:37)"
+  },
+  {
+   "site": "engine/Sources/NTSDCore/OriginalMatchPreparation.swift:112-139,203-212,231-234",
+   "hook": "42d30b/42d473/42d5ce",
+   "behaviour": "requested ID from BG+0xc, X change, 450bb8 byte 3",
+   "pristine": "prepare(mode:) :95-107",
+   "selection": "prepareUsingBundledLibrary"
+  },
+  {
+   "site": "engine/Sources/NTSDCore/OriginalLibSurfaceText.swift; OriginalSurfaceText.swift:8-15 (Renderer seam)",
+   "hook": "401290",
+   "behaviour": "transparent text, retained DC",
+   "pristine": "OriginalSurfaceText",
+   "selection": "textRenderer (OriginalGameplayBody:90, OriginalPausedGameplay:35); menus: advance vs advanceWithLibrary etc."
+  },
+  {
+   "site": "menu text branches: OriginalFrontScreenBody:106-118, OriginalMenuPresentation:250-256, OriginalMenuReturn:66-77, OriginalModeScreen:120-125, OriginalCharacterScreen:92-99, OriginalMatchSelection:84-89, OriginalMusicConfiguration:70-76, OriginalComputerSelection:39-45, OriginalTournamentSetup:34-39, OriginalTeamTournamentSetup:34-39, OriginalWarSetup:84-89",
+   "hook": "401290",
+   "behaviour": "library text",
+   "pristine": "yes (advance with nil)",
+   "selection": "entry-point choice; the application calls only the WithLibrary variants"
+  },
+  {
+   "site": "engine/Sources/NTSDCore/OriginalNetworkMenu.swift:19,51; OriginalFrontScreenBody.swift:25-35; OriginalApplicationCatalogSession.swift:308-313; OriginalApplicationLoadedMenuSession.swift:316",
+   "hook": "401290",
+   "behaviour": "library text only",
+   "pristine": "none",
+   "selection": "-"
+  },
+  {
+   "site": "engine/Sources/NTSDCore/OriginalLibLoadingProgress.swift (\"Loading files\" at :60)",
+   "hook": "424352/424357 (+401290)",
+   "behaviour": "animated loading with the DLL label",
+   "pristine": "no-draw path only (OriginalInitialLoading.swift:10-30); animated path throws",
+   "selection": "OriginalApplicationCatalogSession:343,409"
+  },
+  {
+   "site": "engine/Sources/NTSDRuntime/OriginalMacRuntimeLoading.swift:349-356 (demoMusicResidue)",
+   "hook": "401290",
+   "behaviour": "demo track from the ECX residue 10001298 leaves",
+   "pristine": "none",
+   "selection": "-"
+  },
+  {
+   "site": "engine/Sources/NTSDRuntime/OriginalMacDisplayBackend.swift:1216-1222",
+   "hook": "401290",
+   "behaviour": "BkMode 1/2",
+   "pristine": "also accepts setBackgroundColor",
+   "selection": "-"
+  },
+  {
+   "site": "application layer: OriginalApplicationInputSession.swift:94-96 (libraryCommands = .init() always), OriginalApplicationGameplaySession.swift:12,94-98, OriginalApplicationMatchLaunchSession.swift:12,112, OriginalApplicationMenuSession.swift:31-33, OriginalApplicationBootstrap.swift:161",
+   "hook": "all",
+   "behaviour": "enables every library carrier unconditionally",
+   "pristine": "-",
+   "selection": "not in OriginalGameRules, NTSDProfile or the content identity"
+  }
+ ],
+ "otherItems": [
+  {
+   "name": "initial.bin (the 0x44d000 record's file-backed part)",
+   "where": "native/Sources/NTSDContent (OriginalStartup), E5b",
+   "class": "data/identity",
+   "section": ".data 0x44d000..0x44f000, identical in lf2.exe",
+   "e6": "stays game-supplied (original bytes); an LF2 2.0a pack would ship the same bytes"
+  },
+  {
+   "name": "War unit table 0x44d350..0x44d777, hero table 0x44d324 (A61, A66, A68, A69)",
+   "where": "read from the record",
+   "class": "data/identity",
+   "section": ".data (identical)",
+   "e6": "no change"
+  },
+  {
+   "name": "content identity (digests, counts, EXE SHA), E2",
+   "where": "native (NTSDContent identity)",
+   "class": "data/identity",
+   "section": "not EXE",
+   "e6": "an LF2 2.0a pack needs its own identity"
+  },
+  {
+   "name": "game identity (user-data folder, stop message), E3b",
+   "where": "native apps",
+   "class": "data/identity",
+   "section": "not EXE",
+   "e6": "no change"
+  },
+  {
+   "name": "engine constants E5f left for D1/E7: music tracks and labels, MENU_BACK%d and its count, built-in background names, tournament/result coordinates, EXE strings ('Marti', 'Little Fighter 2'), DAT key, COM GUIDs",
+   "where": "engine/Sources/NTSDCore (OriginalMusicPlayback, OriginalMusicConfiguration, OriginalMenuBackground, OriginalCatalogRegistry, ...)",
+   "class": "data/identity",
+   "section": ".text/.rdata, identical in lf2.exe",
+   "e6": "LF2 2.0a's; the scan policy keeps LF2 EXE strings as engine text"
+  },
+  {
+   "name": "'Loading files' label and its three phase colours",
+   "where": "engine/Sources/NTSDCore/OriginalLibLoadingProgress.swift:60",
+   "class": "lib.dll (NTSD)",
+   "section": "DLL data 0x10003040.. (lib-runtime-static initialData); 13 bytes, below the scanner's 16-byte minimum",
+   "e6": "NTSD's string: moves to the game profile (scan policy)"
+  },
+  {
+   "name": "kind-8/80-89/800-825 Z addend bits 004176cb00447a08",
+   "where": "engine/Sources/NTSDCore/OriginalLibActorHits.swift",
+   "class": "lib.dll (NTSD)",
+   "section": "DLL data +0x14",
+   "e6": "goes with the library extension"
+  },
+  {
+   "name": "import slot 0x447068: IsDebuggerPresent (LF2) -> LoadLibraryA (NTSD)",
+   "where": "not modelled",
+   "class": "lib.dll (NTSD)",
+   "section": ".rdata 0x44c600 (17 bytes)",
+   "e6": "NTSD-only side effect on any CRT call through that slot; not traced"
+  },
+  {
+   "name": "NTSDPractice (E3a: GameData, OriginalMovement/Fighter/Melee/Projectile/Clock; IDs 2, 11, 203, 224, 440)",
+   "where": "native/Sources/NTSDPractice",
+   "class": "unclear",
+   "section": "lab prototypes, not on the runtime path; not part of the profile",
+   "e6": "out of E6's scope"
+  }
+ ],
+ "exeStrings": {
+  "report": "/Volumes/NTSD-Builds/tasks/engine-split/scratch/e7e2/scan-policy-2.json (E7e-2, engine-literal mode)",
+  "exeStringHits": 162,
+  "ntsdExeHits": 159,
+  "ntsdExeEngineFiles": 51,
+  "section": ".rdata (raw == RVA)",
+  "fileOffsets": "291568..310958",
+  "differingRun": "0x4c600 (312832), 17 bytes: the import name",
+  "msvcr80Hits": 3,
+  "libDllHits": 0,
+  "reading": "every EXE string the engine holds is in the part of .rdata identical to lf2.exe: LF2 2.0a's, 'keep' under the user's rule; the only NTSD string in engine code, 'Loading files' (lib.dll data), is shorter than the scanner's 16-byte minimum"
+ },
+ "recordedUTC": "2026-10-21T20:28:42Z",
+ "by": "a separate read-only agent (no EXE, DLL or content bytes read), 2026-10-21; the loop's static checks below",
+ "staticChecks": {
+  "4176ac": "llvm-objdump of both EXEs: cmpl $0x8,%edx; jne 0x4176cf (the pristine target; lib.dll's acceptance continuation is 4176cb): caveat 3 settled, no role affected",
+  "rsrcNames": "both EXEs hold the same 67 resources (types 2 bitmap, 3 icon, 14 icon group, 24 manifest) under the same names; 31 have equal sizes, 36 differ (NTSD's bitmaps): LF2's .rsrc names the same bitmaps the interface lists use",
+  "slot447068": "references to IAT slot 0x447068 in .text: 0x445623 in both (a call in the CRT's /GS failure report, followed by SetUnhandledExceptionFilter(0)), plus NTSD's detour 0x4464ce; so the swapped import changes only the stack-cookie failure path (IsDebuggerPresent becomes LoadLibraryA in NTSD), which no compared path or engine model reaches"
+ }
+}

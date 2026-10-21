@@ -53,6 +53,11 @@ user stops, tool lifecycle rules, budgets, safety refusals and live pins still a
 - Use only the original Windows NTSD distribution as the behavioral reference.
 - Baseline: `downloads/NTSD_2.4_2.0a_clean/NTSD 2.4_2.0a`.
 - Baseline EXE SHA-256: `3f7ac67c5890ef979ee24a6dae5528056e7f631725c292cf9cb0a928ebeff71c`.
+- User update, 2026-10-21 (ENGINE_SPLIT D1): the official LF2 2.0a distribution
+  (lf2.net's `LF2_v2.0a.exe` via the Internet Archive, SHA-256 `540c4855…30e1`;
+  its `lf2.exe` `12dfa00f…8fc5`) is a second pinned reference, used only to tell
+  LF2 2.0a rules from NTSD's. It stays outside the repository; NTSD behaviour is
+  still recovered from the NTSD distribution. See [ENGINE_SPLIT](docs/research/ENGINE_SPLIT.md).
 - The user rejected the previous JavaScript implementation. Do not copy its
   behavior or use F.LF/another LF2 reimplementation as a source of engine rules.
 - Never modify baseline assets to accommodate an incomplete new engine.

@@ -1,0 +1,214 @@
+{
+ "study": "ENGINE_SPLIT",
+ "step": "E6a (reference part)",
+ "recordedUTC": "2026-10-21T20:24:10Z",
+ "decision": "D1 granted by the user 2026-10-21 (see es-e7e2-scan-policy.json userDecision)",
+ "source": {
+  "publisher": "lf2.net (Marti Wong's official site); its download page answers 403 today and links the commercial Little Fighter 2 Remastered (Steam app 3249650, released 2025-07-18)",
+  "url": "http://lf2.net/LF2_v2.0a.exe",
+  "archive": "https://web.archive.org/web/20190623000443id_/http://lf2.net/LF2_v2.0a.exe (Internet Archive capture 2019-06-23, CDX: application/x-msdos-program, status 200, record length 29515592)",
+  "notUsed": "lf2.net/__conduit/0131/LF2_v20a_Install.exe (2013): a toolbar-bundling variant",
+  "downloads": "four downloads, the same 29,586,263 bytes"
+ },
+ "setup": {
+  "file": "LF2_v2.0a.exe",
+  "bytes": 29586263,
+  "sha256": "540c485547e234b0d09595f54d067aafd7176092c308aca61868f3cbc03030e1",
+  "format": "Clickteam Install Creator (stub PE 139,264 bytes; signature 'wwgT)H' at 0x22000; blocks 0x1435, 0x1436, 0x143f, 0x143e, 0x1445, 0x143a (file list), 0x7f7f (files))"
+ },
+ "unpack": {
+  "tool": "tools/extract_clickteam_setup.py (reads the setup as data; nothing executed)",
+  "files": 690,
+  "bytes": 46182929,
+  "methods": {
+   "bzip2": 390,
+   "zlib": 300
+  },
+  "types": {
+   "bmp": 472,
+   "wav": 107,
+   "dat": 79,
+   "txt": 11,
+   "lfr": 10,
+   "wma": 8,
+   "exe": 3
+  },
+  "checks": "every stream's own check (zlib Adler-32, bzip2 CRCs) and its size against the list; the list's per-file 32-bit value is not CRC-32/Adler-32 and is recorded, not checked",
+  "list": "es-e6a-lf2-files.json"
+ },
+ "location": {
+  "path": "/Volumes/NTSD-Builds/tasks/engine-split/reference/lf2-2.0a ('download/', 'LF2 2.0a/', manifest.json)",
+  "inRepository": false,
+  "why": "a second reference for classification only; the LF2 distribution is not redistributed"
+ },
+ "keyFiles": {
+  "lf2.exe": {
+   "bytes": 3424256,
+   "sha256": "12dfa00f6b767508612550e9ab27ab74b4201ff4cb9ff31d068925924eab8fc5"
+  },
+  "readme.txt": {
+   "bytes": 9850,
+   "sha256": "1afdf46df9198614da0b6a511564906691ec51bc22c37895630b7c638c113bb5"
+  },
+  "recording/lfr_summary_generator.exe": {
+   "bytes": 77824,
+   "sha256": "acc7644fd8763358401ea74b4a5ff3eebfa52066349a381d20687861662200c7"
+  }
+ },
+ "exeComparison": {
+  "tool": "tools/compare_pe_sections.py <reference>/lf2.exe 'downloads/NTSD_2.4_2.0a_clean/NTSD 2.4_2.0a/NTSD 2.4.exe'",
+  "result": {
+   "a": {
+    "path": "<reference>/LF2 2.0a/lf2.exe",
+    "size": 3424256,
+    "sha256": "12dfa00f6b767508612550e9ab27ab74b4201ff4cb9ff31d068925924eab8fc5",
+    "base": 4194304,
+    "entry": 4478304,
+    "timestamp": 1247246135,
+    "sections": [
+     {
+      "name": ".text",
+      "va": 4096,
+      "vsize": 283402,
+      "raw": 4096,
+      "rsize": 286720,
+      "sha256": "24c9339bb9dd98cd4f15d9af4e0190722cc750b19299ed0882a73aad88167b5f"
+     },
+     {
+      "name": ".rdata",
+      "va": 290816,
+      "vsize": 22208,
+      "raw": 290816,
+      "rsize": 24576,
+      "sha256": "6225de712d6b735e5d5b854db7bf5cf54612cd526a42e19339f29879d3d0eb7d"
+     },
+     {
+      "name": ".data",
+      "va": 315392,
+      "vsize": 50980,
+      "raw": 315392,
+      "rsize": 8192,
+      "sha256": "b8eab0fcf4226195ff6ce9ed88800e220f3fa89c200718cd52c134b481406036"
+     },
+     {
+      "name": ".rsrc",
+      "va": 368640,
+      "vsize": 3097328,
+      "raw": 323584,
+      "rsize": 3100672,
+      "sha256": "ecfc076d359b082720b9ecde86c052f3e36c68df1bfc10f0e1ed5c2777e2c3f9"
+     }
+    ]
+   },
+   "b": {
+    "path": "downloads/NTSD_2.4_2.0a_clean/NTSD 2.4_2.0a/NTSD 2.4.exe",
+    "size": 31715328,
+    "sha256": "3f7ac67c5890ef979ee24a6dae5528056e7f631725c292cf9cb0a928ebeff71c",
+    "base": 4194304,
+    "entry": 4478304,
+    "timestamp": 1247246135,
+    "sections": [
+     {
+      "name": ".text",
+      "va": 4096,
+      "vsize": 283402,
+      "raw": 4096,
+      "rsize": 286720,
+      "sha256": "680b9623aedd0ea13f29cc37dc2e2495950d5923504f76cf008dfaaa5e3b29ca"
+     },
+     {
+      "name": ".rdata",
+      "va": 290816,
+      "vsize": 22208,
+      "raw": 290816,
+      "rsize": 24576,
+      "sha256": "4cbdbf6aaabd0547af03284c0055557fa82a11eb1e6fb3d246ec4e8eb1512727"
+     },
+     {
+      "name": ".data",
+      "va": 315392,
+      "vsize": 50980,
+      "raw": 315392,
+      "rsize": 8192,
+      "sha256": "b8eab0fcf4226195ff6ce9ed88800e220f3fa89c200718cd52c134b481406036"
+     },
+     {
+      "name": ".rsrc",
+      "va": 368640,
+      "vsize": 31391744,
+      "raw": 323584,
+      "rsize": 31391744,
+      "sha256": "4464567c71b72ac4de91a03da098967245b7bd3ec3ba1fc3ab171006853cdd25"
+     }
+    ]
+   },
+   "sections": [
+    {
+     "name": ".text",
+     "commonRVA": [
+      4096,
+      290816
+     ],
+     "differing": 24,
+     "sameHeader": true,
+     "runs": [
+      {
+       "va": "0x445561",
+       "length": 2
+      },
+      {
+       "va": "0x4464ab",
+       "length": 7
+      },
+      {
+       "va": "0x4464c4",
+       "length": 17
+      }
+     ]
+    },
+    {
+     "name": ".rdata",
+     "commonRVA": [
+      290816,
+      315392
+     ],
+     "differing": 16,
+     "sameHeader": true,
+     "runs": [
+      {
+       "va": "0x44c600",
+       "length": 17
+      }
+     ]
+    },
+    {
+     "name": ".data",
+     "commonRVA": [
+      315392,
+      323584
+     ],
+     "differing": 0,
+     "sameHeader": true,
+     "runs": []
+    },
+    {
+     "name": ".rsrc",
+     "commonRVA": [
+      368640,
+      3469312
+     ],
+     "differing": 2657111,
+     "sameHeader": false
+    }
+   ]
+  },
+  "imports": "163 imports each; the only difference is slot 0x447068, KERNEL32 IsDebuggerPresent in LF2 2.0a and LoadLibraryA in NTSD (its hint/name entry at 0x44c5fe, the .rdata run at 0x44c600)",
+  "reading": [
+   "NTSD 2.4.exe is LF2 2.0a's lf2.exe (same PE timestamp 1247246135, entry 0x445560 and section layout) with a lib.dll loader: the entry's call (0x445561) goes to a detour at 0x4464c4 in file-backed .text padding that loads 'lib.dll' (0x4464ab) through the swapped import (LIB_RUNTIME.md's entry path)",
+   ".data is identical, so initial.bin (the record's initial bytes, a copy of .data) is LF2 2.0a's",
+   ".rsrc differs (resources: NTSD's are larger)",
+   "so every NTSD code change is lib.dll's: its 12 installed jumps and one two-byte patch (LIB_RUNTIME.md 'Installed hooks')",
+   "a side effect in NTSD only: any CRT call through slot 0x447068 (IsDebuggerPresent in LF2) calls LoadLibraryA instead; not traced"
+  ]
+ }
+}
