@@ -31,9 +31,15 @@ final class SyntheticContentPackTests: XCTestCase {
         try Pack.withWrittenPack { root, pack in
             let inputs = try OriginalApplicationStartupInputs.load(directory: directory(root, Pack.startup), identity: pack.identity)
             XCTAssertEqual(inputs.initial.byteCount, 0xc3a8)
-            // Generator invariants (read back, not computed by the engine): no record word, all zero.
-            XCTAssertTrue(Pack.recordWords.isEmpty)
-            XCTAssertTrue(inputs.initial.bytes.allSatisfy { $0 == 0 }, "no record word is required by this rung")
+            // Generator invariants (read back, not computed by the engine): the
+            // record holds the table's words (E7d) and zero elsewhere.
+            var expected = [UInt8](repeating: 0, count: 0xc3a8)
+            for w in Pack.recordWords {
+                XCTAssertEqual(try inputs.initial.integer(at: w.offset - OriginalRecordLayout.base, as: UInt32.self), w.value, w.check)
+                for i in 0..<4 { expected[w.offset - OriginalRecordLayout.base + i] = UInt8(truncatingIfNeeded: w.value >> (8*i)) }
+            }
+            XCTAssertEqual(Set(Pack.recordWords.map(\.offset)).count, Pack.recordWords.count, "one entry per word")
+            XCTAssertTrue(inputs.initial.bytes == expected, "only the table's words are nonzero")
             XCTAssertEqual(Set(inputs.bitmaps.keys), Set((1...13).map { "MENU_BACK\($0)" } + SyntheticNames.frontBitmaps))
             XCTAssertEqual(inputs.bitmaps["MENU_BACK13"].map { [$0.width, $0.height, Int32($0.bitsPerPixel)] }, [64, 48, 24])
             XCTAssertEqual(inputs.bitmaps["SY_FRONT_23"].map { [$0.width, $0.height] }, [32, 16])
@@ -61,8 +67,9 @@ final class SyntheticContentPackTests: XCTestCase {
             let settings = try OriginalSettingsLoading.loadOwnStartup(globals: &globals, translatedBytes: inputs.controlBytes(),
                                                                       file: 0x1000, scratchAddress: 0x2000, target: 0x3000)
             XCTAssertEqual(settings.continuation, .ready)
-            XCTAssertEqual(try word(globals, 0x44fb70), 0x41)
-            XCTAssertEqual(try word(globals, 0x44fb70 + 0x50*3 + 4*10), 0x41 + 43)
+            // Player 1: keyboard (device 0), up 'A'; player 4's defend '6' and last joystick button 7.
+            XCTAssertEqual(try [word(globals, 0x44fb70), word(globals, 0x44fb74)], [0, 0x41])
+            XCTAssertEqual(try [word(globals, 0x44fb70 + 0x50*3 + 4*7), word(globals, 0x44fb70 + 0x50*3 + 4*10)], [0x36, 7])
             XCTAssertEqual(try (0..<4).map { try cString(globals, at: 0x44fcc0 + 11*$0 - OriginalRecordLayout.base) }, ["Ann", "Bo", "Cy", "Di"])
             XCTAssertEqual(try [word(globals, 0x450be8), word(globals, 0x450be4)], [2, 1])
             XCTAssertEqual(try cString(globals, at: 0x44fd18 - OriginalRecordLayout.base), "synthetic pack settings")
@@ -117,23 +124,28 @@ final class SyntheticContentPackTests: XCTestCase {
     func testCatalogLoadsAndBuildsALoadedCatalog() throws {
         try Pack.withWrittenPack { root, pack in
             let inputs = try OriginalApplicationCatalogInputs.load(directory: directory(root, Pack.catalog), identity: pack.identity)
-            let objectFiles = Pack.characters.map(\.dat)
+            let objectFiles = Pack.characters.map(\.dat) + Pack.items.map(\.dat)
             XCTAssertEqual(Set(inputs.files.keys), Set([Pack.catalogFile, Pack.stageFile, Pack.backgroundDAT, Pack.swingSound] + objectFiles))
-            XCTAssertEqual(inputs.bitmaps.count, 13)
+            XCTAssertEqual(inputs.bitmaps.count, 4 + 4*Pack.characters.count + 2*Pack.items.count + 1,
+                           "built-ins, each character's four, each item's two, the shadow")
             XCTAssertEqual(Set(Pack.builtInBitmaps).subtracting(inputs.bitmaps.keys), [])
             XCTAssertEqual(Set(inputs.music.keys), Set(Pack.musicNames))
             XCTAssertEqual(inputs.rules, .syntheticPack)
 
-            let expectedBitmaps = Pack.builtInBitmaps + Pack.characters.flatMap { [$0.head, $0.small, $0.sheet, $0.mirror] } + [Pack.backgroundShadow]
+            let expectedBitmaps = Pack.builtInBitmaps + Pack.characters.flatMap { [$0.head, $0.small, $0.sheet, $0.mirror] }
+                + Pack.items.flatMap { [$0.sheet, $0.mirror] } + [Pack.backgroundShadow]
             var checksums: [UInt32] = []
             for lookahead in [false, true] {
                 let loaded = try loadCatalog(inputs, scanfLookahead: lookahead)
                 let catalog = loaded.catalog
                 // The registry's requests: built-ins, then each object after its progress step, the background, the Stage file.
-                XCTAssertEqual(catalog.registry.requests.map(\.kind), [.bitmap, .bitmap, .bitmap, .bitmap, .progress, .object, .progress, .object, .background, .stages])
-                XCTAssertEqual(catalog.registry.requests.filter { $0.kind == .object }.map { [$0.id, $0.objectType] }, [[1, 0], [2, 0]])
+                let objectCount = Pack.characters.count + Pack.items.count
+                XCTAssertEqual(catalog.registry.requests.map(\.kind), [.bitmap, .bitmap, .bitmap, .bitmap]
+                    + (0..<objectCount).flatMap { _ in [OriginalCatalogLoadRequest.Kind.progress, .object] } + [.background, .stages])
+                XCTAssertEqual(catalog.registry.requests.filter { $0.kind == .object }.map { [$0.id, $0.objectType] },
+                               Pack.characters.map { [$0.id, 0] } + Pack.items.map { [$0.id, 1] })
                 // Objects: IDs, names, the sheet and the frames the DATs define.
-                XCTAssertEqual(catalog.objects.count, 2)
+                XCTAssertEqual(catalog.objects.count, objectCount)
                 for (object, character) in zip(catalog.objects, Pack.characters) {
                     XCTAssertEqual(try object.header.integer(at: 0x6f4, as: Int32.self), character.id)
                     XCTAssertEqual(try object.header.integer(at: 0x6f8, as: Int32.self), 0)
@@ -141,7 +153,8 @@ final class SyntheticContentPackTests: XCTestCase {
                     XCTAssertEqual(try object.header.integer(at: 0x498, as: Int32.self), 1, "one sprite sheet")
                     XCTAssertEqual(try [0x650, 0x678, 0x6a0, 0x6c8].map { try object.header.integer(at: $0 + 4, as: Int32.self) }, [23, 31, 4, 3])
                     let written = object.frames.filter { !$0.name.isEmpty }.map(\.number)
-                    XCTAssertEqual(written, [0, 1, 2, 3, 5, 6, 7, 8, 9, 10, 11, 60, 61, 110, 180, 220, 230])
+                    XCTAssertEqual(written, [0, 1, 2, 3, 5, 6, 7, 8, 9, 10, 11, 60, 61, 110] + Array(180...191)
+                                   + [210, 211, 212, 215, 219] + Array(220...227).filter { $0 != 221 } + [230, 231])
                     XCTAssertEqual(object.frames[3].field("next"), 999)
                     XCTAssertEqual(object.frames[60].sound, Pack.swingSound)
                     XCTAssertEqual(object.frames[60].interactions.count, 1)
@@ -199,15 +212,21 @@ final class SyntheticContentPackTests: XCTestCase {
             XCTAssertEqual(identity.menuManifestSHA256, try manifestDigest(Pack.characterMenu))
             XCTAssertEqual(identity.warMenuManifestSHA256, try manifestDigest(Pack.warMenu))
             XCTAssertEqual(identity.arenaManifestSHA256, try manifestDigest(Pack.arenas))
-            // initial.bin and .mask, 13 MENU_BACK and 24 front DIBs, control, adinfo and 5 menu WAVs; the catalog's 27 entries by role.
+            // initial.bin and .mask, 13 MENU_BACK and 24 front DIBs, control, adinfo and 5 menu WAVs; the catalog's
+            // entries by role: data.txt, stage.dat, a DAT per character and item, the background DAT and the swing WAV; the
+            // built-ins, four images per character, two per item and the shadow; eight music names
+            // (8 characters and an item: 60 entries).
+            let n = Pack.characters.count, m = Pack.items.count
             XCTAssertEqual(identity.startup.entries, 2 + 13 + 24 + 2 + 5)
-            XCTAssertEqual([identity.catalog.entries, identity.catalog.files, identity.catalog.bitmaps, identity.catalog.music], [27, 6, 13, 8])
+            XCTAssertEqual([identity.catalog.entries, identity.catalog.files, identity.catalog.bitmaps, identity.catalog.music],
+                           [(4 + n + m) + (5 + 4*n + 2*m) + 8, 4 + n + m, 5 + 4*n + 2*m, 8])
+            XCTAssertEqual(identity.catalog.entries, 60)
             XCTAssertEqual(identity.rules, .syntheticPack)
             // The generator is deterministic: a second pack has the same bytes.
             XCTAssertEqual(try Pack.make().packages, pack.packages)
-            print("synthetic pack written under \(root.deletingLastPathComponent().path)")
+            syntheticLog("synthetic pack written under \(root.deletingLastPathComponent().path)")
             for (package, files) in pack.packages.sorted(by: { $0.key < $1.key }) {
-                print("synthetic pack: \(package) \(files.count) files \(files.values.map(\.count).reduce(0, +)) bytes")
+                syntheticLog("synthetic pack: \(package) \(files.count) files \(files.values.map(\.count).reduce(0, +)) bytes")
             }
         }
     }
@@ -217,7 +236,7 @@ final class SyntheticContentPackTests: XCTestCase {
             let bundle = try XCTUnwrap(Bundle(path: root.path))
             let content = OriginalContentLocation(appBundle: bundle, identity: pack.identity, fallback: { nil })
             XCTAssertEqual(try OriginalApplicationStartupInputs.bundled(in: content).bitmaps.count, 37)
-            XCTAssertEqual(try OriginalApplicationCatalogInputs.bundled(in: content).files.count, 6)
+            XCTAssertEqual(try OriginalApplicationCatalogInputs.bundled(in: content).files.count, 4 + Pack.characters.count + Pack.items.count)
             XCTAssertEqual(try OriginalApplicationInterfaceInputs.bundled(in: content).bitmaps.count, 10)
             XCTAssertEqual(try OriginalApplicationMenuInputs.bundledWithWar(in: content).bitmaps.count, 13)
             XCTAssertEqual(try OriginalApplicationArenaInputs.bundled(in: content).bitmaps.count, 3)
@@ -359,6 +378,8 @@ final class SyntheticContentPackTests: XCTestCase {
             XCTAssertEqual(try loadCatalog(inputs, scanfLookahead: true).catalog.checksum, Self.pinnedCatalogChecksum)
         }
     }
-    static let pinnedPackSHA256 = "b99cd1f45e29b5c33b1c2855e5d4d953a5790f20ce6ae9a4f5006b1ff0b5d494"
-    static let pinnedCatalogChecksum: UInt32 = 123223
+    /// E7d: the pack grew (record words, keyboard control.txt, six characters, an item,
+    /// more frames); E7c's values were b99cd1f4… and 123223.
+    static let pinnedPackSHA256 = "2f16f591223de9cebaf6a95d63fe8586ec5586149c376af000dfa852ae7d4e17"
+    static let pinnedCatalogChecksum: UInt32 = 761717
 }

@@ -35,15 +35,47 @@ struct SyntheticContentPack {
     /// and every mask byte is 1 (the startup loader requires an all-ones mask,
     /// OriginalApplicationStartupInputs.swift:187-188).
     struct RecordWord: Equatable { let offset: Int, value: UInt32, check: String }
-    /// The words the engine checks for this rung's loaders: none. The startup
-    /// loader checks only the record's length and mask, and the catalog load
-    /// does not read it. Words later rungs will need (not written here, so the
-    /// record stays all zero until a check requires one): 0x44dce8 = 0x44a2b4
-    /// before a replay is written (OriginalReplayWriter.swift:85), and the
-    /// version word 0x44d03c that replays and the network compare
-    /// (OriginalReplayRecording.swift:91, OriginalReplayPlayback.swift:166,
-    /// OriginalInputControl.swift:150).
-    static let recordWords: [RecordWord] = []
+    /// The words an engine check needs, each with the check (E7c needed none:
+    /// the startup loader checks only the record's length and mask, and the
+    /// catalog load does not read it). E7d's start, front menu, first loading,
+    /// menus and VS match need the six below; values are invented wherever the
+    /// engine tests only for nonzero. Not written yet (no rung reaches them):
+    /// 0x44dce8 = 0x44a2b4 before a replay is written (OriginalReplayWriter.swift:85;
+    /// the match's replay is written at its end), and the version word 0x44d03c
+    /// that replays and the network compare (OriginalReplayRecording.swift:91,
+    /// OriginalReplayPlayback.swift:166, OriginalInputControl.swift:150).
+    static let recordWords: [RecordWord] = [
+        // E7d: the game window's client size. WinMain's window setup adds the
+        // frame metrics to them for CreateWindow (OriginalWindowInitialization.swift:90-91,
+        // 107-110) and sizes the back buffer by them (:136, :146-147); the runtime
+        // refuses a zero width or height (OriginalRuntimeWindowBackend.swift:261).
+        // Invented: 800 x 600.
+        RecordWord(offset: 0x44d78c, value: 800, check: "OriginalWindowInitialization.swift:90,107; OriginalRuntimeWindowBackend.swift:261"),
+        RecordWord(offset: 0x44d790, value: 600, check: "OriginalWindowInitialization.swift:91,107; OriginalRuntimeWindowBackend.swift:261"),
+        // E7d: the front menu's first-load flag: its 24 bitmaps are loaded only
+        // while it is nonzero (OriginalFrontMenuResources.swift:62); settings
+        // loading clears it afterwards (OriginalSettingsLoading.swift:139).
+        // Without them the front screen's body stops at a null bitmap
+        // (OriginalFrontScreenBody.swift:147, OriginalFrontMenuLoop.swift:33).
+        // Invented nonzero value: 0xe7d.
+        RecordWord(offset: 0x44d068, value: 0xe7d, check: "OriginalFrontMenuResources.swift:62"),
+        // E7d: the first loading's flag. The loading prefix, the initial loading
+        // and the interface loading require exactly 1 (OriginalInitialSoundLoading.swift:41,
+        // OriginalInitialLoading.swift:128, OriginalInitialInterfaceLoading.swift:69);
+        // the interface loading then clears it (:95). Value fixed by the engine.
+        RecordWord(offset: 0x44d05c, value: 1, check: "OriginalInitialSoundLoading.swift:41; OriginalInitialLoading.swift:128; OriginalInitialInterfaceLoading.swift:69"),
+        // E7d: the menu state after the first loading. The first loaded input
+        // step continues to the loaded menu only while it is nonzero
+        // (OriginalMatchRound.swift:137, OriginalApplicationLoadedMenuSession.swift:112),
+        // and the loaded menu shows the mode screen only for 10
+        // (OriginalModeScreen.swift:17, OriginalApplicationLoadedMenuSession.swift:615;
+        // other values go to the character screen's dispatcher). Value fixed by the engine.
+        RecordWord(offset: 0x44d020, value: 10, check: "OriginalMatchRound.swift:137; OriginalModeScreen.swift:17"),
+        // E7d: the loaded menu's bitmaps are loaded only while this flag is
+        // nonzero (OriginalMenuResourceLoading.swift:41); the loader clears it
+        // (:89). Invented nonzero value: 0xe7d.
+        RecordWord(offset: 0x44d07c, value: 0xe7d, check: "OriginalMenuResourceLoading.swift:41"),
+    ]
 
     static func initialRecord() -> [UInt8] {
         var bytes = [UInt8](repeating: 0, count: OriginalRecordLayout.size)
@@ -64,9 +96,31 @@ struct SyntheticContentPack {
         var head: String { "sprite\\sy\\\(stem)_f.bmp" }
         var small: String { "sprite\\sy\\\(stem)_s.bmp" }
     }
+    /// E7d: eight characters. Confirming no computer players draws a Random
+    /// character for every seat still on Random, each distinct and never
+    /// ordinal 0 (OriginalMatchSelection.swift:131-143, OriginalMatchContinuation.swift:30-36):
+    /// two players choosing ordinals 0 and 1 leave the six empty seats ordinals 2-7.
     static let characters = [
         Character(id: 1, name: "SyOne", stem: "one", body: .init(r: 200, g: 64, b: 40), accent: .init(r: 248, g: 216, b: 88), pace: 0),
         Character(id: 2, name: "SyTwo", stem: "two", body: .init(r: 40, g: 96, b: 200), accent: .init(r: 120, g: 232, b: 248), pace: 1)]
+        + [(3, "Three", "three"), (4, "Four", "four"), (5, "Five", "five"), (6, "Six", "six"), (7, "Seven", "seven"), (8, "Eight", "eight")].map { id, name, stem in
+            Character(id: Int32(id), name: "Sy" + name, stem: stem, body: .init(r: UInt8(30*id), g: UInt8(160 - 12*id), b: UInt8(40 + 20*id)),
+                      accent: .init(r: UInt8(250 - 10*id), g: UInt8(100 + 15*id), b: UInt8(60 + 5*id)), pace: id % 2)
+        }
+    /// E7d: one light weapon (type 1). Each gameplay tick with fewer than four
+    /// items out draws 1 in 200 for a random drop among the objects whose ID is
+    /// in the rules' item range (EngineTestRules: 100..<200); with none the
+    /// candidate draw has range 0 and the engine stops (OriginalWorldHits.swift:43-68,
+    /// OriginalActorHits.swift:106). Invented ID 150 (the engine-tests rules give
+    /// 100 weapon-break rows; 150 has none).
+    struct Item {
+        let id: Int32, name: String, stem: String, color: SyntheticMedia.RGB
+        var dat: String { "data\\sy_\(stem).dat" }
+        var sheet: String { "sprite\\sy\\\(stem)_0.bmp" }
+        var mirror: String { "sprite\\sy\\\(stem)_0_mirror.bmp" }
+    }
+    static let items = [Item(id: 150, name: "SyStick", stem: "stick", color: .init(r: 168, g: 120, b: 72))]
+    static let itemCell = (w: 23, h: 15, row: 4, col: 1)
     /// Sheet cells (w+1)×(h+1) in `row` columns and `col` rows (the DAT's own field names).
     static let cell = (w: 23, h: 31, row: 4, col: 3)
     static let swingSound = "data\\sy_swing.wav"
@@ -93,12 +147,23 @@ struct SyntheticContentPack {
     static let musicRate = 16000
 
     /// data\control.txt in the grammar of OriginalSettingsLoading (423480): 4×11
-    /// key codes, four names, two numbers, two lines, then free lines. The codes
-    /// are invented (consecutive from 0x41 per player); the last line has no
-    /// line end, so the reader's end test stops after it.
+    /// numbers, four names, two numbers, two lines, then free lines. A player's
+    /// eleven numbers are the control table's words 0-10 (OriginalSettingsLoading.swift:107):
+    /// the device (0: keyboard; OriginalFrontControlSettings.swift:6-9), seven
+    /// key VKs for up, down, left, right, attack, jump, defend (read for a
+    /// keyboard player, OriginalLocalInput.swift:82-88) and three joystick
+    /// button numbers (read only for a joystick, :91-92). E7d: every player is
+    /// a keyboard player (E7c's first number per player was nonzero, a
+    /// joystick, so no key reached a seat). The VKs are invented: letters from
+    /// A for players 1-3, digits for player 4; the button numbers too. The last
+    /// line has no line end, so the reader's end test stops after it.
+    static let keyVKs: [[UInt32]] = [Array(0x41...0x47), Array(0x48...0x4e), Array(0x4f...0x55), Array(0x30...0x36)]
+    static let joystickButtons: [UInt32] = [5, 6, 7]
+    enum Key: Int { case up, down, left, right, attack, jump, defend }
+    static func vk(player: Int, _ key: Key) -> UInt32 { keyVKs[player][key.rawValue] }
     static let controlText: String = {
         var lines: [String] = []
-        for player in 0..<4 { lines.append((0..<11).map { String(0x41 + 11*player + $0) }.joined(separator: " ")) }
+        for player in 0..<4 { lines.append(([0] + keyVKs[player] + joystickButtons).map { String($0) }.joined(separator: " ")) }
         lines += ["Ann Bo Cy Di", "2", "1", "synthetic pack settings", "made by NTSDEngineTests", "end of synthetic settings"]
         return lines.joined(separator: "\r\n")
     }()
@@ -106,6 +171,7 @@ struct SyntheticContentPack {
     static func catalogText() -> String {
         var text = "<object>\r\n"
         for c in characters { text += "id: \(c.id) type: 0 file: \(c.dat)\r\n" }
+        for item in items { text += "id: \(item.id) type: 1 file: \(item.dat)\r\n" }
         text += "<object_end>\r\n\r\n<background>\r\nid: 0 file: \(backgroundDAT)\r\n<background_end>\r\n"
         return text
     }
@@ -115,8 +181,8 @@ struct SyntheticContentPack {
     /// ignores whitespace, SyntheticDAT). The frame numbers are the format's
     /// conventions the engine's state code addresses (e.g. OriginalCharacterAI.swift:637).
     private static func frame(_ number: Int, _ name: String, pic: Int, state: Int, wait: Int, next: Int,
-                              body: Bool = true, extra: String = "") -> String {
-        var text = "<frame> \(number) \(name)\npic: \(pic) state: \(state) wait: \(wait) next: \(next) dvx: 0 dvy: 0 dvz: 0 centerx: 12 centery: 31\n"
+                              body: Bool = true, extra: String = "", center: (x: Int, y: Int) = (12, 31)) -> String {
+        var text = "<frame> \(number) \(name)\npic: \(pic) state: \(state) wait: \(wait) next: \(next) dvx: 0 dvy: 0 dvz: 0 centerx: \(center.x) centery: \(center.y)\n"
         text += extra
         if body { text += "bdy:\nkind: 0 x: 5 y: 4 w: 14 h: 27\nbdy_end:\n" }
         return text + "<frame_end>\n\n"
@@ -138,9 +204,47 @@ struct SyntheticContentPack {
             "sound: \(swingSound)\nitr:\nkind: 0 x: 16 y: 10 w: 20 h: 12 dvx: \(6 + p) fall: 25 arest: 9 bdefend: 14 injury: \(23 + 4*p)\nitr_end:\n")
         text += frame(61, "punch", pic: 3, state: 3, wait: 3, next: 999)
         text += frame(110, "defend", pic: 2, state: 7, wait: 10, next: 999)
-        text += frame(180, "falling", pic: 9, state: 12, wait: 4, next: 999)
+        // E7d: the frames a hit and a fall select. Injured by the defender's
+        // accumulated fall: 220, 222/224 (by facing), 226 (OriginalHitDamage.swift:19-31);
+        // falling 180-185 in front, 186-191 behind (:55), whose frame the
+        // airborne fall picks by vertical speed, with 185/191 the bounce
+        // (OriginalActorPhysics.swift:108-124, 154-158); lying 230/231 after
+        // a slow landing (:154). E7c had 180, 220 and 230 only. The falling
+        // frames hold (next 0): the physics chooses among them.
+        for n in 180...185 { text += frame(n, "falling", pic: 9, state: 12, wait: 2, next: 0) }
+        for n in 186...191 { text += frame(n, "falling", pic: 8, state: 12, wait: 2, next: 0) }
         text += frame(220, "injured", pic: 6, state: 11, wait: 4, next: 999)
+        for n in [222, 224] {
+            text += frame(n, "injured", pic: 6, state: 11, wait: 2, next: n + 1)
+            text += frame(n + 1, "injured", pic: 7, state: 11, wait: 2, next: 999)
+        }
+        text += frame(226, "injured", pic: 6, state: 16, wait: 2, next: 227)
+        text += frame(227, "injured", pic: 7, state: 16, wait: 4, next: 999)
         text += frame(230, "lying", pic: 10, state: 14, wait: 30, next: 999, body: false)
+        text += frame(231, "lying", pic: 10, state: 14, wait: 30, next: 999, body: false)
+        // E7d: the jump (212 is where a jump's velocity starts, OriginalActorScheduler.swift:110,155-156)
+        // and the landings a fighter's landing selects (215 after a jump, 219
+        // otherwise, as when the match drops the fighters in; OriginalActorPhysics.swift:142).
+        // Without 219 a landed fighter held an empty frame and was not drawn.
+        text += frame(210, "jump", pic: 4, state: 4, wait: 1, next: 211)
+        text += frame(211, "jump", pic: 5, state: 4, wait: 1, next: 212)
+        text += frame(212, "jump", pic: 6, state: 4, wait: 1, next: 0)
+        text += frame(215, "crouch", pic: 7, state: 15, wait: 2, next: 999)
+        text += frame(219, "crouch", pic: 7, state: 15, wait: 2, next: 999)
+        return text
+    }
+
+    /// E7d: the light weapon's DAT: in the sky (state 1000, frames 0-3, where a
+    /// dropped item starts) and on the ground (frame 60; 70 after a throw), the
+    /// frames a type-1 landing selects (OriginalActorPhysics.swift:162-181).
+    /// Its HP (header 0x90) and the HP a landing costs (0x94) are invented.
+    static func itemText(_ item: Item) -> String {
+        var text = "\n<bmp_begin>\nname: \(item.name)\n"
+        text += "file(0-\(itemCell.row*itemCell.col - 1)): \(item.sheet)  w: \(itemCell.w)  h: \(itemCell.h)  row: \(itemCell.row)  col: \(itemCell.col)\n"
+        text += "weapon_hp: 60\nweapon_drop_hurt: 7\n<bmp_end>\n\n"
+        for i in 0..<4 { text += frame(i, "in_the_sky", pic: i, state: 1000, wait: 1, next: i == 3 ? 0 : i + 1, body: false, center: (12, 15)) }
+        text += frame(60, "on_ground", pic: 0, state: 1004, wait: 1, next: 0, body: false, center: (12, 15))
+        text += frame(70, "on_ground", pic: 1, state: 1004, wait: 1, next: 0, body: false, center: (12, 15))
         return text
     }
 
@@ -201,6 +305,7 @@ struct SyntheticContentPack {
         catalogEntries.append((catalogFile, "file", Array(catalogText().utf8)))
         catalogEntries.append((stageFile, "file", try SyntheticDAT.encrypt(stageText(), fileName: stageFile)))
         for c in characters { catalogEntries.append((c.dat, "file", try SyntheticDAT.encrypt(characterText(c), fileName: c.dat))) }
+        for item in items { catalogEntries.append((item.dat, "file", try SyntheticDAT.encrypt(itemText(item), fileName: item.dat))) }
         catalogEntries.append((backgroundDAT, "file", try SyntheticDAT.encrypt(backgroundText(), fileName: backgroundDAT)))
         catalogEntries.append((swingSound, "file", SyntheticMedia.wav(rate: 16000, samples: 2400, period: 12, amplitude: 90)))
         for c in characters {
@@ -211,6 +316,12 @@ struct SyntheticContentPack {
             // Portraits of an invented size (no engine rule fixes one).
             catalogEntries.append((c.head, "bitmapFile", SyntheticMedia.bands(width: 37, height: 41, colors: [c.accent, c.body])))
             catalogEntries.append((c.small, "bitmapFile", SyntheticMedia.bands(width: 37, height: 41, colors: [c.body, c.accent])))
+        }
+        for item in items {
+            for mirrored in [false, true] {
+                catalogEntries.append((mirrored ? item.mirror : item.sheet, "bitmapFile", SyntheticMedia.sheet(w: itemCell.w, h: itemCell.h,
+                    row: itemCell.row, col: itemCell.col, body: item.color, accent: .init(r: 240, g: 240, b: 240), mirrored: mirrored)))
+            }
         }
         let shadow = SyntheticMedia.bmp(width: 30, height: 9) { x, y in
             let dx = 2*x - 29, dy = 2*y - 8

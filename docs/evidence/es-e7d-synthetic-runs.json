@@ -1,0 +1,138 @@
+{
+ "study": "ENGINE_SPLIT",
+ "step": "E7d",
+ "base": "d3030a1a",
+ "recordedUTC": "2026-10-21T02:25:07Z",
+ "change": "The synthetic pack beyond loading, in the engine's tests only: (1) the first load through OriginalMacRuntimeLoading and the session types to the mode screen; (2) startup to the title screen, and the engine's own OriginalRuntimeSession with a test host to --exit-after-startup; (3) a scripted VS match of 100 gameplay bodies with frame digests pinned. No engine source or package change.",
+ "implementation": "one owner agent; the loop adopted the review's changes",
+ "rungs": {
+  "sessionPath": "clicking START runs the real first load through OriginalMacRuntimeLoading to the mode screen (menu 10); the catalog checksum it computes equals the direct loadWithFiles value (761717); allocations, bitmap requests, files, audio requests [791, 967, 45, 77] and the mode-screen frame pinned",
+  "headlessStart": "startup succeeds (sequence 1, window 3, 59 attempts, 58 requests; audio 22, display 8, runtime 17, window 11), the title frame pinned (iterations 3 and 12 identical), menu iterations, requests, presents [12, 733, 10]; OriginalRuntimeSession with a test host (modelled on NTSDHeadlessHost's) ends --exit-after-startup cleanly and presents the driver's front-menu frame",
+  "vsMatch": "launch at loaded cycle 198, 100 gameplay bodies: P2 walks up to P1, a random item drops and lands, P1's punches take P2 from 500 to 456 HP and knock it to x 292; a 64-bit hash chain over all 100 frames, SHA-256 of bodies 1, 50 and 100, a World+Actors digest and the fighters' states at five bodies pinned; 12,907 draws replayed (9,108 rejected as invalid rectangles, as the game ignores them), 42 sound calls"
+ },
+ "recordWords": [
+  {
+   "offset": "0x44d78c/0x44d790",
+   "value": "800/600",
+   "status": "invented (the original's documented 794x550 differs)",
+   "check": "OriginalWindowInitialization.swift:90-91,136,146-147; OriginalRuntimeWindowBackend.swift:261 refuses zero"
+  },
+  {
+   "offset": "0x44d068",
+   "value": "0xe7d",
+   "status": "invented (only tested nonzero)",
+   "check": "OriginalFrontMenuResources.swift:62"
+  },
+  {
+   "offset": "0x44d05c",
+   "value": "1",
+   "status": "forced (three loaders require exactly 1); probably the original's value by construction",
+   "check": "OriginalInitialSoundLoading.swift:41, OriginalInitialLoading.swift:128, OriginalInitialInterfaceLoading.swift:69"
+  },
+  {
+   "offset": "0x44d020",
+   "value": "10",
+   "status": "forced for the mode-screen path (OriginalModeScreen.swift:12-17 would also set it itself from 0x451160 = 5 and 0x450c2c = 0); probably the original's value by construction",
+   "check": "OriginalMatchRound.swift:137 (nonzero), OriginalModeScreen.swift:17 (== 10)"
+  },
+  {
+   "offset": "0x44d07c",
+   "value": "0xe7d",
+   "status": "invented (only tested nonzero)",
+   "check": "OriginalMenuResourceLoading.swift:41"
+  }
+ ],
+ "pack": {
+  "files": 166,
+  "bytes": 1221616,
+  "sha256OfAllFiles": "2f16f591223de9cebaf6a95d63fe8586ec5586149c376af000dfa852ae7d4e17 (pinned; was b99cd1f4…)",
+  "catalogChecksum": "761717 (pinned; was 123223)",
+  "changes": [
+   "control.txt: each player's first word 0 (keyboard; E7c's nonzero made every player a joystick), then invented key codes (OriginalLocalInput.swift:82-93)",
+   "six more characters (IDs 3-8): Random draws from IDs 1-8 and needs enough eligible, unchosen characters (OriginalMatchSelection.swift:139)",
+   "one light weapon (ID 150, invented cell, HP and hurt): with no object in the item range the random drop divides by zero (OriginalActorHits.swift:106); its frames 0, 60 and 70 follow OriginalActorPhysics.swift:175-180",
+   "more character frames: 210-212, 215, 219 (jump, landing), 222-227 (injured), 180-191 (falling), 231 (lying)"
+  ]
+ },
+ "tests": {
+  "macOS": "Executed 155 tests, with 1 test skipped and 0 failures (clean debug build)",
+  "linux": "swift:6.4.0-noble, uid 1000, TMPDIR on NTSD-Builds: Executed 133 tests, with 1 test skipped and 0 failures (the music test Darwin-only, as in E7c)",
+  "crossHost": "the pinned pack digest, catalog checksum, title and mode-screen frames and the VS match's frame chain and state digests are equal on macOS (CEST) and in the container (UTC)",
+  "timeZone": "the match's values do not change with TZ=America/Los_Angeles (owner's run); the loading's fixed date is converted in the current zone (OriginalMacRuntimeLoading.swift:415) and globals are not digested (the replay name uses local time, OriginalMatchPrelude.swift:57-76)"
+ },
+ "scan": {
+  "report": "/Volumes/NTSD-Builds/tasks/engine-split/scratch/e7b/scan-pack-5.json",
+  "files": 3871,
+  "bytes": 6702325567,
+  "summary": {
+   "DAT and data-file format text (field vocabulary, frame names)": {
+    "hits": 504314,
+    "engineSites": 12
+   },
+   "WAV header fields": {
+    "hits": 18464,
+    "engineSites": 32
+   },
+   "labels shared with the project's own fixtures and manifests (JSON text, not original bytes)": {
+    "hits": 199,
+    "engineSites": 3
+   },
+   "short audio sample runs (authored waveforms)": {
+    "hits": 582,
+    "engineSites": 8
+   },
+   "unexpected": {
+    "hits": 43897,
+    "engineSites": 10
+   }
+  },
+  "examinedUnexpected": "frame field lines of the generated character and item DATs with the generator's small invented values (longest 53 bytes, e.g. 'state: 15 wait: 2 next: 999 dvx: 0'), common in original DATs; the all-ones initial.mask's digest in the startup manifest (as in E7c)"
+ },
+ "review": {
+  "by": "a separate read-only agent, 2026-10-21",
+  "verdict": "accept after wording and evidence fixes: nothing copied; the driver only calls engine and runtime APIs and answers platform requests",
+  "required": [
+   "the session host's comment: exit(1) is reached under --exit-after-startup on a startup failure (a fatalError that ends the test bundle), not only by WM_QUIT (fixed)",
+   "the driver's stated reason: the session's state is private; its exit applies only to scripted or exit-after runs (fixed)",
+   "the evidence states that rungs 1 and 3 run a test-side copy of the session's composition (about 70 lines of its glue in its order, without the window-message guard at OriginalRuntimeSession.swift:698), checked against the session only up to the front menu (here)",
+   "the limits and the engine findings below (here)"
+  ],
+  "adopted": [
+   "the clock closure's capture made weak (a retain cycle)",
+   "diagnostic prints only with SYNTHETIC_VERBOSE"
+  ],
+  "notAdopted": [
+   "globals digested with the replay name masked (recorded as a limit)",
+   "a cross-check of rung 3 through the session with --click-at and --loaded-script (needs the session's private state; recorded)",
+   "linking NTSDHeadlessHost into the tests (a manifest change; recorded)"
+  ]
+ },
+ "limits": [
+  "rungs 1 and 3 drive a test-side copy of the session's composition; the session itself is exercised only to the front menu",
+  "text is never drawn (the text-mask callback returns empty glyphs)",
+  "9,108 of 12,907 draws (71%) were rejected as invalid rectangles",
+  "no computer player, match end, replay or result screen",
+  "globals not digested",
+  "both runs arm64; one pair of time zones",
+  "pack contracts found: at least one object in the item range (OriginalActorHits.swift:106) and at least eight characters eligible for Random (OriginalMatchSelection.swift:139)",
+  "the synthetic tests take about 4 s each on Linux (most of that suite's 84 s)"
+ ],
+ "engineFindings": [
+  {
+   "what": "--virtual-clock claims reproducibility (OriginalRuntimeSession.swift:82-84), but localTime and the session's startup environment (:216-219) use the host's time zone",
+   "status": "recorded; not this split's change"
+  },
+  {
+   "what": "loaded-state tracing only works with networking enabled (OriginalRuntimeSession.swift:615)",
+   "status": "recorded"
+  },
+  {
+   "what": "with no object in the item range a random drop divides by zero (OriginalActorHits.swift:106) and is not labelled a source fault; the original would probably fault there too (unverified)",
+   "status": "recorded; needs a check against the original before any change"
+  }
+ ],
+ "reviewNeeded": "engine test files only; reviewed as above",
+ "openGates": [
+  "the scan policy for the engine's expected classes (E7b; the user, with D1)"
+ ]
+}
