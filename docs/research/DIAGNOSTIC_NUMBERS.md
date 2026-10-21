@@ -28,6 +28,14 @@ three base8 exponent groups suffice for binary64. This is504 bytes with SHA256
 `13175ac4fec5e3602495c2164b80050d181c3d0f9b948e48dd524f367b8d5508`.
 Acceptance verifies each constant directly against the pinned DLL bytes.
 
+Update 2026-10-21 (ENGINE_SPLIT E7e-1, a new statement; the paragraph above
+records the earlier state): the engine no longer holds these records as
+copies but computes them: for p = d·8^g (d = 1…7, g = 0…2) the top 64
+significand bits are 10^±p rounded to the nearest 64-bit value (ties to
+even), the low 16 bits those of 10^±p rounded to 80 bits. The computed 504
+bytes have the same SHA-256 (the engine's test checks it), and the corpus
+test still compares every record with the DLL's.
+
 Preserve the original multiplication algorithm. It accumulates only the upper
 five convolution diagonals of16-bit words into96 bits, normalizes the result
 and rounds the low16 guard bits to an80-bit significand using ties-to-even.

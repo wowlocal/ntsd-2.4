@@ -160,64 +160,115 @@ public enum OriginalDiagnosticNumber {
         }
         return result
     }
-    // Exact twelve-byte scaling constants from pinned VC80 DLL .6195,
-    // 781c1ff0/781c2150; three base8 exponent groups suffice for binary64.
-    static let tableHex: [[String]] = [
-        [
-            "000000000000000000a00240",
-            "000000000000000000c80540",
-            "000000000000000000fa0840",
-            "0000000000000000409c0c40",
-            "000000000000000050c30f40",
-            "000000000000000024f41240",
-            "000000000000008096981640",
-            "0000000000000020bcbe1940",
-            "000000000004bfc91b8e3440",
-            "000000a1edccce1bc2d34e40",
-            "20f09eb5702ba8adc59d6940",
-            "d05dfd25e51a8e4f19eb8340",
-            "7196d795430e058d29af9e40",
-            "f9bfa044ed81128f8182b940",
-            "bf3cd5a6cfff491f78c2d340",
-            "6fc6e08ce980c947ba93a841",
-            "bc856b5527398df770e07c42",
-            "bcdd8edef99dfbeb7eaa5143",
-            "a1e676e3ccf2292f84812644",
-            "281017aaf8ae10e3c5c4fa44",
-            "eba7d4f3f7ebe14a7a95cf45"
-        ],
-        [
-            "cdcccdccccccccccccccfb3f",
-            "713d0ad7a3703d0ad7a3f83f",
-            "5a643bdf4f8d976e1283f53f",
-            "c3d32c6519e25817b7d1f13f",
-            "d00f2384471b47acc5a7ee3f",
-            "40a6b6696caf05bd3786eb3f",
-            "333dbc427ae5d594bfd6e73f",
-            "c2fdfdce61841177ccabe43f",
-            "2f4c5be14dc4be9495e6c93f",
-            "92c4533b7544cd14be9aaf3f",
-            "de67ba943945ad1eb1cf943f",
-            "2423c6e2bcba3b31618b7a3f",
-            "615559c17eb1537c12bb5f3f",
-            "d7ee2f8d06be928515fb443f",
-            "243fa5e939a527ea7fa82a3f",
-            "7daca1e4bc647c46d0dd553e",
-            "637b06cc23547783ff91813d",
-            "91fa3a197a63254331c0ac3c",
-            "2189d138824797b800fdd73b",
-            "dc8858081bb1e8e386a6033b",
-            "c684454207b6997537db2e3a"
-        ]
-    ]
-    private static let tables: [[Scaled]] = tableHex.map { table in
-        table.map { hex in
-            let chars = Array(hex.utf8)
-            let bytes = stride(from: 0, to: chars.count, by: 2).map {
-                UInt8(String(decoding: chars[$0..<$0+2], as: UTF8.self), radix: 16)!
+    // The twelve-byte scaling constants of the pinned VC80 DLL .6195 (its two
+    // tables at 781c1ff0/781c2150: 10^p and 10^-p for p = 1...8, 16...64 by 8,
+    // 128...448 by 64; three base8 exponent groups suffice for binary64), computed
+    // here instead of copied (ENGINE_SPLIT E7e-1): the top 64 significand bits are
+    // 10^±p rounded to the nearest 64-bit value (ties to even), the low 16 bits
+    // those of 10^±p rounded to 80 bits. Equal to the DLL's 42 entries (the
+    // diagnostic-number corpus compares tableHex; the engine's test their digest).
+    /// d·8^g for g = 0...2, d = 1...7: the groups the scaling looks up (group += 7).
+    static let powers = (0..<3).flatMap { group in (1...7).map { $0 << (3*group) } }
+    private static let tables: [[Scaled]] = [powers.map { scaled(power: $0) }, powers.map { scaled(power: -$0) }]
+    /// The tables in hex, in the DLL's byte layout (five significand words, then the exponent word).
+    static var tableHex: [[String]] {
+        tables.map { table in
+            table.map { entry in
+                let digits = Array("0123456789abcdef".utf8)
+                let bytes = (entry.words + [UInt16(entry.exponent)]).flatMap { [UInt8($0 & 0xff), UInt8($0 >> 8)] }
+                return String(decoding: bytes.flatMap { [digits[Int($0 >> 4)], digits[Int($0 & 15)]] }, as: UTF8.self)
             }
-            let words = stride(from: 0, to: 12, by: 2).map { UInt16(bytes[$0]) | UInt16(bytes[$0+1]) << 8 }
-            return .init(words: Array(words.prefix(5)), exponent: Int(words[5]))
+        }
+    }
+    /// 10^power in the twelve-byte format, by the rounding above.
+    private static func scaled(power: Int) -> Scaled {
+        var ten = Natural(1)
+        for _ in 0..<abs(power) { ten.multiply(by: 10) }
+        let width = ten.bitWidth, high: UInt64, low: UInt64, exponent: Int
+        if power > 0 {
+            high = ten.rounded(shiftingRightBy: width-64).value
+            low = UInt64(ten.rounded(shiftingRightBy: width-80).limbs[0] & 0xffff)
+            exponent = width-1+0x3fff
+        } else {
+            // 2^-width < 10^power < 2^(1-width): 10^-power is no power of two.
+            high = Natural.roundedQuotient(Natural(1).shiftedLeft(by: width+63), ten).value
+            low = UInt64(Natural.roundedQuotient(Natural(1).shiftedLeft(by: width+79), ten).limbs[0] & 0xffff)
+            exponent = -width+0x3fff
+        }
+        precondition(high >> 63 == 1, "a normalized 64-bit rounding")
+        return .init(words: [UInt16(low)] + (0..<4).map { UInt16(truncatingIfNeeded: high >> (16*$0)) }, exponent: exponent)
+    }
+    /// Unsigned integers of any width in little-endian 32-bit limbs: only what
+    /// the table's computation needs.
+    private struct Natural {
+        var limbs: [UInt32]
+        init(_ value: UInt32) { limbs = [value] }
+        init(limbs: [UInt32]) { self.limbs = limbs; while self.limbs.count > 1 && self.limbs.last == 0 { self.limbs.removeLast() } }
+        var bitWidth: Int { 32*(limbs.count-1) + (32-(limbs.last ?? 0).leadingZeroBitCount) }
+        var value: UInt64 { precondition(bitWidth <= 64); return limbs.prefix(2).enumerated().reduce(0) { $0 | UInt64($1.element) << (32*$1.offset) } }
+        func bit(_ index: Int) -> Bool { index >= 0 && index/32 < limbs.count && limbs[index/32] >> (index%32) & 1 == 1 }
+        mutating func multiply(by factor: UInt32) {
+            var carry: UInt64 = 0
+            for i in limbs.indices { let p = UInt64(limbs[i])*UInt64(factor)+carry; limbs[i] = UInt32(truncatingIfNeeded: p); carry = p >> 32 }
+            if carry != 0 { limbs.append(UInt32(carry)) }
+        }
+        func shiftedLeft(by count: Int) -> Natural {
+            var out = [UInt32](repeating: 0, count: count/32) + limbs + [0]
+            if count%32 != 0 {
+                for i in stride(from: out.count-1, through: count/32, by: -1) {
+                    out[i] = out[i] << (count%32) | (i > count/32 ? out[i-1] >> (32-count%32) : 0)
+                }
+            }
+            return .init(limbs: out)
+        }
+        func shiftedRight(by count: Int) -> Natural {
+            guard count > 0 else { return shiftedLeft(by: -count) }
+            var out: [UInt32] = []
+            for i in (count/32)..<limbs.count {
+                let next = i+1 < limbs.count ? limbs[i+1] : 0
+                out.append(count%32 == 0 ? limbs[i] : limbs[i] >> (count%32) | next << (32-count%32))
+            }
+            return .init(limbs: out.isEmpty ? [0] : out)
+        }
+        /// self / 2^count rounded to the nearest, ties to even (exact for count <= 0).
+        func rounded(shiftingRightBy count: Int) -> Natural {
+            var q = shiftedRight(by: count)
+            guard count > 0, bit(count-1) else { return q }
+            let sticky = (0..<(count-1)).contains { bit($0) }
+            if sticky || q.bit(0) { q.add(1) }
+            return q
+        }
+        mutating func add(_ value: UInt32) {
+            var carry = UInt64(value), i = 0
+            while carry != 0 {
+                if i == limbs.count { limbs.append(0) }
+                let sum = UInt64(limbs[i])+carry; limbs[i] = UInt32(truncatingIfNeeded: sum); carry = sum >> 32; i += 1
+            }
+        }
+        static func < (a: Natural, b: Natural) -> Bool {
+            if a.limbs.count != b.limbs.count { return a.limbs.count < b.limbs.count }
+            for i in a.limbs.indices.reversed() where a.limbs[i] != b.limbs[i] { return a.limbs[i] < b.limbs[i] }
+            return false
+        }
+        func subtracting(_ b: Natural) -> Natural {
+            var out = limbs, borrow: Int64 = 0
+            for i in out.indices {
+                let d = Int64(out[i]) - Int64(i < b.limbs.count ? b.limbs[i] : 0) - borrow
+                out[i] = UInt32(truncatingIfNeeded: d); borrow = d < 0 ? 1 : 0
+            }
+            return .init(limbs: out)
+        }
+        /// a / d rounded to the nearest, ties to even (bitwise long division).
+        static func roundedQuotient(_ a: Natural, _ d: Natural) -> Natural {
+            var q = Natural(0), r = Natural(0)
+            for i in stride(from: a.bitWidth-1, through: 0, by: -1) {
+                r = r.shiftedLeft(by: 1); if a.bit(i) { r.add(1) }
+                q = q.shiftedLeft(by: 1)
+                if !(r < d) { r = r.subtracting(d); q.add(1) }
+            }
+            let twice = r.shiftedLeft(by: 1)
+            if d < twice || (!(twice < d) && q.bit(0)) { q.add(1) }
+            return q
         }
     }
 }
