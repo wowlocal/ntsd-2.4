@@ -45,7 +45,8 @@ extension OriginalGameRules {
         characterAISpecial: NoSpecialMoves())
 }
 
-/// The engine tests' special moves: none (no engine test runs the AI).
+/// The engine tests' special moves: none (the synthetic computer match runs the
+/// generic character AI with it, ENGINE_SPLIT E7f).
 struct NoSpecialMoves: OriginalCharacterAISpecial {
     func special(own: Int32,_ ai: inout OriginalCharacterAIPass,s: Int,t: Int,slot: Int,_ l: OriginalCharacterAIPass.Locals) throws -> Bool { false }
 }

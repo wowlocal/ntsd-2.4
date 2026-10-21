@@ -107,8 +107,25 @@ import CoreGraphics
     var script: [Int: [Action]] = [:], loadedScript: [Int: [Action]] = [:]
 
     func clock() -> UInt32 { Self.clockBase &+ Self.clockStep &* UInt32(truncatingIfNeeded: steps) }
+    /// GetLocalTime's source date (`OriginalMacRuntimeLoading.localDate`), E7f:
+    /// the instant whose wall-clock time in the host's zone is the virtual
+    /// date's in UTC (2026-01-01 00:00:00). The runtime converts the date in
+    /// the host's zone (OriginalMacRuntimeLoading.swift:414-419), so the
+    /// prelude's replay name, and the recording notices that show it
+    /// (OriginalMenuPresentation.swift:286-291), are then the same on every
+    /// host. E7d passed the virtual date itself, whose name varied with the
+    /// zone (only globals held it; no E7d pin reads them).
+    static let localVirtualDate: Date = {
+        var utc = Calendar(identifier: .gregorian), local = Calendar(identifier: .gregorian)
+        utc.timeZone = TimeZone(secondsFromGMT: 0)!; local.timeZone = .current
+        let wall = utc.dateComponents([.year, .month, .day, .hour, .minute, .second], from: OriginalRuntimeSession.virtualDate)
+        return local.date(from: wall)!
+    }()
 
-    init(root: URL, pack: SyntheticContentPack) throws {
+    /// `glyphs` (E7f): TextOutA draws with the authored glyph source
+    /// (SyntheticGlyphs); without it every string's mask is empty, so no text
+    /// pixel is drawn (E7d's runs).
+    init(root: URL, pack: SyntheticContentPack, glyphs: Bool = false) throws {
         self.root = root; self.pack = pack
         guard let bundle = Bundle(path: root.path) else { throw SyntheticRunError.noBundle(root.path) }
         content = OriginalContentLocation(appBundle: bundle, identity: pack.identity, fallback: { nil })
@@ -121,7 +138,7 @@ import CoreGraphics
         let log = self.log
         func box(_ text: [UInt8], _ caption: [UInt8]) { log.shown.append("box " + String(decoding: caption, as: UTF8.self) + ": " + String(decoding: text, as: UTF8.self)) }
         let host = OriginalRuntimeStartupHost(windows: windowHost,
-            textMask: { _ in .init(advance: 0, originX: 0, originY: 0, width: 0, height: 0, bits: []) },
+            textMask: glyphs ? SyntheticGlyphs.mask : { _ in .init(advance: 0, originX: 0, originY: 0, width: 0, height: 0, bits: []) },
             messageBox: { box($0, $1) })
         started = try OriginalMacRuntimeStartup.run(inputs: startupInputs, overlay: overlay, environment: environment, host: host)
         started.display.pipelinesBackFill = false
@@ -169,7 +186,7 @@ import CoreGraphics
                 loading.postMessage = { [weak menu] message, wParam, lParam in menu?.messages.post(message, wParam, lParam) }
                 loading.presentControlMusic = { [unowned self] in try self.music.present(self.started.runtime.music.presented()) }
                 loading.playbackInteractive = false
-                loading.localDate = { OriginalRuntimeSession.virtualDate }
+                loading.localDate = { Self.localVirtualDate }
                 self.loading = loading
             }
             let completed = try loading!.complete(first: first); cycles += 1
@@ -262,6 +279,57 @@ import CoreGraphics
         for c in [250, 262, 274, 286] { tap(0, .attack, atCycle: c) }
     }
 
+    // MARK: E7f: a match against a computer player, to its end
+
+    /// The loaded cycles of the scripted start against one computer player,
+    /// found by running it and pinned in SyntheticComputerMatchTests. Player 1
+    /// alone joins, takes ordinal 0 and gets ready (as in `scriptVSStart`);
+    /// after the ready countdown (cycle 173) one team of humans makes the
+    /// computer count's minimum 1 (OriginalMatchSelection.swift:114-118), which
+    /// player 1 confirms: seat 1 becomes the computer to choose
+    /// (:145-151, OriginalComputerSelection.swift:141-207). Player 1 steps its
+    /// character from Random to ordinal 2 (SyThree, of the pack's harder-hitting
+    /// characters 3-8), confirms it and its team (Independent); the remaining
+    /// seats are drawn from Random (OriginalComputerSelection.swift:97-114, 199);
+    /// the settings go from option 2 to 0, the start.
+    func scriptComputerStart() {
+        tap(0, .attack, atCycle: 4)                                       // mode screen: VS
+        tap(0, .attack, atCycle: 10)                                      // join
+        tap(0, .right, atCycle: 14)                                       // ordinal 0
+        tap(0, .attack, atCycle: 18); tap(0, .attack, atCycle: 22)        // character, team: ready
+        tap(0, .attack, atCycle: 182)                                     // one computer player
+        for c in [188, 192, 196] { tap(0, .right, atCycle: c) }           // its character: Random -> ordinal 2
+        tap(0, .attack, atCycle: 200); tap(0, .attack, atCycle: 204)      // its character, its team
+        tap(0, .up, atCycle: 210); tap(0, .up, atCycle: 214)              // settings option 2 -> 0
+        tap(0, .attack, atCycle: 218)                                     // start
+    }
+    /// The loaded cycle at which player 1 leaves the result screen: the
+    /// round waits at timer 144 until a seat 0-7 Actor holds attack or jump
+    /// (OriginalMatchRound.swift:121-152), which this run reaches at cycle 663.
+    static let leaveResultCycle = 680
+    func scriptLeaveResult() { tap(0, .attack, atCycle: Self.leaveResultCycle) }
+
+    /// The match's computer players: active slots 10-17 whose Object is a
+    /// character (type 0), the slots the local input hands to the character
+    /// AI (OriginalLocalInput.swift:114-127; a computer chosen for seat s plays in slot
+    /// s+10, OriginalMatchPreparation.swift:180-182).
+    func computerSlots() throws -> [Int] {
+        guard let m = match else { throw SyntheticRunError.noState }
+        return try (10..<18).filter { slot in
+            guard try m.world.integer(at: 4 + slot, as: UInt8.self) != 0 else { return false }
+            let a = m.actors[Int(try m.world.integer(at: 0x194 + 4*slot, as: UInt32.self))]
+            return try m.loadedObjects[Int(try a.integer(at: 0x368, as: UInt32.self))].header.integer(at: 0x6f8, as: Int32.self) == 0
+        }
+    }
+    /// A slot's current buttons (Actor +0xcd up, down, left, right, attack,
+    /// jump, defend; OriginalCharacterAI.swift:7-8, 58): after a body, the ones
+    /// the character AI chose for it.
+    func buttons(slot: Int) throws -> [UInt8] {
+        guard let m = match else { throw SyntheticRunError.noState }
+        let a = m.actors[Int(try m.world.integer(at: 0x194 + 4*slot, as: UInt32.self))]
+        return try (0..<7).map { try a.integer(at: 0xcd + $0, as: UInt8.self) }
+    }
+
     /// One active seat of the match: its Actor's object ID (header +0x6f4),
     /// frame +0x70, integer position +0x10/+0x14/+0x18, HP +0x2fc, facing +0x80.
     struct Fighter: Equatable, CustomStringConvertible {
@@ -283,24 +351,53 @@ import CoreGraphics
     }
 }
 
-enum SyntheticRunError: Error, Equatable { case noBundle(String), noState, noKey(UInt32), messageBox(String), quit(UInt32), stepBound(Int) }
+enum SyntheticRunError: Error, Equatable { case noBundle(String), noState, noKey(UInt32), messageBox(String), quit(UInt32), stepBound(Int), unexpected(String) }
 
 /// Integer digests that are the same on every little-endian host.
 enum SyntheticDigest {
     /// SHA-256 of a frame's XRGB words, as the session's `--body-frame-digests` reports it.
     static func sha256(_ frame: OriginalFramebuffer) -> String { SyntheticContentPack.digest(Array(frame.pixels)) }
-    /// A cheap 64-bit FNV-1a over a frame's pixels as little-endian 64-bit words
+    /// A cheap word-wise variant of 64-bit FNV-1a (one step per little-endian
+    /// 64-bit word of the frame's pixels, not per byte as standard FNV-1a)
     /// (a frame is a whole number of words), for every body of a run: the debug
     /// build's SHA-256 takes about a third of a second per 800×600 frame.
     static func fnv64(_ frame: OriginalFramebuffer, into hash: inout UInt64) {
         frame.pixels.withUnsafeBytes { raw in
             precondition(raw.count % 8 == 0)
+            // E7f: aligned storage (the usual case) is read as words through a
+            // pointer: the same values, about seven times as fast in a debug build.
+            if let base = raw.baseAddress, Int(bitPattern: base) % MemoryLayout<UInt64>.alignment == 0 {
+                raw.withMemoryRebound(to: UInt64.self) { words in
+                    guard var word = words.baseAddress else { return }
+                    let end = word + words.count
+                    var h = hash
+                    while word < end { h = (h ^ UInt64(littleEndian: word.pointee)) &* 0x100000001b3; word += 1 }
+                    hash = h
+                }
+                return
+            }
             for offset in stride(from: 0, to: raw.count, by: 8) {
                 hash = (hash ^ UInt64(littleEndian: raw.loadUnaligned(fromByteOffset: offset, as: UInt64.self))) &* 0x100000001b3
             }
         }
     }
     static let fnvBasis: UInt64 = 0xcbf29ce484222325
+    /// The word-wise FNV-1a over one frame (`fnv64` from the basis), as 16 hex digits: the
+    /// cheap pin for frames beyond the few digested with SHA-256.
+    static func fnv64(_ frame: OriginalFramebuffer) -> String {
+        var hash = fnvBasis; fnv64(frame, into: &hash); return hex64(hash)
+    }
+    /// FNV-1a over bytes, byte by byte, as 16 hex digits (E7f: the 6.5 MB replay
+    /// recording, whose SHA-256 takes about a second in a debug build).
+    static func fnv64(_ bytes: [UInt8]) -> String {
+        var hash = fnvBasis
+        for byte in bytes { hash = (hash ^ UInt64(byte)) &* 0x100000001b3 }
+        return hex64(hash)
+    }
+    static func hex64(_ value: UInt64) -> String {
+        let digits = String(value, radix: 16)
+        return String(repeating: "0", count: 16 - digits.count) + digits
+    }
     /// SHA-256 over records' bytes then their definedness, in order (the
     /// session's `--network-trace` digest, OriginalRuntimeSession.swift:617-625).
     static func records(_ records: [OriginalStateRecord]) -> String {

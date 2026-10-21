@@ -153,12 +153,16 @@ final class SyntheticContentPackTests: XCTestCase {
                     XCTAssertEqual(try object.header.integer(at: 0x498, as: Int32.self), 1, "one sprite sheet")
                     XCTAssertEqual(try [0x650, 0x678, 0x6a0, 0x6c8].map { try object.header.integer(at: $0 + 4, as: Int32.self) }, [23, 31, 4, 3])
                     let written = object.frames.filter { !$0.name.isEmpty }.map(\.number)
-                    XCTAssertEqual(written, [0, 1, 2, 3, 5, 6, 7, 8, 9, 10, 11, 60, 61, 110] + Array(180...191)
+                    // E7f: characters 3-8 also have the second punch.
+                    let punches = character.id <= 2 ? [60, 61] : [60, 61, 65, 66]
+                    XCTAssertEqual(written, [0, 1, 2, 3, 5, 6, 7, 8, 9, 10, 11] + punches + [110] + Array(180...191)
                                    + [210, 211, 212, 215, 219] + Array(220...227).filter { $0 != 221 } + [230, 231])
                     XCTAssertEqual(object.frames[3].field("next"), 999)
-                    XCTAssertEqual(object.frames[60].sound, Pack.swingSound)
-                    XCTAssertEqual(object.frames[60].interactions.count, 1)
-                    XCTAssertEqual(object.frames[60].interactions.first?[17], 23 + 4*Int32(character.pace), "injury")
+                    for punch in punches where punch % 5 == 0 {
+                        XCTAssertEqual(object.frames[punch].sound, Pack.swingSound)
+                        XCTAssertEqual(object.frames[punch].interactions.count, 1)
+                        XCTAssertEqual(object.frames[punch].interactions.first?[17], (character.id <= 2 ? 23 : 90) + 4*Int32(character.pace), "injury")
+                    }
                     XCTAssertEqual(object.frames[0].bodies.count, 1)
                     XCTAssertEqual(object.frames[230].bodies.count, 0)
                 }
@@ -379,7 +383,9 @@ final class SyntheticContentPackTests: XCTestCase {
         }
     }
     /// E7d: the pack grew (record words, keyboard control.txt, six characters, an item,
-    /// more frames); E7c's values were b99cd1f4… and 123223.
-    static let pinnedPackSHA256 = "2f16f591223de9cebaf6a95d63fe8586ec5586149c376af000dfa852ae7d4e17"
-    static let pinnedCatalogChecksum: UInt32 = 761717
+    /// more frames); E7c's values were b99cd1f4… and 123223. E7f: two record
+    /// words (initial.bin) and characters 3-8's punches (their DATs); E7d's
+    /// values were 2f16f591… and 761717.
+    static let pinnedPackSHA256 = "d4363b8a3089ad0aeadf0592307208531e6c1c3fc3abda4f8ea8ad5f75abc9d4"
+    static let pinnedCatalogChecksum: UInt32 = 784925
 }

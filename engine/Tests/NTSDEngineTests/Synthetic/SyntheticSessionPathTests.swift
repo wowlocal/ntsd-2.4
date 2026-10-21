@@ -55,7 +55,8 @@ final class SyntheticSessionPathTests: XCTestCase {
         }
     }
     /// Allocations, bitmap requests, files and audio requests served to the first loading.
-    static let pinnedCounts = [791, 967, 45, 77]
+    /// E7f: 24 more allocations (E7d's 791) for characters 3-8's second punch (frames 65, 66).
+    static let pinnedCounts = [815, 967, 45, 77]
     /// The mode screen after the first loading.
     static let pinnedModeScreenFrame = "0016462c3844443638da5817a61823de0472581b88a835f7b31e0664d6c5e9e2"
 }

@@ -39,11 +39,8 @@ struct SyntheticContentPack {
     /// the startup loader checks only the record's length and mask, and the
     /// catalog load does not read it). E7d's start, front menu, first loading,
     /// menus and VS match need the six below; values are invented wherever the
-    /// engine tests only for nonzero. Not written yet (no rung reaches them):
-    /// 0x44dce8 = 0x44a2b4 before a replay is written (OriginalReplayWriter.swift:85;
-    /// the match's replay is written at its end), and the version word 0x44d03c
-    /// that replays and the network compare (OriginalReplayRecording.swift:91,
-    /// OriginalReplayPlayback.swift:166, OriginalInputControl.swift:150).
+    /// engine tests only for nonzero. E7f's match end writes the replay and
+    /// needs the two at the end.
     static let recordWords: [RecordWord] = [
         // E7d: the game window's client size. WinMain's window setup adds the
         // frame metrics to them for CreateWindow (OriginalWindowInitialization.swift:90-91,
@@ -75,6 +72,20 @@ struct SyntheticContentPack {
         // nonzero (OriginalMenuResourceLoading.swift:41); the loader clears it
         // (:89). Invented nonzero value: 0xe7d.
         RecordWord(offset: 0x44d07c, value: 0xe7d, check: "OriginalMenuResourceLoading.swift:41"),
+        // E7f: the replay codec's version pointer. The match's end writes its
+        // replay (OriginalResultRecording.swift:107,170) and the writer stops
+        // unless this word is exactly 0x44a2b4 (OriginalReplayWriter.swift:85-87:
+        // the EXE dereferences it, and only that address is modelled). Value
+        // fixed by the engine.
+        RecordWord(offset: 0x44dce8, value: 0x44a2b4, check: "OriginalReplayWriter.swift:85"),
+        // E7f: the game's version word. No check needs a value: the recording
+        // copies it to +0x748 (OriginalReplayRecording.swift:91), playback
+        // compares it with the running game's (OriginalReplayPlayback.swift:166),
+        // and the network packet carries its low byte (OriginalInputControl.swift:150).
+        // Invented nonzero (and above the panel's -99 update marker,
+        // OriginalMenuPanelDrawing.swift:128, so no panel changes), so the
+        // written replay shows the copy: 0xe7f.
+        RecordWord(offset: 0x44d03c, value: 0xe7f, check: "OriginalReplayRecording.swift:91; OriginalReplayPlayback.swift:166; OriginalInputControl.swift:150"),
     ]
 
     static func initialRecord() -> [UInt8] {
@@ -200,9 +211,31 @@ struct SyntheticContentPack {
         for i in 0..<4 { text += frame(i, "standing", pic: i, state: 0, wait: 6 + p, next: i == 3 ? 999 : i + 1) }
         for i in 0..<4 { text += frame(5 + i, "walking", pic: 4 + i, state: 1, wait: 3, next: 999) }
         for i in 0..<3 { text += frame(9 + i, "running", pic: 8 + i, state: 2, wait: 2, next: 999) }
-        text += frame(60, "punch", pic: 11, state: 3, wait: 2, next: 61, extra:
-            "sound: \(swingSound)\nitr:\nkind: 0 x: 16 y: 10 w: 20 h: 12 dvx: \(6 + p) fall: 25 arest: 9 bdefend: 14 injury: \(23 + 4*p)\nitr_end:\n")
-        text += frame(61, "punch", pic: 3, state: 3, wait: 3, next: 999)
+        if c.id <= 2 {
+            text += frame(60, "punch", pic: 11, state: 3, wait: 2, next: 61, extra:
+                "sound: \(swingSound)\nitr:\nkind: 0 x: 16 y: 10 w: 20 h: 12 dvx: \(6 + p) fall: 25 arest: 9 bdefend: 14 injury: \(23 + 4*p)\nitr_end:\n")
+            text += frame(61, "punch", pic: 3, state: 3, wait: 3, next: 999)
+        } else {
+            // E7f: characters 3-8, the computer player's pool, hit harder and
+            // further, so a computer player ends a match within a few hundred
+            // bodies (a character's HP is the engine's fixed 500,
+            // OriginalStateRecord.swift:1025). A standing attack is frame 60
+            // or 65 by a draw (OriginalActorControl.swift:162; E7d's
+            // characters have no 65, an empty frame, so a punch of theirs can
+            // land in it). The reach (x 16..72 from centerx 12, about 60 plus the
+            // target body's half-width) covers the character AI's 60 band (it
+            // stops walking within 60 of its target, OriginalCharacterAI.swift:
+            // 428-436) but not all of the 80 it attacks within (:458, 610). No
+            // frame 70: the engine takes it only after a kind-6 itr
+            // (OriginalHitSpecial.swift:8), which the pack has none of.
+            // Characters 1 and 2 (E7d's match) are unchanged.
+            func punch(_ number: Int) -> String {
+                frame(number, "punch", pic: 11, state: 3, wait: 2, next: number + 1, extra:
+                    "sound: \(swingSound)\nitr:\nkind: 0 x: 16 y: 10 w: 56 h: 12 dvx: \(6 + p) fall: 25 arest: 9 bdefend: 14 injury: \(90 + 4*p)\nitr_end:\n")
+                    + frame(number + 1, "punch", pic: 3, state: 3, wait: 3, next: 999)
+            }
+            text += punch(60) + punch(65)
+        }
         text += frame(110, "defend", pic: 2, state: 7, wait: 10, next: 999)
         // E7d: the frames a hit and a fall select. Injured by the defender's
         // accumulated fall: 220, 222/224 (by facing), 226 (OriginalHitDamage.swift:19-31);

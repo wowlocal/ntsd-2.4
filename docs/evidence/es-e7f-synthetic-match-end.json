@@ -1,0 +1,111 @@
+{
+ "study": "ENGINE_SPLIT",
+ "step": "E7f",
+ "base": "10c2df1a",
+ "recordedUTC": "2026-10-21T04:34:58Z",
+ "change": "The synthetic match to its end, in the engine's tests only: (1) a computer player on the engine's generic character AI with the engine tests' NoSpecialMoves hook; (2) the knock-out, the result screen and the epilogue back to the character screen; (3) the replay written at the end and read back by the engine's playback loader; (4) text drawn through an invented 3x5 glyph source. No engine source or package change.",
+ "implementation": "one owner agent; the loop adopted the review's changes. Deviation: the card asked for each rung its own commit; all four are one commit, as they share one cached match run per process",
+ "rungs": {
+  "computerPlayer": "the computer is seat 1, plays in slot 11 as SyThree; it idles 73 bodies (P1 still blinking, not targeted), then walks up and runs to close in, first attack at body 118; over 150 bodies it pressed up 44, down 0, left 18, right 10, attack 19, jump 1, defend 0; launch and first-body cycles (220, 221), the frame chain, SHA-256 of bodies 1, 75 and 150, the World+Actors digest, the fighters every 25 bodies and the per-body buttons pinned",
+  "matchEnd": "the knock-out at body 299 (P1 at -49 HP; the round timer starts at 300), the result recorded and drawn at body 400 (timer 101), the wait at body 443 (timer 144) until P1's scripted attack at cycle 680, the epilogue at cycle 683 back to the character screen; the whole-match chain, the result frames, the two frames after the epilogue, the knock-out and wait states and the end state (winner team 21, 398 ticks) pinned",
+  "replay": "written to overlay/recording/20260101_000000_VS.lfr in the temporary pack: 10,073 bytes (a 4-byte length equal to the payload, then the compressed recording), equal on disk to the saved bytes, SHA-256 pinned; the engine's playback loader reads it back to the 0x630e18-byte recording (mode VS, catalog checksum, version 0xe7f, two results, team and ID per slot, ticks, player names pinned); the name is host-independent because the test's host answers a date whose local time is 2026-01-01 00:00:00 in any zone (the runtime converts in the current zone, OriginalMacRuntimeLoading.swift:414-418)",
+  "text": "an invented 3x5 font at 2x draws the menu labels, every gameplay body's input-diagnostic line, the recording notices and the result screen's numbers and time; the HUD draws no names, only the team mark (frame 254 of the team font, OriginalWorldHUD.swift:116), and the result's player labels are bitmap-font draws (OriginalResultLayout.swift:113-125), so the glyph source does not reach them; otherwise the run is identical to the plain one (states, AI keys, replay bytes, 19,055 text calls)"
+ },
+ "recordWords": [
+  {
+   "offset": "0x44dce8",
+   "value": "0x44a2b4",
+   "status": "forced: the writer throws unless it is exactly that (OriginalReplayWriter.swift:85-87); an EXE address constant already in the engine source, very likely the original's initialised word"
+  },
+  {
+   "offset": "0x44d03c",
+   "value": "0xe7f",
+   "status": "invented: copied (OriginalReplayRecording.swift:91), compared (OriginalReplayPlayback.swift:166) and sent (OriginalInputControl.swift:150); the panel compares it with -99 (OriginalMenuPanelDrawing.swift:128), unaffected"
+  }
+ ],
+ "pack": {
+  "files": 166,
+  "bytes": 1224166,
+  "sha256OfAllFiles": "d4363b8a3089ad0aeadf0592307208531e6c1c3fc3abda4f8ea8ad5f75abc9d4 (pinned; was 2f16f591…)",
+  "catalogChecksum": "784925 (pinned; was 761717)",
+  "changes": [
+   "characters 3-8 (the computer player's pool) punch further (itr width 56, was 20) and harder (injury 90 + 4×pace, was 23 + 4×pace) and gain the second punch, frames 65/66 (a standing attack is frame 60 or 65 by a draw, OriginalActorControl.swift:162); their reach covers the character AI's 60 band (OriginalCharacterAI.swift:428-436) but not all of the 80 it attacks within (:458, 610)",
+   "characters 1-2 byte-identical (E7d's match)",
+   "no frame 70: the engine takes it only after a kind-6 itr (OriginalHitSpecial.swift:8)"
+  ],
+  "pinsChanged": "the pack digest and catalog checksum (the two record words and characters 3-8's DATs) and the session path's first-loading allocations 791 -> 815 (frames 65/66: three allocations for 65's sound, itr and bdy, one for 66, for six characters); every E7d frame, chain, state and World+Actors pin unchanged"
+ },
+ "engineConstantsMet": [
+  "HP fixed at 500 (OriginalStateRecord.swift:1025)",
+  "at least one computer with one team of humans",
+  "a computer chosen for seat s plays in slot s+10; independents get team slot+10 (OriginalMatchPreparation.swift:227)",
+  "Random needs six unchosen characters",
+  "the result screen waits at timer 144 for attack or jump from seats 0-7",
+  "the replay path recording\\<name>"
+ ],
+ "tests": {
+  "macOS": "clean debug: Executed 161 tests, with 1 test skipped and 0 failures",
+  "linux": "swift:6.4.0-noble, uid 1000: Executed 139 tests, with 1 test skipped and 0 failures (after the review's fixes as before them)",
+  "timeZones": "the rung tests and E7d's VS test pass under Asia/Kathmandu (here) and America/Los_Angeles, Pacific/Kiritimati, Asia/Kolkata, UTC and the local zone (owner's runs)",
+  "speed": "each process observes the match twice (without and with glyphs): about 7.5 s each on macOS debug, 8-9 s on Linux"
+ },
+ "scan": {
+  "report": "/Volumes/NTSD-Builds/tasks/engine-split/scratch/e7b/scan-pack-6.json",
+  "files": 3871,
+  "bytes": 6702325567,
+  "summary": {
+   "DAT and data-file format text (field vocabulary, frame names)": {
+    "hits": 524037,
+    "engineSites": 12
+   },
+   "WAV header fields": {
+    "hits": 18464,
+    "engineSites": 32
+   },
+   "labels shared with the project's own fixtures and manifests (JSON text, not original bytes)": {
+    "hits": 199,
+    "engineSites": 3
+   },
+   "short audio sample runs (authored waveforms)": {
+    "hits": 582,
+    "engineSites": 8
+   },
+   "unexpected": {
+    "hits": 45807,
+    "engineSites": 10
+   }
+  },
+  "examinedUnexpected": "as in E7d: frame field lines of the generated DATs with small invented values (longest 53 bytes, now also 'next: 66 dvx: 0 dvy: 0 dvz: 0 centerx: ' of the new punch frames), and the all-ones initial.mask's digest"
+ },
+ "review": {
+  "by": "a separate read-only agent, 2026-10-21",
+  "verdict": "accept after fixes: nothing copied, the drivers only call engine and runtime APIs, E7d's pins unchanged",
+  "required": [
+   "EngineTestRules' comment that no engine test runs the AI (corrected)",
+   "the text test's HUD sentence (corrected: the HUD draws the team mark, no names)",
+   "464 character-AI calls for 462 counted bodies explained (recorded below as not explained)",
+   "the session divergence and the open time-zone finding (recorded below)",
+   "the pack comment on frame 70 and the 60-versus-80 reach (corrected)",
+   "the one-commit deviation from each-rung-its-own-commit (recorded above)"
+  ],
+  "adopted": [
+   "the match loops bounded by steps as well as cycles",
+   "a run under an offset time zone (Asia/Kathmandu)",
+   "the word-wise FNV-1a wording"
+  ]
+ },
+ "limits": [
+  "42,244 of 54,644 draws (77%) were rejected as invalid rectangles (E7d 71%); the 10,982 skipped draws are not classified here",
+  "464 character-AI calls for 462 counted gameplay bodies: the two extra calls are not explained by the tests (the review suspects the epilogue cycle); one call per body is checked only for the first 150",
+  "the test's host answers the local date for the replay name; the session's --virtual-clock passes its own virtual date (OriginalRuntimeSession.swift:410), so the test's copy of the session's setup differs from the session here, and E7d's finding (the virtual clock's local time depends on the host's zone) stays open",
+  "characters 1-2 have no frame 65, so a punch of theirs can land in an empty frame (E7d's match unchanged)",
+  "frame 70 unreachable in this pack (no kind-6 itr)",
+  "arm64 only (macOS and the container); the cross-host equality spans CEST and UTC plus the extra zones above",
+  "a TMPDIR on ExFAT would add ._ files to the recording folder and break the exact-key check: TMPDIR on APFS (NTSD-Builds) here"
+ ],
+ "engineFindingsOpen": "E7d's three (the virtual clock's time zone, tracing needing networking, the unlabelled divide by zero with no item) remain open; none is this split's change",
+ "reviewNeeded": "engine test files only; reviewed as above",
+ "openGates": [
+  "the scan policy for the engine's expected classes (E7b; the user, with D1)"
+ ]
+}

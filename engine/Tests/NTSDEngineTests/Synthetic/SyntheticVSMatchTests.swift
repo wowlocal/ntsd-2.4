@@ -12,7 +12,9 @@ import XCTest
 /// SHA-256 digests, and the fighters' state at five bodies is pinned. Globals
 /// are not digested: the match prelude writes the replay name from the local
 /// time in the host's time zone (OriginalMatchPrelude.swift:57-76; the runtime's
-/// GetLocalTime, OriginalMacRuntimeLoading.swift:414-419).
+/// GetLocalTime, OriginalMacRuntimeLoading.swift:414-419). (E7f: the run now
+/// supplies a date whose local time is the same in every zone,
+/// `SyntheticRun.localVirtualDate`; no pin here changed.)
 final class SyntheticVSMatchTests: XCTestCase {
     typealias Pack = SyntheticContentPack
     static let bodies = 100
