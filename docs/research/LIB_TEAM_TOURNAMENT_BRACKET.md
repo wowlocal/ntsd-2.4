@@ -12,8 +12,10 @@ See [the finite plan](LIB_TEAM_TOURNAMENT_BRACKET_PLAN.md),
 [evidence](../evidence/lib-team-tournament-bracket.json),
 [source producer](../../tools/oracle_lib_team_tournament_bracket.py),
 [independent auditor](../../tools/verify_lib_team_tournament_bracket.py),
-[native rules](../../native/Sources/NTSDCore/OriginalTeamTournamentBracket.swift),
-[layout constants](../../native/Sources/NTSDCore/OriginalTournamentLayout.swift)
+[native rules](../../engine/Sources/NTSDCore/OriginalTeamTournamentBracket.swift)
+(moved to `engine/` in ENGINE_SPLIT E4a), layout constants (a copy of the
+record's words from `0x44d120`, `OriginalTournamentLayout.swift`, removed in
+ENGINE_SPLIT E5b: the tests read the record since)
 and [whole caller tests](../../native/Tests/NTSDCoreTests/OriginalLibTeamTournamentBracketTests.swift).
 
 The behavioral reference is the pinned NTSD EXE, bundled lib.dll, VC80 CRT and
