@@ -30,6 +30,9 @@ public enum NTSDProfile {
                                        [0, 228, 198, 194], [198, 228, 198, 194], [396, 228, 198, 194], [594, 228, 198, 194],
                                        [0, 422, 794, 128]],
                          warModeFrames: [[0, 0, 705, 400], [0, 471, 705, 16]]),
-        // NTSD 2.4's bundled lib.dll (its loader in the EXE's entry, E6a).
-        library: OriginalLibData())
+        // NTSD 2.4's bundled lib.dll (its loader in the EXE's entry, E6a) and its
+        // three loading labels, the same 13 bytes (DLL data 10003040, 1000304e,
+        // 1000305c; E6d-2).
+        library: OriginalLibData(loadingLabels: .init(belowTwo: Array("Loading files".utf8), fiveToSeven: Array("Loading files".utf8),
+                                                      others: Array("Loading files".utf8))))
 }

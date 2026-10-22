@@ -39,6 +39,8 @@ enum SyntheticNames {
 }
 
 extension OriginalGameRules {
+    static let syntheticLibrary = OriginalLibData(loadingLabels: .init(belowTwo: Array("Reading pack.".utf8),
+        fiveToSeven: Array("Pack reading.".utf8), others: Array("Still reading".utf8)))
     /// `engineTests` with the synthetic pack's interface names, Random's candidates and the library.
     static let syntheticPack: OriginalGameRules = {
         let base = OriginalGameRules.engineTests
@@ -47,7 +49,8 @@ extension OriginalGameRules {
             items: base.items, roster: SyntheticNames.roster, modes: base.modes, physics: base.physics, drawing: base.drawing,
             effects: base.effects, lifecycle: base.lifecycle, fusion: base.fusion, weaponBreak: base.weaponBreak,
             interface: SyntheticNames.interface, characterAI: base.characterAI, characterAISpecial: base.characterAISpecial,
-            // The application's sessions are modelled only with the library (E6d).
-            library: OriginalLibData())
+            // The application's sessions are modelled only with the library (E6d);
+            // invented loading labels (E6d-2).
+            library: syntheticLibrary)
     }()
 }

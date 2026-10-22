@@ -70,7 +70,11 @@ final class NTSDProfileLF2Tests: XCTestCase {
                                meleeWeapons: OriginalIDSet([100, 101, 120, 121, 124]), rollingWeapon: 124, thrownWeapons: OriginalIDSet([150, 151]),
                                dashCounters: OriginalIDSet([2, 4, 6, 9, 10, 11, 8, 7, 33, 34]), dashJumper: 34, shortDasher: 1),
             characterAISpecial: NTSDProfile.rules.characterAISpecial,
-            library: OriginalLibData())
+            // E6d-2: the label moved verbatim from 98a097ba's OriginalLibLoadingProgress.swift:60, the
+            // same 13 bytes for each of lib.dll's three strings.
+            library: OriginalLibData(loadingLabels: .init(belowTwo: NTSDProfileLF2Tests.label, fiveToSeven: NTSDProfileLF2Tests.label,
+                                                          others: NTSDProfileLF2Tests.label)))
+    static let label: [UInt8] = [0x4c, 0x6f, 0x61, 0x64, 0x69, 0x6e, 0x67, 0x20, 0x66, 0x69, 0x6c, 0x65, 0x73]
 
     func testEveryFamilyEqualsTheEarlierLiteral() {
         let now = NTSDProfile.rules,before = Self.before
@@ -88,8 +92,8 @@ final class NTSDProfileLF2Tests: XCTestCase {
 
     /// E6d-1: NTSD carries its bundled library; copies keep it unless they replace it.
     func testNTSDCarriesTheLibraryAndCopiesKeepIt() {
-        XCTAssertEqual(NTSDProfile.rules.library, OriginalLibData())
-        XCTAssertEqual(NTSDProfile.rules.with(profile: "copy").library, OriginalLibData())
+        XCTAssertEqual(NTSDProfile.rules.library, Self.before.library)
+        XCTAssertEqual(NTSDProfile.rules.with(profile: "copy").library, Self.before.library)
         XCTAssertNil(NTSDProfile.rules.with(library: .some(nil)).library)
         XCTAssertNotEqual(NTSDProfile.rules, NTSDProfile.rules.with(profile: NTSDProfile.rules.profile, library: .some(nil)))
     }

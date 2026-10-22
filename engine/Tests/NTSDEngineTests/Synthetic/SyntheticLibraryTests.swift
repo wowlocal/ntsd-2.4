@@ -11,14 +11,18 @@ final class SyntheticLibraryTests: XCTestCase {
     func testTheLF2DefaultHasNoLibraryAndTheSyntheticPackHasIt() {
         XCTAssertNil(OriginalGameRules.lf2(profile: "LF2 2.0a", interface: SyntheticNames.interface).library)
         XCTAssertNil(OriginalGameRules.engineTests.library)
-        XCTAssertEqual(OriginalGameRules.syntheticPack.library, OriginalLibData())
+        XCTAssertEqual(OriginalGameRules.syntheticPack.library, OriginalGameRules.syntheticLibrary)
     }
 
     func testRulesDifferingOnlyInTheLibraryAreUnequal() {
         let off = OriginalGameRules.lf2(profile: "p", interface: SyntheticNames.interface)
-        let on = OriginalGameRules.lf2(profile: "p", interface: SyntheticNames.interface, library: OriginalLibData())
+        func library(_ others: String) -> OriginalLibData {
+            OriginalLibData(loadingLabels: .init(belowTwo: Array("a".utf8), fiveToSeven: Array("b".utf8), others: Array(others.utf8)))
+        }
+        let on = OriginalGameRules.lf2(profile: "p", interface: SyntheticNames.interface, library: library("c"))
         XCTAssertNotEqual(off, on)
-        XCTAssertEqual(on, OriginalGameRules.lf2(profile: "p", interface: SyntheticNames.interface, library: OriginalLibData()))
+        XCTAssertEqual(on, OriginalGameRules.lf2(profile: "p", interface: SyntheticNames.interface, library: library("c")))
+        XCTAssertNotEqual(on, OriginalGameRules.lf2(profile: "p", interface: SyntheticNames.interface, library: library("d")))
     }
 
     /// The recovered startup (OriginalMacRuntimeStartup's driver) on the pack's

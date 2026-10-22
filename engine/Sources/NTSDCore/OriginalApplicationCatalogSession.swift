@@ -131,6 +131,8 @@ public struct OriginalApplicationCatalogSession {
         afterChild: @escaping (OriginalCatalogChildObservation,Snapshot) throws -> Void = { _,_ in },
         beforeCommit: (PendingPool) throws -> Void = { _ in }) throws -> PendingPool {
         guard pendingPool == nil else { throw Boundary.alreadyPrepared }
+        // Loading draws lib.dll's labels (E6d): without the library it is not modelled.
+        guard resources.rules.library != nil else { throw OriginalLibData.Required(site:"Loading: the library's labels") }
         let attempt = try Attempt(entry:entry,startup:startup,inputs:resources,controls:makeControls(),observe:observe,afterChild:afterChild)
         let loaded = try attempt.run()
         // Closed streams keep no contents past the load (MEMORY_LOADING M7a).
@@ -340,8 +342,9 @@ public struct OriginalApplicationCatalogSession {
             case .catalogOpen: try front(.init("timeGetTime",[time()]))
             case .update:
                 var globals = try Session.State.slice(state.full,0,OriginalMatchPreparation.globalSize), text = state.libraryText
+                guard let library = inputs.rules.library else { throw OriginalLibData.Required(site:"Loading: the library's labels") }
                 try OriginalLibLoadingProgress.update(globals:&globals,libraryText:&text,input:inputs.presentation,
-                    time:time,panelFirstWord:{ p in
+                    labels:library.loadingLabels,time:time,panelFirstWord:{ p in
                         guard let a = self.state.memory.allocations[p],a.live else { throw Boundary.input("Loading panel owner") }
                         return try a.storage.integer(at:0,as:UInt32.self)
                     },draw:draw,fillBacking:{ throw Boundary.dependency("Loading fill backing") },

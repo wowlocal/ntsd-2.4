@@ -5,8 +5,9 @@ public enum OriginalLibLoadingProgress {
         public let result: Int32, bytes: [UInt8]
         public init(result: Int32 = 0,bytes: [UInt8] = []) { self.result = result;self.bytes = bytes }
     }
+    /// `labels`: the library's loading labels, the game's data (OriginalLibData, E6d-2).
     public static func update(globals: inout OriginalStateRecord, libraryText: inout OriginalLibSurfaceText,
-        input: OriginalMenuPresentationInput, time: () throws -> UInt32,
+        input: OriginalMenuPresentationInput, labels: OriginalLibData.LoadingLabels, time: () throws -> UInt32,
         panelFirstWord: (UInt32) throws -> UInt32,
         draw: ([UInt32]) throws -> Void, fillBacking: () throws -> [UInt8],
         performFill: (OriginalSurfaceFillRequest) throws -> Int32,
@@ -56,8 +57,9 @@ public enum OriginalLibLoadingProgress {
         try bitmap(0x45118c,0,0,-1,0)
         let phase = (try signed(0x4511bc) &+ 1) % 10
         try put(0x4511bc,bits(phase))
-        let color: UInt32 = phase < 2 ? 0xffffff : (bits(phase &- 5) <= 2 ? 0x99 : 0xff)
-        try text.draw(Array("Loading files".utf8),target: word(0x455608),background: 0,color: color,
+        let (color,label): (UInt32,[UInt8]) = phase < 2 ? (0xffffff,labels.belowTwo)
+            : (bits(phase &- 5) <= 2 ? (0x99,labels.fiveToSeven) : (0xff,labels.others))
+        try text.draw(label,target: word(0x455608),background: 0,color: color,
                       x: 608,y: 60,dcResult: input.dcResult,dc: input.dc) { try emit($0.kind.rawValue,$0.arguments,$0.strings) }
         var minimumX: Int32 = 999,minimumY: Int32 = 999
         let panel = try word(0x458420)

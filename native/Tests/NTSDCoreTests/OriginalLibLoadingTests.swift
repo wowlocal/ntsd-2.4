@@ -2,6 +2,7 @@ import Foundation
 import XCTest
 @testable import NTSDCore
 @testable import NTSDReferenceChecks
+import NTSDProfile
 
 final class OriginalLibLoadingTests: XCTestCase {
     private struct Blob: Decodable { let count: Int, deflate: String }
@@ -79,7 +80,8 @@ final class OriginalLibLoadingTests: XCTestCase {
                 })
             }
             let messageBytes = hex(c.spec.message ?? "00112233445566778899aabbccddeeff102132435465768798a9bacb")
-            try OriginalLibLoadingProgress.update(globals: &globals,libraryText: &text,input: c.input,time: {
+            try OriginalLibLoadingProgress.update(globals: &globals,libraryText: &text,input: c.input,
+                labels: NTSDProfile.rules.library!.loadingLabels,time: {
                 guard times.indices.contains(clockIndex) else { throw OriginalStateError.invalidStorage("Unexpected clock read") }
                 defer { clockIndex += 1 };return times[clockIndex]
             },panelFirstWord: { surfaces[try index($0)] },draw: draw,fillBacking: {
@@ -106,6 +108,7 @@ final class OriginalLibLoadingTests: XCTestCase {
                 for missing in [false,true] {
                     var trial = initial,trialText = initialText,clock = 0,seen: [String] = []
                     XCTAssertThrowsError(try OriginalLibLoadingProgress.update(globals: &trial,libraryText: &trialText,input: c.input,
+                        labels: NTSDProfile.rules.library!.loadingLabels,
                         time: { defer { clock += 1 };return times[clock] },panelFirstWord: { surfaces[try index($0)] },
                         draw: { args in if missing && args[0] == 0x23002020 { throw Stop.missingBitmap } },
                         fillBacking: { [UInt8](repeating: 0xa5,count: 100) },performFill: { _ in 0 },
@@ -114,6 +117,30 @@ final class OriginalLibLoadingTests: XCTestCase {
                     XCTAssertEqual(trial,initial);XCTAssertEqual(trialText,initialText)
                     XCTAssertTrue(seen.contains("textOut"));if !missing { XCTAssertTrue(seen.contains("TranslateMessage")) }
                     rollbacks += 1
+                }
+                // E6d-2: the drawn label is the game's (OriginalLibData), chosen with its
+                // colour by the remainder's branch: every branch, with invented labels and
+                // the phase word 4511bc seeded (signed remainder, a negative one included).
+                let invented = OriginalLibData.LoadingLabels(belowTwo: Array("first".utf8),fiveToSeven: Array("second".utf8),
+                                                             others: Array("third".utf8))
+                let branches: [(UInt32,[UInt8],UInt32)] = [(0,invented.belowTwo,0xffffff),(0x80000000,invented.belowTwo,0xffffff),
+                    (4,invented.fiveToSeven,0x99),(6,invented.fiveToSeven,0x99),(2,invented.others,0xff),(8,invented.others,0xff)]
+                for (seed,label,color) in branches {
+                    var probe = initial,probeText = initialText,probeClock = 0,texts: [[UInt8]] = [],colors: [UInt32] = []
+                    try probe.write(seed,at: 0x4511bc-0x44d000)
+                    _ = try? OriginalLibLoadingProgress.update(globals: &probe,libraryText: &probeText,input: c.input,labels: invented,
+                        time: {
+                            guard times.indices.contains(probeClock) else { throw OriginalStateError.invalidStorage("Probe clock") }
+                            defer { probeClock += 1 };return times[probeClock]
+                        },panelFirstWord: { surfaces[try index($0)] },
+                        draw: { _ in },fillBacking: { [UInt8](repeating: 0xa5,count: 100) },performFill: { _ in 0 },
+                        message: { _,_ in .init(result: 0,bytes: messageBytes) },
+                        observe: { e in
+                            if e.kind == "textOut" { texts.append(contentsOf: e.strings) }
+                            if e.kind == "setTextColor",e.arguments.count > 1 { colors.append(e.arguments[1]) }
+                        })
+                    XCTAssertEqual(texts.first,label,"seed \(seed)");XCTAssertEqual(colors.first,color,"seed \(seed)")
+                    XCTAssertFalse(texts.contains(Array("Loading files".utf8)))
                 }
             }
         }
