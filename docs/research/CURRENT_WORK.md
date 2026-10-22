@@ -101,7 +101,8 @@ E6c выполнен: 20 спецприёмов ИИ вернулись в дв�
 E6d-1 выполнен: lib.dll — значение правил игры; без неё сессии приложения останавливаются типизированной ошибкой; все гейты пройдены: [evidence](../evidence/es-e6d1-library-switch.json).
 E6d-2 выполнен: три надписи загрузки lib.dll — данные игры; цвета и Z-слагаемое оставлены (записано); все гейты пройдены: [evidence](../evidence/es-e6d2-loading-labels.json).
 E8a выполнен: модули движка называются Randori*, переключатели RANDORI_* (старые NTSD_* принимаются); все гейты и все хосты пройдены: [evidence](../evidence/es-e8a-randori-rename.json).
-Следующая задача — E8b: публичный репозиторий wowlocal/randori (Apache-2.0, свежая история, CI), затем engine/ — подмодуль на этой ревизии.
+E8b выполнен: движок опубликован как https://github.com/wowlocal/randori (Apache-2.0, свежая история, CI зелёный на macOS и Linux, релиз v0.1.1); engine/ в этой ветке — подмодуль Randori на e6d1c39 (после checkout: `git submodule update --init engine`): [evidence](../evidence/es-e8b2-randori-submodule.json).
+План E0–E8 завершён (2026-10-22). Дальше по желанию пользователя: E6e (пути без lib.dll), находки E7d, слияние в main.
 
 ## Internal build storage и VM quota исправлены — 2026-10-17
 

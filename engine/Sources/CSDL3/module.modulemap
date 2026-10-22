@@ -1,5 +1,0 @@
-module CSDL3 [system] {
-    header "shim.h"
-    link "SDL3"
-    export *
-}

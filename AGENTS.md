@@ -200,6 +200,12 @@ does both.
 
 ## Implementation entry points
 
+ENGINE_SPLIT (exp/engine-split, 2026-10-22): the engine is Randori
+(github.com/wowlocal/randori), the git submodule at `engine/`. Run
+`git submodule update --init engine` after checkout; commit engine changes in
+the submodule, pass its CI, then bump the gitlink here with this repository's
+gates.
+
 `native/` contains Swift/AppKit/SpriteKit practice and recovered shared handlers.
 Before gameplay changes read `docs/MOVEMENT.md`, `docs/COMBAT.md` and
 `docs/PROJECTILES.md`, plus the current study. Read `docs/FRAME_LOADER.md` before
