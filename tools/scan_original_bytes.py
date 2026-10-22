@@ -220,6 +220,7 @@ POLICY = {
     "WAV header fields": ("keep", "loop", "format structure of authored files"),
     "short audio sample runs (authored waveforms)": ("keep", "loop", "short authored runs"),
     "DAT and data-file format text (field vocabulary, frame names)": ("keep", "loop", "the content format"),
+    "ascending integer runs (step 1, no content beyond start and length)": ("keep", "loop", "a run of consecutive integers, e.g. an ID range listed in full, which also occurs in the VC80 DLL's 16-bit identity tables (E6b)"),
     "DAT frame-line fragments (authored values in the format's vocabulary)": ("keep", "loop", "the content format: at most 64 printable bytes with at most 8 digits, against a DAT or a JSON fixture; a copied frame is longer"),
 }
 
@@ -250,6 +251,17 @@ VOCABULARY_MAX, VOCABULARY_DIGITS = 32, 3
 # file offset equals the RVA in .rdata), widened to the name's hint word.
 NTSD_RDATA_RUN = (0x4c5fe, 0x4c611)
 
+WIDTH = {"u8": 1, "le16": 2, "le32": 4, "le64": 8}
+
+def ascending_run(encoding, start, piece):
+    """The whole values a match of an integer literal covers (a partial first or
+    last value skipped) are at least three consecutive integers."""
+    w = WIDTH.get(encoding)
+    if not w: return False
+    body = piece[(w - start % w) % w:]
+    values = [int.from_bytes(body[i:i + w], "little") for i in range(0, len(body) - w + 1, w)]
+    return len(values) >= 3 and all(b - a == 1 for a, b in zip(values, values[1:]))
+
 def digits(piece):
     return sum(c in b"0123456789" for c in piece)
 
@@ -276,12 +288,14 @@ def classify_file(path, variant, piece, start, length, original, original_varian
         return "DAT frame-line fragments (authored values in the format's vocabulary)"
     return "unexpected"
 
-def classify(path, kind, seq, original, section, offset):
+def classify(path, kind, seq, original, section, offset, encoding="", start=0):
     for test, name in EXPECTED:
         if test(path, seq): return name
     low = original.lower()
     if low.endswith(".json") and ("/Fixtures/" in original or "/Resources/" in original):
         return PROJECT_JSON
+    if kind == "integers" and ascending_run(encoding, start, seq):
+        return "ascending integer runs (step 1, no content beyond start and length)"
     if kind == "string":
         name = os.path.basename(low)
         if name == "lib.dll": return "NTSD-only strings (lib.dll or the swapped import)"
@@ -358,7 +372,7 @@ def main():
                 piece = bytes((b - key[i % len(key)]) & 0xff if i >= 123 else b for i, b in zip(range(a0, a1), piece))
             c = classify_file(path, enc, piece, a0, h["length"], rel, variant)
         else:
-            c = classify(path, kind, seq[a0:a1], rel, h["section"], h["offset"])
+            c = classify(path, kind, seq[a0:a1], rel, h["section"], h["offset"], enc, a0)
         hits.append({"engine": f"{path}:{line}", "kind": kind, "encoding": enc, "literalLength": len(seq),
                      "original": rel, "variant": variant, **h, "class": c})
     lf2 = None

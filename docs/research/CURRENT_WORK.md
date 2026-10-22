@@ -96,7 +96,8 @@ E7f выполнен: на синтетическом пакете матч с �
 E7e-2 выполнен: сканер применяет правила (`--policy`), оба прогона проходят, строки EXE ждут E6: [evidence](../evidence/es-e7e2-scan-policy.json).
 E6a выполнен: эталон LF2 2.0a закреплён вне репозитория; NTSD 2.4.exe — это lf2.exe с загрузчиком lib.dll, все правила профиля — код LF2 2.0a: [reference](../evidence/es-e6a-lf2-reference.json), [classification](../evidence/es-e6a-classification.json).
 E6a-2 выполнен: все 159 строк EXE в движке побайтно совпадают с lf2.exe LF2 2.0a и остаются; открытых классов в скане нет, E7 закрыт: [evidence](../evidence/es-e6a2-exe-strings.json).
-Следующая задача — E6b: значения ID-ролей LF2 2.0a переходят в движок, NTSDProfile их составляет.
+E6b выполнен: значения 14 семейств ID-ролей LF2 2.0a теперь в движке, NTSDProfile их составляет; все гейты пройдены: [evidence](../evidence/es-e6b-lf2-rules.json).
+Следующая задача — E6c: 20 спецприёмов ИИ возвращаются в движок как LF2 2.0a по умолчанию.
 
 ## Internal build storage и VM quota исправлены — 2026-10-17
 

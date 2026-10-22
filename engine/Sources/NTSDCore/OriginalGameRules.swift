@@ -53,8 +53,8 @@ public struct OriginalBitmapSheet: Equatable, Sendable {
 
 /// A game's rules (ENGINE_SPLIT E5): the values the engine's passes test where
 /// the original tests object IDs, grouped by family. The game supplies them with
-/// its content identity; the AI's special moves travel with them as a code hook
-/// (E5d-2). Every role lives in one immutable storage, so a pass's copy of the
+/// its content identity, LF2 2.0a's families from the engine (OriginalGameRules.lf2,
+/// E6b); the AI's special moves travel with them as a code hook (E5d-2). Every role lives in one immutable storage, so a pass's copy of the
 /// rules is one reference (E5c-1a).
 public struct OriginalGameRules: Equatable, Sendable {
     /// Reflection (OriginalHitDamage, OriginalWorldContacts).
