@@ -307,13 +307,13 @@ final class NTSDProfileCharacterAITests: XCTestCase {
         let goesOn = try fight(pass(own: 3, other: 3, x: 50), rules: goes)
         XCTAssertGreaterThan(goesOn.count, 2)
         XCTAssertEqual(goesOn, try fight(pass(own: 3, other: 3, x: 50), rules: n), "false goes on as NTSD's own (no routine for 3)")
-        // NTSD's routines are the game's (E5d-3); rules differ by the hook's type.
-        XCTAssertTrue(n.characterAISpecial is NTSDCharacterAISpecial)
+        // NTSD's routines are LF2 2.0a's, the engine's default (E6c; the game's in E5d-3); rules differ by the hook's type.
+        XCTAssertTrue(n.characterAISpecial is OriginalLF2CharacterAISpecial)
         XCTAssertNotEqual(n, n.with(profile: n.profile, characterAISpecial: EndsFight()))
         XCTAssertNotEqual(ends, goes); XCTAssertEqual(ends, n.with(characterAISpecial: EndsFight()))
         XCTAssertEqual(n, n.with(profile: n.profile))
     }
-    /// E5d-3: the routines moved into the game resolve the pass's own `abs` (`0 &- v`,
+    /// E5d-3, E6c: the routines (in the game, then back in the engine) resolve the pass's own `abs` (`0 &- v`,
     /// wrapping), not `Swift.abs`, which traps on `Int32.min`.
     func testMovedRoutinesUseThePassAbs() throws {
         let p = try pass(own: 7, x: Int32.min, z: Int32.min)

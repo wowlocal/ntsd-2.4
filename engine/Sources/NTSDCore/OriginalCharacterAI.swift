@@ -104,7 +104,7 @@ public struct OriginalCharacterAIPass {
         try setG(0x450bcc,Int32(rng.index)); try setG(0x450c34,Int32(rng.counter))
         events.append(.random(stream: stream,range: range,result: result)); return result
     }
-    /// The Actor's current frame's Int32 field (the game's special moves read +0x2c).
+    /// The Actor's current frame's Int32 field (a special-move conformer reads +0x2c).
     public func frameField(_ a: Int,_ o: Int) throws -> Int32 {
         let n = try object(a),f = try i(a,0x70)
         guard objects[n].frameStorage.indices.contains(Int(f)) else { throw error("Character-AI Frame binding") }
@@ -146,7 +146,7 @@ public struct OriginalCharacterAIPass {
     }
 
     public struct Locals {
-        // The four the game's special moves read are public (E5d-3); the order is unchanged.
+        // The four the special moves read are public for any conformer (E5d-3); the order is unchanged.
         public internal(set) var nearest38: Int32 = 10000
         var lying48: Int32 = 10000,item50: Int32 = 10000,target: Int32 = -1,bg: Int32 = 0
         public internal(set) var aligned34: Int32 = 0

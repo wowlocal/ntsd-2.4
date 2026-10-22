@@ -1,9 +1,9 @@
 import NTSDCore
 
-/// NTSD 2.4's game profile (ENGINE_SPLIT E5, E6b). NTSD 2.4.exe is LF2 2.0a's
+/// NTSD 2.4's game profile (ENGINE_SPLIT E5, E6b, E6c). NTSD 2.4.exe is LF2 2.0a's
 /// lf2.exe code plus a lib.dll loader (E6a), so its object-ID rules are LF2 2.0a's
-/// (OriginalGameRules.lf2, OriginalLF2Rules.swift); the game supplies its
-/// interface and its special moves.
+/// (OriginalGameRules.lf2, OriginalLF2Rules.swift), and so are its special
+/// moves (OriginalLF2CharacterAISpecial, E6c); the game supplies its interface.
 public enum NTSDProfile {
     public static let rules = OriginalGameRules.lf2(profile: "NTSD 2.4 2.0a",
         // The front menu's bitmaps in load order and its rectangle sheets (NTSDFrontMenuRectangles.swift).
@@ -28,7 +28,5 @@ public enum NTSDProfile {
                                        [0, 34, 198, 194], [198, 34, 198, 194], [396, 34, 198, 194], [594, 34, 198, 194],
                                        [0, 228, 198, 194], [198, 228, 198, 194], [396, 228, 198, 194], [594, 228, 198, 194],
                                        [0, 422, 794, 128]],
-                         warModeFrames: [[0, 0, 705, 400], [0, 471, 705, 16]]),
-        // The AI's special moves (NTSDCharacterAISpecial.swift).
-        characterAISpecial: NTSDCharacterAISpecial())
+                         warModeFrames: [[0, 0, 705, 400], [0, 471, 705, 16]]))
 }
