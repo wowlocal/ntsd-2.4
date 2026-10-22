@@ -1,5 +1,5 @@
 import Foundation
-import NTSDCore
+import RandoriCore
 
 /// Declared keyboard acquisition and primitive-effect assertions for the own
 /// active trajectory. These helpers belong only to reference comparison.

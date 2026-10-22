@@ -2,7 +2,7 @@
 import CryptoKit
 #endif
 import Foundation
-import NTSDCore
+import RandoriCore
 
 /// Development-only corpus reader; the native application does not depend on this target.
 public enum BootstrapReference {

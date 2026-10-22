@@ -1,5 +1,5 @@
 import Foundation
-import NTSDCore
+import RandoriCore
 
 public enum SettingsWritingReference {
     public struct Result {

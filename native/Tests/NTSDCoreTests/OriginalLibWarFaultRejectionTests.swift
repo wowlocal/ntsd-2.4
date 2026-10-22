@@ -1,6 +1,6 @@
 import Foundation
 import XCTest
-import NTSDCore
+import RandoriCore
 @testable import NTSDReferenceChecks
 
 /// Saved source faults establish boundaries, not successful matches. Every

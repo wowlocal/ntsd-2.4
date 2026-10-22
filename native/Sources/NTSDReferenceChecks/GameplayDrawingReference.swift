@@ -1,5 +1,5 @@
 import Foundation
-import NTSDCore
+import RandoriCore
 
 /// Own World draw, after the independently reconstructed camera/background.
 enum GameplayDrawingReference {

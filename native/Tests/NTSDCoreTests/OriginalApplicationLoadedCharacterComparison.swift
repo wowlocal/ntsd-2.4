@@ -1,6 +1,6 @@
 import Foundation
 import XCTest
-@testable import NTSDCore
+@testable import RandoriCore
 @testable import NTSDReferenceChecks
 
 /// Saved pristine human-screen state transitions projected onto the actual

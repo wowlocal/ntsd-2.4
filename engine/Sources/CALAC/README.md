@@ -4,7 +4,7 @@ The decoding half of Apple's ALAC reference codec (`codec/` of
 <https://github.com/macosforge/alac> at the commit in `upstream.json`),
 vendored unchanged under the Apache License 2.0 (`vendor/LICENSE`, and each
 file's header). `NTSDALAC.cpp` is the only addition: a C interface for
-`NTSDMusicDecoder`.
+`RandoriMusicDecoder`.
 
 It decodes the packaged original tracks (`NTSDContent/Resources/OriginalMusic`,
 lossless ALAC of the FFmpeg decode of `bgm/*.wma`) on hosts without

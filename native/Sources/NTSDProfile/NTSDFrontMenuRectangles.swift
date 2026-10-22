@@ -2,7 +2,7 @@
 // EXE SHA-256: 3f7ac67c5890ef979ee24a6dae5528056e7f631725c292cf9cb0a928ebeff71c
 // Original field order x/y/width/height, then count. No runtime EXE dependency.
 // The game's data (ENGINE_SPLIT E5f-1): NTSD's Interface.frontSheets.
-import NTSDCore
+import RandoriCore
 
 extension NTSDProfile {
     static let frontSheets: [OriginalBitmapSheet] = [

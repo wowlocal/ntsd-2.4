@@ -1,6 +1,6 @@
 import Foundation
 import XCTest
-@testable import NTSDCore
+@testable import RandoriCore
 @testable import NTSDReferenceChecks
 
 /// Saved pristine EXE/VC80 stages. No source after-state feeds the owned game.

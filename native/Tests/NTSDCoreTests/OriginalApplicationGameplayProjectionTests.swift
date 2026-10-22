@@ -1,6 +1,6 @@
 import Foundation
 import XCTest
-@testable import NTSDCore
+@testable import RandoriCore
 @testable import NTSDReferenceChecks
 
 /// Independent source-first scalar and complete rendering/audio projections at

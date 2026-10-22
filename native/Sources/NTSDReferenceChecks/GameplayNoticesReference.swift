@@ -1,5 +1,5 @@
 import Foundation
-import NTSDCore
+import RandoriCore
 
 /// Own whole post-HUD caller. Raw untouched source stack bytes are evidence
 /// of non-access, never initialization data for the native caller.

@@ -1,6 +1,6 @@
 import Foundation
 import XCTest
-import NTSDCore
+import RandoriCore
 
 /// Independent test projection of source events or declared Native effects.
 /// Neither Core graphics/bitmap transitions nor pixel copying construct expected

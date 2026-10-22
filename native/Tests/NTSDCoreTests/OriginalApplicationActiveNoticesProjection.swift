@@ -1,5 +1,5 @@
 import XCTest
-@testable import NTSDCore
+@testable import RandoriCore
 @testable import NTSDReferenceChecks
 
 /// Finite current-input branch specification; never calls the production notice routine.

@@ -1,6 +1,6 @@
 import Foundation
 import XCTest
-@testable import NTSDCore
+@testable import RandoriCore
 @testable import NTSDReferenceChecks
 
 /// Full retained application preflight. Acquisition/local input compare against

@@ -1,6 +1,6 @@
 import Foundation
 import XCTest
-import NTSDCore
+import RandoriCore
 import NTSDReferenceChecks
 
 /// Both accepted 43dfa0 corpora (startup precision and 64-bit control loading)

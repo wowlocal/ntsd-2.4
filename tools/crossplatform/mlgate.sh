@@ -44,10 +44,10 @@ echo "native $(git rev-parse "${TR}:native") tools $(git rev-parse "${TR}:tools"
 B1=build/swiftpm-headless; B1U=build/swiftpm-headless-unchecked; B2=build/swiftpm-app; B3=${GATE_TEST_SCRATCH:-build/swiftpm-test-release-b}; B4=$X/build-android-aarch64; export NTSD_ANDROID_SCRATCH=$B4
 F=$S/frozen-$L; FU=$S/frozen-unchecked-$L; FA=$S/frozen-app-$L
 rm -rf "${B1:?}" "${B1U:?}" "${B2:?}" "${B4:?}" "${F:?}" "${FU:?}" "${FA:?}"
-env -u NTSD_UNCHECKED_EXCLUSIVITY $XB --package-path native --scratch-path $B1 --build-system native -c release --product NTSDHeadless > $X/logs/$L-headless-build.log 2>&1 || { echo "headless build failed"; grep -E 'error:' $X/logs/$L-headless-build.log | head -8 | cut -c1-250; exit 1; }
+env -u NTSD_UNCHECKED_EXCLUSIVITY -u RANDORI_UNCHECKED_EXCLUSIVITY $XB --package-path native --scratch-path $B1 --build-system native -c release --product NTSDHeadless > $X/logs/$L-headless-build.log 2>&1 || { echo "headless build failed"; grep -E 'error:' $X/logs/$L-headless-build.log | head -8 | cut -c1-250; exit 1; }
 mkdir -p $F && cp -R $B1/release/NTSDHeadless $B1/release/*.bundle $F/
 echo "headless built (checked: $(otool -tV $F/NTSDHeadless | grep -c swift_beginAccess) beginAccess)"
-env -u NTSD_UNCHECKED_EXCLUSIVITY $XB --package-path native --scratch-path $B2 --build-system native -c release --product NTSDNative > $X/logs/$L-app-build.log 2>&1 || { echo "app build failed"; grep -E 'error:' $X/logs/$L-app-build.log | head -8 | cut -c1-250; exit 1; }
+env -u NTSD_UNCHECKED_EXCLUSIVITY -u RANDORI_UNCHECKED_EXCLUSIVITY $XB --package-path native --scratch-path $B2 --build-system native -c release --product NTSDNative > $X/logs/$L-app-build.log 2>&1 || { echo "app build failed"; grep -E 'error:' $X/logs/$L-app-build.log | head -8 | cut -c1-250; exit 1; }
 mkdir -p $FA && cp -R $B2/release/NTSDNative $B2/release/*.bundle $FA/
 echo "app built (checked: $(otool -tV $FA/NTSDNative | grep -c swift_beginAccess) beginAccess)"
 NTSD_UNCHECKED_EXCLUSIVITY=1 $XB --package-path native --scratch-path $B1U --build-system native -c release --product NTSDHeadless > $X/logs/$L-headless-unchecked-build.log 2>&1 || { echo "unchecked headless build failed"; exit 1; }
@@ -102,7 +102,7 @@ PY
 ) &
 (
   rm -rf "${B3:?}" "${B3:?}-engine"
-  env -u NTSD_UNCHECKED_EXCLUSIVITY $XB --package-path native --scratch-path $B3 --build-system native -c release --build-tests -Xswiftc -enable-testing > $X/logs/$L-tests-build.log 2>&1
+  env -u NTSD_UNCHECKED_EXCLUSIVITY -u RANDORI_UNCHECKED_EXCLUSIVITY $XB --package-path native --scratch-path $B3 --build-system native -c release --build-tests -Xswiftc -enable-testing > $X/logs/$L-tests-build.log 2>&1
   code=$?; echo "bundle exit=$code"; grep -E 'error:' $X/logs/$L-tests-build.log | head -6 | cut -c1-250
   [ $code -eq 0 ] || exit 1
   BA=$(find $B3 -maxdepth 4 -name 'NTSDNativePackageTests.xctest' | head -1)
@@ -113,11 +113,11 @@ PY
   done
   # The engine's self-contained tests (ENGINE_SPLIT E4c), with its exclusivity check,
   # built after the named suites ran so that a failing engine build skips nothing else.
-  env -u NTSD_UNCHECKED_EXCLUSIVITY $XB --package-path engine --scratch-path $B3-engine --build-system native -c release --build-tests -Xswiftc -enable-testing > $X/logs/$L-engine-tests-build.log 2>&1
+  env -u NTSD_UNCHECKED_EXCLUSIVITY -u RANDORI_UNCHECKED_EXCLUSIVITY $XB --package-path engine --scratch-path $B3-engine --build-system native -c release --build-tests -Xswiftc -enable-testing > $X/logs/$L-engine-tests-build.log 2>&1
   code=$?; echo "engine bundle exit=$code"; grep -E 'error:' $X/logs/$L-engine-tests-build.log | head -6 | cut -c1-250
-  BE=$(find $B3-engine -maxdepth 4 -name 'NTSDEnginePackageTests.xctest' | head -1)
+  BE=$(find $B3-engine -maxdepth 4 -name 'RandoriPackageTests.xctest' | head -1)
   start=$(date +%s); xcrun xctest "$BE" > $X/logs/$L-engine-tests.log 2>&1; code=$?
-  echo "NTSDEngineTests exit=$code $(( $(date +%s)-start ))s $(grep -E 'Executed [0-9]+ tests?' $X/logs/$L-engine-tests.log | tail -1 | sed 's/^ *//')$(grep -qE 'Executed 0 tests' $X/logs/$L-engine-tests.log && echo ' NO TESTS RAN')"
+  echo "RandoriTests exit=$code $(( $(date +%s)-start ))s $(grep -E 'Executed [0-9]+ tests?' $X/logs/$L-engine-tests.log | tail -1 | sed 's/^ *//')$(grep -qE 'Executed 0 tests' $X/logs/$L-engine-tests.log && echo ' NO TESTS RAN')"
   [ $code -eq 0 ] || grep -E 'error:' $X/logs/$L-engine-tests.log | head -6 | cut -c1-300
   echo suites_done
 ) &

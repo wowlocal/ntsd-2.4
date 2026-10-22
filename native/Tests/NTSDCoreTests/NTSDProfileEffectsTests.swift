@@ -1,5 +1,5 @@
 import XCTest
-@testable import NTSDCore
+@testable import RandoriCore
 import NTSDProfile
 
 /// ENGINE_SPLIT E5c-1g/1i: the post-draw opoint's children (A55–A57), the

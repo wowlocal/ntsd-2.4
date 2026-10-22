@@ -1,5 +1,5 @@
 import Foundation
-import NTSDCore
+import RandoriCore
 
 /// Complete own HUD on independently reconstructed match and bitmap state.
 /// The source's discarded stack argument never supplies a native draw target.

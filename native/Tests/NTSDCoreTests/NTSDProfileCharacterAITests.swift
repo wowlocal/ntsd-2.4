@@ -1,5 +1,5 @@
 import XCTest
-@testable import NTSDCore
+@testable import RandoriCore
 @testable import NTSDProfile
 
 /// ENGINE_SPLIT E5d-1a/1b/2: the character AI's target choice (A80–A86), fight

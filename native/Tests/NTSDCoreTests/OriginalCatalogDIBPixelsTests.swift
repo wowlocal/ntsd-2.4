@@ -3,7 +3,7 @@ import Foundation
 import CryptoKit
 #endif
 import XCTest
-import NTSDCore
+import RandoriCore
 @testable import NTSDReferenceChecks
 
 /// Original image files are inputs; independently fixed RGB/masks are outputs.

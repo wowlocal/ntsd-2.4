@@ -1,9 +1,9 @@
 import Foundation
-import NTSDCore
+import RandoriCore
 import NTSDContent
-import NTSDRuntime
-#if canImport(NTSDMacPlatform)
-import NTSDMacPlatform
+import RandoriRuntime
+#if canImport(RandoriMacPlatform)
+import RandoriMacPlatform
 #endif
 
 // ENGINE_SPLIT E1/E2: the engine finds content through OriginalContentLocation
@@ -46,7 +46,7 @@ extension OriginalApplicationMenuInputs {
 extension OriginalRuntimeLoadingPackages {
     init(in bundle: Bundle) { self.init(in:NTSDContent.location(in:bundle)) }
 }
-#if canImport(NTSDMacPlatform)
+#if canImport(RandoriMacPlatform)
 extension OriginalMacRuntimeLoading {
     static func bundled(_ started: OriginalMacRuntimeStartup.Started,startupInputs: OriginalApplicationStartupInputs,
         clock: @escaping () throws -> UInt32) throws -> OriginalMacRuntimeLoading {

@@ -1,6 +1,6 @@
 import Foundation
 import XCTest
-import NTSDCore
+import RandoriCore
 @testable import NTSDReferenceChecks
 
 /// Six saved whole War returns after image/CreateSurface/colorKey failures.

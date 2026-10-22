@@ -1,6 +1,6 @@
 import Foundation
 import XCTest
-@testable import NTSDCore
+@testable import RandoriCore
 import NTSDProfile
 
 /// ENGINE_SPLIT E5f-1/2a/2b/3/4: the front menu's bitmaps and rectangle sheets,

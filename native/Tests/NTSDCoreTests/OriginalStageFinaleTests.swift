@@ -1,5 +1,5 @@
 import XCTest
-import NTSDCore
+import RandoriCore
 
 /// GOAL_100.md P0a, the Stage finale. After the last stage group (5-x) the
 /// stage logic writes menu 300 (437860's 438991, ported as

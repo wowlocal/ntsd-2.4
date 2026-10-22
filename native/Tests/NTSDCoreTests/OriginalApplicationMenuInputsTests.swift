@@ -1,6 +1,6 @@
 import Foundation
 import XCTest
-import NTSDCore
+import RandoriCore
 
 final class OriginalApplicationMenuInputsTests: XCTestCase {
     struct Reference: Decodable {

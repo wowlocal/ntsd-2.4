@@ -1,5 +1,5 @@
 import Foundation
-import NTSDCore
+import RandoriCore
 
 private struct Corpus: Decodable { let exeSHA256: String; let cases: [Case] }
 private struct Case: Decodable {

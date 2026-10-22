@@ -3,7 +3,7 @@ import Foundation
 import CryptoKit
 #endif
 import XCTest
-import NTSDCore
+import RandoriCore
 
 final class OriginalDIBPixelsTests: XCTestCase {
     struct Reference: Decodable {

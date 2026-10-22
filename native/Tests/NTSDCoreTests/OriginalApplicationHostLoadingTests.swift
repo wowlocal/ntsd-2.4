@@ -1,6 +1,6 @@
 import Foundation
 import XCTest
-@testable import NTSDCore
+@testable import RandoriCore
 
 final class OriginalApplicationHostLoadingTests: XCTestCase {
     typealias H = OriginalApplicationHostSessionTests

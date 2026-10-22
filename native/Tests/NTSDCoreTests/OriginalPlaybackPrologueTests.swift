@@ -1,6 +1,6 @@
 import Foundation
 import XCTest
-@testable import NTSDCore
+@testable import RandoriCore
 
 /// Real41bd24..41bdce (tools/oracle_playback_prologue.py) against the playback
 /// controls in OriginalInitialLoading.begin: every playback word and key byte,

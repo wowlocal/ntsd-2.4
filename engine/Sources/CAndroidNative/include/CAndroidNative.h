@@ -45,5 +45,5 @@ extern void _dispatch_main_queue_callback_4CF(void *_Null_unspecified msg);
 void ntsd_android_hide_system_bars(ANativeActivity *_Nonnull activity);
 
 // Implemented in Swift by the game's library (NTSD's NTSDAndroid), which hands
-// the activity to NTSDAndroidHost; ANativeActivity_onCreate forwards to it.
+// the activity to RandoriAndroidHost; ANativeActivity_onCreate forwards to it.
 extern void ntsd_android_on_create(ANativeActivity *_Nonnull activity);

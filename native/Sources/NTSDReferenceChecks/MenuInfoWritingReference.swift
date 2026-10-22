@@ -1,5 +1,5 @@
 import Foundation
-import NTSDCore
+import RandoriCore
 
 public enum MenuInfoWritingReference {
     public struct Result { public var cases = 0, defaults = 0, caches = 0, events = 0, formats = 0, prints = 0, closes = 0, fileWrites = 0, failedWrites = 0, parentWrites = 0, records = 0, bytes = 0 }

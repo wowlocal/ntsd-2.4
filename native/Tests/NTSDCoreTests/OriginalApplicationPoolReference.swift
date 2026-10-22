@@ -1,6 +1,6 @@
 import Foundation
 import XCTest
-import NTSDCore
+import RandoriCore
 @testable import NTSDReferenceChecks
 
 /// Comparison-only replay of saved original stores. The new native continuation

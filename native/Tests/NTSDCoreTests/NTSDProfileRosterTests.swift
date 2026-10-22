@@ -1,5 +1,5 @@
 import XCTest
-@testable import NTSDCore
+@testable import RandoriCore
 import NTSDProfile
 
 /// ENGINE_SPLIT E5c-2d: Random's roster candidates (OriginalMatchContinuation,

@@ -58,7 +58,7 @@ def main():
                    "UISupportedInterfaceOrientations~ipad": ["UIInterfaceOrientationLandscapeLeft", "UIInterfaceOrientationLandscapeRight"],
                    "UIApplicationSceneManifest": {"UIApplicationSupportsMultipleScenes": False, "UISceneConfigurations": {
                        "UIWindowSceneSessionRoleApplication": [{"UISceneConfigurationName": "Default",
-                                                               "UISceneDelegateClassName": "NTSDUIKitHost.NTSDSceneDelegate"}]}}},
+                                                               "UISceneDelegateClassName": "RandoriUIKitHost.NTSDSceneDelegate"}]}}},
                   (app / "Info.plist").open("wb"))
     shutil.copy2(args.profile, app / "embedded.mobileprovision")
     entitlements = out / "entitlements.plist"

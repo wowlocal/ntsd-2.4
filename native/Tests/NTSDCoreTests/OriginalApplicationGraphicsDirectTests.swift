@@ -1,6 +1,6 @@
 import Foundation
 import XCTest
-@testable import NTSDCore
+@testable import RandoriCore
 import NTSDProfile
 
 /// Blt and fill commands built directly (CORE_REALTIME tier 3 G3a) equal

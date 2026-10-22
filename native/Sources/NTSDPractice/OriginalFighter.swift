@@ -1,5 +1,5 @@
 import Foundation
-import NTSDCore
+import RandoriCore
 
 /// Replay bits, original 0x4198f0.
 public struct FighterInput: OptionSet, Sendable {

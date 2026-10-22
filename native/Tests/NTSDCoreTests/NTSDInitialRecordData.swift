@@ -1,4 +1,4 @@
-import NTSDCore
+import RandoriCore
 
 /// NTSD's initialized data for suites that seed a record by hand: ranges of the
 /// game's record (its startup package's initial.bin). Until ENGINE_SPLIT E5b

@@ -1,6 +1,6 @@
 import Foundation
 import XCTest
-import NTSDCore
+import RandoriCore
 @testable import NTSDReferenceChecks
 
 /// Provider inputs come from saved source case specifications; after-state is

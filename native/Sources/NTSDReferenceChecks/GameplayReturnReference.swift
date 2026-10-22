@@ -1,4 +1,4 @@
-import NTSDCore
+import RandoriCore
 import NTSDProfile
 
 /// Compare output and both actual returns from independently rebuilt own state.

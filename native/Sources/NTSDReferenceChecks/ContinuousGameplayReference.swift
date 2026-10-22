@@ -1,5 +1,5 @@
 import Foundation
-import NTSDCore
+import RandoriCore
 
 /// Successive production calls on independently rebuilt native state.
 /// Manifest records are comparison outputs; only declared platform responses

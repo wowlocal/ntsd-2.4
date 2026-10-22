@@ -1,5 +1,5 @@
 import XCTest
-@testable import NTSDCore
+@testable import RandoriCore
 import NTSDProfile
 
 /// ENGINE_SPLIT E5e-4: fusion's Objects (A24–A26) follow the profile. Synthetic

@@ -1,4 +1,4 @@
-import NTSDCore
+import RandoriCore
 
 /// Join the own round output to the result caller. The source audit is checked
 /// as evidence; it never supplies native stack or recording initialization.

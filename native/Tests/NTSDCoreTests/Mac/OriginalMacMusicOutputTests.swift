@@ -1,12 +1,12 @@
 import AVFoundation
 import XCTest
-@testable import NTSDCore
-@testable import NTSDMacPlatform
-@testable import NTSDRuntime
+@testable import RandoriCore
+@testable import RandoriMacPlatform
+@testable import RandoriRuntime
 
 /// Music output follows only the committed DirectShow graph state; the packaged
 /// tracks are the manifest's lossless decodes.
-/// ENGINE_SPLIT E4c-2: its synthetic tests moved to the engine's NTSDEngineTests (same class name).
+/// ENGINE_SPLIT E4c-2: its synthetic tests moved to the engine's RandoriTests (same class name).
 @MainActor final class OriginalMacMusicOutputTests: XCTestCase {
     typealias Output = OriginalMacMusicOutput
     final class Recorder: Output.Player {

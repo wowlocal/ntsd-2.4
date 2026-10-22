@@ -1,6 +1,6 @@
 import Foundation
 import XCTest
-@testable import NTSDCore
+@testable import RandoriCore
 
 final class OriginalStateTests: XCTestCase {
     private struct Corpus: Decodable { let exeSHA256: String; let cases: [Case] }

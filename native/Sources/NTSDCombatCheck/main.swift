@@ -1,5 +1,5 @@
 import Foundation
-import NTSDCore
+import RandoriCore
 import NTSDPractice
 
 struct Corpus: Decodable {

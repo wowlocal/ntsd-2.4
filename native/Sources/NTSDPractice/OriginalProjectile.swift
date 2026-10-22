@@ -1,5 +1,5 @@
 import Foundation
-import NTSDCore
+import RandoriCore
 
 public struct ProjectileDefinition: Codable, Sendable {
     public var id: Int

@@ -1,6 +1,6 @@
 import Foundation
 import XCTest
-@testable import NTSDCore
+@testable import RandoriCore
 import NTSDProfile
 
 /// ENGINE_SPLIT E5c-1b: the automatic guards (A1–A6) take their Objects from the

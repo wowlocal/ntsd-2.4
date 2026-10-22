@@ -3,7 +3,7 @@ import Foundation
 import CryptoKit
 #endif
 import XCTest
-@testable import NTSDCore
+@testable import RandoriCore
 
 /// Real43e620 results (tools/oracle_replay_loader.py) against the Native
 /// loader: status, 44d030/450b74, 4588ac, recording bytes, allocation order,

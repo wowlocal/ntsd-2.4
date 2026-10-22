@@ -1,6 +1,6 @@
-// FreeType for the glyph masks of hosts without CoreText (NTSDFreeTypeText).
+// FreeType for the glyph masks of hosts without CoreText (RandoriFreeTypeText).
 // The include path (include/freetype2) and the static library come from
-// NTSD_FREETYPE_PREFIX.
+// RANDORI_FREETYPE_PREFIX (or NTSD_FREETYPE_PREFIX).
 #include <ft2build.h>
 #include FT_FREETYPE_H
 #include FT_MULTIPLE_MASTERS_H

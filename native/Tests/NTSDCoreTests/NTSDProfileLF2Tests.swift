@@ -1,5 +1,5 @@
 import XCTest
-import NTSDCore
+import RandoriCore
 import NTSDProfile
 
 /// ENGINE_SPLIT E6b: NTSD's profile composes the engine's LF2 2.0a rules

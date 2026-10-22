@@ -1,6 +1,6 @@
 import Foundation
 import XCTest
-import NTSDCore
+import RandoriCore
 
 /// Comparison-only full controlled catalog and WAV records. Original source
 /// files and declared replies are separate inputs; no Native run produces these

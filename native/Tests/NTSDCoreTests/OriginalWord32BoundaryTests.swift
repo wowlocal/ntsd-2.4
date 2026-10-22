@@ -1,11 +1,11 @@
 import XCTest
-@testable import NTSDCore
+@testable import RandoriCore
 
 /// TVOS_WEB W1b: a header word or declared size of 2^31 and more, from a file
 /// or DAT, reaches the same boundary on every host. A 32-bit Int (wasm32)
 /// cannot hold such a value, so these checks compare in 64 bits; the tests
 /// pin the outcome a 64-bit host always had.
-/// ENGINE_SPLIT E4c-2: its synthetic tests moved to the engine's NTSDEngineTests (same class name).
+/// ENGINE_SPLIT E4c-2: its synthetic tests moved to the engine's RandoriTests (same class name).
 final class OriginalWord32BoundaryTests: XCTestCase {
     private func put(_ value: UInt32, _ at: Int, _ bytes: inout [UInt8]) {
         for i in 0..<4 { bytes[at+i] = UInt8(truncatingIfNeeded: value >> (8*UInt32(i))) }

@@ -1,12 +1,12 @@
 import Foundation
 import XCTest
-@testable import NTSDCore
-@testable import NTSDRuntime
+@testable import RandoriCore
+@testable import RandoriRuntime
 
 /// MEMORY_LOADING L13: the loading packages are read on a thread of their own
 /// and taken where they were read, in the same order: the values are the ones
 /// read in sequence, and the first failing package in that order decides.
-/// ENGINE_SPLIT E4c-2: its synthetic tests moved to the engine's NTSDEngineTests (same class name).
+/// ENGINE_SPLIT E4c-2: its synthetic tests moved to the engine's RandoriTests (same class name).
 final class OriginalLoadingReadAheadTests: XCTestCase {
     struct Failed: Error, Equatable { let name: String }
 

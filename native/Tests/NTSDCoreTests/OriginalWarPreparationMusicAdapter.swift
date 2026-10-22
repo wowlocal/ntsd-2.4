@@ -1,6 +1,6 @@
 import Foundation
 import XCTest
-import NTSDCore
+import RandoriCore
 
 /// Declared music responses for saved whole War callers. Numeric results,
 /// optional output words and conversion writes are independent inputs. Defaults

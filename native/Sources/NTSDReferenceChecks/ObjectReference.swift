@@ -2,7 +2,7 @@ import Foundation
 #if canImport(CryptoKit)
 import CryptoKit
 #endif
-import NTSDCore
+import RandoriCore
 
 /// A compact projection of full original Object captures. It compares all header,
 /// tail and bitmap bytes/masks, frame projections after each occurrence and at EOF,

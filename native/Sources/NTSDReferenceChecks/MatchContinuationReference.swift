@@ -1,5 +1,5 @@
 import Foundation
-import NTSDCore
+import RandoriCore
 
 public enum MatchContinuationReference {
     public struct Result {

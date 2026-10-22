@@ -1,5 +1,5 @@
 import Foundation
-import NTSDCore
+import RandoriCore
 
 /// Compares OriginalCharacterAI with real4094b0 calls captured after the
 /// verified first loading. Unlisted Actors must be unchanged; globals may

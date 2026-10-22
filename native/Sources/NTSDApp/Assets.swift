@@ -1,7 +1,7 @@
 import AppKit
 import SpriteKit
 import AVFoundation
-import NTSDCore
+import RandoriCore
 import NTSDPractice
 
 final class Assets {

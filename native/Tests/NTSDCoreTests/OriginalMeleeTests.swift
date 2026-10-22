@@ -1,6 +1,6 @@
 import Foundation
 import XCTest
-@testable import NTSDCore
+@testable import RandoriCore
 @testable import NTSDPractice
 
 final class OriginalMeleeTests: XCTestCase {

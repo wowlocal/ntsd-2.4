@@ -1,5 +1,5 @@
 import Foundation
-import NTSDCore
+import RandoriCore
 
 public struct MeleeState: Codable, Equatable, Sendable {
     public var actors: [FighterState]

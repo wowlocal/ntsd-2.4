@@ -1,5 +1,5 @@
 import Foundation
-import NTSDCore
+import RandoriCore
 import NTSDProfile
 
 /// Uses recorded stimuli, then compares the prelude before the existing complete

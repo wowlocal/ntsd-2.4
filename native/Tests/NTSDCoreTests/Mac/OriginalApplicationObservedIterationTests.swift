@@ -1,8 +1,8 @@
 import AppKit
 import XCTest
-@testable import NTSDCore
-@testable import NTSDMacPlatform
-@testable import NTSDRuntime
+@testable import RandoriCore
+@testable import RandoriMacPlatform
+@testable import RandoriRuntime
 
 /// The whole-iteration permit driver against the existing prepared-array path:
 /// identical saved first-menu values, no new expected state.

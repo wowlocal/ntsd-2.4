@@ -1,7 +1,7 @@
 import Foundation
 import XCTest
 import NTSDReferenceChecks
-@testable import NTSDCore
+@testable import RandoriCore
 
 final class OriginalBackgroundTests: XCTestCase {
     func testOriginalBackgroundParsingAndResourceLifecycle() throws {

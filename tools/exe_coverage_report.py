@@ -77,7 +77,7 @@ def main(universe_path, out_path, image_path, repo, *executed_paths):
         data = json.load(open(path))
         for name, record in data.items():
             executed.setdefault(name, set()).update(record['starts'])
-    swift = [p for root in ('native', 'engine') for module in ('NTSDCore', 'NTSDMacPlatform')   # engine/ since ENGINE_SPLIT E4a
+    swift = [p for root in ('native', 'engine') for module in ('NTSDCore', 'NTSDMacPlatform', 'RandoriCore', 'RandoriMacPlatform')   # engine/ since ENGINE_SPLIT E4a, Randori* since E8a
              for p in glob.glob(os.path.join(repo, root, 'Sources', module, '*.swift'))]
     code = ''.join(open(p, errors='ignore').read() for root in ('native', 'engine')
                    for p in glob.glob(os.path.join(repo, root, '**/*.swift'), recursive=True))

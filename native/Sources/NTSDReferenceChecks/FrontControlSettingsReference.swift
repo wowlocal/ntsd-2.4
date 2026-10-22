@@ -1,5 +1,5 @@
 import Foundation
-import NTSDCore
+import RandoriCore
 
 /// tools/oracle_front_control_settings.py corpus: the completion parent is
 /// replayed by FrontMenuCompletionReference, then every selector-6 case runs

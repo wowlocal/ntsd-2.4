@@ -1,4 +1,4 @@
-import NTSDCore
+import RandoriCore
 
 /// The own first tick reaches this pass with both command flags clear. The
 /// controlled corpus separately checks item/resource branches and aliased pools.

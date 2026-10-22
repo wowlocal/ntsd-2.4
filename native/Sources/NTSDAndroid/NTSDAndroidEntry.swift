@@ -1,5 +1,5 @@
 import CAndroidNative
-import NTSDAndroidHost
+import RandoriAndroidHost
 import NTSDContent
 
 // NTSDAndroid (P8, docs/research/CROSS_PLATFORM.md): NTSD in an Android
@@ -9,5 +9,5 @@ import NTSDContent
 // which tools/crossplatform/android_app.py ships among the data.
 @_cdecl("ntsd_android_on_create")
 func ntsdAndroidOnCreate(_ activity: UnsafeMutablePointer<ANativeActivity>) {
-    MainActor.assumeIsolated { NTSDAndroidHost.create(activity,game:NTSDContent.runtimeGame,resources:"NTSDNative_NTSDContent.bundle") }
+    MainActor.assumeIsolated { RandoriAndroidHost.create(activity,game:NTSDContent.runtimeGame,resources:"NTSDNative_NTSDContent.bundle") }
 }

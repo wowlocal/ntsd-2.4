@@ -1,5 +1,5 @@
 import Foundation
-import NTSDCore
+import RandoriCore
 
 /// Original menu decisions consume the same native CRT state as initialization;
 /// the resulting World/globals/table then flow into full match/replay comparison.

@@ -1,5 +1,5 @@
 import Foundation
-import NTSDCore
+import RandoriCore
 
 /// Own first camera call, continuing the independently reconstructed launch.
 /// Raw bitmap addresses are reference identities only, never engine pointers.

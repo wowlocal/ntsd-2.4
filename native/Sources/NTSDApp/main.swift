@@ -1,8 +1,8 @@
 import AppKit
 import SpriteKit
-import NTSDAppKitHost
+import RandoriAppKitHost
 import NTSDContent
-import NTSDCore
+import RandoriCore
 import NTSDPractice
 
 let arguments = CommandLine.arguments
@@ -258,7 +258,7 @@ final class AppDelegate: NSObject, NSApplicationDelegate, NSWindowDelegate {
 let laboratoryOptions = ["--practice","--movement","--inspect","--verify-data","--data","--assets","--screenshot",
                          "--capture-state","--practice-preview"]
 if !laboratoryOptions.contains(where: arguments.contains) {
-    NTSDAppKitHost.run(arguments: arguments, game: NTSDContent.runtimeGame)   // the engine's AppKit host (ENGINE_SPLIT E4b)
+    RandoriAppKitHost.run(arguments: arguments, game: NTSDContent.runtimeGame)   // the engine's AppKit host (ENGINE_SPLIT E4b)
 }
 
 do {

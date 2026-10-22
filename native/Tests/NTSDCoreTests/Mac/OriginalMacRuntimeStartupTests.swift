@@ -1,8 +1,8 @@
 import AppKit
 import XCTest
-@testable import NTSDCore
-@testable import NTSDMacPlatform
-@testable import NTSDRuntime
+@testable import RandoriCore
+@testable import RandoriMacPlatform
+@testable import RandoriRuntime
 
 /// Runtime WinMain providers: no corpus reply reaches Native. Saved source
 /// records are read only as independent evidence for the defaults write.

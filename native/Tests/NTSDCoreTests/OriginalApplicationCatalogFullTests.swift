@@ -1,6 +1,6 @@
 import Foundation
 import XCTest
-import NTSDCore
+import RandoriCore
 import NTSDContent
 
 /// Complete owned Native composition in an explicitly declared platform

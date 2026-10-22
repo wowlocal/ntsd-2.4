@@ -1,5 +1,5 @@
 import Foundation
-import NTSDCore
+import RandoriCore
 
 /// Extends the existing menu comparison at explicit stage hooks. Native World=2
 /// is produced by the dispatcher branch, then feeds match/replay comparisons.

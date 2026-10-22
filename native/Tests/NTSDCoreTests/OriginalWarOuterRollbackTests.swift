@@ -1,6 +1,6 @@
 import Foundation
 import XCTest
-import NTSDCore
+import RandoriCore
 import NTSDProfile
 
 /// Native-only outer transaction checks. The game contract is the declared

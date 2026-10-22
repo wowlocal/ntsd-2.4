@@ -1,13 +1,13 @@
 import Foundation
 import XCTest
-@testable import NTSDCore
+@testable import RandoriCore
 
 /// MEMORY_LOADING L4: bitmaps are validated at load without being decoded.
 /// `OriginalDIBPixels.validate` must succeed with the decoder's pixel offset
 /// exactly when the decoder succeeds, and otherwise throw the decoder's error,
 /// on every packaged image and on seeded mutations of small images of every
 /// supported format.
-/// ENGINE_SPLIT E4c-2: its synthetic tests moved to the engine's NTSDEngineTests (same class name).
+/// ENGINE_SPLIT E4c-2: its synthetic tests moved to the engine's RandoriTests (same class name).
 final class OriginalDIBValidationTests: XCTestCase {
     func outcome(_ body: () throws -> Int) -> String {
         do { return "offset \(try body())" } catch let error as OriginalDIBPixels.Boundary { return "error \(error.rawValue)" }

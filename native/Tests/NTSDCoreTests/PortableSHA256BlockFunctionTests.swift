@@ -3,12 +3,12 @@ import XCTest
 #if canImport(CryptoKit)
 import CryptoKit
 #endif
-@testable import NTSDCore
+@testable import RandoriCore
 
 /// MEMORY_LOADING L11: a host block function is installed only when it gives
 /// the Swift digests, and the hasher drives it over whole blocks exactly as
 /// its own compression.
-/// ENGINE_SPLIT E4c-2: its synthetic tests moved to the engine's NTSDEngineTests (same class name).
+/// ENGINE_SPLIT E4c-2: its synthetic tests moved to the engine's RandoriTests (same class name).
 final class PortableSHA256BlockFunctionTests: XCTestCase {
     /// The Swift compression, block by block, as a C function (no capture).
     static let swiftBlocks: PortableSHA256.BlockFunction = { state, data, count in

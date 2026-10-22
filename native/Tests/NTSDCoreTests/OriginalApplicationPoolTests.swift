@@ -1,6 +1,6 @@
 import Foundation
 import XCTest
-import NTSDCore
+import RandoriCore
 import NTSDProfile
 
 final class OriginalApplicationPoolTests: XCTestCase {

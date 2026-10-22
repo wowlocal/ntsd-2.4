@@ -6,7 +6,7 @@ Usage: run_linux_suites.py BUILD_DIR OUT.jsonl [--jobs N] [--timeout SECONDS] [-
                            [--module NAME]
 
 BUILD_DIR is the Linux products directory holding NAME-test-runner: the game's
-NTSDCoreTests (the default) or the engine package's NTSDEngineTests (ENGINE_SPLIT E4c).
+NTSDCoreTests (the default) or the engine package's RandoriTests (ENGINE_SPLIT E4c).
 The repository and BUILD_DIR are mounted read-only into swift:6.4.0-noble and
 their macOS absolute paths are recreated by tools/crossplatform/linux-test-run.sh,
 so #filePath and Bundle.module resolve. Suites already in OUT.jsonl are skipped,

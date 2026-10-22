@@ -1,9 +1,9 @@
 import Foundation
 import XCTest
-@testable import NTSDCore
+@testable import RandoriCore
 
 /// MEMORY_LOADING M1: bitmap bytes kept compressed must read back exactly.
-/// ENGINE_SPLIT E4c-2: its synthetic tests moved to the engine's NTSDEngineTests (same class name).
+/// ENGINE_SPLIT E4c-2: its synthetic tests moved to the engine's RandoriTests (same class name).
 final class OriginalLZ4Tests: XCTestCase {
     /// The startup package now loads on all cores too (M1): the first failing
     /// entry in manifest order still decides the error.

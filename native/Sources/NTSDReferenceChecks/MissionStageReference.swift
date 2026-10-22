@@ -1,5 +1,5 @@
 import Foundation
-import NTSDCore
+import RandoriCore
 
 /// Compares OriginalMissionStage with real437860 calls captured after the
 /// verified first loading on the loaded catalog's stage records. Calls to the

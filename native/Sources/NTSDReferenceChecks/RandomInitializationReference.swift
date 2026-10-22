@@ -1,5 +1,5 @@
 import Foundation
-import NTSDCore
+import RandoriCore
 
 /// CRT-generated tables are native inputs to the existing catalog/match/replay
 /// comparison. Expected original tables are only compared, never installed.

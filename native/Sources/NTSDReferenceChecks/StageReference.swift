@@ -2,7 +2,7 @@ import Foundation
 #if canImport(CryptoKit)
 import CryptoKit
 #endif
-import NTSDCore
+import RandoriCore
 
 /// Development-only lossless storage comparison. Compression is solely the
 /// fixture transport; the shipping Stage loader uses original record bytes/masks.

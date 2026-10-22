@@ -1,11 +1,11 @@
 import Foundation
 import XCTest
-@testable import NTSDCore
+@testable import RandoriCore
 
 /// MEMORY_LOADING L3: package entries are read, verified and decoded
 /// concurrently and taken in manifest order, so the first failing entry in that
 /// order still decides the error, whichever entry fails first in time.
-/// ENGINE_SPLIT E4c-2: its synthetic tests moved to the engine's NTSDEngineTests (same class name).
+/// ENGINE_SPLIT E4c-2: its synthetic tests moved to the engine's RandoriTests (same class name).
 final class OriginalConcurrentInputsTests: XCTestCase {
     let fm = FileManager.default
     struct Entry: Decodable { let name: String, path: String }

@@ -1,6 +1,6 @@
 import Foundation
 import XCTest
-import NTSDCore
+import RandoriCore
 import NTSDProfile
 
 /// Three saved whole-child prefixes, reached through actual Native startup,

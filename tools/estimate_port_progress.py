@@ -96,8 +96,9 @@ def matches(text):
     return {(int(m[1], 16), int(m[2], 16)) for m in RANGE.finditer(text)}
 
 
-# Core's sources: native/Sources/NTSDCore before ENGINE_SPLIT E4a, engine/Sources/NTSDCore after.
-CORE_PREFIXES = ('native/Sources/NTSDCore/', 'engine/Sources/NTSDCore/')
+# Core's sources: native/Sources/NTSDCore before ENGINE_SPLIT E4a, engine/Sources/NTSDCore after,
+# engine/Sources/RandoriCore after E8a.
+CORE_PREFIXES = ('native/Sources/NTSDCore/', 'engine/Sources/NTSDCore/', 'engine/Sources/RandoriCore/')
 
 
 def core_has(files, module):
@@ -205,7 +206,7 @@ def main():
         source_mask = mask_of(collect(files, start, end, False), start, end)
         body = inside_mask(mask)
         counts = {}
-        for folder in ['NTSDCore', 'NTSDApp', 'NTSDReferenceChecks']:
+        for folder in ['NTSDCore', 'RandoriCore', 'NTSDApp', 'NTSDReferenceChecks']:
             selected = [text for path, text in files.items()
                         if path.startswith(('native/Sources/'+folder+'/', 'engine/Sources/'+folder+'/')) and path.endswith('.swift')]
             counts[folder] = dict(files=len(selected), lines=sum(len(t.splitlines()) for t in selected))

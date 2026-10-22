@@ -1,5 +1,5 @@
 import XCTest
-@testable import NTSDCore
+@testable import RandoriCore
 
 /// STAGE_ENDING.md: whole 437220 against `tools/oracle_stage_ending.py`
 /// (Unicorn, real 437220 and 431c70, declared inputs). Every case compares the

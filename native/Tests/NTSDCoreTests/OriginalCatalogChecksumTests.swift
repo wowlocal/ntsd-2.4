@@ -1,5 +1,5 @@
 import XCTest
-@testable import NTSDCore
+@testable import RandoriCore
 import NTSDProfile
 
 /// APPLICATION_CATALOG_CHECKSUM.md: the catalog checksum 44f620 over the app's
@@ -7,7 +7,7 @@ import NTSDProfile
 /// VC80's fscanf("%c") lookahead the value is the one the original computes
 /// (0x1ec3356: its own recordings, and 44f620 read from the running original
 /// under CrossOver). Without it, the earlier corpora's declared value remains.
-/// ENGINE_SPLIT E4c-2: its synthetic tests moved to the engine's NTSDEngineTests (same class name).
+/// ENGINE_SPLIT E4c-2: its synthetic tests moved to the engine's RandoriTests (same class name).
 final class OriginalCatalogChecksumTests: XCTestCase {
     private func checksum(scanfLookahead: Bool) throws -> UInt32 {
         let inputs = try OriginalApplicationCatalogInputs.load(directory: OriginalApplicationCatalogInputs.bundledDirectory())

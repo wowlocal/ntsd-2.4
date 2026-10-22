@@ -1,7 +1,7 @@
 import Dispatch
 import Foundation
 import XCTest
-@testable import NTSDCore
+@testable import RandoriCore
 
 final class OriginalApplicationWindowInspectionTests: XCTestCase {
     typealias W = OriginalApplicationWindowStartupTests

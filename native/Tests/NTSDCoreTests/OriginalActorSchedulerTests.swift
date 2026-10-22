@@ -3,7 +3,7 @@ import Foundation
 import CryptoKit
 #endif
 import XCTest
-@testable import NTSDCore
+@testable import RandoriCore
 @testable import NTSDReferenceChecks
 import NTSDProfile
 

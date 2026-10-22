@@ -1,6 +1,6 @@
 import Foundation
 import XCTest
-@testable import NTSDCore
+@testable import RandoriCore
 import NTSDReferenceChecks
 
 /// Controlled raw 4122f0 corpora: preserve all existing game bytes/masks plus

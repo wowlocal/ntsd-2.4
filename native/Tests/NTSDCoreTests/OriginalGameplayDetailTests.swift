@@ -1,5 +1,5 @@
 import XCTest
-@testable import NTSDCore
+@testable import RandoriCore
 @testable import NTSDReferenceChecks
 
 /// CORE_REALTIME 4d: a gameplay tick without drawing detail (the runtime's

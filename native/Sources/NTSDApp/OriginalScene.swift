@@ -1,6 +1,6 @@
 import AppKit
 import SpriteKit
-import NTSDCore
+import RandoriCore
 import NTSDPractice
 
 /// A static source-data viewer. It intentionally has no guessed game clock,

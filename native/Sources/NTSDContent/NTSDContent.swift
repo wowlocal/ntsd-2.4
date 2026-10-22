@@ -1,5 +1,5 @@
 import Foundation
-import NTSDCore
+import RandoriCore
 import NTSDProfile
 
 /// NTSD 2.4's content packages (ENGINE_SPLIT E1): the game's side of the

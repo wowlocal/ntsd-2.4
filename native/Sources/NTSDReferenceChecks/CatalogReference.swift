@@ -1,5 +1,5 @@
 import Foundation
-import NTSDCore
+import RandoriCore
 
 /// Checks captured original parent bytes/masks and boundary call order. Child
 /// contents remain opaque; no loaded-object equality is inferred here.

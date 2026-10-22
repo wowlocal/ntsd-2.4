@@ -1,4 +1,4 @@
-import NTSDCore
+import RandoriCore
 
 /// ENGINE_SPLIT E5c-2d (survey F11): a copy of a profile with some families
 /// replaced, so a test names only the family it moves and a new family edits

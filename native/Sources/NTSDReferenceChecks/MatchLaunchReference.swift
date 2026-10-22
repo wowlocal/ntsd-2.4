@@ -1,5 +1,5 @@
 import Foundation
-import NTSDCore
+import RandoriCore
 import NTSDProfile
 
 /// Continue the entire verified selection parent, keeping its own state and

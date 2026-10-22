@@ -129,7 +129,7 @@ def index(seqs):
 # --- the original side -----------------------------------------------------
 
 def dat_key(repo):
-    text = open(os.path.join(repo, "engine/Sources/NTSDCore/OriginalDATDecoder.swift"), encoding="utf-8").read()
+    text = open(os.path.join(repo, "engine/Sources/RandoriCore/OriginalDATDecoder.swift"), encoding="utf-8").read()
     m = re.search(r'key\s*=\s*Array\("([^"]+)"\.utf8\)', text) or re.search(r'"(SiuHung[^"]*)"', text)
     return m.group(1).encode("ascii")
 

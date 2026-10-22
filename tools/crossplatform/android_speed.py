@@ -47,11 +47,13 @@ DEFAULT_LIB = Path("/Volumes/X5/ntsd-2.4-research/crossplatform/build-android-aa
 
 # Inclusive phases of a gameplay cycle (symbol substrings, or a tuple of
 # alternatives: the window host's draw is mangled differently since it moved to
-# the engine's NTSDAndroidHost module, ENGINE_SPLIT E4b-6).
+# the engine's RandoriAndroidHost module, ENGINE_SPLIT E4b-6).
 PHASES = {
     "front-buffer drawing": "OriginalMacDisplayBackendC12performFront",
     "display perform": "OriginalMacDisplayBackendC7perform",
-    "Android window drawing": ("WindowHostC4draw", "0a6WindowB0C4draw"),
+    # The module name RandoriAndroidHost (ENGINE_SPLIT E8a) changes the mangled
+    # abbreviation of NTSDAndroidWindowHost.draw again (confirmed with nm).
+    "Android window drawing": ("WindowHostC4draw", "0a6WindowB0C4draw", "NTSDAndroidWindowC0C4draw"),
     "gameplay session": "OriginalApplicationGameplaySessionV7advance",
     "gameplay body": "OriginalGameplayBody",
     "loaded cycle": "OriginalApplicationLoadedCycleSessionV7advance",

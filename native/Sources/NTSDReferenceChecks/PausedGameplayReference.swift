@@ -1,5 +1,5 @@
 import Foundation
-import NTSDCore
+import RandoriCore
 
 /// Own pause, single-step and resume on independently rebuilt native state.
 /// Manifest records are comparison outputs; only declared platform responses

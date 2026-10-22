@@ -1,10 +1,10 @@
 import XCTest
-@testable import NTSDCore
-import NTSDMusicDecoder
+@testable import RandoriCore
+import RandoriMusicDecoder
 
 /// The packaged tracks decode without AVFoundation to exactly the PCM their
 /// manifest records (FFmpeg's decode of bgm/*.wma, before ALAC encoding).
-/// ENGINE_SPLIT E4c-2: its synthetic tests moved to the engine's NTSDEngineTests (same class name).
+/// ENGINE_SPLIT E4c-2: its synthetic tests moved to the engine's RandoriTests (same class name).
 final class OriginalALACTrackTests: XCTestCase {
     static let directory = URL(fileURLWithPath:#filePath).deletingLastPathComponent().deletingLastPathComponent().deletingLastPathComponent()
         .appendingPathComponent("Sources/NTSDContent/Resources/OriginalMusic",isDirectory:true)

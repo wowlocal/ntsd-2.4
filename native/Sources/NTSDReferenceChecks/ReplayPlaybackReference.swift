@@ -1,5 +1,5 @@
 import Foundation
-import NTSDCore
+import RandoriCore
 
 /// Compares OriginalReplayPlayback with real43dfa0 calls captured after the
 /// verified first loading. Recordings are the app's own files, loaded through

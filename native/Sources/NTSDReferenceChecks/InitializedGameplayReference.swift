@@ -1,5 +1,5 @@
 import Foundation
-import NTSDCore
+import RandoriCore
 
 /// The new source chain executes445a31/CRT before World construction, then
 /// reproduces the pinned historical records on the same CPU through41f550.

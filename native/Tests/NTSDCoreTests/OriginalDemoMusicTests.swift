@@ -1,6 +1,6 @@
 import Foundation
 import XCTest
-@testable import NTSDCore
+@testable import RandoriCore
 
 /// Real4025d0 cases (tools/oracle_demo_music.py) against selectDemoTrack and the
 /// following4025b0 play decision: RNG draw, 44eed0 bytes, RNG words, play path.

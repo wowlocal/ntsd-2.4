@@ -1,8 +1,8 @@
 import AppKit
 import XCTest
-@testable import NTSDCore
-@testable import NTSDMacPlatform
-@testable import NTSDRuntime
+@testable import RandoriCore
+@testable import RandoriMacPlatform
+@testable import RandoriRuntime
 
 /// Actual menu startup/listener and the whole 0x401 iteration. The peer is a
 /// task-owned socket on this machine; it supplies input, never an after-state.

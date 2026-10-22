@@ -1,6 +1,6 @@
 import Foundation
 import XCTest
-@testable import NTSDCore
+@testable import RandoriCore
 
 /// MEMORY_LOADING L5: the bitmap inputs' `response` and the graphics' `bitmap`
 /// run in place, without a rollback copy, because each throws only before its

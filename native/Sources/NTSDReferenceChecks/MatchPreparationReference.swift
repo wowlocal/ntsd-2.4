@@ -2,7 +2,7 @@ import Foundation
 #if canImport(CryptoKit)
 import CryptoKit
 #endif
-import NTSDCore
+import RandoriCore
 
 /// Rebuilds and verifies the full native catalog once, then continues through
 /// bootstrap and chained match preparations. Expected post-state never supplies

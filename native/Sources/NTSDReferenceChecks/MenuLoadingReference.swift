@@ -1,5 +1,5 @@
 import Foundation
-import NTSDCore
+import RandoriCore
 
 /// Own early-menu state continues into the shared full loading composition.
 /// Expected snapshots check the handoff and final records; they never seed it.

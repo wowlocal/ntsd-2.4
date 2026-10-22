@@ -1,6 +1,6 @@
 import Foundation
 import XCTest
-import NTSDCore
+import RandoriCore
 @testable import NTSDReferenceChecks
 final class OriginalNetworkMenuTests: XCTestCase {
     enum LateFailure: Error { case observer }

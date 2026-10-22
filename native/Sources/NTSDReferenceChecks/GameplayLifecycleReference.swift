@@ -1,4 +1,4 @@
-import NTSDCore
+import RandoriCore
 
 /// Runs the public full-loop API on the independently rebuilt initialized match.
 /// Expected snapshots and inherited source stack bytes never seed native state.

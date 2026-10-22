@@ -1,5 +1,5 @@
 import Foundation
-import NTSDCore
+import RandoriCore
 import NTSDProfile
 
 /// Natural continuation of the own early-menu/loading state to character-menu

@@ -1,8 +1,8 @@
 import AppKit
 import XCTest
-@testable import NTSDCore
-@testable import NTSDMacPlatform
-@testable import NTSDRuntime
+@testable import RandoriCore
+@testable import RandoriMacPlatform
+@testable import RandoriRuntime
 
 @MainActor final class OriginalApplicationObservedBitmapTests: XCTestCase {
     typealias D = OriginalMacDisplayBackendTests

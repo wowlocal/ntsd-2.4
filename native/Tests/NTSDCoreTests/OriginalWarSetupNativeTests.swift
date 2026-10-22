@@ -1,5 +1,5 @@
 import XCTest
-import NTSDCore
+import RandoriCore
 import NTSDProfile
 
 /// Native-only transaction checks using a small declared catalog. These are

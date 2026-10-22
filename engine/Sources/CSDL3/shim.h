@@ -1,4 +1,4 @@
-// SDL3 for the engine's NTSDSDLHost. The include path comes from NTSD_SDL_PREFIX
+// SDL3 for the engine's RandoriSDLHost. The include path comes from RANDORI_SDL_PREFIX (or NTSD_SDL_PREFIX)
 // (engine/Package.swift), the library path from the game's app (native/Package.swift).
 // Macros Swift cannot import are re-exported as constants.
 #include <SDL3/SDL.h>

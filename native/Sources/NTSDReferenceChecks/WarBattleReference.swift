@@ -1,5 +1,5 @@
 import Foundation
-import NTSDCore
+import RandoriCore
 
 /// Compares OriginalWarBattle with real43a860 calls captured after the verified
 /// first loading on the loaded catalog's Objects and arenas. Calls to the

@@ -1,10 +1,10 @@
 import AppKit
 import AVFAudio
 import XCTest
-@testable import NTSDCore
+@testable import RandoriCore
 import NTSDProfile
-@testable import NTSDMacPlatform
-@testable import NTSDRuntime
+@testable import RandoriMacPlatform
+@testable import RandoriRuntime
 @testable import NTSDReferenceChecks
 
 @MainActor final class OriginalMacAudioBackendTests: XCTestCase {

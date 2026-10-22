@@ -2,7 +2,7 @@ import Foundation
 #if canImport(CryptoKit)
 import CryptoKit
 #endif
-import NTSDCore
+import RandoriCore
 
 /// Independent comparison with full original 0x990 BG records and 0x1f50
 /// wrappers. Fixture compression is lossless: original untouched bitmap tails

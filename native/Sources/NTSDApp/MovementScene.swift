@@ -1,6 +1,6 @@
 import AppKit
 import SpriteKit
-import NTSDCore
+import RandoriCore
 import NTSDPractice
 
 final class MovementScene: SKScene {

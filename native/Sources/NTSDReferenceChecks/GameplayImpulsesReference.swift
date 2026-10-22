@@ -1,4 +1,4 @@
-import NTSDCore
+import RandoriCore
 
 enum GameplayImpulsesReference {
     struct Input: Decodable {

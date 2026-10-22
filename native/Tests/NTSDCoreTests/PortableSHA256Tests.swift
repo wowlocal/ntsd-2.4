@@ -3,11 +3,11 @@ import XCTest
 #if canImport(CryptoKit)
 import CryptoKit
 #endif
-@testable import NTSDCore
+@testable import RandoriCore
 
 /// Hosts without CryptoKit check packaged inputs with PortableSHA256, so it
 /// must give the same digest as CryptoKit on every packaged input.
-/// ENGINE_SPLIT E4c-2: its synthetic tests moved to the engine's NTSDEngineTests (same class name).
+/// ENGINE_SPLIT E4c-2: its synthetic tests moved to the engine's RandoriTests (same class name).
 final class PortableSHA256Tests: XCTestCase {
     #if canImport(CryptoKit)
     func testEveryPackagedInputMatchesCryptoKit() throws {

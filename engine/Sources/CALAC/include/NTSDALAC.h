@@ -1,5 +1,5 @@
 // C interface to Apple's ALAC reference decoder (vendor/, Apache-2.0) for
-// NTSDMusicDecoder: decodes the packaged original tracks without AVFoundation.
+// RandoriMusicDecoder: decodes the packaged original tracks without AVFoundation.
 #ifndef NTSD_ALAC_H
 #define NTSD_ALAC_H
 #include <stdint.h>

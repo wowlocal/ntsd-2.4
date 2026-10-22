@@ -2,7 +2,7 @@ import Foundation
 #if canImport(CryptoKit)
 import CryptoKit
 #endif
-import NTSDCore
+import RandoriCore
 import NTSDProfile
 
 /// Full catalog comparison against a single execution of 4122f0 and its children.

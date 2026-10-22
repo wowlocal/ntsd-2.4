@@ -1,6 +1,6 @@
 import Foundation
 import XCTest
-@testable import NTSDCore
+@testable import RandoriCore
 
 /// The allocation table with an actor tier (CORE_REALTIME R3 stage 1) behaves
 /// as the dictionary it replaced, and the match bindings' read and store give

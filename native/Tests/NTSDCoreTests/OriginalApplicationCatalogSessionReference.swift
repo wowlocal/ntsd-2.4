@@ -2,7 +2,7 @@ import Foundation
 #if canImport(CryptoKit)
 import CryptoKit
 #endif
-import NTSDCore
+import RandoriCore
 @testable import NTSDReferenceChecks
 
 /// Test-only reader. Saved records/masks are comparison operands; only original

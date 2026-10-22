@@ -26,12 +26,12 @@ let exclusivity: [SwiftSetting] = uncheckedExclusivity
 
 // The engine's products (../engine, package identity "engine").
 func engine(_ product: String) -> Target.Dependency { .product(name: product, package: "engine") }
-let core = engine("NTSDCore"), runtime = engine("NTSDRuntime"), musicDecoder = engine("NTSDMusicDecoder")
-let macPlatform = engine("NTSDMacPlatform")
+let core = engine("RandoriCore"), runtime = engine("RandoriRuntime"), musicDecoder = engine("RandoriMusicDecoder")
+let macPlatform = engine("RandoriMacPlatform")
 
 let macProducts: [Product] = portable ? [] : [.executable(name: "NTSDNative", targets: ["NTSDApp"])]
 let macTargets: [Target] = portable ? [] : [
-    .executableTarget(name: "NTSDApp", dependencies: [core, macPlatform, engine("NTSDAppKitHost"), "NTSDContent", "NTSDPractice"], swiftSettings: exclusivity,
+    .executableTarget(name: "NTSDApp", dependencies: [core, macPlatform, engine("RandoriAppKitHost"), "NTSDContent", "NTSDPractice"], swiftSettings: exclusivity,
                       linkerSettings: [.linkedFramework("AppKit"), .linkedFramework("SpriteKit"),
                                        .linkedFramework("AVFoundation")])]
 let macTestDependencies: [Target.Dependency] = portable ? [] : [macPlatform]
@@ -45,9 +45,9 @@ let sdlProducts: [Product] = sdl ? [.executable(name: "NTSDSDL", targets: ["NTSD
 // NTSD_FREETYPE_PREFIX (include/freetype2, lib); without it text stays blank.
 let freetypePrefix = portable ? Context.environment["NTSD_FREETYPE_PREFIX"] : nil
 let sdlTargets: [Target] = sdl ? [
-    // The host itself, with CSDL3, is the engine's NTSDSDLHost (ENGINE_SPLIT E4b);
+    // The host itself, with CSDL3, is the engine's RandoriSDLHost (ENGINE_SPLIT E4b);
     // its include paths are needed here too, and the app links SDL3.
-    .executableTarget(name: "NTSDSDL", dependencies: [engine("NTSDSDLHost"), "NTSDContent"],
+    .executableTarget(name: "NTSDSDL", dependencies: [engine("RandoriSDLHost"), "NTSDContent"],
                       swiftSettings: [.unsafeFlags(["-Xcc", "-I\(sdlPrefix)/include"]
                                                    + (freetypePrefix.map { ["-Xcc", "-I\($0)/include/freetype2"] } ?? []))] + exclusivity,
                       linkerSettings: [.unsafeFlags(["-L\(sdlPrefix)/lib"] + (freetypePrefix.map { ["-L\($0)/lib"] } ?? [])),
@@ -56,11 +56,11 @@ let sdlTargets: [Target] = sdl ? [
 
 // NTSD_IOS=1 (with NTSD_PORTABLE=1) adds the iPad host (P8), built for an
 // iOS triple and wrapped into an app by tools/crossplatform/ios_app.py; the
-// host is the engine's NTSDUIKitHost (ENGINE_SPLIT E4b).
+// host is the engine's RandoriUIKitHost (ENGINE_SPLIT E4b).
 let ios = Context.environment["NTSD_IOS"] == "1"
 let iosProducts: [Product] = ios ? [.executable(name: "NTSDiOS", targets: ["NTSDiOS"])] : []
 let iosTargets: [Target] = ios ? [
-    .executableTarget(name: "NTSDiOS", dependencies: [engine("NTSDUIKitHost"), "NTSDContent"], swiftSettings: exclusivity,
+    .executableTarget(name: "NTSDiOS", dependencies: [engine("RandoriUIKitHost"), "NTSDContent"], swiftSettings: exclusivity,
                       linkerSettings: [.linkedFramework("UIKit"), .linkedFramework("AVFoundation"), .linkedFramework("CoreText")])] : []
 
 // NTSD_ANDROID=1 (with NTSD_PORTABLE=1) adds the Android host (P8): a
@@ -70,19 +70,19 @@ let android = Context.environment["NTSD_ANDROID"] == "1"
 let androidProducts: [Product] = android ? [.library(name: "NTSDAndroid", type: .dynamic, targets: ["NTSDAndroid"])] : []
 let androidTargets: [Target] = android ? [
     // The host, with CAndroidNative's NativeActivity entry, is the engine's
-    // NTSDAndroidHost (ENGINE_SPLIT E4b); its FreeType include path is needed here too.
-    .target(name: "NTSDAndroid", dependencies: [engine("NTSDAndroidHost"), "NTSDContent"],
+    // RandoriAndroidHost (ENGINE_SPLIT E4b); its FreeType include path is needed here too.
+    .target(name: "NTSDAndroid", dependencies: [engine("RandoriAndroidHost"), "NTSDContent"],
             swiftSettings: [.unsafeFlags(freetypePrefix.map { ["-Xcc", "-I\($0)/include/freetype2"] } ?? [])] + exclusivity)] : []
 
 // NTSD_WEB=1 (with NTSD_PORTABLE=1) adds the browser host (TVOS_WEB W2b),
 // built for wasm32-unknown-wasip1 only (it uses the WASI-only main queue and
 // sockets stub) and run in a page's worker by tools/crossplatform/web_run.mjs;
-// the host, with its page functions (wasm imports), is the engine's NTSDWebHost
+// the host, with its page functions (wasm imports), is the engine's RandoriWebHost
 // (ENGINE_SPLIT E4b).
 let web = Context.environment["NTSD_WEB"] == "1"
 let webProducts: [Product] = web ? [.executable(name: "NTSDWeb", targets: ["NTSDWeb"])] : []
 let webTargets: [Target] = web ? [
-    .executableTarget(name: "NTSDWeb", dependencies: [engine("NTSDWebHost"), "NTSDContent"], swiftSettings: exclusivity)] : []
+    .executableTarget(name: "NTSDWeb", dependencies: [engine("RandoriWebHost"), "NTSDContent"], swiftSettings: exclusivity)] : []
 
 let package = Package(
     name: "NTSDNative",
@@ -115,7 +115,7 @@ let package = Package(
         // behind NTSDApp's lab and the movement/combat checks; not on the
         // runtime path.
         .target(name: "NTSDPractice", dependencies: [core], swiftSettings: exclusivity),
-        .executableTarget(name: "NTSDHeadless", dependencies: [engine("NTSDHeadlessHost"), "NTSDContent"], swiftSettings: exclusivity),
+        .executableTarget(name: "NTSDHeadless", dependencies: [engine("RandoriHeadlessHost"), "NTSDContent"], swiftSettings: exclusivity),
         .target(name: "NTSDReferenceChecks", dependencies: [core, "CZlib", "NTSDProfile"]),
         .executableTarget(name: "NTSDBootstrapCheck", dependencies: ["NTSDReferenceChecks"]),
         .executableTarget(name: "NTSDCatalogCheck", dependencies: ["NTSDReferenceChecks"]),

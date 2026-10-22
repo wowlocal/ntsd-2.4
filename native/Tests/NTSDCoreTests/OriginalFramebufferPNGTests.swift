@@ -1,6 +1,6 @@
 import XCTest
 import CZlib
-@testable import NTSDRuntime
+@testable import RandoriRuntime
 
 final class OriginalFramebufferPNGTests: XCTestCase {
     private func chunks(_ png: [UInt8]) -> [(type: String,data: [UInt8])] {

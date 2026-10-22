@@ -1,4 +1,4 @@
-import NTSDCore
+import RandoriCore
 
 /// NTSD 2.4's game profile (ENGINE_SPLIT E5, E6b, E6c, E6d). NTSD 2.4.exe is LF2 2.0a's
 /// lf2.exe code plus a lib.dll loader (E6a), so its object-ID rules are LF2 2.0a's
