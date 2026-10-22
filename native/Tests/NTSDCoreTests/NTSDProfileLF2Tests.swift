@@ -69,7 +69,8 @@ final class NTSDProfileLF2Tests: XCTestCase {
                                drinks: OriginalIDSet([122, 123]), rangedBand: OriginalIDSet([4, 5, 31]), rangedJoiner: 36,
                                meleeWeapons: OriginalIDSet([100, 101, 120, 121, 124]), rollingWeapon: 124, thrownWeapons: OriginalIDSet([150, 151]),
                                dashCounters: OriginalIDSet([2, 4, 6, 9, 10, 11, 8, 7, 33, 34]), dashJumper: 34, shortDasher: 1),
-            characterAISpecial: NTSDProfile.rules.characterAISpecial)
+            characterAISpecial: NTSDProfile.rules.characterAISpecial,
+            library: OriginalLibData())
 
     func testEveryFamilyEqualsTheEarlierLiteral() {
         let now = NTSDProfile.rules,before = Self.before
@@ -81,7 +82,16 @@ final class NTSDProfileLF2Tests: XCTestCase {
         XCTAssertEqual(now.drawing,before.drawing);XCTAssertEqual(now.effects,before.effects)
         XCTAssertEqual(now.lifecycle,before.lifecycle);XCTAssertEqual(now.fusion,before.fusion)
         XCTAssertEqual(now.weaponBreak,before.weaponBreak);XCTAssertEqual(now.characterAI,before.characterAI)
+        XCTAssertEqual(now.library,before.library)
         XCTAssertEqual(now,before)
+    }
+
+    /// E6d-1: NTSD carries its bundled library; copies keep it unless they replace it.
+    func testNTSDCarriesTheLibraryAndCopiesKeepIt() {
+        XCTAssertEqual(NTSDProfile.rules.library, OriginalLibData())
+        XCTAssertEqual(NTSDProfile.rules.with(profile: "copy").library, OriginalLibData())
+        XCTAssertNil(NTSDProfile.rules.with(library: .some(nil)).library)
+        XCTAssertNotEqual(NTSDProfile.rules, NTSDProfile.rules.with(profile: NTSDProfile.rules.profile, library: .some(nil)))
     }
 
     /// The engine's LF2 2.0a values are the same families.

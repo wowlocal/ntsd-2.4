@@ -138,6 +138,9 @@ public struct OriginalApplicationBootstrap {
         beforeCommit: (OriginalWinMainStartup,Session,P) throws -> Void = { _,_,_ in },
         failedAttempt: (P,Error) -> Void = { _,_ in }) throws -> Started {
         guard startup == nil,session == nil else { throw Boundary.alreadyStarted }
+        // The front screen draws through lib.dll's text routine (401290 -> 10001298;
+        // E6d): a session without the library is not modelled here.
+        guard rules.library != nil else { throw OriginalLibData.Required(site:"Bootstrap start: the front screen's library text") }
         guard initial.byteCount == OriginalApplicationDispatchEntry.globalSize else {
             throw OriginalStateError.invalidStorage("Bootstrap full initial extent")
         }

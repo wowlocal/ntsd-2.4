@@ -9,6 +9,10 @@ public struct OriginalApplicationMatchLaunchSession {
 
     public init(pending: Menu.PendingMatchPrelude) throws {
         try pending.snapshot.state.validateAliases()
+        // The launch's preparation runs lib.dll's three hooks with owned bitmaps (E6d).
+        guard pending.snapshot.match.catalog.rules.library != nil else {
+            throw OriginalLibData.Required(site:"Match launch: the library's preparation")
+        }
         guard pending.snapshot.match.libraryCommands != nil else {
             throw Menu.Boundary.dependency("Installed preparation library owner")
         }

@@ -8,12 +8,14 @@ extension OriginalGameRules {
               impact: Impact? = nil,items: Items? = nil,roster: Roster? = nil,modes: Modes? = nil,
               physics: Physics? = nil,drawing: Drawing? = nil,effects: Effects? = nil,lifecycle: Lifecycle? = nil,fusion: Fusion? = nil,
               weaponBreak: WeaponBreak? = nil,interface: Interface? = nil,
-              characterAI: CharacterAI? = nil,characterAISpecial: (any OriginalCharacterAISpecial)? = nil) -> OriginalGameRules {
+              characterAI: CharacterAI? = nil,characterAISpecial: (any OriginalCharacterAISpecial)? = nil,
+              library: OriginalLibData?? = nil) -> OriginalGameRules {
         OriginalGameRules(profile: profile,reflection: reflection ?? self.reflection,armour: armour ?? self.armour,
                           interaction: interaction ?? self.interaction,impact: impact ?? self.impact,items: items ?? self.items,
                           roster: roster ?? self.roster,modes: modes ?? self.modes,physics: physics ?? self.physics,
                           drawing: drawing ?? self.drawing,effects: effects ?? self.effects,lifecycle: lifecycle ?? self.lifecycle,fusion: fusion ?? self.fusion,
                           weaponBreak: weaponBreak ?? self.weaponBreak,interface: interface ?? self.interface,
-                          characterAI: characterAI ?? self.characterAI,characterAISpecial: characterAISpecial ?? self.characterAISpecial)
+                          characterAI: characterAI ?? self.characterAI,characterAISpecial: characterAISpecial ?? self.characterAISpecial,
+                          library: library ?? self.library)
     }
 }

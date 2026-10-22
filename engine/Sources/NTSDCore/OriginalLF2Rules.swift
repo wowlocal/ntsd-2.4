@@ -6,14 +6,16 @@
 /// command word 3 (E6a, docs/evidence/es-e6a-classification.json). So NTSD's
 /// profile composes them unchanged. A game supplies its interface (names and
 /// rectangles of its content); LF2 2.0a's special moves are the default
-/// (OriginalLF2CharacterAISpecial, E6c).
+/// (OriginalLF2CharacterAISpecial, E6c), and LF2 2.0a has no library (E6d).
 extension OriginalGameRules {
-    /// LF2 2.0a's rules with a game's interface and, by default, LF2 2.0a's special moves.
+    /// LF2 2.0a's rules with a game's interface and, by default, LF2 2.0a's special
+    /// moves and no library.
     public static func lf2(profile: String, interface: Interface,
-                           characterAISpecial: any OriginalCharacterAISpecial = OriginalLF2CharacterAISpecial()) -> OriginalGameRules {
+                           characterAISpecial: any OriginalCharacterAISpecial = OriginalLF2CharacterAISpecial(),
+                           library: OriginalLibData? = nil) -> OriginalGameRules {
         OriginalGameRules(profile: profile, reflection: .lf2, armour: .lf2, interaction: .lf2, impact: .lf2, items: .lf2, roster: .lf2,
                           modes: .lf2, physics: .lf2, drawing: .lf2, effects: .lf2, lifecycle: .lf2, fusion: .lf2, weaponBreak: .lf2,
-                          interface: interface, characterAI: .lf2, characterAISpecial: characterAISpecial)
+                          interface: interface, characterAI: .lf2, characterAISpecial: characterAISpecial, library: library)
     }
 }
 

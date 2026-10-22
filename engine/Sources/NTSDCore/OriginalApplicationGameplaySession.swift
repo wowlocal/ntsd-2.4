@@ -8,6 +8,10 @@ public struct OriginalApplicationGameplaySession {
 
     public init(pending: OriginalApplicationInputSession.PendingContinuation) throws {
         try pending.state.validateAliases()
+        // Gameplay's checkpoints own the library's text, hits and transforms (E6d).
+        guard pending.match.catalog.rules.library != nil else {
+            throw OriginalLibData.Required(site:"Gameplay: the library's owners")
+        }
         guard pending.round.continuation == .gameplay || pending.round.continuation == .pausedRendering,
               pending.match.libraryCommands != nil else {
             throw Menu.Boundary.dependency("Installed gameplay continuation")

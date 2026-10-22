@@ -2,7 +2,7 @@
 
 /// ENGINE_SPLIT E7c: the synthetic pack's rules, `OriginalGameRules.engineTests`
 /// (EngineTestRules.swift, unchanged) with interface lists filled in (and, E7d,
-/// Random's candidates). Every
+/// Random's candidates; E6d, the bundled library the sessions need). Every
 /// name is invented here; only the list lengths are the engine's, because the
 /// engine binds one name to each slot or destination of its record layout:
 ///
@@ -39,13 +39,15 @@ enum SyntheticNames {
 }
 
 extension OriginalGameRules {
-    /// `engineTests` with the synthetic pack's interface names.
+    /// `engineTests` with the synthetic pack's interface names, Random's candidates and the library.
     static let syntheticPack: OriginalGameRules = {
         let base = OriginalGameRules.engineTests
         return OriginalGameRules(profile: "engine tests synthetic pack (ENGINE_SPLIT E7c)",
             reflection: base.reflection, armour: base.armour, interaction: base.interaction, impact: base.impact,
             items: base.items, roster: SyntheticNames.roster, modes: base.modes, physics: base.physics, drawing: base.drawing,
             effects: base.effects, lifecycle: base.lifecycle, fusion: base.fusion, weaponBreak: base.weaponBreak,
-            interface: SyntheticNames.interface, characterAI: base.characterAI, characterAISpecial: base.characterAISpecial)
+            interface: SyntheticNames.interface, characterAI: base.characterAI, characterAISpecial: base.characterAISpecial,
+            // The application's sessions are modelled only with the library (E6d).
+            library: OriginalLibData())
     }()
 }

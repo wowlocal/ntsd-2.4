@@ -91,9 +91,10 @@ public struct OriginalApplicationInputSession {
         var state = entry.state,candidate = environment
         var match = try bindings.read(state,catalog:entry.loaded.catalog,interface:entry.loaded.interface,
                                       arithmeticPrecision:arithmeticPrecision)
-        // This application uses the bundled-library handlers. Its requested
-        // Object word has no established startup backing and is not known zero.
-        match.libraryCommands = .init()
+        // With the bundled library (E6d) this application uses its handlers. Its
+        // requested Object word has no established startup backing and is not
+        // known zero. Without it the word-1 path stays (no library commands).
+        if match.catalog.rules.library != nil { match.libraryCommands = .init() }
         match.bitmapOwners = Dictionary(uniqueKeysWithValues:entry.entry.snapshot.bitmapTokens.enumerated().map { ($0.offset,$0.element) })
         match.bitmapSurfaceOwners = Dictionary(uniqueKeysWithValues:entry.entry.snapshot.bitmapSurfaces.enumerated().map { ($0.offset,$0.element) })
         var context = try bindings.inputContext(state),commands = Array(entry.loaded.commands.prefix(10))
