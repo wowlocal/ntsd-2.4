@@ -2501,6 +2501,15 @@ against `lf2.exe`, outside E6.
   Windows, the iPad and Apple TV simulators, the engine alone on macOS (debug
   and release, 164) and Linux (142); phone and Mac A/B overlapping.
   [Evidence](../evidence/es-e8a-randori-rename.json).
+- 2026-10-22 E8b-1: the engine was published (github.com/wowlocal/randori,
+  615251e, v0.1.0, Apache-2.0, fresh history); its first CI passed on Linux
+  and failed on macOS: Xcode 16.4's Swift 6.1 could not type-check two
+  manifest expressions. The manifest builds those lists step by step;
+  `dump-package` is byte-identical under eleven switch combinations; the
+  engine alone passes on macOS (164, debug and release) and Linux (142). The
+  sources need Swift 6.4 (6.1 and 6.2 stop in RandoriRuntime), so the
+  repository's CI installs the swift.org 6.4 toolchain on macOS. Reviewed.
+  [Evidence](../evidence/es-e8b1-manifest.json).
 
 ## Next task
 

@@ -1,0 +1,65 @@
+{
+ "study": "ENGINE_SPLIT",
+ "step": "E8b-1",
+ "base": "ad833eb1",
+ "recordedUTC": "2026-10-22T06:20:25Z",
+ "why": "The engine was published as github.com/wowlocal/randori (615251e, tag v0.1.0); its first CI run passed on Linux (swift:6.4.0-noble) and failed on GitHub's macOS runner (macos-15, Xcode 16.4, Swift 6.1): 'the compiler is unable to type-check this expression in reasonable time' at the SDL targets and at Package(...).",
+ "change": "engine/Package.swift builds the SDL and Android dependency and flag lists step by step, collects the host products and targets in loops and names the core products and targets before Package(...). tools/crossplatform/engine_standalone.sh exports engine/ from the submodule's own repository when engine/ is a submodule (for E8b-2).",
+ "neutrality": {
+  "method": "swift package dump-package (Xcode 27, Swift 6.4) under eleven switch combinations, old against new manifest, in the same directory",
+  "combinations": [
+   "android",
+   "android-freetype",
+   "default",
+   "ios",
+   "legacy-names",
+   "portable",
+   "sdl-mac",
+   "sdl-portable-freetype",
+   "unchecked",
+   "web",
+   "portable+sdl (added after review: 7ac099a2c886afac both)"
+  ],
+  "dumpSHA256Prefixes": {
+   "legacy-names": "3f82b09a0bc855f3",
+   "android-freetype": "a43df96794f55e7f",
+   "android": "541d370a0dab891f",
+   "portable": "82624f75e85b5eda",
+   "sdl-mac": "d058c27fd2d2624c",
+   "web": "a2ab37f624711a1c",
+   "ios": "0ec67d392ab1cbae",
+   "unchecked": "f019d7b48c02578b",
+   "sdl-portable-freetype": "1ddb55a1ffedbcf7",
+   "default": "dc8760404586a363"
+  },
+  "identical": true
+ },
+ "swift61": "Docker swift:6.1-noble (6.1.3) evaluates the new manifest in about 1 s (the old one timed out); the engine's sources still need a newer compiler (6.1 and 6.2 stop at an ambiguous withUnsafeBytes in RandoriRuntime/OriginalFramebufferPNG.swift:24), so Randori requires Swift 6.4, which its CI now installs on macOS",
+ "standalone": [
+  "staged tree a0a21186e6486bd8cd450824fb3e3f4e964ed57c engine d57d6f0028d360e28a50a03d2b9745fc98bed6ed",
+  "export d57d6f0028d360e28a50a03d2b9745fc98bed6ed files 431",
+  "mac debug build exit=0",
+  "mac debug list exit=0 tests 164",
+  "mac debug test exit=0 Executed 164 tests, with 1 test skipped and 0 failures (0 unexpected) in 53.984 (54.000) seconds",
+  "mac release build exit=0",
+  "mac release list exit=0 tests 164",
+  "mac release test exit=0 Executed 164 tests, with 1 test skipped and 0 failures (0 unexpected) in 7.506 (7.520) seconds",
+  "linux build exit=0",
+  "linux list exit=0 tests 142",
+  "linux test exit=0",
+  "Executed 142 tests, with 1 test skipped and 0 failures (0 unexpected) in 27.2 (27.2) seconds"
+ ],
+ "review": {
+  "by": "a separate read-only agent, 2026-10-22",
+  "required": [],
+  "verified": [
+   "products, targets, dependencies and flags in the old order for every combination",
+   "top-level var and statements are fine in a tools-version 6.0 manifest and on Linux"
+  ],
+  "optionalAdopted": [
+   "the portable SDL build without FreeType added to the comparison",
+   "the comment cites ENGINE_SPLIT E8b and covers the Android, host and core lists"
+  ]
+ },
+ "gate": "a manifest-only change: the eleven identical dumps establish the same package graph; the engine alone was built and tested on macOS (debug and release, 164) and Linux (142); the mlgate set runs again in E8b-2 with engine/ as the submodule"
+}

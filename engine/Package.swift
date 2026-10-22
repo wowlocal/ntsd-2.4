@@ -77,12 +77,17 @@ let webTargets: [Target] = web ? [
 let sdl = setting("SDL") == "1"
 let sdlPrefix = setting("SDL_PREFIX") ?? "/opt/homebrew/opt/sdl3"
 let sdlProducts: [Product] = sdl ? [.library(name: "RandoriSDLHost", targets: ["RandoriSDLHost"])] : []
+// The dependency and flag lists are built step by step: as single expressions
+// they exceeded Swift 6.1's type-checking time (the CI's Xcode 16.4, ENGINE_SPLIT
+// E8b); the Android lists and the host and core lists below follow suit.
+var sdlDependencies: [Target.Dependency] = ["RandoriCore", "RandoriRuntime", "RandoriMusicDecoder", "CSDL3"]
+if !portable { sdlDependencies.append("RandoriMacPlatform") }
+if freetypePrefix != nil { sdlDependencies.append("RandoriFreeTypeText") }
+var sdlFlags: [String] = ["-Xcc", "-I\(sdlPrefix)/include"]
+if let freetypePrefix { sdlFlags += ["-Xcc", "-I\(freetypePrefix)/include/freetype2"] }
 let sdlTargets: [Target] = sdl ? [
     .systemLibrary(name: "CSDL3", path: "Sources/CSDL3"),
-    .target(name: "RandoriSDLHost", dependencies: ["RandoriCore", "RandoriRuntime", "RandoriMusicDecoder", "CSDL3"] + (portable ? [] : ["RandoriMacPlatform"])
-                + (freetypePrefix == nil ? [] : ["RandoriFreeTypeText"]),
-            swiftSettings: [.unsafeFlags(["-Xcc", "-I\(sdlPrefix)/include"]
-                                         + (freetypePrefix.map { ["-Xcc", "-I\($0)/include/freetype2"] } ?? []))] + exclusivity)] : []
+    .target(name: "RandoriSDLHost", dependencies: sdlDependencies, swiftSettings: [.unsafeFlags(sdlFlags)] + exclusivity)] : []
 
 // RANDORI_IOS=1 (with RANDORI_PORTABLE=1) adds the UIKit host library (P8, TVOS_WEB
 // T0): the iPad and the Apple TV, built for an iOS or tvOS triple.
@@ -97,40 +102,53 @@ let iosTargets: [Target] = ios ? [
 // built for an Android triple into the game's dynamic library.
 let android = setting("ANDROID") == "1"
 let androidProducts: [Product] = android ? [.library(name: "RandoriAndroidHost", targets: ["RandoriAndroidHost"])] : []
+var androidDependencies: [Target.Dependency] = ["RandoriCore", "RandoriRuntime", "RandoriMusicDecoder", "CAndroidNative"]
+if freetypePrefix != nil { androidDependencies.append("RandoriFreeTypeText") }
+let androidFlags: [String] = freetypePrefix.map { ["-Xcc", "-I\($0)/include/freetype2"] } ?? []
 let androidTargets: [Target] = android ? [
     .target(name: "CAndroidNative", linkerSettings: [.linkedLibrary("android"), .linkedLibrary("log"), .linkedLibrary("aaudio")]),
-    .target(name: "RandoriAndroidHost", dependencies: ["RandoriCore", "RandoriRuntime", "RandoriMusicDecoder", "CAndroidNative"]
-                + (freetypePrefix == nil ? [] : ["RandoriFreeTypeText"]),
-            swiftSettings: [.unsafeFlags(freetypePrefix.map { ["-Xcc", "-I\($0)/include/freetype2"] } ?? [])] + exclusivity)] : []
+    .target(name: "RandoriAndroidHost", dependencies: androidDependencies, swiftSettings: [.unsafeFlags(androidFlags)] + exclusivity)] : []
+
+var hostProducts: [Product] = macProducts
+for products in [freetypeProducts, webProducts, sdlProducts, iosProducts, androidProducts] { hostProducts += products }
+var hostTargets: [Target] = macTargets
+for targets in [freetypeTargets, webTargets, sdlTargets, iosTargets, androidTargets] { hostTargets += targets }
+
+let coreProducts: [Product] = [
+    .library(name: "RandoriCore", targets: ["RandoriCore"]),
+    .library(name: "RandoriRuntime", targets: ["RandoriRuntime"]),
+    .library(name: "RandoriMusicDecoder", targets: ["RandoriMusicDecoder"]),
+    .library(name: "RandoriHeadlessHost", targets: ["RandoriHeadlessHost"])]
+let coreSwift: [SwiftSetting] = crossModule + exclusivity
+let littleEndian: [Platform] = [.linux, .android, .windows, .wasi]
+var testDependencies: [Target.Dependency] = ["RandoriCore", "RandoriRuntime", "RandoriMusicDecoder"]
+if !portable { testDependencies.append("RandoriMacPlatform") }
+let coreTargets: [Target] = [
+    .target(name: "RandoriReplayCodec", exclude: ["README.md", "upstream.json"],
+            publicHeadersPath: "include", cSettings: [.unsafeFlags(["-Wno-deprecated-non-prototype"])]),
+    .target(name: "RandoriCore", dependencies: ["RandoriReplayCodec"], swiftSettings: coreSwift),
+    .target(name: "RandoriRuntime", dependencies: ["RandoriCore"], swiftSettings: coreSwift),
+    // The vendored decoder learns the byte order from TargetConditionals.h
+    // on Apple platforms and only for x86 elsewhere; every non-Apple target
+    // built here (aarch64, x86_64, wasm32) is little-endian (without it the
+    // decoder byte-swapped every packet on wasm32, TVOS_WEB W2b-3).
+    .target(name: "CALAC", exclude: ["README.md", "upstream.json", "vendor/LICENSE"],
+            cSettings: [.define("TARGET_RT_LITTLE_ENDIAN", to: "1", .when(platforms: littleEndian))],
+            cxxSettings: [.define("TARGET_RT_LITTLE_ENDIAN", to: "1", .when(platforms: littleEndian))]),
+    .target(name: "RandoriMusicDecoder", dependencies: ["CALAC"], swiftSettings: exclusivity),
+    // The hosts (ENGINE_SPLIT E4b): each runs a game given as an OriginalGame.
+    .target(name: "RandoriHeadlessHost", dependencies: ["RandoriCore", "RandoriRuntime"], swiftSettings: exclusivity),
+    // The engine's self-contained tests (ENGINE_SPLIT E4c): synthetic inputs
+    // only; the fixture-driven suites and those reading the game's content stay
+    // with the game (native/Tests/NTSDCoreTests). Mac/ builds only on an Apple host.
+    .testTarget(name: "RandoriTests", dependencies: testDependencies,
+                exclude: portable ? ["Mac"] : [], swiftSettings: exclusivity),
+]
 
 let package = Package(
     name: "Randori",
     platforms: [.macOS(.v14), .iOS(.v17)],
-    products: macProducts + freetypeProducts + webProducts + sdlProducts + iosProducts + androidProducts + [
-        .library(name: "RandoriCore", targets: ["RandoriCore"]),
-        .library(name: "RandoriRuntime", targets: ["RandoriRuntime"]),
-        .library(name: "RandoriMusicDecoder", targets: ["RandoriMusicDecoder"]),
-        .library(name: "RandoriHeadlessHost", targets: ["RandoriHeadlessHost"])],
-    targets: macTargets + freetypeTargets + webTargets + sdlTargets + iosTargets + androidTargets + [
-        .target(name: "RandoriReplayCodec", exclude: ["README.md", "upstream.json"],
-                publicHeadersPath: "include", cSettings: [.unsafeFlags(["-Wno-deprecated-non-prototype"])]),
-        .target(name: "RandoriCore", dependencies: ["RandoriReplayCodec"], swiftSettings: crossModule + exclusivity),
-        .target(name: "RandoriRuntime", dependencies: ["RandoriCore"], swiftSettings: crossModule + exclusivity),
-        // The vendored decoder learns the byte order from TargetConditionals.h
-        // on Apple platforms and only for x86 elsewhere; every non-Apple target
-        // built here (aarch64, x86_64, wasm32) is little-endian (without it the
-        // decoder byte-swapped every packet on wasm32, TVOS_WEB W2b-3).
-        .target(name: "CALAC", exclude: ["README.md", "upstream.json", "vendor/LICENSE"],
-                cSettings: [.define("TARGET_RT_LITTLE_ENDIAN", to: "1", .when(platforms: [.linux, .android, .windows, .wasi]))],
-                cxxSettings: [.define("TARGET_RT_LITTLE_ENDIAN", to: "1", .when(platforms: [.linux, .android, .windows, .wasi]))]),
-        .target(name: "RandoriMusicDecoder", dependencies: ["CALAC"], swiftSettings: exclusivity),
-        // The hosts (ENGINE_SPLIT E4b): each runs a game given as an OriginalGame.
-        .target(name: "RandoriHeadlessHost", dependencies: ["RandoriCore", "RandoriRuntime"], swiftSettings: exclusivity),
-        // The engine's self-contained tests (ENGINE_SPLIT E4c): synthetic inputs
-        // only; the fixture-driven suites and those reading the game's content stay
-        // with the game (native/Tests/NTSDCoreTests). Mac/ builds only on an Apple host.
-        .testTarget(name: "RandoriTests", dependencies: ["RandoriCore", "RandoriRuntime", "RandoriMusicDecoder"] + (portable ? [] : ["RandoriMacPlatform"]),
-                    exclude: portable ? ["Mac"] : [], swiftSettings: exclusivity),
-    ],
+    products: hostProducts + coreProducts,
+    targets: hostTargets + coreTargets,
     swiftLanguageModes: [.v5]
 )

@@ -1,6 +1,7 @@
 #!/bin/zsh
 # ENGINE_SPLIT E7a: the engine package alone. Exports engine/ at REV with
-# git archive into OUT/engine (nothing else from the repository), then
+# git archive into OUT/engine (nothing else from the repository; from the
+# submodule's own repository once engine/ is one, E8b), then
 #  - macOS: a debug build and test run, and a clean release build and test run,
 #    of the package's default products and RandoriTests (release with
 #    -enable-testing, as mlgate's engine bundle; checked exclusivity as there);
@@ -15,8 +16,13 @@ REPO=$(cd "$(dirname "$0")/../.." && pwd)
 XB=/Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/bin
 IMAGE=swift:6.4.0-noble
 mkdir -p $OUT/logs && rm -rf $OUT/engine $OUT/build-debug $OUT/build-release $OUT/build-linux && mkdir -p $OUT/engine
-git -C $REPO archive $REV engine | tar -x -C $OUT --strip-components 0
-echo "export $(git -C $REPO rev-parse ${REV}:engine) files $(find $OUT/engine -type f | wc -l | tr -d ' ')"
+OBJ=$(git -C $REPO rev-parse ${REV}:engine)
+if [ "$(git -C $REPO cat-file -t $OBJ 2>/dev/null)" = tree ]; then
+  git -C $REPO archive $REV engine | tar -x -C $OUT --strip-components 0
+else   # engine/ is a submodule (ENGINE_SPLIT E8b): its own repository holds the commit
+  git -C $REPO/engine archive $OBJ | tar -x -C $OUT/engine
+fi
+echo "export $OBJ files $(find $OUT/engine -type f | wc -l | tr -d ' ')"
 cd $OUT/engine
 for c in debug release; do
   F=(); [ $c = release ] && F=(-Xswiftc -enable-testing)
