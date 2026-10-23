@@ -30,7 +30,7 @@ final class OriginalApplicationInputTests: XCTestCase {
     /// do not claim a second application bootstrap or reconstructed draw owners.
     static func state(_ full: OriginalStateRecord,_ memory: OriginalMenuPresentationMemory) throws -> State {
         try .init(full:full,memory:memory,front:.init(interface: NTSDProfile.rules.interface),frontSurfaces:[:],earlyScreen:.init(),
-                  libraryText:.init(),random:.init(state:1),screenBody:nil)
+                  libraryText:.init(),random:.init(state:1),screenBody:nil,branding:.lf2)
     }
     static func coherent(_ b: B,_ model: OriginalMatchPreparation,_ state: State) throws {
         XCTAssertEqual(try slice(state.full,0,OriginalMatchPreparation.globalSize),model.globals)

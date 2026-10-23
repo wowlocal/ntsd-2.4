@@ -192,7 +192,7 @@ final class OriginalBitmapSurfaceLoadingTests: XCTestCase {
             let tailMask = [Bool](repeating:true,count:outerAndWorldBytes.count-0x854)
             return try .init(full:.init(bytes:bytes,defined:base.globals.defined+outerMask+tailMask),memory:base.memory,
                              front:front,frontSurfaces:frontSurfaces,earlyScreen:earlyScreen,
-                             libraryText:libraryText,random:random,screenBody:screenBody)
+                             libraryText:libraryText,random:random,screenBody:screenBody,branding:.lf2)
         }
 
         /// Compatibility bridge for the retained loading-prefix comparator.

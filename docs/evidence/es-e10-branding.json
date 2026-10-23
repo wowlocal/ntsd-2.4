@@ -1,0 +1,44 @@
+{
+ "study": "ENGINE_SPLIT E10",
+ "date": "2026-10-23",
+ "why": "A new original game on the engine (the user's Burn Rate request, 2026-10-23) must not show LF2 2.0a's own strings: its title screen drew \"by Marti Wong, Starsky Wong / 1999-2008, all rights reserved / http://www.LittleFighter.com\" and its window was titled \"Little Fighter 2\".",
+ "decision": "The EXE strings a player sees become game values carried by OriginalGameRules.Branding, LF2 2.0a's by default; this reverses E3b's \"the EXE's own strings stay\" for these strings only (the DAT key and the cheat sequences stay).",
+ "randori": {
+  "commit": "786befd (Let a game supply the branding strings)",
+  "pushed": "b3efa7a..786befd main",
+  "ci": {"run": 39917355785, "result": "success", "jobs": {"macos": "success", "linux": "success"}}
+ },
+ "design": {
+  "fields": "windowClass, windowTitle, shortName (quit caption and \"LF2\" in two replay errors), credits (three plain lines of exactly 27, 30 and 28 printable ASCII bytes; encoded for the EXE model's copy as plain[i] &+ (i & 3) plus NUL), creditLinks (3), website, controlHelp, recordingHelp, challenge, advertise, forum, builtInBackgroundName (<= 29)",
+  "validation": "a throwing public init (Branding.Invalid(field:)); .lf2 through an internal non-throwing init, checked by a test running the public checks; windowClass/windowTitle/shortName printable ASCII",
+  "defaults": "OriginalGameRules.lf2(...) defaults to Branding.lf2; the full OriginalGameRules.init requires a branding; public entry points take a defaulted parameter; OriginalApplicationMenuSession.State holds the game's branding (no default) and the loaded menu takes it from there",
+  "fixedByTheEngine": "the clickable spans are bytes 3..<13 and 15..<27 of line 1 (x 611-686 and > 692), line 3 responds at x > 591; createWindow still carries LF2's string addresses 0x447634/0x447620 beside the game's bytes; \"Are you sure to quit?\", \"Error\"/\"ERROR\" stay",
+  "kept": "deprecated aliases for the three removed public statics (OriginalFrontControlSettings.help, OriginalFrontRecordingInfo.help/.challenge)"
+ },
+ "review": {
+  "first": "accept after fixes: no defect (LF2's bytes identical at every site, every runtime path passes the game's branding); S1 end-to-end tests, S2 one source of truth, S3 doc accuracy, S4 more NTSD reference checks; notes (deprecated aliases, no try!, lazy read in the HUD notice, ASCII window strings, required branding in the full init)",
+  "second": "accept: all applied; note (optional) that the demo notice, ModeScreen.advance(state:) and runMainMenu read the catalog's rules while the menu reads its State (same rules at runtime)"
+ },
+ "tests": {
+  "engine": "181 (from 166): OriginalGameBrandingTests (11, direct: LF2's encoded credits equal OriginalFrontScreenBody.literals, links, window strings, quit caption, website, replay errors, background 99, recovery, advertise, forum, invalid input) and Synthetic/SyntheticBrandingTests (4, the runtime on a branded synthetic pack: window title/class at startup and after Alt+Enter, ESC caption, front-screen credit lines and hover spans with no LF2 line drawn, website link, background 99's name after loading, mode-screen credit links, PostHUDNotices.apply and ModeScreen.advance on the run's catalog, control-settings help, recording-info help and challenge)",
+  "mutation": "removing branding: at 22 call sites one at a time: 17 caught; not caught: the network menu (unreachable without a network), replay start (same field the mode-screen test proves), the loading-progress advertise (not drawn on the test clock; direct test), OriginalModeMenuContinuation (no engine caller), Alt+Enter's WM_DESTROY/WM_NCDESTROY delivery (never reads branding); log scratch/e10/mutations/run.log",
+  "native": "six test files pass `.lf2` where it became required (no expected value changed); 24 suites in debug and the reference/catalog suites (FrontScreenBody, ModeScreen, FrontMenuLoop, FrontMenuCompletion, Catalog, LoadedCatalog, CatalogChecksum/DIBPixels/Precision/Sounds) in a release build pass"
+ },
+ "checks": {
+  "engineStandalone": "Randori 786befd exported alone: macOS debug and release 181 tests, Linux 159, all passing (scratch/e10/standalone)",
+  "gate": {
+   "label": "es-e10", "prev": "es-e9",
+   "testedTrees": "native 3e32bdfe98215c03747d317e71b04d5baf4d7c09 tools fb74c25f488fd877ddd6fe068f4044e46452a4da engine 786befd607606d43af61715058473404a10de1f6",
+   "beginAccess": "headless 3273, app 3401 (3281/3409 before)",
+   "launches": "0 crashes of 20",
+   "scenarios": "all 10 equal; 1832 frames identical to m1-frames-ref",
+   "appkit": "vs and playback equal; 3960 frames identical",
+   "unchecked": "vs and demo equal; 1832 frames identical",
+   "emulator": "vs equal; 1832 frames identical",
+   "suites": "the exclusivity check and 49 named suites (es-e9's 30 plus 19 branding-related: FrontScreenBody, ModeScreen, LoadedCatalog, FrontMenuLoop, FrontMenuCompletion, Catalog, NTSDProfileLF2, WindowInitialization, ReplayPlayback, WindowInput, FrontControlSettings, FrontRecordingInfo, NetworkMenu, LibLoading, PostHUDNotices, ApplicationRecovery, WindowLifecycle, MacWindowBackend, MacRuntimeStartup) pass in the clean release test build; the engine bundle's 181 tests pass",
+   "macAB": "3v3 overlapping everywhere: load 2.311-2.447 against 1.515-2.448 s, process 3.222-3.322 against 3.111-3.400 ms/tick, complete overlapping, peak and bodies resident overlapping",
+   "phoneAB": "3v2 overlapping everywhere: load 6.99-7.78 against 5.64-7.07 s, main 10.78-11.02 against 10.68-10.85 ms/tick, render, process, complete, peak, bodies and ticks-end resident overlapping"
+  }
+ },
+ "gameUse": "Burn Rate (local repository ~/Developer/burn-rate, 8b13ce0) sets its own branding: window \"Burn Rate\", credit lines \"by BurnRateHQ, Randori Team\" / \"2026, an experimental brawler.\" / \"github.com/wowlocal/randori \", links to the Randori repository, the built-in road named \"Highway 101\"; its AppKit title screen shows them."
+}

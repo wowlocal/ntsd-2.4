@@ -310,7 +310,7 @@ final class OriginalApplicationMenuInputTests: XCTestCase {
         let full = try OriginalStateRecord(bytes:bytes,defined:mask)
         let pointers = try OriginalStateRecord(bytes:Array(bytes[0xb8a8..<0xb8b0]),defined:Array(mask[0xb8a8..<0xb8b0]))
         func state(_ memory: OriginalMenuPresentationMemory) throws -> Session.State {
-            try .init(full:full,memory:memory,front:.init(interface: NTSDProfile.rules.interface),frontSurfaces:[:],earlyScreen:.init(),libraryText:.init(),random:.init(),screenBody:nil)
+            try .init(full:full,memory:memory,front:.init(interface: NTSDProfile.rules.interface),frontSurfaces:[:],earlyScreen:.init(),libraryText:.init(),random:.init(),screenBody:nil,branding:.lf2)
         }
         var conflict = pointers;try conflict.write(UInt8(0xc1),at:0)
         XCTAssertThrowsError(try state(.init(replayPointers:conflict))) { error in
@@ -365,7 +365,7 @@ final class OriginalApplicationMenuInputTests: XCTestCase {
         let mask = [Bool](repeating:true,count:0xc3a8),full = try OriginalStateRecord(bytes:bytes,defined:mask)
         let pointers = try OriginalStateRecord(bytes:Array(bytes[0xb8a8..<0xb8b0]),defined:Array(mask[0xb8a8..<0xb8b0]))
         let state = try Session.State(full:full,memory:.init(replayPointers:pointers),front:.init(interface: NTSDProfile.rules.interface),frontSurfaces:[:],
-                                      earlyScreen:.init(),libraryText:.init(),random:.init(),screenBody:nil)
+                                      earlyScreen:.init(),libraryText:.init(),random:.init(),screenBody:nil,branding:.lf2)
         let replies = Session.Responses(draw:0,presentation:0,sound:0,release:0,dcResult:0,dc:9)
         var message = try OriginalStateRecord(bytes:[UInt8](repeating:0,count:28),defined:[Bool](repeating:true,count:28))
         try message.write(UInt32(0x200),at:4);try message.write(UInt32(230 << 16 | 350),at:12)

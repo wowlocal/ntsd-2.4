@@ -106,8 +106,11 @@ E8b выполнен: движок опубликован как https://github.
 исправлены в Randori (ba68981, 22f1e56, b3efa7a; CI зелёный) — виртуальные часы фиксируют пояс UTC+1,
 `--network-trace` пишет состояние и с `--no-network`, пустой список предметов следует 0x417170 (диапазон < 1 → 0
 без деления) и останавливается на честной границе «Source state unknown»; review принят после исправлений, gate
-`es-e9` совпал: [evidence](../evidence/es-e9-engine-findings.json). Дальше по желанию пользователя: E6e (пути без
-lib.dll), слияние в main.
+`es-e9` совпал: [evidence](../evidence/es-e9-engine-findings.json). E10 выполнен (2026-10-23, для новой игры
+пользователя Burn Rate на движке): строки, которые видит игрок (окно, подтверждение выхода, три строки авторов и
+их ссылки, прочие ссылки, «LF2» в ошибках повтора, имя фона 99), стали `OriginalGameRules.Branding`, по умолчанию
+LF2 2.0a — NTSD без изменений; Randori 786befd (CI зелёный), review принят, gate `es-e10` совпал:
+[evidence](../evidence/es-e10-branding.json). Дальше по желанию пользователя: E6e (пути без lib.dll), слияние в main.
 
 ## Internal build storage и VM quota исправлены — 2026-10-17
 

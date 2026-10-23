@@ -113,7 +113,7 @@ final class OriginalApplicationGraphicsDirectTests: XCTestCase {
         let mask = [Bool](repeating: true, count: 0xc3a8), full = try OriginalStateRecord(bytes: bytes, defined: mask)
         let pointers = try OriginalStateRecord(bytes: Array(bytes[0xb8a8..<0xb8b0]), defined: Array(mask[0xb8a8..<0xb8b0]))
         var state = try Session.State(full: full, memory: .init(replayPointers: pointers), front: .init(interface: NTSDProfile.rules.interface), frontSurfaces: [:],
-                                      earlyScreen: .init(), libraryText: .init(), random: .init(), screenBody: nil)
+                                      earlyScreen: .init(), libraryText: .init(), random: .init(), screenBody: nil, branding: .lf2)
         XCTAssertNil(state.graphics)
         let blit = OriginalBitmapBlit(sourceSurface: 0, targetSurface: 3, source: [0, 0, 2, 2], destination: [0, 0, 2, 2],
                                       flags: 0x1008000, effects: nil)

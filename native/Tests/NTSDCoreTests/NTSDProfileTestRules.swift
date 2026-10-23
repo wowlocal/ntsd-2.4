@@ -16,6 +16,6 @@ extension OriginalGameRules {
                           drawing: drawing ?? self.drawing,effects: effects ?? self.effects,lifecycle: lifecycle ?? self.lifecycle,fusion: fusion ?? self.fusion,
                           weaponBreak: weaponBreak ?? self.weaponBreak,interface: interface ?? self.interface,
                           characterAI: characterAI ?? self.characterAI,characterAISpecial: characterAISpecial ?? self.characterAISpecial,
-                          library: library ?? self.library)
+                          library: library ?? self.library,branding: branding)
     }
 }

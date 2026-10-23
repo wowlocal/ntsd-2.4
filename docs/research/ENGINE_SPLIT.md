@@ -172,6 +172,7 @@ A read-only survey of `native/` (three agents, 2026-10-18):
 | E6 | Classify each profile rule as LF2 2.0a or NTSD from the second reference; LF2 rules become the engine's default profile | D1 granted 2026-10-21; E6a **done** ([reference](../evidence/es-e6a-lf2-reference.json), [classification](../evidence/es-e6a-classification.json), [survey](../evidence/es-e6a-survey.md)); E6a-2 **done** ([evidence](../evidence/es-e6a2-exe-strings.json)); E6b **done** ([evidence](../evidence/es-e6b-lf2-rules.json)); E6c **done** ([evidence](../evidence/es-e6c-special-moves.json)); E6d-1 **done** ([evidence](../evidence/es-e6d1-library-switch.json)); E6d-2 **done** ([evidence](../evidence/es-e6d2-loading-labels.json)); E6e optional, not queued (E6 design below) |
 | E7 | Engine stand-alone: the engine package builds alone (macOS, Linux container) and passes its tests with a from-scratch synthetic content pack; a scan finds no original bytes (files under `downloads/`, the resources, fixtures, `initial.bin`) | [survey](../evidence/es-e7-survey.md); E7a **done** ([evidence](../evidence/es-e7a-standalone.json)), E7b **done** ([evidence](../evidence/es-e7b-scan.json); policy open, the user's), E7c **done** ([evidence](../evidence/es-e7c-synthetic-pack.json)), E7d **done** ([evidence](../evidence/es-e7d-synthetic-runs.json)), E7e-1 **done** ([evidence](../evidence/es-e7e1-power-table.json)); E7f **done** ([evidence](../evidence/es-e7f-synthetic-match-end.json)); E7e-2 **done** (the policy enforced, [evidence](../evidence/es-e7e2-scan-policy.json)); EXE strings settled in E6a-2 ([evidence](../evidence/es-e6a2-exe-strings.json)): E7 **done** |
 | E9 | E7d's engine findings (user, 2026-10-23: «хочу продолжить»): the virtual clock's zone, the trace without networking, the empty item list | **done** ([evidence](../evidence/es-e9-engine-findings.json)) |
+| E10 | Game-supplied branding (for a new game on the engine, the user's Burn Rate request 2026-10-23): the EXE strings a player sees become `OriginalGameRules.Branding`, LF2 2.0a's by default (reverses E3b's "the EXE's own strings stay" for these strings) | **done** ([evidence](../evidence/es-e10-branding.json)) |
 | E8 | Publication: name, licence, a new repository with fresh history, a tag; this repository depends on it by revision; README credits | authorized 2026-10-21 (D2 delegated): E8a **done** ([evidence](../evidence/es-e8a-randori-rename.json)), E8b **done** ([manifest](../evidence/es-e8b1-manifest.json), [publication and submodule](../evidence/es-e8b2-randori-submodule.json)): (the repository `wowlocal/randori`, Apache-2.0, fresh history, CI; `engine/` becomes a submodule at a revision) |
 
 ## E1 design (2026-10-18, before review)
@@ -239,7 +240,8 @@ Inventory (read-only agent, 2026-10-18, on E2's tree):
   the wasm import module `"ntsd"`. A test pins `NTSD.release`; tools pin
   `/save/NTSD Native`, `ntsd-data`, `NTSD.present`/`NTSD.release` timings.
   The EXE's own strings ("Marti", "Little Fighter 2", "LF2", lf2.net, the DAT
-  key) are original behaviour and stay.
+  key) are original behaviour and stay. (2026-10-23, E10: the ones a player
+  sees became game values, LF2 2.0a's by default; the DAT key stays.)
 
 Plan:
 
@@ -2542,10 +2544,26 @@ against `lf2.exe`, outside E6.
   phone per tick overlapping, Mac memory overlapping (es-e8b2 bimodal), Mac
   load faster (the bundle placement E8b-2 isolated), phone memory lower.
   [Evidence](../evidence/es-e9-engine-findings.json).
+- 2026-10-23 E10: game-supplied branding, for the user's new game on the
+  engine (Burn Rate), whose title screen showed LF2's credit lines and whose
+  window was "Little Fighter 2". Randori 786befd (CI green): the strings a
+  player sees (window class and title, quit caption, the three credit lines
+  and their links, the website/help/challenge/advertise/forum links, "LF2"
+  in two replay errors, background 99's name) come from
+  `OriginalGameRules.Branding`, LF2 2.0a's by default, so NTSD is unchanged;
+  the credit lines keep LF2's lengths (27, 30, 28) because their encoded
+  copy and clickable spans depend on them. This reverses E3b's "the EXE's
+  own strings stay" for these strings. Reviewed (accept after fixes: end-to-
+  end tests on a branded synthetic pack, one source of truth, docs; then
+  accept; 17 of 22 call-site mutations caught, the 5 others explained).
+  Engine alone 181 macOS / 159 Linux. Gate `es-e10`: scenarios, frames,
+  AppKit, unchecked, emulator identical, 20 clean launches, 3,273/3,401, 49
+  suites (19 branding-related added), the engine's 181; phone and Mac A/B
+  overlapping. [Evidence](../evidence/es-e10-branding.json).
 
 ## Next task
 
-None queued: the plan (E0-E8) is complete (2026-10-22), E9 too (2026-10-23). The engine is
+None queued: the plan (E0-E8) is complete (2026-10-22), E9 and E10 too (2026-10-23). The engine is
 Randori (github.com/wowlocal/randori), a submodule at `engine/`: run
 `git submodule update --init engine` after checking out this branch; an
 engine change is committed and pushed in the submodule (CI must pass) and

@@ -73,7 +73,9 @@ final class NTSDProfileLF2Tests: XCTestCase {
             // E6d-2: the label moved verbatim from 98a097ba's OriginalLibLoadingProgress.swift:60, the
             // same 13 bytes for each of lib.dll's three strings.
             library: OriginalLibData(loadingLabels: .init(belowTwo: NTSDProfileLF2Tests.label, fiveToSeven: NTSDProfileLF2Tests.label,
-                                                          others: NTSDProfileLF2Tests.label)))
+                                                          others: NTSDProfileLF2Tests.label)),
+            // E10 (the initializer now requires it): the strings the engine held then, LF2 2.0a's.
+            branding: .lf2)
     static let label: [UInt8] = [0x4c, 0x6f, 0x61, 0x64, 0x69, 0x6e, 0x67, 0x20, 0x66, 0x69, 0x6c, 0x65, 0x73]
 
     func testEveryFamilyEqualsTheEarlierLiteral() {
