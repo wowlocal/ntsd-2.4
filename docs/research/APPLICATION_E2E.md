@@ -53,4 +53,10 @@ matched only on a machine in UTC+1. `tools/app_e2e.py` now starts every app
 run with `TZ=Etc/GMT-1`; the vs scenario passes when the script itself runs in
 a shell set to `TZ=Asia/Tokyo`.
 
+2026-10-23 (ENGINE_SPLIT E9): `--virtual-clock` now pins the zone as well
+(UTC+1 without daylight time, the zone the references were recorded in), so
+the app's GetLocalTime and startup zone no longer depend on `TZ`; the
+`TZ=Etc/GMT-1` setting stays and changes nothing.
+[Evidence](../evidence/es-e9-engine-findings.json).
+
 EXE envelope not recalculated.

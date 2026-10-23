@@ -102,7 +102,12 @@ E6d-1 выполнен: lib.dll — значение правил игры; бе
 E6d-2 выполнен: три надписи загрузки lib.dll — данные игры; цвета и Z-слагаемое оставлены (записано); все гейты пройдены: [evidence](../evidence/es-e6d2-loading-labels.json).
 E8a выполнен: модули движка называются Randori*, переключатели RANDORI_* (старые NTSD_* принимаются); все гейты и все хосты пройдены: [evidence](../evidence/es-e8a-randori-rename.json).
 E8b выполнен: движок опубликован как https://github.com/wowlocal/randori (Apache-2.0, свежая история, CI зелёный на macOS и Linux, релиз v0.1.1); engine/ в этой ветке — подмодуль Randori на e6d1c39 (после checkout: `git submodule update --init engine`): [evidence](../evidence/es-e8b2-randori-submodule.json).
-План E0–E8 завершён (2026-10-22). Дальше по желанию пользователя: E6e (пути без lib.dll), находки E7d, слияние в main.
+План E0–E8 завершён (2026-10-22). E9 выполнен (2026-10-23, пользователь: «хочу продолжить»): три находки E7d
+исправлены в Randori (ba68981, 22f1e56, b3efa7a; CI зелёный) — виртуальные часы фиксируют пояс UTC+1,
+`--network-trace` пишет состояние и с `--no-network`, пустой список предметов следует 0x417170 (диапазон < 1 → 0
+без деления) и останавливается на честной границе «Source state unknown»; review принят после исправлений, gate
+`es-e9` совпал: [evidence](../evidence/es-e9-engine-findings.json). Дальше по желанию пользователя: E6e (пути без
+lib.dll), слияние в main.
 
 ## Internal build storage и VM quota исправлены — 2026-10-17
 

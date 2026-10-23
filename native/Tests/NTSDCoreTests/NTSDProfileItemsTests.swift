@@ -55,9 +55,13 @@ final class NTSDProfileItemsTests: XCTestCase {
         XCTAssertTrue(ntsd.events.contains(where: draw147));XCTAssertFalse(moved.events.contains(where: draw147))
         XCTAssertEqual(try object(ntsd),0);XCTAssertEqual(try object(moved),0)
         // In game mode 1 a scarce drop never stays, though its coin flip is drawn: no candidate
-        // is left and the stream-154 draw over none fails; nothing spawns.
+        // is left, the stream-154 draw over none answers 0 and candidate 0 is stack the call
+        // has not written (41f128); the pass stops there and nothing spawns.
         let mode1 = try spawn([122],mode: 1,rules: NTSDProfile.rules)
-        XCTAssertEqual(mode1.error,"\(OriginalStateError.invalidStorage("Original hit RNG division by zero"))")
+        let unknown = OriginalStateError.invalidStorage("Source state unknown: no item candidate; the random item reads candidate 0 "
+            + "from stack this call has not written (41f128)")
+        XCTAssertEqual(mode1.error,"\(unknown)")
+        XCTAssertEqual(mode1.events.last,.random(stream: 154,range: 0,result: 0))
         XCTAssertTrue(mode1.events.contains(where: draw147));XCTAssertFalse(mode1.events.contains(.reconstruct(slot: 50)))
         XCTAssertEqual(try object(spawn([122],mode: 1,rules: rules(scarce: OriginalIDSet([123])))),0)
     }

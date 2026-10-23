@@ -1,0 +1,66 @@
+{
+ "study": "ENGINE_SPLIT E9",
+ "date": "2026-10-23",
+ "what": "E7d's three engine findings fixed in Randori and the gitlink bumped: the virtual clock pins its zone, --network-trace records loaded state without networking, and the random item drop with no candidate follows 0x417170 and then stops at an honest boundary",
+ "supersedes": [
+  "docs/evidence/es-e7d-synthetic-runs.json engineFindings (all three, recorded there unchanged)",
+  "the 'Original hit RNG division by zero' label pinned by docs/evidence/es-e5c2a-items-roles.json:25 and docs/evidence/es-e5c2-plumbing.md:114 (recorded there unchanged)"
+ ],
+ "randori": {
+  "repository": "https://github.com/wowlocal/randori",
+  "commits": {
+   "ba68981": "Pin the virtual clock's time zone (OriginalRuntimeSession.virtualZone = TimeZone(secondsFromGMT: 3600), used for the startup GetTimeZoneInformation and OriginalMacRuntimeLoading.localZone; OriginalVirtualClockZoneTests)",
+   "22f1e56": "Trace loaded state without networking (the --network-trace file opens outside the !--no-network block; socket observers only with a live network)",
+   "b3efa7a": "Follow 0x417170 on an empty item list (OriginalActorHits.draw returns 0 for range < 1 without reading the RNG state, observing the event; OriginalWorldHits.advance stops with 'Source state unknown: no item candidate ...' after the full pool's known fault and before the spawn; OriginalEmptyItemDropTests)"
+  },
+  "pushed": "e6d1c39..b3efa7a main (over SSH; the submodule's push URL set locally, .gitmodules keeps the public HTTPS URL)",
+  "ci": {"run": 39901863981, "result": "success", "jobs": {"macos": "success (debug and release, swift.org 6.4.0)", "linux": "success (swift:6.4.0-noble)"}},
+  "tag": "none (v0.1.1 stays the release)"
+ },
+ "staticEvidence": {
+  "kind": "static reading of the pinned EXE; nothing executed",
+  "exeSHA256": "3f7ac67c5890ef979ee24a6dae5528056e7f631725c292cf9cb0a928ebeff71c",
+  "tool": "xcrun llvm-objdump -d --no-show-raw-insn --x86-asm-syntax=intel --start-address=… --stop-address=… on 'downloads/NTSD_2.4_2.0a_clean/NTSD 2.4_2.0a/NTSD 2.4.exe' (scratch/e9/disasm-417170.txt, disasm-41ef6c.txt)",
+  "417170..4171bc": "test esi,esi; jg 41717d; xor eax,eax; pop esi; ret: a range below 1 returns 0 before reading 450c34/450bcc or dividing; otherwise counter (+1 mod 0x4d2), index (+1 mod 0xbb8) and (table[index] + counter) idiv range",
+  "41f115..41f140": "the stream-154 draw (push [esp+44] = candidate count, push 0x9a) returns eax; 41f128 reads candidate [esp+4*eax+0x12c] unconditionally; 41f12f reads the slot word [esp+0x64] and 41f139 the slot's Actor [ebx+4*eax+0x194] (the full pool's access violation after a reserve respawn, -3-World -> 0xff2f6088); 41f140 reads the Object table with the candidate",
+  "writerScan": "the independent reviewer's scan of 41bc90..422ab8: 41f010 is the candidate list's only writer before 41f128 in a call; 421533 (the requested-items list, stream 0xd0) writes the same slots later in the call; nothing takes the area's address; the team counters at [esp+0x74+4*team] stop at 0x110 (team < 0x28 checked at 41d942). With no candidate the word is stack the call has not written: unknown"
+ },
+ "behaviour": {
+  "zone": "neutral for every pinned reference: local wall time under the virtual clock stays 2026-01-01 01:00 (replay names 20260101_010000); TZ=Etc/GMT-1 (tools/app_e2e.py) and TimeZone(secondsFromGMT:3600) give the same names, offset and no daylight rule on this Mac; the zone names reach only the CRT's own calendar storage, which no digest reads",
+  "trace": "neutral with networking on; new: --no-network --network-trace writes state rows (and fails at startup if the file exists, .withoutOverwriting, where the flag was ignored before)",
+  "item": "neutral for every reference: both hit corpora's 37 stream-154 draws have range 1 (reviewer, original-world-hits*.json); the changed path is reachable only with no candidate (game content without an item in the item range, or a scarce-only pool in modes 1-4)",
+  "nativeTest": "native/Tests/NTSDCoreTests/NTSDProfileItemsTests.swift testScarceDropsA40 pinned the old native rejection message (required by the es-e5c2a review), not an original observation; it now pins the new message and the last event .random(154,0,0); the outcome (the pass stops, nothing spawns) is unchanged"
+ },
+ "review": {
+  "agent": "separate read-only reviewer",
+  "first": "accept after fixes: F1 defect (the empty-candidate guard ran before the full pool's known fault; moved after it, tested), F2 comment (421533 also writes the list later), F3 early return reading no RNG state, F4 assert the 154 event, F5 evidence and dated notes, F6 two test comments, F11 tests (zone; no-network trace through a headless run)",
+  "second": "accept: no remaining defects (optional commit-message wording left as is: rewording would change the gated commit id)"
+ },
+ "checks": {
+  "engineStandalone": "before the review fixes (Randori 3dc22e4): macOS debug and release 164 tests, Linux 142, all passing (scratch/e9/standalone); after them: the focused tests in a debug build (OriginalEmptyItemDropTests, OriginalVirtualClockZoneTests, SyntheticHeadlessStartTests, OriginalRequestSlotWordTests: 15 tests), Randori CI on b3efa7a (macOS debug+release, Linux), the gate's engine bundle (166 tests)",
+  "gate": {
+   "label": "es-e9", "prev": "es-e8b2",
+   "testedTrees": "native 1a70ca53027015faf488fee2adab238d476d30ba tools fb74c25f488fd877ddd6fe068f4044e46452a4da engine b3efa7a3ef060e57ac62f5d8b90c7c2f18090a9d",
+   "beginAccess": "headless 3281, app 3409 (3278/3406 before: +3 each, the new guards)",
+   "launches": "0 crashes of 20",
+   "scenarios": "all 10 equal; frames 1832 identical to m1-frames-ref",
+   "appkit": "vs and playback equal; 3960 frames identical",
+   "unchecked": "vs and demo equal; 1832 frames identical",
+   "emulator": "vs equal; 1832 frames identical",
+   "suites": "the exclusivity check and 30 named Core suites (es-e9.suites: es-e8b2's 28 plus NTSDProfileItemsTests and OriginalActorHitsTests) pass in the clean release test build; the engine bundle's 166 tests pass (1 skipped)",
+   "macAB": {
+    "3v3": "load 2.419-2.477 s against 2.394-2.690 s, process 2.722-3.267 against 2.678-3.444 ms/tick overlapping; peak resident 672-675 against 652-664 MB and bodies resident 672-675 against 559-565 MB apart",
+    "4v4": "peak resident 672-683 against 653-672 MB and bodies resident 672-683 against 559-672 MB overlapping (es-e8b2 bimodal, 559 or 672; es-e9's four runs all in the upper mode); process and complete per tick overlapping; load apart with es-e9 faster (2.231-2.358 s against 2.618-2.644 s), the freshly copied bundle placement E8b-2 isolated"
+   },
+   "phoneAB": {
+    "3v2": "load 7.6-8.27 s against 6.66-7.25 s apart (slower); main 10.84-11.01 against 11.01-11.02 ms/tick touching; process, render, complete overlapping; ticks-end resident 568-572 against 594-610 MB apart (smaller)",
+    "4v4": "load 6.63-7.36 s against 7.25-8.01 s overlapping; main, render, process, complete per tick overlapping; peak resident and footprint overlapping; bodies resident 526-545 against 552-570 MB and ticks-end resident 563-574 against 576-603 MB apart (smaller), not read as a change"
+   },
+   "traceCheck": "NTSD_GAME_ARGS='--network-trace FILE' run_headless_scenarios.py vs with --no-network: es-e9 wrote 2336 lines, all kind 'state'; es-e8b2 wrote no file; both runs' 1832 frames identical to m1-frames-ref"
+  }
+ },
+ "notes": [
+  "The submodule's push URL is SSH in the local config only; .gitmodules keeps https://github.com/wowlocal/randori.git",
+  "The commit-message wording nit on b3efa7a ('a stack list that 41f010 writes earlier in the call') is left: the list's only writer before 41f128 is 41f010"
+ ]
+}

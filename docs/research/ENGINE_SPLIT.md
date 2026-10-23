@@ -171,6 +171,7 @@ A read-only survey of `native/` (three agents, 2026-10-18):
 | E5 | Game profile: the ID sites (100 rows, about 125 branch points; first estimated ~90) and the AI dispatch behind a profile the game supplies; the engine defines the `0x44d000` record's layout and the game supplies `initial.bin`; the NTSD profile bit-exact (all gates plus the full fixture-driven suites); the API's fit with 2.8.3.3 checked read only | E5a **done** (survey and design, [evidence](../evidence/es-e5a-design.json)); E5b **done** ([evidence](../evidence/es-e5b-record-type.json)); E5c-0 **done** ([evidence](../evidence/es-e5c0-profile-plumbing.json)); E5c-1a **done** ([evidence](../evidence/es-e5c1a-reflector-roles.json)); E5c-1b **done** ([evidence](../evidence/es-e5c1b-armour-roles.json)); E5c-1c **done** ([evidence](../evidence/es-e5c1c-interaction-roles.json)); E5c-1d **done** ([evidence](../evidence/es-e5c1d-impact-roles.json)); E5c-2a **done** ([evidence](../evidence/es-e5c2a-items-roles.json)); E5c-2b **done** ([evidence](../evidence/es-e5c2b-camera-links-roles.json)); E5c-2c **done** ([evidence](../evidence/es-e5c2c-requested-mission-roles.json)); E5c-2d **done** ([evidence](../evidence/es-e5c2d-roster-roles.json)); E5c-2e **done** ([evidence](../evidence/es-e5c2e-modes-roles.json)); E5c-2f **done** ([evidence](../evidence/es-e5c2f-prelude-roles.json)); E5c-2g **done** ([evidence](../evidence/es-e5c2g-mode-label-roles.json)); E5c-1e **done** ([evidence](../evidence/es-e5c1e-physics-roles.json)); E5c-1f **done** ([evidence](../evidence/es-e5c1f-drawing-roles.json)); E5c-1g **done** ([evidence](../evidence/es-e5c1g-effects-roles.json)); E5c-1h **done** ([evidence](../evidence/es-e5c1h-lifecycle-roles.json)); E5c-1i **done** ([evidence](../evidence/es-e5c1i-object-input-roles.json)); E5c-1j **done** ([evidence](../evidence/es-e5c1j-input-roles.json)); E5d: [survey](../evidence/es-e5d-plumbing.md), E5d-1a **done** ([evidence](../evidence/es-e5d1a-ai-target-roles.json)), E5d-1b **done** ([evidence](../evidence/es-e5d1b-ai-fight-roles.json)), E5d-2 **done** ([evidence](../evidence/es-e5d2-ai-special-hook.json)), E5d-3 **done** ([evidence](../evidence/es-e5d3-ai-routines-in-game.json)); E5e: [survey](../evidence/es-e5e-plumbing.md), E5e-1 **done** ([evidence](../evidence/es-e5e1-id300-roles.json)), E5e-2 **done** ([evidence](../evidence/es-e5e2-mission-pseudo-ids.json)), E5e-3 **done** ([evidence](../evidence/es-e5e3-war-life.json)), E5e-4 **done** ([evidence](../evidence/es-e5e4-fusion.json)), E5e-5 **done** ([evidence](../evidence/es-e5e5-weapon-break.json)); E5f: [survey](../evidence/es-e5f-plumbing.md), E5f-1 **done** ([evidence](../evidence/es-e5f1-front-interface.json)), E5f-2a **done** ([evidence](../evidence/es-e5f2a-interface-sound-names.json)), E5f-2b **done** ([evidence](../evidence/es-e5f2b-menu-war-names.json)), E5f-3 **done** ([evidence](../evidence/es-e5f3-menu-sound-names.json)), E5f-4 **done** ([evidence](../evidence/es-e5f4-panel-war-frames.json)) |
 | E6 | Classify each profile rule as LF2 2.0a or NTSD from the second reference; LF2 rules become the engine's default profile | D1 granted 2026-10-21; E6a **done** ([reference](../evidence/es-e6a-lf2-reference.json), [classification](../evidence/es-e6a-classification.json), [survey](../evidence/es-e6a-survey.md)); E6a-2 **done** ([evidence](../evidence/es-e6a2-exe-strings.json)); E6b **done** ([evidence](../evidence/es-e6b-lf2-rules.json)); E6c **done** ([evidence](../evidence/es-e6c-special-moves.json)); E6d-1 **done** ([evidence](../evidence/es-e6d1-library-switch.json)); E6d-2 **done** ([evidence](../evidence/es-e6d2-loading-labels.json)); E6e optional, not queued (E6 design below) |
 | E7 | Engine stand-alone: the engine package builds alone (macOS, Linux container) and passes its tests with a from-scratch synthetic content pack; a scan finds no original bytes (files under `downloads/`, the resources, fixtures, `initial.bin`) | [survey](../evidence/es-e7-survey.md); E7a **done** ([evidence](../evidence/es-e7a-standalone.json)), E7b **done** ([evidence](../evidence/es-e7b-scan.json); policy open, the user's), E7c **done** ([evidence](../evidence/es-e7c-synthetic-pack.json)), E7d **done** ([evidence](../evidence/es-e7d-synthetic-runs.json)), E7e-1 **done** ([evidence](../evidence/es-e7e1-power-table.json)); E7f **done** ([evidence](../evidence/es-e7f-synthetic-match-end.json)); E7e-2 **done** (the policy enforced, [evidence](../evidence/es-e7e2-scan-policy.json)); EXE strings settled in E6a-2 ([evidence](../evidence/es-e6a2-exe-strings.json)): E7 **done** |
+| E9 | E7d's engine findings (user, 2026-10-23: «хочу продолжить»): the virtual clock's zone, the trace without networking, the empty item list | **done** ([evidence](../evidence/es-e9-engine-findings.json)) |
 | E8 | Publication: name, licence, a new repository with fresh history, a tag; this repository depends on it by revision; README credits | authorized 2026-10-21 (D2 delegated): E8a **done** ([evidence](../evidence/es-e8a-randori-rename.json)), E8b **done** ([manifest](../evidence/es-e8b1-manifest.json), [publication and submodule](../evidence/es-e8b2-randori-submodule.json)): (the repository `wowlocal/randori`, Apache-2.0, fresh history, CI; `engine/` becomes a submodule at a revision) |
 
 ## E1 design (2026-10-18, before review)
@@ -2523,10 +2524,28 @@ against `lf2.exe`, outside E6.
   Mac load about 0.3 s slower, isolated with APFS clones to the freshly
   copied (byte-identical) content bundle, not the code.
   [Evidence](../evidence/es-e8b2-randori-submodule.json).
+- 2026-10-23 E9: E7d's three engine findings, fixed in Randori (ba68981,
+  22f1e56, b3efa7a; CI green on macOS and Linux) and the gitlink bumped.
+  The virtual clock pins its zone (UTC+1 without daylight time, where the
+  references were recorded, so GetLocalTime still reads 01:00);
+  `--network-trace` records loaded state with `--no-network` too; the random
+  item with no candidate: 0x417170 returns 0 for a range below 1 without
+  dividing (static: 417170..4171bc), so the draw follows it and the pass
+  stops after the full pool's known fault with "Source state unknown"
+  (41f128 reads candidate 0 from stack the call has not written). The
+  game's items test pinned the old native message; it now pins the new one.
+  Reviewed (accept after fixes: the guard moved after the full-pool fault,
+  tests added; re-review accepted). Gate `es-e9`: 10 scenarios, frames,
+  AppKit, unchecked, emulator identical, 20 clean launches, 3,281/3,409
+  (+3), 30 suites, the engine's 166; a vs run with `--no-network
+  --network-trace` wrote 2,336 state rows (es-e8b2 none); 4v4 A/Bs: Mac and
+  phone per tick overlapping, Mac memory overlapping (es-e8b2 bimodal), Mac
+  load faster (the bundle placement E8b-2 isolated), phone memory lower.
+  [Evidence](../evidence/es-e9-engine-findings.json).
 
 ## Next task
 
-None queued: the plan (E0-E8) is complete (2026-10-22). The engine is
+None queued: the plan (E0-E8) is complete (2026-10-22), E9 too (2026-10-23). The engine is
 Randori (github.com/wowlocal/randori), a submodule at `engine/`: run
 `git submodule update --init engine` after checking out this branch; an
 engine change is committed and pushed in the submodule (CI must pass) and
@@ -2536,8 +2555,6 @@ Optional, for the user to ask for:
   covers today (animated loading, network menu and front-body text, the
   text filters), with new comparisons below the library entry; then an LF2
   2.0a content identity and LF2's own data against lf2.exe.
-- E7d's engine findings (the virtual clock's time zone, tracing without
-  networking, the divide by zero with no item), each checked against the
-  original first; a read-only state accessor and an error callback in
-  `OriginalRuntimeSession`.
+- A read-only state accessor and an error callback in
+  `OriginalRuntimeSession` (E7d's API notes; E9 fixed its three findings).
 - Merging exp/engine-split into main (the loop does not merge).

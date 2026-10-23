@@ -46,4 +46,15 @@ restored; see the plan's addendum.
   stays open.
 - The whole e2e set passes.
 
+## No candidate (2026-10-23, ENGINE_SPLIT E9)
+
+The declared skip does not cover a drop with no item candidate. 417170
+answers 0 for the empty range without reading the RNG, and 41f128 then
+reads candidate 0 from a stack list that 41f010 writes earlier in the call
+(421533 writes the same slots later), so the Object 41f140 reads with it is
+unknown. `OriginalWorldHits` stops there with a "Source state unknown"
+boundary, after the full pool's known fault after a reserve respawn (41f139),
+which comes first. Static reading only;
+[evidence](../evidence/es-e9-engine-findings.json).
+
 EXE envelope not recalculated.
