@@ -283,3 +283,46 @@ indices. Loading helper425010, positive-count postprocessing, the full header/
 FileOpen caller and actual PNG/packed resources retain their own gates. This
 checked increment does not accept target startup, AI/gameplay, M1–M6 or the full
 game. Independent contract/comparator review remains unavailable/open.
+
+## Frame index and integer caller run1 plan
+
+Parent commit19116511 is checked and local. Next freeze
+`frame-object1/object-frame-index-plan1.json` and its producer snapshot: six
+actual whole-body cases for indices0/998/999/1000/-1/Int32.min. Inputs also
+exercise embedded nondigits, ignored plus/second minus, positive Int32 wrap and
+a repeated present Frame. No old source/candidate is rerun. The actual414570
+integer code executes; no baseline scanf conversion is supplied.
+
+Source presence is tested as a dword and written as one byte. A repeated present
+record branches back to the outer caller; there is no inferred2.4 overlay rule.
+Frame state is read through the actual field dispatcher. Inputs prepare only
+explicit controlled header/count/presence fields over a5/5a backing, never a
+source after-state. Integer multiplication/addition retain32-bit wrap, including
+the controlled Int32.min alias. The exact433664-byte allocation remains fixed;
+index999 has no invented backing. Negative header aliases may reach existing
+box helpers and must stop on unknown children rather than acquire guessed data.
+
+Only the existing Open/free boundaries and the imported index-error dialog are
+synthetic. The dialog records its exact source text/caption/flags and returns
+declared0, which the caller ignores; this is not an actual Windows UI observation.
+The425010/44e160 entries are recorded but not executed. Unknown reads/helpers
+retain separate partial outcomes, not successful Native rejection matches.
+Limit6 calls/20 minutes/2M instructions/30s per call/16MiB output, T7 UUID checked
+and40GiB reserve. Source results precede Native integer/Frame transfer and the
+connected reader/consumer comparison. Independent review remains open.
+
+Index source1 is terminal0:4 whole returns and2 unsupported reads. Duplicate0
+preserves its first state;998 is a complete record; the positive overflow token
+2147483648 becomes Int32.min and multiplication wraps to Frame0. Index1000
+requests the original dialog then returns. Index999 stops on its first unbacked
+presence read. The-1 header alias stops reading unknown pointer Object+7b0 at
+412c88, before a box helper; no null or extra allocation is invented. Source
+SHA-256597130754db183a34f9f2f7acb8dac64a28f81202f78f003770f3c673c79ce0d.
+
+Before transferring the common four integer fields, freeze the planned four
+changed-field controls in `object-frame-fields-plan1.json`, using the same pinned
+index-tool1 producer. They cover pic/state/wait/next, repeated fields, nondigits/
+sign/wrap, wrapped duplicate presence and a final-number lookahead boundary.
+Same per-call/time/output/reserve limits; only these4 new calls execute. No prior
+case reruns. This extends the same D3 mechanism to16 total declared cases across
+constructor/counter/index/field phases; remaining children and review stay open.

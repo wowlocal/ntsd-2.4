@@ -491,7 +491,7 @@ def dat_buffer_pilot(parent_path, pilot_path):
 
 
 def object_body_pilot(parent_path, pilot_path):
-    """Whole target Object body on declared Frame-free owned streams.
+    """Whole target Object body on separately declared owned streams.
 
     Actual parser/scanner/EOF/close/tail/cookie instructions execute. FileOpen
     supplies a declared owned buffer and free is an allocator boundary. No
@@ -557,6 +557,8 @@ def object_body_pilot(parent_path, pilot_path):
         region(filename, bytes.fromhex(plan['filenameHex'])+b'\0', 'owned filename')
         region(0x49eea4, struct.pack('<I', plan['cookie']), 'declared process cookie')
         region(STOP, b'\xcc', 'return sentinel')
+        if 'messageBoxAddress' in plan:
+            region(plan['messageBoxAddress'], b'\xcc', 'declared MessageBox entry')
 
         def seed(address, raw, r):
             uc.mem_write(address, bytes(raw))
@@ -605,6 +607,9 @@ def object_body_pilot(parent_path, pilot_path):
                 if kind == 'scan':
                     events.append(dict(kind='token', bytes=cstring(data['destination']),
                         before=data['before'], after=word(data['stream'])-data['buffer']))
+                elif kind == 'integer':
+                    events.append(dict(kind='integer', bits=word(data['destination']),
+                        before=data['before'], after=word(data['stream'])-data['buffer']))
                 elif kind == 'eof':
                     events.append(dict(kind='eof', cursor=word(data['stream'])-data['buffer'],
                                        result=register('EAX')))
@@ -634,14 +639,25 @@ def object_body_pilot(parent_path, pilot_path):
                 # volatile-register response, not recovered CRT behavior.
                 returned(eax=plan['freeVolatileEAX'])
                 return
+            if 'messageBoxAddress' in plan and pc == plan['messageBoxAddress']:
+                at = register('ESP')
+                owner, text, caption, flags = (word(at+i) for i in (4, 8, 12, 16))
+                if (owner, text, caption, flags) != (0, 0x49cb4b, filename, 0):
+                    raise Boundary('Unexpected index-error dialog arguments')
+                events.append(dict(kind='messageBox', text=cstring(text), caption=cstring(caption), flags=flags))
+                returned(16, plan['messageBoxResult'])
+                return
             if not any(executable and a <= pc and pc+size <= a+len(raw)
                        for a, raw, _, executable in source_regions):
                 raise Boundary(f'Undeclared instruction {pc:#x}+{size}')
             if pc == 0x414490:
                 at = register('ESP')
-                if word(at+4) != state['stream'] or word(at+8) != 0x4977fc:
+                format_address = word(at+8)
+                allowed = [int(value, 16) for value in plan.get('allowedFormats', ['0x4977fc'])]
+                if word(at+4) != state['stream'] or format_address not in allowed:
                     raise Boundary('Unexpected scanner owner or format')
-                pending[word(at)] = ('scan', dict(destination=word(at+12),
+                kind = 'integer' if format_address == 0x497b08 else 'scan'
+                pending[word(at)] = (kind, dict(destination=word(at+12),
                     before=word(state['stream'])-state['buffer'], stream=state['stream'], buffer=state['buffer']))
             elif pc == 0x414920:
                 at = register('ESP')

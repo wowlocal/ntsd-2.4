@@ -14,6 +14,11 @@ public struct NTSD2833TokenStream: Sendable {
         public var terminatedBytes: [UInt8] { bytes + [0, 0, 0, 0] }
         public var cStringBytes: [UInt8] { Array(bytes.prefix(while: { $0 != 0 })) }
     }
+    public struct IntegerRead: Equatable, Sendable {
+        public let bits: UInt32
+        public let before: Int, after: Int
+        public var value: Int32 { Int32(bitPattern: bits) }
+    }
     private var bytes: [UInt8]
     public let byteCount: Int
     public private(set) var cursorOffset: Int
@@ -56,6 +61,33 @@ public struct NTSD2833TokenStream: Sendable {
         // appending a NUL or treating it as ordinary EOF would change the rule.
         while Self.whitespace(try read(at: probe)) { probe += 1 }
         return false
+    }
+    /// Actual414570..4145d0. Nondigits are ignored, only a leading minus sets
+    /// sign, and accumulation/negation wrap32 bits. The next byte is loaded
+    /// before the end test: a one-byte final number can read beyond the buffer;
+    /// a last loaded byte at the end is not accumulated. This is not scanf.
+    public mutating func readInteger() throws -> IntegerRead {
+        let before = cursorOffset
+        var position = before
+        while Self.whitespace(try read(at: position)) { position += 1 }
+        var current = try read(at: position)
+        position += 1
+        let negative = current == 0x2d
+        if negative { current = try read(at: position); position += 1 }
+        var value: UInt32 = 0
+        while true {
+            if current >= 0x30 && current <= 0x39 {
+                value = value &* 10 &+ UInt32(current - 0x30)
+            }
+            current = try read(at: position)
+            position += 1
+            if Self.whitespace(current) { break }
+            if position >= byteCount { position += 1; break }
+        }
+        position -= 1
+        if negative { value = 0 &- value }
+        cursorOffset = position
+        return .init(bits: value, before: before, after: position)
     }
     public mutating func close() {
         bytes.removeAll(keepingCapacity: false)

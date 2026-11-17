@@ -12,6 +12,7 @@ public struct NTSD2833ObjectStorage: Sendable {
         case allocationExtent
         case filenameOwner
         case unsupportedOuterTag([UInt8])
+        case unsupportedFrameTag([UInt8])
         case boxPostprocessing(offset: Int, count: Int32)
         case callerHelper(UInt32)
         case frameOutsideAllocation(Int)
@@ -19,6 +20,8 @@ public struct NTSD2833ObjectStorage: Sendable {
     public enum Event: Equatable, Sendable {
         case open(bytes: Int, cursor: Int)
         case token(bytes: [UInt8], before: Int, after: Int)
+        case integer(bits: UInt32, before: Int, after: Int)
+        case messageBox(text: [UInt8], caption: [UInt8], flags: UInt32)
         case eof(cursor: Int, ended: Bool)
         case close, releaseBuffer, releaseCursor
     }
@@ -61,6 +64,19 @@ public struct NTSD2833ObjectStorage: Sendable {
         let frame = try frameStorage(at: index)
         return try frame.integer(at: 8, as: Int32.self)
     }
+    private static func frameOffset(_ index: Int32) throws -> Int {
+        let bits = UInt32(bitPattern: index) &* UInt32(frameStride) &+ UInt32(frameBase)
+        let offset = Int(Int32(bitPattern: bits))
+        guard offset >= 0, offset <= allocationSize-frameStride else {
+            throw Boundary.frameOutsideAllocation(Int(index))
+        }
+        return offset
+    }
+    /// The actual caller's32-bit index arithmetic, including proved aliases.
+    /// This is separate from the ordinary physical-record enumeration above.
+    public func frameState(rawIndex: Int32) throws -> Int32 {
+        try storage.integer(at: Self.frameOffset(rawIndex)+8, as: Int32.self)
+    }
 
     // Complete nonmatching outer-token route, source40e62b..41120d. These known
     // branches must remain explicit boundaries until their actual children and
@@ -71,13 +87,27 @@ public struct NTSD2833ObjectStorage: Sendable {
         "<name>", "<minibar>", "<bossbar>", "<pic>", "<effect>", "<radar>",
         "<weapon>", "<sound>", "<frame>"
     ].map { Array($0.utf8) })
+    private static let integerFrameFields: [[UInt8]: Int] = [
+        Array("pic:".utf8): 4, Array("state:".utf8): 8,
+        Array("wait:".utf8): 0x0c, Array("next:".utf8): 0x10
+    ]
+    private static let otherFrameTags: Set<[UInt8]> = Set([
+        "dvx:", "dvy:", "dvz:", "centerx:", "centery:", "hit_a:", "hit_d:", "hit_j:",
+        "hit_Fa:", "hit_Ua:", "hit_Da:", "hit_Fj:", "hit_Uj:", "hit_Dj:", "hit_ja:",
+        "hit_aj:", "hit_jd:", "hit_ad:", "hit_g:", "respond:", "chp:", "cmp:", "hit_f:",
+        "hit_b:", "hit_uz:", "hit_dz:", "hold_a:", "hold_d:", "hold_j:", "hold_f:",
+        "hold_b:", "hold_uz:", "hold_dz:", "shadow:", "loop:", "amount:", "bound:",
+        "cover:", "attacking:", "action:", "centerz:", "caughtact:", "y:", "## reserve ##",
+        "hp:", "mp:", "dx:", "dy:", "dz:", "sound:", "opoint:", "bpoint:", "cpoint:",
+        "wpoint:", "ppoint:", "itr:", "bdy:"
+    ].map { Array($0.utf8) })
 
     private mutating func word(_ value: UInt32, at offset: Int,
-                               observe: ((Int, UInt32) -> Void)?) throws {
+                               observe: ((Int, Int, UInt32) -> Void)?) throws {
         try storage.write(value, at: offset)
-        observe?(offset, value)
+        observe?(offset, 4, value)
     }
-    private mutating func initializeBody(observe: ((Int, UInt32) -> Void)?) throws {
+    private mutating func initializeBody(observe: ((Int, Int, UInt32) -> Void)?) throws {
         for offset in stride(from: 0x7f8, to: Self.allocationSize, by: 4) {
             try word(0, at: offset, observe: observe)
         }
@@ -95,7 +125,7 @@ public struct NTSD2833ObjectStorage: Sendable {
             try word(3000, at: offset, observe: observe)
         }
     }
-    private mutating func afterToken(observe: ((Int, UInt32) -> Void)?) throws {
+    private mutating func afterToken(observe: ((Int, Int, UInt32) -> Void)?) throws {
         // Actual45c500: these stores occur after each token, not only at EOF.
         for (source, destination) in [(0, 4), (0x18, 0x1c)] {
             if try storage.integer(at: destination, as: UInt32.self) == 0 {
@@ -107,19 +137,64 @@ public struct NTSD2833ObjectStorage: Sendable {
             guard count <= 0 else { throw Boundary.boxPostprocessing(offset: offset, count: count) }
         }
     }
-    /// Complete body-caller behavior in the currently compared Frame-free domain.
+    private static func loadingStep(_ remaining: inout Int) throws {
+        remaining -= 1
+        guard remaining != 0 else { throw Boundary.callerHelper(0x425010) }
+    }
+    private mutating func loadFrame(initialToken: [UInt8], stream: inout NTSD2833TokenStream,
+                                    events: inout [Event], untilPump: inout Int,
+                                    observe: ((Int, Int, UInt32) -> Void)?) throws {
+        let index = try stream.readInteger()
+        events.append(.integer(bits: index.bits, before: index.before, after: index.after))
+        if index.value >= 1000 {
+            // The caller ignores MessageBoxA's result and resumes its outer
+            // stream. This receipt is an owned UI request, not a Windows call.
+            events.append(.messageBox(text: Array("Unable to create memory space for frame!".utf8),
+                                      caption: fileName, flags: 0))
+            return
+        }
+        let base = try Self.frameOffset(index.value)
+        if try storage.integer(at: base, as: UInt32.self) != 0 { return }
+        try storage.write(UInt8(1), at: base)
+        observe?(base, 1, 1)
+        var token = initialToken
+        repeat {
+            try Self.loadingStep(&untilPump)
+            if let field = Self.integerFrameFields[token] {
+                let value = try stream.readInteger()
+                events.append(.integer(bits: value.bits, before: value.before, after: value.after))
+                try word(value.bits, at: base+field, observe: observe)
+            } else if Self.otherFrameTags.contains(token) {
+                throw Boundary.unsupportedFrameTag(token)
+            }
+            let next = try stream.readString()
+            events.append(.token(bytes: next.cStringBytes, before: next.before, after: next.after))
+            token = next.cStringBytes
+            if token == Array("<frame_end>".utf8) { break }
+        } while true
+        for (countOffset, pointerOffset, helper): (Int, Int, UInt32) in
+            [(0x78, 0x7c, 0x44e1a0), (0x128, 0x130, 0x44e160), (0x12c, 0x134, 0x44e1e0)] {
+            if try storage.integer(at: base+countOffset, as: Int32.self) > 0 {
+                // The pointer read precedes the child call. Undefined alias
+                // bytes cannot be replaced with a guessed null or helper result.
+                _ = try storage.integer(at: base+pointerOffset, as: UInt32.self)
+                throw Boundary.callerHelper(helper)
+            }
+        }
+    }
+    /// Body-caller behavior for the compared token and integer Frame domain.
     /// Unsupported children/read boundaries throw with public state unchanged.
     /// The diagnostic store callback may observe a failed candidate's partial
     /// work, like the baseline loader callbacks; it cannot commit that state.
     @discardableResult
     public mutating func loadBody(_ file: NTSD2833FileBytes,
-                                 onStore: ((Int, UInt32) -> Void)? = nil) throws -> Receipt {
+                                 onWrite: ((Int, Int, UInt32) -> Void)? = nil) throws -> Receipt {
         guard file.fileName == fileName,
               try storage.integer(at: 0x7a8, as: UInt32.self) == filenameIdentity else {
             throw Boundary.filenameOwner
         }
         var candidate = self
-        try candidate.initializeBody(observe: onStore)
+        try candidate.initializeBody(observe: onWrite)
         var stream = NTSD2833TokenStream(file)
         var events: [Event] = [.open(bytes: file.endOffset, cursor: file.cursorOffset)]
         var untilLoadingPump = 32
@@ -127,14 +202,16 @@ public struct NTSD2833ObjectStorage: Sendable {
         repeat {
             let token = try stream.readString()
             events.append(.token(bytes: token.cStringBytes, before: token.before, after: token.after))
-            untilLoadingPump -= 1
             // 40e618..40e626 calls425010 here, resetting the next interval to100.
             // Its actual effects are an open dependency, not a no-op callback.
-            guard untilLoadingPump != 0 else { throw Boundary.callerHelper(0x425010) }
-            guard !Self.outerTags.contains(token.cStringBytes) else {
+            try Self.loadingStep(&untilLoadingPump)
+            if token.cStringBytes == Array("<frame>".utf8) {
+                try candidate.loadFrame(initialToken: token.cStringBytes, stream: &stream, events: &events,
+                                        untilPump: &untilLoadingPump, observe: onWrite)
+            } else if Self.outerTags.contains(token.cStringBytes) {
                 throw Boundary.unsupportedOuterTag(token.cStringBytes)
             }
-            try candidate.afterToken(observe: onStore)
+            try candidate.afterToken(observe: onWrite)
             let ended = try stream.isAtEnd()
             events.append(.eof(cursor: stream.cursorOffset, ended: ended))
             if ended { break }
